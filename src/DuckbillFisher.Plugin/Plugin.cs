@@ -13,9 +13,11 @@ public sealed class Plugin : IDalamudPlugin
     private readonly WindowSystem windows = new("DuckbillFisher");
     private readonly MainWindow mainWindow;
     private readonly FishingConditionObserver fishingObserver;
+    private readonly FishGuideDiagnostics fishGuide;
     private bool disposed;
 
-    public Plugin(IDalamudPluginInterface pluginInterface, ICommandManager commandManager, ICondition conditions)
+    public Plugin(IDalamudPluginInterface pluginInterface, ICommandManager commandManager, ICondition conditions,
+        IClientState clientState, IPlayerState playerState, IDataManager dataManager, IGameGui gameGui, IFramework framework)
     {
         this.pluginInterface = pluginInterface;
         this.commandManager = commandManager;
@@ -25,7 +27,8 @@ public sealed class Plugin : IDalamudPlugin
             throw new InvalidOperationException($"Command already registered: {Command}");
 
         fishingObserver = new FishingConditionObserver(conditions);
-        mainWindow = new MainWindow(fishingObserver);
+        fishGuide = new FishGuideDiagnostics(clientState, playerState, dataManager, gameGui, framework);
+        mainWindow = new MainWindow(fishingObserver, fishGuide);
         windows.AddWindow(mainWindow);
         pluginInterface.UiBuilder.Draw += windows.Draw;
         pluginInterface.UiBuilder.OpenMainUi += OpenMainUi;
@@ -45,6 +48,7 @@ public sealed class Plugin : IDalamudPlugin
         pluginInterface.UiBuilder.OpenMainUi -= OpenMainUi;
         commandManager.RemoveHandler(Command);
         fishingObserver.Dispose();
+        fishGuide.Dispose();
         windows.RemoveAllWindows();
     }
 }

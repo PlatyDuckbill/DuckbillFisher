@@ -6,16 +6,24 @@
 
 - 프로젝트명/표시명/InternalName: DuckbillFisher.
 - 최소 배포 목표: 친구가 커스텀 URL로 설치·업데이트. 장기 목표: 공식 등록.
+- 수첩 갱신은 사용자가 수첩을 열 때 수행하는 방식을 우선한다. 로그인 후 갱신은 대안이며 이번 진단에서는 선택 옵션(기본 꺼짐)으로 제공한다.
 - 개발 방식 전환: 다음 세션부터 게임이 실행되는 Windows PC에서 직접 편집·Git 관리·빌드·인게임 확인한다. Mac 왕복은 기본 흐름에서 제외했다. 재개 순서와 소스/이력 이동은 docs/SESSION-HANDOFF.md.
 - 대상 Windows 런타임: 한국 서버용 Dalamud D15.0.3.6. 기존 플러그인 실행 환경을 기준으로 개발한다.
 - Mac: arm64. 저장소 `.dotnet/`에 SDK 10.0.402를 설치하고 공식 SHA512를 검증했다. 시스템 PATH는 변경하지 않았다.
 - SDK: Dalamud.NET.Sdk 15.0.0 → .NET 10 / C# 14 / Plugin x64. Core는 net10.0.
 - 컴파일 참조: upstream D15.0.3.6, revision `3e8e6eb456c928401febd1d9452c4b8d4cad0eb5`. URL/SHA256은 build/dalamud-reference.json.
 - 원격 origin: PlatyDuckbill/DuckbillFisher. 원격 게시와 접근 검증은 별도로 진행한다.
+- 현재 Windows 작업 루트는 `C:\Users\hyogu\Downloads\DuckbillFisher`이며 Git 2.56.0.windows.2와 .NET SDK 10.0.402, KR Dalamud 15.0.3.6을 재확인했다. PowerShell 7.6.7은 정상 설치되어 있다. 현재 도구의 샌드박스 안에서는 Store 실행 별칭과 실제 설치 파일 모두 실행이 차단되며, 승인된 샌드박스 밖 실행에서는 두 경로 모두 성공했다. 이후 `pwsh` 명령은 필요한 승인을 거쳐 샌드박스 밖에서 실행한다. 이번 확인에서는 빌드·Core 테스트를 실행하지 않았다.
 
 ## 구현 및 검증
 
 - Plugin: `/duckbillfisher` 명령과 설치 관리자 Main UI 버튼으로 시작 창 열기, 이벤트/명령 해제.
+- 0.1.2.0 수집 비트 진단: 선택한 일반 어종을 어류도감이 열린 상태에서 읽는 NativeFishCollectionReader를 추가했다. 조사한 게임 빌드와 DLL 해시/로드 모듈 MVID가 일치할 때만 동작하며 Framework 스레드·현재 캐릭터·IsInLog·ID 경계를 확인한다. 어종 클릭과 수첩 재개방에서 표본을 읽고 로그/보고서에 남긴다. unsafe는 이 어댑터 메서드에 격리했다. 수집 상태 자동 분류/필터는 아직 연결하지 않았다.
+- 0.1.2.0 검증: 사용자 언로드 확인 후 build.ps1 성공, Core 15개 통과, 한섭 참조 Plugin 경고 0 / 오류 0, manifest 성공. 실제 보고서에서 황금나비어(ID 194/Item 7685)는 True, 홍룡(ID 696/Item 24993)은 False였고 사용자 확인 수집/미수집 상태와 각각 일치했다. 이미 로그인한 한 캐릭터의 기본 읽기 검증이며 로그인 직후 준비·캐릭터 전환·자동 필터는 미확인이다. 근거는 docs/validation/ENV-03-FISH-NATIVE.md.
+- 0.1.1.0 수첩 진단 구현: `FishGuide2`/`FishingNote`의 표시를 공개 IGameGui 래퍼로 250ms마다 관찰해 열림 때 정적 FishParameter 목록을 준비한다. 수동 재조회, 이름/ID 검색, Item/EventItem 참조 확인, 로그인 갱신 옵션, 최근 80행 보고서를 추가했다. IsLoggedIn/IsLoaded/ContentId 변경 감지는 Framework.Update에서 수행하고 이전 캐릭터 표시를 비운다. ContentId는 보고서에 출력하지 않는다. 수집 여부는 Unknown이며 네이티브 수첩 비트는 읽지 않는다.
+- 이번 Windows 빌드: 사용자 언로드 확인 후 한섭 15.0.3.6 참조로 build.ps1 성공. Core 15개 통과, Plugin 경고 0 / 오류 0, manifest 0.1.1.0/API 15 검사 성공. 절차/인게임 결과는 docs/validation/ENV-03-FISH-WIN.md.
+- 0.1.1.0 한섭 기본 검증 통과: 사용자 보고서에서 FishingNote/FishGuide2 각각 3회 표시와 총 6회 갱신을 확인했다. 실제 FishParameter 2,512행 / IsInLog 1,518행 / 최대 IsInLog ID 1,522. 로그인·준비 상태는 둘 다 True인 기존 세션이며 개별 어종 선택과 로그인/재로드 경계는 미확인이다. 수집 비트는 아직 읽지 않았다. 원본은 docs/validation/ENV-03-FISH-WIN.md.
+- ENV-03 수첩 API 조사: 실제 KR 게임 빌드 `2026.10.06.0000.0000`과 설치 DLL의 SHA256/revision을 기록했다. 설치 메타데이터와 고정 소스에서 `PlayerState.IsFishCaught(uint fishParameterId)`·IsInLog 호출 조건·비트 배열 구현을 대조했다. 공개 수집 서비스는 확보하지 못했으며 `IsLoaded`의 수첩 준비 보장도 미확인이다. `FishParameter.Item`은 EventItem/Item을 지원하는 비제네릭 RowRef다. 재현용 `scripts/inspect-fish-api.ps1` 실행 성공. 상세 근거와 다음 검증은 docs/validation/ENV-03-FISH-API.md. Plugin/Core 변경·빌드·테스트·인게임 수첩 읽기는 하지 않았다.
 - Core: Unknown/Uncaught/Caught와 수동 override, 즐겨찾기 알림 대상 판정. 기존 테스트 9개 통과.
 - ENV-03 공개 API 관찰: `ICondition.ConditionChange`의 Fishing/ExecutingGatheringAction/Casting을 사용자가 켠 동안 기록한다. 시작/중지 표본, 수동 메모, 단조 증가 경과 초, 최근 200행, 보고서 복사를 구현했다. 창 닫기와 별개로 관찰하며 Dispose 때 이벤트를 해제한다. 정밀 시전·입질을 추론하거나 수첩을 읽지 않는다.
 - 이번 Mac 검증: build.ps1로 Core 테스트 15개(기존 9 + 관찰 6) 통과, 고정 upstream 15.0.3.6 참조 Debug Plugin 컴파일 경고 0 / 오류 0 및 manifest 검사 성공. 명령/결과는 docs/validation/ENV-03-local.md.
@@ -39,26 +47,26 @@
 | 항목 | 상태 |
 |---|---|
 | Windows 버전/CPU | 환경 확인 출력: Microsoft Windows 10.0.26300 / X64 |
-| KR 게임 클라이언트 빌드 | 미확인 |
+| KR 게임 클라이언트 빌드 | `C:\Program Files (x86)\FINAL FANTASY XIV - KOREA\game\ffxivgame.ver`: `2026.10.06.0000.0000` |
 | 대상 환경의 Dalamud.dll 경로 | `%APPDATA%\XIVLauncherKR\addon\Hooks\dev`에서 15.0.3.6 확인 |
-| 해당 설치의 Plugin 실행 호환성 | 기존 시작 창과 ENV-03 관찰 기능 기본 검증 통과; 정밀 시점·추가 경계·수첩 읽기는 미확인 |
+| 해당 설치의 Plugin 실행 호환성 | 시작 창·낚시 관찰·수첩 감지/시트 읽기 및 0.1.2.0 수집/미수집 각 1종 비트 대조 통과. 로그인 준비·추가 경계·전체 필터·정밀 시점은 미확인 |
 | 개발 플러그인 등록 위치 | 빌드 출력 DLL 등록 후 로드 성공; 인게임 등록 UI의 세부 명칭은 별도 기록 없음 |
 | 코드 라이선스 / 어종 데이터 출처·라이선스 | 정식 배포 전 선정·검토 |
 
-## 다음 한 작업: ENV-03 수첩 읽기 근거 조사
+## 다음 한 작업: ENV-03 수첩 재개방·로그인 경계 확인
 
-공개 플래그 관찰의 기본 구현과 한섭 검증을 마쳤다. 구현 근거는 docs/validation/ENV-03-API-NOTES.md, 실제 결과는 docs/validation/ENV-03-WIN-RESULTS.md에 있다. ENV-03 전체와 수첩 검증은 아직 완료하지 않았다.
+공개 플래그 관찰의 기본 구현과 한섭 검증을 마쳤다. 구현 근거는 docs/validation/ENV-03-API-NOTES.md, 실제 결과는 docs/validation/ENV-03-WIN-RESULTS.md에 있다. Windows 설치본의 수첩 API 조사는 docs/validation/ENV-03-FISH-API.md에 기록했다. ENV-03 전체와 실제 수첩 검증은 아직 완료하지 않았다.
 
-새 Windows 세션에서는 먼저 docs/SESSION-HANDOFF.md에 따라 이번 커밋의 작업 폴더/이력을 받고 KR 환경을 확인한다. 기존 Downloads 소스가 최신 문서를 포함한다고 가정하지 않는다. 원격 푸시/접근은 미검증이므로 로컬 전달용 bundle/소스 ZIP 경로를 함께 제공한다.
+현재 작업 폴더는 `C:\Users\hyogu\Downloads\DuckbillFisher`이며 Git 이력과 최신 관찰 코드를 확인했다. 같은 폴더에서 계속 개발한다. 실제 원격 접근·게시 상태는 별도 미확인이다.
 
-1. 수첩 읽기의 공개 API 유무와 실제 KR 대상 버전의 구조/메서드 근거를 확인한다. 글로벌 최신 구조를 곧바로 적용하지 않는다.
-2. FishParameter ID와 Item ID의 매핑, 수첩 준비 상태, 로그인/로그아웃 시 접근 가능 조건을 정리한다. 근거가 부족하면 어댑터 구현을 보류하고 Unknown/수동 필터 대안을 유지한다.
-3. 근거를 확보한 범위만 읽기 전용 어댑터로 검증하고, 수집/미수집이 알려진 어종과 대조한다. 읽기 실패는 Unknown으로 유지한다.
+1. 0.1.2.0에서 어종 선택 후 어류도감을 닫았다 다시 열면 해당 어종을 자동 재조회하는지 확인한다. 기존 두 어종의 ID/정답은 docs/validation/ENV-03-FISH-NATIVE.md에 있으며 같은 확인을 다시 요청할 필요가 없다.
+2. 로그아웃/로그인·캐릭터 변경 때 선택/대기 요청/현재 비트 표본 폐기와 준비 전 Unknown을 확인한다. 다른 캐릭터에는 기존 기준 어종의 수집 정답을 적용하지 않는다.
+3. 기본 수집 비트 읽기는 통과했다. 준비 조건과 실패 동작을 확정한 뒤 수집/미수집 표시와 전체 목록 필터에 연결한다. 재로드 후 이벤트 중복도 추가 검증으로 남아 있다.
 
 타이머는 아직 미구현이다. 후속 타이머 실험에서는 Fishing 전이를 시작/구간 종료 후보로 삼되 입질 감지로 표현하지 않는다. 도중 활성화 시 과거 시작 시각은 Unknown으로 처리해야 한다. 회수 후 자세 유지·생미끼·재로드 후 이벤트 중복·지역 이동/로그아웃은 그 작업의 추가 검증으로 남긴다.
 
-정밀 시전 감지와 수첩 읽기의 한섭 런타임 호환성은 아직 검증하지 않았다. 이번 시작 창의 성공을 전체 낚시 기능의 호환성으로 확대 해석하지 않는다.
+정밀 시전 감지와 전체 수첩 상태/준비 시점의 호환성은 아직 검증하지 않았다. 수집 비트 각 1종 대조의 성공을 모든 어종·캐릭터·로그인 경계의 보장으로 확대 해석하지 않는다.
 
 ## 후속 세션 입력 예시
 
-> AGENTS.md, docs/SESSION-HANDOFF.md, docs/STATUS.md를 읽고 이어서 진행해 줘. 이제 이 Windows PC에서 직접 편집·빌드·게임 검증한다. 먼저 작업 루트와 현재 KR 환경을 확인하고 ENV-03 수첩 읽기의 API/버전 근거부터 조사해 줘. 기존 한섭 관찰 결과와 미확인 항목을 구분하고 검증되지 않은 네이티브 구조는 적용하지 마.
+> AGENTS.md, docs/SESSION-HANDOFF.md, docs/STATUS.md와 docs/validation/ENV-03-FISH-NATIVE.md를 읽고 이어서 진행해 줘. 0.1.2.0에서 황금나비어 True/홍룡 False 대조는 통과했다. 수첩 재개방 자동 조회와 로그인/캐릭터 전환 시 표본 폐기를 확인하고, Unknown 유지 조건을 정리한 뒤 수집 상태 표시/필터에 연결해 줘.

@@ -4,6 +4,8 @@
 
 고정한 upstream Dalamud 15.0.3.6 배포의 Dalamud.xml / FFXIVClientStructs.xml과 공개 소스를 조사했다. 아래는 구현 후보이며 한섭에서 낚시 데이터를 읽은 실행 결과가 아니다.
 
+2026-10-15 Windows 설치본의 후속 조사와 고정 소스 대조는 [한섭 수첩 API 조사](ENV-03-FISH-API.md)에 기록했다. 실제 게임 빌드, DLL 해시/revision, IsFishCaught 구현, 비제네릭 Item 참조, 준비 상태의 미확인 범위를 포함한다. 아래 초기 후보와 인게임 수첩 읽기 성공을 구분한다.
+
 ## 낚시 상태 관찰 후보
 
 - `ICondition.ConditionChange` 이벤트와 `ConditionFlag.Fishing`, `ExecutingGatheringAction`, `Casting` 상태가 조사 대상이다.

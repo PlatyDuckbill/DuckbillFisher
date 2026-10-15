@@ -8,17 +8,116 @@ internal sealed class MainWindow : Window
 {
     private static readonly string[] Markers = ["찌 던짐", "입질 대기", "입질 확인", "낚아챔", "취소/회수", "낚시 종료", "생미끼 시전", "지역 이동", "로그아웃"];
     private readonly FishingConditionObserver observer;
+    private readonly FishGuideDiagnostics fishGuide;
+    private IReadOnlyList<FishGuideRow>? lastRows;
+    private FishGuideRow[] matches = [];
+    private FishGuideRow? selectedFish;
+    private string search = "";
+    private int lastSession = -1;
     private int selectedMarker;
 
-    public MainWindow(FishingConditionObserver observer) : base("DuckbillFisher###DuckbillFisher.Main")
+    public MainWindow(FishingConditionObserver observer, FishGuideDiagnostics fishGuide) : base("DuckbillFisher###DuckbillFisher.Main")
     {
         this.observer = observer;
+        this.fishGuide = fishGuide;
         Size = new Vector2(820, 560);
         SizeCondition = ImGuiCond.FirstUseEver;
         SizeConstraints = new WindowSizeConstraints { MinimumSize = new Vector2(520, 400), MaximumSize = new Vector2(float.MaxValue) };
     }
 
     public override void Draw()
+    {
+        if (ImGui.BeginTabBar("DiagnosticsTabs"))
+        {
+            if (ImGui.BeginTabItem("수첩 연동 확인"))
+            {
+                DrawFishGuide();
+                ImGui.EndTabItem();
+            }
+            if (ImGui.BeginTabItem("낚시 상태 관찰"))
+            {
+                DrawFishingObservation();
+                ImGui.EndTabItem();
+            }
+            ImGui.EndTabBar();
+        }
+    }
+
+    private void DrawFishGuide()
+    {
+        var view = fishGuide.View;
+        if (!ReferenceEquals(lastRows, view.Rows) || lastSession != view.Session)
+        {
+            lastRows = view.Rows;
+            lastSession = view.Session;
+            selectedFish = null;
+            UpdateMatches(view.Rows);
+        }
+
+        ImGui.TextWrapped("게임의 어류도감을 연 상태에서 아래 어종 이름을 클릭하면 실제 수집 비트를 조회합니다. 아직 검증 중이며 자동 필터에는 반영하지 않습니다.");
+        ImGui.TextWrapped(view.Status);
+        ImGui.Separator();
+        ImGui.TextUnformatted($"로그인: {view.IsLoggedIn} | 캐릭터 준비: {view.IsLoaded?.ToString() ?? "조회 전"}");
+        ImGui.TextUnformatted($"어류도감: {(view.FishGuideVisible ? "열림" : "닫힘")} | 낚시 수첩: {(view.FishingNoteVisible ? "열림" : "닫힘")}");
+        ImGui.TextUnformatted($"열림 표본 {view.OpenCount}회 | 목록 갱신 {view.RefreshCount}회 | 마지막 계기: {view.LastTrigger}");
+        var fallback = view.LoginFallback;
+        if (ImGui.Checkbox("로그인 준비 후에도 갱신", ref fallback))
+            fishGuide.SetLoginFallback(fallback);
+        if (ImGui.Button("어종 목록 새로 읽기"))
+            fishGuide.RequestRefresh();
+        ImGui.SameLine();
+        if (ImGui.Button("수첩 진단 복사"))
+            ImGui.SetClipboardText(fishGuide.CreateReport(selectedFish));
+        ImGui.TextUnformatted($"전체 행 {view.Rows.Count} | 수첩 포함 {view.InLogCount} | 수첩 포함 최대 ID {view.MaxInLogId}");
+
+        ImGui.SetNextItemWidth(300);
+        if (ImGui.InputText("어종 이름 또는 FishParameter ID", ref search, 100))
+            UpdateMatches(view.Rows);
+        ImGui.TextUnformatted("수첩에 포함된 검색 결과 중 최대 30종을 표시합니다.");
+        if (ImGui.BeginChild("FishMatches", new Vector2(0, 120), true))
+        {
+            foreach (var fish in matches)
+            {
+                if (ImGui.Selectable($"{fish.Name} (ID {fish.FishParameterId})###Fish{fish.FishParameterId}",
+                    selectedFish == fish))
+                {
+                    selectedFish = fish;
+                    fishGuide.RequestCollectionRead(fish.FishParameterId);
+                }
+            }
+        }
+        ImGui.EndChild();
+        if (selectedFish is { } selected)
+        {
+            ImGui.TextWrapped($"{selected.Name} | FishParameter {selected.FishParameterId} | {selected.ItemType} {selected.ItemId} | IsInLog={selected.IsInLog} | 수집 여부: Unknown");
+            if (view.CollectionSample is { } sample && sample.FishParameterId == selected.FishParameterId)
+                ImGui.TextWrapped($"마지막 수집 비트: {sample.Value?.ToString() ?? "Unknown"} | {sample.Reason}");
+            else
+                ImGui.TextUnformatted("수집 비트 조회 대기 중입니다.");
+            if (ImGui.Button("선택 어종 수집 비트 다시 읽기"))
+                fishGuide.RequestCollectionRead(selected.FishParameterId);
+        }
+        if (ImGui.CollapsingHeader("준비 상태와 수첩 열림 기록"))
+        {
+            if (ImGui.BeginChild("FishGuideHistory", new Vector2(0, 130), true, ImGuiWindowFlags.HorizontalScrollbar))
+            {
+                for (var i = view.History.Count - 1; i >= 0; i--)
+                    ImGui.TextUnformatted(view.History[i]);
+            }
+            ImGui.EndChild();
+        }
+    }
+
+    private void UpdateMatches(IReadOnlyList<FishGuideRow> rows)
+    {
+        var term = search.Trim();
+        matches = rows.Where(row => row.IsInLog &&
+                (term.Length == 0 || row.Name.Contains(term, StringComparison.OrdinalIgnoreCase) ||
+                 row.FishParameterId.ToString(System.Globalization.CultureInfo.InvariantCulture) == term))
+            .Take(30).ToArray();
+    }
+
+    private void DrawFishingObservation()
     {
         ImGui.TextUnformatted("ENV-03 낚시 상태 관찰");
         ImGui.Separator();
