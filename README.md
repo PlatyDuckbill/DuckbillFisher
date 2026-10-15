@@ -16,6 +16,7 @@
 
 ## 지금 시작하기
 
+- 0.1.5.0: 어종 선택 시 낚시터·지도 핀 버튼과 초기 10종의 미끼·낚아채기·조건·시간/날씨 창 예측을 표시한다. 상세 조건 필터와 출현 시간순 정렬을 추가했다. 입질 초 수 통계는 후속으로 미뤘다. [데이터 출처/고지](data/README.md)와 [인게임 검증 대기 범위](docs/validation/MVP-01-DETAILS.md)를 따른다.
 - 앞으로 FFXIV가 실행되는 **Windows PC에서 직접 편집·빌드·게임 확인**을 진행한다. 이번 세션을 이어받을 때는 [Windows 세션 인수인계](docs/SESSION-HANDOFF.md)부터 읽는다.
 - Windows 사용자는 [Windows 준비 및 첫 실행](docs/WINDOWS-SETUP.md)을 따른다.
 - 현재 상태와 다음 한 작업은 [STATUS](docs/STATUS.md)에 있다.

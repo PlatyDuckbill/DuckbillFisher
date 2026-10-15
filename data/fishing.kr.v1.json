@@ -1,0 +1,229 @@
+{
+  "schemaVersion": 1,
+  "dataVersion": "kr-initial-2026-10-16",
+  "region": "KR",
+  "gameBuild": "2026.10.06.0000.0000",
+  "sourceRepository": "https://github.com/icykoneko/ff14-fish-tracker-app",
+  "sourceRevision": "d0e1ab5bba62c2b57356e690a73676cd4751b64d",
+  "sourceFiles": [
+    "private/fishData.yaml",
+    "js/app/data.js"
+  ],
+  "fish": [
+    {
+      "itemId": 7678,
+      "fishParameterId": 187,
+      "fishingSpotId": 37,
+      "sourceName": "Zalera",
+      "startHour": 9,
+      "endHour": 14,
+      "weatherIds": [],
+      "previousWeatherIds": [],
+      "baitPath": [
+        2591
+      ],
+      "hookset": "Precision",
+      "tug": "heavy",
+      "predators": [],
+      "intuitionSeconds": null,
+      "folkloreRequired": false,
+      "fishEyesSupported": true
+    },
+    {
+      "itemId": 7685,
+      "fishParameterId": 194,
+      "fishingSpotId": 36,
+      "sourceName": "Goldenfin",
+      "startHour": 9,
+      "endHour": 14,
+      "weatherIds": [],
+      "previousWeatherIds": [],
+      "baitPath": [
+        2587
+      ],
+      "hookset": "Precision",
+      "tug": "heavy",
+      "predators": [],
+      "intuitionSeconds": null,
+      "folkloreRequired": false,
+      "fishEyesSupported": true
+    },
+    {
+      "itemId": 7682,
+      "fishParameterId": 191,
+      "fishingSpotId": 42,
+      "sourceName": "Crystal Perch",
+      "startHour": 0,
+      "endHour": 24,
+      "weatherIds": [
+        4,
+        3,
+        5
+      ],
+      "previousWeatherIds": [],
+      "baitPath": [
+        2594
+      ],
+      "hookset": "Precision",
+      "tug": "heavy",
+      "predators": [],
+      "intuitionSeconds": null,
+      "folkloreRequired": false,
+      "fishEyesSupported": true
+    },
+    {
+      "itemId": 7683,
+      "fishParameterId": 192,
+      "fishingSpotId": 8,
+      "sourceName": "Moldva",
+      "startHour": 18,
+      "endHour": 2,
+      "weatherIds": [],
+      "previousWeatherIds": [],
+      "baitPath": [
+        2592,
+        4942
+      ],
+      "hookset": "Powerful",
+      "tug": "heavy",
+      "predators": [],
+      "intuitionSeconds": null,
+      "folkloreRequired": false,
+      "fishEyesSupported": true
+    },
+    {
+      "itemId": 7684,
+      "fishParameterId": 193,
+      "fishingSpotId": 60,
+      "sourceName": "Junkmonger",
+      "startHour": 16,
+      "endHour": 2,
+      "weatherIds": [],
+      "previousWeatherIds": [],
+      "baitPath": [
+        2585,
+        4869,
+        4904
+      ],
+      "hookset": "Powerful",
+      "tug": "heavy",
+      "predators": [],
+      "intuitionSeconds": null,
+      "folkloreRequired": false,
+      "fishEyesSupported": true
+    },
+    {
+      "itemId": 7686,
+      "fishParameterId": 195,
+      "fishingSpotId": 38,
+      "sourceName": "Gigantshark",
+      "startHour": 0,
+      "endHour": 24,
+      "weatherIds": [
+        1,
+        2
+      ],
+      "previousWeatherIds": [],
+      "baitPath": [
+        2611,
+        4874
+      ],
+      "hookset": "Powerful",
+      "tug": "heavy",
+      "predators": [],
+      "intuitionSeconds": null,
+      "folkloreRequired": false,
+      "fishEyesSupported": true
+    },
+    {
+      "itemId": 7687,
+      "fishParameterId": 196,
+      "fishingSpotId": 59,
+      "sourceName": "Armorer",
+      "startHour": 19,
+      "endHour": 3,
+      "weatherIds": [],
+      "previousWeatherIds": [],
+      "baitPath": [
+        2606
+      ],
+      "hookset": "Precision",
+      "tug": "heavy",
+      "predators": [],
+      "intuitionSeconds": null,
+      "folkloreRequired": false,
+      "fishEyesSupported": true
+    },
+    {
+      "itemId": 7690,
+      "fishParameterId": 199,
+      "fishingSpotId": 47,
+      "sourceName": "Silver Sovereign",
+      "startHour": 0,
+      "endHour": 24,
+      "weatherIds": [],
+      "previousWeatherIds": [],
+      "baitPath": [
+        2628
+      ],
+      "hookset": "Powerful",
+      "tug": "heavy",
+      "predators": [],
+      "intuitionSeconds": null,
+      "folkloreRequired": false,
+      "fishEyesSupported": true
+    },
+    {
+      "itemId": 8768,
+      "fishParameterId": 290,
+      "fishingSpotId": 86,
+      "sourceName": "Helicoprion",
+      "startHour": 8,
+      "endHour": 20,
+      "weatherIds": [
+        14
+      ],
+      "previousWeatherIds": [
+        4,
+        3
+      ],
+      "baitPath": [
+        2600,
+        5035
+      ],
+      "hookset": "Powerful",
+      "tug": "heavy",
+      "predators": [],
+      "intuitionSeconds": null,
+      "folkloreRequired": false,
+      "fishEyesSupported": false
+    },
+    {
+      "itemId": 8754,
+      "fishParameterId": 276,
+      "fishingSpotId": 108,
+      "sourceName": "Nepto Dragon",
+      "startHour": 0,
+      "endHour": 24,
+      "weatherIds": [
+        7,
+        8
+      ],
+      "previousWeatherIds": [],
+      "baitPath": [
+        2606
+      ],
+      "hookset": "Powerful",
+      "tug": "heavy",
+      "predators": [
+        {
+          "itemId": 4913,
+          "count": 3
+        }
+      ],
+      "intuitionSeconds": 350,
+      "folkloreRequired": false,
+      "fishEyesSupported": false
+    }
+  ]
+}

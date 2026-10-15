@@ -17,6 +17,7 @@ public sealed class Plugin : IDalamudPlugin
     private readonly FishingConditionObserver fishingObserver;
     private readonly FishGuideDiagnostics fishGuide;
     private readonly FishCatalog fishCatalog;
+    private readonly FishingMapService fishingMap;
     private bool disposed;
 
     public Plugin(IDalamudPluginInterface pluginInterface, ICommandManager commandManager, ICondition conditions,
@@ -34,7 +35,8 @@ public sealed class Plugin : IDalamudPlugin
         fishingObserver = new FishingConditionObserver(conditions);
         fishCatalog = new FishCatalog(dataManager, framework);
         fishGuide = new FishGuideDiagnostics(clientState, playerState, fishCatalog, gameGui, framework);
-        mainWindow = new MainWindow(fishingObserver, fishGuide, new FishListPanel(fishCatalog, textureProvider),
+        fishingMap = new FishingMapService(gameGui, clientState, framework);
+        mainWindow = new MainWindow(fishingObserver, fishGuide, new FishListPanel(fishCatalog, textureProvider, fishingMap),
             () => commandInfo.HelpMessage = UiText.Get(TextKey.CommandHelp));
         windows.AddWindow(mainWindow);
         pluginInterface.UiBuilder.Draw += windows.Draw;
@@ -57,6 +59,7 @@ public sealed class Plugin : IDalamudPlugin
         fishingObserver.Dispose();
         fishGuide.Dispose();
         fishCatalog.Dispose();
+        fishingMap.Dispose();
         windows.RemoveAllWindows();
     }
 }

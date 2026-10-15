@@ -12,7 +12,7 @@
   <data name="CatalogSortName" xml:space="preserve"><value>Name</value></data>
   <data name="CatalogSortId" xml:space="preserve"><value>Fish ID</value></data>
   <data name="CatalogCount" xml:space="preserve"><value>{0} displayed rows / {1} source sheet rows</value></data>
-  <data name="CatalogDetailsPending" xml:space="preserve"><value>Collection lookup is not connected to this list yet. Fishing spots, bait, and availability details are being prepared.</value></data>
+  <data name="CatalogDetailsPending" xml:space="preserve"><value>Select a fish for spots, maps, and cross-checked conditions. Collection integration and bite-time statistics are planned separately.</value></data>
   <data name="CatalogNoMatches" xml:space="preserve"><value>No matching fish. Try changing the search or filter.</value></data>
   <data name="CatalogRowInfo" xml:space="preserve"><value>ID {0} · Collection integration pending</value></data>
   <data name="CopyCatalogReport" xml:space="preserve"><value>Copy list diagnostics</value></data>
@@ -103,4 +103,42 @@
   <data name="NativeDllMismatch" xml:space="preserve"><value>Unknown: KR DLLs differ from the inspected files or modules. Native reads are disabled.</value></data>
   <data name="NativeCheckFailed" xml:space="preserve"><value>Unknown: compatibility check failed ({0}). Native reads are disabled.</value></data>
   <data name="NativeCompatible" xml:space="preserve"><value>KR game build and DLLs match the inspected installation</value></data>
+  <data name="CatalogDetailsOnly" xml:space="preserve"><value>Only fish with condition details</value></data>
+  <data name="CatalogSortWindow" xml:space="preserve"><value>Next window</value></data>
+  <data name="CatalogDetailCoverage" xml:space="preserve"><value>Condition details cross-checked with source data: {0} fish</value></data>
+  <data name="CatalogDetailPrompt" xml:space="preserve"><value>Select a fish to view fishing spots and details.</value></data>
+  <data name="CatalogDetailsMissing" xml:space="preserve"><value>Bait, hookset, and conditions for this fish are not available yet.</value></data>
+  <data name="SpotLine" xml:space="preserve"><value>{0} · {1} (X:{2:F1} Y:{3:F1})</value></data>
+  <data name="OpenFishingMap" xml:space="preserve"><value>Show map flag</value></data>
+  <data name="MapPlayerRequired" xml:space="preserve"><value>Log in to a character to show a map flag.</value></data>
+  <data name="MapUnavailable" xml:space="preserve"><value>Map or coordinates are unavailable.</value></data>
+  <data name="MapOpened" xml:space="preserve"><value>Opened the map with a flag at {0}.</value></data>
+  <data name="MapOpenFailed" xml:space="preserve"><value>Could not open the map for {0}.</value></data>
+  <data name="MapError" xml:space="preserve"><value>Map request failed: {0}</value></data>
+  <data name="BaitPathLabel" xml:space="preserve"><value>Bait / mooch sequence: {0}</value></data>
+  <data name="HooksetLabel" xml:space="preserve"><value>With Patience: {0}</value></data>
+  <data name="HooksetPrecision" xml:space="preserve"><value>Precision Hookset</value></data>
+  <data name="HooksetPowerful" xml:space="preserve"><value>Powerful Hookset</value></data>
+  <data name="TugLabel" xml:space="preserve"><value>Tug strength: {0}</value></data>
+  <data name="TimeConditionLabel" xml:space="preserve"><value>Time: ET {0}–{1}</value></data>
+  <data name="TimeAllDay" xml:space="preserve"><value>Time: all Eorzean day</value></data>
+  <data name="WeatherConditionLabel" xml:space="preserve"><value>Current weather condition: {0}</value></data>
+  <data name="PreviousWeatherConditionLabel" xml:space="preserve"><value>Previous weather condition: {0}</value></data>
+  <data name="NoWeatherRestriction" xml:space="preserve"><value>No restriction</value></data>
+  <data name="PredatorLabel" xml:space="preserve"><value>{0} × {1}</value></data>
+  <data name="IntuitionConditions" xml:space="preserve"><value>Intuition catches: {0} (check your progress separately)</value></data>
+  <data name="IntuitionDuration" xml:space="preserve"><value>Intuition duration: {0} seconds</value></data>
+  <data name="FolkloreRequired" xml:space="preserve"><value>The relevant folklore book is required.</value></data>
+  <data name="ForecastAlways" xml:space="preserve"><value>No time or weather restriction</value></data>
+  <data name="ForecastOpen" xml:space="preserve"><value>Time/weather window open · closes in {0}</value></data>
+  <data name="ForecastOpenNoEnd" xml:space="preserve"><value>Time/weather window open · end not found within the search horizon</value></data>
+  <data name="ForecastUpcoming" xml:space="preserve"><value>Starts in {0} · local time {1}</value></data>
+  <data name="ForecastEnd" xml:space="preserve"><value>Ends: local time {0}</value></data>
+  <data name="ForecastNotFound" xml:space="preserve"><value>No matching window found within the next seven real days.</value></data>
+  <data name="ForecastUnknown" xml:space="preserve"><value>Availability forecast is not available.</value></data>
+  <data name="ForecastScope" xml:space="preserve"><value>Forecasts cover normal time/weather conditions. Fish Eyes, Intuition, and personal readiness are not included. In-game KR comparison is pending.</value></data>
+  <data name="DurationShort" xml:space="preserve"><value>{0:0}h {1:00}m {2:00}s</value></data>
+  <data name="DataSourceLabel" xml:space="preserve"><value>Data source and license</value></data>
+  <data name="DataSourceInfo" xml:space="preserve"><value>Carbuncle Plushy / FFX|V Fish Tracker (MIT) · {0} · revision {1}. Names, spots, and maps come from the KR client.</value></data>
+  <data name="CopyDataLicense" xml:space="preserve"><value>Copy license</value></data>
 </root>

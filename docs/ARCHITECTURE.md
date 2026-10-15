@@ -41,6 +41,7 @@ Plugin의 `AssemblyName`은 `DuckbillFisher`다. 주 DLL은 `DuckbillFisher.dll`
 
 ## 시간과 성능
 
+- 0.1.5.0의 FishingAvailability는 UTC/조건/날씨 확률만 받는 Core 계산이다. Framework에서 초기 10종을 초당 한 번 예측해 snapshot에 보관하고 Draw에서는 시각 차이만 표시한다. FishCatalog가 낚시터·지도·날씨 확률·내장 조건을 연결하고 FishingMapService는 명시적 클릭 요청만 Framework에서 처리한다. 외부 데이터 JSON과 MIT 고지는 주 DLL 리소스에 내장해 파일/네트워크 읽기를 렌더링에 넣지 않는다. 구조/제약은 [상세 검증](validation/MVP-01-DETAILS.md)을 따른다.
 - 0.1.4.1부터 이름/참조의 해석 상태를 FishRowResolution으로 보관한다. 일반 목록은 Resolved 행만 표시한다. ID 0, 빈 참조/이름, 참조 해석 실패는 개수와 진단 보고서로 노출하고 원본 행은 보존한다. 상세 낚시 조건의 유무, 아이콘 로드 여부, 캐릭터 수집 상태는 이 분류의 기준이 아니다.
 - 예측은 UTC 기반 절대 시간, 입질 경과는 Stopwatch 같은 단조 증가 시간으로 처리한다.
 - ET/날씨 계산을 렌더링 루프 밖에서 수행하고 지역·날씨 구간·데이터 revision별로 캐시한다.

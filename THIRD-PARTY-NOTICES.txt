@@ -1,0 +1,32 @@
+FFX|V Fish Tracker App / Carbuncle Plushy
+https://github.com/icykoneko/ff14-fish-tracker-app
+Revision: d0e1ab5bba62c2b57356e690a73676cd4751b64d
+
+Derived material: ten selected fishing condition records from private/fishData.yaml
+and js/app/data.js; weather target calculation adapted from js/app/weather.js.
+Changes: selected KR-matched IDs and conditions, omitted bite-time statistics;
+weather target arithmetic expressed in C#. Game names, icons, maps, and weather
+rates are read from the installed client and are not copied from this project.
+The upstream weather implementation credits Rougeadyn's SaintCoinach library.
+
+MIT License
+
+Copyright (c) 2019 icykoneko
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.

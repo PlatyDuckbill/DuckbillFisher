@@ -12,7 +12,7 @@
   <data name="CatalogSortName" xml:space="preserve"><value>이름순</value></data>
   <data name="CatalogSortId" xml:space="preserve"><value>어종 ID순</value></data>
   <data name="CatalogCount" xml:space="preserve"><value>표시 결과 {0}행 / 원본 시트 전체 {1}행</value></data>
-  <data name="CatalogDetailsPending" xml:space="preserve"><value>이 목록은 아직 수집 조회에 연결되지 않았습니다. 낚시터·미끼·출현 시간 상세 정보도 준비 중입니다.</value></data>
+  <data name="CatalogDetailsPending" xml:space="preserve"><value>어종을 선택해 낚시터·지도와 대조한 상세 조건을 확인하세요. 수집 연동과 입질 초 수 통계는 후속 작업입니다.</value></data>
   <data name="CatalogNoMatches" xml:space="preserve"><value>검색 결과가 없습니다. 검색어나 필터를 바꿔 보세요.</value></data>
   <data name="CatalogRowInfo" xml:space="preserve"><value>ID {0} · 수집 연동 예정</value></data>
   <data name="CopyCatalogReport" xml:space="preserve"><value>목록 진단 복사</value></data>
@@ -103,4 +103,42 @@
   <data name="NativeDllMismatch" xml:space="preserve"><value>Unknown: 조사한 KR DLL과 다릅니다. 수집 비트 읽기를 비활성화했습니다.</value></data>
   <data name="NativeCheckFailed" xml:space="preserve"><value>Unknown: 호환성 확인 실패 ({0}). 수집 비트 읽기를 비활성화했습니다.</value></data>
   <data name="NativeCompatible" xml:space="preserve"><value>조사한 KR 게임 빌드와 DLL 일치</value></data>
+  <data name="CatalogDetailsOnly" xml:space="preserve"><value>상세 조건 있는 어종만</value></data>
+  <data name="CatalogSortWindow" xml:space="preserve"><value>출현 시간순</value></data>
+  <data name="CatalogDetailCoverage" xml:space="preserve"><value>출처 자료와 대조한 상세 조건: {0}종</value></data>
+  <data name="CatalogDetailPrompt" xml:space="preserve"><value>목록에서 어종을 선택하면 낚시터와 상세 정보를 표시합니다.</value></data>
+  <data name="CatalogDetailsMissing" xml:space="preserve"><value>이 어종의 미끼·낚아채기·출현 조건은 아직 준비 중입니다.</value></data>
+  <data name="SpotLine" xml:space="preserve"><value>{0} · {1} (X:{2:F1} Y:{3:F1})</value></data>
+  <data name="OpenFishingMap" xml:space="preserve"><value>지도에 핀 표시</value></data>
+  <data name="MapPlayerRequired" xml:space="preserve"><value>지도 핀을 표시하려면 캐릭터에 접속해 주세요.</value></data>
+  <data name="MapUnavailable" xml:space="preserve"><value>지도 또는 좌표를 확인할 수 없습니다.</value></data>
+  <data name="MapOpened" xml:space="preserve"><value>{0} 위치에 지도 핀을 표시했습니다.</value></data>
+  <data name="MapOpenFailed" xml:space="preserve"><value>{0} 지도를 열지 못했습니다.</value></data>
+  <data name="MapError" xml:space="preserve"><value>지도 열기 중 오류가 발생했습니다: {0}</value></data>
+  <data name="BaitPathLabel" xml:space="preserve"><value>미끼 → 생미끼 순서: {0}</value></data>
+  <data name="HooksetLabel" xml:space="preserve"><value>인내 사용 시: {0}</value></data>
+  <data name="HooksetPrecision" xml:space="preserve"><value>섬세한 낚아채기</value></data>
+  <data name="HooksetPowerful" xml:space="preserve"><value>강력한 낚아채기</value></data>
+  <data name="TugLabel" xml:space="preserve"><value>입질 강도: {0}</value></data>
+  <data name="TimeConditionLabel" xml:space="preserve"><value>출현 시간: ET {0}~{1}</value></data>
+  <data name="TimeAllDay" xml:space="preserve"><value>출현 시간: ET 하루 종일</value></data>
+  <data name="WeatherConditionLabel" xml:space="preserve"><value>현재 날씨 조건: {0}</value></data>
+  <data name="PreviousWeatherConditionLabel" xml:space="preserve"><value>직전 날씨 조건: {0}</value></data>
+  <data name="NoWeatherRestriction" xml:space="preserve"><value>제한 없음</value></data>
+  <data name="PredatorLabel" xml:space="preserve"><value>{0} × {1}</value></data>
+  <data name="IntuitionConditions" xml:space="preserve"><value>직감 필요 어획: {0} (달성 여부는 별도 확인)</value></data>
+  <data name="IntuitionDuration" xml:space="preserve"><value>직감 지속 시간: {0}초</value></data>
+  <data name="FolkloreRequired" xml:space="preserve"><value>해당 전승록이 필요합니다.</value></data>
+  <data name="ForecastAlways" xml:space="preserve"><value>시간·날씨 제한 없음</value></data>
+  <data name="ForecastOpen" xml:space="preserve"><value>시간·날씨 창 열림 · {0} 뒤 종료</value></data>
+  <data name="ForecastOpenNoEnd" xml:space="preserve"><value>시간·날씨 창 열림 · 탐색 범위 내 종료 시점 미확인</value></data>
+  <data name="ForecastUpcoming" xml:space="preserve"><value>{0} 후 시작 · 현지 시각 {1}</value></data>
+  <data name="ForecastEnd" xml:space="preserve"><value>종료: 현지 시각 {0}</value></data>
+  <data name="ForecastNotFound" xml:space="preserve"><value>앞으로 실제 시간 7일 범위에서 다음 창을 찾지 못했습니다.</value></data>
+  <data name="ForecastUnknown" xml:space="preserve"><value>출현 시간 예측을 준비하지 못했습니다.</value></data>
+  <data name="ForecastScope" xml:space="preserve"><value>예측은 통상 시간·날씨 조건 기준입니다. 물고기의 눈·직감·개인 준비 상태는 반영하지 않습니다. 한섭 게임 내 대조가 필요합니다.</value></data>
+  <data name="DurationShort" xml:space="preserve"><value>{0:0}시간 {1:00}분 {2:00}초</value></data>
+  <data name="DataSourceLabel" xml:space="preserve"><value>데이터 출처와 라이선스</value></data>
+  <data name="DataSourceInfo" xml:space="preserve"><value>Carbuncle Plushy / FFX|V Fish Tracker (MIT) · {0} · 원본 {1}. 한섭 이름·낚시터·지도는 현재 클라이언트에서 읽습니다.</value></data>
+  <data name="CopyDataLicense" xml:space="preserve"><value>라이선스 복사</value></data>
 </root>
