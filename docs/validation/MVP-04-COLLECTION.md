@@ -1,6 +1,6 @@
 # 수집됨 자동 반영: 수첩 조회와 새 어종 등록
 
-갱신: 2026-10-16. Plugin 0.1.7.0 / KR Dalamud 15.0.3.6 / 게임 빌드 2026.10.06.0000.0000. **별도/정규 빌드 통과·기존 DLL 반영 / 자동 필터·등록 이벤트 인게임 검증 대기**.
+갱신: 2026-10-16. Plugin 0.1.7.0 / KR Dalamud 15.0.3.6 / 게임 빌드 2026.10.06.0000.0000. **빌드·수첩 자동 조회/집계 확인 / 숨김·등록 이벤트·캐릭터 격리 검증 대기**.
 
 ## 범위
 
@@ -60,3 +60,26 @@ pwsh -NoLogo -NoProfile -File scripts/check-localization.ps1
 5. 수동 미수집 지정은 자동 결과와 별개로 남고, 수동 해제 시 자동 수집됨으로 돌아가는지 확인한다. 로그인/다른 캐릭터 전환 시 이전 자동 집합/등록 대기 요청이 섞이지 않아야 한다. 재로드 후 자동 관찰을 다시 준비하는지도 확인한다.
 
 수첩 조회·수집 숨김·새 등록·세션 격리·언어 전환은 실제 결과를 받은 뒤 각각 판정한다. 습득 이벤트 전달이 다르면 복사한 진단의 ID/숫자만 근거로 보완하며 미수집으로 임의 처리하지 않는다.
+
+## 실제 한섭 보고서: 수첩 자동 조회/집계
+
+사용자가 0.1.7.0 재로드 후 보낸 목록 진단의 핵심 값이다. 긴 원본/미해결 행 목록과 이미 확인한 지도/조건 출력은 반복해서 보관하지 않는다.
+
+```text
+Plugin: 0.1.7.0
+Ready=True; Editable=True; Session=1; Favorites=1
+ManualCaught=0; ManualUncaught=0
+CollectionFilter=All; FavoritesOnly=False; Sort=0; Displayed=10
+StorageError=none
+Session=1; Caught=738; Eligible=1517; GuideVisible=True
+Scans=40; RawFalse=779; UnknownReads=0; RegistrationContract=True
+RegistrationMessages=0; AppliedRegistrations=0; LastLogItem=0; LastLogFish=0
+LastTrigger=GuideScan; SampledAtSeconds=65.472; Status=CollectionPositiveOnly
+AutomaticUncaught=Unknown; ObservationsPersisted=False
+```
+
+- 수동 기록 0건 상태에서 자동 수집됨 집합 738종이 생성됐다. 738 + 779 = 1517로 조회 대상 전체의 표본 집계가 맞으며 Unknown 조회는 0건이다. False 779종을 자동 미수집으로 전환하지 않는 계약도 보고서에서 유지됐다.
+- 도감 표시 상태에서 40회 갱신됐고 등록 로그의 설치본 매크로 계약도 통과했다. 설정 편집 가능/저장 오류 없음과 즐겨찾기 1건을 확인했다.
+- 필터는 All이므로 이 보고서만으로 수집 숨김의 실제 화면 결과를 통과시키지 않는다. 황금나비어의 개별 자동 표시도 별도 화면/사용자 응답이 필요하다. 숨김 필터에서 사라지는지 짧게 추가 확인을 요청했다.
+- 등록 이벤트 0건은 오류를 뜻하지 않는다. 새 어종 습득·등록이 관찰되지 않은 상태여서 습득 순간 갱신은 아직 미검증이다. RegistrationContract=True를 실제 이벤트 수신 검증과 혼동하지 않는다.
+- 다른 캐릭터/재접속·수동 우선순위·언어 전환도 이 보고서로 확정하지 않는다. 이번 반영은 문서 변경이며 빌드/테스트는 재실행하지 않았다.
