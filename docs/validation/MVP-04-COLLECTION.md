@@ -1,6 +1,6 @@
 # 수집됨 자동 반영: 수첩 조회와 새 어종 등록
 
-갱신: 2026-10-16. Plugin 0.1.7.0 / KR Dalamud 15.0.3.6 / 게임 빌드 2026.10.06.0000.0000. **빌드·수첩 자동 조회/집계·황금나비어 숨김 확인 / 등록 이벤트·캐릭터 격리 검증 대기**.
+갱신: 2026-10-16. Plugin 0.1.7.0 / KR Dalamud 15.0.3.6 / 게임 빌드 2026.10.06.0000.0000. **수첩 자동 조회·황금나비어 숨김·가라루파 신규 등록 반영 확인 / 세션 격리·추가 경계 검증 대기**.
 
 ## 범위
 
@@ -83,3 +83,25 @@ AutomaticUncaught=Unknown; ObservationsPersisted=False
 - 보고서의 필터는 All이었다. 이후 수동 지정을 해제한 황금나비어가 수집한 어종 숨기기에서 사라지는지 물었고 사용자가 ‘사라짐’이라고 응답했다. 이 대표 어종의 자동 수집 상태에 따른 숨김 동작은 통과로 기록한다. 전체 어종별 수집 정답을 대조한 것으로 확대하지 않는다.
 - 등록 이벤트 0건은 오류를 뜻하지 않는다. 새 어종 습득·등록이 관찰되지 않은 상태여서 습득 순간 갱신은 아직 미검증이다. RegistrationContract=True를 실제 이벤트 수신 검증과 혼동하지 않는다.
 - 다른 캐릭터/재접속·수동 우선순위·언어 전환도 이 보고서로 확정하지 않는다. 이번 반영은 문서 변경이며 빌드/테스트는 재실행하지 않았다.
+
+## 실제 한섭 보고서: 가라루파 신규 등록
+
+사용자는 가라루파로 신규 등록 실험을 진행하고 다음 결과를 보냈다. 한섭 시트의 FishParameter 395 / Item 12809 매핑과 일치한다.
+
+```text
+Plugin: 0.1.7.0
+Ready=True; Editable=True; Session=1; Favorites=1
+ManualCaught=0; ManualUncaught=0
+CollectionFilter=All; FavoritesOnly=False; Sort=0; Displayed=1
+Session=1; Caught=739; Eligible=1517; GuideVisible=False
+Scans=349; RawFalse=779; UnknownReads=0; RegistrationContract=True
+RegistrationMessages=1; AppliedRegistrations=1; LastLogItem=12809; LastLogFish=395
+LastTrigger=RegistrationLog; SampledAtSeconds=634.559; Status=CollectionPositiveOnly
+AutomaticUncaught=Unknown; ObservationsPersisted=False
+```
+
+- 도감이 닫힌 상태의 신규 등록 이벤트 1건 수신·1건 적용, 정확한 Item→FishParameter 연결과 자동 수집 수 738→739 증가를 확인했다. 수동 기록은 0건이며 마지막 갱신 이유가 RegistrationLog라 수동 지정이나 이후 도감 재조회로 대체한 결과가 아니다. 이 대표 어종의 신규 등록 자동 반영을 통과로 기록한다.
+- RawFalse=779는 직전 도감 조회의 표본이다. 등록 이벤트는 수집됨 집합만 갱신하므로 그대로 남는 것이 정상이며, 최신 자동 수집 수와 합쳐 같은 시점의 전체 집계로 해석하지 않는다.
+- 필터는 All이므로 이 보고서에서 가라루파가 실제로 숨겨진 화면까지 확인한 것은 아니다. 공통 숨김 경로는 앞선 황금나비어 응답으로 확인했다. 이벤트 처리의 정확한 지연 시간도 이 보고서만으로 측정하지 않는다.
+- 남은 범위는 로그아웃·재접속/다른 캐릭터 격리, 수동 우선순위·언어 전환 등 추가 경계와 자동 미수집/전체 수첩 준비 판정이다. 최초 조회/황금나비어 숨김/가라루파 첫 등록 실험을 반복 요청하지 않는다.
+- 이번 결과 반영은 문서 변경이며 DLL 수정·빌드·테스트는 하지 않았다.
