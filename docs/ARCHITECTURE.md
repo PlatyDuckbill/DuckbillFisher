@@ -41,6 +41,9 @@ Plugin의 `AssemblyName`은 `DuckbillFisher`다. 주 DLL은 `DuckbillFisher.dll`
 
 ## 시간과 성능
 
+- 0.1.6.0의 FishPreferences는 공개 IPlayerState.ContentId/IsLoaded와 IClientState.IsLoggedIn을 Framework.Update에서 읽는다. 즐겨찾기는 공통, 수동 수집 bool은 캐릭터/FishParameter ID별로 보관한다. UI는 변경 요청만 큐에 넣고 서비스가 적용 직전 세션을 확인해 다른 캐릭터로 넘어간 수동 요청을 폐기한다. 로그인 전/조회 실패에는 수동 상태를 비우고 변경을 막는다. 불변 snapshot의 revision이 바뀔 때만 목록 필터를 다시 계산한다.
+- 저장은 공개 IDalamudPluginInterface.GetPluginConfig/SavePluginConfig를 사용한다. 스키마 버전 1이며 손상/미지원 기존 설정은 덮어쓰지 않고 편집을 비활성화한다. 저장 실패 시 직전 메모리 상태를 유지하고 재시도 안내를 표시한다. Draw에서 파일을 읽거나 저장하지 않는다. ContentId는 로컬 설정 키로만 사용하고 복사 보고서에는 넣지 않는다. Core의 CollectionFilter가 수동 우선순위와 표시 필터 의미를 담당하며 원시 수집 비트를 자동 판정에 사용하지 않는다.
+
 - 0.1.5.0의 FishingAvailability는 UTC/조건/날씨 확률만 받는 Core 계산이다. Framework에서 초기 10종을 초당 한 번 예측해 snapshot에 보관하고 Draw에서는 시각 차이만 표시한다. FishCatalog가 낚시터·지도·날씨 확률·내장 조건을 연결하고 FishingMapService는 명시적 클릭 요청만 Framework에서 처리한다. 외부 데이터 JSON과 MIT 고지는 주 DLL 리소스에 내장해 파일/네트워크 읽기를 렌더링에 넣지 않는다. 구조/제약은 [상세 검증](validation/MVP-01-DETAILS.md)을 따른다.
 - 0.1.4.1부터 이름/참조의 해석 상태를 FishRowResolution으로 보관한다. 일반 목록은 Resolved 행만 표시한다. ID 0, 빈 참조/이름, 참조 해석 실패는 개수와 진단 보고서로 노출하고 원본 행은 보존한다. 상세 낚시 조건의 유무, 아이콘 로드 여부, 캐릭터 수집 상태는 이 분류의 기준이 아니다.
 - 예측은 UTC 기반 절대 시간, 입질 경과는 Stopwatch 같은 단조 증가 시간으로 처리한다.

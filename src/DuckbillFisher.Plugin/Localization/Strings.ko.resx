@@ -14,7 +14,7 @@
   <data name="CatalogCount" xml:space="preserve"><value>표시 결과 {0}행 / 원본 시트 전체 {1}행</value></data>
   <data name="CatalogDetailsPending" xml:space="preserve"><value>어종을 선택해 낚시터·지도와 대조한 상세 조건을 확인하세요. 수집 연동과 입질 초 수 통계는 후속 작업입니다.</value></data>
   <data name="CatalogNoMatches" xml:space="preserve"><value>검색 결과가 없습니다. 검색어나 필터를 바꿔 보세요.</value></data>
-  <data name="CatalogRowInfo" xml:space="preserve"><value>ID {0} · 수집 연동 예정</value></data>
+  <data name="CatalogRowInfo" xml:space="preserve"><value>ID {0}</value></data>
   <data name="CopyCatalogReport" xml:space="preserve"><value>목록 진단 복사</value></data>
   <data name="CatalogShowUnresolved" xml:space="preserve"><value>확인 불가 행 표시 (진단용)</value></data>
   <data name="CatalogUnresolvedCount" xml:space="preserve"><value>현재 필터 범위의 확인 불가 {0}행은 기본 목록에서 제외합니다.</value></data>
@@ -141,4 +141,27 @@
   <data name="DataSourceLabel" xml:space="preserve"><value>데이터 출처와 라이선스</value></data>
   <data name="DataSourceInfo" xml:space="preserve"><value>Carbuncle Plushy / FFX|V Fish Tracker (MIT) · {0} · 원본 {1}. 한섭 이름·낚시터·지도는 현재 클라이언트에서 읽습니다.</value></data>
   <data name="CopyDataLicense" xml:space="preserve"><value>라이선스 복사</value></data>
+  <data name="CatalogSortFavorite" xml:space="preserve"><value>즐겨찾기 우선</value></data>
+  <data name="CatalogFavoritesOnly" xml:space="preserve"><value>즐겨찾기만</value></data>
+  <data name="CollectionAll" xml:space="preserve"><value>전체</value></data>
+  <data name="CollectionHideCaught" xml:space="preserve"><value>수집한 어종 숨기기</value></data>
+  <data name="CollectionUncaughtOnly" xml:space="preserve"><value>미수집만</value></data>
+  <data name="CollectionCaughtOnly" xml:space="preserve"><value>수집됨만</value></data>
+  <data name="CollectionUnknownOnly" xml:space="preserve"><value>미확인만</value></data>
+  <data name="CollectionVisibility" xml:space="preserve"><value>수집 상태 필터</value></data>
+  <data name="CollectionFilterHint" xml:space="preserve"><value>‘수집한 어종 숨기기’는 미확인도 표시합니다. ‘미수집만’은 미수집으로 지정한 어종만 표시합니다. 게임 수첩 자동 수집 연동은 아직 준비 중입니다.</value></data>
+  <data name="ManualPlayerRequired" xml:space="preserve"><value>수동 수집 기록을 변경하려면 캐릭터에 접속해 주세요.</value></data>
+  <data name="PreferencesLoadFailed" xml:space="preserve"><value>설정을 읽을 수 없거나 지원하지 않는 형식입니다. 기존 파일을 보존하기 위해 변경을 비활성화했습니다.</value></data>
+  <data name="PreferencesSaveFailed" xml:space="preserve"><value>설정을 저장하지 못했습니다. 이전 상태를 표시하고 있으니 변경을 다시 시도해 주세요.</value></data>
+  <data name="FavoriteRowState" xml:space="preserve"><value>즐겨찾기 · {0}</value></data>
+  <data name="FavoriteToggle" xml:space="preserve"><value>즐겨찾기</value></data>
+  <data name="ManualCollectionLabel" xml:space="preserve"><value>수집 상태: {0}</value></data>
+  <data name="MarkCaught" xml:space="preserve"><value>수집됨으로 지정</value></data>
+  <data name="MarkUncaught" xml:space="preserve"><value>미수집으로 지정</value></data>
+  <data name="ClearManualCollection" xml:space="preserve"><value>수동 지정 해제</value></data>
+  <data name="PreferenceScope" xml:space="preserve"><value>즐겨찾기는 공통이며 수동 수집 기록은 캐릭터별로 저장합니다. 수동 지정을 해제하면 자동 연동 전까지 미확인으로 돌아갑니다.</value></data>
+  <data name="CollectionManualCaught" xml:space="preserve"><value>수집됨 (수동)</value></data>
+  <data name="CollectionManualUncaught" xml:space="preserve"><value>미수집 (수동)</value></data>
+  <data name="CollectionUnknown" xml:space="preserve"><value>미확인</value></data>
+  <data name="PreferencesPlayerUnavailable" xml:space="preserve"><value>현재 캐릭터 정보를 읽지 못했습니다. 캐릭터 확인이 복구될 때까지 수동 기록을 숨깁니다.</value></data>
 </root>
