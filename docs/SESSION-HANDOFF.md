@@ -16,7 +16,7 @@
 - 게임: `C:\Program Files (x86)\FINAL FANTASY XIV - KOREA\game`.
 - 참조: `C:\Users\hyogu\AppData\Roaming\XIVLauncherKR\addon\Hooks\dev`.
 - 개발 DLL: `C:\Users\hyogu\Downloads\DuckbillFisher\src\DuckbillFisher.Plugin\bin\Debug\DuckbillFisher.dll`.
-- 사용자 언로드 후 정규 DLL 0.1.8.0 교체 완료. 사용자 재로드/인게임 확인 대기. 다음 교체는 새 언로드 확인 필요.
+- 정규 DLL 0.1.8.0 교체/재로드 후 짧은 진단·먼바다 제외 동작 확인. 다음 교체는 새 언로드 확인 필요.
 - PowerShell 5.1 읽기는 `-Encoding UTF8`; pwsh는 현재 샌드박스 밖 승인 실행 필요.
 
 ## 일반 구현 빌드
