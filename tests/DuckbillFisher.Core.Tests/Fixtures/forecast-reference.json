@@ -1,0 +1,1681 @@
+{
+  "sourceRevision": "d0e1ab5bba62c2b57356e690a73676cd4751b64d",
+  "gameBuild": "2026.10.06.0000.0000",
+  "weather": {
+    "firstPeriodSeconds": 1792082600,
+    "targets": [
+      50,
+      78,
+      78,
+      2,
+      58,
+      6,
+      43,
+      67,
+      87,
+      79,
+      31,
+      51,
+      55,
+      83,
+      59,
+      48,
+      4,
+      24,
+      84,
+      44,
+      28,
+      92,
+      77,
+      64,
+      17,
+      45,
+      73,
+      49,
+      77,
+      93,
+      70,
+      94,
+      14,
+      14,
+      82,
+      58,
+      34,
+      62,
+      38,
+      23,
+      51,
+      71,
+      39,
+      55,
+      83,
+      4,
+      28,
+      32,
+      20,
+      92,
+      12,
+      48,
+      92,
+      40,
+      73,
+      9,
+      29,
+      89,
+      41,
+      17,
+      22,
+      94,
+      14,
+      74,
+      18,
+      38,
+      54,
+      26,
+      10,
+      91,
+      99,
+      19,
+      71,
+      43,
+      15,
+      32,
+      4,
+      51,
+      4,
+      40,
+      60,
+      48,
+      28,
+      4,
+      9,
+      81,
+      1,
+      85,
+      57,
+      33,
+      69,
+      14,
+      25,
+      22,
+      74,
+      78,
+      10,
+      54,
+      98,
+      19,
+      91,
+      83,
+      15,
+      67,
+      43,
+      59,
+      39,
+      15,
+      52,
+      80,
+      4,
+      60,
+      16,
+      96,
+      69,
+      97,
+      13,
+      69,
+      13,
+      41,
+      17,
+      45,
+      5,
+      90,
+      18,
+      86,
+      62,
+      26,
+      6,
+      83,
+      3,
+      27,
+      31,
+      59,
+      83,
+      91,
+      19,
+      99,
+      20,
+      64,
+      64,
+      20,
+      56,
+      64,
+      25,
+      81,
+      8,
+      29,
+      57,
+      9,
+      25,
+      17,
+      97,
+      74,
+      94,
+      18,
+      18,
+      74,
+      54,
+      34,
+      62,
+      42,
+      87,
+      43,
+      59,
+      39,
+      87,
+      83,
+      40,
+      12,
+      40,
+      68,
+      40,
+      28,
+      4,
+      80,
+      60,
+      21,
+      53,
+      77,
+      49,
+      21,
+      1,
+      58,
+      30,
+      54,
+      18,
+      98,
+      74,
+      90,
+      38,
+      46,
+      31,
+      75,
+      91,
+      83,
+      55,
+      51,
+      52,
+      56,
+      80,
+      16,
+      48,
+      72,
+      72,
+      16,
+      96,
+      17,
+      89,
+      13,
+      1,
+      69,
+      29,
+      77,
+      46,
+      33,
+      86,
+      30,
+      58,
+      42,
+      86,
+      98,
+      3,
+      7,
+      31,
+      47,
+      95,
+      75,
+      47,
+      91,
+      71,
+      72,
+      0,
+      20,
+      12,
+      8,
+      56,
+      89,
+      77,
+      33,
+      69,
+      25,
+      65,
+      97,
+      25,
+      25,
+      82,
+      34,
+      54,
+      50,
+      18,
+      94,
+      71,
+      27,
+      47,
+      23,
+      51,
+      71,
+      87,
+      95,
+      59,
+      80,
+      56,
+      24,
+      72,
+      28,
+      4,
+      17,
+      73,
+      68,
+      73,
+      25,
+      45,
+      17,
+      13,
+      89,
+      22,
+      78,
+      98,
+      22,
+      78,
+      54,
+      90,
+      79,
+      62,
+      91,
+      7,
+      63,
+      75,
+      3,
+      67,
+      20,
+      92,
+      60,
+      96,
+      48,
+      24,
+      84,
+      64,
+      40,
+      13,
+      57,
+      77,
+      33,
+      5,
+      81,
+      98,
+      94,
+      26,
+      10,
+      22,
+      66,
+      38,
+      82,
+      58,
+      55,
+      99,
+      83,
+      55,
+      7,
+      83,
+      44,
+      52,
+      72,
+      68,
+      12,
+      32,
+      68,
+      12,
+      88,
+      9,
+      21,
+      37,
+      97,
+      25,
+      25,
+      34,
+      6,
+      97,
+      50,
+      94,
+      62,
+      74,
+      54,
+      30,
+      67,
+      75,
+      95,
+      87,
+      59,
+      35,
+      15,
+      59,
+      35,
+      52,
+      28,
+      64,
+      16,
+      12,
+      56,
+      73,
+      33,
+      57,
+      45,
+      5,
+      53,
+      9,
+      41,
+      21,
+      38,
+      26,
+      50,
+      2,
+      62,
+      42,
+      35,
+      95,
+      19,
+      23,
+      27,
+      35,
+      39,
+      19,
+      51,
+      60,
+      48,
+      84,
+      68,
+      28,
+      72,
+      53,
+      69,
+      93,
+      57,
+      45,
+      69,
+      13,
+      1,
+      81,
+      6,
+      66,
+      90,
+      46,
+      6,
+      86,
+      62,
+      39,
+      74,
+      31,
+      19,
+      43,
+      63,
+      51,
+      55,
+      60,
+      24,
+      48,
+      44,
+      52,
+      32,
+      16,
+      56,
+      36,
+      45,
+      85,
+      9,
+      69,
+      37,
+      57,
+      34,
+      22,
+      22,
+      14,
+      26
+    ]
+  },
+  "spots": [
+    {
+      "fishParameterId": 187,
+      "territoryId": 134,
+      "rates": [
+        {
+          "weatherId": 3,
+          "chance": 20
+        },
+        {
+          "weatherId": 1,
+          "chance": 30
+        },
+        {
+          "weatherId": 2,
+          "chance": 20
+        },
+        {
+          "weatherId": 5,
+          "chance": 10
+        },
+        {
+          "weatherId": 4,
+          "chance": 10
+        },
+        {
+          "weatherId": 7,
+          "chance": 10
+        }
+      ]
+    },
+    {
+      "fishParameterId": 194,
+      "territoryId": 128,
+      "rates": [
+        {
+          "weatherId": 3,
+          "chance": 20
+        },
+        {
+          "weatherId": 1,
+          "chance": 30
+        },
+        {
+          "weatherId": 2,
+          "chance": 30
+        },
+        {
+          "weatherId": 4,
+          "chance": 10
+        },
+        {
+          "weatherId": 7,
+          "chance": 10
+        }
+      ]
+    },
+    {
+      "fishParameterId": 191,
+      "territoryId": 134,
+      "rates": [
+        {
+          "weatherId": 3,
+          "chance": 20
+        },
+        {
+          "weatherId": 1,
+          "chance": 30
+        },
+        {
+          "weatherId": 2,
+          "chance": 20
+        },
+        {
+          "weatherId": 5,
+          "chance": 10
+        },
+        {
+          "weatherId": 4,
+          "chance": 10
+        },
+        {
+          "weatherId": 7,
+          "chance": 10
+        }
+      ]
+    },
+    {
+      "fishParameterId": 192,
+      "territoryId": 152,
+      "rates": [
+        {
+          "weatherId": 9,
+          "chance": 5
+        },
+        {
+          "weatherId": 7,
+          "chance": 15
+        },
+        {
+          "weatherId": 4,
+          "chance": 10
+        },
+        {
+          "weatherId": 3,
+          "chance": 10
+        },
+        {
+          "weatherId": 2,
+          "chance": 15
+        },
+        {
+          "weatherId": 1,
+          "chance": 30
+        },
+        {
+          "weatherId": 2,
+          "chance": 15
+        }
+      ]
+    },
+    {
+      "fishParameterId": 193,
+      "territoryId": 138,
+      "rates": [
+        {
+          "weatherId": 4,
+          "chance": 10
+        },
+        {
+          "weatherId": 1,
+          "chance": 30
+        },
+        {
+          "weatherId": 2,
+          "chance": 20
+        },
+        {
+          "weatherId": 3,
+          "chance": 20
+        },
+        {
+          "weatherId": 5,
+          "chance": 10
+        },
+        {
+          "weatherId": 6,
+          "chance": 10
+        }
+      ]
+    },
+    {
+      "fishParameterId": 195,
+      "territoryId": 134,
+      "rates": [
+        {
+          "weatherId": 3,
+          "chance": 20
+        },
+        {
+          "weatherId": 1,
+          "chance": 30
+        },
+        {
+          "weatherId": 2,
+          "chance": 20
+        },
+        {
+          "weatherId": 5,
+          "chance": 10
+        },
+        {
+          "weatherId": 4,
+          "chance": 10
+        },
+        {
+          "weatherId": 7,
+          "chance": 10
+        }
+      ]
+    },
+    {
+      "fishParameterId": 196,
+      "territoryId": 138,
+      "rates": [
+        {
+          "weatherId": 4,
+          "chance": 10
+        },
+        {
+          "weatherId": 1,
+          "chance": 30
+        },
+        {
+          "weatherId": 2,
+          "chance": 20
+        },
+        {
+          "weatherId": 3,
+          "chance": 20
+        },
+        {
+          "weatherId": 5,
+          "chance": 10
+        },
+        {
+          "weatherId": 6,
+          "chance": 10
+        }
+      ]
+    },
+    {
+      "fishParameterId": 199,
+      "territoryId": 135,
+      "rates": [
+        {
+          "weatherId": 3,
+          "chance": 20
+        },
+        {
+          "weatherId": 1,
+          "chance": 30
+        },
+        {
+          "weatherId": 2,
+          "chance": 20
+        },
+        {
+          "weatherId": 5,
+          "chance": 10
+        },
+        {
+          "weatherId": 4,
+          "chance": 10
+        },
+        {
+          "weatherId": 7,
+          "chance": 10
+        }
+      ]
+    },
+    {
+      "fishParameterId": 290,
+      "territoryId": 146,
+      "rates": [
+        {
+          "weatherId": 14,
+          "chance": 20
+        },
+        {
+          "weatherId": 1,
+          "chance": 40
+        },
+        {
+          "weatherId": 2,
+          "chance": 20
+        },
+        {
+          "weatherId": 3,
+          "chance": 10
+        },
+        {
+          "weatherId": 4,
+          "chance": 10
+        }
+      ]
+    },
+    {
+      "fishParameterId": 276,
+      "territoryId": 137,
+      "rates": [
+        {
+          "weatherId": 4,
+          "chance": 5
+        },
+        {
+          "weatherId": 1,
+          "chance": 45
+        },
+        {
+          "weatherId": 2,
+          "chance": 30
+        },
+        {
+          "weatherId": 3,
+          "chance": 10
+        },
+        {
+          "weatherId": 7,
+          "chance": 5
+        },
+        {
+          "weatherId": 8,
+          "chance": 5
+        }
+      ]
+    }
+  ],
+  "cases": [
+    {
+      "fishParameterId": 187,
+      "now": 1792082774999,
+      "kind": "Upcoming",
+      "start": 1792082775000,
+      "end": 1792083650000
+    },
+    {
+      "fishParameterId": 187,
+      "now": 1792082775000,
+      "kind": "Open",
+      "start": 1792082775000,
+      "end": 1792083650000
+    },
+    {
+      "fishParameterId": 187,
+      "now": 1792082775001,
+      "kind": "Open",
+      "start": 1792082775000,
+      "end": 1792083650000
+    },
+    {
+      "fishParameterId": 187,
+      "now": 1792083059114,
+      "kind": "Open",
+      "start": 1792082775000,
+      "end": 1792083650000
+    },
+    {
+      "fishParameterId": 187,
+      "now": 1792083649999,
+      "kind": "Open",
+      "start": 1792082775000,
+      "end": 1792083650000
+    },
+    {
+      "fishParameterId": 187,
+      "now": 1792083650000,
+      "kind": "Upcoming",
+      "start": 1792086975000,
+      "end": 1792087850000
+    },
+    {
+      "fishParameterId": 187,
+      "now": 1792083650001,
+      "kind": "Upcoming",
+      "start": 1792086975000,
+      "end": 1792087850000
+    },
+    {
+      "fishParameterId": 187,
+      "now": 1792169459114,
+      "kind": "Upcoming",
+      "start": 1792170975000,
+      "end": 1792171850000
+    },
+    {
+      "fishParameterId": 187,
+      "now": 1792255859114,
+      "kind": "Upcoming",
+      "start": 1792259175000,
+      "end": 1792260050000
+    },
+    {
+      "fishParameterId": 187,
+      "now": 1792342259114,
+      "kind": "Upcoming",
+      "start": 1792343175000,
+      "end": 1792344050000
+    },
+    {
+      "fishParameterId": 187,
+      "now": 1792428659114,
+      "kind": "Upcoming",
+      "start": 1792431375000,
+      "end": 1792432250000
+    },
+    {
+      "fishParameterId": 187,
+      "now": 1792515059114,
+      "kind": "Upcoming",
+      "start": 1792515375000,
+      "end": 1792516250000
+    },
+    {
+      "fishParameterId": 187,
+      "now": 1792601459114,
+      "kind": "Upcoming",
+      "start": 1792603575000,
+      "end": 1792604450000
+    },
+    {
+      "fishParameterId": 187,
+      "now": 1792687859114,
+      "kind": "Open",
+      "start": 1792687575000,
+      "end": 1792688450000
+    },
+    {
+      "fishParameterId": 194,
+      "now": 1792082774999,
+      "kind": "Upcoming",
+      "start": 1792082775000,
+      "end": 1792083650000
+    },
+    {
+      "fishParameterId": 194,
+      "now": 1792082775000,
+      "kind": "Open",
+      "start": 1792082775000,
+      "end": 1792083650000
+    },
+    {
+      "fishParameterId": 194,
+      "now": 1792082775001,
+      "kind": "Open",
+      "start": 1792082775000,
+      "end": 1792083650000
+    },
+    {
+      "fishParameterId": 194,
+      "now": 1792083059114,
+      "kind": "Open",
+      "start": 1792082775000,
+      "end": 1792083650000
+    },
+    {
+      "fishParameterId": 194,
+      "now": 1792083649999,
+      "kind": "Open",
+      "start": 1792082775000,
+      "end": 1792083650000
+    },
+    {
+      "fishParameterId": 194,
+      "now": 1792083650000,
+      "kind": "Upcoming",
+      "start": 1792086975000,
+      "end": 1792087850000
+    },
+    {
+      "fishParameterId": 194,
+      "now": 1792083650001,
+      "kind": "Upcoming",
+      "start": 1792086975000,
+      "end": 1792087850000
+    },
+    {
+      "fishParameterId": 194,
+      "now": 1792169459114,
+      "kind": "Upcoming",
+      "start": 1792170975000,
+      "end": 1792171850000
+    },
+    {
+      "fishParameterId": 194,
+      "now": 1792255859114,
+      "kind": "Upcoming",
+      "start": 1792259175000,
+      "end": 1792260050000
+    },
+    {
+      "fishParameterId": 194,
+      "now": 1792342259114,
+      "kind": "Upcoming",
+      "start": 1792343175000,
+      "end": 1792344050000
+    },
+    {
+      "fishParameterId": 194,
+      "now": 1792428659114,
+      "kind": "Upcoming",
+      "start": 1792431375000,
+      "end": 1792432250000
+    },
+    {
+      "fishParameterId": 194,
+      "now": 1792515059114,
+      "kind": "Upcoming",
+      "start": 1792515375000,
+      "end": 1792516250000
+    },
+    {
+      "fishParameterId": 194,
+      "now": 1792601459114,
+      "kind": "Upcoming",
+      "start": 1792603575000,
+      "end": 1792604450000
+    },
+    {
+      "fishParameterId": 194,
+      "now": 1792687859114,
+      "kind": "Open",
+      "start": 1792687575000,
+      "end": 1792688450000
+    },
+    {
+      "fishParameterId": 191,
+      "now": 1792082599999,
+      "kind": "Upcoming",
+      "start": 1792082600000,
+      "end": 1792086800000
+    },
+    {
+      "fishParameterId": 191,
+      "now": 1792082600000,
+      "kind": "Open",
+      "start": 1792082600000,
+      "end": 1792086800000
+    },
+    {
+      "fishParameterId": 191,
+      "now": 1792082600001,
+      "kind": "Open",
+      "start": 1792082600000,
+      "end": 1792086800000
+    },
+    {
+      "fishParameterId": 191,
+      "now": 1792083059114,
+      "kind": "Open",
+      "start": 1792082600000,
+      "end": 1792086800000
+    },
+    {
+      "fishParameterId": 191,
+      "now": 1792086799999,
+      "kind": "Open",
+      "start": 1792085400000,
+      "end": 1792086800000
+    },
+    {
+      "fishParameterId": 191,
+      "now": 1792086800000,
+      "kind": "Upcoming",
+      "start": 1792088200000,
+      "end": 1792089600000
+    },
+    {
+      "fishParameterId": 191,
+      "now": 1792086800001,
+      "kind": "Upcoming",
+      "start": 1792088200000,
+      "end": 1792089600000
+    },
+    {
+      "fishParameterId": 191,
+      "now": 1792169459114,
+      "kind": "Open",
+      "start": 1792169400000,
+      "end": 1792172200000
+    },
+    {
+      "fishParameterId": 191,
+      "now": 1792255859114,
+      "kind": "Open",
+      "start": 1792254800000,
+      "end": 1792257600000
+    },
+    {
+      "fishParameterId": 191,
+      "now": 1792342259114,
+      "kind": "Open",
+      "start": 1792341600000,
+      "end": 1792343000000
+    },
+    {
+      "fishParameterId": 191,
+      "now": 1792428659114,
+      "kind": "Upcoming",
+      "start": 1792431200000,
+      "end": 1792432600000
+    },
+    {
+      "fishParameterId": 191,
+      "now": 1792515059114,
+      "kind": "Open",
+      "start": 1792513800000,
+      "end": 1792515200000
+    },
+    {
+      "fishParameterId": 191,
+      "now": 1792601459114,
+      "kind": "Upcoming",
+      "start": 1792602000000,
+      "end": 1792603400000
+    },
+    {
+      "fishParameterId": 191,
+      "now": 1792687859114,
+      "kind": "Upcoming",
+      "start": 1792693000000,
+      "end": 1792695800000
+    },
+    {
+      "fishParameterId": 192,
+      "now": 1792083059114,
+      "kind": "Upcoming",
+      "start": 1792084350000,
+      "end": 1792085750000
+    },
+    {
+      "fishParameterId": 192,
+      "now": 1792084349999,
+      "kind": "Upcoming",
+      "start": 1792084350000,
+      "end": 1792085750000
+    },
+    {
+      "fishParameterId": 192,
+      "now": 1792084350000,
+      "kind": "Open",
+      "start": 1792084350000,
+      "end": 1792085750000
+    },
+    {
+      "fishParameterId": 192,
+      "now": 1792084350001,
+      "kind": "Open",
+      "start": 1792084350000,
+      "end": 1792085750000
+    },
+    {
+      "fishParameterId": 192,
+      "now": 1792085749999,
+      "kind": "Open",
+      "start": 1792085400000,
+      "end": 1792085750000
+    },
+    {
+      "fishParameterId": 192,
+      "now": 1792085750000,
+      "kind": "Upcoming",
+      "start": 1792088550000,
+      "end": 1792089950000
+    },
+    {
+      "fishParameterId": 192,
+      "now": 1792085750001,
+      "kind": "Upcoming",
+      "start": 1792088550000,
+      "end": 1792089950000
+    },
+    {
+      "fishParameterId": 192,
+      "now": 1792169459114,
+      "kind": "Open",
+      "start": 1792169400000,
+      "end": 1792169750000
+    },
+    {
+      "fishParameterId": 192,
+      "now": 1792255859114,
+      "kind": "Upcoming",
+      "start": 1792256550000,
+      "end": 1792257950000
+    },
+    {
+      "fishParameterId": 192,
+      "now": 1792342259114,
+      "kind": "Upcoming",
+      "start": 1792344750000,
+      "end": 1792346150000
+    },
+    {
+      "fishParameterId": 192,
+      "now": 1792428659114,
+      "kind": "Upcoming",
+      "start": 1792428750000,
+      "end": 1792430150000
+    },
+    {
+      "fishParameterId": 192,
+      "now": 1792515059114,
+      "kind": "Upcoming",
+      "start": 1792516950000,
+      "end": 1792518350000
+    },
+    {
+      "fishParameterId": 192,
+      "now": 1792601459114,
+      "kind": "Open",
+      "start": 1792600950000,
+      "end": 1792602350000
+    },
+    {
+      "fishParameterId": 192,
+      "now": 1792687859114,
+      "kind": "Upcoming",
+      "start": 1792689150000,
+      "end": 1792690550000
+    },
+    {
+      "fishParameterId": 193,
+      "now": 1792083059114,
+      "kind": "Upcoming",
+      "start": 1792084000000,
+      "end": 1792085750000
+    },
+    {
+      "fishParameterId": 193,
+      "now": 1792083999999,
+      "kind": "Upcoming",
+      "start": 1792084000000,
+      "end": 1792085750000
+    },
+    {
+      "fishParameterId": 193,
+      "now": 1792084000000,
+      "kind": "Open",
+      "start": 1792084000000,
+      "end": 1792085750000
+    },
+    {
+      "fishParameterId": 193,
+      "now": 1792084000001,
+      "kind": "Open",
+      "start": 1792084000000,
+      "end": 1792085750000
+    },
+    {
+      "fishParameterId": 193,
+      "now": 1792085749999,
+      "kind": "Open",
+      "start": 1792085400000,
+      "end": 1792085750000
+    },
+    {
+      "fishParameterId": 193,
+      "now": 1792085750000,
+      "kind": "Upcoming",
+      "start": 1792088200000,
+      "end": 1792089950000
+    },
+    {
+      "fishParameterId": 193,
+      "now": 1792085750001,
+      "kind": "Upcoming",
+      "start": 1792088200000,
+      "end": 1792089950000
+    },
+    {
+      "fishParameterId": 193,
+      "now": 1792169459114,
+      "kind": "Open",
+      "start": 1792169400000,
+      "end": 1792169750000
+    },
+    {
+      "fishParameterId": 193,
+      "now": 1792255859114,
+      "kind": "Upcoming",
+      "start": 1792256200000,
+      "end": 1792257950000
+    },
+    {
+      "fishParameterId": 193,
+      "now": 1792342259114,
+      "kind": "Upcoming",
+      "start": 1792344400000,
+      "end": 1792346150000
+    },
+    {
+      "fishParameterId": 193,
+      "now": 1792428659114,
+      "kind": "Open",
+      "start": 1792428400000,
+      "end": 1792430150000
+    },
+    {
+      "fishParameterId": 193,
+      "now": 1792515059114,
+      "kind": "Upcoming",
+      "start": 1792516600000,
+      "end": 1792518350000
+    },
+    {
+      "fishParameterId": 193,
+      "now": 1792601459114,
+      "kind": "Open",
+      "start": 1792600600000,
+      "end": 1792602350000
+    },
+    {
+      "fishParameterId": 193,
+      "now": 1792687859114,
+      "kind": "Upcoming",
+      "start": 1792688800000,
+      "end": 1792690550000
+    },
+    {
+      "fishParameterId": 195,
+      "now": 1792083059114,
+      "kind": "Upcoming",
+      "start": 1792086800000,
+      "end": 1792088200000
+    },
+    {
+      "fishParameterId": 195,
+      "now": 1792086799999,
+      "kind": "Upcoming",
+      "start": 1792086800000,
+      "end": 1792088200000
+    },
+    {
+      "fishParameterId": 195,
+      "now": 1792086800000,
+      "kind": "Open",
+      "start": 1792086800000,
+      "end": 1792088200000
+    },
+    {
+      "fishParameterId": 195,
+      "now": 1792086800001,
+      "kind": "Open",
+      "start": 1792086800000,
+      "end": 1792088200000
+    },
+    {
+      "fishParameterId": 195,
+      "now": 1792088199999,
+      "kind": "Open",
+      "start": 1792086800000,
+      "end": 1792088200000
+    },
+    {
+      "fishParameterId": 195,
+      "now": 1792088200000,
+      "kind": "Upcoming",
+      "start": 1792089600000,
+      "end": 1792092400000
+    },
+    {
+      "fishParameterId": 195,
+      "now": 1792088200001,
+      "kind": "Upcoming",
+      "start": 1792089600000,
+      "end": 1792092400000
+    },
+    {
+      "fishParameterId": 195,
+      "now": 1792169459114,
+      "kind": "Upcoming",
+      "start": 1792172200000,
+      "end": 1792176400000
+    },
+    {
+      "fishParameterId": 195,
+      "now": 1792255859114,
+      "kind": "Upcoming",
+      "start": 1792257600000,
+      "end": 1792260400000
+    },
+    {
+      "fishParameterId": 195,
+      "now": 1792342259114,
+      "kind": "Upcoming",
+      "start": 1792347200000,
+      "end": 1792351400000
+    },
+    {
+      "fishParameterId": 195,
+      "now": 1792428659114,
+      "kind": "Open",
+      "start": 1792428400000,
+      "end": 1792431200000
+    },
+    {
+      "fishParameterId": 195,
+      "now": 1792515059114,
+      "kind": "Upcoming",
+      "start": 1792515200000,
+      "end": 1792519400000
+    },
+    {
+      "fishParameterId": 195,
+      "now": 1792601459114,
+      "kind": "Open",
+      "start": 1792600600000,
+      "end": 1792602000000
+    },
+    {
+      "fishParameterId": 195,
+      "now": 1792687859114,
+      "kind": "Open",
+      "start": 1792687400000,
+      "end": 1792690200000
+    },
+    {
+      "fishParameterId": 196,
+      "now": 1792083059114,
+      "kind": "Upcoming",
+      "start": 1792084525000,
+      "end": 1792085925000
+    },
+    {
+      "fishParameterId": 196,
+      "now": 1792084524999,
+      "kind": "Upcoming",
+      "start": 1792084525000,
+      "end": 1792085925000
+    },
+    {
+      "fishParameterId": 196,
+      "now": 1792084525000,
+      "kind": "Open",
+      "start": 1792084525000,
+      "end": 1792085925000
+    },
+    {
+      "fishParameterId": 196,
+      "now": 1792084525001,
+      "kind": "Open",
+      "start": 1792084525000,
+      "end": 1792085925000
+    },
+    {
+      "fishParameterId": 196,
+      "now": 1792085924999,
+      "kind": "Open",
+      "start": 1792085400000,
+      "end": 1792085925000
+    },
+    {
+      "fishParameterId": 196,
+      "now": 1792085925000,
+      "kind": "Upcoming",
+      "start": 1792088725000,
+      "end": 1792090125000
+    },
+    {
+      "fishParameterId": 196,
+      "now": 1792085925001,
+      "kind": "Upcoming",
+      "start": 1792088725000,
+      "end": 1792090125000
+    },
+    {
+      "fishParameterId": 196,
+      "now": 1792169459114,
+      "kind": "Open",
+      "start": 1792169400000,
+      "end": 1792169925000
+    },
+    {
+      "fishParameterId": 196,
+      "now": 1792255859114,
+      "kind": "Upcoming",
+      "start": 1792256725000,
+      "end": 1792258125000
+    },
+    {
+      "fishParameterId": 196,
+      "now": 1792342259114,
+      "kind": "Upcoming",
+      "start": 1792344925000,
+      "end": 1792346325000
+    },
+    {
+      "fishParameterId": 196,
+      "now": 1792428659114,
+      "kind": "Upcoming",
+      "start": 1792428925000,
+      "end": 1792430325000
+    },
+    {
+      "fishParameterId": 196,
+      "now": 1792515059114,
+      "kind": "Upcoming",
+      "start": 1792517125000,
+      "end": 1792518525000
+    },
+    {
+      "fishParameterId": 196,
+      "now": 1792601459114,
+      "kind": "Open",
+      "start": 1792601125000,
+      "end": 1792602525000
+    },
+    {
+      "fishParameterId": 196,
+      "now": 1792687859114,
+      "kind": "Upcoming",
+      "start": 1792689325000,
+      "end": 1792690725000
+    },
+    {
+      "fishParameterId": 199,
+      "now": 1792083059114,
+      "kind": "Always",
+      "start": null,
+      "end": null
+    },
+    {
+      "fishParameterId": 199,
+      "now": 1792169459114,
+      "kind": "Always",
+      "start": null,
+      "end": null
+    },
+    {
+      "fishParameterId": 199,
+      "now": 1792255859114,
+      "kind": "Always",
+      "start": null,
+      "end": null
+    },
+    {
+      "fishParameterId": 199,
+      "now": 1792342259114,
+      "kind": "Always",
+      "start": null,
+      "end": null
+    },
+    {
+      "fishParameterId": 199,
+      "now": 1792428659114,
+      "kind": "Always",
+      "start": null,
+      "end": null
+    },
+    {
+      "fishParameterId": 199,
+      "now": 1792515059114,
+      "kind": "Always",
+      "start": null,
+      "end": null
+    },
+    {
+      "fishParameterId": 199,
+      "now": 1792601459114,
+      "kind": "Always",
+      "start": null,
+      "end": null
+    },
+    {
+      "fishParameterId": 199,
+      "now": 1792687859114,
+      "kind": "Always",
+      "start": null,
+      "end": null
+    },
+    {
+      "fishParameterId": 290,
+      "now": 1792083059114,
+      "kind": "Upcoming",
+      "start": 1792126000000,
+      "end": 1792126700000
+    },
+    {
+      "fishParameterId": 290,
+      "now": 1792125999999,
+      "kind": "Upcoming",
+      "start": 1792126000000,
+      "end": 1792126700000
+    },
+    {
+      "fishParameterId": 290,
+      "now": 1792126000000,
+      "kind": "Open",
+      "start": 1792126000000,
+      "end": 1792126700000
+    },
+    {
+      "fishParameterId": 290,
+      "now": 1792126000001,
+      "kind": "Open",
+      "start": 1792126000000,
+      "end": 1792126700000
+    },
+    {
+      "fishParameterId": 290,
+      "now": 1792126699999,
+      "kind": "Open",
+      "start": 1792126000000,
+      "end": 1792126700000
+    },
+    {
+      "fishParameterId": 290,
+      "now": 1792126700000,
+      "kind": "Upcoming",
+      "start": 1792151200000,
+      "end": 1792151900000
+    },
+    {
+      "fishParameterId": 290,
+      "now": 1792126700001,
+      "kind": "Upcoming",
+      "start": 1792151200000,
+      "end": 1792151900000
+    },
+    {
+      "fishParameterId": 290,
+      "now": 1792169459114,
+      "kind": "Upcoming",
+      "start": 1792180600000,
+      "end": 1792181300000
+    },
+    {
+      "fishParameterId": 290,
+      "now": 1792255859114,
+      "kind": "Open",
+      "start": 1792254800000,
+      "end": 1792256200000
+    },
+    {
+      "fishParameterId": 290,
+      "now": 1792342259114,
+      "kind": "Upcoming",
+      "start": 1792373800000,
+      "end": 1792374500000
+    },
+    {
+      "fishParameterId": 290,
+      "now": 1792428659114,
+      "kind": "Upcoming",
+      "start": 1792481600000,
+      "end": 1792483000000
+    },
+    {
+      "fishParameterId": 290,
+      "now": 1792515059114,
+      "kind": "Upcoming",
+      "start": 1792609000000,
+      "end": 1792609700000
+    },
+    {
+      "fishParameterId": 290,
+      "now": 1792601459114,
+      "kind": "Upcoming",
+      "start": 1792609000000,
+      "end": 1792609700000
+    },
+    {
+      "fishParameterId": 290,
+      "now": 1792687859114,
+      "kind": "Upcoming",
+      "start": 1792730800000,
+      "end": 1792731500000
+    },
+    {
+      "fishParameterId": 276,
+      "now": 1792083059114,
+      "kind": "Upcoming",
+      "start": 1792110600000,
+      "end": 1792112000000
+    },
+    {
+      "fishParameterId": 276,
+      "now": 1792110599999,
+      "kind": "Upcoming",
+      "start": 1792110600000,
+      "end": 1792112000000
+    },
+    {
+      "fishParameterId": 276,
+      "now": 1792110600000,
+      "kind": "Open",
+      "start": 1792110600000,
+      "end": 1792112000000
+    },
+    {
+      "fishParameterId": 276,
+      "now": 1792110600001,
+      "kind": "Open",
+      "start": 1792110600000,
+      "end": 1792112000000
+    },
+    {
+      "fishParameterId": 276,
+      "now": 1792111999999,
+      "kind": "Open",
+      "start": 1792110600000,
+      "end": 1792112000000
+    },
+    {
+      "fishParameterId": 276,
+      "now": 1792112000000,
+      "kind": "Upcoming",
+      "start": 1792121800000,
+      "end": 1792123200000
+    },
+    {
+      "fishParameterId": 276,
+      "now": 1792112000001,
+      "kind": "Upcoming",
+      "start": 1792121800000,
+      "end": 1792123200000
+    },
+    {
+      "fishParameterId": 276,
+      "now": 1792169459114,
+      "kind": "Upcoming",
+      "start": 1792177800000,
+      "end": 1792180600000
+    },
+    {
+      "fishParameterId": 276,
+      "now": 1792255859114,
+      "kind": "Upcoming",
+      "start": 1792270200000,
+      "end": 1792271600000
+    },
+    {
+      "fishParameterId": 276,
+      "now": 1792342259114,
+      "kind": "Upcoming",
+      "start": 1792343000000,
+      "end": 1792344400000
+    },
+    {
+      "fishParameterId": 276,
+      "now": 1792428659114,
+      "kind": "Upcoming",
+      "start": 1792432600000,
+      "end": 1792434000000
+    },
+    {
+      "fishParameterId": 276,
+      "now": 1792515059114,
+      "kind": "Upcoming",
+      "start": 1792523600000,
+      "end": 1792525000000
+    },
+    {
+      "fishParameterId": 276,
+      "now": 1792601459114,
+      "kind": "Upcoming",
+      "start": 1792607600000,
+      "end": 1792609000000
+    },
+    {
+      "fishParameterId": 276,
+      "now": 1792687859114,
+      "kind": "Upcoming",
+      "start": 1792690200000,
+      "end": 1792691600000
+    }
+  ]
+}

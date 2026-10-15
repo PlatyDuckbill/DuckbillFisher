@@ -10,4 +10,8 @@
     <PackageReference Include="xunit.runner.visualstudio" Version="3.1.5" PrivateAssets="all" />
     <ProjectReference Include="../../src/DuckbillFisher.Core/DuckbillFisher.Core.csproj" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="../../data/fishing.kr.v1.json" Link="Fixtures/fishing.kr.v1.json" CopyToOutputDirectory="PreserveNewest" />
+    <None Update="Fixtures/forecast-reference.json" CopyToOutputDirectory="PreserveNewest" />
+  </ItemGroup>
 </Project>
