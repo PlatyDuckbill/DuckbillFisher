@@ -2,6 +2,7 @@ using Dalamud.Game.Command;
 using Dalamud.Interface.Windowing;
 using Dalamud.Plugin;
 using Dalamud.Plugin.Services;
+using DuckbillFisher.Plugin.Localization;
 
 namespace DuckbillFisher.Plugin;
 
@@ -10,6 +11,7 @@ public sealed class Plugin : IDalamudPlugin
     private const string Command = "/duckbillfisher";
     private readonly IDalamudPluginInterface pluginInterface;
     private readonly ICommandManager commandManager;
+    private readonly CommandInfo commandInfo;
     private readonly WindowSystem windows = new("DuckbillFisher");
     private readonly MainWindow mainWindow;
     private readonly FishingConditionObserver fishingObserver;
@@ -21,14 +23,16 @@ public sealed class Plugin : IDalamudPlugin
     {
         this.pluginInterface = pluginInterface;
         this.commandManager = commandManager;
+        UiText.SetLanguage(UiLanguage.Korean);
 
-        if (!commandManager.AddHandler(Command, new CommandInfo(OnCommand)
-            { HelpMessage = "DuckbillFisher 창을 여닫습니다." }))
-            throw new InvalidOperationException($"Command already registered: {Command}");
+        commandInfo = new CommandInfo(OnCommand) { HelpMessage = UiText.Get(TextKey.CommandHelp) };
+        if (!commandManager.AddHandler(Command, commandInfo))
+            throw new InvalidOperationException(UiText.Get(TextKey.CommandConflict, Command));
 
         fishingObserver = new FishingConditionObserver(conditions);
         fishGuide = new FishGuideDiagnostics(clientState, playerState, dataManager, gameGui, framework);
-        mainWindow = new MainWindow(fishingObserver, fishGuide);
+        mainWindow = new MainWindow(fishingObserver, fishGuide,
+            () => commandInfo.HelpMessage = UiText.Get(TextKey.CommandHelp));
         windows.AddWindow(mainWindow);
         pluginInterface.UiBuilder.Draw += windows.Draw;
         pluginInterface.UiBuilder.OpenMainUi += OpenMainUi;

@@ -5,11 +5,12 @@
 ```text
 src/
   DuckbillFisher.Core/       # 수집 상태/알림 대상 판정, 관찰 이력; 추후 시간·날씨·타이머
-  DuckbillFisher.Plugin/     # 진입점·관찰 UI·공개 Condition 어댑터; 추후 수첩·설정 I/O
+  DuckbillFisher.Plugin/     # 진입점·관찰 UI·공개 API·검증한 KR 수집 비트 어댑터
+    Localization/           # .resx·타입화된 메시지·UI 언어 선택
 tests/
   DuckbillFisher.Core.Tests/
 data/                       # 검증된 원본/정제 JSON, 출처와 라이선스
-scripts/                    # 환경 확인·빌드·배포 준비·배포 도구 테스트
+scripts/                    # 환경/리소스 확인·빌드·공유 패키지 계약·배포 준비/검사
 repo/                       # 친구 공유용 설치 목록, 현재 빈 배열
 docs/
 ```
@@ -31,6 +32,8 @@ Plugin의 `AssemblyName`은 `DuckbillFisher`다. 주 DLL은 `DuckbillFisher.dll`
 | Notifications/Map | 허용된 로컬 출력, 사용자 클릭에 따른 지도 열기 |
 
 인터페이스는 실제 테스트와 어댑터 경계에 필요한 것만 만든다. 공개 API 유무는 ENV-03에서 확인하며 `CastStarted` 같은 개념적 이벤트 이름을 실제 Dalamud API로 오인하지 않는다.
+
+사용자 문구는 상태/게임 접근과 분리한다. 상태와 이력은 번역 문자열 대신 UiMessage의 키/인자를 보관하고 UI/진단 출력에서 각각 표현한다. 추가 언어와 패키징은 [다국어 지침](LOCALIZATION.md)을 따른다.
 
 ## 시간과 성능
 

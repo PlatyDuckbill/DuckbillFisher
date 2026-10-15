@@ -2,16 +2,21 @@ using System.Diagnostics;
 using System.Globalization;
 using System.Text;
 using Dalamud.Plugin.Services;
+using DuckbillFisher.Plugin.Localization;
 using Lumina.Excel.Sheets;
+using T = DuckbillFisher.Plugin.Localization.TextKey;
 
 namespace DuckbillFisher.Plugin;
 
-internal sealed record FishGuideRow(uint FishParameterId, uint ItemId, string ItemType, string Name, bool IsInLog);
+internal sealed record FishGuideRow(uint FishParameterId, uint ItemId, string ItemType, string Name, bool IsInLog)
+{
+    public string DisplayName => string.IsNullOrWhiteSpace(Name) ? UiText.Get(T.MissingName) : Name;
+}
 
 internal sealed record FishGuideDiagnosticView(
     bool HasSample, bool IsLoggedIn, bool? IsLoaded, bool FishGuideVisible, bool FishingNoteVisible,
-    bool LoginFallback, int Session, int OpenCount, int RefreshCount, string LastTrigger, string Status,
-    int InLogCount, uint MaxInLogId, IReadOnlyList<FishGuideRow> Rows, IReadOnlyList<string> History)
+    bool LoginFallback, int Session, int OpenCount, int RefreshCount, UiMessage LastTrigger, UiMessage Status,
+    int InLogCount, uint MaxInLogId, IReadOnlyList<FishGuideRow> Rows, IReadOnlyList<LocalizedLogEntry> History)
 {
     public FishBitSample? CollectionSample { get; init; }
 }
@@ -27,14 +32,14 @@ internal sealed class FishGuideDiagnostics : IDisposable
     private readonly NativeFishCollectionReader collectionReader;
     private readonly object gate = new();
     private readonly Stopwatch clock = Stopwatch.StartNew();
-    private readonly Queue<string> history = new();
+    private readonly Queue<LocalizedLogEntry> history = new();
     private FishGuideDiagnosticView view = new(false, false, null, false, false, false, 0, 0, 0,
-        "없음", "수첩을 열면 어종 목록을 읽습니다. 수집 여부는 아직 확인 전입니다.", 0, 0, [], []);
+        new(T.None), new(T.GuideWaiting), 0, 0, [], []);
     private FishGuideRow[]? cachedRows;
     private TimeSpan nextPoll;
     private ulong characterId;
     private bool manualRefresh;
-    private string? pendingTrigger;
+    private UiMessage? pendingTrigger;
     private uint? trackedFishId;
     private uint? pendingFishId;
     private bool disposed;
@@ -76,7 +81,7 @@ internal sealed class FishGuideDiagnostics : IDisposable
                 return;
             view = view with { LoginFallback = enabled };
             if (enabled && characterId != 0)
-                pendingTrigger = "로그인 후 갱신 옵션 켜기";
+                pendingTrigger = new(T.LoginOptionTrigger);
         }
     }
 
@@ -97,8 +102,8 @@ internal sealed class FishGuideDiagnostics : IDisposable
                 pendingTrigger = null;
                 manualRefresh = false;
                 pendingFishId = null;
-                var status = $"Unknown: 공개 API 확인 실패 ({ex.GetType().Name}).";
-                if (view.Status != status)
+                var status = new UiMessage(T.PublicApiError, ex.GetType().Name);
+                if (!view.Status.SameAs(status))
                 {
                     AddHistory(status);
                     view = view with { HasSample = false, Rows = [], InLogCount = 0, MaxInLogId = 0, CollectionSample = null, Status = status };
@@ -127,19 +132,22 @@ internal sealed class FishGuideDiagnostics : IDisposable
             view = view with
             {
                 Session = view.Session + 1, Rows = [], InLogCount = 0, MaxInLogId = 0,
-                LastTrigger = "없음", OpenCount = 0, RefreshCount = 0,
+                LastTrigger = new(T.None), OpenCount = 0, RefreshCount = 0,
                 CollectionSample = null,
-                Status = "수첩을 열면 어종 목록을 읽습니다. 수집 여부는 아직 확인 전입니다.",
+                Status = new(T.GuideWaiting),
             };
-            AddHistory(currentCharacter == 0 ? "세션 해제: 이전 표시 폐기" : "캐릭터 준비: 새 세션");
+            AddHistory(new(currentCharacter == 0 ? T.SessionCleared : T.SessionReady));
             if (currentCharacter != 0 && view.LoginFallback)
-                pendingTrigger = "로그인 후 준비 확인";
+                pendingTrigger = new(T.LoginReadyTrigger);
             else if (currentCharacter != 0 && (guide || note))
-                pendingTrigger = "캐릭터 준비 시 수첩이 이미 열려 있음";
+                pendingTrigger = new(T.AlreadyOpenWhenReady);
         }
 
         if (!oldView.HasSample || loggedIn != oldView.IsLoggedIn || loaded != oldView.IsLoaded)
-            AddHistory($"상태: IsLoggedIn={loggedIn}, IsLoaded={loaded?.ToString() ?? "조회 안 함"}");
+        {
+            object loadedValue = loaded is bool value ? value : new UiMessage(T.NotQueried);
+            AddHistory(new(T.PlayerStateChanged, loggedIn, loadedValue));
+        }
 
         ObserveWindow("FishGuide2", oldView.FishGuideVisible, guide, oldView.HasSample);
         ObserveWindow("FishingNote", oldView.FishingNoteVisible, note, oldView.HasSample);
@@ -152,15 +160,15 @@ internal sealed class FishGuideDiagnostics : IDisposable
         if (!loggedIn || loaded != true || currentCharacter == 0)
         {
             if (manualRefresh)
-                AddHistory("수동 갱신 생략: 로그인과 캐릭터 준비 필요");
+                AddHistory(new(T.ManualRefreshSkipped));
             manualRefresh = false;
             pendingFishId = null;
-            view = view with { Rows = [], InLogCount = 0, MaxInLogId = 0, CollectionSample = null, Status = "Unknown: 로그인과 캐릭터 준비를 기다립니다." };
+            view = view with { Rows = [], InLogCount = 0, MaxInLogId = 0, CollectionSample = null, Status = new(T.WaitingForPlayer) };
             return;
         }
 
         if (manualRefresh)
-            pendingTrigger = "수동 새로 읽기";
+            pendingTrigger = new(T.ManualRefreshTrigger);
         if (pendingTrigger is { } trigger)
         {
             var reload = manualRefresh;
@@ -173,10 +181,10 @@ internal sealed class FishGuideDiagnostics : IDisposable
             pendingFishId = null;
             var row = view.Rows.FirstOrDefault(fish => fish.FishParameterId == fishId);
             var sample = row is null
-                ? new FishBitSample(fishId, null, "Unknown: 현재 어종 목록에 없는 ID입니다.")
+                ? new FishBitSample(fishId, null, new(T.RowAbsent))
                 : collectionReader.Read(row, characterId, guide);
             view = view with { CollectionSample = sample };
-            AddHistory($"수집 비트 조회: FishParameter={fishId}; raw={sample.Value?.ToString() ?? "Unknown"}; {sample.Reason}");
+            AddHistory(new(T.BitReadLog, fishId, sample.Value?.ToString() ?? "Unknown", sample.Reason));
         }
     }
 
@@ -189,16 +197,16 @@ internal sealed class FishGuideDiagnostics : IDisposable
     private void ObserveWindow(string name, bool wasVisible, bool visible, bool hadSample)
     {
         if (!hadSample || wasVisible != visible)
-            AddHistory($"{name}: {(visible ? "표시" : "닫힘")}{(!hadSample ? " (첫 표본)" : "")}");
+            AddHistory(new(hadSample ? T.WindowStateLog : T.WindowFirstSampleLog, name, new UiMessage(visible ? T.Opened : T.Closed)));
         if (!visible || (hadSample && wasVisible))
             return;
         view = view with { OpenCount = view.OpenCount + 1 };
-        pendingTrigger = hadSample ? $"수첩 열림: {name}" : $"로드 시 이미 표시됨: {name}";
+        pendingTrigger = new(hadSample ? T.GuideOpenedTrigger : T.GuideInitiallyVisibleTrigger, name);
         if (name == "FishGuide2")
             pendingFishId = trackedFishId;
     }
 
-    private void RefreshRows(string trigger, bool reload)
+    private void RefreshRows(UiMessage trigger, bool reload)
     {
         try
         {
@@ -214,7 +222,7 @@ internal sealed class FishGuideDiagnostics : IDisposable
                     var name = item.Is<Item>() ? item.GetValueOrDefault<Item>()?.Name.ExtractText()
                         : item.Is<EventItem>() ? item.GetValueOrDefault<EventItem>()?.Name.ExtractText() : null;
                     rows.Add(new FishGuideRow(fish.RowId, item.RowId, itemType,
-                        string.IsNullOrWhiteSpace(name) ? "(참조 행/이름 확인 불가)" : name, fish.IsInLog));
+                        name ?? "", fish.IsInLog));
                 }
                 cachedRows = rows.ToArray();
             }
@@ -226,9 +234,9 @@ internal sealed class FishGuideDiagnostics : IDisposable
                 Rows = cachedRows, InLogCount = inLog.Length,
                 MaxInLogId = inLog.Length == 0 ? 0 : inLog.Max(row => row.FishParameterId),
                 RefreshCount = view.RefreshCount + 1, LastTrigger = trigger,
-                Status = "어종 목록 읽기 완료 · 수집 여부 Unknown (확인 전)",
+                Status = new(T.RowsRead),
             };
-            AddHistory($"갱신 #{view.RefreshCount}: {trigger}; 전체 {cachedRows.Length} / IsInLog {inLog.Length}");
+            AddHistory(new(T.RowsRefreshLog, view.RefreshCount, trigger, cachedRows.Length, inLog.Length));
             if (view.FishGuideVisible && trackedFishId is not null)
                 pendingFishId = trackedFishId;
         }
@@ -239,17 +247,17 @@ internal sealed class FishGuideDiagnostics : IDisposable
             view = view with
             {
                 Rows = [], InLogCount = 0, MaxInLogId = 0, LastTrigger = trigger, CollectionSample = null,
-                Status = $"Unknown: 어종 목록 읽기 실패 ({ex.GetType().Name}). 수동 새로 읽기로 재시도하세요.",
+                Status = new(T.RowsReadError, ex.GetType().Name),
             };
             AddHistory(view.Status);
         }
     }
 
-    private void AddHistory(string message)
+    private void AddHistory(UiMessage message)
     {
         if (history.Count == 80)
             history.Dequeue();
-        history.Enqueue(string.Create(CultureInfo.InvariantCulture, $"+{clock.Elapsed.TotalSeconds:F3}s {message}"));
+        history.Enqueue(new(clock.Elapsed, message));
     }
 
     public string CreateReport(FishGuideRow? selected)
@@ -257,25 +265,26 @@ internal sealed class FishGuideDiagnostics : IDisposable
         lock (gate)
         {
             var report = new StringBuilder();
-            report.AppendLine("DuckbillFisher ENV-03/fish-guide-native/v1");
-            report.AppendLine($"Plugin: {typeof(Plugin).Assembly.GetName().Version}; Dalamud: {typeof(IPlayerState).Assembly.GetName().Version}");
-            report.AppendLine($"Session: {view.Session}; sampled: {view.HasSample}; IsLoggedIn={view.IsLoggedIn}; IsLoaded={view.IsLoaded?.ToString() ?? "not sampled"}");
-            report.AppendLine($"FishGuide2={view.FishGuideVisible}; FishingNote={view.FishingNoteVisible}; loginFallback={view.LoginFallback}");
-            report.AppendLine($"Open samples: {view.OpenCount}; refreshes: {view.RefreshCount}; trigger: {view.LastTrigger}");
-            report.AppendLine($"FishParameter rows: {view.Rows.Count}; IsInLog rows: {view.InLogCount}; max IsInLog RowId: {view.MaxInLogId}");
-            report.AppendLine(view.Status);
-            report.AppendLine($"Game build: {collectionReader.GameVersion}; native compatibility: {collectionReader.Compatibility}");
+            void AppendInvariant(FormattableString line) => report.AppendLine(FormattableString.Invariant(line));
+            report.AppendLine("DuckbillFisher ENV-03/fish-guide-native/v2");
+            AppendInvariant($"Plugin: {typeof(Plugin).Assembly.GetName().Version}; Dalamud: {typeof(IPlayerState).Assembly.GetName().Version}");
+            AppendInvariant($"Session: {view.Session}; sampled: {view.HasSample}; IsLoggedIn={view.IsLoggedIn}; IsLoaded={view.IsLoaded?.ToString() ?? "not sampled"}");
+            AppendInvariant($"FishGuide2={view.FishGuideVisible}; FishingNote={view.FishingNoteVisible}; loginFallback={view.LoginFallback}");
+            AppendInvariant($"Open samples: {view.OpenCount}; refreshes: {view.RefreshCount}; trigger: {view.LastTrigger.Diagnostic}");
+            AppendInvariant($"FishParameter rows: {view.Rows.Count}; IsInLog rows: {view.InLogCount}; max IsInLog RowId: {view.MaxInLogId}");
+            report.AppendLine(view.Status.Diagnostic);
+            AppendInvariant($"Game build: {collectionReader.GameVersion}; native compatibility: {collectionReader.Compatibility.Diagnostic}");
             // Only include a selection that belongs to the currently published snapshot.
             if (selected is not null && view.Rows.Contains(selected))
             {
-                report.AppendLine($"Selected: FishParameter={selected.FishParameterId}; {selected.ItemType}={selected.ItemId}; IsInLog={selected.IsInLog}; name={selected.Name}");
+                AppendInvariant($"Selected: FishParameter={selected.FishParameterId}; {selected.ItemType}={selected.ItemId}; IsInLog={selected.IsInLog}; name={selected.Name}");
                 if (view.CollectionSample is { } sample && sample.FishParameterId == selected.FishParameterId)
-                    report.AppendLine($"Raw caught bit: {sample.Value?.ToString() ?? "Unknown"}; {sample.Reason}");
+                    AppendInvariant($"Raw caught bit: {sample.Value?.ToString() ?? "Unknown"}; [{sample.Reason.Key}] {sample.Reason.Diagnostic}");
             }
             report.AppendLine("Collection=Unknown: diagnostic raw bit only. Compare against the game fish log; no automatic filter or readiness inference.");
             report.AppendLine("Visibility sampled every 250ms via public APIs. Times are monotonic seconds since plugin load.");
             foreach (var entry in history)
-                report.AppendLine(entry);
+                report.AppendLine(entry.Diagnostic);
             return report.ToString();
         }
     }

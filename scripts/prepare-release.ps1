@@ -9,6 +9,7 @@ param(
 # Local preparation only. Does not upload files or modify the live repository index.
 $ErrorActionPreference = 'Stop'
 Set-StrictMode -Version Latest
+. (Join-Path $PSScriptRoot 'package-files.ps1')
 if (!$AssetBaseUrl.IsAbsoluteUri -or $AssetBaseUrl.Scheme -ne 'https' -or
     $AssetBaseUrl.UserInfo -or $AssetBaseUrl.Query -or $AssetBaseUrl.Fragment) {
     throw 'AssetBaseUrl must be an absolute HTTPS directory URL without credentials, query or fragment.'
@@ -19,10 +20,16 @@ $zip = [IO.Compression.ZipFile]::OpenRead($package)
 $temp = Join-Path ([IO.Path]::GetTempPath()) ([IO.Path]::GetRandomFileName())
 try {
     # Tight allowlist for the current starter package; extend deliberately when adding assets.
-    $required = @('DuckbillFisher.dll', 'DuckbillFisher.Core.dll', 'DuckbillFisher.json')
+    $required = @(Get-RequiredPluginFiles)
     $allowed = $required + @('DuckbillFisher.pdb', 'DuckbillFisher.Core.pdb', 'DuckbillFisher.deps.json', 'DuckbillFisher.Core.deps.json')
-    $names = @($zip.Entries | ForEach-Object { $_.FullName })
-    if (@($names | Select-Object -Unique).Count -ne $names.Count) { throw 'Duplicate ZIP entries.' }
+    # DalamudPackager on Windows emits backslashes for satellite paths.
+    # Normalize before allowlist and duplicate checks, without changing the packaged bytes.
+    $entries = [Collections.Generic.Dictionary[string,object]]::new([StringComparer]::Ordinal)
+    foreach ($entry in $zip.Entries) {
+        $name = $entry.FullName.Replace('\', '/')
+        if (!$entries.TryAdd($name, $entry)) { throw 'Duplicate ZIP entries.' }
+    }
+    $names = @($entries.Keys)
     foreach ($name in $names) {
         if ($name -cnotin $allowed) { throw "Unexpected ZIP entry: $name. Review the packaging allowlist." }
     }
@@ -49,7 +56,12 @@ try {
     }
 } finally {
     $zip.Dispose()
-    if (Test-Path -LiteralPath $temp) { Remove-Item -LiteralPath $temp -Recurse -Force }
+    if (Test-Path -LiteralPath $temp) {
+        $resolvedTemp = (Resolve-Path -LiteralPath $temp).Path
+        $tempParent = [IO.Path]::GetFullPath([IO.Path]::GetTempPath()).TrimEnd([IO.Path]::DirectorySeparatorChar)
+        if ([IO.Path]::GetDirectoryName($resolvedTemp) -ne $tempParent) { throw 'Refusing cleanup outside the temporary root.' }
+        Remove-Item -LiteralPath $resolvedTemp -Recurse -Force
+    }
 }
 
 $output = [IO.Path]::GetFullPath($OutputDirectory)

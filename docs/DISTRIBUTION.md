@@ -36,6 +36,8 @@ pwsh -File scripts/prepare-release.ps1 `
 
 버전은 Plugin csproj의 Version에서 관리한다. 예시의 release tag/출력 경로도 실제 버전에 맞춘다. 스크립트는 ZIP의 필수 파일, 허용 목록, API, DLL/manifest 버전 일치를 확인한 후 버전별 ZIP·SHA256·pluginmaster.json을 로컬에 만든다. 기존 결과가 있으면 덮어쓰지 않는다. 업로드하거나 repo/pluginmaster.json을 자동 변경하지 않는다.
 
+0.1.3.0부터 한국어 리소스인 `ko/DuckbillFisher.resources.dll`도 필요하다. `scripts/package-files.ps1`가 번역 리소스에서 필요한 DLL 목록을 계산하며 개발 복사와 배포 준비에서 공유한다. 배포 ZIP의 경로 구분자는 정규화해 검사한다. 자세한 문자열/언어 확장 절차는 [다국어 지침](LOCALIZATION.md)을 따른다.
+
 ## 게시 순서
 
 1. 테스트한 커밋, 지원하는 KR 게임/Dalamud 버전, 변경 사항을 기록한다. 코드/도입 자료 라이선스를 정리한다.

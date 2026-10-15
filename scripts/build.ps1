@@ -10,6 +10,7 @@ param(
 $ErrorActionPreference = 'Stop'
 Set-StrictMode -Version Latest
 $root = Split-Path $PSScriptRoot -Parent
+. (Join-Path $PSScriptRoot 'package-files.ps1')
 
 function Invoke-Dotnet {
     & dotnet @args
@@ -27,6 +28,7 @@ if ($DalamudPath) { $DalamudPath = (Resolve-Path -LiteralPath $DalamudPath).Path
 
 Push-Location $root
 try {
+    & (Join-Path $PSScriptRoot 'check-localization.ps1')
     $requiredSdk = (Get-Content global.json -Raw | ConvertFrom-Json).sdk.version
     $actualSdk = & dotnet --version
     if ($LASTEXITCODE -ne 0 -or $actualSdk -ne $requiredSdk) {
@@ -54,14 +56,18 @@ try {
     }
 
     # Only our assemblies and manifest. Never copy the Dalamud runtime or game files.
-    $files = @('DuckbillFisher.dll', 'DuckbillFisher.Core.dll', 'DuckbillFisher.json')
+    $files = @(Get-RequiredPluginFiles)
     foreach ($file in $files) {
         if (!(Test-Path -LiteralPath (Join-Path $output $file) -PathType Leaf)) { throw "Missing output: $file" }
     }
     if ($DeployDirectory) {
         $destination = [IO.Path]::GetFullPath($DeployDirectory)
         New-Item -ItemType Directory -Force -Path $destination | Out-Null
-        foreach ($file in $files) { Copy-Item -LiteralPath (Join-Path $output $file) -Destination (Join-Path $destination $file) -Force }
+        foreach ($file in $files) {
+            $target = Join-Path $destination $file
+            New-Item -ItemType Directory -Force -Path (Split-Path $target -Parent) | Out-Null
+            Copy-Item -LiteralPath (Join-Path $output $file) -Destination $target -Force
+        }
         Write-Output "Copied to $destination. Register DuckbillFisher.dll in Dev Plugin Locations. Unload the plugin before future copies."
     } else {
         Write-Output "Dev plugin DLL: $(Join-Path $output 'DuckbillFisher.dll')"

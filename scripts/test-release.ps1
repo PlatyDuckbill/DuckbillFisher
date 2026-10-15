@@ -3,6 +3,7 @@
 param([Parameter(Mandatory)][string]$PackagePath)
 
 $ErrorActionPreference = 'Stop'
+. (Join-Path $PSScriptRoot 'package-files.ps1')
 $package = (Resolve-Path -LiteralPath $PackagePath).Path
 $temp = Join-Path ([IO.Path]::GetTempPath()) ([IO.Path]::GetRandomFileName())
 $prepare = Join-Path $PSScriptRoot 'prepare-release.ps1'
@@ -32,7 +33,8 @@ try {
     if ((Get-Content $indexPath -Raw) -ne $indexText) { throw 'Existing index was modified.' }
     Assert-Rejected { & $prepare -PackagePath $package -AssetBaseUrl 'http://example.invalid/' -OutputDirectory (Join-Path $temp 'bad-url') }
 
-    foreach ($case in @('missing-core', 'runtime-dll', 'wrong-api', 'wrong-version', 'duplicate')) {
+    $satellite = @(Get-RequiredPluginFiles | Where-Object { $_.EndsWith('/DuckbillFisher.resources.dll') })[0]
+    foreach ($case in @('missing-core', 'runtime-dll', 'wrong-api', 'wrong-version', 'duplicate', 'missing-localization', 'normalized-duplicate')) {
         $bad = Join-Path $temp "$case.zip"
         Copy-Item $package $bad
         $zip = [IO.Compression.ZipFile]::Open($bad, [IO.Compression.ZipArchiveMode]::Update)
@@ -41,6 +43,15 @@ try {
                 'missing-core' { $zip.GetEntry('DuckbillFisher.Core.dll').Delete() }
                 'runtime-dll' { $zip.CreateEntry('Dalamud.dll') | Out-Null }
                 'duplicate' { $zip.CreateEntry('DuckbillFisher.json') | Out-Null }
+                'missing-localization' {
+                    $localeEntry = $zip.Entries | Where-Object { $_.FullName.Replace('\', '/') -ceq $satellite }
+                    $localeEntry.Delete()
+                }
+                'normalized-duplicate' {
+                    $localeEntry = $zip.Entries | Where-Object { $_.FullName.Replace('\', '/') -ceq $satellite }
+                    $alternate = if ($localeEntry.FullName.Contains('\')) { $satellite } else { $satellite.Replace('/', '\') }
+                    $zip.CreateEntry($alternate) | Out-Null
+                }
                 default {
                     $reader = [IO.StreamReader]::new($zip.GetEntry('DuckbillFisher.json').Open())
                     try { $manifest = $reader.ReadToEnd() | ConvertFrom-Json -AsHashtable }
@@ -58,5 +69,10 @@ try {
         Assert-Rejected { & $prepare -PackagePath $bad -AssetBaseUrl $baseUrl -OutputDirectory $badOutput }
         if (Test-Path $badOutput) { throw "Invalid package wrote output: $case" }
     }
-    Write-Output 'PASS: valid release, overwrite protection, HTTPS, missing dependency, runtime exclusion, API, version, duplicate entries.'
-} finally { Remove-Item -LiteralPath $temp -Recurse -Force }
+    Write-Output 'PASS: valid release, overwrite protection, HTTPS, missing dependency, runtime exclusion, API, version, duplicate entries, missing localization, normalized duplicate paths.'
+} finally {
+    $resolvedTemp = (Resolve-Path -LiteralPath $temp).Path
+    $tempParent = [IO.Path]::GetFullPath([IO.Path]::GetTempPath()).TrimEnd([IO.Path]::DirectorySeparatorChar)
+    if ([IO.Path]::GetDirectoryName($resolvedTemp) -ne $tempParent) { throw 'Refusing cleanup outside the temporary root.' }
+    Remove-Item -LiteralPath $resolvedTemp -Recurse -Force
+}

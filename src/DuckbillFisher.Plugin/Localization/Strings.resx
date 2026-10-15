@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+  <resheader name="version"><value>2.0</value></resheader>
+  <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms</value></resheader>
+  <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms</value></resheader>
+  <data name="Language" xml:space="preserve"><value>Language</value></data>
+  <data name="Korean" xml:space="preserve"><value>한국어</value></data>
+  <data name="English" xml:space="preserve"><value>English</value></data>
+  <data name="TabGuide" xml:space="preserve"><value>Fish log diagnostics</value></data>
+  <data name="TabFishing" xml:space="preserve"><value>Fishing observations</value></data>
+  <data name="CommandHelp" xml:space="preserve"><value>Toggle the DuckbillFisher window.</value></data>
+  <data name="CommandConflict" xml:space="preserve"><value>Command already registered: {0}</value></data>
+  <data name="GuideIntro" xml:space="preserve"><value>Open the in-game Fish Guide and click a fish below to read its caught bit. This is a diagnostic sample, not an automatic collection filter.</value></data>
+  <data name="LoginState" xml:space="preserve"><value>Logged in: {0} | Player data loaded: {1}</value></data>
+  <data name="GuideVisibility" xml:space="preserve"><value>Fish Guide: {0} | Fishing Log: {1}</value></data>
+  <data name="GuideCounters" xml:space="preserve"><value>Open samples: {0} | Refreshes: {1} | Last trigger: {2}</value></data>
+  <data name="LoginFallback" xml:space="preserve"><value>Also refresh when player data becomes ready after login</value></data>
+  <data name="ReloadFish" xml:space="preserve"><value>Reload fish rows</value></data>
+  <data name="CopyGuide" xml:space="preserve"><value>Copy fish log report</value></data>
+  <data name="GuideRows" xml:space="preserve"><value>All rows: {0} | In log: {1} | Highest in-log ID: {2}</value></data>
+  <data name="FishSearch" xml:space="preserve"><value>Fish name or FishParameter ID</value></data>
+  <data name="SearchHint" xml:space="preserve"><value>Showing up to 30 matching fish included in the fish log.</value></data>
+  <data name="MissingName" xml:space="preserve"><value>(unresolved row or name)</value></data>
+  <data name="FishOption" xml:space="preserve"><value>{0} (ID {1})</value></data>
+  <data name="SelectedFish" xml:space="preserve"><value>{0} | FishParameter {1} | {2} {3} | IsInLog={4} | Collection: Unknown</value></data>
+  <data name="BitValue" xml:space="preserve"><value>Last raw caught bit: {0} | {1}</value></data>
+  <data name="BitPending" xml:space="preserve"><value>Waiting for a caught-bit sample.</value></data>
+  <data name="ReadBitAgain" xml:space="preserve"><value>Read selected fish bit again</value></data>
+  <data name="GuideHistory" xml:space="preserve"><value>Player readiness and fish log history</value></data>
+  <data name="Opened" xml:space="preserve"><value>open</value></data>
+  <data name="Closed" xml:space="preserve"><value>closed</value></data>
+  <data name="NotQueried" xml:space="preserve"><value>not sampled</value></data>
+  <data name="None" xml:space="preserve"><value>none</value></data>
+  <data name="FishingTitle" xml:space="preserve"><value>ENV-03 fishing observations</value></data>
+  <data name="FishingIntro" xml:space="preserve"><value>Observe the three condition flags while fishing manually. Cast and bite detection are not available yet.</value></data>
+  <data name="StartObservation" xml:space="preserve"><value>Start new observation</value></data>
+  <data name="StopObservation" xml:space="preserve"><value>Stop observation</value></data>
+  <data name="CopyObservation" xml:space="preserve"><value>Copy observation report</value></data>
+  <data name="Recording" xml:space="preserve"><value>recording</value></data>
+  <data name="Stopped" xml:space="preserve"><value>stopped</value></data>
+  <data name="ObservationCounts" xml:space="preserve"><value>{0} | Retained: {1}/200 | Older entries dropped: {2}</value></data>
+  <data name="ObservationHint" xml:space="preserve"><value>Starting a new observation clears the previous history. Recording continues when this window is closed; unloading discards it.</value></data>
+  <data name="ManualMarker" xml:space="preserve"><value>Manual note</value></data>
+  <data name="AddMarker" xml:space="preserve"><value>Add note</value></data>
+  <data name="MarkerHint" xml:space="preserve"><value>Notes record the time of your click, not a detected game action.</value></data>
+  <data name="LastSnapshot" xml:space="preserve"><value>Last sample: Fishing={0} | Gathering={1} | Casting={2}</value></data>
+  <data name="NewestFirst" xml:space="preserve"><value>Newest entries appear first below. Copied reports use chronological order.</value></data>
+  <data name="Close" xml:space="preserve"><value>Close</value></data>
+  <data name="MarkCast" xml:space="preserve"><value>Cast</value></data>
+  <data name="MarkWait" xml:space="preserve"><value>Waiting for a bite</value></data>
+  <data name="MarkBite" xml:space="preserve"><value>Bite seen</value></data>
+  <data name="MarkHook" xml:space="preserve"><value>Hook</value></data>
+  <data name="MarkRetrieve" xml:space="preserve"><value>Cancel / retrieve</value></data>
+  <data name="MarkEnd" xml:space="preserve"><value>Stop fishing</value></data>
+  <data name="MarkMooch" xml:space="preserve"><value>Mooch cast</value></data>
+  <data name="MarkMove" xml:space="preserve"><value>Change area</value></data>
+  <data name="MarkLogout" xml:space="preserve"><value>Log out</value></data>
+  <data name="GuideWaiting" xml:space="preserve"><value>Open the fish log to load the fish rows. Collection status is not established yet.</value></data>
+  <data name="PublicApiError" xml:space="preserve"><value>Unknown: public API check failed ({0}).</value></data>
+  <data name="SessionCleared" xml:space="preserve"><value>Session cleared: previous display discarded</value></data>
+  <data name="SessionReady" xml:space="preserve"><value>Player data ready: new session</value></data>
+  <data name="LoginOptionTrigger" xml:space="preserve"><value>Login refresh option enabled</value></data>
+  <data name="LoginReadyTrigger" xml:space="preserve"><value>Player data ready after login</value></data>
+  <data name="AlreadyOpenWhenReady" xml:space="preserve"><value>Fish log already visible when player data became ready</value></data>
+  <data name="PlayerStateChanged" xml:space="preserve"><value>State: IsLoggedIn={0}, IsLoaded={1}</value></data>
+  <data name="ManualRefreshSkipped" xml:space="preserve"><value>Manual refresh skipped: login and player data must be ready</value></data>
+  <data name="WaitingForPlayer" xml:space="preserve"><value>Unknown: waiting for login and player data.</value></data>
+  <data name="ManualRefreshTrigger" xml:space="preserve"><value>Manual reload</value></data>
+  <data name="RowAbsent" xml:space="preserve"><value>Unknown: ID is absent from the current fish rows.</value></data>
+  <data name="BitReadLog" xml:space="preserve"><value>Caught-bit sample: FishParameter={0}; raw={1}; {2}</value></data>
+  <data name="WindowStateLog" xml:space="preserve"><value>{0}: {1}</value></data>
+  <data name="WindowFirstSampleLog" xml:space="preserve"><value>{0}: {1} (initial sample)</value></data>
+  <data name="GuideOpenedTrigger" xml:space="preserve"><value>Fish log opened: {0}</value></data>
+  <data name="GuideInitiallyVisibleTrigger" xml:space="preserve"><value>Already visible at load: {0}</value></data>
+  <data name="RowsRead" xml:space="preserve"><value>Fish rows loaded | Collection: Unknown (not validated)</value></data>
+  <data name="RowsRefreshLog" xml:space="preserve"><value>Refresh #{0}: {1}; all rows {2} / in log {3}</value></data>
+  <data name="RowsReadError" xml:space="preserve"><value>Unknown: fish row load failed ({0}). Use Reload fish rows to retry.</value></data>
+  <data name="NativeWrongThread" xml:space="preserve"><value>Not on the game framework thread.</value></data>
+  <data name="NativeGuideRequired" xml:space="preserve"><value>Open the in-game Fish Guide and select the fish again.</value></data>
+  <data name="NativeRowUnsupported" xml:space="preserve"><value>Outside the validated fish log ID / normal fishing row scope.</value></data>
+  <data name="NativePlayerRequired" xml:space="preserve"><value>Player data readiness could not be confirmed.</value></data>
+  <data name="NativeAddressMissing" xml:space="preserve"><value>PlayerState address is not ready.</value></data>
+  <data name="NativeCharacterChanged" xml:space="preserve"><value>Player data is not ready or the character changed during the read.</value></data>
+  <data name="NativeRawSample" xml:space="preserve"><value>Raw caught-bit sample; compare it with the game fish log. Automatic filters do not use this value.</value></data>
+  <data name="NativeWrongProcess" xml:space="preserve"><value>Unknown: not the inspected game process.</value></data>
+  <data name="NativeGameMismatch" xml:space="preserve"><value>Unknown: KR game build differs from the inspected build. Native reads are disabled.</value></data>
+  <data name="NativeDllMismatch" xml:space="preserve"><value>Unknown: KR DLLs differ from the inspected files or modules. Native reads are disabled.</value></data>
+  <data name="NativeCheckFailed" xml:space="preserve"><value>Unknown: compatibility check failed ({0}). Native reads are disabled.</value></data>
+  <data name="NativeCompatible" xml:space="preserve"><value>KR game build and DLLs match the inspected installation</value></data>
+</root>

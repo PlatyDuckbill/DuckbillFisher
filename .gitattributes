@@ -2,6 +2,7 @@
 *.md text eol=lf
 *.cs text eol=lf
 *.csproj text eol=lf
+*.resx text eol=lf
 *.json text eol=lf
 *.ps1 text eol=lf
 *.sh text eol=lf
