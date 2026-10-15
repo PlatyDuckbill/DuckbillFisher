@@ -1,0 +1,9 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/DuckbillFisher.Core/DuckbillFisher.Core.csproj" />
+    <Project Path="src/DuckbillFisher.Plugin/DuckbillFisher.Plugin.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/DuckbillFisher.Core.Tests/DuckbillFisher.Core.Tests.csproj" />
+  </Folder>
+</Solution>

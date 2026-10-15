@@ -1,0 +1,62 @@
+name: Build and test
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  core:
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-dotnet@v4
+        with:
+          global-json-file: global.json
+      - name: Test Core and locked dependencies
+        shell: pwsh
+        run: ./scripts/build.ps1 -CoreOnly -Configuration Release
+      - name: Check PowerShell syntax
+        shell: pwsh
+        run: |
+          Get-ChildItem scripts/*.ps1 | ForEach-Object {
+            $tokens = $null
+            $errors = $null
+            [System.Management.Automation.Language.Parser]::ParseFile($_.FullName, [ref]$tokens, [ref]$errors) | Out-Null
+            if ($errors.Count) { throw ($errors | Out-String) }
+          }
+
+  plugin:
+    name: Compile against upstream D15 (not a KR runtime test)
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-dotnet@v4
+        with:
+          global-json-file: global.json
+      - name: Fetch pinned compile references
+        shell: pwsh
+        run: |
+          $reference = Get-Content build/dalamud-reference.json -Raw | ConvertFrom-Json
+          $zip = Join-Path $env:RUNNER_TEMP 'dalamud.zip'
+          $refs = Join-Path $env:RUNNER_TEMP 'dalamud-refs'
+          Invoke-WebRequest $reference.url -OutFile $zip
+          if ((Get-FileHash $zip -Algorithm SHA256).Hash.ToLowerInvariant() -ne $reference.sha256) { throw 'Reference checksum mismatch' }
+          Expand-Archive $zip -DestinationPath $refs
+          "DALAMUD_HOME=$refs" >> $env:GITHUB_ENV
+      - name: Build package and test release preparation
+        shell: pwsh
+        run: |
+          ./scripts/build.ps1 -Configuration Release
+          ./scripts/test-release.ps1 -PackagePath src/DuckbillFisher.Plugin/bin/Release/DuckbillFisher/latest.zip
+      - uses: actions/upload-artifact@v4
+        with:
+          name: DuckbillFisher-dev-unverified-in-game
+          path: src/DuckbillFisher.Plugin/bin/Release/DuckbillFisher/latest.zip
+          if-no-files-found: error

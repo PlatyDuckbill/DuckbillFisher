@@ -1,0 +1,8 @@
+{
+  "assemblyVersion": "15.0.3.6",
+  "apiLevel": 15,
+  "revision": "3e8e6eb456c928401febd1d9452c4b8d4cad0eb5",
+  "url": "https://raw.githubusercontent.com/goatcorp/dalamud-distrib/3e8e6eb456c928401febd1d9452c4b8d4cad0eb5/latest.zip",
+  "sha256": "560d283b63d5d70dd5fa7eeb79e7a9cb5139b3dcc63e0cb01b466a57b020fcaa",
+  "purpose": "Upstream compile checks only. Windows KR runtime compatibility must be tested separately."
+}

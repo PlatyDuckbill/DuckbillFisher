@@ -1,0 +1,22 @@
+# .NET build output
+**/bin/
+**/obj/
+TestResults/
+artifacts/
+.dotnet/
+.cache/
+
+# Local editor / OS state
+.vs/
+.idea/
+.DS_Store
+*.user
+*.suo
+
+# Machine-specific settings, logs and credentials
+.env
+.env.*
+!.env.example
+*.local.json
+*.log
+logs/

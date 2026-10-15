@@ -1,0 +1,20 @@
+<Project Sdk="Dalamud.NET.Sdk/15.0.0">
+  <PropertyGroup>
+    <AssemblyName>DuckbillFisher</AssemblyName>
+    <RootNamespace>DuckbillFisher.Plugin</RootNamespace>
+    <Version>0.1.0.0</Version>
+    <Author>PlatyDuckbill</Author>
+    <Name>DuckbillFisher</Name>
+    <Punchline>한국 서버 터주 도우미 — 개발 준비 버전</Punchline>
+    <Description>현재는 시작 창의 로드와 재로드를 확인하는 개발 버전입니다. /duckbillfisher로 창을 여닫습니다. 낚시 정보와 타이머 기능은 아직 제공하지 않습니다.</Description>
+    <RepoUrl>https://github.com/PlatyDuckbill/DuckbillFisher</RepoUrl>
+    <Tags>fishing;한국어</Tags>
+    <DalamudApiLevel>15</DalamudApiLevel>
+    <ApplicableVersion>any</ApplicableVersion>
+    <IsPackable>false</IsPackable>
+    <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="../DuckbillFisher.Core/DuckbillFisher.Core.csproj" />
+  </ItemGroup>
+</Project>
