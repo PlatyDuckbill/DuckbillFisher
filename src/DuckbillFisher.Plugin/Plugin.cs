@@ -11,10 +11,11 @@ public sealed class Plugin : IDalamudPlugin
     private readonly IDalamudPluginInterface pluginInterface;
     private readonly ICommandManager commandManager;
     private readonly WindowSystem windows = new("DuckbillFisher");
-    private readonly MainWindow mainWindow = new();
+    private readonly MainWindow mainWindow;
+    private readonly FishingConditionObserver fishingObserver;
     private bool disposed;
 
-    public Plugin(IDalamudPluginInterface pluginInterface, ICommandManager commandManager)
+    public Plugin(IDalamudPluginInterface pluginInterface, ICommandManager commandManager, ICondition conditions)
     {
         this.pluginInterface = pluginInterface;
         this.commandManager = commandManager;
@@ -23,6 +24,8 @@ public sealed class Plugin : IDalamudPlugin
             { HelpMessage = "DuckbillFisher 창을 여닫습니다." }))
             throw new InvalidOperationException($"Command already registered: {Command}");
 
+        fishingObserver = new FishingConditionObserver(conditions);
+        mainWindow = new MainWindow(fishingObserver);
         windows.AddWindow(mainWindow);
         pluginInterface.UiBuilder.Draw += windows.Draw;
         pluginInterface.UiBuilder.OpenMainUi += OpenMainUi;
@@ -41,6 +44,7 @@ public sealed class Plugin : IDalamudPlugin
         pluginInterface.UiBuilder.Draw -= windows.Draw;
         pluginInterface.UiBuilder.OpenMainUi -= OpenMainUi;
         commandManager.RemoveHandler(Command);
+        fishingObserver.Dispose();
         windows.RemoveAllWindows();
     }
 }

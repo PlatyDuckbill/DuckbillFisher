@@ -4,8 +4,8 @@
 
 ```text
 src/
-  DuckbillFisher.Core/       # 현재 수집 상태/알림 대상 판정; 추후 시간·날씨·타이머
-  DuckbillFisher.Plugin/     # 현재 진입점·시작 창; 추후 게임 어댑터·설정 I/O
+  DuckbillFisher.Core/       # 수집 상태/알림 대상 판정, 관찰 이력; 추후 시간·날씨·타이머
+  DuckbillFisher.Plugin/     # 진입점·관찰 UI·공개 Condition 어댑터; 추후 수첩·설정 I/O
 tests/
   DuckbillFisher.Core.Tests/
 data/                       # 검증된 원본/정제 JSON, 출처와 라이선스

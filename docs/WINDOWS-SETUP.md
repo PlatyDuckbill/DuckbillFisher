@@ -2,6 +2,8 @@
 
 목표: 대상 한섭 Dalamud 환경에서 `/duckbillfisher`로 시작 창을 열고 재로드까지 확인한다.
 
+기존 Windows 게임 PC의 PowerShell/SDK 설치와 관찰 기능 기본 검증은 완료했다. 앞으로 이 PC에서 직접 개발한다. **이번 세션에서 이어갈 때는 [세션 인수인계](SESSION-HANDOFF.md)**의 소스/이력 이동과 실제 KR 경로부터 확인한다. 아래 도구 설치는 새 PC 또는 누락 도구를 위한 절차이며, 이미 설치한 도구를 다시 설치할 필요는 없다.
+
 ## 1. 개발 도구 설치
 
 Windows x64 PC 기준이다. Windows 설정 → 시스템 → 정보에서 시스템 종류를 확인하고 ARM 기반 PC는 설치 아키텍처를 별도로 맞춘다.
@@ -101,4 +103,4 @@ pwsh -File scripts/build.ps1 `
 
 ## 완료 기준
 
-실제 한섭 환경에서 빌드·로드·한글 창 표시·언로드·재로드가 통과해야 한다. 현재 Mac의 upstream 참조 컴파일은 통과했지만 이 Windows 검증은 아직 남아 있다.
+실제 한섭 환경에서 빌드·로드·한글 창 표시·언로드·재로드가 통과해야 한다. 기존 시작 창의 [ENV-02 Windows 검증](validation/ENV-02-WIN.md)은 완료했다. 새 낚시 상태 관찰 기능은 [ENV-03 Windows 절차](validation/ENV-03-WIN.md)를 따른다.
