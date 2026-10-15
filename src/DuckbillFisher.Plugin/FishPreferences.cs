@@ -20,8 +20,11 @@ public sealed class FishPreferencesConfiguration : IPluginConfiguration
 internal sealed record FishPreferencesView(int Revision, int Session, bool HasCharacter, bool CanEdit,
     IReadOnlySet<uint> Favorites, IReadOnlyDictionary<uint, bool> ManualCaught, UiMessage? Error)
 {
-    // Automatic collection observations will be connected separately after readiness validation.
-    public CollectionStatus Collection(uint fishId) => CollectionFilter.Resolve(CollectionStatus.Unknown,
+    internal ulong CharacterId { get; init; }
+
+    public CollectionStatus Collection(uint fishId, FishCollectionView observed) => CollectionFilter.Resolve(
+        observed.Session == Session && HasCharacter && observed.Caught.Contains(fishId)
+            ? CollectionStatus.Caught : CollectionStatus.Unknown,
         ManualCaught.TryGetValue(fishId, out var caught) ? caught : null);
 }
 
@@ -177,7 +180,7 @@ internal sealed class FishPreferences : IDisposable
         var manual = characterId != 0 && configuration.Characters.TryGetValue(characterId, out var saved)
             ? saved.ToFrozenDictionary() : FrozenDictionary<uint, bool>.Empty;
         view = new(view.Revision + 1, view.Session, characterId != 0, writable,
-            configuration.Favorites.ToFrozenSet(), manual, view.Error);
+            configuration.Favorites.ToFrozenSet(), manual, view.Error) { CharacterId = characterId };
     }
 
     private static bool IsValid(FishPreferencesConfiguration value) =>

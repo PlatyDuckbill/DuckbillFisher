@@ -2,6 +2,14 @@ namespace DuckbillFisher.Plugin.Localization;
 
 internal enum TextKey
 {
+    CollectionWaiting,
+    CollectionReadFailed,
+    CollectionPositiveOnly,
+    CollectionLogUnavailable,
+    CollectionObservedCount,
+    AutomaticObservationLabel,
+    CollectionAutomaticCaught,
+    CollectionHelp,
     CatalogSortFavorite,
     CatalogFavoritesOnly,
     CollectionAll,

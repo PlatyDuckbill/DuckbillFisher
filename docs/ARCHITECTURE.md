@@ -41,6 +41,8 @@ Plugin의 `AssemblyName`은 `DuckbillFisher`다. 주 DLL은 `DuckbillFisher.dll`
 
 ## 시간과 성능
 
+- 0.1.7.0의 FishCollectionObserver는 FishPreferences의 현재 세션을 따르는 수집됨 관찰이다. NativeFishCollectionReader를 수첩 진단과 공유하고 기존 가드 안에서 FishGuide2 표시 중 1초마다 True만 수집한다. IChatGui.LogMessage의 검증한 KR 도감 등록 ID/숫자 Item 매개변수도 제한된 큐를 거쳐 Framework에서 적용한다. False는 Unknown이며 수동 override가 자동 관찰보다 우선한다. 자동 관찰은 세션 메모리에만 보관한다. API 근거·등록 입력 계약과 남은 검증은 [자동 수집 검증](validation/MVP-04-COLLECTION.md)을 따른다.
+
 - 0.1.6.0의 FishPreferences는 공개 IPlayerState.ContentId/IsLoaded와 IClientState.IsLoggedIn을 Framework.Update에서 읽는다. 즐겨찾기는 공통, 수동 수집 bool은 캐릭터/FishParameter ID별로 보관한다. UI는 변경 요청만 큐에 넣고 서비스가 적용 직전 세션을 확인해 다른 캐릭터로 넘어간 수동 요청을 폐기한다. 로그인 전/조회 실패에는 수동 상태를 비우고 변경을 막는다. 불변 snapshot의 revision이 바뀔 때만 목록 필터를 다시 계산한다.
 - 저장은 공개 IDalamudPluginInterface.GetPluginConfig/SavePluginConfig를 사용한다. 스키마 버전 1이며 손상/미지원 기존 설정은 덮어쓰지 않고 편집을 비활성화한다. 저장 실패 시 직전 메모리 상태를 유지하고 재시도 안내를 표시한다. Draw에서 파일을 읽거나 저장하지 않는다. ContentId는 로컬 설정 키로만 사용하고 복사 보고서에는 넣지 않는다. Core의 CollectionFilter가 수동 우선순위와 표시 필터 의미를 담당하며 원시 수집 비트를 자동 판정에 사용하지 않는다.
 

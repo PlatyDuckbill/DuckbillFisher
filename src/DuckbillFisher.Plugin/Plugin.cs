@@ -19,11 +19,12 @@ public sealed class Plugin : IDalamudPlugin
     private readonly FishCatalog fishCatalog;
     private readonly FishingMapService fishingMap;
     private readonly FishPreferences fishPreferences;
+    private readonly FishCollectionObserver fishCollection;
     private bool disposed;
 
     public Plugin(IDalamudPluginInterface pluginInterface, ICommandManager commandManager, ICondition conditions,
         IClientState clientState, IPlayerState playerState, IDataManager dataManager, IGameGui gameGui, IFramework framework,
-        ITextureProvider textureProvider, IPluginLog log)
+        ITextureProvider textureProvider, IPluginLog log, IChatGui chat)
     {
         this.pluginInterface = pluginInterface;
         this.commandManager = commandManager;
@@ -35,10 +36,12 @@ public sealed class Plugin : IDalamudPlugin
 
         fishingObserver = new FishingConditionObserver(conditions);
         fishCatalog = new FishCatalog(dataManager, framework);
-        fishGuide = new FishGuideDiagnostics(clientState, playerState, fishCatalog, gameGui, framework);
+        var collectionReader = new NativeFishCollectionReader(framework);
+        fishGuide = new FishGuideDiagnostics(clientState, playerState, fishCatalog, gameGui, framework, collectionReader);
         fishingMap = new FishingMapService(gameGui, clientState, framework);
         fishPreferences = new FishPreferences(pluginInterface, clientState, playerState, framework, log);
-        mainWindow = new MainWindow(fishingObserver, fishGuide, new FishListPanel(fishCatalog, textureProvider, fishingMap, fishPreferences),
+        fishCollection = new FishCollectionObserver(fishPreferences, fishCatalog, collectionReader, dataManager, gameGui, chat, framework, log);
+        mainWindow = new MainWindow(fishingObserver, fishGuide, new FishListPanel(fishCatalog, textureProvider, fishingMap, fishPreferences, fishCollection),
             () => commandInfo.HelpMessage = UiText.Get(TextKey.CommandHelp));
         windows.AddWindow(mainWindow);
         pluginInterface.UiBuilder.Draw += windows.Draw;
@@ -62,6 +65,7 @@ public sealed class Plugin : IDalamudPlugin
         fishGuide.Dispose();
         fishCatalog.Dispose();
         fishingMap.Dispose();
+        fishCollection.Dispose();
         fishPreferences.Dispose();
         windows.RemoveAllWindows();
     }

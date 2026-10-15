@@ -1,4 +1,6 @@
 using System.Globalization;
+using System.Collections.Frozen;
+using System.Text;
 using System.Numerics;
 using Dalamud.Bindings.ImGui;
 using Dalamud.Interface.Textures;
@@ -9,8 +11,9 @@ using T = DuckbillFisher.Plugin.Localization.TextKey;
 
 namespace DuckbillFisher.Plugin;
 
-/// <summary>Displays cached rows and explicit manual preferences; no game collection inference.</summary>
-internal sealed class FishListPanel(FishCatalog catalog, ITextureProvider textures, FishingMapService mapService, FishPreferences preferences)
+/// <summary>Displays cached static rows, session-local collection observations, and manual overrides.</summary>
+internal sealed class FishListPanel(FishCatalog catalog, ITextureProvider textures, FishingMapService mapService,
+    FishPreferences preferences, FishCollectionObserver collection)
 {
     private static readonly StringComparer NameComparer = StringComparer.Create(CultureInfo.GetCultureInfo("ko-KR"), true);
     private IReadOnlyList<FishGuideRow>? lastRows;
@@ -29,6 +32,7 @@ internal sealed class FishListPanel(FishCatalog catalog, ITextureProvider textur
     private int lastForecastRevision;
     private int lastPreferenceRevision;
     private int lastPreferenceSession;
+    private int lastCollectionRevision;
     private bool favoritesOnly;
     private int collectionVisibility;
 
@@ -41,7 +45,12 @@ internal sealed class FishListPanel(FishCatalog catalog, ITextureProvider textur
         }
         var view = catalog.View;
         var personal = preferences.View;
-        var changed = !ReferenceEquals(lastRows, view.Rows) || lastPreferenceRevision != personal.Revision;
+        var observed = collection.View;
+        if (observed.Session != personal.Session)
+            observed = new(observed.Revision, personal.Session, FrozenSet<uint>.Empty, new(T.CollectionWaiting));
+        var changed = !ReferenceEquals(lastRows, view.Rows) || lastPreferenceRevision != personal.Revision ||
+            lastCollectionRevision != observed.Revision;
+        lastCollectionRevision = observed.Revision;
         if (lastPreferenceSession != personal.Session)
         {
             selectedId = null;
@@ -67,7 +76,7 @@ internal sealed class FishListPanel(FishCatalog catalog, ITextureProvider textur
             catalog.RequestLoad(reload: true);
         ImGui.SameLine();
         if (ImGui.Button(UiText.Label(T.CopyCatalogReport, "CopyCatalogReport")))
-            ImGui.SetClipboardText(CreateReport(personal));
+            ImGui.SetClipboardText(CreateReport(personal, observed));
         changed |= ImGui.Checkbox(UiText.Label(T.CatalogShowUnresolved, "CatalogShowUnresolved"), ref showUnresolved);
         ImGui.SameLine();
         changed |= ImGui.Checkbox(UiText.Label(T.CatalogDetailsOnly, "CatalogDetailsOnly"), ref detailsOnly);
@@ -78,7 +87,9 @@ internal sealed class FishListPanel(FishCatalog catalog, ITextureProvider textur
             UiText.Get(T.CollectionUncaughtOnly), UiText.Get(T.CollectionCaughtOnly), UiText.Get(T.CollectionUnknownOnly)];
         changed |= ImGui.Combo(UiText.Label(T.CollectionVisibility, "CatalogCollectionVisibility"), ref collectionVisibility,
             collectionNames, collectionNames.Length);
-        ImGui.TextWrapped(UiText.Get(T.CollectionFilterHint));
+        ImGui.TextWrapped(UiText.Get(T.CollectionObservedCount, observed.Caught.Count, observed.Status));
+        if (ImGui.CollapsingHeader(UiText.Label(T.CollectionHelp, "CollectionHelp")))
+            ImGui.TextWrapped(UiText.Get(T.CollectionFilterHint));
         if (!personal.HasCharacter)
             ImGui.TextWrapped(UiText.Get(T.ManualPlayerRequired));
         if (personal.Error is { } error)
@@ -86,7 +97,7 @@ internal sealed class FishListPanel(FishCatalog catalog, ITextureProvider textur
 
         // Rebuild only for data or user input changes, never on every frame or scroll step.
         if (changed || (sort == 2 && lastForecastRevision != view.ForecastRevision))
-            UpdateMatches(view, personal, changed);
+            UpdateMatches(view, personal, observed, changed);
         lastForecastRevision = view.ForecastRevision;
         ImGui.TextUnformatted(UiText.Get(T.CatalogCount, matches.Length, view.Rows.Count));
         if (unresolvedCount > 0)
@@ -97,16 +108,16 @@ internal sealed class FishListPanel(FishCatalog catalog, ITextureProvider textur
         if (ImGui.BeginTable("CatalogLayout", 2, ImGuiTableFlags.Resizable | ImGuiTableFlags.BordersInnerV))
         {
             ImGui.TableNextColumn();
-            DrawRows(personal);
+            DrawRows(personal, observed);
             ImGui.TableNextColumn();
             if (ImGui.BeginChild("CatalogDetail", new Vector2(0, 0), false))
-                DrawDetails(view, personal);
+                DrawDetails(view, personal, observed);
             ImGui.EndChild();
             ImGui.EndTable();
         }
     }
 
-    private void DrawRows(FishPreferencesView personal)
+    private void DrawRows(FishPreferencesView personal, FishCollectionView observed)
     {
         if (ImGui.BeginChild("CatalogRows", new Vector2(0, 0), true))
         {
@@ -124,7 +135,7 @@ internal sealed class FishListPanel(FishCatalog catalog, ITextureProvider textur
                 clipper.Begin(matches.Length, rowHeight + ImGui.GetStyle().ItemSpacing.Y);
                 while (clipper.Step())
                     for (var i = clipper.DisplayStart; i < clipper.DisplayEnd; i++)
-                        DrawRow(matches[i], rowHeight, personal);
+                        DrawRow(matches[i], rowHeight, personal, observed);
             }
             finally
             {
@@ -134,14 +145,14 @@ internal sealed class FishListPanel(FishCatalog catalog, ITextureProvider textur
         ImGui.EndChild();
     }
 
-    private void UpdateMatches(FishCatalogView view, FishPreferencesView personal, bool reset)
+    private void UpdateMatches(FishCatalogView view, FishPreferencesView personal, FishCollectionView observed, bool reset)
     {
         var term = search.Trim();
         var scope = view.Rows.Where(row => !inLogOnly || row.IsInLog).ToArray();
         unresolvedCount = scope.Count(row => !row.IsDisplayable);
         var filtered = scope.Where(row => (showUnresolved || row.IsDisplayable) && (!detailsOnly || row.Details is not null) &&
             (!favoritesOnly || personal.Favorites.Contains(row.FishParameterId)) &&
-            CollectionFilter.Matches(personal.Collection(row.FishParameterId), (CollectionVisibility)collectionVisibility) &&
+            CollectionFilter.Matches(personal.Collection(row.FishParameterId, observed), (CollectionVisibility)collectionVisibility) &&
             (term.Length == 0 || row.Name.Contains(term, StringComparison.OrdinalIgnoreCase) ||
              row.Spots.Any(spot => spot.Name.Contains(term, StringComparison.OrdinalIgnoreCase) || spot.Zone.Contains(term, StringComparison.OrdinalIgnoreCase)) ||
              row.FishParameterId.ToString(CultureInfo.InvariantCulture) == term));
@@ -161,7 +172,7 @@ internal sealed class FishListPanel(FishCatalog catalog, ITextureProvider textur
         resetScroll |= reset;
     }
 
-    private void DrawRow(FishGuideRow fish, float height, FishPreferencesView personal)
+    private void DrawRow(FishGuideRow fish, float height, FishPreferencesView personal, FishCollectionView observed)
     {
         ImGui.PushID((int)fish.FishParameterId);
         var start = ImGui.GetCursorPos();
@@ -188,7 +199,7 @@ internal sealed class FishListPanel(FishCatalog catalog, ITextureProvider textur
         else
             ImGui.TextDisabled(UiText.Get(fish.IsDisplayable ? T.CatalogRowInfo : T.CatalogUnresolvedRow, fish.FishParameterId));
         ImGui.SetCursorPos(start + new Vector2(iconSize + 14, 4 + ImGui.GetTextLineHeightWithSpacing() * 2));
-        var collection = new UiMessage(CollectionKey(personal.Collection(fish.FishParameterId)));
+        var collection = new UiMessage(CollectionKey(personal, observed, fish.FishParameterId));
         ImGui.TextDisabled(personal.Favorites.Contains(fish.FishParameterId)
             ? UiText.Get(T.FavoriteRowState, collection) : collection.Display);
         ImGui.SetCursorPos(next);
@@ -203,7 +214,7 @@ internal sealed class FishListPanel(FishCatalog catalog, ITextureProvider textur
             _ => DateTimeOffset.MaxValue,
         } : DateTimeOffset.MaxValue;
 
-    private void DrawDetails(FishCatalogView view, FishPreferencesView personal)
+    private void DrawDetails(FishCatalogView view, FishPreferencesView personal, FishCollectionView observed)
     {
         var selected = selectedFish;
         ImGui.TextWrapped(UiText.Get(T.CatalogDetailCoverage, detailCoverage));
@@ -212,7 +223,7 @@ internal sealed class FishListPanel(FishCatalog catalog, ITextureProvider textur
         else
         {
             ImGui.TextUnformatted(selected.DisplayName);
-            DrawPreferences(selected, personal);
+            DrawPreferences(selected, personal, observed);
             ImGui.Separator();
             foreach (var spot in selected.Spots)
             {
@@ -261,14 +272,16 @@ internal sealed class FishListPanel(FishCatalog catalog, ITextureProvider textur
         }
     }
 
-    private void DrawPreferences(FishGuideRow fish, FishPreferencesView personal)
+    private void DrawPreferences(FishGuideRow fish, FishPreferencesView personal, FishCollectionView observed)
     {
         ImGui.BeginDisabled(!personal.CanEdit || !fish.IsDisplayable);
         var favorite = personal.Favorites.Contains(fish.FishParameterId);
         if (ImGui.Checkbox(UiText.Label(T.FavoriteToggle, $"Favorite{fish.FishParameterId}"), ref favorite))
             preferences.SetFavorite(fish.FishParameterId, favorite);
         ImGui.EndDisabled();
-        ImGui.TextWrapped(UiText.Get(T.ManualCollectionLabel, new UiMessage(CollectionKey(personal.Collection(fish.FishParameterId)))));
+        ImGui.TextWrapped(UiText.Get(T.ManualCollectionLabel, new UiMessage(CollectionKey(personal, observed, fish.FishParameterId))));
+        ImGui.TextWrapped(UiText.Get(T.AutomaticObservationLabel, new UiMessage(observed.Caught.Contains(fish.FishParameterId)
+            ? T.CollectionAutomaticCaught : T.CollectionUnknown)));
         ImGui.BeginDisabled(!personal.CanEdit || !personal.HasCharacter || !fish.IsDisplayable);
         if (ImGui.Button(UiText.Label(T.MarkCaught, $"MarkCaught{fish.FishParameterId}")))
             preferences.SetManualCaught(fish.FishParameterId, true, personal.Session);
@@ -281,16 +294,28 @@ internal sealed class FishListPanel(FishCatalog catalog, ITextureProvider textur
         ImGui.TextWrapped(UiText.Get(T.PreferenceScope));
     }
 
-    private static T CollectionKey(CollectionStatus status) => status switch
-    {
-        CollectionStatus.Caught => T.CollectionManualCaught,
-        CollectionStatus.Uncaught => T.CollectionManualUncaught,
-        _ => T.CollectionUnknown,
-    };
+    private static T CollectionKey(FishPreferencesView personal, FishCollectionView observed, uint fishId) =>
+        personal.ManualCaught.TryGetValue(fishId, out var caught)
+            ? caught ? T.CollectionManualCaught : T.CollectionManualUncaught
+            : personal.Collection(fishId, observed) == CollectionStatus.Caught ? T.CollectionAutomaticCaught : T.CollectionUnknown;
 
-    private string CreateReport(FishPreferencesView personal) => catalog.CreateReport() + Environment.NewLine +
-        string.Create(CultureInfo.InvariantCulture,
-            $"DuckbillFisher MVP-01/preferences/v1\nReady={personal.HasCharacter}; Editable={personal.CanEdit}; Session={personal.Session}; Favorites={personal.Favorites.Count}; ManualCaught={personal.ManualCaught.Count(pair => pair.Value)}; ManualUncaught={personal.ManualCaught.Count(pair => !pair.Value)}\nCollectionFilter={(CollectionVisibility)collectionVisibility}; FavoritesOnly={favoritesOnly}; Sort={sort}; Displayed={matches.Length}\nCollectionSource=ManualOnly; AutomaticCollection=Unknown; StorageError={personal.Error?.Key.ToString() ?? "none"}\n");
+    private string CreateReport(FishPreferencesView personal, FishCollectionView observed)
+    {
+        var report = new StringBuilder(catalog.CreateReport()).AppendLine();
+        void Append(FormattableString line) => report.AppendLine(line.ToString(CultureInfo.InvariantCulture));
+        report.AppendLine("DuckbillFisher MVP-01/preferences/v2");
+        Append($"Ready={personal.HasCharacter}; Editable={personal.CanEdit}; Session={personal.Session}; Favorites={personal.Favorites.Count}");
+        Append($"ManualCaught={personal.ManualCaught.Count(pair => pair.Value)}; ManualUncaught={personal.ManualCaught.Count(pair => !pair.Value)}");
+        Append($"CollectionFilter={(CollectionVisibility)collectionVisibility}; FavoritesOnly={favoritesOnly}; Sort={sort}; Displayed={matches.Length}");
+        Append($"CollectionSource=ManualOverrideThenPositiveObservation; StorageError={personal.Error?.Key.ToString() ?? "none"}");
+        report.AppendLine().AppendLine("DuckbillFisher MVP-04/collection/v1");
+        Append($"Session={observed.Session}; Caught={observed.Caught.Count}; Eligible={observed.EligibleRows}; GuideVisible={observed.GuideVisible}");
+        Append($"Scans={observed.Scans}; RawFalse={observed.RawFalse}; UnknownReads={observed.Unknown}; RegistrationContract={observed.RegistrationContract}");
+        Append($"RegistrationMessages={observed.RegistrationMessages}; AppliedRegistrations={observed.AppliedRegistrations}; LastLogItem={observed.LastLogItem}; LastLogFish={observed.LastLogFish}");
+        Append($"LastTrigger={observed.LastTrigger}; SampledAtSeconds={observed.SampledAtSeconds?.ToString("F3", CultureInfo.InvariantCulture) ?? "none"}; Status={observed.Status.Key}");
+        report.AppendLine("AutomaticUncaught=Unknown; ObservationsPersisted=False");
+        return report.ToString();
+    }
 
     private static string EtClock(double hour) => $"{(int)hour:00}:{(int)Math.Round(hour % 1 * 60):00}";
     private static string WeatherNames(string[] names) => names.Length == 0 ? UiText.Get(T.NoWeatherRestriction) : string.Join(" / ", names);

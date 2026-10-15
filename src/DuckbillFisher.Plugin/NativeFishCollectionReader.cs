@@ -30,6 +30,10 @@ internal sealed class NativeFishCollectionReader
 
     public string GameVersion { get; private set; } = "unknown";
     public UiMessage Compatibility => unsupportedReason ?? new(T.NativeCompatible);
+    public bool IsCompatible => unsupportedReason is null;
+
+    public static bool Supports(FishGuideRow row) => row.IsDisplayable && row.IsInLog && row.ItemType == "Item" &&
+        row.FishParameterId is > 0 and <= MaxValidatedFishParameterId;
 
     public unsafe FishBitSample Read(FishGuideRow row, ulong expectedCharacter, bool fishGuideVisible)
     {
@@ -40,7 +44,7 @@ internal sealed class NativeFishCollectionReader
             return Unknown(new(T.NativeWrongThread));
         if (!fishGuideVisible)
             return Unknown(new(T.NativeGuideRequired));
-        if (!row.IsInLog || row.ItemType != "Item" || row.FishParameterId is 0 or > MaxValidatedFishParameterId)
+        if (!Supports(row))
             return Unknown(new(T.NativeRowUnsupported));
         if (expectedCharacter == 0)
             return Unknown(new(T.NativePlayerRequired));

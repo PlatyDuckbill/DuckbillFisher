@@ -38,14 +38,14 @@ internal sealed class FishGuideDiagnostics : IDisposable
     private bool disposed;
 
     public FishGuideDiagnostics(IClientState clientState, IPlayerState playerState, FishCatalog catalog,
-        IGameGui gameGui, IFramework framework)
+        IGameGui gameGui, IFramework framework, NativeFishCollectionReader collectionReader)
     {
         this.clientState = clientState;
         this.playerState = playerState;
         this.catalog = catalog;
         this.gameGui = gameGui;
         this.framework = framework;
-        collectionReader = new NativeFishCollectionReader(framework);
+        this.collectionReader = collectionReader;
         framework.Update += OnUpdate;
     }
 
