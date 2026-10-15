@@ -16,6 +16,8 @@ internal sealed class FishListPanel(FishCatalog catalog, ITextureProvider textur
     private FishGuideRow[] matches = [];
     private string search = "";
     private bool inLogOnly = true;
+    private bool showUnresolved;
+    private int unresolvedCount;
     private bool requested;
     private bool resetScroll;
     private int sort;
@@ -41,11 +43,17 @@ internal sealed class FishListPanel(FishCatalog catalog, ITextureProvider textur
         changed |= ImGui.Combo(UiText.Label(T.CatalogSort, "CatalogSort"), ref sort, sortNames, sortNames.Length);
         if (ImGui.Button(UiText.Label(T.ReloadFish, "ReloadCatalog")))
             catalog.RequestLoad(reload: true);
+        ImGui.SameLine();
+        if (ImGui.Button(UiText.Label(T.CopyCatalogReport, "CopyCatalogReport")))
+            ImGui.SetClipboardText(catalog.CreateReport());
+        changed |= ImGui.Checkbox(UiText.Label(T.CatalogShowUnresolved, "CatalogShowUnresolved"), ref showUnresolved);
 
         // Rebuild only for data or user input changes, never on every frame or scroll step.
         if (changed)
             UpdateMatches(view.Rows);
         ImGui.TextUnformatted(UiText.Get(T.CatalogCount, matches.Length, view.Rows.Count));
+        if (unresolvedCount > 0)
+            ImGui.TextWrapped(UiText.Get(T.CatalogUnresolvedCount, unresolvedCount));
         ImGui.TextWrapped(UiText.Get(T.CatalogDetailsPending));
         ImGui.Separator();
 
@@ -78,7 +86,9 @@ internal sealed class FishListPanel(FishCatalog catalog, ITextureProvider textur
     private void UpdateMatches(IReadOnlyList<FishGuideRow> rows)
     {
         var term = search.Trim();
-        var filtered = rows.Where(row => (!inLogOnly || row.IsInLog) &&
+        var scope = rows.Where(row => !inLogOnly || row.IsInLog).ToArray();
+        unresolvedCount = scope.Count(row => !row.IsDisplayable);
+        var filtered = scope.Where(row => (showUnresolved || row.IsDisplayable) &&
             (term.Length == 0 || row.Name.Contains(term, StringComparison.OrdinalIgnoreCase) ||
              row.FishParameterId.ToString(CultureInfo.InvariantCulture) == term));
         matches = (sort == 0
@@ -106,7 +116,7 @@ internal sealed class FishListPanel(FishCatalog catalog, ITextureProvider textur
         ImGui.SetCursorPos(start + new Vector2(iconSize + 14, 4));
         ImGui.TextUnformatted(fish.DisplayName);
         ImGui.SetCursorPos(start + new Vector2(iconSize + 14, 4 + ImGui.GetTextLineHeightWithSpacing()));
-        ImGui.TextDisabled(UiText.Get(T.CatalogRowInfo, fish.FishParameterId));
+        ImGui.TextDisabled(UiText.Get(fish.IsDisplayable ? T.CatalogRowInfo : T.CatalogUnresolvedRow, fish.FishParameterId));
         ImGui.SetCursorPos(next);
         ImGui.PopID();
     }

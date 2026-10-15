@@ -11,10 +11,14 @@
   <data name="CatalogSort" xml:space="preserve"><value>Sort</value></data>
   <data name="CatalogSortName" xml:space="preserve"><value>Name</value></data>
   <data name="CatalogSortId" xml:space="preserve"><value>Fish ID</value></data>
-  <data name="CatalogCount" xml:space="preserve"><value>{0} results / {1} client rows</value></data>
-  <data name="CatalogDetailsPending" xml:space="preserve"><value>Collection, fishing spots, bait, and availability details are not available in this list yet.</value></data>
+  <data name="CatalogCount" xml:space="preserve"><value>{0} displayed rows / {1} source sheet rows</value></data>
+  <data name="CatalogDetailsPending" xml:space="preserve"><value>Collection lookup is not connected to this list yet. Fishing spots, bait, and availability details are being prepared.</value></data>
   <data name="CatalogNoMatches" xml:space="preserve"><value>No matching fish. Try changing the search or filter.</value></data>
-  <data name="CatalogRowInfo" xml:space="preserve"><value>ID {0} · Collection unknown</value></data>
+  <data name="CatalogRowInfo" xml:space="preserve"><value>ID {0} · Collection integration pending</value></data>
+  <data name="CopyCatalogReport" xml:space="preserve"><value>Copy list diagnostics</value></data>
+  <data name="CatalogShowUnresolved" xml:space="preserve"><value>Show unresolved rows (diagnostics)</value></data>
+  <data name="CatalogUnresolvedCount" xml:space="preserve"><value>{0} unresolved rows in this filter scope are excluded from the default list.</value></data>
+  <data name="CatalogUnresolvedRow" xml:space="preserve"><value>ID {0} · Unresolved row or name</value></data>
   <data name="Language" xml:space="preserve"><value>Language</value></data>
   <data name="Korean" xml:space="preserve"><value>한국어</value></data>
   <data name="English" xml:space="preserve"><value>English</value></data>

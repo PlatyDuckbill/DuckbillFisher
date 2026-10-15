@@ -1,3 +1,4 @@
+using System.Text;
 using Dalamud.Plugin.Services;
 using DuckbillFisher.Plugin.Localization;
 using Lumina.Excel.Sheets;
@@ -5,9 +6,22 @@ using T = DuckbillFisher.Plugin.Localization.TextKey;
 
 namespace DuckbillFisher.Plugin;
 
+internal enum FishRowResolution
+{
+    Unknown,
+    Resolved,
+    ZeroRow,
+    EmptyItemReference,
+    UnsupportedReference,
+    MissingReferencedRow,
+    EmptyName,
+}
+
 internal sealed record FishGuideRow(uint FishParameterId, uint ItemId, string ItemType, string Name, bool IsInLog)
 {
     public uint IconId { get; init; }
+    public FishRowResolution Resolution { get; init; }
+    public bool IsDisplayable => Resolution == FishRowResolution.Resolved;
     public string DisplayName => string.IsNullOrWhiteSpace(Name) ? UiText.Get(T.MissingName) : Name;
 }
 
@@ -78,19 +92,33 @@ internal sealed class FishCatalog : IDisposable
                     var item = fish.Item;
                     string? name = null;
                     uint iconId = 0;
-                    if (item.Is<Item>() && item.GetValueOrDefault<Item>() is { } normal)
+                    var resolution = fish.RowId == 0 ? FishRowResolution.ZeroRow
+                        : item.RowId == 0 ? FishRowResolution.EmptyItemReference
+                        : FishRowResolution.UnsupportedReference;
+                    if (fish.RowId != 0 && item.RowId != 0 && item.Is<Item>())
                     {
-                        name = normal.Name.ExtractText();
-                        iconId = normal.Icon;
+                        resolution = FishRowResolution.MissingReferencedRow;
+                        if (item.GetValueOrDefault<Item>() is { } normal)
+                        {
+                            name = normal.Name.ExtractText();
+                            iconId = normal.Icon;
+                            resolution = string.IsNullOrWhiteSpace(name) ? FishRowResolution.EmptyName : FishRowResolution.Resolved;
+                        }
                     }
-                    else if (item.Is<EventItem>() && item.GetValueOrDefault<EventItem>() is { } eventItem)
+                    else if (fish.RowId != 0 && item.RowId != 0 && item.Is<EventItem>())
                     {
-                        name = eventItem.Name.ExtractText();
-                        iconId = eventItem.Icon;
+                        resolution = FishRowResolution.MissingReferencedRow;
+                        if (item.GetValueOrDefault<EventItem>() is { } eventItem)
+                        {
+                            name = eventItem.Name.ExtractText();
+                            iconId = eventItem.Icon;
+                            resolution = string.IsNullOrWhiteSpace(name) ? FishRowResolution.EmptyName : FishRowResolution.Resolved;
+                        }
                     }
                     rows.Add(new(fish.RowId, item.RowId, item.RowType?.Name ?? "Unknown", name ?? "", fish.IsInLog)
                     {
                         IconId = iconId,
+                        Resolution = resolution,
                     });
                 }
                 if (rows.Count == 0)
@@ -103,6 +131,24 @@ internal sealed class FishCatalog : IDisposable
             }
             return view.Rows;
         }
+    }
+
+    public string CreateReport()
+    {
+        var snapshot = View;
+        var unresolved = snapshot.Rows.Where(row => !row.IsDisplayable).ToArray();
+        var report = new StringBuilder();
+        void Append(FormattableString line) => report.AppendLine(FormattableString.Invariant(line));
+        report.AppendLine("DuckbillFisher MVP-01/catalog/v1");
+        Append($"Plugin: {typeof(Plugin).Assembly.GetName().Version}");
+        Append($"Rows: {snapshot.Rows.Count}; displayable: {snapshot.Rows.Count - unresolved.Length}; unresolved: {unresolved.Length}; unresolved in log: {unresolved.Count(row => row.IsInLog)}");
+        report.AppendLine($"Status: [{snapshot.Status.Key}] {snapshot.Status.Diagnostic}");
+        foreach (var group in unresolved.GroupBy(row => row.Resolution).OrderBy(group => group.Key))
+            Append($"Resolution: {group.Key}; count: {group.Count()}");
+        report.AppendLine("Unresolved row details: up to 80, ordered by FishParameter ID. No character collection data.");
+        foreach (var row in unresolved.OrderBy(row => row.FishParameterId).Take(80))
+            Append($"FishParameter={row.FishParameterId}; {row.ItemType}={row.ItemId}; IsInLog={row.IsInLog}; resolution={row.Resolution}");
+        return report.ToString();
     }
 
     public void Dispose()
