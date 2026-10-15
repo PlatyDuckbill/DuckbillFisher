@@ -21,6 +21,7 @@ internal enum FishRowResolution
 internal sealed record FishGuideRow(uint FishParameterId, uint ItemId, string ItemType, string Name, bool IsInLog)
 {
     public uint IconId { get; init; }
+    public bool IsOceanFishing { get; init; }
     public FishRowResolution Resolution { get; init; }
     public bool IsDisplayable => Resolution == FishRowResolution.Resolved;
     public IReadOnlyList<FishingSpotView> Spots { get; init; } = [];
@@ -171,6 +172,7 @@ internal sealed class FishCatalog : IDisposable
                     rows.Add(new(fish.RowId, item.RowId, item.RowType?.Name ?? "Unknown", name ?? "", fish.IsInLog)
                     {
                         IconId = iconId,
+                        IsOceanFishing = fish.OceanStars > 0,
                         Resolution = resolution,
                         Spots = fishSpots,
                         Details = details,

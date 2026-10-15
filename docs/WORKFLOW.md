@@ -20,14 +20,15 @@
 
 1. 같은 Windows 소스 폴더를 열고 `git status`와 STATUS의 다음 한 작업을 확인한다. 필요하면 작은 기능 브랜치를 만든다. 기존 수정은 보존한다.
 2. AI와 작은 변경을 구현하고 사람이 범위·동작·설계 이유를 검토한다. 대상 API는 현재 KR 설치를 기준으로 확인한다.
-3. Dalamud에서 DuckbillFisher를 직접 언로드한 뒤 PowerShell 7에서 아래 명령으로 테스트·Plugin 빌드·manifest 검사를 실행한다.
+3. 먼저 별도 출력 경로로 Plugin을 빌드한다. 사용자에게 언로드 완료를 확인받은 뒤 아래 명령으로 정규 DLL을 빌드한다. 테스트는 사용자가 요청한 경우에만 실행한다.
 
 ```powershell
-.\scripts\build.ps1 -DalamudPath "$env:APPDATA\XIVLauncherKR\addon\Hooks\dev"
+dotnet build src/DuckbillFisher.Plugin/DuckbillFisher.Plugin.csproj --no-restore -c Debug -p:DalamudLibPath=C:/Users/hyogu/AppData/Roaming/XIVLauncherKR/addon/Hooks/dev/
+pwsh -NoLogo -NoProfile -File scripts/check-localization.ps1
 ```
 
 4. 성공한 출력 DLL을 로드하고 게임 행동은 사람이 직접 수행한다. 실제 결과가 없으면 인게임 검증 대기로 남긴다. 빌드 실패 시 기존 DLL로 검증을 계속하지 않는다.
-5. 실패하면 같은 PC에서 오류 전문과 재현 순서를 확인해 수정한다. 성공/실패·미실행 항목은 [검증 기록](templates/VALIDATION.md)에 구분해 남긴다.
+5. 실패하면 같은 PC에서 관련 오류 구역과 재현 순서를 확인해 수정한다. 기본은 짧은 진단이며 전체 진단은 필요한 경우에만 파일이나 해당 구역으로 받는다. 성공/실패·미실행 항목은 [검증 기록](templates/VALIDATION.md)에 구분해 남긴다.
 6. STATUS와 필요한 HANDOFF를 갱신하고 완료한 작업 범위를 명시적으로 스테이징해 커밋한다. 인게임 확인 대기 상태도 구분해 기록한다. 커밋 SHA·검증 결과를 보고하며 푸시·배포는 별도로 취급한다. 상세 규칙은 AGENTS.md의 '작업 완료와 커밋'을 따른다.
 
 등록한 DLL 경로는 `src\DuckbillFisher.Plugin\bin\Debug\DuckbillFisher.dll`의 절대 경로다. 소스 폴더를 옮겼을 때만 개발 플러그인 등록 경로를 바꾸고, 이전 경로와 중복 등록하지 않는다. 전용 개발 폴더 복사는 선택이다.

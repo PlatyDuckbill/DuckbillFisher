@@ -3,7 +3,7 @@
 ## 목적과 현재 단계
 
 - 한국 서버 FFXIV용 정보 제공 Dalamud 플러그인. 프로젝트명·표시명·InternalName은 `DuckbillFisher`로 확정되었다.
-- 먼저 `docs/STATUS.md`, `docs/WORKFLOW.md`를 읽고 작업 범위를 정한다. 설계는 `docs/ARCHITECTURE.md`, 제품 범위는 `docs/PRODUCT.md`에 있다.
+- 먼저 `docs/STATUS.md`를 읽고 작업 범위를 정한다. 절차가 필요할 때 `docs/WORKFLOW.md`의 관련 구역을 읽는다. 설계는 `docs/ARCHITECTURE.md`, 제품 범위는 `docs/PRODUCT.md`에 있다.
 - 세션을 새로 시작하거나 다른 PC에서 이어받으면 `docs/SESSION-HANDOFF.md`도 읽는다. 앞으로의 기본 작업 환경은 FFXIV가 실행되는 Windows PC이며, 같은 PC에서 편집·빌드·인게임 확인을 진행한다. Mac 왕복이나 소스 ZIP 전달을 매 작업의 전제로 삼지 않는다.
 - 시작 창과 Core/테스트, 빌드·배포 준비 스크립트가 존재한다. 검증된 범위와 Windows 인게임 대기 사항은 STATUS를 따른다.
 - 변경 이유와 검증 방법을 한국어로 명확하게 설명한다.
@@ -49,13 +49,15 @@
 ## 완료 보고 및 인수인계
 
 - 실제 실행한 명령·결과와 실행하지 못한 검증을 구분한다. Mac 테스트 통과를 Windows 로드/인게임 검증으로 표현하지 않는다.
-- PowerShell 7의 `scripts/build.ps1 -CoreOnly`로 Core를 검증한다. Plugin 빌드는 `-DalamudPath <Dalamud.dll 폴더>`를 지정한다. 고정 SDK는 global.json, 의존성은 packages.lock.json을 따른다.
+- 테스트는 사용자가 요청한 경우에만 추가/실행한다. 일반 구현은 `dotnet build`와 리소스 검사를 사용하며 테스트도 실행하는 `scripts/build.ps1`은 사용하지 않는다. 명령은 SESSION-HANDOFF를 따른다. 고정 SDK는 global.json, 의존성은 packages.lock.json을 따른다.
 - 배포 준비는 `scripts/prepare-release.ps1`을 사용한다. 인게임 검증 전에는 repo/pluginmaster.json에 설치 항목을 추가하거나 미검증 ZIP을 사용자 릴리스로 게시하지 않는다.
 - 게임 관련 변경은 재현 단계와 기대 결과를 제공한다. Windows 결과가 없으면 상태를 '인게임 검증 대기'로 남긴다.
 - 작업 종료 시 `docs/STATUS.md`에 완료 항목, 미확인 사항, 다음 한 작업을 갱신한다.
 - 세션/PC 전환 시 `docs/SESSION-HANDOFF.md`의 재개 절차와 환경을 갱신한다. 커밋/원격 게시/전달 파일 생성 여부와 실제 게임 검증 범위를 구분한다.
 - 문서에는 기술적 요구사항·결정·실행 근거를 기록한다. 사용자의 기술 숙련도에 대한 평가나 개인적인 표현은 넣지 않는다.
 - 새 정책/아키텍처 결정만 문서화한다. 매 세션마다 같은 설명을 복제하지 않는다.
+- 기본 요청은 짧은 진단이다. 전체 진단·반복 로그는 필요한 경우에만 파일 또는 해당 구역으로 받는다. 검색/도구 출력도 필요한 구역과 줄 수로 제한한다.
+- STATUS/HANDOFF는 각각 60줄 안팎의 현재 사실·미확인 사항·다음 작업으로 유지한다. 과거 이력은 history/validation에 보관하고 매번 재독하지 않는다. 확인한 사실은 한 번 기록하고 링크한다.
 - 외부 데이터/코드는 원본 URL, 고정 revision, 라이선스, 변경 내역을 기록한 후 도입한다.
 - 공식 Dalamud 제출용 AI 공개문과 PR 설명은 현재 upstream 정책상 사람이 직접 작성해야 한다. AI가 대신 작성하여 사람 작성으로 제출하지 않는다. 내부 작업 기록과 사실 자료 정리는 가능하다.
 

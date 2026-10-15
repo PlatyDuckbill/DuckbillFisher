@@ -15,7 +15,11 @@
   <data name="CatalogDetailsPending" xml:space="preserve"><value>어종을 선택해 수집 기록·낚시터·지도와 대조한 상세 조건을 확인하세요. 입질 초 수 통계는 후속 작업입니다.</value></data>
   <data name="CatalogNoMatches" xml:space="preserve"><value>검색 결과가 없습니다. 검색어나 필터를 바꿔 보세요.</value></data>
   <data name="CatalogRowInfo" xml:space="preserve"><value>ID {0}</value></data>
-  <data name="CopyCatalogReport" xml:space="preserve"><value>목록 진단 복사</value></data>
+  <data name="CopyCatalogReport" xml:space="preserve"><value>짧은 진단 복사</value></data>
+  <data name="CatalogIncludeOceanFish" xml:space="preserve"><value>먼바다 어종 포함</value></data>
+  <data name="CatalogDiagnostics" xml:space="preserve"><value>상세 진단</value></data>
+  <data name="CatalogDiagnosticsHint" xml:space="preserve"><value>평소에는 짧은 진단을 사용하세요. 조건·지도·확인 불가 행을 조사할 때만 전체 진단을 복사하세요.</value></data>
+  <data name="CopyFullCatalogReport" xml:space="preserve"><value>전체 진단 복사</value></data>
   <data name="CatalogShowUnresolved" xml:space="preserve"><value>확인 불가 행 표시 (진단용)</value></data>
   <data name="CatalogUnresolvedCount" xml:space="preserve"><value>현재 필터 범위의 확인 불가 {0}행은 기본 목록에서 제외합니다.</value></data>
   <data name="CatalogUnresolvedRow" xml:space="preserve"><value>ID {0} · 참조 행 또는 이름 확인 불가</value></data>

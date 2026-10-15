@@ -15,7 +15,11 @@
   <data name="CatalogDetailsPending" xml:space="preserve"><value>Select a fish for collection records, spots, maps, and cross-checked conditions. Bite-time statistics are planned separately.</value></data>
   <data name="CatalogNoMatches" xml:space="preserve"><value>No matching fish. Try changing the search or filter.</value></data>
   <data name="CatalogRowInfo" xml:space="preserve"><value>ID {0}</value></data>
-  <data name="CopyCatalogReport" xml:space="preserve"><value>Copy list diagnostics</value></data>
+  <data name="CopyCatalogReport" xml:space="preserve"><value>Copy short diagnostics</value></data>
+  <data name="CatalogIncludeOceanFish" xml:space="preserve"><value>Include ocean fishing fish</value></data>
+  <data name="CatalogDiagnostics" xml:space="preserve"><value>Detailed diagnostics</value></data>
+  <data name="CatalogDiagnosticsHint" xml:space="preserve"><value>Use short diagnostics first. Copy the full report only when investigating conditions, maps, or unresolved rows.</value></data>
+  <data name="CopyFullCatalogReport" xml:space="preserve"><value>Copy full diagnostics</value></data>
   <data name="CatalogShowUnresolved" xml:space="preserve"><value>Show unresolved rows (diagnostics)</value></data>
   <data name="CatalogUnresolvedCount" xml:space="preserve"><value>{0} unresolved rows in this filter scope are excluded from the default list.</value></data>
   <data name="CatalogUnresolvedRow" xml:space="preserve"><value>ID {0} · Unresolved row or name</value></data>

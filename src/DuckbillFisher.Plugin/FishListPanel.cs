@@ -20,6 +20,7 @@ internal sealed class FishListPanel(FishCatalog catalog, ITextureProvider textur
     private FishGuideRow[] matches = [];
     private string search = "";
     private bool inLogOnly = true;
+    private bool includeOceanFish = true;
     private bool showUnresolved;
     private int unresolvedCount;
     private bool requested;
@@ -77,6 +78,13 @@ internal sealed class FishListPanel(FishCatalog catalog, ITextureProvider textur
         ImGui.SameLine();
         if (ImGui.Button(UiText.Label(T.CopyCatalogReport, "CopyCatalogReport")))
             ImGui.SetClipboardText(CreateReport(personal, observed));
+        if (ImGui.CollapsingHeader(UiText.Label(T.CatalogDiagnostics, "CatalogDiagnostics")))
+        {
+            ImGui.TextWrapped(UiText.Get(T.CatalogDiagnosticsHint));
+            if (ImGui.Button(UiText.Label(T.CopyFullCatalogReport, "CopyFullCatalogReport")))
+                ImGui.SetClipboardText(CreateReport(personal, observed, full: true));
+        }
+        changed |= ImGui.Checkbox(UiText.Label(T.CatalogIncludeOceanFish, "CatalogIncludeOceanFish"), ref includeOceanFish);
         changed |= ImGui.Checkbox(UiText.Label(T.CatalogShowUnresolved, "CatalogShowUnresolved"), ref showUnresolved);
         ImGui.SameLine();
         changed |= ImGui.Checkbox(UiText.Label(T.CatalogDetailsOnly, "CatalogDetailsOnly"), ref detailsOnly);
@@ -151,6 +159,7 @@ internal sealed class FishListPanel(FishCatalog catalog, ITextureProvider textur
         var scope = view.Rows.Where(row => !inLogOnly || row.IsInLog).ToArray();
         unresolvedCount = scope.Count(row => !row.IsDisplayable);
         var filtered = scope.Where(row => (showUnresolved || row.IsDisplayable) && (!detailsOnly || row.Details is not null) &&
+            (includeOceanFish || !row.IsOceanFishing) &&
             (!favoritesOnly || personal.Favorites.Contains(row.FishParameterId)) &&
             CollectionFilter.Matches(personal.Collection(row.FishParameterId, observed), (CollectionVisibility)collectionVisibility) &&
             (term.Length == 0 || row.Name.Contains(term, StringComparison.OrdinalIgnoreCase) ||
@@ -299,14 +308,25 @@ internal sealed class FishListPanel(FishCatalog catalog, ITextureProvider textur
             ? caught ? T.CollectionManualCaught : T.CollectionManualUncaught
             : personal.Collection(fishId, observed) == CollectionStatus.Caught ? T.CollectionAutomaticCaught : T.CollectionUnknown;
 
-    private string CreateReport(FishPreferencesView personal, FishCollectionView observed)
+    private string CreateReport(FishPreferencesView personal, FishCollectionView observed, bool full = false)
     {
-        var report = new StringBuilder(catalog.CreateReport()).AppendLine();
+        var report = new StringBuilder();
         void Append(FormattableString line) => report.AppendLine(line.ToString(CultureInfo.InvariantCulture));
+        if (full)
+            report.AppendLine(catalog.CreateReport());
+        else
+        {
+            var view = catalog.View;
+            report.AppendLine("DuckbillFisher summary/v1");
+            Append($"Plugin={typeof(Plugin).Assembly.GetName().Version}; Rows={view.Rows.Count}; Status={view.Status.Key}");
+            if (selectedFish is { } selected)
+                Append($"SelectedFish={selected.FishParameterId}; Item={selected.ItemId}; Ocean={selected.IsOceanFishing}; Collection={personal.Collection(selected.FishParameterId, observed)}");
+        }
         report.AppendLine("DuckbillFisher MVP-01/preferences/v2");
         Append($"Ready={personal.HasCharacter}; Editable={personal.CanEdit}; Session={personal.Session}; Favorites={personal.Favorites.Count}");
         Append($"ManualCaught={personal.ManualCaught.Count(pair => pair.Value)}; ManualUncaught={personal.ManualCaught.Count(pair => !pair.Value)}");
         Append($"CollectionFilter={(CollectionVisibility)collectionVisibility}; FavoritesOnly={favoritesOnly}; Sort={sort}; Displayed={matches.Length}");
+        Append($"InLogOnly={inLogOnly}; IncludeOceanFish={includeOceanFish}; DetailsOnly={detailsOnly}; ShowUnresolved={showUnresolved}");
         Append($"CollectionSource=ManualOverrideThenPositiveObservation; StorageError={personal.Error?.Key.ToString() ?? "none"}");
         report.AppendLine().AppendLine("DuckbillFisher MVP-04/collection/v1");
         Append($"Session={observed.Session}; Caught={observed.Caught.Count}; Eligible={observed.EligibleRows}; GuideVisible={observed.GuideVisible}");
