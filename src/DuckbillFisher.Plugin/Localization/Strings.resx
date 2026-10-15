@@ -4,6 +4,17 @@
   <resheader name="version"><value>2.0</value></resheader>
   <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms</value></resheader>
   <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms</value></resheader>
+  <data name="TabCatalog" xml:space="preserve"><value>Fish list</value></data>
+  <data name="CatalogWaiting" xml:space="preserve"><value>Loading the fish list…</value></data>
+  <data name="CatalogLoaded" xml:space="preserve"><value>Fish list loaded from the game client.</value></data>
+  <data name="CatalogInLogOnly" xml:space="preserve"><value>Fish log entries only</value></data>
+  <data name="CatalogSort" xml:space="preserve"><value>Sort</value></data>
+  <data name="CatalogSortName" xml:space="preserve"><value>Name</value></data>
+  <data name="CatalogSortId" xml:space="preserve"><value>Fish ID</value></data>
+  <data name="CatalogCount" xml:space="preserve"><value>{0} results / {1} client rows</value></data>
+  <data name="CatalogDetailsPending" xml:space="preserve"><value>Collection, fishing spots, bait, and availability details are not available in this list yet.</value></data>
+  <data name="CatalogNoMatches" xml:space="preserve"><value>No matching fish. Try changing the search or filter.</value></data>
+  <data name="CatalogRowInfo" xml:space="preserve"><value>ID {0} · Collection unknown</value></data>
   <data name="Language" xml:space="preserve"><value>Language</value></data>
   <data name="Korean" xml:space="preserve"><value>한국어</value></data>
   <data name="English" xml:space="preserve"><value>English</value></data>

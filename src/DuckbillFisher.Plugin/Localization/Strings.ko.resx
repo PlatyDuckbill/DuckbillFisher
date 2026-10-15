@@ -4,6 +4,17 @@
   <resheader name="version"><value>2.0</value></resheader>
   <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms</value></resheader>
   <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms</value></resheader>
+  <data name="TabCatalog" xml:space="preserve"><value>어종 목록</value></data>
+  <data name="CatalogWaiting" xml:space="preserve"><value>어종 목록을 불러오는 중입니다…</value></data>
+  <data name="CatalogLoaded" xml:space="preserve"><value>게임 클라이언트에서 어종 목록을 불러왔습니다.</value></data>
+  <data name="CatalogInLogOnly" xml:space="preserve"><value>수첩 포함 어종만</value></data>
+  <data name="CatalogSort" xml:space="preserve"><value>정렬</value></data>
+  <data name="CatalogSortName" xml:space="preserve"><value>이름순</value></data>
+  <data name="CatalogSortId" xml:space="preserve"><value>어종 ID순</value></data>
+  <data name="CatalogCount" xml:space="preserve"><value>검색 결과 {0}종 / 클라이언트 전체 {1}행</value></data>
+  <data name="CatalogDetailsPending" xml:space="preserve"><value>이 목록의 수집 상태·낚시터·미끼·출현 시간 상세 정보는 아직 준비 중입니다.</value></data>
+  <data name="CatalogNoMatches" xml:space="preserve"><value>검색 결과가 없습니다. 검색어나 필터를 바꿔 보세요.</value></data>
+  <data name="CatalogRowInfo" xml:space="preserve"><value>ID {0} · 수집 여부 미확인</value></data>
   <data name="Language" xml:space="preserve"><value>언어</value></data>
   <data name="Korean" xml:space="preserve"><value>한국어</value></data>
   <data name="English" xml:space="preserve"><value>English</value></data>

@@ -1,6 +1,6 @@
 # ENV-03 수첩 조회의 로그인·캐릭터 경계
 
-준비일: 2026-10-16. 대상: Plugin 0.1.3.0 / KR Dalamud 15.0.3.6. **인게임 검증 대기**. 기존 DLL로 확인하며 새 빌드나 언로드가 필요하지 않다.
+갱신: 2026-10-16. 대상: Plugin 0.1.3.0 / KR Dalamud 15.0.3.6. **로그아웃 후 이전 정보 폐기와 재접속 후 새 목록/비트 조회 확인**. 다른 캐릭터 전환은 미확인이다. 기존 DLL로 확인했으며 새 빌드나 언로드를 하지 않았다.
 
 ## 확인할 가설
 
@@ -29,4 +29,52 @@
 - IsLoaded와 어류도감 표시만으로 전체 수첩 데이터 수신 완료를 보장하지 않는다. 이번 확인이 통과해도 전체 자동 필터나 로그인 직후 False의 정확성을 검증한 것으로 확대하지 않는다.
 - 폴링 사이에 지나간 짧은 준비 상태는 로그에 없을 수 있다. 보고서에 없는 전이를 관찰했다고 기록하지 않는다.
 
-결과는 보고서와 함께 선택/비트 초기화 여부, 재접속 후 새 조회 여부, 다른 캐릭터 수행 여부를 기록한다. 현재 사용자에게 같은 캐릭터 재접속 절차와 가능한 경우 다른 캐릭터 확인을 요청한 상태이며 결과는 아직 받지 않았다.
+결과는 보고서와 함께 선택/비트 초기화 여부, 재접속 후 새 조회 여부, 다른 캐릭터 수행 여부를 기록한다.
+
+## 실제 한섭 결과: 재접속 전 정보 폐기
+
+사용자 보고서에서 다음을 확인했다. 같은 캐릭터 재접속 절차에 대한 응답이며 보고서에는 캐릭터 식별자를 넣지 않으므로 다른 캐릭터 전환까지 확인했다고 해석하지 않는다.
+
+```text
+Plugin: 0.1.3.0; Dalamud: 15.0.3.6
+Session: 3; sampled: True; IsLoggedIn=True; IsLoaded=True
+FishGuide2=False; FishingNote=False; loginFallback=False
+Open samples: 0; refreshes: 0; trigger: none
+FishParameter rows: 0; IsInLog rows: 0; max IsInLog RowId: 0
+
++17.982s [BitReadLog] Caught-bit sample: FishParameter=194; raw=Unknown; Open the in-game Fish Guide and select the fish again.
++29.082s [WindowStateLog] FishGuide2: open
++29.082s [RowsRefreshLog] Refresh #3: Fish log opened: FishGuide2; all rows 2512 / in log 1518
++29.082s [BitReadLog] Caught-bit sample: FishParameter=194; raw=True; Raw caught-bit sample; compare it with the game fish log. Automatic filters do not use this value.
++72.365s [BitReadLog] Caught-bit sample: FishParameter=194; raw=True; Raw caught-bit sample; compare it with the game fish log. Automatic filters do not use this value.
++80.898s [SessionCleared] Session cleared: previous display discarded
++80.898s [PlayerStateChanged] State: IsLoggedIn=False, IsLoaded=not sampled
++135.081s [SessionReady] Player data ready: new session
++135.081s [PlayerStateChanged] State: IsLoggedIn=True, IsLoaded=True
+```
+
+- 로그아웃 전 황금나비어 True가 기록되어 있고, 로그아웃/재접속 뒤 Session 3에서 공개 목록·개방/갱신 횟수·마지막 트리거가 초기화됐다. 현재 `Selected`와 `Raw caught bit` 행은 없다. 과거 이력은 유지됐다.
+- 사용자는 재접속 후 도감을 열기 전 황금나비어가 검색되지 않는다고 설명했다. 이는 공개 목록 0행과 일치하는 현재 진단 동작이다. 정적 어종의 존재 여부나 데이터 소실을 뜻하지 않는다.
+- 재접속 전 +17.982초에 도감이 닫힌 상태의 명시적 비트 요청이 Unknown으로 처리되고, +29.082초에 도감을 연 뒤 새 조회가 True가 된 것도 확인했다. 이 결과를 재접속 후 새 조회로 해석하지 않는다.
+- 첫 보고서에서 재접속 이후 새 비트 조회는 없었다. 이어서 도감 열기→황금나비어 검색/선택을 요청했고 아래 두 번째 보고서를 받았다. 다른 캐릭터 전환, 순간적인 대기 요청 폐기, 재로드 후 이벤트 중복은 추가 미확인이다.
+- 같은 보고서의 ID 298 raw=True는 게임 수첩 정답을 별도로 받지 않았으므로 검증된 수집 어종 기준으로 추가하지 않는다.
+
+## 실제 한섭 결과: 재접속 후 새 조회
+
+```text
+Session: 3; sampled: True; IsLoggedIn=True; IsLoaded=True
+FishGuide2=True; FishingNote=False; loginFallback=False
+Open samples: 3; refreshes: 3; trigger: Fish log opened: FishGuide2
+FishParameter rows: 2512; IsInLog rows: 1518; max IsInLog RowId: 1522
+Selected: FishParameter=194; Item=7685; IsInLog=True; name=황금나비어
+Raw caught bit: True; [NativeRawSample] Raw caught-bit sample; compare it with the game fish log. Automatic filters do not use this value.
++219.116s [WindowStateLog] FishingNote: open
++219.116s [RowsRefreshLog] Refresh #1: Fish log opened: FishingNote; all rows 2512 / in log 1518
++227.915s [WindowStateLog] FishGuide2: open
++227.915s [RowsRefreshLog] Refresh #3: Fish log opened: FishGuide2; all rows 2512 / in log 1518
++229.482s [BitReadLog] Caught-bit sample: FishParameter=194; raw=True; Raw caught-bit sample; compare it with the game fish log. Automatic filters do not use this value.
+```
+
+Session 3에서 신규 목록 로드와 사용자 재선택 후 새 비트 조회를 확인했다. 이전 세션의 표본을 단순 재표시한 결과가 아니다. 기존 기준 캐릭터의 황금나비어=True와 일치한다. 이 결과는 같은 캐릭터의 재접속 한 경로를 검증하며, 로그인 직후 전체 비트의 준비 완료나 모든 캐릭터의 정확성을 보장하지 않는다.
+
+이번 검증 기록 갱신에서는 Plugin 코드·DLL을 바꾸거나 빌드·테스트를 새로 실행하지 않았다.

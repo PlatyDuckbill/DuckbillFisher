@@ -3,15 +3,9 @@ using System.Globalization;
 using System.Text;
 using Dalamud.Plugin.Services;
 using DuckbillFisher.Plugin.Localization;
-using Lumina.Excel.Sheets;
 using T = DuckbillFisher.Plugin.Localization.TextKey;
 
 namespace DuckbillFisher.Plugin;
-
-internal sealed record FishGuideRow(uint FishParameterId, uint ItemId, string ItemType, string Name, bool IsInLog)
-{
-    public string DisplayName => string.IsNullOrWhiteSpace(Name) ? UiText.Get(T.MissingName) : Name;
-}
 
 internal sealed record FishGuideDiagnosticView(
     bool HasSample, bool IsLoggedIn, bool? IsLoaded, bool FishGuideVisible, bool FishingNoteVisible,
@@ -26,7 +20,7 @@ internal sealed class FishGuideDiagnostics : IDisposable
 {
     private readonly IClientState clientState;
     private readonly IPlayerState playerState;
-    private readonly IDataManager dataManager;
+    private readonly FishCatalog catalog;
     private readonly IGameGui gameGui;
     private readonly IFramework framework;
     private readonly NativeFishCollectionReader collectionReader;
@@ -35,7 +29,6 @@ internal sealed class FishGuideDiagnostics : IDisposable
     private readonly Queue<LocalizedLogEntry> history = new();
     private FishGuideDiagnosticView view = new(false, false, null, false, false, false, 0, 0, 0,
         new(T.None), new(T.GuideWaiting), 0, 0, [], []);
-    private FishGuideRow[]? cachedRows;
     private TimeSpan nextPoll;
     private ulong characterId;
     private bool manualRefresh;
@@ -44,12 +37,12 @@ internal sealed class FishGuideDiagnostics : IDisposable
     private uint? pendingFishId;
     private bool disposed;
 
-    public FishGuideDiagnostics(IClientState clientState, IPlayerState playerState, IDataManager dataManager,
+    public FishGuideDiagnostics(IClientState clientState, IPlayerState playerState, FishCatalog catalog,
         IGameGui gameGui, IFramework framework)
     {
         this.clientState = clientState;
         this.playerState = playerState;
-        this.dataManager = dataManager;
+        this.catalog = catalog;
         this.gameGui = gameGui;
         this.framework = framework;
         collectionReader = new NativeFishCollectionReader(framework);
@@ -210,39 +203,23 @@ internal sealed class FishGuideDiagnostics : IDisposable
     {
         try
         {
-            if (cachedRows is null || reload)
-            {
-                var sheet = dataManager.GetExcelSheet<FishParameter>()
-                    ?? throw new InvalidOperationException("FishParameter sheet unavailable.");
-                var rows = new List<FishGuideRow>();
-                foreach (var fish in sheet)
-                {
-                    var item = fish.Item;
-                    var itemType = item.RowType?.Name ?? "Unknown";
-                    var name = item.Is<Item>() ? item.GetValueOrDefault<Item>()?.Name.ExtractText()
-                        : item.Is<EventItem>() ? item.GetValueOrDefault<EventItem>()?.Name.ExtractText() : null;
-                    rows.Add(new FishGuideRow(fish.RowId, item.RowId, itemType,
-                        name ?? "", fish.IsInLog));
-                }
-                cachedRows = rows.ToArray();
-            }
-            var inLog = cachedRows.Where(row => row.IsInLog).ToArray();
+            var rows = catalog.Read(reload);
+            var inLog = rows.Where(row => row.IsInLog).ToArray();
             if (inLog.Length == 0)
                 throw new InvalidDataException("No FishParameter rows eligible for the fish log.");
             view = view with
             {
-                Rows = cachedRows, InLogCount = inLog.Length,
+                Rows = rows, InLogCount = inLog.Length,
                 MaxInLogId = inLog.Length == 0 ? 0 : inLog.Max(row => row.FishParameterId),
                 RefreshCount = view.RefreshCount + 1, LastTrigger = trigger,
                 Status = new(T.RowsRead),
             };
-            AddHistory(new(T.RowsRefreshLog, view.RefreshCount, trigger, cachedRows.Length, inLog.Length));
+            AddHistory(new(T.RowsRefreshLog, view.RefreshCount, trigger, rows.Count, inLog.Length));
             if (view.FishGuideVisible && trackedFishId is not null)
                 pendingFishId = trackedFishId;
         }
         catch (Exception ex)
         {
-            cachedRows = null;
             pendingFishId = null;
             view = view with
             {

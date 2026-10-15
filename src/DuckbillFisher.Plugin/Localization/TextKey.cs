@@ -2,6 +2,17 @@ namespace DuckbillFisher.Plugin.Localization;
 
 internal enum TextKey
 {
+    TabCatalog,
+    CatalogWaiting,
+    CatalogLoaded,
+    CatalogInLogOnly,
+    CatalogSort,
+    CatalogSortName,
+    CatalogSortId,
+    CatalogCount,
+    CatalogDetailsPending,
+    CatalogNoMatches,
+    CatalogRowInfo,
     Language,
     Korean,
     English,

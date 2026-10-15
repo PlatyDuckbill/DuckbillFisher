@@ -35,6 +35,10 @@ Plugin의 `AssemblyName`은 `DuckbillFisher`다. 주 DLL은 `DuckbillFisher.dll`
 
 사용자 문구는 상태/게임 접근과 분리한다. 상태와 이력은 번역 문자열 대신 UiMessage의 키/인자를 보관하고 UI/진단 출력에서 각각 표현한다. 추가 언어와 패키징은 [다국어 지침](LOCALIZATION.md)을 따른다.
 
+0.1.4.0의 `FishCatalog`는 Framework.Update에서 게임 시트의 이름·아이콘·ID·IsInLog를 읽어 정적 목록을 캐시한다. `FishListPanel`과 `FishGuideDiagnostics`가 이를 공유한다. 목록 탭의 로드/재조회는 요청만 큐에 넣으며 Draw에서 시트를 읽지 않는다. 정적 목록은 로그아웃 후에도 유지할 수 있지만 캐릭터의 비트 표본/선택 추적은 기존 수첩 진단에서 따로 폐기한다. 목록 탭의 행 선택은 정적 어종 선택이며 캐릭터 수집 상태를 포함하지 않는다.
+
+목록의 검색/필터/정렬은 입력이나 원본 목록 변경 때만 갱신한다. 고정 높이 행에 설치본의 ImGuiListClipper를 적용해 보이는 행만 그린다. 아이콘은 설치본 ITextureProvider의 공유 즉시 텍스처로 받아 소유권을 가져오거나 borrowed wrap을 Dispose하지 않는다. 목록 정렬은 게임 데이터 언어인 한국어 비교를 사용하고 동률은 FishParameter ID로 고정해 UI 언어 변경에 따라 순서가 흔들리지 않게 한다.
+
 ## 시간과 성능
 
 - 예측은 UTC 기반 절대 시간, 입질 경과는 Stopwatch 같은 단조 증가 시간으로 처리한다.
