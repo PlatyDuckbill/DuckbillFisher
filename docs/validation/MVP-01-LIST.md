@@ -1,6 +1,6 @@
 # MVP-01 첫 어종 목록
 
-갱신: 2026-10-16. Plugin 0.1.4.0 및 수정본 0.1.4.1 / KR Dalamud 15.0.3.6. **검색 확인, 확인 불가 행 처리 수정은 인게임 검증 대기**. MVP-01 전체 완료가 아니라 목록 표시의 첫 작업이다.
+갱신: 2026-10-16. Plugin 0.1.4.0 및 수정본 0.1.4.1 / KR Dalamud 15.0.3.6. **검색·도감 없이 정적 목록 로드·확인 불가 행 집계 확인**. 화면/스크롤/언어 전환의 세부 검증은 남아 있다. MVP-01 전체 완료가 아니라 목록 표시의 첫 작업이다.
 
 ## 구현 범위
 
@@ -64,3 +64,28 @@ pwsh -NoLogo -NoProfile -File scripts/check-localization.ps1
 ### 개발 DLL 누락과 복구
 
 사용자가 Core DLL만 보인다고 보고했고 실제 Debug 폴더에서 주 DLL 부재를 확인했다. obj/Debug와 별도 출력에는 컴파일된 DLL이 남아 있었다. 원인은 확정하지 않았다. 정규 Debug 경로로 다시 빌드해 경고/오류 0으로 복구하고, 출력 파일의 실제 존재·크기 82,944바이트·어셈블리 버전 0.1.4.1·한국어 satellite DLL 존재를 직접 확인했다. 빌드 성공 메시지나 manifest만으로 주 DLL 존재를 확인했다고 취급하지 않는다. 테스트나 게임 로드를 새로 수행한 결과는 아니다.
+
+## 0.1.4.1 실제 목록 진단
+
+사용자가 0.1.4.1을 로드한 뒤 다음 보고서를 제공했다. **어류도감을 한 번도 열지 않았다**고 명시했다.
+
+```text
+DuckbillFisher MVP-01/catalog/v1
+Plugin: 0.1.4.1
+Rows: 2512; displayable: 2465; unresolved: 47; unresolved in log: 1
+Status: [CatalogLoaded] Fish list loaded from the game client.
+Resolution: ZeroRow; count: 1
+Resolution: EmptyItemReference; count: 44
+Resolution: EmptyName; count: 2
+FishParameter=0; Item=0; IsInLog=True; resolution=ZeroRow
+FishParameter=15026; EventItem=2002390; IsInLog=False; resolution=EmptyName
+FishParameter=15058; EventItem=2002869; IsInLog=False; resolution=EmptyName
+```
+
+- 원본 2,512행 중 일반 목록에 사용할 수 있는 행은 2,465행이다. 제외 사유 1+44+2=47과 일치하며 참조 행 부재/미지원 참조 타입은 보고되지 않았다.
+- 수첩 포함 확인 불가 행은 ID 0 한 행뿐이다. 기존 IsInLog 1,518행에서 이를 제외하면 일반 목록의 수첩 대상은 1,517행으로 계산된다. 이는 수집 완료 어종 수가 아니다.
+- 44행은 아이템 참조 ID가 0이고 모두 IsInLog=False였다. 이름이 빈 2행도 IsInLog=False이며 위 EventItem 참조다. 이를 사용되지 않는 데이터라고 단정하거나 이름을 추측해 채우지 않는다.
+- 도감을 열지 않아도 정적 목록 로드와 진단 복사가 가능함을 확인했다. 캐릭터 수집 비트 읽기나 수집 데이터 준비 완료를 확인한 결과는 아니다.
+- 일반 화면에서 확인 불가 행이 사라졌다는 별도 설명, 수정 후 검색 재확인, 스크롤/정렬/언어 전환 결과는 받지 않았다. 보고서 집계 확인과 화면의 모든 동작 완료를 구분한다.
+
+이번 결과 반영은 문서 변경이다. 새 빌드나 테스트를 실행하지 않았다. 후속 MVP-01 작업은 검증된 5~10종의 상세 데이터 구조·출처·낚시터/미끼부터 준비하며 화면 검증의 미확인 항목도 유지한다.
