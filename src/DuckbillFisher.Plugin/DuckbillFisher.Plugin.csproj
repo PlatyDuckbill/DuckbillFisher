@@ -2,12 +2,12 @@
   <PropertyGroup>
     <AssemblyName>DuckbillFisher</AssemblyName>
     <RootNamespace>DuckbillFisher.Plugin</RootNamespace>
-    <Version>0.1.19.0</Version>
+    <Version>0.1.20.0</Version>
     <NeutralLanguage>en</NeutralLanguage>
     <Author>PlatyDuckbill</Author>
     <Name>DuckbillFisher</Name>
     <Punchline>한국 서버 터주 도우미 — 개발 준비 버전</Punchline>
-    <Description>어종 목록·상세 조건·지도 핀·즐겨찾기·수집 필터를 제공합니다. 조사한 KR 빌드에서 수첩 조회와 새 어종 등록을 반영하고, 게임 도감 전체 목록과 수집 비트가 일치하면 미수집도 표시하는 개발 버전입니다. 타이머는 아직 없습니다. /duckbillfisher로 창을 엽니다.</Description>
+    <Description>어종 목록·상세 조건·지도 핀·즐겨찾기·수집 필터·출현 사전 알림을 제공합니다. 조사한 KR 빌드에서 수첩 조회와 새 어종 등록을 반영하고, 게임 도감 전체 목록과 수집 비트가 일치하면 미수집도 표시하는 개발 버전입니다. 타이머는 아직 없습니다. /duckbillfisher로 창을 엽니다.</Description>
     <RepoUrl>https://github.com/PlatyDuckbill/DuckbillFisher</RepoUrl>
     <Tags>fishing;한국어</Tags>
     <DalamudApiLevel>15</DalamudApiLevel>

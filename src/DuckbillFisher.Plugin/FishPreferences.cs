@@ -11,16 +11,23 @@ namespace DuckbillFisher.Plugin;
 // Public for Dalamud's configuration serializer. Content IDs stay in local configuration only.
 public sealed class FishPreferencesConfiguration : IPluginConfiguration
 {
-    public const int CurrentVersion = 1;
+    public const int CurrentVersion = 2;
     public int Version { get; set; } = CurrentVersion;
     public HashSet<uint> Favorites { get; set; } = [];
     public Dictionary<ulong, Dictionary<uint, bool>> Characters { get; set; } = [];
+    public bool SpawnAlertsEnabled { get; set; }
+    public int SpawnAlertLeadMinutes { get; set; } = SpawnAlertScheduler.DefaultLeadMinutes;
+    // Last reserved window start per fish/character. Also suppresses repeats after clock rollback.
+    public Dictionary<ulong, Dictionary<uint, long>> AlertWindows { get; set; } = [];
 }
 
 internal sealed record FishPreferencesView(int Revision, int Session, bool HasCharacter, bool CanEdit,
     IReadOnlySet<uint> Favorites, IReadOnlyDictionary<uint, bool> ManualCaught, UiMessage? Error)
 {
     internal ulong CharacterId { get; init; }
+    public bool SpawnAlertsEnabled { get; init; }
+    public int SpawnAlertLeadMinutes { get; init; } = SpawnAlertScheduler.DefaultLeadMinutes;
+    internal IReadOnlyDictionary<uint, long> ReservedAlertWindows { get; init; } = FrozenDictionary<uint, long>.Empty;
 
     public CollectionStatus Collection(uint fishId, FishCollectionView observed) => CollectionFilter.Resolve(
         observed.Session == Session && HasCharacter ? observed.Collection(fishId) : CollectionStatus.Unknown,
@@ -37,6 +44,7 @@ internal sealed class FishPreferences : IDisposable
     private readonly IPluginLog log;
     private readonly object gate = new();
     private readonly Queue<Edit> pending = new();
+    private (bool Enabled, int LeadMinutes)? pendingAlerts;
     private FishPreferencesConfiguration configuration = new();
     private FishPreferencesView view = new(0, 0, false, false,
         FrozenSet<uint>.Empty, FrozenDictionary<uint, bool>.Empty, null);
@@ -60,6 +68,7 @@ internal sealed class FishPreferences : IDisposable
             else if (saved is FishPreferencesConfiguration loaded && IsValid(loaded))
             {
                 configuration = loaded;
+                configuration.Version = FishPreferencesConfiguration.CurrentVersion;
                 writable = true;
             }
             else
@@ -88,6 +97,37 @@ internal sealed class FishPreferences : IDisposable
         lock (gate)
             if (!disposed && writable && characterId != 0 && fishId != 0 && expectedSession == view.Session)
                 pending.Enqueue(new(fishId, caught, true, expectedSession));
+    }
+
+    public void SetSpawnAlerts(bool enabled, int leadMinutes)
+    {
+        lock (gate)
+            if (!disposed && writable)
+                pendingAlerts = (enabled, Math.Clamp(leadMinutes, SpawnAlertScheduler.MinLeadMinutes, SpawnAlertScheduler.MaxLeadMinutes));
+    }
+
+    // Framework only. Reserve durably before output: a crash may lose a notification, but cannot resend it.
+    public IReadOnlyList<SpawnAlert>? ReserveAlerts(int expectedSession, IReadOnlyList<SpawnAlert> alerts)
+    {
+        if (!framework.IsInFrameworkUpdateThread)
+            throw new InvalidOperationException("Alert reservations must be saved on Framework.Update.");
+        lock (gate)
+        {
+            if (disposed || !writable || characterId == 0 || expectedSession != view.Session || !configuration.SpawnAlertsEnabled)
+                return [];
+            var candidate = CopyConfiguration();
+            if (!candidate.AlertWindows.TryGetValue(characterId, out var saved))
+                candidate.AlertWindows[characterId] = saved = [];
+            var accepted = alerts.Where(alert => !saved.TryGetValue(alert.FishId, out var last) ||
+                alert.Start.ToUnixTimeMilliseconds() > last).ToArray();
+            if (accepted.Length == 0)
+                return accepted;
+            foreach (var alert in accepted)
+                saved[alert.FishId] = alert.Start.ToUnixTimeMilliseconds();
+            var success = Save(candidate);
+            Publish();
+            return success ? accepted : null;
+        }
     }
 
     private void OnUpdate(IFramework _)
@@ -126,15 +166,17 @@ internal sealed class FishPreferences : IDisposable
             }
             else if (stateErrorChanged)
                 Publish();
-            if (pending.Count == 0)
+            if (pending.Count == 0 && pendingAlerts is null)
                 return;
-            var candidate = new FishPreferencesConfiguration
-            {
-                Favorites = [.. configuration.Favorites],
-                Characters = configuration.Characters.ToDictionary(pair => pair.Key,
-                    pair => new Dictionary<uint, bool>(pair.Value)),
-            };
+            var candidate = CopyConfiguration();
             var changed = false;
+            if (pendingAlerts is { } alertSettings)
+            {
+                changed = candidate.SpawnAlertsEnabled != alertSettings.Enabled || candidate.SpawnAlertLeadMinutes != alertSettings.LeadMinutes;
+                candidate.SpawnAlertsEnabled = alertSettings.Enabled;
+                candidate.SpawnAlertLeadMinutes = alertSettings.LeadMinutes;
+                pendingAlerts = null;
+            }
             while (pending.TryDequeue(out var edit))
             {
                 if (!edit.Manual)
@@ -158,18 +200,7 @@ internal sealed class FishPreferences : IDisposable
             }
             if (!changed)
                 return;
-            try
-            {
-                pluginInterface.SavePluginConfig(candidate);
-                configuration = candidate;
-                if (view.Error?.Key == T.PreferencesSaveFailed)
-                    view = view with { Error = null };
-            }
-            catch (Exception ex)
-            {
-                log.Error(ex, "Could not save fish preferences; retaining the previous in-memory state.");
-                view = view with { Error = new(T.PreferencesSaveFailed) };
-            }
+            Save(candidate);
             Publish();
         }
     }
@@ -179,13 +210,49 @@ internal sealed class FishPreferences : IDisposable
         var manual = characterId != 0 && configuration.Characters.TryGetValue(characterId, out var saved)
             ? saved.ToFrozenDictionary() : FrozenDictionary<uint, bool>.Empty;
         view = new(view.Revision + 1, view.Session, characterId != 0, writable,
-            configuration.Favorites.ToFrozenSet(), manual, view.Error) { CharacterId = characterId };
+            configuration.Favorites.ToFrozenSet(), manual, view.Error)
+        {
+            CharacterId = characterId, SpawnAlertsEnabled = configuration.SpawnAlertsEnabled,
+            SpawnAlertLeadMinutes = configuration.SpawnAlertLeadMinutes,
+            ReservedAlertWindows = characterId != 0 && configuration.AlertWindows.TryGetValue(characterId, out var windows)
+                ? windows.ToFrozenDictionary() : FrozenDictionary<uint, long>.Empty,
+        };
+    }
+
+    private FishPreferencesConfiguration CopyConfiguration() => new()
+    {
+        Favorites = [.. configuration.Favorites],
+        Characters = configuration.Characters.ToDictionary(pair => pair.Key, pair => new Dictionary<uint, bool>(pair.Value)),
+        SpawnAlertsEnabled = configuration.SpawnAlertsEnabled,
+        SpawnAlertLeadMinutes = configuration.SpawnAlertLeadMinutes,
+        AlertWindows = configuration.AlertWindows.ToDictionary(pair => pair.Key, pair => new Dictionary<uint, long>(pair.Value)),
+    };
+
+    private bool Save(FishPreferencesConfiguration candidate)
+    {
+        try
+        {
+            pluginInterface.SavePluginConfig(candidate);
+            configuration = candidate;
+            if (view.Error?.Key == T.PreferencesSaveFailed)
+                view = view with { Error = null };
+            return true;
+        }
+        catch (Exception ex)
+        {
+            log.Error(ex, "Could not save fish preferences; retaining the previous in-memory state.");
+            view = view with { Error = new(T.PreferencesSaveFailed) };
+            return false;
+        }
     }
 
     private static bool IsValid(FishPreferencesConfiguration value) =>
-        value.Version == FishPreferencesConfiguration.CurrentVersion && value.Favorites is not null &&
+        value.Version is 1 or FishPreferencesConfiguration.CurrentVersion && value.Favorites is not null &&
         !value.Favorites.Contains(0) && value.Characters is not null &&
-        value.Characters.All(pair => pair.Key != 0 && pair.Value is not null && !pair.Value.ContainsKey(0));
+        value.Characters.All(pair => pair.Key != 0 && pair.Value is not null && !pair.Value.ContainsKey(0)) &&
+        value.SpawnAlertLeadMinutes is >= SpawnAlertScheduler.MinLeadMinutes and <= SpawnAlertScheduler.MaxLeadMinutes &&
+        value.AlertWindows is not null && value.AlertWindows.All(pair => pair.Key != 0 && pair.Value is not null &&
+            pair.Value.All(window => window.Key != 0 && window.Value is > 0 and <= 253402300799999));
 
     public void Dispose()
     {
@@ -193,6 +260,7 @@ internal sealed class FishPreferences : IDisposable
         {
             disposed = true;
             pending.Clear();
+            pendingAlerts = null;
         }
         framework.Update -= OnUpdate;
     }

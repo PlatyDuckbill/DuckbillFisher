@@ -249,4 +249,24 @@
   <data name="GeographyScopeCount" xml:space="preserve"><value>선택한 확장팩의 지역 {0}개 · 검색 결과 {1}개</value></data>
   <data name="GeographyHiddenRegions" xml:space="preserve"><value>선택한 확장팩 밖의 지역 {0}개도 필터에 남아 있습니다. 마우스를 올리면 이름을 볼 수 있습니다.</value></data>
   <data name="GeographyClearHidden" xml:space="preserve"><value>확장팩 범위 밖 지역 선택 해제</value></data>
+  <data name="TabAlerts" xml:space="preserve"><value>출현 알림</value></data>
+  <data name="AlertsRulesHeading" xml:space="preserve"><value>발송 규칙과 범위</value></data>
+  <data name="AlertsIntro" xml:space="preserve"><value>즐겨찾기이며 최종 수집 상태가 미수집인 어종을 본인 로컬 채팅창으로 알려줍니다. 수동 지정이 우선합니다. 미확인·수집됨·상시·먼바다·예측 미지원 어종은 제외합니다. 목록의 검색과 표시 필터는 알림에 영향을 주지 않습니다.</value></data>
+  <data name="AlertsEnable" xml:space="preserve"><value>로컬 채팅 출현 알림 켜기</value></data>
+  <data name="AlertsLead" xml:space="preserve"><value>출현 몇 분 전 (실제 시간)</value></data>
+  <data name="AlertsLeadRange" xml:space="preserve"><value>범위: 실제 {0}~{1}분. 설정은 공통이며 발송 기록은 캐릭터별로 구분합니다.</value></data>
+  <data name="AlertsPolicy" xml:space="preserve"><value>앞으로 도달할 알림 시각만 예약합니다. 켜기·사전 시간 변경·미수집 확인·로그인·재로드 시 이미 지난 알림을 보내지 않습니다. 긴 중단이나 시계 변경 뒤에는 미래 알림을 다시 예약합니다. 어종·출현 창별 기록을 저장한 뒤 발송하며, 저장 실패 시 발송하지 않습니다. 동시 알림은 한 메시지로 묶고 아래에 전체 어종을 표시합니다. Toast와 소리는 후속입니다. 일반 시간·날씨 예측이며 개인 준비 완료를 뜻하지 않습니다.</value></data>
+  <data name="AlertsDisabled" xml:space="preserve"><value>출현 알림이 꺼져 있습니다.</value></data>
+  <data name="AlertsWaitingCharacter" xml:space="preserve"><value>캐릭터 정보를 기다립니다. 이전 캐릭터의 예약은 폐기했습니다.</value></data>
+  <data name="AlertsStorageUnavailable" xml:space="preserve"><value>설정 또는 발송 기록을 저장할 수 없어 알림을 중지했습니다. 저장 문제를 해결한 뒤 설정을 변경해 재시도하세요. 기록 저장 없이 발송하지 않습니다.</value></data>
+  <data name="AlertsForecastUnavailable" xml:space="preserve"><value>호환되는 최신 시간·날씨 예측을 기다립니다.</value></data>
+  <data name="AlertsWatching" xml:space="preserve"><value>대상 즐겨찾기의 미래 알림을 확인 중입니다. 수집 상태 확인에는 게임 어류도감 열기가 필요할 수 있습니다.</value></data>
+  <data name="AlertsOutputFailed" xml:space="preserve"><value>알림 갱신 또는 출력에 실패했습니다. 발송 예약한 알림은 재전송하지 않습니다. 반복되면 플러그인 로그를 확인하세요.</value></data>
+  <data name="AlertsCounts" xml:space="preserve"><value>대상 예약 {0}종 · 대기 {1}종 · 이번 세션 발송 {2}종</value></data>
+  <data name="AlertsNext" xml:space="preserve"><value>다음 알림: {0} · 현지 {1:MM-dd HH:mm:ss} · 창 시작 {2:MM-dd HH:mm:ss}</value></data>
+  <data name="AlertsCopy" xml:space="preserve"><value>짧은 알림 진단 복사</value></data>
+  <data name="AlertsLastBatch" xml:space="preserve"><value>마지막 발송 묶음 (현재 캐릭터 세션)</value></data>
+  <data name="AlertEntry" xml:space="preserve"><value>{0} ({1}, 현지 {2:MM-dd HH:mm})</value></data>
+  <data name="AlertMore" xml:space="preserve"><value>{0} 외 {1}종 (전체 목록은 출현 알림 탭)</value></data>
+  <data name="AlertMessage" xml:space="preserve"><value>출현 예고: {0}. 일반 시간·날씨 기준 예측입니다. 미끼·직감 등 개인 조건을 확인하세요.</value></data>
 </root>

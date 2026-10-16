@@ -13,6 +13,7 @@ internal sealed class MainWindow : Window
     private readonly FishingConditionObserver observer;
     private readonly FishGuideDiagnostics fishGuide;
     private readonly FishListPanel fishList;
+    private readonly SpawnAlertsPanel spawnAlerts;
     private readonly Action languageChanged;
     private string[] markerLabels = Markers.Select(key => UiText.Get(key)).ToArray();
     private IReadOnlyList<FishGuideRow>? lastRows;
@@ -22,11 +23,13 @@ internal sealed class MainWindow : Window
     private int lastSession = -1;
     private int selectedMarker;
 
-    public MainWindow(FishingConditionObserver observer, FishGuideDiagnostics fishGuide, FishListPanel fishList, Action languageChanged) : base("DuckbillFisher###DuckbillFisher.Main")
+    public MainWindow(FishingConditionObserver observer, FishGuideDiagnostics fishGuide, FishListPanel fishList,
+        SpawnAlertsPanel spawnAlerts, Action languageChanged) : base("DuckbillFisher###DuckbillFisher.Main")
     {
         this.observer = observer;
         this.fishGuide = fishGuide;
         this.fishList = fishList;
+        this.spawnAlerts = spawnAlerts;
         this.languageChanged = languageChanged;
         Size = new Vector2(820, 560);
         SizeCondition = ImGuiCond.FirstUseEver;
@@ -53,6 +56,11 @@ internal sealed class MainWindow : Window
             if (ImGui.BeginTabItem(UiText.Label(T.TabGuide, "GuideTab")))
             {
                 DrawFishGuide();
+                ImGui.EndTabItem();
+            }
+            if (ImGui.BeginTabItem(UiText.Label(T.TabAlerts, "SpawnAlertsTab")))
+            {
+                spawnAlerts.Draw();
                 ImGui.EndTabItem();
             }
             if (ImGui.BeginTabItem(UiText.Label(T.TabFishing, "FishingTab")))

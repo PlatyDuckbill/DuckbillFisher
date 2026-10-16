@@ -249,4 +249,24 @@
   <data name="GeographyScopeCount" xml:space="preserve"><value>{0} regions in the selected expansions · {1} search results</value></data>
   <data name="GeographyHiddenRegions" xml:space="preserve"><value>{0} selected regions are outside the selected expansions and still affect the filter. Hover to see their names.</value></data>
   <data name="GeographyClearHidden" xml:space="preserve"><value>Clear regions outside these expansions</value></data>
+  <data name="TabAlerts" xml:space="preserve"><value>Spawn alerts</value></data>
+  <data name="AlertsRulesHeading" xml:space="preserve"><value>Delivery rules and scope</value></data>
+  <data name="AlertsIntro" xml:space="preserve"><value>Local chat reminders for favorited fish whose final collection status is Uncaught. Manual collection settings take priority. Unknown, caught, always available, ocean and unsupported fish are excluded. List search and display filters do not restrict alerts.</value></data>
+  <data name="AlertsEnable" xml:space="preserve"><value>Enable local chat spawn alerts</value></data>
+  <data name="AlertsLead" xml:space="preserve"><value>Real minutes before opening</value></data>
+  <data name="AlertsLeadRange" xml:space="preserve"><value>Range: {0}–{1} real minutes. Settings are shared; delivery records are separate for each character.</value></data>
+  <data name="AlertsPolicy" xml:space="preserve"><value>Only future deadlines are armed. Enabling, changing the lead time, discovering an uncaught fish, logging in or reloading never replays missed alerts. Long pauses or clock jumps rearm future deadlines. Each fish/window is reserved on disk before output; a save failure suppresses output. Simultaneous reminders share one message; the last batch below lists all fish. Toast and sound are planned for a later version. Predictions use normal time/weather only and do not establish personal readiness.</value></data>
+  <data name="AlertsDisabled" xml:space="preserve"><value>Spawn alerts are disabled.</value></data>
+  <data name="AlertsWaitingCharacter" xml:space="preserve"><value>Waiting for character data. Previous character reservations have been discarded.</value></data>
+  <data name="AlertsStorageUnavailable" xml:space="preserve"><value>Alerts paused: settings or delivery records could not be saved. Resolve the storage issue and change a setting to retry. No alert was sent without a saved reservation.</value></data>
+  <data name="AlertsForecastUnavailable" xml:space="preserve"><value>Waiting for a fresh, compatible time/weather forecast.</value></data>
+  <data name="AlertsWatching" xml:space="preserve"><value>Watching future deadlines for eligible favorites. Collection status may require opening the in-game Fish Guide.</value></data>
+  <data name="AlertsOutputFailed" xml:space="preserve"><value>Could not update or output alerts. Reserved reminders are not replayed. Check the plugin log if this continues.</value></data>
+  <data name="AlertsCounts" xml:space="preserve"><value>Eligible plans: {0} · Armed: {1} · Reminders sent this session: {2}</value></data>
+  <data name="AlertsNext" xml:space="preserve"><value>Next reminder: {0} · local {1:MM-dd HH:mm:ss} · window starts {2:MM-dd HH:mm:ss}</value></data>
+  <data name="AlertsCopy" xml:space="preserve"><value>Copy short alert diagnostic</value></data>
+  <data name="AlertsLastBatch" xml:space="preserve"><value>Last delivered batch (this character session)</value></data>
+  <data name="AlertEntry" xml:space="preserve"><value>{0} ({1}, local {2:MM-dd HH:mm})</value></data>
+  <data name="AlertMore" xml:space="preserve"><value>{0} and {1} more; see Spawn alerts for the full batch</value></data>
+  <data name="AlertMessage" xml:space="preserve"><value>Upcoming window: {0}. Normal time/weather forecast only; check bait, intuition and other personal requirements.</value></data>
 </root>
