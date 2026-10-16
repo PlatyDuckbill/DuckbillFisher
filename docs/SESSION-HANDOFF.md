@@ -30,11 +30,11 @@
 - 0.1.18.0 남은 시간순은 사용자 ‘정렬은 잘 됨’으로 대표 확인 통과. 열린 창 종료순→예정 창 시작순→미확인→상시, 동률 이름/ID이며 지역은 기존 필터로만 적용한다. [근거](validation/MVP-01-REMAINING-TIME-SORT.md).
 - 0.1.19.0은 별도/정규 빌드 경고·오류 0/한영 245키 검사와 사용자 ‘배경 로드 문제 없음’으로 대표 확인 통과. summary/v5 선택 예측 시각과 같은 시점 Teamcraft 활성 응답도 확보했다.
 - Teamcraft/바다구렁이 차이는 사용자 요청으로 미해결 후속 조사에 보류했다. 다음 작업에서 조사/로그 요청을 재개하지 않고 기존 예측을 임의 수정하지 않는다. 당시 자료와 제외한 가설은 [조사 기록](validation/MVP-03-OPEN-WINDOW-DIAGNOSTICS.md)에 보존했다.
-- 현재 정규 DLL은 0.1.23.0이다. 사용자 새 언로드 확인 후 정규 빌드 경고·오류 0/한영 375키·산출물 버전 확인 완료, 로드 후 대표 인게임 확인 대기다. 0.1.22.0 행/링크/전체 채널의 대표 결과도 아직 없다. 이후 교체에는 새 언로드 확인이 필요하다. [이번 범위/확인 순서](validation/MVP-03-FAVORITE-POLICY.md).
-- 즐겨찾기 관리: 기본 전체 알림(수집됨/Unknown 포함), 미수집만 선택, 새 어종 등록 시 자동 해제(기본 꺼짐), 행 삭제. 자동 해제는 기존 검증된 KR 등록 이벤트에만 적용하고 도감 조회/수동 지정/반복 어획에는 적용하지 않는다. 개별 시간/기록·기존 채널/SE/링크 유지. schema v5는 v1~v4를 보존한다.
+- 현재 정규 DLL은 0.1.24.0이다. 사용자 새 언로드 확인 후 별도/정규 빌드 경고·오류 0/한영 387키·산출물 버전 확인 완료, 로드 후 대표 인게임 확인 대기다. 기존 행/링크/전체 채널·즐겨찾기 정책의 대표 결과도 아직 없다. 이후 교체에는 새 언로드 확인이 필요하다. [즐겨찾기 정책](validation/MVP-03-FAVORITE-POLICY.md), [최신 빌드/확인 순서](validation/MVP-01-COMPACT-CONTROLS.md).
+- 즐겨찾기 관리: 기본 전체 알림(수집됨/Unknown 포함), 미수집만 선택, 새 어종 등록 시 자동 해제(기본 꺼짐), 행 삭제. 자동 해제는 기존 검증된 KR 등록 이벤트에만 적용하고 도감 조회/수동 지정/반복 어획에는 적용하지 않는다. 개별 시간/기록·SE/링크를 유지한다.
 - 목록 기본: 남은 시간순·먼바다 제외·시간제만·등급 전체·수집한 어종 숨기기. 진단용 두 체크는 상세 진단 안에 있다. 목록 필터는 즐겨찾기 알림과 독립이며 전체 알림도 Unknown 상태 자체를 바꾸지 않는다. 서버 송신 없음/Native 게이트 유지.
-- 소스 0.1.24.0은 채널 22개/분 단위 알림과 선택형 상단 Toast(기본 꺼짐)를 포함한다. 제외된 저장 채널은 시스템 대체, schema v6는 v1~v5 보존, alerts/v5는 Toast 추가. 설치 API 대조 통과. [채널](validation/MVP-03-ALERT-SIMPLIFICATION.md), [Toast](validation/MVP-03-TOAST.md).
-- 목록/즐겨찾기의 설정·진단을 접는 UI 소스 수정과 한영 387키·diff 검사 완료. 빌드/테스트/인게임 확인은 사용자 요청으로 미실행. 다음은 사용자 빌드 진행 지시 후 별도 빌드/새 언로드 확인/정규 빌드와 대표 화면 확인이다. [UI 변경/확인 순서](validation/MVP-01-COMPACT-CONTROLS.md).
+- 0.1.24.0은 채널 22개/분 단위 알림과 선택형 상단 Toast(기본 꺼짐)를 포함한다. 제외된 저장 채널은 시스템 대체, schema v6는 v1~v5 보존, alerts/v5는 Toast 추가. 설치 API 대조 통과. [채널](validation/MVP-03-ALERT-SIMPLIFICATION.md), [Toast](validation/MVP-03-TOAST.md).
+- 목록/즐겨찾기의 설정·진단을 접는 UI를 포함해 정규 빌드 완료. 이전 소스 수정 단계의 빌드 생략 뒤 사용자가 새 언로드를 확인하여 빌드를 진행했다. 테스트는 미실행. 다음은 로드 후 대표 화면/알림 확인이다. [UI 변경/실행 근거](validation/MVP-01-COMPACT-CONTROLS.md).
 - PowerShell 5.1 읽기는 `-Encoding UTF8`; pwsh는 현재 샌드박스 밖 승인 실행 필요.
 
 ## 일반 구현 빌드
@@ -46,7 +46,7 @@ dotnet build src/DuckbillFisher.Plugin/DuckbillFisher.Plugin.csproj --no-restore
 pwsh -NoLogo -NoProfile -File scripts/check-localization.ps1
 ```
 
-- 1차 빌드는 `-p:OutputPath=C:/Users/hyogu/Downloads/DuckbillFisher/.cache/favorite-policy-build/` 추가.
+- 1차 빌드는 `-p:OutputPath=C:/Users/hyogu/Downloads/DuckbillFisher/.cache/toast-ui-build/` 추가.
 - 성공 후 언로드 요청 → 사용자 확인 → 정규 Debug 빌드로 교체.
 - 실제 주 DLL/버전·Core DLL·ko 리소스 DLL·manifest 확인.
 - `scripts/build.ps1`은 테스트도 실행하므로 일반 구현 때 사용하지 않는다.
