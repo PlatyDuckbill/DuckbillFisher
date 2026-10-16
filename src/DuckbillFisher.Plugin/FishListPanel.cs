@@ -36,6 +36,8 @@ internal sealed class FishListPanel(FishCatalog catalog, ITextureProvider textur
     private int lastCollectionRevision;
     private bool favoritesOnly;
     private int collectionVisibility;
+    private readonly Dictionary<uint, FishRowSummary> rowSummaries = [];
+    private CultureInfo? summaryCulture;
 
     public void Draw()
     {
@@ -45,6 +47,12 @@ internal sealed class FishListPanel(FishCatalog catalog, ITextureProvider textur
             requested = true;
         }
         var view = catalog.View;
+        // Language changes invalidate presentation only, preserving selection and filters.
+        if (!ReferenceEquals(lastRows, view.Rows) || summaryCulture != UiText.Culture)
+        {
+            rowSummaries.Clear();
+            summaryCulture = UiText.Culture;
+        }
         var personal = preferences.View;
         var observed = collection.View;
         if (observed.Session != personal.Session)
@@ -116,7 +124,7 @@ internal sealed class FishListPanel(FishCatalog catalog, ITextureProvider textur
         if (ImGui.BeginTable("CatalogLayout", 2, ImGuiTableFlags.Resizable | ImGuiTableFlags.BordersInnerV))
         {
             ImGui.TableNextColumn();
-            DrawRows(personal, observed);
+            DrawRows(view, personal, observed);
             ImGui.TableNextColumn();
             if (ImGui.BeginChild("CatalogDetail", new Vector2(0, 0), false))
                 DrawDetails(view, personal, observed);
@@ -125,7 +133,7 @@ internal sealed class FishListPanel(FishCatalog catalog, ITextureProvider textur
         }
     }
 
-    private void DrawRows(FishPreferencesView personal, FishCollectionView observed)
+    private void DrawRows(FishCatalogView view, FishPreferencesView personal, FishCollectionView observed)
     {
         if (ImGui.BeginChild("CatalogRows", new Vector2(0, 0), true))
         {
@@ -136,14 +144,15 @@ internal sealed class FishListPanel(FishCatalog catalog, ITextureProvider textur
             }
             if (matches.Length == 0)
                 ImGui.TextWrapped(UiText.Get(T.CatalogNoMatches));
-            var rowHeight = ImGui.GetTextLineHeightWithSpacing() * 3 + 8;
+            var rowHeight = ImGui.GetTextLineHeightWithSpacing() * 5 + 8;
+            var now = DateTimeOffset.UtcNow;
             var clipper = ImGui.ImGuiListClipper();
             try
             {
                 clipper.Begin(matches.Length, rowHeight + ImGui.GetStyle().ItemSpacing.Y);
                 while (clipper.Step())
                     for (var i = clipper.DisplayStart; i < clipper.DisplayEnd; i++)
-                        DrawRow(matches[i], rowHeight, personal, observed);
+                        DrawRow(matches[i], rowHeight, view, personal, observed, now);
             }
             finally
             {
@@ -182,18 +191,20 @@ internal sealed class FishListPanel(FishCatalog catalog, ITextureProvider textur
         resetScroll |= reset;
     }
 
-    private void DrawRow(FishGuideRow fish, float height, FishPreferencesView personal, FishCollectionView observed)
+    private void DrawRow(FishGuideRow fish, float height, FishCatalogView view,
+        FishPreferencesView personal, FishCollectionView observed, DateTimeOffset now)
     {
         ImGui.PushID((int)fish.FishParameterId);
         var start = ImGui.GetCursorPos();
+        var rowWidth = ImGui.GetContentRegionAvail().X;
         if (ImGui.Selectable("###CatalogRow", selectedId == fish.FishParameterId,
-                ImGuiSelectableFlags.None, new Vector2(ImGui.GetContentRegionAvail().X, height)))
+                ImGuiSelectableFlags.None, new Vector2(rowWidth, height)))
         {
             selectedId = fish.FishParameterId;
             selectedFish = fish;
         }
         var next = ImGui.GetCursorPos();
-        var iconSize = height - 8;
+        var iconSize = ImGui.GetTextLineHeightWithSpacing() * 3;
         ImGui.SetCursorPos(start + new Vector2(4, 4));
         // Shared immediate textures are owned by Dalamud; do not dispose the borrowed wrap.
         if (fish.IconId != 0 && textures.TryGetFromGameIcon(new GameIconLookup(fish.IconId), out var icon)
@@ -201,21 +212,47 @@ internal sealed class FishListPanel(FishCatalog catalog, ITextureProvider textur
             ImGui.Image(wrap.Handle, new Vector2(iconSize));
         else
             ImGui.Dummy(new Vector2(iconSize));
-        ImGui.SetCursorPos(start + new Vector2(iconSize + 14, 4));
-        ImGui.TextUnformatted(fish.IsOceanFishing ? UiText.Get(T.OceanRowLabel, fish.DisplayName) : fish.DisplayName);
-        ImGui.SetCursorPos(start + new Vector2(iconSize + 14, 4 + ImGui.GetTextLineHeightWithSpacing()));
-        if (fish.Ocean is { } ocean)
-            ImGui.TextUnformatted(UiText.Get(T.OceanArea, ocean.Area));
-        else if (fish.Spots.FirstOrDefault() is { } spot)
-            ImGui.TextUnformatted(spot.Name);
-        else
-            ImGui.TextDisabled(UiText.Get(fish.IsDisplayable ? T.CatalogRowInfo : T.CatalogUnresolvedRow, fish.FishParameterId));
-        ImGui.SetCursorPos(start + new Vector2(iconSize + 14, 4 + ImGui.GetTextLineHeightWithSpacing() * 2));
+        var textWidth = Math.Max(1, rowWidth - iconSize - 14);
+        void Line(int index, string text, bool disabled = false)
+        {
+            ImGui.SetCursorPos(start + new Vector2(iconSize + 14, 4 + ImGui.GetTextLineHeightWithSpacing() * index));
+            DrawRowLine(text, textWidth, disabled);
+        }
+        Line(0, fish.IsOceanFishing ? UiText.Get(T.OceanRowLabel, fish.DisplayName) : fish.DisplayName);
+        var location = fish.Ocean is { } ocean ? UiText.Get(T.OceanArea, ocean.Area)
+            : fish.Spots.FirstOrDefault() is { } spot ? spot.Name
+            : UiText.Get(fish.IsDisplayable ? T.CatalogRowInfo : T.CatalogUnresolvedRow, fish.FishParameterId);
         var collection = new UiMessage(CollectionKey(personal, observed, fish.FishParameterId));
-        ImGui.TextDisabled(personal.Favorites.Contains(fish.FishParameterId)
-            ? UiText.Get(T.FavoriteRowState, collection) : collection.Display);
+        var state = personal.Favorites.Contains(fish.FishParameterId)
+            ? UiText.Get(T.FavoriteRowState, collection) : collection.Display;
+        var window = fish.IsOceanFishing ? UiText.Get(T.RowOceanWindow)
+            : view.Windows.TryGetValue(fish.FishParameterId, out var forecast)
+                ? FormatWindow(forecast, now) : UiText.Get(T.ForecastUnknown);
+        Line(1, UiText.Get(T.RowStateLocation, state, location), true);
+        Line(2, window);
+        if (!rowSummaries.TryGetValue(fish.FishParameterId, out var summary))
+            rowSummaries[fish.FishParameterId] = summary = FishRowSummary.Create(fish);
+        Line(3, summary.Bait);
+        Line(4, summary.Conditions, true);
         ImGui.SetCursorPos(next);
         ImGui.PopID();
+    }
+
+    private static void DrawRowLine(string text, float width, bool disabled)
+    {
+        var position = ImGui.GetCursorScreenPos();
+        ImGui.PushClipRect(position, position + new Vector2(width, ImGui.GetTextLineHeight()), true);
+        if (disabled) ImGui.TextDisabled(text);
+        else ImGui.TextUnformatted(text);
+        ImGui.PopClipRect();
+        if (ImGui.IsItemHovered() && ImGui.CalcTextSize(text).X > width)
+        {
+            ImGui.BeginTooltip();
+            ImGui.PushTextWrapPos(ImGui.GetFontSize() * 35);
+            ImGui.TextUnformatted(text);
+            ImGui.PopTextWrapPos();
+            ImGui.EndTooltip();
+        }
     }
 
     private static DateTimeOffset WindowSortKey(FishCatalogView view, uint id) =>
@@ -360,13 +397,19 @@ internal sealed class FishListPanel(FishCatalog catalog, ITextureProvider textur
 
     private static void DrawWindow(FishingWindow window)
     {
-        var now = DateTimeOffset.UtcNow;
+        ImGui.TextWrapped(FormatWindow(window, DateTimeOffset.UtcNow));
+        if (window.Kind == FishingWindowKind.Upcoming && window.End is { } finish)
+            ImGui.TextWrapped(UiText.Get(T.ForecastEnd, finish.ToLocalTime().ToString("MM-dd HH:mm", UiText.Culture)));
+    }
+
+    private static string FormatWindow(FishingWindow window, DateTimeOffset now)
+    {
         string Remaining(DateTimeOffset time)
         {
             var duration = time > now ? time - now : TimeSpan.Zero;
             return UiText.Get(T.DurationShort, Math.Floor(duration.TotalHours), duration.Minutes, duration.Seconds);
         }
-        var message = window.Kind switch
+        return window.Kind switch
         {
             FishingWindowKind.Always => UiText.Get(T.ForecastAlways),
             FishingWindowKind.Open when window.End is { } end => UiText.Get(T.ForecastOpen, Remaining(end)),
@@ -376,8 +419,5 @@ internal sealed class FishListPanel(FishCatalog catalog, ITextureProvider textur
             FishingWindowKind.NotFound => UiText.Get(T.ForecastNotFound),
             _ => UiText.Get(T.ForecastUnknown),
         };
-        ImGui.TextWrapped(message);
-        if (window.Kind == FishingWindowKind.Upcoming && window.End is { } finish)
-            ImGui.TextWrapped(UiText.Get(T.ForecastEnd, finish.ToLocalTime().ToString("MM-dd HH:mm", UiText.Culture)));
     }
 }

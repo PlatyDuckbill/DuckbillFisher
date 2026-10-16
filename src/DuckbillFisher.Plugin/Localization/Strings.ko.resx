@@ -143,7 +143,7 @@
   <data name="ForecastAlways" xml:space="preserve"><value>시간·날씨 제한 없음</value></data>
   <data name="ForecastOpen" xml:space="preserve"><value>시간·날씨 창 열림 · {0} 뒤 종료</value></data>
   <data name="ForecastOpenNoEnd" xml:space="preserve"><value>시간·날씨 창 열림 · 탐색 범위 내 종료 시점 미확인</value></data>
-  <data name="ForecastUpcoming" xml:space="preserve"><value>{0} 후 시작 · 현지 시각 {1}</value></data>
+  <data name="ForecastUpcoming" xml:space="preserve"><value>시간·날씨 창: {0} 후 시작 · 현지 시각 {1}</value></data>
   <data name="ForecastEnd" xml:space="preserve"><value>종료: 현지 시각 {0}</value></data>
   <data name="ForecastNotFound" xml:space="preserve"><value>앞으로 실제 시간 7일 범위에서 다음 창을 찾지 못했습니다.</value></data>
   <data name="ForecastUnknown" xml:space="preserve"><value>출현 시간 예측을 준비하지 못했습니다.</value></data>
@@ -212,4 +212,12 @@
   <data name="OceanScope" xml:space="preserve"><value>방문 시간대는 항로의 해역 방문 시간이며 이 어종의 어획 제한을 뜻하지 않습니다. 어종별 시간 제한·미끼·특수 조건은 확인 전입니다. 일반 낚시의 시간·날씨 예측은 적용하지 않습니다.</value></data>
   <data name="OceanRoutes" xml:space="preserve"><value>항로 목적지: {0}</value></data>
   <data name="SourceCoverageInfo" xml:space="preserve"><value>일반 낚시 원본 {0}종. 작살 자료는 별도 {1}건 보존({2}건 조건 미확인)하며 작살 화면·수집 연동은 후속입니다.</value></data>
+  <data name="RowBaitPath" xml:space="preserve"><value>미끼 → 생미끼: {0}</value></data>
+  <data name="RowBaitUnknown" xml:space="preserve"><value>미끼: 미확인</value></data>
+  <data name="RowConditionsUnknown" xml:space="preserve"><value>시간·날씨 조건: 미확인</value></data>
+  <data name="RowOceanConditions" xml:space="preserve"><value>어종별 조건 미확인 · 상세에서 해역 정보 확인</value></data>
+  <data name="RowOceanWindow" xml:space="preserve"><value>먼바다: 일반 출현 예측 미적용</value></data>
+  <data name="RowStateLocation" xml:space="preserve"><value>{0} · {1}</value></data>
+  <data name="RowIntuition" xml:space="preserve"><value>직감 필요</value></data>
+  <data name="RowFolklore" xml:space="preserve"><value>전승록 필요</value></data>
 </root>

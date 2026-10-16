@@ -17,9 +17,9 @@
 - 참조: `C:\Users\hyogu\AppData\Roaming\XIVLauncherKR\addon\Hooks\dev`.
 - 개발 DLL: `C:\Users\hyogu\Downloads\DuckbillFisher\src\DuckbillFisher.Plugin\bin\Debug\DuckbillFisher.dll`.
 - 0.1.9.0 전체 도감 대조/홍룡 미수집 필터/도감 닫힘 후 유지와 동일 캐릭터 재접속 초기화·복구 확인. 다른 캐릭터는 없어 격리 실기 확인 보류. 다음 교체는 새 언로드 확인 필요.
-- 정규 DLL 0.1.11.0의 상세 140종 연결/목록·사용자 대표 확인 통과. 다음 교체에는 새 언로드 확인 필요. [확대 결과](validation/MVP-01-DATA-EXPANSION.md).
 - 정규 DLL 0.1.12.0의 일반 903종/예측 대상 872종/먼바다 259종·작살 보존 203건(115건 미확인) 런타임 수치와 사용자 ‘문제 없음’으로 대표 확인 통과. 다음 교체에는 새 언로드 확인 필요. [이번 결과/남은 검증](validation/MVP-01-ALL-SOURCE-DATA.md)을 따른다.
-- 사용자 후속 UI 요구: 현재 지역만 필터와 목록 행의 간단한 미끼/시간/조건 요약. 지역 ID와 조건 메타데이터를 유지했다. 먼바다 방문 시간대를 어종별 제한으로 해석하지 않는다.
+- 현재 정규 DLL은 0.1.13.0이다. 사용자 언로드 확인 후 교체했고 별도/정규 빌드 경고·오류 0, 한영 216키 검사 통과. 목록 5줄 요약·긴 줄 툴팁은 인게임 검증 대기다. [확인 순서](validation/MVP-01-LIST-SUMMARY.md). 다음 교체는 새 언로드 확인 필요.
+- 다음 UI 구현은 현재 지역만 필터다. 지역 ID와 조건 메타데이터를 유지했다. 먼바다 방문 시간대를 어종별 제한으로 해석하지 않는다.
 - 추가 분류 필터 F12는 시간제(ET/날씨) / 터주 / 터주왕 / 모두 보기다. 수집 여부와 독립되며 포함 관계·단일/복수 선택·필터 간 결합 규칙은 PRODUCT의 미정 항목부터 논의한다. 아직 구현하지 않았다.
 - PowerShell 5.1 읽기는 `-Encoding UTF8`; pwsh는 현재 샌드박스 밖 승인 실행 필요.
 
@@ -32,7 +32,7 @@ dotnet build src/DuckbillFisher.Plugin/DuckbillFisher.Plugin.csproj --no-restore
 pwsh -NoLogo -NoProfile -File scripts/check-localization.ps1
 ```
 
-- 1차 빌드는 `-p:OutputPath=C:/Users/hyogu/Downloads/DuckbillFisher/.cache/all-details-build/` 추가.
+- 1차 빌드는 `-p:OutputPath=C:/Users/hyogu/Downloads/DuckbillFisher/.cache/list-summary-build/` 추가.
 - 성공 후 언로드 요청 → 사용자 확인 → 정규 Debug 빌드로 교체.
 - 실제 주 DLL/버전·Core DLL·ko 리소스 DLL·manifest 확인.
 - `scripts/build.ps1`은 테스트도 실행하므로 일반 구현 때 사용하지 않는다.

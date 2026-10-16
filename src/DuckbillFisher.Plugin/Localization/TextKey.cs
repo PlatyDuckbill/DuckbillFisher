@@ -2,6 +2,14 @@ namespace DuckbillFisher.Plugin.Localization;
 
 internal enum TextKey
 {
+    RowBaitPath,
+    RowBaitUnknown,
+    RowConditionsUnknown,
+    RowOceanConditions,
+    RowOceanWindow,
+    RowStateLocation,
+    RowIntuition,
+    RowFolklore,
     BaitAlternatives,
     ConditionUnknown,
     ConditionsPartial,

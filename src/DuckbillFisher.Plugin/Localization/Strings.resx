@@ -143,7 +143,7 @@
   <data name="ForecastAlways" xml:space="preserve"><value>No time or weather restriction</value></data>
   <data name="ForecastOpen" xml:space="preserve"><value>Time/weather window open · closes in {0}</value></data>
   <data name="ForecastOpenNoEnd" xml:space="preserve"><value>Time/weather window open · end not found within the search horizon</value></data>
-  <data name="ForecastUpcoming" xml:space="preserve"><value>Starts in {0} · local time {1}</value></data>
+  <data name="ForecastUpcoming" xml:space="preserve"><value>Time/weather window in {0} · local time {1}</value></data>
   <data name="ForecastEnd" xml:space="preserve"><value>Ends: local time {0}</value></data>
   <data name="ForecastNotFound" xml:space="preserve"><value>No matching window found within the next seven real days.</value></data>
   <data name="ForecastUnknown" xml:space="preserve"><value>Availability forecast is not available.</value></data>
@@ -212,4 +212,12 @@
   <data name="OceanScope" xml:space="preserve"><value>Visit periods describe routes to this area, not this fish's catch restrictions. Fish-specific time, bait and special conditions are not established. Standard time/weather forecasts are not applied.</value></data>
   <data name="OceanRoutes" xml:space="preserve"><value>Route destinations: {0}</value></data>
   <data name="SourceCoverageInfo" xml:space="preserve"><value>Rod-fishing source records: {0}. Spearfishing records stored separately: {1} ({2} with unknown conditions); spearfishing UI and collection integration are pending.</value></data>
+  <data name="RowBaitPath" xml:space="preserve"><value>Bait → mooch: {0}</value></data>
+  <data name="RowBaitUnknown" xml:space="preserve"><value>Bait: unconfirmed</value></data>
+  <data name="RowConditionsUnknown" xml:space="preserve"><value>Time/weather conditions: unconfirmed</value></data>
+  <data name="RowOceanConditions" xml:space="preserve"><value>Fish-specific conditions are unconfirmed; see area details.</value></data>
+  <data name="RowOceanWindow" xml:space="preserve"><value>Ocean fishing: standard forecast not applied</value></data>
+  <data name="RowStateLocation" xml:space="preserve"><value>{0} · {1}</value></data>
+  <data name="RowIntuition" xml:space="preserve"><value>Intuition required</value></data>
+  <data name="RowFolklore" xml:space="preserve"><value>Folklore required</value></data>
 </root>
