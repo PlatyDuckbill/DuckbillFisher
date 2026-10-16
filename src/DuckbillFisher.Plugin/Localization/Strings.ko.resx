@@ -251,11 +251,11 @@
   <data name="GeographyClearHidden" xml:space="preserve"><value>확장팩 범위 밖 지역 선택 해제</value></data>
   <data name="TabAlerts" xml:space="preserve"><value>출현 알림</value></data>
   <data name="AlertsRulesHeading" xml:space="preserve"><value>발송 규칙과 범위</value></data>
-  <data name="AlertsIntro" xml:space="preserve"><value>즐겨찾기이며 최종 수집 상태가 미수집인 어종을 본인 로컬 채팅창으로 알려줍니다. 수동 지정이 우선합니다. 미확인·수집됨·상시·먼바다·예측 미지원 어종은 제외합니다. 목록의 검색과 표시 필터는 알림에 영향을 주지 않습니다.</value></data>
+  <data name="AlertsIntro" xml:space="preserve"><value>즐겨찾기이며 최종 미수집인 어종을 본인에게 알립니다. 수동 지정이 우선하며 목록 필터와 독립적입니다. 일반 시간·날씨 예측으로, 미끼·직감 등 개인 준비 완료를 뜻하지 않습니다.</value></data>
   <data name="AlertsEnable" xml:space="preserve"><value>로컬 채팅 출현 알림 켜기</value></data>
-  <data name="AlertsLead" xml:space="preserve"><value>출현 몇 분 전 (실제 시간)</value></data>
+  <data name="AlertsLead" xml:space="preserve"><value>기본 사전 시간 (실제 분)</value></data>
   <data name="AlertsLeadRange" xml:space="preserve"><value>범위: 실제 {0}~{1}분. 설정은 공통이며 발송 기록은 캐릭터별로 구분합니다.</value></data>
-  <data name="AlertsPolicy" xml:space="preserve"><value>앞으로 도달할 알림 시각만 예약합니다. 켜기·사전 시간 변경·미수집 확인·로그인·재로드 시 이미 지난 알림을 보내지 않습니다. 긴 중단이나 시계 변경 뒤에는 미래 알림을 다시 예약합니다. 어종·출현 창별 기록을 저장한 뒤 발송하며, 저장 실패 시 발송하지 않습니다. 동시 알림은 한 메시지로 묶고 아래에 전체 어종을 표시합니다. Toast와 소리는 후속입니다. 일반 시간·날씨 예측이며 개인 준비 완료를 뜻하지 않습니다.</value></data>
+  <data name="AlertsPolicy" xml:space="preserve"><value>앞으로 도달할 시각만 예약합니다. 로그인·재로드·설정 변경·긴 중단 뒤 이미 지난 알림을 보내지 않습니다. 캐릭터별 출현 창 기록으로 중복을 막습니다. 채널은 본인에게 보이는 형식이며 다른 플레이어에게 전송하지 않습니다. 동시 대상은 효과음을 한 번 재생하며 채널 기본 소리는 끕니다. Toast는 후속입니다.</value></data>
   <data name="AlertsDisabled" xml:space="preserve"><value>출현 알림이 꺼져 있습니다.</value></data>
   <data name="AlertsWaitingCharacter" xml:space="preserve"><value>캐릭터 정보를 기다립니다. 이전 캐릭터의 예약은 폐기했습니다.</value></data>
   <data name="AlertsStorageUnavailable" xml:space="preserve"><value>설정 또는 발송 기록을 저장할 수 없어 알림을 중지했습니다. 저장 문제를 해결한 뒤 설정을 변경해 재시도하세요. 기록 저장 없이 발송하지 않습니다.</value></data>
@@ -265,8 +265,36 @@
   <data name="AlertsCounts" xml:space="preserve"><value>대상 예약 {0}종 · 대기 {1}종 · 이번 세션 발송 {2}종</value></data>
   <data name="AlertsNext" xml:space="preserve"><value>다음 알림: {0} · 현지 {1:MM-dd HH:mm:ss} · 창 시작 {2:MM-dd HH:mm:ss}</value></data>
   <data name="AlertsCopy" xml:space="preserve"><value>짧은 알림 진단 복사</value></data>
-  <data name="AlertsLastBatch" xml:space="preserve"><value>마지막 발송 묶음 (현재 캐릭터 세션)</value></data>
-  <data name="AlertEntry" xml:space="preserve"><value>{0} ({1}, 현지 {2:MM-dd HH:mm})</value></data>
-  <data name="AlertMore" xml:space="preserve"><value>{0} 외 {1}종 (전체 목록은 출현 알림 탭)</value></data>
-  <data name="AlertMessage" xml:space="preserve"><value>출현 예고: {0}. 일반 시간·날씨 기준 예측입니다. 미끼·직감 등 개인 조건을 확인하세요.</value></data>
+  <data name="AlertChannel" xml:space="preserve"><value>로컬 표시 채널</value></data>
+  <data name="AlertChannelSystem" xml:space="preserve"><value>시스템</value></data>
+  <data name="AlertChannelSay" xml:space="preserve"><value>일반 대화</value></data>
+  <data name="AlertChannelCwls" xml:space="preserve"><value>CWLS1</value></data>
+  <data name="AlertSound" xml:space="preserve"><value>채팅 효과음</value></data>
+  <data name="AlertSoundNone" xml:space="preserve"><value>끔</value></data>
+  <data name="AlertSoundNumber" xml:space="preserve"><value>SE.{0}</value></data>
+  <data name="AlertSoundPreview" xml:space="preserve"><value>미리 듣기</value></data>
+  <data name="AlertSoundPreviewed" xml:space="preserve"><value>효과음 재생을 요청했습니다. 게임 시스템 음량·음소거 설정이 적용됩니다.</value></data>
+  <data name="AlertSoundUnavailable" xml:space="preserve"><value>현재 환경에서 게임 효과음을 사용할 수 없습니다. 캐릭터 접속 상태를 확인하세요. 채팅 알림은 계속 사용할 수 있습니다.</value></data>
+  <data name="AlertSoundSkipped" xml:space="preserve"><value>SE.{0} 생략됨</value></data>
+  <data name="AlertCompactMessage" xml:space="preserve"><value>{0} {1} </value></data>
+  <data name="AlertExtraHistory" xml:space="preserve"><value> · 외 {0}종은 발송 기록 참고</value></data>
+  <data name="AlertRemainingHours" xml:space="preserve"><value>{0}시간 {1}분 {2}초 후</value></data>
+  <data name="AlertRemainingMinutes" xml:space="preserve"><value>{0}분 {1}초 후</value></data>
+  <data name="AlertFavorites" xml:space="preserve"><value>즐겨찾기</value></data>
+  <data name="AlertFavoritesHint" xml:space="preserve"><value>알림 제외 어종을 포함한 모든 즐겨찾기를 표시합니다. 개별 시간을 켜면 기본 시간 대신 적용하고, 끄면 기본 시간을 따릅니다. 개별 시간은 공통 설정이며 즐겨찾기를 해제해도 보존합니다. 최종 미수집인 어종만 알림을 받습니다.</value></data>
+  <data name="AlertFavoriteName" xml:space="preserve"><value>{0} (ID {1})</value></data>
+  <data name="AlertCustomLead" xml:space="preserve"><value>개별 시간</value></data>
+  <data name="AlertFishMinutes" xml:space="preserve"><value>분 전</value></data>
+  <data name="AlertFavoriteNext" xml:space="preserve"><value>알림: 현지 {0:MM-dd HH:mm:ss} · 창 시작: {1:MM-dd HH:mm:ss}</value></data>
+  <data name="AlertNoReservation" xml:space="preserve"><value>예약된 미래 알림 없음</value></data>
+  <data name="AlertHistory" xml:space="preserve"><value>발송 기록</value></data>
+  <data name="AlertHistoryHint" xml:space="preserve"><value>현재 캐릭터 세션의 최근 200건을 최신순으로 표시하며 로그아웃·재로드 시 비웁니다. 남은 시간은 발송 당시 값입니다. 채팅 필터와 게임 음소거·음량 설정에 따라 표시와 청취가 달라집니다.</value></data>
+  <data name="AlertHistoryLine" xml:space="preserve"><value>{0:MM-dd HH:mm:ss} · {1} · {2}</value></data>
+  <data name="AlertHistoryDetails" xml:space="preserve"><value>{0} · {1} · 창 시작 {2:MM-dd HH:mm:ss}</value></data>
+  <data name="AlertExcludedCaught" xml:space="preserve"><value>알림 제외: 수집됨</value></data>
+  <data name="AlertExcludedUnknown" xml:space="preserve"><value>알림 제외: 수집 여부 미확인</value></data>
+  <data name="AlertUnsupported" xml:space="preserve"><value>알림 제외: 먼바다 또는 지원 낚시터·조건 없음</value></data>
+  <data name="AlertAlways" xml:space="preserve"><value>알림 제외: 상시 어종</value></data>
+  <data name="AlertArmed" xml:space="preserve"><value>미래 알림 예약됨</value></data>
+  <data name="AlertPending" xml:space="preserve"><value>지원하는 미래 창 또는 예약 처리 대기</value></data>
 </root>

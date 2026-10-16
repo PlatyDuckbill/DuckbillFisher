@@ -7,11 +7,17 @@ using T = DuckbillFisher.Plugin.Localization.TextKey;
 
 namespace DuckbillFisher.Plugin;
 
-internal sealed record SpawnAlertDisplay(uint FishId, string Name, string Place, DateTimeOffset Start);
+internal sealed record SpawnAlertDisplay(uint FishId, string Name, FishingSpotView Spot, DateTimeOffset Start, int LeadMinutes);
+internal sealed record SpawnAlertDelivery(DateTimeOffset SentAt, SpawnAlertDisplay Fish, SpawnAlertChannel Channel,
+    int Sound, bool SoundPlayed);
+internal enum FavoriteAlertState { Disabled, WaitingCharacter, Caught, Unknown, Unsupported, Always, Pending, Armed }
+internal sealed record FavoriteAlertView(uint FishId, string? Name, int LeadMinutes,
+    FavoriteAlertState State, DateTimeOffset? Start);
 internal sealed record SpawnAlertsView(int Session, UiMessage Status, int Eligible, int Armed, int Sent, int Batches,
-    int Rebases, IReadOnlyList<SpawnAlertDisplay> LastBatch)
+    int Rebases, IReadOnlyList<SpawnAlertDelivery> History)
 {
     public SpawnAlertDisplay? Next { get; init; }
+    public IReadOnlyList<FavoriteAlertView> Favorites { get; init; } = [];
 }
 
 /// <summary>Framework adapter: plans with existing forecasts, reserves locally, then queues local chat only.</summary>
@@ -21,28 +27,28 @@ internal sealed class SpawnAlerts : IDisposable
     private readonly FishPreferences preferences;
     private readonly FishCollectionObserver collection;
     private readonly IFramework framework;
-    private readonly IChatGui chat;
+    private readonly SpawnAlertOutput output;
     private readonly IPluginLog log;
     private readonly SpawnAlertScheduler scheduler = new();
     private readonly Stopwatch clock = Stopwatch.StartNew();
     private readonly object gate = new();
-    private readonly Dictionary<uint, FishingWindow> plans = [];
-    private readonly Dictionary<uint, TimeSpan> retryAfter = [];
+    private sealed record Plan(FishingWindow Window, int Lead);
+    private readonly Dictionary<uint, Plan> plans = [];
+    private readonly Dictionary<uint, (int Lead, TimeSpan At)> retryAfter = [];
     private IReadOnlyList<FishGuideRow>? lastRows;
     private Dictionary<uint, FishGuideRow> rowsById = [];
     private SpawnAlertsView view = new(-1, new(T.AlertsDisabled), 0, 0, 0, 0, 0, []);
     private TimeSpan nextPoll;
-    private int lastLead;
     private bool disposed;
 
     public SpawnAlerts(FishCatalog catalog, FishPreferences preferences, FishCollectionObserver collection,
-        IFramework framework, IChatGui chat, IPluginLog log)
+        IFramework framework, SpawnAlertOutput output, IPluginLog log)
     {
         this.catalog = catalog;
         this.preferences = preferences;
         this.collection = collection;
         this.framework = framework;
-        this.chat = chat;
+        this.output = output;
         this.log = log;
         framework.Update += OnUpdate;
     }
@@ -63,7 +69,7 @@ internal sealed class SpawnAlerts : IDisposable
                     log.Error(ex, "Could not update spawn alerts; no pending notifications will be replayed.");
                 plans.Clear();
                 retryAfter.Clear();
-                scheduler.Evaluate(DateTimeOffset.UtcNow, clock.Elapsed, view.Session, false, lastLead, []);
+                scheduler.Evaluate(DateTimeOffset.UtcNow, clock.Elapsed, view.Session, false, preferences.View.SpawnAlertLeadMinutes, []);
                 view = view with { Status = new(T.AlertsOutputFailed), Armed = 0, Next = null };
             }
         }
@@ -87,12 +93,6 @@ internal sealed class SpawnAlerts : IDisposable
             plans.Clear();
             retryAfter.Clear();
         }
-        if (lastLead != personal.SpawnAlertLeadMinutes)
-        {
-            plans.Clear();
-            retryAfter.Clear();
-        }
-        lastLead = personal.SpawnAlertLeadMinutes;
         var status = !personal.SpawnAlertsEnabled ? T.AlertsDisabled : !personal.HasCharacter ? T.AlertsWaitingCharacter :
             !personal.CanEdit || personal.Error is not null ? T.AlertsStorageUnavailable :
             !catalog.ConditionBuildMatches || data.ForecastAt is not { } forecastAt ||
@@ -107,42 +107,46 @@ internal sealed class SpawnAlerts : IDisposable
                 if (!rowsById.TryGetValue(id, out var row) || !row.IsDisplayable || row.IsOceanFishing ||
                     row.Details?.Spot is null || personal.Collection(id, observed) != CollectionStatus.Uncaught)
                     continue;
+                var lead = personal.AlertLead(id);
+                if (plans.TryGetValue(id, out var old) && old.Lead != lead)
+                    plans.Remove(id);
                 if (!plans.TryGetValue(id, out var plan))
                 {
-                    if (retryAfter.TryGetValue(id, out var retry) && elapsed < retry)
+                    if (retryAfter.TryGetValue(id, out var retry) && retry.Lead == lead && elapsed < retry.At)
                         continue;
                     // Spread a large favorite list across updates; existing deadlines are still checked.
                     if (plansBuilt >= 8)
                         continue;
                     plansBuilt++;
-                    plan = SpawnAlertScheduler.FindFutureWindow(now, lastLead, data.Windows.GetValueOrDefault(id),
+                    var window = SpawnAlertScheduler.FindFutureWindow(now, lead, data.Windows.GetValueOrDefault(id),
                         row.Details.Rule, row.Details.Spot.WeatherRates, personal.ReservedAlertWindows.GetValueOrDefault(id));
-                    if (plan is null)
+                    if (window is null)
                     {
-                        retryAfter[id] = elapsed + TimeSpan.FromMinutes(1);
+                        retryAfter[id] = (lead, elapsed + TimeSpan.FromMinutes(1));
                         continue;
                     }
                     retryAfter.Remove(id);
-                    plans[id] = plan;
+                    plans[id] = plan = new(window, lead);
                 }
-                candidates.Add(new(id, true, CollectionStatus.Uncaught, plan));
+                candidates.Add(new(id, true, CollectionStatus.Uncaught, plan.Window, lead));
             }
         }
-        var evaluation = scheduler.Evaluate(now, elapsed, personal.Session, active, lastLead, candidates);
+        var evaluation = scheduler.Evaluate(now, elapsed, personal.Session, active, personal.SpawnAlertLeadMinutes, candidates);
         var retained = candidates.Select(fish => fish.FishId).ToHashSet();
         foreach (var id in retryAfter.Keys.ToArray())
             if (!active || !personal.Favorites.Contains(id) || personal.Collection(id, observed) != CollectionStatus.Uncaught)
                 retryAfter.Remove(id);
         // Evaluate the crossing before expiring a plan. Replanning first would discard a due alert.
         foreach (var id in plans.Keys.ToArray())
-            if (!retained.Contains(id) || plans[id].Start is not { } start || start.AddMinutes(-lastLead) <= now)
+            if (!retained.Contains(id) || plans[id].Window.Start is not { } start || start.AddMinutes(-plans[id].Lead) <= now)
                 plans.Remove(id);
-        var next = plans.OrderBy(pair => pair.Value.Start).FirstOrDefault();
+        var next = plans.OrderBy(pair => pair.Value.Window.Start?.AddMinutes(-pair.Value.Lead)).ThenBy(pair => pair.Key).FirstOrDefault();
         view = view with
         {
             Status = new(status), Eligible = candidates.Count, Armed = evaluation.Armed,
             Rebases = view.Rebases + (evaluation.Rebased ? 1 : 0),
-            Next = next.Value?.Start is { } nextStart ? Display(next.Key, nextStart) : null,
+            Next = next.Value?.Window.Start is { } nextStart ? Display(next.Key, nextStart, next.Value.Lead) : null,
+            Favorites = FavoriteRows(personal, observed, data),
         };
         if (evaluation.Due.Count == 0)
             return;
@@ -154,29 +158,48 @@ internal sealed class SpawnAlerts : IDisposable
         }
         if (reserved.Count == 0)
             return;
+        var sentAt = DateTimeOffset.UtcNow;
+        if (sentAt < now || sentAt - now > TimeSpan.FromSeconds(10))
+            return; // A slow save or clock jump must not replay a stale batch.
         var batch = reserved.OrderBy(alert => alert.Start).ThenBy(alert => alert.FishId)
-            .Select(alert => Display(alert.FishId, alert.Start)).ToArray();
+            .Where(alert => alert.Start > sentAt)
+            .Select(alert => Display(alert.FishId, alert.Start, personal.AlertLead(alert.FishId))).ToArray();
+        if (batch.Length == 0)
+            return;
         // One chat message per poll, regardless of how many fish share the deadline.
-        var names = string.Join(" / ", batch.Take(3).Select(fish =>
-            UiText.Get(T.AlertEntry, fish.Name, fish.Place, fish.Start.ToLocalTime())));
-        if (batch.Length > 3)
-            names = UiText.Get(T.AlertMore, names, batch.Length - 3);
-        chat.Print(UiText.Get(T.AlertMessage, names), "DuckbillFisher");
-        view = view with { Sent = view.Sent + batch.Length, Batches = view.Batches + 1, LastBatch = batch };
+        var soundPlayed = output.Print(batch, sentAt, personal);
+        var history = batch.Reverse().Select(fish => new SpawnAlertDelivery(sentAt, fish, personal.SpawnAlertChannel,
+            personal.SpawnAlertSound, soundPlayed)).Concat(view.History).Take(200).ToArray();
+        view = view with { Sent = view.Sent + batch.Length, Batches = view.Batches + 1, History = history };
     }
 
-    private SpawnAlertDisplay Display(uint id, DateTimeOffset start)
+    private SpawnAlertDisplay Display(uint id, DateTimeOffset start, int lead)
     {
         var row = rowsById[id];
-        return new(id, row.Name, row.Details!.Spot!.Name, start);
+        return new(id, row.Name, row.Details!.Spot!, start, lead);
     }
+
+    private FavoriteAlertView[] FavoriteRows(FishPreferencesView personal, FishCollectionView observed, FishCatalogView data) =>
+        personal.Favorites.Select(id =>
+        {
+            rowsById.TryGetValue(id, out var row);
+            plans.TryGetValue(id, out var plan);
+            var collectionStatus = personal.Collection(id, observed);
+            var state = !personal.HasCharacter ? FavoriteAlertState.WaitingCharacter :
+                collectionStatus == CollectionStatus.Caught ? FavoriteAlertState.Caught : collectionStatus == CollectionStatus.Unknown ? FavoriteAlertState.Unknown :
+                row is not { IsDisplayable: true, IsOceanFishing: false, Details.Spot: not null } ? FavoriteAlertState.Unsupported :
+                data.Windows.GetValueOrDefault(id)?.Kind == FishingWindowKind.Always ? FavoriteAlertState.Always :
+                !personal.SpawnAlertsEnabled ? FavoriteAlertState.Disabled :
+                plan is null ? FavoriteAlertState.Pending : FavoriteAlertState.Armed;
+            return new FavoriteAlertView(id, row?.Name, personal.AlertLead(id), state, plan?.Window.Start);
+        }).OrderBy(fish => fish.Name, StringComparer.Ordinal).ThenBy(fish => fish.FishId).ToArray();
 
     public string CreateReport()
     {
         var snapshot = View;
         var settings = preferences.View;
         return string.Create(CultureInfo.InvariantCulture,
-            $"DuckbillFisher MVP-03/alerts/v1\nPlugin={typeof(Plugin).Assembly.GetName().Version}; Enabled={settings.SpawnAlertsEnabled}; LeadMinutes={settings.SpawnAlertLeadMinutes}; Channel=LocalChat; Session={snapshot.Session}; Status={snapshot.Status.Key}\nEligible={snapshot.Eligible}; Armed={snapshot.Armed}; Sent={snapshot.Sent}; Batches={snapshot.Batches}; Rebases={snapshot.Rebases}\nNextFish={snapshot.Next?.FishId}; NextStart={snapshot.Next?.Start:O}; DueAt={snapshot.Next?.Start.AddMinutes(-settings.SpawnAlertLeadMinutes):O}\nDedup=PersistedWindowStartPerCharacter; CatchUp=False; PersonalReadiness=False");
+            $"DuckbillFisher MVP-03/alerts/v2\nPlugin={typeof(Plugin).Assembly.GetName().Version}; Enabled={settings.SpawnAlertsEnabled}; LeadMinutes={settings.SpawnAlertLeadMinutes}; Channel={settings.SpawnAlertChannel}; Sound={settings.SpawnAlertSound}; SoundReady={output.SoundAvailable}; Session={snapshot.Session}; Status={snapshot.Status.Key}\nFavorites={snapshot.Favorites.Count}; CustomLeads={settings.FishAlertLeadMinutes.Count}; History={snapshot.History.Count}; Eligible={snapshot.Eligible}; Armed={snapshot.Armed}; Sent={snapshot.Sent}; Batches={snapshot.Batches}; Rebases={snapshot.Rebases}\nNextFish={snapshot.Next?.FishId}; NextLead={snapshot.Next?.LeadMinutes}; NextStart={snapshot.Next?.Start:O}; DueAt={snapshot.Next?.Start.AddMinutes(-snapshot.Next.LeadMinutes):O}\nDedup=PersistedWindowStartPerCharacter; CatchUp=False; PersonalReadiness=False");
     }
 
     public void Dispose()

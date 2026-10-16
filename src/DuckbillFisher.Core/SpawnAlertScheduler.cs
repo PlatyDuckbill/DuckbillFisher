@@ -1,6 +1,7 @@
 namespace DuckbillFisher.Core;
 
-public sealed record SpawnAlertCandidate(uint FishId, bool Favorite, CollectionStatus Collection, FishingWindow Window);
+public sealed record SpawnAlertCandidate(uint FishId, bool Favorite, CollectionStatus Collection, FishingWindow Window,
+    int? LeadMinutes = null);
 public sealed record SpawnAlert(uint FishId, DateTimeOffset Start);
 public sealed record SpawnAlertEvaluation(IReadOnlyList<SpawnAlert> Due, int Armed, bool Rebased);
 
@@ -10,11 +11,10 @@ public sealed class SpawnAlertScheduler
     public const int DefaultLeadMinutes = 5;
     public const int MinLeadMinutes = 1;
     public const int MaxLeadMinutes = 60;
-    private Dictionary<uint, DateTimeOffset> armed = [];
+    private Dictionary<uint, (DateTimeOffset Start, int Lead)> armed = [];
     private DateTimeOffset? previousUtc;
     private TimeSpan previousElapsed;
     private int previousSession;
-    private int previousLead;
     private bool wasEnabled;
 
     public static FishingWindow? FindFutureWindow(DateTimeOffset now, int leadMinutes, FishingWindow? first,
@@ -46,10 +46,10 @@ public sealed class SpawnAlertScheduler
     {
         var delta = elapsed - previousElapsed;
         var rebase = previousUtc is null || session != previousSession || enabled != wasEnabled ||
-            leadMinutes != previousLead || delta <= TimeSpan.Zero || delta > TimeSpan.FromSeconds(10) ||
+            delta <= TimeSpan.Zero || delta > TimeSpan.FromSeconds(10) ||
             Math.Abs(((now - previousUtc.Value) - delta).TotalSeconds) > 2;
         var due = new List<SpawnAlert>();
-        var next = new Dictionary<uint, DateTimeOffset>();
+        var next = new Dictionary<uint, (DateTimeOffset Start, int Lead)>();
         if (enabled && leadMinutes is >= MinLeadMinutes and <= MaxLeadMinutes)
         {
             foreach (var fish in candidates)
@@ -57,10 +57,13 @@ public sealed class SpawnAlertScheduler
                 if (fish.FishId == 0 || !fish.Favorite || fish.Collection != CollectionStatus.Uncaught ||
                     fish.Window is not { Kind: FishingWindowKind.Upcoming, Start: { } start } || start <= now)
                     continue;
-                var deadline = start.AddMinutes(-leadMinutes);
+                var lead = fish.LeadMinutes ?? leadMinutes;
+                if (lead is < MinLeadMinutes or > MaxLeadMinutes)
+                    continue;
+                var deadline = start.AddMinutes(-lead);
                 if (deadline > now)
-                    next[fish.FishId] = start;
-                else if (!rebase && armed.TryGetValue(fish.FishId, out var reserved) && reserved == start &&
+                    next[fish.FishId] = (start, lead);
+                else if (!rebase && armed.TryGetValue(fish.FishId, out var reserved) && reserved == (start, lead) &&
                          previousUtc < deadline)
                     due.Add(new(fish.FishId, start));
             }
@@ -69,7 +72,6 @@ public sealed class SpawnAlertScheduler
         previousUtc = now;
         previousElapsed = elapsed;
         previousSession = session;
-        previousLead = leadMinutes;
         wasEnabled = enabled;
         return new(due, armed.Count, rebase);
     }

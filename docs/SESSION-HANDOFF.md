@@ -30,8 +30,8 @@
 - 0.1.18.0 남은 시간순은 사용자 ‘정렬은 잘 됨’으로 대표 확인 통과. 열린 창 종료순→예정 창 시작순→미확인→상시, 동률 이름/ID이며 지역은 기존 필터로만 적용한다. [근거](validation/MVP-01-REMAINING-TIME-SORT.md).
 - 0.1.19.0은 별도/정규 빌드 경고·오류 0/한영 245키 검사와 사용자 ‘배경 로드 문제 없음’으로 대표 확인 통과. summary/v5 선택 예측 시각과 같은 시점 Teamcraft 활성 응답도 확보했다.
 - Teamcraft/바다구렁이 차이는 사용자 요청으로 미해결 후속 조사에 보류했다. 다음 작업에서 조사/로그 요청을 재개하지 않고 기존 예측을 임의 수정하지 않는다. 당시 자료와 제외한 가설은 [조사 기록](validation/MVP-03-OPEN-WINDOW-DIAGNOSTICS.md)에 보존했다.
-- 현재 정규 DLL은 0.1.20.0이다. 사용자 언로드 확인 후 별도/정규 빌드 경고·오류 0/한영 265키 검사와 주 DLL/Core/ko/manifest 확인 완료. 다음은 로드 후 알림 대표 확인이며 추가 교체는 새 언로드 확인 필요. [예약/저장 정책·검사·인게임 순서](validation/MVP-03-SPAWN-ALERTS.md)를 따른다.
-- 알림 탭: 기본 꺼짐/5분, 실제 1~60분 전, 첫 채널 본인 로컬 채팅. Unknown 제외/수동 우선/목록 표시 필터와 독립이다. 캐릭터별 발송 창 시작을 저장 후 출력하며 설정 v1의 즐겨찾기/수동 상태를 v2로 보존한다. Toast/소리는 후속. 실제 출력·재로드 중복·절전 복귀는 인게임 검증 대기다.
+- 정규 DLL 0.1.20.0 알림은 사용자 대표 확인을 받았다. 모든 경계/절전 확인을 뜻하지 않는다. 0.1.21.0 피드백 수정본은 별도 빌드/한영 293키 통과, 새 언로드 확인→정규 빌드→화면/출력 확인 대기다. [이번 근거/확인 순서](validation/MVP-03-ALERT-MANAGEMENT.md).
+- 알림: 공통 즐겨찾기/최종 미수집·수동 우선·목록 필터와 독립. 전체 즐겨찾기와 제외 이유, 기본/개별 1~60분, 로컬 시스템/일반/CWLS1, SE.1~16/미리 듣기, 세션 최신 200건 기록, 간결한 메시지/지도 링크를 제공한다. schema v3는 v1/v2를 보존한다. 채널은 서버 송신이 아니며 Native 소리는 기존 정확한 KR 게이트를 재사용한다. Toast는 후속.
 - PowerShell 5.1 읽기는 `-Encoding UTF8`; pwsh는 현재 샌드박스 밖 승인 실행 필요.
 
 ## 일반 구현 빌드
@@ -43,7 +43,7 @@ dotnet build src/DuckbillFisher.Plugin/DuckbillFisher.Plugin.csproj --no-restore
 pwsh -NoLogo -NoProfile -File scripts/check-localization.ps1
 ```
 
-- 1차 빌드는 `-p:OutputPath=C:/Users/hyogu/Downloads/DuckbillFisher/.cache/spawn-alert-build/` 추가.
+- 1차 빌드는 `-p:OutputPath=C:/Users/hyogu/Downloads/DuckbillFisher/.cache/alert-management-build/` 추가.
 - 성공 후 언로드 요청 → 사용자 확인 → 정규 Debug 빌드로 교체.
 - 실제 주 DLL/버전·Core DLL·ko 리소스 DLL·manifest 확인.
 - `scripts/build.ps1`은 테스트도 실행하므로 일반 구현 때 사용하지 않는다.

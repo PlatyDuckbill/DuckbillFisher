@@ -59,6 +59,8 @@ Plugin의 `AssemblyName`은 `DuckbillFisher`다. 주 DLL은 `DuckbillFisher.dll`
 
 0.1.20.0 `SpawnAlertScheduler`는 기존 예측의 미래 창과 사전 알림 시각 통과를 Core에서 판정한다. Plugin `SpawnAlerts`는 Framework에서 최종 수집 상태/즐겨찾기 snapshot을 연결하고, `FishPreferences`의 캐릭터별 마지막 창 시작을 저장한 뒤 로컬 채팅 큐에 넣는다. 로그인·설정 변경·긴 중단·시계 변경은 소급 발송하지 않는다. Draw에서는 설정 요청/불변 view 표시만 처리한다. [상세 정책과 실패 동작](validation/MVP-03-SPAWN-ALERTS.md)을 따른다.
 
+0.1.21.0은 어종별 적용 사전 분을 Core 예약 키에 포함하여 해당 어종만 다시 예약한다. `SpawnAlertOutput`은 로컬 XivChatEntry/지도 링크와 KR 게이트를 공유한 정적 SE 호출을 격리한다. 설정 schema v3의 공통 개별 시간/채널/SE, 캐릭터별 영속 중복 방지 기록, 세션 200건 UI 발송 이력은 수명과 책임을 구분한다. [이번 결정](validation/MVP-03-ALERT-MANAGEMENT.md)을 따른다.
+
 - 수집 상태는 Caught / Uncaught / Unknown. 값 없음은 false가 아니다.
 - 수동 override는 자동 판정과 따로 저장하고 '자동 상태 사용'으로 복귀할 수 있게 한다.
 - 캐릭터 식별자는 로컬 설정 격리에만 사용하고 로그·공개 테스트 자료에 넣지 않는다.

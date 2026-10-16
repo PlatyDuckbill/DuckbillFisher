@@ -8,15 +8,20 @@ using T = DuckbillFisher.Plugin.Localization.TextKey;
 
 namespace DuckbillFisher.Plugin;
 
+public enum SpawnAlertChannel { System, Say, CrossWorldLinkshell1 }
+
 // Public for Dalamud's configuration serializer. Content IDs stay in local configuration only.
 public sealed class FishPreferencesConfiguration : IPluginConfiguration
 {
-    public const int CurrentVersion = 2;
+    public const int CurrentVersion = 3;
     public int Version { get; set; } = CurrentVersion;
     public HashSet<uint> Favorites { get; set; } = [];
     public Dictionary<ulong, Dictionary<uint, bool>> Characters { get; set; } = [];
     public bool SpawnAlertsEnabled { get; set; }
     public int SpawnAlertLeadMinutes { get; set; } = SpawnAlertScheduler.DefaultLeadMinutes;
+    public SpawnAlertChannel SpawnAlertChannel { get; set; }
+    public int SpawnAlertSound { get; set; }
+    public Dictionary<uint, int> FishAlertLeadMinutes { get; set; } = [];
     // Last reserved window start per fish/character. Also suppresses repeats after clock rollback.
     public Dictionary<ulong, Dictionary<uint, long>> AlertWindows { get; set; } = [];
 }
@@ -27,6 +32,10 @@ internal sealed record FishPreferencesView(int Revision, int Session, bool HasCh
     internal ulong CharacterId { get; init; }
     public bool SpawnAlertsEnabled { get; init; }
     public int SpawnAlertLeadMinutes { get; init; } = SpawnAlertScheduler.DefaultLeadMinutes;
+    public SpawnAlertChannel SpawnAlertChannel { get; init; }
+    public int SpawnAlertSound { get; init; }
+    public IReadOnlyDictionary<uint, int> FishAlertLeadMinutes { get; init; } = FrozenDictionary<uint, int>.Empty;
+    public int AlertLead(uint id) => FishAlertLeadMinutes.GetValueOrDefault(id, SpawnAlertLeadMinutes);
     internal IReadOnlyDictionary<uint, long> ReservedAlertWindows { get; init; } = FrozenDictionary<uint, long>.Empty;
 
     public CollectionStatus Collection(uint fishId, FishCollectionView observed) => CollectionFilter.Resolve(
@@ -44,7 +53,8 @@ internal sealed class FishPreferences : IDisposable
     private readonly IPluginLog log;
     private readonly object gate = new();
     private readonly Queue<Edit> pending = new();
-    private (bool Enabled, int LeadMinutes)? pendingAlerts;
+    private (bool Enabled, int LeadMinutes, SpawnAlertChannel Channel, int Sound)? pendingAlerts;
+    private readonly Dictionary<uint, int?> pendingFishAlerts = [];
     private FishPreferencesConfiguration configuration = new();
     private FishPreferencesView view = new(0, 0, false, false,
         FrozenSet<uint>.Empty, FrozenDictionary<uint, bool>.Empty, null);
@@ -99,11 +109,20 @@ internal sealed class FishPreferences : IDisposable
                 pending.Enqueue(new(fishId, caught, true, expectedSession));
     }
 
-    public void SetSpawnAlerts(bool enabled, int leadMinutes)
+    public void SetSpawnAlerts(bool enabled, int leadMinutes, SpawnAlertChannel channel, int sound)
     {
         lock (gate)
             if (!disposed && writable)
-                pendingAlerts = (enabled, Math.Clamp(leadMinutes, SpawnAlertScheduler.MinLeadMinutes, SpawnAlertScheduler.MaxLeadMinutes));
+                pendingAlerts = (enabled, Math.Clamp(leadMinutes, SpawnAlertScheduler.MinLeadMinutes, SpawnAlertScheduler.MaxLeadMinutes),
+                    Enum.IsDefined(channel) ? channel : SpawnAlertChannel.System, Math.Clamp(sound, 0, 16));
+    }
+
+    public void SetFishAlertLead(uint id, int? minutes)
+    {
+        lock (gate)
+            if (!disposed && writable && id != 0)
+                pendingFishAlerts[id] = minutes is { } value
+                    ? Math.Clamp(value, SpawnAlertScheduler.MinLeadMinutes, SpawnAlertScheduler.MaxLeadMinutes) : null;
     }
 
     // Framework only. Reserve durably before output: a crash may lose a notification, but cannot resend it.
@@ -166,17 +185,31 @@ internal sealed class FishPreferences : IDisposable
             }
             else if (stateErrorChanged)
                 Publish();
-            if (pending.Count == 0 && pendingAlerts is null)
+            if (pending.Count == 0 && pendingAlerts is null && pendingFishAlerts.Count == 0)
                 return;
             var candidate = CopyConfiguration();
             var changed = false;
             if (pendingAlerts is { } alertSettings)
             {
-                changed = candidate.SpawnAlertsEnabled != alertSettings.Enabled || candidate.SpawnAlertLeadMinutes != alertSettings.LeadMinutes;
+                changed = candidate.SpawnAlertsEnabled != alertSettings.Enabled || candidate.SpawnAlertLeadMinutes != alertSettings.LeadMinutes ||
+                    candidate.SpawnAlertChannel != alertSettings.Channel || candidate.SpawnAlertSound != alertSettings.Sound;
                 candidate.SpawnAlertsEnabled = alertSettings.Enabled;
                 candidate.SpawnAlertLeadMinutes = alertSettings.LeadMinutes;
+                candidate.SpawnAlertChannel = alertSettings.Channel;
+                candidate.SpawnAlertSound = alertSettings.Sound;
                 pendingAlerts = null;
             }
+            foreach (var (id, minutes) in pendingFishAlerts)
+            {
+                if (minutes is { } value)
+                {
+                    changed |= !candidate.FishAlertLeadMinutes.TryGetValue(id, out var old) || old != value;
+                    candidate.FishAlertLeadMinutes[id] = value;
+                }
+                else
+                    changed |= candidate.FishAlertLeadMinutes.Remove(id);
+            }
+            pendingFishAlerts.Clear();
             while (pending.TryDequeue(out var edit))
             {
                 if (!edit.Manual)
@@ -214,6 +247,8 @@ internal sealed class FishPreferences : IDisposable
         {
             CharacterId = characterId, SpawnAlertsEnabled = configuration.SpawnAlertsEnabled,
             SpawnAlertLeadMinutes = configuration.SpawnAlertLeadMinutes,
+            SpawnAlertChannel = configuration.SpawnAlertChannel, SpawnAlertSound = configuration.SpawnAlertSound,
+            FishAlertLeadMinutes = configuration.FishAlertLeadMinutes.ToFrozenDictionary(),
             ReservedAlertWindows = characterId != 0 && configuration.AlertWindows.TryGetValue(characterId, out var windows)
                 ? windows.ToFrozenDictionary() : FrozenDictionary<uint, long>.Empty,
         };
@@ -225,6 +260,8 @@ internal sealed class FishPreferences : IDisposable
         Characters = configuration.Characters.ToDictionary(pair => pair.Key, pair => new Dictionary<uint, bool>(pair.Value)),
         SpawnAlertsEnabled = configuration.SpawnAlertsEnabled,
         SpawnAlertLeadMinutes = configuration.SpawnAlertLeadMinutes,
+        SpawnAlertChannel = configuration.SpawnAlertChannel, SpawnAlertSound = configuration.SpawnAlertSound,
+        FishAlertLeadMinutes = new(configuration.FishAlertLeadMinutes),
         AlertWindows = configuration.AlertWindows.ToDictionary(pair => pair.Key, pair => new Dictionary<uint, long>(pair.Value)),
     };
 
@@ -247,10 +284,13 @@ internal sealed class FishPreferences : IDisposable
     }
 
     private static bool IsValid(FishPreferencesConfiguration value) =>
-        value.Version is 1 or FishPreferencesConfiguration.CurrentVersion && value.Favorites is not null &&
+        value.Version is 1 or 2 or FishPreferencesConfiguration.CurrentVersion && value.Favorites is not null &&
         !value.Favorites.Contains(0) && value.Characters is not null &&
         value.Characters.All(pair => pair.Key != 0 && pair.Value is not null && !pair.Value.ContainsKey(0)) &&
         value.SpawnAlertLeadMinutes is >= SpawnAlertScheduler.MinLeadMinutes and <= SpawnAlertScheduler.MaxLeadMinutes &&
+        Enum.IsDefined(value.SpawnAlertChannel) && value.SpawnAlertSound is >= 0 and <= 16 &&
+        value.FishAlertLeadMinutes is not null && value.FishAlertLeadMinutes.All(pair => pair.Key != 0 &&
+            pair.Value is >= SpawnAlertScheduler.MinLeadMinutes and <= SpawnAlertScheduler.MaxLeadMinutes) &&
         value.AlertWindows is not null && value.AlertWindows.All(pair => pair.Key != 0 && pair.Value is not null &&
             pair.Value.All(window => window.Key != 0 && window.Value is > 0 and <= 253402300799999));
 
@@ -261,6 +301,7 @@ internal sealed class FishPreferences : IDisposable
             disposed = true;
             pending.Clear();
             pendingAlerts = null;
+            pendingFishAlerts.Clear();
         }
         framework.Update -= OnUpdate;
     }

@@ -251,11 +251,11 @@
   <data name="GeographyClearHidden" xml:space="preserve"><value>Clear regions outside these expansions</value></data>
   <data name="TabAlerts" xml:space="preserve"><value>Spawn alerts</value></data>
   <data name="AlertsRulesHeading" xml:space="preserve"><value>Delivery rules and scope</value></data>
-  <data name="AlertsIntro" xml:space="preserve"><value>Local chat reminders for favorited fish whose final collection status is Uncaught. Manual collection settings take priority. Unknown, caught, always available, ocean and unsupported fish are excluded. List search and display filters do not restrict alerts.</value></data>
+  <data name="AlertsIntro" xml:space="preserve"><value>Local reminders for favorites whose final collection status is Uncaught; manual settings take priority. List filters do not restrict alerts. Normal time/weather forecasts do not establish bait, intuition or other personal readiness.</value></data>
   <data name="AlertsEnable" xml:space="preserve"><value>Enable local chat spawn alerts</value></data>
-  <data name="AlertsLead" xml:space="preserve"><value>Real minutes before opening</value></data>
+  <data name="AlertsLead" xml:space="preserve"><value>Default minutes before opening</value></data>
   <data name="AlertsLeadRange" xml:space="preserve"><value>Range: {0}–{1} real minutes. Settings are shared; delivery records are separate for each character.</value></data>
-  <data name="AlertsPolicy" xml:space="preserve"><value>Only future deadlines are armed. Enabling, changing the lead time, discovering an uncaught fish, logging in or reloading never replays missed alerts. Long pauses or clock jumps rearm future deadlines. Each fish/window is reserved on disk before output; a save failure suppresses output. Simultaneous reminders share one message; the last batch below lists all fish. Toast and sound are planned for a later version. Predictions use normal time/weather only and do not establish personal readiness.</value></data>
+  <data name="AlertsPolicy" xml:space="preserve"><value>Only future reminders are armed. Login, reload, settings changes and long pauses never replay missed alerts. Saved per-character window records prevent duplicates. Each channel is a local display type; no message is sent to other players. One sound plays per batch, with default channel sounds silenced. Toast is planned for later.</value></data>
   <data name="AlertsDisabled" xml:space="preserve"><value>Spawn alerts are disabled.</value></data>
   <data name="AlertsWaitingCharacter" xml:space="preserve"><value>Waiting for character data. Previous character reservations have been discarded.</value></data>
   <data name="AlertsStorageUnavailable" xml:space="preserve"><value>Alerts paused: settings or delivery records could not be saved. Resolve the storage issue and change a setting to retry. No alert was sent without a saved reservation.</value></data>
@@ -265,8 +265,36 @@
   <data name="AlertsCounts" xml:space="preserve"><value>Eligible plans: {0} · Armed: {1} · Reminders sent this session: {2}</value></data>
   <data name="AlertsNext" xml:space="preserve"><value>Next reminder: {0} · local {1:MM-dd HH:mm:ss} · window starts {2:MM-dd HH:mm:ss}</value></data>
   <data name="AlertsCopy" xml:space="preserve"><value>Copy short alert diagnostic</value></data>
-  <data name="AlertsLastBatch" xml:space="preserve"><value>Last delivered batch (this character session)</value></data>
-  <data name="AlertEntry" xml:space="preserve"><value>{0} ({1}, local {2:MM-dd HH:mm})</value></data>
-  <data name="AlertMore" xml:space="preserve"><value>{0} and {1} more; see Spawn alerts for the full batch</value></data>
-  <data name="AlertMessage" xml:space="preserve"><value>Upcoming window: {0}. Normal time/weather forecast only; check bait, intuition and other personal requirements.</value></data>
+  <data name="AlertChannel" xml:space="preserve"><value>Local display channel</value></data>
+  <data name="AlertChannelSystem" xml:space="preserve"><value>System</value></data>
+  <data name="AlertChannelSay" xml:space="preserve"><value>Say</value></data>
+  <data name="AlertChannelCwls" xml:space="preserve"><value>CWLS1</value></data>
+  <data name="AlertSound" xml:space="preserve"><value>Chat sound effect</value></data>
+  <data name="AlertSoundNone" xml:space="preserve"><value>Off</value></data>
+  <data name="AlertSoundNumber" xml:space="preserve"><value>SE.{0}</value></data>
+  <data name="AlertSoundPreview" xml:space="preserve"><value>Preview sound</value></data>
+  <data name="AlertSoundPreviewed" xml:space="preserve"><value>Sound preview requested. Game system volume/mute settings apply.</value></data>
+  <data name="AlertSoundUnavailable" xml:space="preserve"><value>Game sound is unavailable in this environment. Check that a character is logged in. Chat alerts can still work.</value></data>
+  <data name="AlertSoundSkipped" xml:space="preserve"><value>SE.{0} skipped</value></data>
+  <data name="AlertCompactMessage" xml:space="preserve"><value>{0} {1} </value></data>
+  <data name="AlertExtraHistory" xml:space="preserve"><value> · {0} more in delivery history</value></data>
+  <data name="AlertRemainingHours" xml:space="preserve"><value>in {0}h {1}m {2}s</value></data>
+  <data name="AlertRemainingMinutes" xml:space="preserve"><value>in {0}m {1}s</value></data>
+  <data name="AlertFavorites" xml:space="preserve"><value>Favorites</value></data>
+  <data name="AlertFavoritesHint" xml:space="preserve"><value>All favorites are listed, including fish excluded from alerts. Enable a per-fish time to override the default; disabling it restores the default. Overrides are shared and preserved when a favorite is removed. Only a final Uncaught status can trigger an alert.</value></data>
+  <data name="AlertFavoriteName" xml:space="preserve"><value>{0} (ID {1})</value></data>
+  <data name="AlertCustomLead" xml:space="preserve"><value>Per-fish time</value></data>
+  <data name="AlertFishMinutes" xml:space="preserve"><value>minutes before</value></data>
+  <data name="AlertFavoriteNext" xml:space="preserve"><value>Reminder: local {0:MM-dd HH:mm:ss} · window: {1:MM-dd HH:mm:ss}</value></data>
+  <data name="AlertNoReservation" xml:space="preserve"><value>No future reminder armed.</value></data>
+  <data name="AlertHistory" xml:space="preserve"><value>Delivery history</value></data>
+  <data name="AlertHistoryHint" xml:space="preserve"><value>Newest 200 reminders in this character session; cleared on logout or reload. Remaining time is captured at delivery. Chat filters and game mute/volume settings affect what you see and hear.</value></data>
+  <data name="AlertHistoryLine" xml:space="preserve"><value>{0:MM-dd HH:mm:ss} · {1} · {2}</value></data>
+  <data name="AlertHistoryDetails" xml:space="preserve"><value>{0} · {1} · window starts {2:MM-dd HH:mm:ss}</value></data>
+  <data name="AlertExcludedCaught" xml:space="preserve"><value>Excluded: caught</value></data>
+  <data name="AlertExcludedUnknown" xml:space="preserve"><value>Excluded: collection unknown</value></data>
+  <data name="AlertUnsupported" xml:space="preserve"><value>Excluded: ocean fish or no supported spot/conditions</value></data>
+  <data name="AlertAlways" xml:space="preserve"><value>Excluded: always available</value></data>
+  <data name="AlertArmed" xml:space="preserve"><value>Future reminder armed</value></data>
+  <data name="AlertPending" xml:space="preserve"><value>Waiting for a supported future window or planning slot</value></data>
 </root>

@@ -68,8 +68,8 @@ internal sealed class FishListPanel(FishCatalog catalog, ITextureProvider textur
         var observed = collection.View;
         if (observed.Session != personal.Session)
             observed = new(observed.Revision, personal.Session, FrozenSet<uint>.Empty, new(T.CollectionWaiting));
-        var changed = !ReferenceEquals(lastRows, view.Rows) || lastPreferenceRevision != personal.Revision ||
-            lastCollectionRevision != observed.Revision;
+        var changed = !ReferenceEquals(lastRows, view.Rows) || lastPreferenceSession != personal.Session;
+        var refresh = changed || lastPreferenceRevision != personal.Revision || lastCollectionRevision != observed.Revision;
         changed |= currentRegionOnly && lastRegion != location;
         lastRegion = location;
         lastCollectionRevision = observed.Revision;
@@ -80,7 +80,7 @@ internal sealed class FishListPanel(FishCatalog catalog, ITextureProvider textur
         }
         lastPreferenceSession = personal.Session;
         lastPreferenceRevision = personal.Revision;
-        if (changed)
+        if (refresh)
         {
             detailCoverage = view.Rows.Count(row => row.Details is not null);
             selectedFish = selectedId is { } selected ? view.Rows.FirstOrDefault(row => row.FishParameterId == selected) : null;
@@ -140,7 +140,7 @@ internal sealed class FishListPanel(FishCatalog catalog, ITextureProvider textur
             ImGui.TextWrapped(error.Display);
 
         // Rebuild only for data or user input changes, never on every frame or scroll step.
-        if (changed || (sort == 2 && lastForecastRevision != view.ForecastRevision))
+        if (changed || refresh || (sort == 2 && lastForecastRevision != view.ForecastRevision))
             UpdateMatches(view, personal, observed, location, changed);
         lastForecastRevision = view.ForecastRevision;
         ImGui.TextUnformatted(UiText.Get(T.CatalogCount, matches.Length, view.Rows.Count));
