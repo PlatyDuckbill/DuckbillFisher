@@ -23,8 +23,7 @@ internal sealed record FishPreferencesView(int Revision, int Session, bool HasCh
     internal ulong CharacterId { get; init; }
 
     public CollectionStatus Collection(uint fishId, FishCollectionView observed) => CollectionFilter.Resolve(
-        observed.Session == Session && HasCharacter && observed.Caught.Contains(fishId)
-            ? CollectionStatus.Caught : CollectionStatus.Unknown,
+        observed.Session == Session && HasCharacter ? observed.Collection(fishId) : CollectionStatus.Unknown,
         ManualCaught.TryGetValue(fishId, out var caught) ? caught : null);
 }
 

@@ -2,6 +2,7 @@ using System.Collections.Frozen;
 using System.Diagnostics;
 using Dalamud.Game.Chat;
 using Dalamud.Plugin.Services;
+using DuckbillFisher.Core;
 using DuckbillFisher.Plugin.Localization;
 using Lumina.Excel.Sheets;
 using T = DuckbillFisher.Plugin.Localization.TextKey;
@@ -10,6 +11,11 @@ namespace DuckbillFisher.Plugin;
 
 internal sealed record FishCollectionView(int Revision, int Session, IReadOnlySet<uint> Caught, UiMessage Status)
 {
+    public IReadOnlySet<uint> Uncaught { get; init; } = FrozenSet<uint>.Empty;
+    public FishGuideSnapshotState GuideState { get; init; }
+    public int GuideEntries { get; init; }
+    public int GuideMatched { get; init; }
+    public int GuideMismatches { get; init; }
     public int EligibleRows { get; init; }
     public int Scans { get; init; }
     public int RawFalse { get; init; }
@@ -22,9 +28,12 @@ internal sealed record FishCollectionView(int Revision, int Session, IReadOnlySe
     public bool GuideVisible { get; init; }
     public string LastTrigger { get; init; } = "none";
     public double? SampledAtSeconds { get; init; }
+
+    public CollectionStatus Collection(uint fishId) => Caught.Contains(fishId) ? CollectionStatus.Caught :
+        Uncaught.Contains(fishId) ? CollectionStatus.Uncaught : CollectionStatus.Unknown;
 }
 
-/// <summary>Session-local positive observations only. False bits never establish uncaught/readiness.</summary>
+/// <summary>Session-local observations. Uncaught requires a complete guide snapshot matched against fish bits.</summary>
 internal sealed class FishCollectionObserver : IDisposable
 {
     // Inspected KR LogMessage: Item lookup uses lnum1 (first numeric parameter).
@@ -42,10 +51,12 @@ internal sealed class FishCollectionObserver : IDisposable
     private readonly Stopwatch clock = Stopwatch.StartNew();
     private readonly Queue<Registration> pending = new();
     private readonly HashSet<uint> caught = [];
+    private readonly HashSet<uint> uncaught = [];
     private FishCollectionView view = new(0, 0, FrozenSet<uint>.Empty, new(T.CollectionWaiting));
     private IReadOnlyList<FishGuideRow>? lastRows;
     private FishGuideRow[] eligible = [];
     private Dictionary<uint, uint> fishByItem = [];
+    private Dictionary<uint, uint> itemsByFish = [];
     private bool? logContract;
     private bool requested;
     private bool disposed;
@@ -94,6 +105,7 @@ internal sealed class FishCollectionObserver : IDisposable
             if (view.Session != personal.Session)
             {
                 caught.Clear();
+                uncaught.Clear();
                 view = new(view.Revision + 1, personal.Session, FrozenSet<uint>.Empty, new(T.CollectionWaiting));
                 nextScan = TimeSpan.Zero;
             }
@@ -114,9 +126,11 @@ internal sealed class FishCollectionObserver : IDisposable
                 // Managed API failures only. This cannot make an invalid native pointer recoverable.
                 if (view.Status.Key != T.CollectionReadFailed)
                     log.Error(ex, "Could not refresh automatic fish collection observations.");
-                var changed = !caught.SetEquals(view.Caught);
+                uncaught.Clear();
+                var changed = !caught.SetEquals(view.Caught) || view.Uncaught.Count > 0;
                 view = view with { Status = new(T.CollectionReadFailed), GuideVisible = false,
-                    Caught = changed ? caught.ToFrozenSet() : view.Caught, Revision = view.Revision + (changed ? 1 : 0) };
+                    Caught = changed ? caught.ToFrozenSet() : view.Caught, Uncaught = FrozenSet<uint>.Empty,
+                    GuideState = FishGuideSnapshotState.Unavailable, Revision = view.Revision + (changed ? 1 : 0) };
             }
         }
     }
@@ -142,6 +156,11 @@ internal sealed class FishCollectionObserver : IDisposable
             // Ambiguous item mappings are excluded from event-based observations.
             fishByItem = eligible.GroupBy(row => row.ItemId).Where(group => group.Count() == 1)
                 .ToDictionary(group => group.Key, group => group.Single().FishParameterId);
+            itemsByFish = eligible.ToDictionary(row => row.FishParameterId, row => row.ItemId);
+            uncaught.Clear();
+            view = view with { Revision = view.Revision + (view.Uncaught.Count > 0 ? 1 : 0),
+                Uncaught = FrozenSet<uint>.Empty, GuideState = FishGuideSnapshotState.NotSampled,
+                GuideEntries = 0, GuideMatched = 0, GuideMismatches = 0 };
             lastRows = rows;
             nextScan = TimeSpan.Zero;
         }
@@ -167,6 +186,7 @@ internal sealed class FishCollectionObserver : IDisposable
             if (logContract != true || !fishByItem.TryGetValue(registration.ItemId, out var fishId))
                 continue;
             changed |= caught.Add(fishId);
+            changed |= uncaught.Remove(fishId);
             trigger = "RegistrationLog";
             view = view with { AppliedRegistrations = view.AppliedRegistrations + 1, LastLogFish = fishId };
         }
@@ -186,6 +206,27 @@ internal sealed class FishCollectionObserver : IDisposable
                 else
                     unknown++;
             }
+            var snapshot = reader.ReadGuideSnapshot(itemsByFish, personal.CharacterId,
+                gameGui.FindAgentInterface(addon).Address);
+            // Never turn a previous positive observation back into an automatic negative.
+            if (snapshot.State == FishGuideSnapshotState.Complete && snapshot.Uncaught.Any(caught.Contains))
+                snapshot = snapshot with { State = FishGuideSnapshotState.ConflictingObservation };
+            if (snapshot.State == FishGuideSnapshotState.Complete)
+            {
+                var previousCount = caught.Count;
+                caught.UnionWith(snapshot.Caught);
+                changed |= caught.Count != previousCount;
+            }
+            var nextUncaught = snapshot.State == FishGuideSnapshotState.Complete
+                ? snapshot.Uncaught : FrozenSet<uint>.Empty;
+            if (!uncaught.SetEquals(nextUncaught))
+            {
+                uncaught.Clear();
+                uncaught.UnionWith(nextUncaught);
+                changed = true;
+            }
+            view = view with { GuideState = snapshot.State, GuideEntries = snapshot.Entries,
+                GuideMatched = snapshot.Matched, GuideMismatches = snapshot.Mismatches };
             nextScan = clock.Elapsed + TimeSpan.FromSeconds(1);
             trigger = "GuideScan";
             view = view with { Scans = view.Scans + 1, RawFalse = rawFalse, Unknown = unknown };
@@ -193,8 +234,10 @@ internal sealed class FishCollectionObserver : IDisposable
         view = view with
         {
             Revision = view.Revision + (changed ? 1 : 0), Caught = changed ? caught.ToFrozenSet() : view.Caught,
+            Uncaught = changed ? uncaught.ToFrozenSet() : view.Uncaught,
             EligibleRows = eligible.Length, GuideVisible = visible, RegistrationContract = logContract == true,
-            Status = new(logContract == true ? T.CollectionPositiveOnly : T.CollectionLogUnavailable),
+            Status = new(view.GuideState == FishGuideSnapshotState.Complete ? T.CollectionGuideConfirmed :
+                logContract == true ? T.CollectionPositiveOnly : T.CollectionLogUnavailable),
             LastTrigger = trigger == "none" ? view.LastTrigger : trigger,
             SampledAtSeconds = trigger == "none" ? view.SampledAtSeconds : clock.Elapsed.TotalSeconds,
         };
@@ -207,6 +250,7 @@ internal sealed class FishCollectionObserver : IDisposable
             disposed = true;
             pending.Clear();
             caught.Clear();
+            uncaught.Clear();
         }
         chat.LogMessage -= OnLogMessage;
         framework.Update -= OnUpdate;

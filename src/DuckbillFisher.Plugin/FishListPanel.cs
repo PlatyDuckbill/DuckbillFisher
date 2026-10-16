@@ -95,7 +95,7 @@ internal sealed class FishListPanel(FishCatalog catalog, ITextureProvider textur
             UiText.Get(T.CollectionUncaughtOnly), UiText.Get(T.CollectionCaughtOnly), UiText.Get(T.CollectionUnknownOnly)];
         changed |= ImGui.Combo(UiText.Label(T.CollectionVisibility, "CatalogCollectionVisibility"), ref collectionVisibility,
             collectionNames, collectionNames.Length);
-        ImGui.TextWrapped(UiText.Get(T.CollectionObservedCount, observed.Caught.Count, observed.Status));
+        ImGui.TextWrapped(UiText.Get(T.CollectionObservedCount, observed.Caught.Count, observed.Uncaught.Count, observed.Status));
         if (ImGui.CollapsingHeader(UiText.Label(T.CollectionHelp, "CollectionHelp")))
             ImGui.TextWrapped(UiText.Get(T.CollectionFilterHint));
         if (!personal.HasCharacter)
@@ -289,8 +289,7 @@ internal sealed class FishListPanel(FishCatalog catalog, ITextureProvider textur
             preferences.SetFavorite(fish.FishParameterId, favorite);
         ImGui.EndDisabled();
         ImGui.TextWrapped(UiText.Get(T.ManualCollectionLabel, new UiMessage(CollectionKey(personal, observed, fish.FishParameterId))));
-        ImGui.TextWrapped(UiText.Get(T.AutomaticObservationLabel, new UiMessage(observed.Caught.Contains(fish.FishParameterId)
-            ? T.CollectionAutomaticCaught : T.CollectionUnknown)));
+        ImGui.TextWrapped(UiText.Get(T.AutomaticObservationLabel, new UiMessage(AutomaticCollectionKey(observed, fish.FishParameterId))));
         ImGui.BeginDisabled(!personal.CanEdit || !personal.HasCharacter || !fish.IsDisplayable);
         if (ImGui.Button(UiText.Label(T.MarkCaught, $"MarkCaught{fish.FishParameterId}")))
             preferences.SetManualCaught(fish.FishParameterId, true, personal.Session);
@@ -306,7 +305,14 @@ internal sealed class FishListPanel(FishCatalog catalog, ITextureProvider textur
     private static T CollectionKey(FishPreferencesView personal, FishCollectionView observed, uint fishId) =>
         personal.ManualCaught.TryGetValue(fishId, out var caught)
             ? caught ? T.CollectionManualCaught : T.CollectionManualUncaught
-            : personal.Collection(fishId, observed) == CollectionStatus.Caught ? T.CollectionAutomaticCaught : T.CollectionUnknown;
+            : AutomaticCollectionKey(observed, fishId);
+
+    private static T AutomaticCollectionKey(FishCollectionView observed, uint fishId) => observed.Collection(fishId) switch
+    {
+        CollectionStatus.Caught => T.CollectionAutomaticCaught,
+        CollectionStatus.Uncaught => T.CollectionAutomaticUncaught,
+        _ => T.CollectionUnknown,
+    };
 
     private string CreateReport(FishPreferencesView personal, FishCollectionView observed, bool full = false)
     {
@@ -327,13 +333,14 @@ internal sealed class FishListPanel(FishCatalog catalog, ITextureProvider textur
         Append($"ManualCaught={personal.ManualCaught.Count(pair => pair.Value)}; ManualUncaught={personal.ManualCaught.Count(pair => !pair.Value)}");
         Append($"CollectionFilter={(CollectionVisibility)collectionVisibility}; FavoritesOnly={favoritesOnly}; Sort={sort}; Displayed={matches.Length}");
         Append($"InLogOnly={inLogOnly}; IncludeOceanFish={includeOceanFish}; DetailsOnly={detailsOnly}; ShowUnresolved={showUnresolved}");
-        Append($"CollectionSource=ManualOverrideThenPositiveObservation; StorageError={personal.Error?.Key.ToString() ?? "none"}");
-        report.AppendLine().AppendLine("DuckbillFisher MVP-04/collection/v1");
+        Append($"CollectionSource=ManualOverrideThenGameObservation; StorageError={personal.Error?.Key.ToString() ?? "none"}");
+        report.AppendLine().AppendLine("DuckbillFisher MVP-04/collection/v2");
         Append($"Session={observed.Session}; Caught={observed.Caught.Count}; Eligible={observed.EligibleRows}; GuideVisible={observed.GuideVisible}");
         Append($"Scans={observed.Scans}; RawFalse={observed.RawFalse}; UnknownReads={observed.Unknown}; RegistrationContract={observed.RegistrationContract}");
         Append($"RegistrationMessages={observed.RegistrationMessages}; AppliedRegistrations={observed.AppliedRegistrations}; LastLogItem={observed.LastLogItem}; LastLogFish={observed.LastLogFish}");
         Append($"LastTrigger={observed.LastTrigger}; SampledAtSeconds={observed.SampledAtSeconds?.ToString("F3", CultureInfo.InvariantCulture) ?? "none"}; Status={observed.Status.Key}");
-        report.AppendLine("AutomaticUncaught=Unknown; ObservationsPersisted=False");
+        Append($"Uncaught={observed.Uncaught.Count}; GuideState={observed.GuideState}; GuideEntries={observed.GuideEntries}; Matched={observed.GuideMatched}; Mismatches={observed.GuideMismatches}");
+        report.AppendLine("AutomaticUncaught=MatchedGameGuideSnapshot; ObservationsPersisted=False");
         return report.ToString();
     }
 

@@ -153,7 +153,7 @@
   <data name="CollectionCaughtOnly" xml:space="preserve"><value>Caught only</value></data>
   <data name="CollectionUnknownOnly" xml:space="preserve"><value>Unknown only</value></data>
   <data name="CollectionVisibility" xml:space="preserve"><value>Collection filter</value></data>
-  <data name="CollectionFilterHint" xml:space="preserve"><value>Open the in-game Fish Guide to refresh caught fish. New fish registrations also update the list. Hide caught keeps Unknown fish visible; Uncaught only currently uses manual records. Automatic uncaught detection is not established yet.</value></data>
+  <data name="CollectionFilterHint" xml:space="preserve"><value>Open the Fishing tab of the in-game Fish Guide. Uncaught is confirmed only after the complete guide list matches the collection bits; unavailable or incomplete data remains Unknown. New registrations update Caught. Hide caught keeps Unknown visible. Uncaught only includes automatic observations and manual records, with manual records taking priority.</value></data>
   <data name="ManualPlayerRequired" xml:space="preserve"><value>Log in to edit this character's manual collection records.</value></data>
   <data name="PreferencesLoadFailed" xml:space="preserve"><value>Preferences could not be loaded or use an unsupported format. Editing is disabled to preserve the existing file.</value></data>
   <data name="PreferencesSaveFailed" xml:space="preserve"><value>Preferences could not be saved. The previous state is still displayed; please try the change again.</value></data>
@@ -170,10 +170,12 @@
   <data name="PreferencesPlayerUnavailable" xml:space="preserve"><value>Current character data could not be read. Manual records are hidden until character identification recovers.</value></data>
   <data name="CollectionWaiting" xml:space="preserve"><value>Open the in-game Fish Guide to load collection observations.</value></data>
   <data name="CollectionReadFailed" xml:space="preserve"><value>Automatic collection could not be refreshed. Existing observations remain available.</value></data>
-  <data name="CollectionPositiveOnly" xml:space="preserve"><value>Updates when the Fish Guide opens or a new fish is registered.</value></data>
+  <data name="CollectionPositiveOnly" xml:space="preserve"><value>Caught updates from the Fish Guide and new registrations. Uncaught awaits a complete guide comparison.</value></data>
   <data name="CollectionLogUnavailable" xml:space="preserve"><value>Fish Guide lookup is available; new-registration updates are unavailable for this installation.</value></data>
-  <data name="CollectionObservedCount" xml:space="preserve"><value>Automatically confirmed caught: {0} · {1}</value></data>
+  <data name="CollectionObservedCount" xml:space="preserve"><value>Automatic observations: {0} caught / {1} uncaught · {2}</value></data>
   <data name="AutomaticObservationLabel" xml:space="preserve"><value>Game observation: {0}</value></data>
   <data name="CollectionAutomaticCaught" xml:space="preserve"><value>Caught (automatic)</value></data>
+  <data name="CollectionAutomaticUncaught" xml:space="preserve"><value>Uncaught (automatic)</value></data>
+  <data name="CollectionGuideConfirmed" xml:space="preserve"><value>Collection states matched the complete game guide at the last lookup.</value></data>
   <data name="CollectionHelp" xml:space="preserve"><value>Collection filter help</value></data>
 </root>

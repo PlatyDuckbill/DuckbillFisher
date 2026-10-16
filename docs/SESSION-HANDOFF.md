@@ -16,7 +16,7 @@
 - 게임: `C:\Program Files (x86)\FINAL FANTASY XIV - KOREA\game`.
 - 참조: `C:\Users\hyogu\AppData\Roaming\XIVLauncherKR\addon\Hooks\dev`.
 - 개발 DLL: `C:\Users\hyogu\Downloads\DuckbillFisher\src\DuckbillFisher.Plugin\bin\Debug\DuckbillFisher.dll`.
-- 정규 DLL 0.1.8.0 교체/재로드 후 짧은 진단·먼바다 제외 동작 확인. 다음 교체는 새 언로드 확인 필요.
+- 사용자 언로드 후 정규 DLL 0.1.9.0 교체 완료. 자동 미수집 재로드/인게임 확인 대기. 다음 교체는 새 언로드 확인 필요.
 - PowerShell 5.1 읽기는 `-Encoding UTF8`; pwsh는 현재 샌드박스 밖 승인 실행 필요.
 
 ## 일반 구현 빌드
@@ -28,7 +28,7 @@ dotnet build src/DuckbillFisher.Plugin/DuckbillFisher.Plugin.csproj --no-restore
 pwsh -NoLogo -NoProfile -File scripts/check-localization.ps1
 ```
 
-- 1차 빌드는 `-p:OutputPath=C:/Users/hyogu/Downloads/DuckbillFisher/.cache/catalog-context-build/` 추가.
+- 1차 빌드는 `-p:OutputPath=C:/Users/hyogu/Downloads/DuckbillFisher/.cache/guide-snapshot-build/` 추가.
 - 성공 후 언로드 요청 → 사용자 확인 → 정규 Debug 빌드로 교체.
 - 실제 주 DLL/버전·Core DLL·ko 리소스 DLL·manifest 확인.
 - `scripts/build.ps1`은 테스트도 실행하므로 일반 구현 때 사용하지 않는다.
@@ -37,7 +37,7 @@ pwsh -NoLogo -NoProfile -File scripts/check-localization.ps1
 ## 유지할 사실
 
 - 최신 기능·검증 수치·보류는 [STATUS](STATUS.md)를 따른다.
-- 자동 수집은 True 관찰/등록 이벤트만 사용한다. False의 미수집 확정에는 준비 완료 근거가 필요하다.
+- 자동 수집은 True 관찰/등록 이벤트를 사용한다. 자동 미수집은 0.1.9.0의 게임 도감 전체 목록 대조 후만 적용한다. False·IsLoaded·창 표시만으로 확정하지 않는다. [근거와 다음 확인](validation/MVP-04-GUIDE-SNAPSHOT.md)을 따른다.
 - 네이티브 접근은 조사한 KR 빌드와 DLL SHA/MVID 일치 조건 유지.
 - 짧은 진단을 기본 요청한다. 전체 진단은 관련 오류 조사에 한정하고 가능하면 파일로 받는다.
 - 새 대화는 이 문서와 STATUS로 재개한다. 호스트가 지원하면 수동 `/compact` 사용 가능. 에이전트가 압축 주기를 직접 바꾸지는 못한다.

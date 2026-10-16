@@ -9,6 +9,8 @@ internal enum TextKey
     CollectionObservedCount,
     AutomaticObservationLabel,
     CollectionAutomaticCaught,
+    CollectionAutomaticUncaught,
+    CollectionGuideConfirmed,
     CollectionHelp,
     CatalogSortFavorite,
     CatalogFavoritesOnly,
