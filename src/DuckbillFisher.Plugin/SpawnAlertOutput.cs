@@ -89,7 +89,9 @@ internal sealed class SpawnAlertOutput : IDisposable
             if (!first)
                 message.AddText("\n");
             first = false;
-            message.AddText(UiText.Get(T.AlertCompactMessage, fish.Name, Remaining(fish.Start - now)));
+            foreach (var payload in SeString.CreateItemLink(fish.ItemId, false, fish.Name).Payloads)
+                message.Add(payload);
+            message.AddText(UiText.Get(T.AlertLinkedRemaining, Remaining(fish.Start - now)));
             foreach (var payload in SeString.CreateMapLink(fish.Spot.TerritoryId, fish.Spot.MapId, fish.Spot.X, fish.Spot.Y).Payloads)
                 message.Add(payload);
         }
@@ -97,12 +99,7 @@ internal sealed class SpawnAlertOutput : IDisposable
             message.AddText(UiText.Get(T.AlertExtraHistory, batch.Count - 3));
         chat.Print(new XivChatEntry
         {
-            Type = settings.SpawnAlertChannel switch
-            {
-                SpawnAlertChannel.Say => XivChatType.Say,
-                SpawnAlertChannel.CrossWorldLinkshell1 => XivChatType.CrossLinkShell1,
-                _ => XivChatType.SystemMessage,
-            },
+            Type = settings.SpawnAlertChannel,
             Name = "DuckbillFisher", Message = message.Build(), Silent = true,
         });
         if (settings.SpawnAlertSound == 0)

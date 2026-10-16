@@ -3,7 +3,6 @@ using System.Collections.Frozen;
 using System.Text;
 using System.Numerics;
 using Dalamud.Bindings.ImGui;
-using Dalamud.Interface.Textures;
 using Dalamud.Plugin.Services;
 using DuckbillFisher.Core;
 using DuckbillFisher.Plugin.Localization;
@@ -16,7 +15,6 @@ internal sealed class FishListPanel(FishCatalog catalog, ITextureProvider textur
     FishPreferences preferences, FishCollectionObserver collection, FishingConditionPanel conditions, FishingRegionObserver region)
 {
     private static readonly StringComparer NameComparer = StringComparer.Create(CultureInfo.GetCultureInfo("ko-KR"), true);
-    private static readonly Vector4 OpenWindowBackground = new(0.10f, 0.48f, 0.30f, 0.28f);
     private static readonly CollectionVisibility[] CollectionChoices =
         [CollectionVisibility.All, CollectionVisibility.HideCaught, CollectionVisibility.CaughtOnly, CollectionVisibility.UnknownOnly];
     private static readonly FishGradeVisibility[] GradeChoices =
@@ -41,8 +39,7 @@ internal sealed class FishListPanel(FishCatalog catalog, ITextureProvider textur
     private int lastCollectionRevision;
     private bool favoritesOnly;
     private int collectionVisibility;
-    private readonly Dictionary<uint, FishRowSummary> rowSummaries = [];
-    private CultureInfo? summaryCulture;
+    private readonly FishRowRenderer rows = new(textures);
     private bool currentRegionOnly;
     private FishingRegionView? lastRegion;
     private bool timeRestrictedOnly;
@@ -58,12 +55,6 @@ internal sealed class FishListPanel(FishCatalog catalog, ITextureProvider textur
         }
         var view = catalog.View;
         var location = region.View;
-        // Language changes invalidate presentation only, preserving selection and filters.
-        if (!ReferenceEquals(lastRows, view.Rows) || summaryCulture != UiText.Culture)
-        {
-            rowSummaries.Clear();
-            summaryCulture = UiText.Culture;
-        }
         var personal = preferences.View;
         var observed = collection.View;
         if (observed.Session != personal.Session)
@@ -172,7 +163,7 @@ internal sealed class FishListPanel(FishCatalog catalog, ITextureProvider textur
             }
             if (matches.Length == 0)
                 ImGui.TextWrapped(UiText.Get(T.CatalogNoMatches));
-            var rowHeight = ImGui.GetTextLineHeightWithSpacing() * 5 + 8;
+            var rowHeight = FishRowRenderer.Height;
             var now = DateTimeOffset.UtcNow;
             var clipper = ImGui.ImGuiListClipper();
             try
@@ -228,84 +219,22 @@ internal sealed class FishListPanel(FishCatalog catalog, ITextureProvider textur
     private void DrawRow(FishGuideRow fish, float height, FishCatalogView view,
         FishPreferencesView personal, FishCollectionView observed, FishingRegionView location, DateTimeOffset now)
     {
-        ImGui.PushID((int)fish.FishParameterId);
-        var start = ImGui.GetCursorPos();
-        var rowWidth = ImGui.GetContentRegionAvail().X;
         view.Windows.TryGetValue(fish.FishParameterId, out var forecast);
-        // Draw below Selectable so the theme's selection/hover states remain visible.
-        // Expired snapshots and always-available fish must not look like open limited windows.
-        if (!fish.IsOceanFishing && forecast is { Kind: FishingWindowKind.Open } &&
-            (forecast.Start is null || forecast.Start <= now) && (forecast.End is null || now < forecast.End))
-        {
-            var screen = ImGui.GetCursorScreenPos();
-            ImGui.GetWindowDrawList().AddRectFilled(screen, screen + new Vector2(rowWidth, height),
-                ImGui.GetColorU32(OpenWindowBackground));
-        }
-        if (ImGui.Selectable("###CatalogRow", selectedId == fish.FishParameterId,
-                ImGuiSelectableFlags.None, new Vector2(rowWidth, height)))
-        {
-            selectedId = fish.FishParameterId;
-            selectedFish = fish;
-        }
-        var next = ImGui.GetCursorPos();
-        var iconSize = ImGui.GetTextLineHeightWithSpacing() * 3;
-        ImGui.SetCursorPos(start + new Vector2(4, 4));
-        // Shared immediate textures are owned by Dalamud; do not dispose the borrowed wrap.
-        if (fish.IconId != 0 && textures.TryGetFromGameIcon(new GameIconLookup(fish.IconId), out var icon)
-            && icon.TryGetWrap(out var wrap, out _))
-            ImGui.Image(wrap.Handle, new Vector2(iconSize));
-        else
-            ImGui.Dummy(new Vector2(iconSize));
-        var textWidth = Math.Max(1, rowWidth - iconSize - 14);
-        void Line(int index, string text, bool disabled = false)
-        {
-            ImGui.SetCursorPos(start + new Vector2(iconSize + 14, 4 + ImGui.GetTextLineHeightWithSpacing() * index));
-            DrawRowLine(text, textWidth, disabled);
-        }
-        var name = fish.IsOceanFishing ? UiText.Get(T.OceanRowLabel, fish.DisplayName)
-            : fish.Grade is FishGrade.Big or FishGrade.Legendary
-                ? UiText.Get(T.RowGradeLabel, new UiMessage(fish.Grade == FishGrade.Legendary ? T.GradeLegendaryLabel : T.GradeBigLabel), fish.DisplayName)
-                : fish.DisplayName;
-        Line(0, name);
         var locationScoped = currentRegionOnly || geography.HasSelection;
         var rowSpot = locationScoped ? fish.Spots.FirstOrDefault(spot => geography.MatchesSpot(spot, location, currentRegionOnly))
             : fish.Spots.FirstOrDefault();
         var place = fish.Ocean is { } ocean ? UiText.Get(T.OceanArea, ocean.Area)
             : rowSpot is { } spot ? spot.Name
             : UiText.Get(fish.IsDisplayable ? T.CatalogRowInfo : T.CatalogUnresolvedRow, fish.FishParameterId);
-        var collection = new UiMessage(CollectionKey(personal, observed, fish.FishParameterId));
+        var collection = new UiMessage(FishRowRenderer.CollectionKey(personal, observed, fish.FishParameterId));
         var state = personal.Favorites.Contains(fish.FishParameterId)
             ? UiText.Get(T.FavoriteRowState, collection) : collection.Display;
-        var window = fish.IsOceanFishing ? UiText.Get(T.RowOceanWindow)
-            : forecast is not null ? FormatWindow(forecast, now) : UiText.Get(T.ForecastUnknown);
         var usesOtherRegion = locationScoped && rowSpot is not null && fish.Details?.Spot is { } recommended &&
             recommended.TerritoryId != rowSpot.TerritoryId;
-        if (usesOtherRegion)
-            window = UiText.Get(T.RegionForecastElsewhere, window);
-        Line(1, UiText.Get(T.RowStateLocation, state, place), true);
-        Line(2, window);
-        if (!rowSummaries.TryGetValue(fish.FishParameterId, out var summary))
-            rowSummaries[fish.FishParameterId] = summary = FishRowSummary.Create(fish);
-        Line(3, summary.Bait);
-        Line(4, usesOtherRegion ? UiText.Get(T.RegionForecastElsewhere, summary.Conditions) : summary.Conditions, true);
-        ImGui.SetCursorPos(next);
-        ImGui.PopID();
-    }
-
-    private static void DrawRowLine(string text, float width, bool disabled)
-    {
-        var position = ImGui.GetCursorScreenPos();
-        ImGui.PushClipRect(position, position + new Vector2(width, ImGui.GetTextLineHeight()), true);
-        if (disabled) ImGui.TextDisabled(text);
-        else ImGui.TextUnformatted(text);
-        ImGui.PopClipRect();
-        if (ImGui.IsItemHovered() && ImGui.CalcTextSize(text).X > width)
+        if (rows.Draw(fish, height, selectedId == fish.FishParameterId, state, place, forecast, now, usesOtherRegion))
         {
-            ImGui.BeginTooltip();
-            ImGui.PushTextWrapPos(ImGui.GetFontSize() * 35);
-            ImGui.TextUnformatted(text);
-            ImGui.PopTextWrapPos();
-            ImGui.EndTooltip();
+            selectedId = fish.FishParameterId;
+            selectedFish = fish;
         }
     }
 
@@ -372,7 +301,7 @@ internal sealed class FishListPanel(FishCatalog catalog, ITextureProvider textur
         if (ImGui.Checkbox(UiText.Label(T.FavoriteToggle, $"Favorite{fish.FishParameterId}"), ref favorite))
             preferences.SetFavorite(fish.FishParameterId, favorite);
         ImGui.EndDisabled();
-        ImGui.TextWrapped(UiText.Get(T.ManualCollectionLabel, new UiMessage(CollectionKey(personal, observed, fish.FishParameterId))));
+        ImGui.TextWrapped(UiText.Get(T.ManualCollectionLabel, new UiMessage(FishRowRenderer.CollectionKey(personal, observed, fish.FishParameterId))));
         ImGui.TextWrapped(UiText.Get(T.AutomaticObservationLabel, new UiMessage(AutomaticCollectionKey(observed, fish.FishParameterId))));
         ImGui.BeginDisabled(!personal.CanEdit || !personal.HasCharacter || !fish.IsDisplayable);
         if (ImGui.Button(UiText.Label(T.MarkCaught, $"MarkCaught{fish.FishParameterId}")))
@@ -385,11 +314,6 @@ internal sealed class FishListPanel(FishCatalog catalog, ITextureProvider textur
         ImGui.EndDisabled();
         ImGui.TextWrapped(UiText.Get(T.PreferenceScope));
     }
-
-    private static T CollectionKey(FishPreferencesView personal, FishCollectionView observed, uint fishId) =>
-        personal.ManualCaught.TryGetValue(fishId, out var caught)
-            ? caught ? T.CollectionManualCaught : T.CollectionManualUncaught
-            : AutomaticCollectionKey(observed, fishId);
 
     private static T AutomaticCollectionKey(FishCollectionView observed, uint fishId) => observed.Collection(fishId) switch
     {
@@ -461,27 +385,9 @@ internal sealed class FishListPanel(FishCatalog catalog, ITextureProvider textur
 
     private static void DrawWindow(FishingWindow window)
     {
-        ImGui.TextWrapped(FormatWindow(window, DateTimeOffset.UtcNow));
+        ImGui.TextWrapped(FishRowRenderer.FormatWindow(window, DateTimeOffset.UtcNow));
         if (window.Kind == FishingWindowKind.Upcoming && window.End is { } finish)
             ImGui.TextWrapped(UiText.Get(T.ForecastEnd, finish.ToLocalTime().ToString("MM-dd HH:mm", UiText.Culture)));
     }
 
-    private static string FormatWindow(FishingWindow window, DateTimeOffset now)
-    {
-        string Remaining(DateTimeOffset time)
-        {
-            var duration = time > now ? time - now : TimeSpan.Zero;
-            return UiText.Get(T.DurationShort, Math.Floor(duration.TotalHours), duration.Minutes, duration.Seconds);
-        }
-        return window.Kind switch
-        {
-            FishingWindowKind.Always => UiText.Get(T.ForecastAlways),
-            FishingWindowKind.Open when window.End is { } end => UiText.Get(T.ForecastOpen, Remaining(end)),
-            FishingWindowKind.Open => UiText.Get(T.ForecastOpenNoEnd),
-            FishingWindowKind.Upcoming when window.Start is { } start => UiText.Get(T.ForecastUpcoming,
-                Remaining(start), start.ToLocalTime().ToString("MM-dd HH:mm", UiText.Culture)),
-            FishingWindowKind.NotFound => UiText.Get(T.ForecastNotFound),
-            _ => UiText.Get(T.ForecastUnknown),
-        };
-    }
 }

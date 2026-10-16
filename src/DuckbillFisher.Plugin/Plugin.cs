@@ -51,7 +51,7 @@ public sealed class Plugin : IDalamudPlugin
         spawnAlerts = new SpawnAlerts(fishCatalog, fishPreferences, fishCollection, framework, alertOutput, log);
         mainWindow = new MainWindow(fishingObserver, fishGuide, new FishListPanel(fishCatalog, textureProvider, fishingMap,
                 fishPreferences, fishCollection, new FishingConditionPanel(textureProvider, itemLinks), fishingRegion),
-            new SpawnAlertsPanel(fishPreferences, spawnAlerts, alertOutput, fishingMap), () => commandInfo.HelpMessage = UiText.Get(TextKey.CommandHelp));
+            new SpawnAlertsPanel(fishPreferences, spawnAlerts, alertOutput, fishCollection, textureProvider), () => commandInfo.HelpMessage = UiText.Get(TextKey.CommandHelp));
         windows.AddWindow(mainWindow);
         pluginInterface.UiBuilder.Draw += windows.Draw;
         pluginInterface.UiBuilder.OpenMainUi += OpenMainUi;

@@ -266,9 +266,6 @@
   <data name="AlertsNext" xml:space="preserve"><value>다음 알림: {0} · 현지 {1:MM-dd HH:mm:ss} · 창 시작 {2:MM-dd HH:mm:ss}</value></data>
   <data name="AlertsCopy" xml:space="preserve"><value>짧은 알림 진단 복사</value></data>
   <data name="AlertChannel" xml:space="preserve"><value>로컬 표시 채널</value></data>
-  <data name="AlertChannelSystem" xml:space="preserve"><value>시스템</value></data>
-  <data name="AlertChannelSay" xml:space="preserve"><value>일반 대화</value></data>
-  <data name="AlertChannelCwls" xml:space="preserve"><value>CWLS1</value></data>
   <data name="AlertSound" xml:space="preserve"><value>채팅 효과음</value></data>
   <data name="AlertSoundNone" xml:space="preserve"><value>끔</value></data>
   <data name="AlertSoundNumber" xml:space="preserve"><value>SE.{0}</value></data>
@@ -276,7 +273,6 @@
   <data name="AlertSoundPreviewed" xml:space="preserve"><value>효과음 재생을 요청했습니다. 게임 시스템 음량·음소거 설정이 적용됩니다.</value></data>
   <data name="AlertSoundUnavailable" xml:space="preserve"><value>현재 환경에서 게임 효과음을 사용할 수 없습니다. 캐릭터 접속 상태를 확인하세요. 채팅 알림은 계속 사용할 수 있습니다.</value></data>
   <data name="AlertSoundSkipped" xml:space="preserve"><value>SE.{0} 생략됨</value></data>
-  <data name="AlertCompactMessage" xml:space="preserve"><value>{0} {1} </value></data>
   <data name="AlertExtraHistory" xml:space="preserve"><value> · 외 {0}종은 발송 기록 참고</value></data>
   <data name="AlertRemainingHours" xml:space="preserve"><value>{0}시간 {1}분 {2}초 후</value></data>
   <data name="AlertRemainingMinutes" xml:space="preserve"><value>{0}분 {1}초 후</value></data>
@@ -289,12 +285,94 @@
   <data name="AlertNoReservation" xml:space="preserve"><value>예약된 미래 알림 없음</value></data>
   <data name="AlertHistory" xml:space="preserve"><value>발송 기록</value></data>
   <data name="AlertHistoryHint" xml:space="preserve"><value>현재 캐릭터 세션의 최근 200건을 최신순으로 표시하며 로그아웃·재로드 시 비웁니다. 남은 시간은 발송 당시 값입니다. 채팅 필터와 게임 음소거·음량 설정에 따라 표시와 청취가 달라집니다.</value></data>
-  <data name="AlertHistoryLine" xml:space="preserve"><value>{0:MM-dd HH:mm:ss} · {1} · {2}</value></data>
-  <data name="AlertHistoryDetails" xml:space="preserve"><value>{0} · {1} · 창 시작 {2:MM-dd HH:mm:ss}</value></data>
+  <data name="AlertHistoryLine" xml:space="preserve"><value>{0:HH:mm:ss} · {1} · {2} · {3} · {4}</value></data>
   <data name="AlertExcludedCaught" xml:space="preserve"><value>알림 제외: 수집됨</value></data>
   <data name="AlertExcludedUnknown" xml:space="preserve"><value>알림 제외: 수집 여부 미확인</value></data>
   <data name="AlertUnsupported" xml:space="preserve"><value>알림 제외: 먼바다 또는 지원 낚시터·조건 없음</value></data>
   <data name="AlertAlways" xml:space="preserve"><value>알림 제외: 상시 어종</value></data>
   <data name="AlertArmed" xml:space="preserve"><value>미래 알림 예약됨</value></data>
   <data name="AlertPending" xml:space="preserve"><value>지원하는 미래 창 또는 예약 처리 대기</value></data>
+  <data name="ChatChannelFallback" xml:space="preserve"><value>{0}</value></data>
+  <data name="AlertLinkedRemaining" xml:space="preserve"><value> {0} </value></data>
+  <data name="ChatDebug" xml:space="preserve"><value>디버그</value></data>
+  <data name="ChatUrgent" xml:space="preserve"><value>긴급</value></data>
+  <data name="ChatNotice" xml:space="preserve"><value>공지</value></data>
+  <data name="ChatSay" xml:space="preserve"><value>일반 대화</value></data>
+  <data name="ChatShout" xml:space="preserve"><value>외치기</value></data>
+  <data name="ChatTellOutgoing" xml:space="preserve"><value>귓속말 보내기</value></data>
+  <data name="ChatTellIncoming" xml:space="preserve"><value>귓속말 받기</value></data>
+  <data name="ChatParty" xml:space="preserve"><value>파티</value></data>
+  <data name="ChatAlliance" xml:space="preserve"><value>연합 파티</value></data>
+  <data name="ChatLs1" xml:space="preserve"><value>링크셸 1</value></data>
+  <data name="ChatLs2" xml:space="preserve"><value>링크셸 2</value></data>
+  <data name="ChatLs3" xml:space="preserve"><value>링크셸 3</value></data>
+  <data name="ChatLs4" xml:space="preserve"><value>링크셸 4</value></data>
+  <data name="ChatLs5" xml:space="preserve"><value>링크셸 5</value></data>
+  <data name="ChatLs6" xml:space="preserve"><value>링크셸 6</value></data>
+  <data name="ChatLs7" xml:space="preserve"><value>링크셸 7</value></data>
+  <data name="ChatLs8" xml:space="preserve"><value>링크셸 8</value></data>
+  <data name="ChatFreeCompany" xml:space="preserve"><value>자유부대</value></data>
+  <data name="ChatNoviceNetwork" xml:space="preserve"><value>초보자 채널</value></data>
+  <data name="ChatCustomEmote" xml:space="preserve"><value>사용자 감정 표현</value></data>
+  <data name="ChatStandardEmote" xml:space="preserve"><value>감정 표현</value></data>
+  <data name="ChatYell" xml:space="preserve"><value>떠들기</value></data>
+  <data name="ChatCrossParty" xml:space="preserve"><value>서버 초월 파티</value></data>
+  <data name="ChatPvPTeam" xml:space="preserve"><value>PvP 팀</value></data>
+  <data name="ChatCrossLinkShell1" xml:space="preserve"><value>CWLS1</value></data>
+  <data name="ChatCrossLinkShell2" xml:space="preserve"><value>CWLS2</value></data>
+  <data name="ChatCrossLinkShell3" xml:space="preserve"><value>CWLS3</value></data>
+  <data name="ChatCrossLinkShell4" xml:space="preserve"><value>CWLS4</value></data>
+  <data name="ChatCrossLinkShell5" xml:space="preserve"><value>CWLS5</value></data>
+  <data name="ChatCrossLinkShell6" xml:space="preserve"><value>CWLS6</value></data>
+  <data name="ChatCrossLinkShell7" xml:space="preserve"><value>CWLS7</value></data>
+  <data name="ChatCrossLinkShell8" xml:space="preserve"><value>CWLS8</value></data>
+  <data name="ChatDamage" xml:space="preserve"><value>피해</value></data>
+  <data name="ChatMiss" xml:space="preserve"><value>빗나감</value></data>
+  <data name="ChatAction" xml:space="preserve"><value>기술</value></data>
+  <data name="ChatItem" xml:space="preserve"><value>아이템</value></data>
+  <data name="ChatHealing" xml:space="preserve"><value>회복</value></data>
+  <data name="ChatGainBuff" xml:space="preserve"><value>강화 효과 획득</value></data>
+  <data name="ChatGainDebuff" xml:space="preserve"><value>약화 효과 획득</value></data>
+  <data name="ChatLoseBuff" xml:space="preserve"><value>강화 효과 해제</value></data>
+  <data name="ChatLoseDebuff" xml:space="preserve"><value>약화 효과 해제</value></data>
+  <data name="ChatGlamourNotifications" xml:space="preserve"><value>투영 알림</value></data>
+  <data name="ChatAlarm" xml:space="preserve"><value>알람</value></data>
+  <data name="ChatEcho" xml:space="preserve"><value>자신에게 말하기</value></data>
+  <data name="ChatSystemMessage" xml:space="preserve"><value>시스템</value></data>
+  <data name="ChatSystemError" xml:space="preserve"><value>시스템 오류</value></data>
+  <data name="ChatGatheringSystemMessage" xml:space="preserve"><value>채집 시스템</value></data>
+  <data name="ChatErrorMessage" xml:space="preserve"><value>오류</value></data>
+  <data name="ChatNPCDialogue" xml:space="preserve"><value>NPC 대사</value></data>
+  <data name="ChatLootNotice" xml:space="preserve"><value>전리품 알림</value></data>
+  <data name="ChatProgress" xml:space="preserve"><value>진행 상황</value></data>
+  <data name="ChatLootRoll" xml:space="preserve"><value>전리품 주사위</value></data>
+  <data name="ChatCrafting" xml:space="preserve"><value>제작</value></data>
+  <data name="ChatGathering" xml:space="preserve"><value>채집</value></data>
+  <data name="ChatNPCDialogueAnnouncements" xml:space="preserve"><value>NPC 안내</value></data>
+  <data name="ChatFreeCompanyAnnouncement" xml:space="preserve"><value>자유부대 공지</value></data>
+  <data name="ChatFreeCompanyLoginLogout" xml:space="preserve"><value>자유부대 접속</value></data>
+  <data name="ChatRetainerSale" xml:space="preserve"><value>집사 판매</value></data>
+  <data name="ChatPeriodicRecruitmentNotification" xml:space="preserve"><value>모집 알림</value></data>
+  <data name="ChatSign" xml:space="preserve"><value>표식</value></data>
+  <data name="ChatRandomNumber" xml:space="preserve"><value>주사위</value></data>
+  <data name="ChatNoviceNetworkSystem" xml:space="preserve"><value>초보자 채널 시스템</value></data>
+  <data name="ChatOrchestrion" xml:space="preserve"><value>오케스트리온</value></data>
+  <data name="ChatPvpTeamAnnouncement" xml:space="preserve"><value>PvP 팀 공지</value></data>
+  <data name="ChatPvpTeamLoginLogout" xml:space="preserve"><value>PvP 팀 접속</value></data>
+  <data name="ChatMessageBook" xml:space="preserve"><value>메시지북</value></data>
+  <data name="ChatGmTell" xml:space="preserve"><value>GM 귓속말</value></data>
+  <data name="ChatGmSay" xml:space="preserve"><value>GM 일반 대화</value></data>
+  <data name="ChatGmShout" xml:space="preserve"><value>GM 외치기</value></data>
+  <data name="ChatGmYell" xml:space="preserve"><value>GM 떠들기</value></data>
+  <data name="ChatGmParty" xml:space="preserve"><value>GM 파티</value></data>
+  <data name="ChatGmFreeCompany" xml:space="preserve"><value>GM 자유부대</value></data>
+  <data name="ChatGmLinkshell1" xml:space="preserve"><value>GM 링크셸 1</value></data>
+  <data name="ChatGmLinkshell2" xml:space="preserve"><value>GM 링크셸 2</value></data>
+  <data name="ChatGmLinkshell3" xml:space="preserve"><value>GM 링크셸 3</value></data>
+  <data name="ChatGmLinkshell4" xml:space="preserve"><value>GM 링크셸 4</value></data>
+  <data name="ChatGmLinkshell5" xml:space="preserve"><value>GM 링크셸 5</value></data>
+  <data name="ChatGmLinkshell6" xml:space="preserve"><value>GM 링크셸 6</value></data>
+  <data name="ChatGmLinkshell7" xml:space="preserve"><value>GM 링크셸 7</value></data>
+  <data name="ChatGmLinkshell8" xml:space="preserve"><value>GM 링크셸 8</value></data>
+  <data name="ChatGmNoviceNetwork" xml:space="preserve"><value>GM 초보자 채널</value></data>
 </root>

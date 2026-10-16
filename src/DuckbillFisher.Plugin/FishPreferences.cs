@@ -1,5 +1,6 @@
 using System.Collections.Frozen;
 using Dalamud.Configuration;
+using Dalamud.Game.Text;
 using Dalamud.Plugin;
 using Dalamud.Plugin.Services;
 using DuckbillFisher.Core;
@@ -8,18 +9,20 @@ using T = DuckbillFisher.Plugin.Localization.TextKey;
 
 namespace DuckbillFisher.Plugin;
 
+// Schema <= 3 serialized this three-value enum. Retained only for migration.
 public enum SpawnAlertChannel { System, Say, CrossWorldLinkshell1 }
 
 // Public for Dalamud's configuration serializer. Content IDs stay in local configuration only.
 public sealed class FishPreferencesConfiguration : IPluginConfiguration
 {
-    public const int CurrentVersion = 3;
+    public const int CurrentVersion = 4;
     public int Version { get; set; } = CurrentVersion;
     public HashSet<uint> Favorites { get; set; } = [];
     public Dictionary<ulong, Dictionary<uint, bool>> Characters { get; set; } = [];
     public bool SpawnAlertsEnabled { get; set; }
     public int SpawnAlertLeadMinutes { get; set; } = SpawnAlertScheduler.DefaultLeadMinutes;
     public SpawnAlertChannel SpawnAlertChannel { get; set; }
+    public ushort SpawnAlertChannelId { get; set; } = (ushort)XivChatType.SystemMessage;
     public int SpawnAlertSound { get; set; }
     public Dictionary<uint, int> FishAlertLeadMinutes { get; set; } = [];
     // Last reserved window start per fish/character. Also suppresses repeats after clock rollback.
@@ -32,7 +35,7 @@ internal sealed record FishPreferencesView(int Revision, int Session, bool HasCh
     internal ulong CharacterId { get; init; }
     public bool SpawnAlertsEnabled { get; init; }
     public int SpawnAlertLeadMinutes { get; init; } = SpawnAlertScheduler.DefaultLeadMinutes;
-    public SpawnAlertChannel SpawnAlertChannel { get; init; }
+    public XivChatType SpawnAlertChannel { get; init; } = XivChatType.SystemMessage;
     public int SpawnAlertSound { get; init; }
     public IReadOnlyDictionary<uint, int> FishAlertLeadMinutes { get; init; } = FrozenDictionary<uint, int>.Empty;
     public int AlertLead(uint id) => FishAlertLeadMinutes.GetValueOrDefault(id, SpawnAlertLeadMinutes);
@@ -53,7 +56,7 @@ internal sealed class FishPreferences : IDisposable
     private readonly IPluginLog log;
     private readonly object gate = new();
     private readonly Queue<Edit> pending = new();
-    private (bool Enabled, int LeadMinutes, SpawnAlertChannel Channel, int Sound)? pendingAlerts;
+    private (bool Enabled, int LeadMinutes, XivChatType Channel, int Sound)? pendingAlerts;
     private readonly Dictionary<uint, int?> pendingFishAlerts = [];
     private FishPreferencesConfiguration configuration = new();
     private FishPreferencesView view = new(0, 0, false, false,
@@ -78,6 +81,13 @@ internal sealed class FishPreferences : IDisposable
             else if (saved is FishPreferencesConfiguration loaded && IsValid(loaded))
             {
                 configuration = loaded;
+                if (loaded.Version <= 3)
+                    configuration.SpawnAlertChannelId = (ushort)(loaded.SpawnAlertChannel switch
+                    {
+                        SpawnAlertChannel.Say => XivChatType.Say,
+                        SpawnAlertChannel.CrossWorldLinkshell1 => XivChatType.CrossLinkShell1,
+                        _ => XivChatType.SystemMessage,
+                    });
                 configuration.Version = FishPreferencesConfiguration.CurrentVersion;
                 writable = true;
             }
@@ -109,12 +119,12 @@ internal sealed class FishPreferences : IDisposable
                 pending.Enqueue(new(fishId, caught, true, expectedSession));
     }
 
-    public void SetSpawnAlerts(bool enabled, int leadMinutes, SpawnAlertChannel channel, int sound)
+    public void SetSpawnAlerts(bool enabled, int leadMinutes, XivChatType channel, int sound)
     {
         lock (gate)
             if (!disposed && writable)
                 pendingAlerts = (enabled, Math.Clamp(leadMinutes, SpawnAlertScheduler.MinLeadMinutes, SpawnAlertScheduler.MaxLeadMinutes),
-                    Enum.IsDefined(channel) ? channel : SpawnAlertChannel.System, Math.Clamp(sound, 0, 16));
+                    ChatChannelChoices.Supports(channel) ? channel : XivChatType.SystemMessage, Math.Clamp(sound, 0, 16));
     }
 
     public void SetFishAlertLead(uint id, int? minutes)
@@ -192,10 +202,10 @@ internal sealed class FishPreferences : IDisposable
             if (pendingAlerts is { } alertSettings)
             {
                 changed = candidate.SpawnAlertsEnabled != alertSettings.Enabled || candidate.SpawnAlertLeadMinutes != alertSettings.LeadMinutes ||
-                    candidate.SpawnAlertChannel != alertSettings.Channel || candidate.SpawnAlertSound != alertSettings.Sound;
+                    candidate.SpawnAlertChannelId != (ushort)alertSettings.Channel || candidate.SpawnAlertSound != alertSettings.Sound;
                 candidate.SpawnAlertsEnabled = alertSettings.Enabled;
                 candidate.SpawnAlertLeadMinutes = alertSettings.LeadMinutes;
-                candidate.SpawnAlertChannel = alertSettings.Channel;
+                candidate.SpawnAlertChannelId = (ushort)alertSettings.Channel;
                 candidate.SpawnAlertSound = alertSettings.Sound;
                 pendingAlerts = null;
             }
@@ -247,7 +257,7 @@ internal sealed class FishPreferences : IDisposable
         {
             CharacterId = characterId, SpawnAlertsEnabled = configuration.SpawnAlertsEnabled,
             SpawnAlertLeadMinutes = configuration.SpawnAlertLeadMinutes,
-            SpawnAlertChannel = configuration.SpawnAlertChannel, SpawnAlertSound = configuration.SpawnAlertSound,
+            SpawnAlertChannel = (XivChatType)configuration.SpawnAlertChannelId, SpawnAlertSound = configuration.SpawnAlertSound,
             FishAlertLeadMinutes = configuration.FishAlertLeadMinutes.ToFrozenDictionary(),
             ReservedAlertWindows = characterId != 0 && configuration.AlertWindows.TryGetValue(characterId, out var windows)
                 ? windows.ToFrozenDictionary() : FrozenDictionary<uint, long>.Empty,
@@ -260,7 +270,7 @@ internal sealed class FishPreferences : IDisposable
         Characters = configuration.Characters.ToDictionary(pair => pair.Key, pair => new Dictionary<uint, bool>(pair.Value)),
         SpawnAlertsEnabled = configuration.SpawnAlertsEnabled,
         SpawnAlertLeadMinutes = configuration.SpawnAlertLeadMinutes,
-        SpawnAlertChannel = configuration.SpawnAlertChannel, SpawnAlertSound = configuration.SpawnAlertSound,
+        SpawnAlertChannelId = configuration.SpawnAlertChannelId, SpawnAlertSound = configuration.SpawnAlertSound,
         FishAlertLeadMinutes = new(configuration.FishAlertLeadMinutes),
         AlertWindows = configuration.AlertWindows.ToDictionary(pair => pair.Key, pair => new Dictionary<uint, long>(pair.Value)),
     };
@@ -284,11 +294,12 @@ internal sealed class FishPreferences : IDisposable
     }
 
     private static bool IsValid(FishPreferencesConfiguration value) =>
-        value.Version is 1 or 2 or FishPreferencesConfiguration.CurrentVersion && value.Favorites is not null &&
+        value.Version is 1 or 2 or 3 or FishPreferencesConfiguration.CurrentVersion && value.Favorites is not null &&
         !value.Favorites.Contains(0) && value.Characters is not null &&
         value.Characters.All(pair => pair.Key != 0 && pair.Value is not null && !pair.Value.ContainsKey(0)) &&
         value.SpawnAlertLeadMinutes is >= SpawnAlertScheduler.MinLeadMinutes and <= SpawnAlertScheduler.MaxLeadMinutes &&
-        Enum.IsDefined(value.SpawnAlertChannel) && value.SpawnAlertSound is >= 0 and <= 16 &&
+        (value.Version <= 3 ? Enum.IsDefined(value.SpawnAlertChannel) : ChatChannelChoices.Supports((XivChatType)value.SpawnAlertChannelId)) &&
+        value.SpawnAlertSound is >= 0 and <= 16 &&
         value.FishAlertLeadMinutes is not null && value.FishAlertLeadMinutes.All(pair => pair.Key != 0 &&
             pair.Value is >= SpawnAlertScheduler.MinLeadMinutes and <= SpawnAlertScheduler.MaxLeadMinutes) &&
         value.AlertWindows is not null && value.AlertWindows.All(pair => pair.Key != 0 && pair.Value is not null &&

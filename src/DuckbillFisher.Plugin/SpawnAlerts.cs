@@ -1,5 +1,6 @@
 using System.Diagnostics;
 using System.Globalization;
+using Dalamud.Game.Text;
 using Dalamud.Plugin.Services;
 using DuckbillFisher.Core;
 using DuckbillFisher.Plugin.Localization;
@@ -7,12 +8,16 @@ using T = DuckbillFisher.Plugin.Localization.TextKey;
 
 namespace DuckbillFisher.Plugin;
 
-internal sealed record SpawnAlertDisplay(uint FishId, string Name, FishingSpotView Spot, DateTimeOffset Start, int LeadMinutes);
-internal sealed record SpawnAlertDelivery(DateTimeOffset SentAt, SpawnAlertDisplay Fish, SpawnAlertChannel Channel,
+internal sealed record SpawnAlertDisplay(uint FishId, uint ItemId, string Name, FishingSpotView Spot, DateTimeOffset Start, int LeadMinutes);
+internal sealed record SpawnAlertDelivery(DateTimeOffset SentAt, SpawnAlertDisplay Fish, XivChatType Channel,
     int Sound, bool SoundPlayed);
 internal enum FavoriteAlertState { Disabled, WaitingCharacter, Caught, Unknown, Unsupported, Always, Pending, Armed }
 internal sealed record FavoriteAlertView(uint FishId, string? Name, int LeadMinutes,
-    FavoriteAlertState State, DateTimeOffset? Start);
+    FavoriteAlertState State, DateTimeOffset? Start)
+{
+    public FishGuideRow? Row { get; init; }
+    public FishingWindow? Window { get; init; }
+}
 internal sealed record SpawnAlertsView(int Session, UiMessage Status, int Eligible, int Armed, int Sent, int Batches,
     int Rebases, IReadOnlyList<SpawnAlertDelivery> History)
 {
@@ -176,7 +181,7 @@ internal sealed class SpawnAlerts : IDisposable
     private SpawnAlertDisplay Display(uint id, DateTimeOffset start, int lead)
     {
         var row = rowsById[id];
-        return new(id, row.Name, row.Details!.Spot!, start, lead);
+        return new(id, row.ItemId, row.Name, row.Details!.Spot!, start, lead);
     }
 
     private FavoriteAlertView[] FavoriteRows(FishPreferencesView personal, FishCollectionView observed, FishCatalogView data) =>
@@ -191,7 +196,10 @@ internal sealed class SpawnAlerts : IDisposable
                 data.Windows.GetValueOrDefault(id)?.Kind == FishingWindowKind.Always ? FavoriteAlertState.Always :
                 !personal.SpawnAlertsEnabled ? FavoriteAlertState.Disabled :
                 plan is null ? FavoriteAlertState.Pending : FavoriteAlertState.Armed;
-            return new FavoriteAlertView(id, row?.Name, personal.AlertLead(id), state, plan?.Window.Start);
+            return new FavoriteAlertView(id, row?.Name, personal.AlertLead(id), state, plan?.Window.Start)
+            {
+                Row = row, Window = data.Windows.GetValueOrDefault(id),
+            };
         }).OrderBy(fish => fish.Name, StringComparer.Ordinal).ThenBy(fish => fish.FishId).ToArray();
 
     public string CreateReport()
@@ -199,7 +207,7 @@ internal sealed class SpawnAlerts : IDisposable
         var snapshot = View;
         var settings = preferences.View;
         return string.Create(CultureInfo.InvariantCulture,
-            $"DuckbillFisher MVP-03/alerts/v2\nPlugin={typeof(Plugin).Assembly.GetName().Version}; Enabled={settings.SpawnAlertsEnabled}; LeadMinutes={settings.SpawnAlertLeadMinutes}; Channel={settings.SpawnAlertChannel}; Sound={settings.SpawnAlertSound}; SoundReady={output.SoundAvailable}; Session={snapshot.Session}; Status={snapshot.Status.Key}\nFavorites={snapshot.Favorites.Count}; CustomLeads={settings.FishAlertLeadMinutes.Count}; History={snapshot.History.Count}; Eligible={snapshot.Eligible}; Armed={snapshot.Armed}; Sent={snapshot.Sent}; Batches={snapshot.Batches}; Rebases={snapshot.Rebases}\nNextFish={snapshot.Next?.FishId}; NextLead={snapshot.Next?.LeadMinutes}; NextStart={snapshot.Next?.Start:O}; DueAt={snapshot.Next?.Start.AddMinutes(-snapshot.Next.LeadMinutes):O}\nDedup=PersistedWindowStartPerCharacter; CatchUp=False; PersonalReadiness=False");
+            $"DuckbillFisher MVP-03/alerts/v3\nPlugin={typeof(Plugin).Assembly.GetName().Version}; Enabled={settings.SpawnAlertsEnabled}; LeadMinutes={settings.SpawnAlertLeadMinutes}; Channel={settings.SpawnAlertChannel}; Channels={ChatChannelChoices.All.Length}; Sound={settings.SpawnAlertSound}; SoundReady={output.SoundAvailable}; Session={snapshot.Session}; Status={snapshot.Status.Key}\nFavorites={snapshot.Favorites.Count}; CustomLeads={settings.FishAlertLeadMinutes.Count}; History={snapshot.History.Count}; Eligible={snapshot.Eligible}; Armed={snapshot.Armed}; Sent={snapshot.Sent}; Batches={snapshot.Batches}; Rebases={snapshot.Rebases}\nNextFish={snapshot.Next?.FishId}; NextLead={snapshot.Next?.LeadMinutes}; NextStart={snapshot.Next?.Start:O}; DueAt={snapshot.Next?.Start.AddMinutes(-snapshot.Next.LeadMinutes):O}\nDedup=PersistedWindowStartPerCharacter; CatchUp=False; PersonalReadiness=False");
     }
 
     public void Dispose()

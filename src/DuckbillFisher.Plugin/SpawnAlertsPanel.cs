@@ -1,13 +1,17 @@
 using Dalamud.Bindings.ImGui;
+using Dalamud.Plugin.Services;
 using DuckbillFisher.Core;
 using DuckbillFisher.Plugin.Localization;
 using T = DuckbillFisher.Plugin.Localization.TextKey;
 
 namespace DuckbillFisher.Plugin;
 
-internal sealed class SpawnAlertsPanel(FishPreferences preferences, SpawnAlerts alerts, SpawnAlertOutput output, FishingMapService maps)
+internal sealed class SpawnAlertsPanel(FishPreferences preferences, SpawnAlerts alerts, SpawnAlertOutput output,
+    FishCollectionObserver collection, ITextureProvider textures)
 {
-    private static readonly SpawnAlertChannel[] Channels = [SpawnAlertChannel.System, SpawnAlertChannel.Say, SpawnAlertChannel.CrossWorldLinkshell1];
+    private readonly FishRowRenderer rows = new(textures);
+    private uint? selectedId;
+    private int lastSession = -1;
     private IReadOnlyList<FavoriteAlertView>? lastFavorites;
     private FavoriteAlertView[] matches = [];
     private string search = "";
@@ -21,12 +25,17 @@ internal sealed class SpawnAlertsPanel(FishPreferences preferences, SpawnAlerts 
     private void DrawContent()
     {
         var settings = preferences.View;
+        if (lastSession != settings.Session)
+        {
+            selectedId = null;
+            lastSession = settings.Session;
+        }
         var view = alerts.View;
         if (view.Session != settings.Session)
             view = new(settings.Session, new(T.AlertsWaitingCharacter), 0, 0, 0, 0, 0, []);
         var enabled = settings.SpawnAlertsEnabled;
         var minutes = settings.SpawnAlertLeadMinutes;
-        var channel = Array.IndexOf(Channels, settings.SpawnAlertChannel);
+        var channel = Array.IndexOf(ChatChannelChoices.All, settings.SpawnAlertChannel);
         var sound = settings.SpawnAlertSound;
         var changed = false;
         ImGui.TextWrapped(UiText.Get(T.AlertsIntro));
@@ -35,13 +44,13 @@ internal sealed class SpawnAlertsPanel(FishPreferences preferences, SpawnAlerts 
         ImGui.SetNextItemWidth(180);
         changed |= ImGui.InputInt(UiText.Label(T.AlertsLead, "SpawnAlertLead"), ref minutes);
         ImGui.SetNextItemWidth(180);
-        var channelNames = Channels.Select(value => UiText.Get(ChannelKey(value))).ToArray();
+        var channelNames = ChatChannelChoices.Names;
         changed |= ImGui.Combo(UiText.Label(T.AlertChannel, "SpawnAlertChannel"), ref channel, channelNames, channelNames.Length);
         ImGui.SetNextItemWidth(180);
         var sounds = Enumerable.Range(0, 17).Select(value => value == 0 ? UiText.Get(T.AlertSoundNone) : UiText.Get(T.AlertSoundNumber, value)).ToArray();
         changed |= ImGui.Combo(UiText.Label(T.AlertSound, "SpawnAlertSound"), ref sound, sounds, sounds.Length);
         if (changed)
-            preferences.SetSpawnAlerts(enabled, minutes, Channels[channel], sound);
+            preferences.SetSpawnAlerts(enabled, minutes, ChatChannelChoices.All[channel], sound);
         ImGui.EndDisabled();
         ImGui.SameLine();
         ImGui.BeginDisabled(sound == 0 || !output.SoundAvailable || !settings.HasCharacter);
@@ -93,7 +102,10 @@ internal sealed class SpawnAlertsPanel(FishPreferences preferences, SpawnAlerts 
                 fish.FishId.ToString(System.Globalization.CultureInfo.InvariantCulture) == term).ToArray();
         }
         ImGui.TextWrapped(UiText.Get(T.AlertFavoritesHint));
-        var rowHeight = ImGui.GetTextLineHeightWithSpacing() * 3 + ImGui.GetFrameHeightWithSpacing() + 8;
+        var baseHeight = FishRowRenderer.Height;
+        var rowHeight = baseHeight + ImGui.GetFrameHeightWithSpacing() + ImGui.GetTextLineHeightWithSpacing() + 8;
+        var observed = collection.View;
+        var now = DateTimeOffset.UtcNow;
         var clipper = ImGui.ImGuiListClipper();
         try
         {
@@ -104,9 +116,17 @@ internal sealed class SpawnAlertsPanel(FishPreferences preferences, SpawnAlerts 
                     var fish = matches[i];
                     ImGui.PushID((int)fish.FishId);
                     var rowY = ImGui.GetCursorPosY();
-                    ImGui.TextUnformatted(UiText.Get(T.AlertFavoriteName, fish.Name ?? UiText.Get(T.MissingName), fish.FishId));
-                    if (ImGui.IsItemHovered()) ImGui.SetTooltip(fish.Name ?? UiText.Get(T.MissingName));
-                    ImGui.TextUnformatted(UiText.Get(StateKey(fish.State)));
+                    if (fish.Row is { } row)
+                    {
+                        var state = UiText.Get(T.FavoriteRowState, new UiMessage(FishRowRenderer.CollectionKey(settings, observed, fish.FishId)));
+                        var place = row.Ocean is { } ocean ? UiText.Get(T.OceanArea, ocean.Area) : row.Spots.FirstOrDefault()?.Name
+                            ?? UiText.Get(row.IsDisplayable ? T.CatalogRowInfo : T.CatalogUnresolvedRow, row.FishParameterId);
+                        if (rows.Draw(row, baseHeight, selectedId == fish.FishId, state, place, fish.Window, now))
+                            selectedId = fish.FishId;
+                    }
+                    else
+                        ImGui.TextUnformatted(UiText.Get(T.AlertFavoriteName, UiText.Get(T.MissingName), fish.FishId));
+                    ImGui.SetCursorPosY(rowY + baseHeight + 4);
                     var custom = settings.FishAlertLeadMinutes.ContainsKey(fish.FishId);
                     var lead = settings.AlertLead(fish.FishId);
                     ImGui.BeginDisabled(!settings.CanEdit);
@@ -119,7 +139,8 @@ internal sealed class SpawnAlertsPanel(FishPreferences preferences, SpawnAlerts 
                         preferences.SetFishAlertLead(fish.FishId, lead);
                     ImGui.EndDisabled();
                     ImGui.EndDisabled();
-                    ImGui.TextUnformatted(fish.LeadMinutes == settings.AlertLead(fish.FishId) && fish.Start is { } start
+                    ImGui.TextDisabled(UiText.Get(StateKey(fish.State)));
+                    if (ImGui.IsItemHovered()) ImGui.SetTooltip(fish.LeadMinutes == settings.AlertLead(fish.FishId) && fish.Start is { } start
                         ? UiText.Get(T.AlertFavoriteNext, start.AddMinutes(-fish.LeadMinutes).ToLocalTime(), start.ToLocalTime())
                         : UiText.Get(T.AlertNoReservation));
                     ImGui.Separator();
@@ -136,27 +157,13 @@ internal sealed class SpawnAlertsPanel(FishPreferences preferences, SpawnAlerts 
         for (var i = 0; i < view.History.Count; i++)
         {
             var entry = view.History[i];
-            ImGui.PushID(i);
-            ImGui.TextWrapped(UiText.Get(T.AlertHistoryLine, entry.SentAt.ToLocalTime(), entry.Fish.Name,
-                SpawnAlertOutput.Remaining(entry.Fish.Start - entry.SentAt)));
-            ImGui.TextWrapped(UiText.Get(T.AlertHistoryDetails, new UiMessage(ChannelKey(entry.Channel)),
-                entry.Sound == 0 ? new UiMessage(T.AlertSoundNone) : new UiMessage(entry.SoundPlayed ? T.AlertSoundNumber : T.AlertSoundSkipped, entry.Sound),
-                entry.Fish.Start.ToLocalTime()));
-            if (ImGui.Button(UiText.Label(T.OpenFishingMap, "HistoryMap")))
-                maps.Request(entry.Fish.Spot);
-            ImGui.SameLine();
-            ImGui.TextUnformatted(entry.Fish.Spot.Zone);
-            ImGui.Separator();
-            ImGui.PopID();
+            var line = UiText.Get(T.AlertHistoryLine, entry.SentAt.ToLocalTime(), entry.Fish.Name,
+                SpawnAlertOutput.Remaining(entry.Fish.Start - entry.SentAt), ChatChannelChoices.Name(entry.Channel),
+                entry.Sound == 0 ? new UiMessage(T.AlertSoundNone) : new UiMessage(entry.SoundPlayed ? T.AlertSoundNumber : T.AlertSoundSkipped, entry.Sound));
+            ImGui.TextUnformatted(line);
+            if (ImGui.IsItemHovered()) ImGui.SetTooltip(line);
         }
     }
-
-    private static T ChannelKey(SpawnAlertChannel channel) => channel switch
-    {
-        SpawnAlertChannel.Say => T.AlertChannelSay,
-        SpawnAlertChannel.CrossWorldLinkshell1 => T.AlertChannelCwls,
-        _ => T.AlertChannelSystem,
-    };
 
     private static T StateKey(FavoriteAlertState state) => state switch
     {

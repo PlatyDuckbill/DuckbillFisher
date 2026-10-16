@@ -266,9 +266,6 @@
   <data name="AlertsNext" xml:space="preserve"><value>Next reminder: {0} · local {1:MM-dd HH:mm:ss} · window starts {2:MM-dd HH:mm:ss}</value></data>
   <data name="AlertsCopy" xml:space="preserve"><value>Copy short alert diagnostic</value></data>
   <data name="AlertChannel" xml:space="preserve"><value>Local display channel</value></data>
-  <data name="AlertChannelSystem" xml:space="preserve"><value>System</value></data>
-  <data name="AlertChannelSay" xml:space="preserve"><value>Say</value></data>
-  <data name="AlertChannelCwls" xml:space="preserve"><value>CWLS1</value></data>
   <data name="AlertSound" xml:space="preserve"><value>Chat sound effect</value></data>
   <data name="AlertSoundNone" xml:space="preserve"><value>Off</value></data>
   <data name="AlertSoundNumber" xml:space="preserve"><value>SE.{0}</value></data>
@@ -276,7 +273,6 @@
   <data name="AlertSoundPreviewed" xml:space="preserve"><value>Sound preview requested. Game system volume/mute settings apply.</value></data>
   <data name="AlertSoundUnavailable" xml:space="preserve"><value>Game sound is unavailable in this environment. Check that a character is logged in. Chat alerts can still work.</value></data>
   <data name="AlertSoundSkipped" xml:space="preserve"><value>SE.{0} skipped</value></data>
-  <data name="AlertCompactMessage" xml:space="preserve"><value>{0} {1} </value></data>
   <data name="AlertExtraHistory" xml:space="preserve"><value> · {0} more in delivery history</value></data>
   <data name="AlertRemainingHours" xml:space="preserve"><value>in {0}h {1}m {2}s</value></data>
   <data name="AlertRemainingMinutes" xml:space="preserve"><value>in {0}m {1}s</value></data>
@@ -289,12 +285,94 @@
   <data name="AlertNoReservation" xml:space="preserve"><value>No future reminder armed.</value></data>
   <data name="AlertHistory" xml:space="preserve"><value>Delivery history</value></data>
   <data name="AlertHistoryHint" xml:space="preserve"><value>Newest 200 reminders in this character session; cleared on logout or reload. Remaining time is captured at delivery. Chat filters and game mute/volume settings affect what you see and hear.</value></data>
-  <data name="AlertHistoryLine" xml:space="preserve"><value>{0:MM-dd HH:mm:ss} · {1} · {2}</value></data>
-  <data name="AlertHistoryDetails" xml:space="preserve"><value>{0} · {1} · window starts {2:MM-dd HH:mm:ss}</value></data>
+  <data name="AlertHistoryLine" xml:space="preserve"><value>{0:HH:mm:ss} · {1} · {2} · {3} · {4}</value></data>
   <data name="AlertExcludedCaught" xml:space="preserve"><value>Excluded: caught</value></data>
   <data name="AlertExcludedUnknown" xml:space="preserve"><value>Excluded: collection unknown</value></data>
   <data name="AlertUnsupported" xml:space="preserve"><value>Excluded: ocean fish or no supported spot/conditions</value></data>
   <data name="AlertAlways" xml:space="preserve"><value>Excluded: always available</value></data>
   <data name="AlertArmed" xml:space="preserve"><value>Future reminder armed</value></data>
   <data name="AlertPending" xml:space="preserve"><value>Waiting for a supported future window or planning slot</value></data>
+  <data name="ChatChannelFallback" xml:space="preserve"><value>{0}</value></data>
+  <data name="AlertLinkedRemaining" xml:space="preserve"><value> {0} </value></data>
+  <data name="ChatDebug" xml:space="preserve"><value>Debug</value></data>
+  <data name="ChatUrgent" xml:space="preserve"><value>Urgent</value></data>
+  <data name="ChatNotice" xml:space="preserve"><value>Notice</value></data>
+  <data name="ChatSay" xml:space="preserve"><value>Say</value></data>
+  <data name="ChatShout" xml:space="preserve"><value>Shout</value></data>
+  <data name="ChatTellOutgoing" xml:space="preserve"><value>Tell (outgoing)</value></data>
+  <data name="ChatTellIncoming" xml:space="preserve"><value>Tell (incoming)</value></data>
+  <data name="ChatParty" xml:space="preserve"><value>Party</value></data>
+  <data name="ChatAlliance" xml:space="preserve"><value>Alliance</value></data>
+  <data name="ChatLs1" xml:space="preserve"><value>Linkshell 1</value></data>
+  <data name="ChatLs2" xml:space="preserve"><value>Linkshell 2</value></data>
+  <data name="ChatLs3" xml:space="preserve"><value>Linkshell 3</value></data>
+  <data name="ChatLs4" xml:space="preserve"><value>Linkshell 4</value></data>
+  <data name="ChatLs5" xml:space="preserve"><value>Linkshell 5</value></data>
+  <data name="ChatLs6" xml:space="preserve"><value>Linkshell 6</value></data>
+  <data name="ChatLs7" xml:space="preserve"><value>Linkshell 7</value></data>
+  <data name="ChatLs8" xml:space="preserve"><value>Linkshell 8</value></data>
+  <data name="ChatFreeCompany" xml:space="preserve"><value>Free Company</value></data>
+  <data name="ChatNoviceNetwork" xml:space="preserve"><value>Novice Network</value></data>
+  <data name="ChatCustomEmote" xml:space="preserve"><value>Custom emote</value></data>
+  <data name="ChatStandardEmote" xml:space="preserve"><value>Emote</value></data>
+  <data name="ChatYell" xml:space="preserve"><value>Yell</value></data>
+  <data name="ChatCrossParty" xml:space="preserve"><value>Cross-world party</value></data>
+  <data name="ChatPvPTeam" xml:space="preserve"><value>PvP team</value></data>
+  <data name="ChatCrossLinkShell1" xml:space="preserve"><value>CWLS1</value></data>
+  <data name="ChatCrossLinkShell2" xml:space="preserve"><value>CWLS2</value></data>
+  <data name="ChatCrossLinkShell3" xml:space="preserve"><value>CWLS3</value></data>
+  <data name="ChatCrossLinkShell4" xml:space="preserve"><value>CWLS4</value></data>
+  <data name="ChatCrossLinkShell5" xml:space="preserve"><value>CWLS5</value></data>
+  <data name="ChatCrossLinkShell6" xml:space="preserve"><value>CWLS6</value></data>
+  <data name="ChatCrossLinkShell7" xml:space="preserve"><value>CWLS7</value></data>
+  <data name="ChatCrossLinkShell8" xml:space="preserve"><value>CWLS8</value></data>
+  <data name="ChatDamage" xml:space="preserve"><value>Damage</value></data>
+  <data name="ChatMiss" xml:space="preserve"><value>Miss</value></data>
+  <data name="ChatAction" xml:space="preserve"><value>Action</value></data>
+  <data name="ChatItem" xml:space="preserve"><value>Item</value></data>
+  <data name="ChatHealing" xml:space="preserve"><value>Healing</value></data>
+  <data name="ChatGainBuff" xml:space="preserve"><value>Buff gained</value></data>
+  <data name="ChatGainDebuff" xml:space="preserve"><value>Debuff gained</value></data>
+  <data name="ChatLoseBuff" xml:space="preserve"><value>Buff lost</value></data>
+  <data name="ChatLoseDebuff" xml:space="preserve"><value>Debuff lost</value></data>
+  <data name="ChatGlamourNotifications" xml:space="preserve"><value>Glamour</value></data>
+  <data name="ChatAlarm" xml:space="preserve"><value>Alarm</value></data>
+  <data name="ChatEcho" xml:space="preserve"><value>Echo</value></data>
+  <data name="ChatSystemMessage" xml:space="preserve"><value>System</value></data>
+  <data name="ChatSystemError" xml:space="preserve"><value>System error</value></data>
+  <data name="ChatGatheringSystemMessage" xml:space="preserve"><value>Gathering system</value></data>
+  <data name="ChatErrorMessage" xml:space="preserve"><value>Error</value></data>
+  <data name="ChatNPCDialogue" xml:space="preserve"><value>NPC dialogue</value></data>
+  <data name="ChatLootNotice" xml:space="preserve"><value>Loot notice</value></data>
+  <data name="ChatProgress" xml:space="preserve"><value>Progress</value></data>
+  <data name="ChatLootRoll" xml:space="preserve"><value>Loot roll</value></data>
+  <data name="ChatCrafting" xml:space="preserve"><value>Crafting</value></data>
+  <data name="ChatGathering" xml:space="preserve"><value>Gathering</value></data>
+  <data name="ChatNPCDialogueAnnouncements" xml:space="preserve"><value>NPC announcements</value></data>
+  <data name="ChatFreeCompanyAnnouncement" xml:space="preserve"><value>Free Company announcement</value></data>
+  <data name="ChatFreeCompanyLoginLogout" xml:space="preserve"><value>Free Company login/logout</value></data>
+  <data name="ChatRetainerSale" xml:space="preserve"><value>Retainer sale</value></data>
+  <data name="ChatPeriodicRecruitmentNotification" xml:space="preserve"><value>Recruitment notification</value></data>
+  <data name="ChatSign" xml:space="preserve"><value>Sign</value></data>
+  <data name="ChatRandomNumber" xml:space="preserve"><value>Random number</value></data>
+  <data name="ChatNoviceNetworkSystem" xml:space="preserve"><value>Novice Network system</value></data>
+  <data name="ChatOrchestrion" xml:space="preserve"><value>Orchestrion</value></data>
+  <data name="ChatPvpTeamAnnouncement" xml:space="preserve"><value>PvP team announcement</value></data>
+  <data name="ChatPvpTeamLoginLogout" xml:space="preserve"><value>PvP team login/logout</value></data>
+  <data name="ChatMessageBook" xml:space="preserve"><value>Message book</value></data>
+  <data name="ChatGmTell" xml:space="preserve"><value>GM tell</value></data>
+  <data name="ChatGmSay" xml:space="preserve"><value>GM say</value></data>
+  <data name="ChatGmShout" xml:space="preserve"><value>GM shout</value></data>
+  <data name="ChatGmYell" xml:space="preserve"><value>GM yell</value></data>
+  <data name="ChatGmParty" xml:space="preserve"><value>GM party</value></data>
+  <data name="ChatGmFreeCompany" xml:space="preserve"><value>GM Free Company</value></data>
+  <data name="ChatGmLinkshell1" xml:space="preserve"><value>GM linkshell 1</value></data>
+  <data name="ChatGmLinkshell2" xml:space="preserve"><value>GM linkshell 2</value></data>
+  <data name="ChatGmLinkshell3" xml:space="preserve"><value>GM linkshell 3</value></data>
+  <data name="ChatGmLinkshell4" xml:space="preserve"><value>GM linkshell 4</value></data>
+  <data name="ChatGmLinkshell5" xml:space="preserve"><value>GM linkshell 5</value></data>
+  <data name="ChatGmLinkshell6" xml:space="preserve"><value>GM linkshell 6</value></data>
+  <data name="ChatGmLinkshell7" xml:space="preserve"><value>GM linkshell 7</value></data>
+  <data name="ChatGmLinkshell8" xml:space="preserve"><value>GM linkshell 8</value></data>
+  <data name="ChatGmNoviceNetwork" xml:space="preserve"><value>GM Novice Network</value></data>
 </root>
