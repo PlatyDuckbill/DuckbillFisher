@@ -19,16 +19,18 @@ internal sealed class FishListPanel(FishCatalog catalog, ITextureProvider textur
         [CollectionVisibility.All, CollectionVisibility.HideCaught, CollectionVisibility.CaughtOnly, CollectionVisibility.UnknownOnly];
     private static readonly FishGradeVisibility[] GradeChoices =
         [FishGradeVisibility.All, FishGradeVisibility.BigIncludingLegendary, FishGradeVisibility.LegendaryOnly];
+    private static readonly CatalogSort[] SortChoices =
+        [CatalogSort.Name, CatalogSort.FishId, CatalogSort.RemainingTime, CatalogSort.FavoritesFirst];
     private IReadOnlyList<FishGuideRow>? lastRows;
     private FishGuideRow[] matches = [];
     private string search = "";
-    private bool inLogOnly = true;
+    private bool inLogOnly;
     private bool includeOceanFish;
     private bool showUnresolved;
     private int unresolvedCount;
     private bool requested;
     private bool resetScroll;
-    private int sort = 2;
+    private int sort;
     private uint? selectedId;
     private FishGuideRow? selectedFish;
     private int detailCoverage;
@@ -38,13 +40,14 @@ internal sealed class FishListPanel(FishCatalog catalog, ITextureProvider textur
     private int lastPreferenceSession;
     private int lastCollectionRevision;
     private bool favoritesOnly;
-    private int collectionVisibility = Array.IndexOf(CollectionChoices, CollectionVisibility.HideCaught);
+    private int collectionVisibility;
     private readonly FishRowRenderer rows = new(textures);
     private bool currentRegionOnly;
     private FishingRegionView? lastRegion;
-    private bool timeRestrictedOnly = true;
+    private bool timeRestrictedOnly;
     private int gradeVisibility;
     private readonly FishGeographyPanel geography = new();
+    private bool restoredSettings;
 
     public void Draw()
     {
@@ -56,10 +59,16 @@ internal sealed class FishListPanel(FishCatalog catalog, ITextureProvider textur
         var view = catalog.View;
         var location = region.View;
         var personal = preferences.View;
+        var restored = !restoredSettings;
+        if (restored)
+        {
+            ApplyCatalogSettings(personal.Catalog);
+            restoredSettings = true;
+        }
         var observed = collection.View;
         if (observed.Session != personal.Session)
             observed = new(observed.Revision, personal.Session, FrozenSet<uint>.Empty, new(T.CollectionWaiting));
-        var changed = !ReferenceEquals(lastRows, view.Rows) || lastPreferenceSession != personal.Session;
+        var changed = restored || !ReferenceEquals(lastRows, view.Rows) || lastPreferenceSession != personal.Session;
         var refresh = changed || lastPreferenceRevision != personal.Revision || lastCollectionRevision != observed.Revision;
         changed |= currentRegionOnly && lastRegion != location;
         lastRegion = location;
@@ -79,29 +88,37 @@ internal sealed class FishListPanel(FishCatalog catalog, ITextureProvider textur
         lastRows = view.Rows;
         if (view.Status.Key != T.CatalogLoaded)
             ImGui.TextWrapped(view.Status.Display);
+        if (observed.GuidePrompt(personal.Session, personal.HasCharacter) is { } guidePrompt)
+            ImGui.TextWrapped(guidePrompt.Display);
         ImGui.SetNextItemWidth(280);
         changed |= ImGui.InputText(UiText.Label(T.FishSearch, "CatalogSearch"), ref search, 100);
+        var filtersChanged = false;
         if (ImGui.BeginTable("CatalogPrimaryControls", 2, ImGuiTableFlags.SizingStretchSame))
         {
             ImGui.TableNextColumn();
             ImGui.TextUnformatted(UiText.Get(T.CatalogSort));
             ImGui.SetNextItemWidth(-1);
             string[] sortNames = [UiText.Get(T.CatalogSortName), UiText.Get(T.CatalogSortId), UiText.Get(T.CatalogSortWindow), UiText.Get(T.CatalogSortFavorite)];
-            changed |= ImGui.Combo("###CatalogSort", ref sort, sortNames, sortNames.Length);
+            filtersChanged |= ImGui.Combo("###CatalogSort", ref sort, sortNames, sortNames.Length);
             if (sort == 2 && ImGui.IsItemHovered()) ImGui.SetTooltip(UiText.Get(T.CatalogSortWindowHint));
             ImGui.TableNextColumn();
             ImGui.TextUnformatted(UiText.Get(T.CollectionVisibility));
             ImGui.SetNextItemWidth(-1);
             string[] collectionNames = [UiText.Get(T.CollectionAll), UiText.Get(T.CollectionHideCaught),
                 UiText.Get(T.CollectionCaughtOnly), UiText.Get(T.CollectionUnknownOnly)];
-            changed |= ImGui.Combo("###CatalogCollectionVisibility", ref collectionVisibility, collectionNames, collectionNames.Length);
+            filtersChanged |= ImGui.Combo("###CatalogCollectionVisibility", ref collectionVisibility, collectionNames, collectionNames.Length);
             ImGui.EndTable();
         }
-        changed |= DrawFilters();
+        filtersChanged |= DrawFilters();
         if (currentRegionOnly)
             ImGui.TextWrapped(location.State == FishingRegionState.Ready
                 ? UiText.Get(T.CurrentRegionName, location.Name) : UiText.Get(T.CurrentRegionUnavailable));
-        changed |= geography.Draw(view.Geography);
+        filtersChanged |= geography.Draw(view.Geography);
+        if (filtersChanged)
+        {
+            preferences.SetCatalogSettings(CurrentCatalogSettings());
+            changed = true;
+        }
         if (ImGui.CollapsingHeader(UiText.Label(T.CatalogDiagnostics, "CatalogDiagnostics")))
         {
             ImGui.TextWrapped(view.Status.Display);
@@ -159,7 +176,17 @@ internal sealed class FishListPanel(FishCatalog catalog, ITextureProvider textur
                 new UiMessage(favoritesOnly ? T.OptionOn : T.OptionOff), new UiMessage(currentRegionOnly ? T.OptionOn : T.OptionOff),
                 new UiMessage(includeOceanFish ? T.OptionOn : T.OptionOff), new UiMessage(inLogOnly ? T.OptionOn : T.OptionOff)));
         if (!open) return false;
-        var changed = ImGui.Checkbox(UiText.Label(T.TimeRestrictedOnly, "CatalogTimeRestrictedOnly"), ref timeRestrictedOnly);
+        var changed = false;
+        if (ImGui.SmallButton(UiText.Label(T.CatalogRestoreDefaults, "RestoreCatalogDefaults")))
+        {
+            ApplyCatalogSettings(new());
+            search = "";
+            showUnresolved = false;
+            detailsOnly = false;
+            changed = true;
+        }
+        if (ImGui.IsItemHovered()) ImGui.SetTooltip(UiText.Get(T.CatalogSavedHint));
+        changed |= ImGui.Checkbox(UiText.Label(T.TimeRestrictedOnly, "CatalogTimeRestrictedOnly"), ref timeRestrictedOnly);
         if (ImGui.IsItemHovered()) ImGui.SetTooltip(UiText.Get(T.TimeRestrictedHint));
         ImGui.SetNextItemWidth(190);
         changed |= ImGui.Combo(UiText.Label(T.GradeFilter, "CatalogGradeFilter"), ref gradeVisibility, gradeNames, gradeNames.Length);
@@ -170,6 +197,27 @@ internal sealed class FishListPanel(FishCatalog catalog, ITextureProvider textur
         changed |= ImGui.Checkbox(UiText.Label(T.CatalogIncludeOceanFish, "CatalogIncludeOceanFish"), ref includeOceanFish);
         changed |= ImGui.Checkbox(UiText.Label(T.CatalogInLogOnly, "CatalogInLogOnly"), ref inLogOnly);
         return changed;
+    }
+
+    private CatalogSettings CurrentCatalogSettings() => new()
+    {
+        Sort = SortChoices[sort], Collection = CollectionChoices[collectionVisibility], Grade = GradeChoices[gradeVisibility],
+        InLogOnly = inLogOnly, IncludeOceanFish = includeOceanFish, TimeRestrictedOnly = timeRestrictedOnly,
+        FavoritesOnly = favoritesOnly, CurrentRegionOnly = currentRegionOnly,
+        Regions = geography.Regions.Order().ToArray(), Expansions = geography.Expansions.Order().ToArray(),
+    };
+
+    private void ApplyCatalogSettings(CatalogSettings settings)
+    {
+        sort = Array.IndexOf(SortChoices, settings.Sort);
+        collectionVisibility = Array.IndexOf(CollectionChoices, settings.Collection);
+        gradeVisibility = Array.IndexOf(GradeChoices, settings.Grade);
+        inLogOnly = settings.InLogOnly;
+        includeOceanFish = settings.IncludeOceanFish;
+        timeRestrictedOnly = settings.TimeRestrictedOnly;
+        favoritesOnly = settings.FavoritesOnly;
+        currentRegionOnly = settings.CurrentRegionOnly;
+        geography.RestoreSelections(settings.Regions, settings.Expansions);
     }
 
     private void DrawRows(FishCatalogView view, FishPreferencesView personal, FishCollectionView observed, FishingRegionView location)
@@ -363,10 +411,11 @@ internal sealed class FishListPanel(FishCatalog catalog, ITextureProvider textur
                 Append($"SelectedForecast={forecast?.Kind.ToString() ?? "Unknown"}; ForecastAt={view.ForecastAt:O}; Start={forecast?.Start:O}; End={forecast?.End:O}; CopiedAt={DateTimeOffset.UtcNow:O}");
             }
         }
-        report.AppendLine("DuckbillFisher MVP-01/preferences/v5");
+        report.AppendLine("DuckbillFisher MVP-01/preferences/v6");
         Append($"Ready={personal.HasCharacter}; Editable={personal.CanEdit}; Session={personal.Session}; Favorites={personal.Favorites.Count}");
         Append($"ManualCaught={personal.ManualCaught.Count(pair => pair.Value)}; ManualUncaught={personal.ManualCaught.Count(pair => !pair.Value)}");
         Append($"CollectionFilter={CollectionChoices[collectionVisibility]}; FavoritesOnly={favoritesOnly}; Sort={sort}; Displayed={matches.Length}");
+        Append($"CatalogSaved={personal.Catalog.Matches(CurrentCatalogSettings())}; SettingsScope=Shared; SearchPersisted=False; DiagnosticsPersisted=False");
         Append($"InLogOnly={inLogOnly}; IncludeOceanFish={includeOceanFish}; DetailsOnly={detailsOnly}; ShowUnresolved={showUnresolved}");
         var location = region.View;
         Append($"CurrentRegionOnly={currentRegionOnly}; Territory={location.TerritoryId}; RegionState={location.State}; RegionFish={RegionFish(catalog.View, location).Count}");

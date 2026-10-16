@@ -280,6 +280,10 @@
   <data name="AlertDiagnosticsHeading" xml:space="preserve"><value>알림 진단</value></data>
   <data name="AlertFavoritesCount" xml:space="preserve"><value>표시 즐겨찾기 {0}종 · 마우스를 올리면 안내 표시</value></data>
   <data name="CatalogFiltersHeading" xml:space="preserve"><value>목록 필터 ({0}개 적용)</value></data>
+  <data name="CatalogRestoreDefaults" xml:space="preserve"><value>필터·정렬 기본값 복원</value></data>
+  <data name="CatalogSavedHint" xml:space="preserve"><value>목록 필터·정렬·지역·확장팩 선택은 재로드 후에도 유지하며 캐릭터 공통으로 저장합니다. 기본값 복원은 현재 검색어와 진단용 체크도 초기화합니다. 즐겨찾기·수집 기록·알림 설정은 보존합니다.</value></data>
+  <data name="CollectionGuideOpenRequired" xml:space="preserve"><value>이번 세션의 수집 정보를 아직 확인하지 않았습니다. 게임 어류도감의 낚시 탭을 한 번 열어 주세요. 확인 전 어종은 미확인으로 유지합니다.</value></data>
+  <data name="CollectionGuideRetryRequired" xml:space="preserve"><value>수집 정보의 전체 대조를 완료하지 못했습니다. 게임 어류도감의 낚시 탭을 열고 잠시 기다려 주세요. 확인 전 어종은 미확인으로 유지합니다.</value></data>
   <data name="CatalogFiltersSummary" xml:space="preserve"><value>시간제만: {0}
 어종 등급: {1}
 즐겨찾기만: {2}
@@ -389,6 +393,6 @@
   <data name="ChatGmNoviceNetwork" xml:space="preserve"><value>GM 초보자 채널</value></data>
   <data name="AlertUncaughtOnly" xml:space="preserve"><value>미수집 어종만 알림</value></data>
   <data name="AlertAutoRemove" xml:space="preserve"><value>새 어종 도감 등록 시 즐겨찾기 자동 해제</value></data>
-  <data name="AlertAutoRemoveHint" xml:space="preserve"><value>알림 켜기와 별도로 작동합니다. 새 어종 등록이 확인되면 공통 즐겨찾기에서 해제합니다. 도감 열기·수동 수집 지정·이미 등록한 어종 다시 잡기는 해제 조건이 아닙니다. 개별 시간과 발송 기록은 보존합니다.</value></data>
+  <data name="AlertAutoRemoveHint" xml:space="preserve"><value>기본은 켜짐이며 끄면 그 선택을 저장합니다. 알림 켜기와 별도로 작동합니다. 새 어종 등록이 확인되면 공통 즐겨찾기에서 해제합니다. 도감 열기·수동 수집 지정·이미 등록한 어종 다시 잡기는 해제 조건이 아닙니다. 개별 시간과 발송 기록은 보존합니다.</value></data>
   <data name="AlertRemoveFavorite" xml:space="preserve"><value>즐겨찾기 삭제</value></data>
 </root>

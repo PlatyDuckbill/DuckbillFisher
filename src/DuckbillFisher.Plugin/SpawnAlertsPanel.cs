@@ -44,6 +44,8 @@ internal sealed class SpawnAlertsPanel(FishPreferences preferences, SpawnAlerts 
             ImGui.TextWrapped(view.Status.Display);
         if (settings.Error is { } error)
             ImGui.TextWrapped(error.Display);
+        if (collection.View.GuidePrompt(settings.Session, settings.HasCharacter) is { } guidePrompt)
+            ImGui.TextWrapped(guidePrompt.Display);
         ImGui.TextWrapped(UiText.Get(T.AlertsCounts, view.Eligible, view.Armed, view.Sent));
         if (view.Next is { } next && ImGui.IsItemHovered())
             ImGui.SetTooltip(UiText.Get(T.AlertsNext, next.Name, next.Start.AddMinutes(-next.LeadMinutes).ToLocalTime(),

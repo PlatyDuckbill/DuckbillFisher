@@ -25,6 +25,22 @@ internal sealed class FishGeographyPanel
     public IReadOnlySet<uint> Expansions => expansions;
     public bool HasSelection => regions.Count > 0 || expansions.Count > 0;
 
+    public void RestoreSelections(IEnumerable<uint> savedRegions, IEnumerable<uint> savedExpansions)
+    {
+        if (!regions.SetEquals(savedRegions))
+        {
+            regions.Clear();
+            regions.UnionWith(savedRegions);
+            regionRevision++;
+        }
+        if (!expansions.SetEquals(savedExpansions))
+        {
+            expansions.Clear();
+            expansions.UnionWith(savedExpansions);
+            expansionRevision++;
+        }
+    }
+
     public bool Draw(FishingGeography options)
     {
         UpdateOptions(options);

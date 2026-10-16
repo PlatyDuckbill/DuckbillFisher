@@ -29,6 +29,11 @@ internal sealed record FishCollectionView(int Revision, int Session, IReadOnlySe
     public string LastTrigger { get; init; } = "none";
     public double? SampledAtSeconds { get; init; }
 
+    public UiMessage? GuidePrompt(int expectedSession, bool hasCharacter) => !hasCharacter ||
+        Session == expectedSession && GuideState == FishGuideSnapshotState.Complete ? null :
+        new UiMessage(Session != expectedSession || GuideState == FishGuideSnapshotState.NotSampled
+            ? T.CollectionGuideOpenRequired : T.CollectionGuideRetryRequired);
+
     public CollectionStatus Collection(uint fishId) => Caught.Contains(fishId) ? CollectionStatus.Caught :
         Uncaught.Contains(fishId) ? CollectionStatus.Uncaught : CollectionStatus.Unknown;
 }

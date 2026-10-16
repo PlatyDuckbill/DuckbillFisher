@@ -15,7 +15,7 @@ public enum SpawnAlertChannel { System, Say, CrossWorldLinkshell1 }
 // Public for Dalamud's configuration serializer. Content IDs stay in local configuration only.
 public sealed class FishPreferencesConfiguration : IPluginConfiguration
 {
-    public const int CurrentVersion = 7;
+    public const int CurrentVersion = 8;
     public int Version { get; set; } = CurrentVersion;
     public HashSet<uint> Favorites { get; set; } = [];
     public Dictionary<ulong, Dictionary<uint, bool>> Characters { get; set; } = [];
@@ -25,7 +25,8 @@ public sealed class FishPreferencesConfiguration : IPluginConfiguration
     public ushort SpawnAlertChannelId { get; set; } = (ushort)XivChatType.SystemMessage;
     public int SpawnAlertSound { get; set; }
     public SpawnAlertAudience SpawnAlertAudience { get; set; } = SpawnAlertAudience.AllFavorites;
-    public bool RemoveFavoriteOnRegistration { get; set; }
+    public bool RemoveFavoriteOnRegistration { get; set; } = true;
+    public CatalogSettings Catalog { get; set; } = new();
     public Dictionary<uint, int> FishAlertLeadMinutes { get; set; } = [];
     // Last reserved window start per fish/character. Also suppresses repeats after clock rollback.
     public Dictionary<ulong, Dictionary<uint, long>> AlertWindows { get; set; } = [];
@@ -40,7 +41,8 @@ internal sealed record FishPreferencesView(int Revision, int Session, bool HasCh
     public XivChatType SpawnAlertChannel { get; init; } = XivChatType.SystemMessage;
     public int SpawnAlertSound { get; init; }
     public SpawnAlertAudience SpawnAlertAudience { get; init; } = SpawnAlertAudience.AllFavorites;
-    public bool RemoveFavoriteOnRegistration { get; init; }
+    public bool RemoveFavoriteOnRegistration { get; init; } = true;
+    public CatalogSettings Catalog { get; init; } = new();
     public IReadOnlyDictionary<uint, int> FishAlertLeadMinutes { get; init; } = FrozenDictionary<uint, int>.Empty;
     public int AlertLead(uint id) => FishAlertLeadMinutes.GetValueOrDefault(id, SpawnAlertLeadMinutes);
     internal IReadOnlyDictionary<uint, long> ReservedAlertWindows { get; init; } = FrozenDictionary<uint, long>.Empty;
@@ -62,6 +64,7 @@ internal sealed class FishPreferences : IDisposable
     private readonly Queue<Edit> pending = new();
     private (bool Enabled, int LeadMinutes, XivChatType Channel, int Sound, SpawnAlertAudience Audience, bool RemoveOnRegistration)? pendingAlerts;
     private readonly Dictionary<uint, int?> pendingFishAlerts = [];
+    private CatalogSettings? pendingCatalog;
     private FishPreferencesConfiguration configuration = new();
     private FishPreferencesView view = new(0, 0, false, false,
         FrozenSet<uint>.Empty, FrozenDictionary<uint, bool>.Empty, null);
@@ -95,6 +98,10 @@ internal sealed class FishPreferences : IDisposable
                 // A removed display channel must not invalidate favorites or character records.
                 if (!ChatChannelChoices.Supports((XivChatType)configuration.SpawnAlertChannelId))
                     configuration.SpawnAlertChannelId = (ushort)XivChatType.SystemMessage;
+                // Schema 8 applies the requested enabled default once; later saved opt-outs are retained.
+                if (loaded.Version < 8)
+                    configuration.RemoveFavoriteOnRegistration = true;
+                configuration.Catalog = loaded.Catalog.Copy();
                 configuration.Version = FishPreferencesConfiguration.CurrentVersion;
                 writable = true;
             }
@@ -111,6 +118,13 @@ internal sealed class FishPreferences : IDisposable
     }
 
     public FishPreferencesView View { get { lock (gate) return view; } }
+
+    public void SetCatalogSettings(CatalogSettings settings)
+    {
+        lock (gate)
+            if (!disposed && writable && settings.IsValid())
+                pendingCatalog = settings.Copy();
+    }
 
     public void SetFavorite(uint fishId, bool favorite)
     {
@@ -221,13 +235,19 @@ internal sealed class FishPreferences : IDisposable
             }
             else if (stateErrorChanged)
                 Publish();
-            if (pending.Count == 0 && pendingAlerts is null && pendingFishAlerts.Count == 0)
+            if (pending.Count == 0 && pendingAlerts is null && pendingFishAlerts.Count == 0 && pendingCatalog is null)
                 return;
             var candidate = CopyConfiguration();
             var changed = false;
+            if (pendingCatalog is { } catalogSettings)
+            {
+                changed = !candidate.Catalog.Matches(catalogSettings);
+                candidate.Catalog = catalogSettings;
+                pendingCatalog = null;
+            }
             if (pendingAlerts is { } alertSettings)
             {
-                changed = candidate.SpawnAlertsEnabled != alertSettings.Enabled || candidate.SpawnAlertLeadMinutes != alertSettings.LeadMinutes ||
+                changed |= candidate.SpawnAlertsEnabled != alertSettings.Enabled || candidate.SpawnAlertLeadMinutes != alertSettings.LeadMinutes ||
                     candidate.SpawnAlertChannelId != (ushort)alertSettings.Channel || candidate.SpawnAlertSound != alertSettings.Sound ||
                     candidate.SpawnAlertAudience != alertSettings.Audience || candidate.RemoveFavoriteOnRegistration != alertSettings.RemoveOnRegistration;
                 candidate.SpawnAlertsEnabled = alertSettings.Enabled;
@@ -288,6 +308,7 @@ internal sealed class FishPreferences : IDisposable
             SpawnAlertLeadMinutes = configuration.SpawnAlertLeadMinutes,
             SpawnAlertChannel = (XivChatType)configuration.SpawnAlertChannelId, SpawnAlertSound = configuration.SpawnAlertSound,
             SpawnAlertAudience = configuration.SpawnAlertAudience, RemoveFavoriteOnRegistration = configuration.RemoveFavoriteOnRegistration,
+            Catalog = configuration.Catalog.Copy(),
             FishAlertLeadMinutes = configuration.FishAlertLeadMinutes.ToFrozenDictionary(),
             ReservedAlertWindows = characterId != 0 && configuration.AlertWindows.TryGetValue(characterId, out var windows)
                 ? windows.ToFrozenDictionary() : FrozenDictionary<uint, long>.Empty,
@@ -302,6 +323,7 @@ internal sealed class FishPreferences : IDisposable
         SpawnAlertLeadMinutes = configuration.SpawnAlertLeadMinutes,
         SpawnAlertChannelId = configuration.SpawnAlertChannelId, SpawnAlertSound = configuration.SpawnAlertSound,
         SpawnAlertAudience = configuration.SpawnAlertAudience, RemoveFavoriteOnRegistration = configuration.RemoveFavoriteOnRegistration,
+        Catalog = configuration.Catalog.Copy(),
         FishAlertLeadMinutes = new(configuration.FishAlertLeadMinutes),
         AlertWindows = configuration.AlertWindows.ToDictionary(pair => pair.Key, pair => new Dictionary<uint, long>(pair.Value)),
     };
@@ -325,7 +347,8 @@ internal sealed class FishPreferences : IDisposable
     }
 
     private static bool IsValid(FishPreferencesConfiguration value) =>
-        value.Version is 1 or 2 or 3 or 4 or 5 or 6 or FishPreferencesConfiguration.CurrentVersion && value.Favorites is not null &&
+        value.Version is 1 or 2 or 3 or 4 or 5 or 6 or 7 or FishPreferencesConfiguration.CurrentVersion && value.Favorites is not null &&
+        value.Catalog is not null && value.Catalog.IsValid() &&
         !value.Favorites.Contains(0) && value.Characters is not null &&
         value.Characters.All(pair => pair.Key != 0 && pair.Value is not null && !pair.Value.ContainsKey(0)) &&
         value.SpawnAlertLeadMinutes is >= SpawnAlertScheduler.MinLeadMinutes and <= SpawnAlertScheduler.MaxLeadMinutes &&
@@ -345,6 +368,7 @@ internal sealed class FishPreferences : IDisposable
             pending.Clear();
             pendingAlerts = null;
             pendingFishAlerts.Clear();
+            pendingCatalog = null;
         }
         framework.Update -= OnUpdate;
     }

@@ -280,6 +280,10 @@
   <data name="AlertDiagnosticsHeading" xml:space="preserve"><value>Alert diagnostics</value></data>
   <data name="AlertFavoritesCount" xml:space="preserve"><value>{0} favorites shown · hover for details</value></data>
   <data name="CatalogFiltersHeading" xml:space="preserve"><value>List filters ({0} active)</value></data>
+  <data name="CatalogRestoreDefaults" xml:space="preserve"><value>Restore default filters and sort</value></data>
+  <data name="CatalogSavedHint" xml:space="preserve"><value>List filters, sort, regions and expansions are saved across reloads and shared between characters. Restore defaults also clears the current search and diagnostic checks. Favorites, collection records and alert settings are preserved.</value></data>
+  <data name="CollectionGuideOpenRequired" xml:space="preserve"><value>Collection data has not been confirmed for this session. Please open the Fishing tab of the in-game Fish Guide once. Unconfirmed fish remain Unknown.</value></data>
+  <data name="CollectionGuideRetryRequired" xml:space="preserve"><value>Collection data could not be fully confirmed. Please open the Fishing tab of the in-game Fish Guide and wait briefly. Unconfirmed fish remain Unknown.</value></data>
   <data name="CatalogFiltersSummary" xml:space="preserve"><value>Time restrictions only: {0}
 Fish grade: {1}
 Favorites only: {2}
@@ -389,6 +393,6 @@ In fish log only: {5}</value></data>
   <data name="ChatGmNoviceNetwork" xml:space="preserve"><value>GM Novice Network</value></data>
   <data name="AlertUncaughtOnly" xml:space="preserve"><value>Alert for uncaught fish only</value></data>
   <data name="AlertAutoRemove" xml:space="preserve"><value>Remove favorite on new Fish Guide registration</value></data>
-  <data name="AlertAutoRemoveHint" xml:space="preserve"><value>Independent of enabling alerts. A confirmed new-fish registration removes it from shared favorites. Opening the guide, changing manual collection status and catching an already registered fish do not trigger removal. Custom alert times and delivery history are preserved.</value></data>
+  <data name="AlertAutoRemoveHint" xml:space="preserve"><value>Enabled by default; turning it off is saved. Independent of enabling alerts. A confirmed new-fish registration removes it from shared favorites. Opening the guide, changing manual collection status and catching an already registered fish do not trigger removal. Custom alert times and delivery history are preserved.</value></data>
   <data name="AlertRemoveFavorite" xml:space="preserve"><value>Remove favorite</value></data>
 </root>

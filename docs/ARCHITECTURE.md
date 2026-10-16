@@ -67,6 +67,8 @@ Plugin의 `AssemblyName`은 `DuckbillFisher`다. 주 DLL은 `DuckbillFisher.dll`
 
 0.1.25.0은 사용자 요청으로 0.1.24.0의 IToastGui 의존성과 팝업 설정/출력/발송 기록 표시를 제거한다. `SpawnAlertOutput`은 로컬 채팅과 선택 SE만 담당하며 기존 예약/영속 중복 방지에는 변경이 없다. schema v7은 v1~v6 설정을 허용하고 제거된 팝업 속성을 사용하지 않는다. 채널 선택은 22개이며 기존 알려진 제외 채널은 시스템으로 대체한다. [제거 결정/확인 상태](validation/MVP-03-TOAST.md)를 따른다.
 
+0.1.26.0의 `CatalogSettings`는 안정적인 enum/지역 ID와 초기값을 보관한다. UI는 한 번 복원하고 변경 요청만 기존 preferences 큐에 넣는다. Framework에서 다른 요청과 병합해 저장하고 복사한 설정을 view에 게시한다. schema v8은 자동 해제 켜짐을 이전 버전에 적용하며 이후 사용자 선택은 보존한다. 도감 안내는 기존 세션/GuideState.Complete 판정을 그대로 사용하며 추가 조회나 수집 추론을 하지 않는다. [정책/실패 처리](validation/MVP-01-CATALOG-SETTINGS.md)를 따른다.
+
 - 수집 상태는 Caught / Uncaught / Unknown. 값 없음은 false가 아니다.
 - 수동 override는 자동 판정과 따로 저장하고 '자동 상태 사용'으로 복귀할 수 있게 한다.
 - 캐릭터 식별자는 로컬 설정 격리에만 사용하고 로그·공개 테스트 자료에 넣지 않는다.
