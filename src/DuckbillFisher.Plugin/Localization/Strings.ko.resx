@@ -234,4 +234,14 @@
   <data name="GradeLegendaryLabel" xml:space="preserve"><value>터주왕</value></data>
   <data name="GradeBigLabel" xml:space="preserve"><value>터주</value></data>
   <data name="RowGradeLabel" xml:space="preserve"><value>[{0}] {1}</value></data>
+  <data name="GeographyHeading" xml:space="preserve"><value>지역·확장팩 선택</value></data>
+  <data name="GeographySelection" xml:space="preserve"><value>지역: {0} · 확장팩: {1}</value></data>
+  <data name="GeographyHint" xml:space="preserve"><value>지역과 확장팩은 각각 여러 개를 선택할 수 있습니다. 같은 그룹은 하나라도 해당하면 되고, 같은 낚시터가 각 그룹과 ‘현재 지역만’ 조건을 모두 만족해야 합니다. 확장팩은 어종 도입 시점이 아닌 낚시터 소속입니다. ‘전체’는 해당 그룹만 해제하며 특정 선택 시 먼바다·위치 미확인 어종은 제외합니다.</value></data>
+  <data name="GeographyExpansion" xml:space="preserve"><value>낚시터 확장팩</value></data>
+  <data name="GeographyAll" xml:space="preserve"><value>전체 (제한 없음)</value></data>
+  <data name="GeographyNoOptions" xml:space="preserve"><value>해당하는 낚시터 지역 정보가 없습니다.</value></data>
+  <data name="GeographyRegion" xml:space="preserve"><value>지역</value></data>
+  <data name="GeographySearch" xml:space="preserve"><value>지역 검색</value></data>
+  <data name="GeographyRegionOption" xml:space="preserve"><value>{0} ({1})</value></data>
+  <data name="GeographySelectedCount" xml:space="preserve"><value>{0}개 선택</value></data>
 </root>

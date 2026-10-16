@@ -26,6 +26,7 @@ internal sealed record FishGuideRow(uint FishParameterId, uint ItemId, string It
     public FishRowResolution Resolution { get; init; }
     public bool IsDisplayable => Resolution == FishRowResolution.Resolved;
     public IReadOnlyList<FishingSpotView> Spots { get; init; } = [];
+    public IReadOnlyList<FishingLocation> Locations { get; init; } = [];
     public FishingDetailView? Details { get; init; }
     public OceanFishingView? Ocean { get; init; }
     public FishGrade Grade { get; init; }
@@ -35,6 +36,7 @@ internal sealed record FishGuideRow(uint FishParameterId, uint ItemId, string It
 
 internal sealed record FishCatalogView(IReadOnlyList<FishGuideRow> Rows, UiMessage Status)
 {
+    public FishingGeography Geography { get; init; } = new([], []);
     public IReadOnlyDictionary<uint, IReadOnlySet<uint>> FishByTerritory { get; init; } = FrozenDictionary<uint, IReadOnlySet<uint>>.Empty;
     public IReadOnlyDictionary<uint, FishingDetailView> RelatedDetails { get; init; } = new Dictionary<uint, FishingDetailView>();
     public IReadOnlyDictionary<uint, FishingWindow> Windows { get; init; } = new Dictionary<uint, FishingWindow>();
@@ -244,6 +246,7 @@ internal sealed class FishCatalog : IDisposable
                         IsOceanFishing = fish.OceanStars > 0,
                         Resolution = resolution,
                         Spots = fishSpots,
+                        Locations = fish.OceanStars == 0 ? fishSpots.Select(spot => spot.Location).Distinct().ToArray() : [],
                         Details = details,
                         Grade = grade,
                         TimeRestriction = timing,
@@ -253,6 +256,7 @@ internal sealed class FishCatalog : IDisposable
                 if (rows.Count == 0)
                     throw new InvalidDataException("FishParameter sheet is empty.");
                 view = new(rows.ToArray(), new(T.CatalogLoaded)) {
+                    Geography = FishingGeography.FromRows(rows),
                     FishByTerritory = rows.Where(row => row.IsDisplayable && !row.IsOceanFishing)
                         .SelectMany(row => row.Spots.Where(spot => spot.TerritoryId != 0)
                             .Select(spot => (spot.TerritoryId, row.FishParameterId)))
@@ -293,11 +297,14 @@ internal sealed class FishCatalog : IDisposable
     private Dictionary<uint, (FishingSpotView View, HashSet<uint> Items)> LoadSpots()
     {
         var result = new Dictionary<uint, (FishingSpotView, HashSet<uint>)>();
+        var expansions = dataManager.GetExcelSheet<ExVersion>();
         foreach (var spot in dataManager.GetExcelSheet<FishingSpot>()!)
         {
             if (spot.TerritoryType.RowId == 0 || spot.PlaceNameMain.RowId != 0)
                 continue;
             var territory = spot.TerritoryType.Value;
+            // ExVersion row 0 is ARR, not an absent reference.
+            var expansion = expansions?.GetRowOrDefault(territory.ExVersion.RowId);
             if (territory.Map.RowId == 0)
                 continue;
             var map = territory.Map.Value;
@@ -311,7 +318,8 @@ internal sealed class FishCatalog : IDisposable
             var rates = weather.Weather.Select((value, index) => new WeatherChance(value.RowId, weather.Rate[index]))
                 .Where(rate => rate.Chance > 0).ToArray();
             result[spot.RowId] = (new(spot.RowId, spot.PlaceName.Value.Name.ExtractText(),
-                territory.PlaceName.Value.Name.ExtractText(), territory.RowId, map.RowId, x, y, rates),
+                territory.PlaceName.Value.Name.ExtractText(), territory.RowId, map.RowId, x, y, rates)
+                { ExpansionId = expansion?.RowId, ExpansionName = expansion?.Name.ExtractText() ?? "" },
                 spot.Item.Select(value => value.RowId).Where(id => id != 0).ToHashSet());
         }
         return result;

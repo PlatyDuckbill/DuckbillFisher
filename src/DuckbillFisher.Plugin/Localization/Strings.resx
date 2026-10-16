@@ -234,4 +234,14 @@
   <data name="GradeLegendaryLabel" xml:space="preserve"><value>Legendary fish</value></data>
   <data name="GradeBigLabel" xml:space="preserve"><value>Big fish</value></data>
   <data name="RowGradeLabel" xml:space="preserve"><value>[{0}] {1}</value></data>
+  <data name="GeographyHeading" xml:space="preserve"><value>Region and expansion selection</value></data>
+  <data name="GeographySelection" xml:space="preserve"><value>Regions: {0} · Expansions: {1}</value></data>
+  <data name="GeographyHint" xml:space="preserve"><value>Select any number of regions and expansions. Within a group, any selection may match; the same fishing spot must satisfy all selected groups and Current region only. Expansion refers to the spot's expansion, not the fish's introduction patch. All clears only that group. A specific selection excludes ocean fish and unknown locations.</value></data>
+  <data name="GeographyExpansion" xml:space="preserve"><value>Spot expansion</value></data>
+  <data name="GeographyAll" xml:space="preserve"><value>All (unrestricted)</value></data>
+  <data name="GeographyNoOptions" xml:space="preserve"><value>No matching known fishing regions.</value></data>
+  <data name="GeographyRegion" xml:space="preserve"><value>Region</value></data>
+  <data name="GeographySearch" xml:space="preserve"><value>Search regions</value></data>
+  <data name="GeographyRegionOption" xml:space="preserve"><value>{0} ({1})</value></data>
+  <data name="GeographySelectedCount" xml:space="preserve"><value>{0} selected</value></data>
 </root>

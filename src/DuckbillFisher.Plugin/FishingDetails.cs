@@ -4,7 +4,12 @@ using DuckbillFisher.Core;
 namespace DuckbillFisher.Plugin;
 
 internal sealed record FishingSpotView(uint Id, string Name, string Zone, uint TerritoryId, uint MapId,
-    float X, float Y, WeatherChance[] WeatherRates);
+    float X, float Y, WeatherChance[] WeatherRates)
+{
+    public uint? ExpansionId { get; init; }
+    public string ExpansionName { get; init; } = "";
+    public FishingLocation Location => new(TerritoryId, ExpansionId);
+}
 
 internal sealed record FishingItemView(uint Id, string Name, uint IconId);
 internal sealed record FishingConditionIcon(uint Id, string Name, uint IconId);

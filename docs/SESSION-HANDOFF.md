@@ -21,9 +21,11 @@
 - 0.1.13.0 목록 요약은 사용자 ‘정상임’으로 대표 확인 통과. [결과](validation/MVP-01-LIST-SUMMARY.md).
 - 0.1.14.0 현재 지역 필터는 사용자 ‘정상’으로 대표 확인 통과. [결과](validation/MVP-01-CURRENT-REGION.md).
 - 현재 지역은 일반 낚시터의 Territory ID 기준이며 먼바다·위치 미확인 어종을 제외한다. 다른 필터 선택은 유지한다. 먼바다 방문 시간대를 어종별 제한으로 해석하지 않는다.
-- 현재 정규 DLL은 0.1.15.0이다. 별도/정규 빌드 경고·오류 0, 한영 230키 검사 통과. 사용자 보고에서 분류 335/왕 36/시간제 443과 터주왕+수집됨 결과 7종 확인. 한영/모든 선택의 화면 확인은 별도 미확인이다. [결과](validation/MVP-01-CLASSIFICATION-FILTERS.md). 다음 교체는 새 언로드 확인 필요.
+- 0.1.15.0의 분류 335/왕 36/시간제 443과 터주왕+수집됨 결과 7종 확인. 한영/모든 선택 화면은 별도 미확인이다. [결과](validation/MVP-01-CLASSIFICATION-FILTERS.md).
 - 사용자 선택은 시간제 체크 + 전체/터주(왕 포함)/터주왕 단일 선택이다. 다른 필터와 AND, 등급 전체는 다른 선택을 유지한다. 검수 ID 자료는 터주 335/왕 36종이다. 미확인 분류를 특정 등급/시간제로 추측하지 않는다.
 - 수집 UI의 ‘미수집만’을 제거했고 네 항목을 명시적으로 Core enum에 매핑한다. 기존 수집 숨김/내부 Unknown/자동 관찰/수동 우선순위는 유지한다.
+- 현재 정규 DLL은 0.1.16.0이다. 사용자 언로드 확인 후 교체했고 별도/정규 빌드 경고·오류 0, 한영 240키 검사 통과. 지역/확장팩 선택은 인게임 검증 대기다. [확인 순서](validation/MVP-01-GEOGRAPHY-FILTERS.md). 다음 교체는 새 언로드 확인 필요.
+- 지역/확장팩은 복수 선택, 확장팩은 낚시터 소속 기준이다. 그룹 안 OR/같은 낚시터에서 그룹 간 AND를 적용하며 현재 지역만과도 함께 적용한다. ExVersion 0은 신생이며 미확인은 null로 구분한다. 선택 후보는 로컬 자료에서 64지역/6확장팩이다.
 - PowerShell 5.1 읽기는 `-Encoding UTF8`; pwsh는 현재 샌드박스 밖 승인 실행 필요.
 
 ## 일반 구현 빌드
@@ -35,7 +37,7 @@ dotnet build src/DuckbillFisher.Plugin/DuckbillFisher.Plugin.csproj --no-restore
 pwsh -NoLogo -NoProfile -File scripts/check-localization.ps1
 ```
 
-- 1차 빌드는 `-p:OutputPath=C:/Users/hyogu/Downloads/DuckbillFisher/.cache/classification-build/` 추가.
+- 1차 빌드는 `-p:OutputPath=C:/Users/hyogu/Downloads/DuckbillFisher/.cache/geography-build/` 추가.
 - 성공 후 언로드 요청 → 사용자 확인 → 정규 Debug 빌드로 교체.
 - 실제 주 DLL/버전·Core DLL·ko 리소스 DLL·manifest 확인.
 - `scripts/build.ps1`은 테스트도 실행하므로 일반 구현 때 사용하지 않는다.

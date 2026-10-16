@@ -2,6 +2,16 @@ namespace DuckbillFisher.Plugin.Localization;
 
 internal enum TextKey
 {
+    GeographyHeading,
+    GeographySelection,
+    GeographyHint,
+    GeographyExpansion,
+    GeographyAll,
+    GeographyNoOptions,
+    GeographyRegion,
+    GeographySearch,
+    GeographyRegionOption,
+    GeographySelectedCount,
     TimeRestrictedOnly,
     TimeRestrictedHint,
     GradeAll,
