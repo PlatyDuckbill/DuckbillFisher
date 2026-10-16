@@ -17,7 +17,7 @@
 - 참조: `C:\Users\hyogu\AppData\Roaming\XIVLauncherKR\addon\Hooks\dev`.
 - 개발 DLL: `C:\Users\hyogu\Downloads\DuckbillFisher\src\DuckbillFisher.Plugin\bin\Debug\DuckbillFisher.dll`.
 - 0.1.9.0 전체 도감 대조/홍룡 미수집 필터/도감 닫힘 후 유지와 동일 캐릭터 재접속 초기화·복구 확인. 다른 캐릭터는 없어 격리 실기 확인 보류. 다음 교체는 새 언로드 확인 필요.
-- 정규 DLL 0.1.10.0의 아이템 링크/조건 아이콘 대표 확인 통과. 0.1.11.0은 상세 140종으로 확대하고 별도 빌드/리소스 검사를 통과했다. 새 언로드 확인→정규 빌드→인게임 확인 대기. [확대 결과/절차](validation/MVP-01-DATA-EXPANSION.md)를 따른다.
+- 0.1.10.0의 아이템 링크/조건 아이콘 대표 확인 통과. 상세 140종의 정규 DLL 0.1.11.0은 사용자 언로드 확인 후 빌드/교체 완료, Core/ko/manifest 확인. 인게임 확인 대기. 다음 교체에는 새 언로드 확인 필요. [확대 결과/절차](validation/MVP-01-DATA-EXPANSION.md)를 따른다.
 - PowerShell 5.1 읽기는 `-Encoding UTF8`; pwsh는 현재 샌드박스 밖 승인 실행 필요.
 
 ## 일반 구현 빌드
