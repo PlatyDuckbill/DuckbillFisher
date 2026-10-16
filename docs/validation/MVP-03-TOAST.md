@@ -9,7 +9,8 @@
 - 설정 schema v7은 v1~v6를 받아들이며 삭제한 팝업 속성은 사용하지 않는다. 기존 즐겨찾기/개별 시간/채널/효과음/캐릭터 수동 기록/창 기록을 그대로 복사한다. 실제 저장 복원은 다음 로드에서 확인한다.
 - `dotnet build src/DuckbillFisher.Plugin/DuckbillFisher.Plugin.csproj --no-restore -c Debug -p:DalamudLibPath=C:/Users/hyogu/AppData/Roaming/XIVLauncherKR/addon/Hooks/dev/ -p:OutputPath=C:/Users/hyogu/Downloads/DuckbillFisher/.cache/no-toast-build/`: 경고·오류 0.
 - `pwsh -NoLogo -NoProfile -File scripts/check-localization.ps1`: 한영 382키/형식 인자 일치. `git diff --check` 통과. 제품 소스에 Toast 관련 참조가 남지 않은 것을 검색으로 확인했다. 지역 선택용 ImGui 팝업은 별개다. 테스트 추가/실행 없음.
-- 별도 산출물은 주 DLL 977920바이트/0.1.25.0, Core 39936바이트/1.0.0.0, ko 리소스 38912바이트/0.1.25.0이다. 정규 DLL은 0.1.24.0 유지, 새 언로드 확인 후 정규 빌드/로드 대기다.
+- 사용자 새 `언로드 완료` 확인 후 위 명령에서 OutputPath 옵션을 제외한 정규 Debug 빌드를 실행했다. 경고·오류 0, 한영 382키/형식 인자 검사 재통과. 테스트 미실행, 인게임 확인 대기다.
+- 별도/정규 산출물 모두 주 DLL 977920바이트/0.1.25.0, Core 39936바이트/1.0.0.0, ko 리소스 38912바이트/0.1.25.0이다. 정규 manifest DuckbillFisher/0.1.25.0/API 15 확인, 정규 DLL 교체 완료.
 - 제거 버전 로드 후 팝업 옵션이 사라지고 기존 즐겨찾기/개별 시간/채널/SE가 복원되는지, 다음 자연스러운 알림에서 채팅 링크/분 단위 시간/효과음/한 줄 발송 기록이 유지되는지 확인한다. Toast 재현 로그는 요청하지 않는다.
 
 ## 범위와 사용자 동작
