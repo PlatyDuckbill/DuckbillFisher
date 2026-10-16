@@ -17,7 +17,8 @@
 - 참조: `C:\Users\hyogu\AppData\Roaming\XIVLauncherKR\addon\Hooks\dev`.
 - 개발 DLL: `C:\Users\hyogu\Downloads\DuckbillFisher\src\DuckbillFisher.Plugin\bin\Debug\DuckbillFisher.dll`.
 - 0.1.9.0 전체 도감 대조/홍룡 미수집 필터/도감 닫힘 후 유지와 동일 캐릭터 재접속 초기화·복구 확인. 다른 캐릭터는 없어 격리 실기 확인 보류. 다음 교체는 새 언로드 확인 필요.
-- 정규 DLL 0.1.11.0의 Details=140/140·BuildMatch=True·Displayed=140과 사용자 ‘전부 이상 없이 동작하는듯’으로 확대 대표 확인 통과. 다음은 창천 3.x의 지원 조건/한섭 참조 검수다. 다음 교체에는 새 언로드 확인 필요. [확대 결과/절차](validation/MVP-01-DATA-EXPANSION.md)를 따른다.
+- 정규 DLL 0.1.11.0의 상세 140종 연결/목록·사용자 대표 확인 통과. 다음 교체에는 새 언로드 확인 필요. [확대 결과](validation/MVP-01-DATA-EXPANSION.md).
+- 다음 범위는 사용자 요청으로 전체 원본 일괄 확대다. 사전 점검에서 일반 도감 대응 903/1258종·먼바다 상세 0/259종·작살 미확인 115건과 누락 필드를 확인했다. [점검 결과/다음 모델 보완](validation/DATA-COVERAGE-REVIEW.md)을 읽고 재개한다.
 - PowerShell 5.1 읽기는 `-Encoding UTF8`; pwsh는 현재 샌드박스 밖 승인 실행 필요.
 
 ## 일반 구현 빌드
