@@ -13,6 +13,7 @@ internal sealed class SpawnAlertsPanel(FishPreferences preferences, SpawnAlerts 
     private uint? selectedId;
     private int lastSession = -1;
     private IReadOnlyList<FavoriteAlertView>? lastFavorites;
+    private int lastFavoritesRevision = -1;
     private FavoriteAlertView[] matches = [];
     private string search = "";
     public void Draw()
@@ -37,10 +38,15 @@ internal sealed class SpawnAlertsPanel(FishPreferences preferences, SpawnAlerts 
         var minutes = settings.SpawnAlertLeadMinutes;
         var channel = Array.IndexOf(ChatChannelChoices.All, settings.SpawnAlertChannel);
         var sound = settings.SpawnAlertSound;
+        var uncaughtOnly = settings.SpawnAlertAudience == SpawnAlertAudience.UncaughtOnly;
+        var removeOnRegistration = settings.RemoveFavoriteOnRegistration;
         var changed = false;
         ImGui.TextWrapped(UiText.Get(T.AlertsIntro));
         ImGui.BeginDisabled(!settings.CanEdit);
         changed |= ImGui.Checkbox(UiText.Label(T.AlertsEnable, "SpawnAlertsEnabled"), ref enabled);
+        changed |= ImGui.Checkbox(UiText.Label(T.AlertUncaughtOnly, "AlertUncaughtOnly"), ref uncaughtOnly);
+        changed |= ImGui.Checkbox(UiText.Label(T.AlertAutoRemove, "AlertAutoRemove"), ref removeOnRegistration);
+        if (ImGui.IsItemHovered()) ImGui.SetTooltip(UiText.Get(T.AlertAutoRemoveHint));
         ImGui.SetNextItemWidth(180);
         changed |= ImGui.InputInt(UiText.Label(T.AlertsLead, "SpawnAlertLead"), ref minutes);
         ImGui.SetNextItemWidth(180);
@@ -50,7 +56,8 @@ internal sealed class SpawnAlertsPanel(FishPreferences preferences, SpawnAlerts 
         var sounds = Enumerable.Range(0, 17).Select(value => value == 0 ? UiText.Get(T.AlertSoundNone) : UiText.Get(T.AlertSoundNumber, value)).ToArray();
         changed |= ImGui.Combo(UiText.Label(T.AlertSound, "SpawnAlertSound"), ref sound, sounds, sounds.Length);
         if (changed)
-            preferences.SetSpawnAlerts(enabled, minutes, ChatChannelChoices.All[channel], sound);
+            preferences.SetSpawnAlerts(enabled, minutes, ChatChannelChoices.All[channel], sound,
+                uncaughtOnly ? SpawnAlertAudience.UncaughtOnly : SpawnAlertAudience.AllFavorites, removeOnRegistration);
         ImGui.EndDisabled();
         ImGui.SameLine();
         ImGui.BeginDisabled(sound == 0 || !output.SoundAvailable || !settings.HasCharacter);
@@ -94,12 +101,16 @@ internal sealed class SpawnAlertsPanel(FishPreferences preferences, SpawnAlerts 
     private void DrawFavorites(SpawnAlertsView view, FishPreferencesView settings)
     {
         var changed = ImGui.InputText(UiText.Label(T.FishSearch, "AlertFavoriteSearch"), ref search, 100);
-        if (changed || !ReferenceEquals(lastFavorites, view.Favorites))
+        if (changed || !ReferenceEquals(lastFavorites, view.Favorites) || lastFavoritesRevision != settings.Revision)
         {
             lastFavorites = view.Favorites;
+            lastFavoritesRevision = settings.Revision;
             var term = search.Trim();
-            matches = view.Favorites.Where(fish => term.Length == 0 || fish.Name?.Contains(term, StringComparison.OrdinalIgnoreCase) == true ||
-                fish.FishId.ToString(System.Globalization.CultureInfo.InvariantCulture) == term).ToArray();
+            matches = view.Favorites.Where(fish => settings.Favorites.Contains(fish.FishId) &&
+                (term.Length == 0 || fish.Name?.Contains(term, StringComparison.OrdinalIgnoreCase) == true ||
+                fish.FishId.ToString(System.Globalization.CultureInfo.InvariantCulture) == term)).ToArray();
+            if (selectedId is { } selected && !settings.Favorites.Contains(selected))
+                selectedId = null;
         }
         ImGui.TextWrapped(UiText.Get(T.AlertFavoritesHint));
         var baseHeight = FishRowRenderer.Height;
@@ -138,6 +149,9 @@ internal sealed class SpawnAlertsPanel(FishPreferences preferences, SpawnAlerts 
                     if (ImGui.InputInt(UiText.Label(T.AlertFishMinutes, "FishLead"), ref lead))
                         preferences.SetFishAlertLead(fish.FishId, lead);
                     ImGui.EndDisabled();
+                    ImGui.SameLine();
+                    if (ImGui.SmallButton(UiText.Label(T.AlertRemoveFavorite, "RemoveAlertFavorite")))
+                        preferences.SetFavorite(fish.FishId, false);
                     ImGui.EndDisabled();
                     ImGui.TextDisabled(UiText.Get(StateKey(fish.State)));
                     if (ImGui.IsItemHovered()) ImGui.SetTooltip(fish.LeadMinutes == settings.AlertLead(fish.FishId) && fish.Start is { } start

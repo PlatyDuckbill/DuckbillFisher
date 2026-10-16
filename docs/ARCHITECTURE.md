@@ -63,6 +63,8 @@ Plugin의 `AssemblyName`은 `DuckbillFisher`다. 주 DLL은 `DuckbillFisher.dll`
 
 0.1.22.0의 `FishRowRenderer`는 목록/즐겨찾기의 동일 행 표시와 요약 캐시만 담당한다. 게임 데이터 조회/예측/필터는 가져오지 않는다. `ChatChannelChoices`는 설치 SDK enum 전체와 번역을 연결하며 schema v4에서 과거 세 채널 선택을 실제 타입 ID로 한 번 변환한다. [이번 결정](validation/MVP-03-ALERT-CATALOG-VIEW.md)을 따른다.
 
+0.1.23.0의 Core `SpawnAlertAudience`는 전체/미수집만을 구분한다. 기본 전체는 Unknown도 대상으로 삼되 수집 상태 자체를 바꾸지 않는다. 새 등록 자동 해제는 이벤트 수신 당시 선택과 처리 당시 설정/세션을 함께 확인하여 기존 검증된 KR 등록 경로에서만 Framework의 preferences 저장/게시를 호출한다. 도감 스캔과 수동 지정은 이 경로를 호출하지 않는다. [정책/실패 동작](validation/MVP-03-FAVORITE-POLICY.md)을 따른다.
+
 - 수집 상태는 Caught / Uncaught / Unknown. 값 없음은 false가 아니다.
 - 수동 override는 자동 판정과 따로 저장하고 '자동 상태 사용'으로 복귀할 수 있게 한다.
 - 캐릭터 식별자는 로컬 설정 격리에만 사용하고 로그·공개 테스트 자료에 넣지 않는다.

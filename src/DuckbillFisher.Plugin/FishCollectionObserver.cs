@@ -92,7 +92,7 @@ internal sealed class FishCollectionObserver : IDisposable
         var itemId = message.Parameters[0].UIntValue;
         lock (gate)
             if (!disposed && pending.Count < 64)
-                pending.Enqueue(new(personal.Session, itemId, clock.Elapsed));
+                pending.Enqueue(new(personal.Session, itemId, clock.Elapsed, personal.RemoveFavoriteOnRegistration));
     }
 
     private void OnUpdate(IFramework _)
@@ -189,6 +189,8 @@ internal sealed class FishCollectionObserver : IDisposable
             changed |= uncaught.Remove(fishId);
             trigger = "RegistrationLog";
             view = view with { AppliedRegistrations = view.AppliedRegistrations + 1, LastLogFish = fishId };
+            if (registration.RemoveFavorite)
+                preferences.OnFishRegistered(fishId, personal.Session);
         }
         var addon = gameGui.GetAddonByName("FishGuide2");
         var visible = !addon.IsNull && addon.IsVisible;
@@ -256,5 +258,5 @@ internal sealed class FishCollectionObserver : IDisposable
         framework.Update -= OnUpdate;
     }
 
-    private sealed record Registration(int Session, uint ItemId, TimeSpan At);
+    private sealed record Registration(int Session, uint ItemId, TimeSpan At, bool RemoveFavorite);
 }

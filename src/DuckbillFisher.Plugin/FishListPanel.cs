@@ -23,12 +23,12 @@ internal sealed class FishListPanel(FishCatalog catalog, ITextureProvider textur
     private FishGuideRow[] matches = [];
     private string search = "";
     private bool inLogOnly = true;
-    private bool includeOceanFish = true;
+    private bool includeOceanFish;
     private bool showUnresolved;
     private int unresolvedCount;
     private bool requested;
     private bool resetScroll;
-    private int sort;
+    private int sort = 2;
     private uint? selectedId;
     private FishGuideRow? selectedFish;
     private int detailCoverage;
@@ -38,11 +38,11 @@ internal sealed class FishListPanel(FishCatalog catalog, ITextureProvider textur
     private int lastPreferenceSession;
     private int lastCollectionRevision;
     private bool favoritesOnly;
-    private int collectionVisibility;
+    private int collectionVisibility = Array.IndexOf(CollectionChoices, CollectionVisibility.HideCaught);
     private readonly FishRowRenderer rows = new(textures);
     private bool currentRegionOnly;
     private FishingRegionView? lastRegion;
-    private bool timeRestrictedOnly;
+    private bool timeRestrictedOnly = true;
     private int gradeVisibility;
     private readonly FishGeographyPanel geography = new();
 
@@ -94,6 +94,8 @@ internal sealed class FishListPanel(FishCatalog catalog, ITextureProvider textur
         if (ImGui.CollapsingHeader(UiText.Label(T.CatalogDiagnostics, "CatalogDiagnostics")))
         {
             ImGui.TextWrapped(UiText.Get(T.CatalogDiagnosticsHint));
+            changed |= ImGui.Checkbox(UiText.Label(T.CatalogShowUnresolved, "CatalogShowUnresolved"), ref showUnresolved);
+            changed |= ImGui.Checkbox(UiText.Label(T.CatalogDetailsOnly, "CatalogDetailsOnly"), ref detailsOnly);
             if (ImGui.Button(UiText.Label(T.CopyFullCatalogReport, "CopyFullCatalogReport")))
                 ImGui.SetClipboardText(CreateReport(personal, observed, full: true));
         }
@@ -112,9 +114,6 @@ internal sealed class FishListPanel(FishCatalog catalog, ITextureProvider textur
         string[] gradeNames = [UiText.Get(T.GradeAll), UiText.Get(T.GradeBigIncludingLegendary), UiText.Get(T.GradeLegendaryOnly)];
         changed |= ImGui.Combo(UiText.Label(T.GradeFilter, "CatalogGradeFilter"), ref gradeVisibility, gradeNames, gradeNames.Length);
         if (ImGui.IsItemHovered()) ImGui.SetTooltip(UiText.Get(T.GradeFilterHint));
-        changed |= ImGui.Checkbox(UiText.Label(T.CatalogShowUnresolved, "CatalogShowUnresolved"), ref showUnresolved);
-        ImGui.SameLine();
-        changed |= ImGui.Checkbox(UiText.Label(T.CatalogDetailsOnly, "CatalogDetailsOnly"), ref detailsOnly);
         changed |= ImGui.Checkbox(UiText.Label(T.CatalogFavoritesOnly, "CatalogFavoritesOnly"), ref favoritesOnly);
         ImGui.SameLine();
         ImGui.SetNextItemWidth(180);

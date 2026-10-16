@@ -30,8 +30,9 @@
 - 0.1.18.0 남은 시간순은 사용자 ‘정렬은 잘 됨’으로 대표 확인 통과. 열린 창 종료순→예정 창 시작순→미확인→상시, 동률 이름/ID이며 지역은 기존 필터로만 적용한다. [근거](validation/MVP-01-REMAINING-TIME-SORT.md).
 - 0.1.19.0은 별도/정규 빌드 경고·오류 0/한영 245키 검사와 사용자 ‘배경 로드 문제 없음’으로 대표 확인 통과. summary/v5 선택 예측 시각과 같은 시점 Teamcraft 활성 응답도 확보했다.
 - Teamcraft/바다구렁이 차이는 사용자 요청으로 미해결 후속 조사에 보류했다. 다음 작업에서 조사/로그 요청을 재개하지 않고 기존 예측을 임의 수정하지 않는다. 당시 자료와 제외한 가설은 [조사 기록](validation/MVP-03-OPEN-WINDOW-DIAGNOSTICS.md)에 보존했다.
-- 0.1.21.0 알림 관리는 사용자 대표 확인을 받았다. 모든 경계/채널/절전 조합 확인을 뜻하지 않는다. 현재 정규 DLL은 0.1.22.0이다. 사용자 언로드 확인 후 별도/정규 빌드 경고·오류 0/한영 371키/채널 이름 81/81개와 주 DLL/Core/ko/manifest 확인 완료. 다음은 로드 후 인게임 확인이며 추가 교체에는 새 언로드 확인 필요. [이번 범위/실패 수정/확인 순서](validation/MVP-03-ALERT-CATALOG-VIEW.md).
-- 알림: 기본/개별 1~60분·공통 즐겨찾기/최종 미수집·수동 우선·SE.1~16/미리 듣기·세션 200건 기록을 유지한다. 기존 목록과 공통 행 렌더러, 실제 어종 아이템 링크, 전체 정의 채널 81개, 지도 버튼 없는 한 줄 기록을 제공한다. schema v4는 기존 세 채널 선택과 v1~v3를 보존한다. 서버 송신 없음/Native 소리 KR 게이트 유지. Toast는 후속.
+- 현재 정규 DLL은 0.1.22.0이며 해당 행/링크/전체 채널의 대표 결과는 아직 없다. 0.1.23.0은 별도 빌드/한영 375키 통과, 새 언로드 확인→정규 빌드/로드→대표 확인 대기다. [이번 범위/확인 순서](validation/MVP-03-FAVORITE-POLICY.md).
+- 즐겨찾기 관리: 기본 전체 알림(수집됨/Unknown 포함), 미수집만 선택, 새 어종 등록 시 자동 해제(기본 꺼짐), 행 삭제. 자동 해제는 기존 검증된 KR 등록 이벤트에만 적용하고 도감 조회/수동 지정/반복 어획에는 적용하지 않는다. 개별 시간/기록·기존 채널/SE/링크 유지. schema v5는 v1~v4를 보존한다.
+- 목록 기본: 남은 시간순·먼바다 제외·시간제만·등급 전체·수집한 어종 숨기기. 진단용 두 체크는 상세 진단 안으로 이동했다. 목록 필터는 즐겨찾기 알림과 독립이며 전체 알림도 Unknown 상태 자체를 바꾸지 않는다. 서버 송신 없음/Native 게이트 유지/Toast 후속.
 - PowerShell 5.1 읽기는 `-Encoding UTF8`; pwsh는 현재 샌드박스 밖 승인 실행 필요.
 
 ## 일반 구현 빌드
@@ -43,7 +44,7 @@ dotnet build src/DuckbillFisher.Plugin/DuckbillFisher.Plugin.csproj --no-restore
 pwsh -NoLogo -NoProfile -File scripts/check-localization.ps1
 ```
 
-- 1차 빌드는 `-p:OutputPath=C:/Users/hyogu/Downloads/DuckbillFisher/.cache/alert-catalog-build/` 추가.
+- 1차 빌드는 `-p:OutputPath=C:/Users/hyogu/Downloads/DuckbillFisher/.cache/favorite-policy-build/` 추가.
 - 성공 후 언로드 요청 → 사용자 확인 → 정규 Debug 빌드로 교체.
 - 실제 주 DLL/버전·Core DLL·ko 리소스 DLL·manifest 확인.
 - `scripts/build.ps1`은 테스트도 실행하므로 일반 구현 때 사용하지 않는다.

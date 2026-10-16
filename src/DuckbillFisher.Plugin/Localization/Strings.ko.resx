@@ -249,9 +249,9 @@
   <data name="GeographyScopeCount" xml:space="preserve"><value>선택한 확장팩의 지역 {0}개 · 검색 결과 {1}개</value></data>
   <data name="GeographyHiddenRegions" xml:space="preserve"><value>선택한 확장팩 밖의 지역 {0}개도 필터에 남아 있습니다. 마우스를 올리면 이름을 볼 수 있습니다.</value></data>
   <data name="GeographyClearHidden" xml:space="preserve"><value>확장팩 범위 밖 지역 선택 해제</value></data>
-  <data name="TabAlerts" xml:space="preserve"><value>출현 알림</value></data>
+  <data name="TabAlerts" xml:space="preserve"><value>즐겨찾기 관리</value></data>
   <data name="AlertsRulesHeading" xml:space="preserve"><value>발송 규칙과 범위</value></data>
-  <data name="AlertsIntro" xml:space="preserve"><value>즐겨찾기이며 최종 미수집인 어종을 본인에게 알립니다. 수동 지정이 우선하며 목록 필터와 독립적입니다. 일반 시간·날씨 예측으로, 미끼·직감 등 개인 준비 완료를 뜻하지 않습니다.</value></data>
+  <data name="AlertsIntro" xml:space="preserve"><value>즐겨찾기와 본인 알림을 관리합니다. 기본은 수집 여부와 무관한 전체 알림입니다. 미수집만 알림은 수동 지정이 우선인 최종 상태를 사용하며 미확인은 제외합니다. 목록 필터와 독립적이며, 일반 시간·날씨 창은 개인 준비 완료를 뜻하지 않습니다.</value></data>
   <data name="AlertsEnable" xml:space="preserve"><value>로컬 채팅 출현 알림 켜기</value></data>
   <data name="AlertsLead" xml:space="preserve"><value>기본 사전 시간 (실제 분)</value></data>
   <data name="AlertsLeadRange" xml:space="preserve"><value>범위: 실제 {0}~{1}분. 설정은 공통이며 발송 기록은 캐릭터별로 구분합니다.</value></data>
@@ -260,7 +260,7 @@
   <data name="AlertsWaitingCharacter" xml:space="preserve"><value>캐릭터 정보를 기다립니다. 이전 캐릭터의 예약은 폐기했습니다.</value></data>
   <data name="AlertsStorageUnavailable" xml:space="preserve"><value>설정 또는 발송 기록을 저장할 수 없어 알림을 중지했습니다. 저장 문제를 해결한 뒤 설정을 변경해 재시도하세요. 기록 저장 없이 발송하지 않습니다.</value></data>
   <data name="AlertsForecastUnavailable" xml:space="preserve"><value>호환되는 최신 시간·날씨 예측을 기다립니다.</value></data>
-  <data name="AlertsWatching" xml:space="preserve"><value>대상 즐겨찾기의 미래 알림을 확인 중입니다. 수집 상태 확인에는 게임 어류도감 열기가 필요할 수 있습니다.</value></data>
+  <data name="AlertsWatching" xml:space="preserve"><value>선택한 알림 대상의 미래 출현 창을 확인 중입니다.</value></data>
   <data name="AlertsOutputFailed" xml:space="preserve"><value>알림 갱신 또는 출력에 실패했습니다. 발송 예약한 알림은 재전송하지 않습니다. 반복되면 플러그인 로그를 확인하세요.</value></data>
   <data name="AlertsCounts" xml:space="preserve"><value>대상 예약 {0}종 · 대기 {1}종 · 이번 세션 발송 {2}종</value></data>
   <data name="AlertsNext" xml:space="preserve"><value>다음 알림: {0} · 현지 {1:MM-dd HH:mm:ss} · 창 시작 {2:MM-dd HH:mm:ss}</value></data>
@@ -277,7 +277,7 @@
   <data name="AlertRemainingHours" xml:space="preserve"><value>{0}시간 {1}분 {2}초 후</value></data>
   <data name="AlertRemainingMinutes" xml:space="preserve"><value>{0}분 {1}초 후</value></data>
   <data name="AlertFavorites" xml:space="preserve"><value>즐겨찾기</value></data>
-  <data name="AlertFavoritesHint" xml:space="preserve"><value>알림 제외 어종을 포함한 모든 즐겨찾기를 표시합니다. 개별 시간을 켜면 기본 시간 대신 적용하고, 끄면 기본 시간을 따릅니다. 개별 시간은 공통 설정이며 즐겨찾기를 해제해도 보존합니다. 최종 미수집인 어종만 알림을 받습니다.</value></data>
+  <data name="AlertFavoritesHint" xml:space="preserve"><value>모든 즐겨찾기를 표시합니다. 개별 시간을 끄면 기본 시간을 따릅니다. 즐겨찾기 삭제 시 미래 알림은 취소하고 개별 시간과 발송 기록은 보존합니다. 즐겨찾기와 알림 설정은 캐릭터 공통입니다.</value></data>
   <data name="AlertFavoriteName" xml:space="preserve"><value>{0} (ID {1})</value></data>
   <data name="AlertCustomLead" xml:space="preserve"><value>개별 시간</value></data>
   <data name="AlertFishMinutes" xml:space="preserve"><value>분 전</value></data>
@@ -375,4 +375,8 @@
   <data name="ChatGmLinkshell7" xml:space="preserve"><value>GM 링크셸 7</value></data>
   <data name="ChatGmLinkshell8" xml:space="preserve"><value>GM 링크셸 8</value></data>
   <data name="ChatGmNoviceNetwork" xml:space="preserve"><value>GM 초보자 채널</value></data>
+  <data name="AlertUncaughtOnly" xml:space="preserve"><value>미수집 어종만 알림</value></data>
+  <data name="AlertAutoRemove" xml:space="preserve"><value>새 어종 도감 등록 시 즐겨찾기 자동 해제</value></data>
+  <data name="AlertAutoRemoveHint" xml:space="preserve"><value>알림 켜기와 별도로 작동합니다. 새 어종 등록이 확인되면 공통 즐겨찾기에서 해제합니다. 도감 열기·수동 수집 지정·이미 등록한 어종 다시 잡기는 해제 조건이 아닙니다. 개별 시간과 발송 기록은 보존합니다.</value></data>
+  <data name="AlertRemoveFavorite" xml:space="preserve"><value>즐겨찾기 삭제</value></data>
 </root>

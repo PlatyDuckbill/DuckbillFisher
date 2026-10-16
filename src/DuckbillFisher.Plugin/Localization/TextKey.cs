@@ -2,6 +2,10 @@ namespace DuckbillFisher.Plugin.Localization;
 
 internal enum TextKey
 {
+    AlertUncaughtOnly,
+    AlertAutoRemove,
+    AlertAutoRemoveHint,
+    AlertRemoveFavorite,
     ChatChannelFallback,
     AlertLinkedRemaining,
     ChatDebug,

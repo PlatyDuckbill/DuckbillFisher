@@ -249,9 +249,9 @@
   <data name="GeographyScopeCount" xml:space="preserve"><value>{0} regions in the selected expansions · {1} search results</value></data>
   <data name="GeographyHiddenRegions" xml:space="preserve"><value>{0} selected regions are outside the selected expansions and still affect the filter. Hover to see their names.</value></data>
   <data name="GeographyClearHidden" xml:space="preserve"><value>Clear regions outside these expansions</value></data>
-  <data name="TabAlerts" xml:space="preserve"><value>Spawn alerts</value></data>
+  <data name="TabAlerts" xml:space="preserve"><value>Favorites management</value></data>
   <data name="AlertsRulesHeading" xml:space="preserve"><value>Delivery rules and scope</value></data>
-  <data name="AlertsIntro" xml:space="preserve"><value>Local reminders for favorites whose final collection status is Uncaught; manual settings take priority. List filters do not restrict alerts. Normal time/weather forecasts do not establish bait, intuition or other personal readiness.</value></data>
+  <data name="AlertsIntro" xml:space="preserve"><value>Manage favorites and their local reminders. By default, all favorites can alert regardless of collection status. Uncaught only uses the final collection status with manual overrides first and excludes Unknown. List filters are independent. Normal time/weather windows do not establish personal readiness.</value></data>
   <data name="AlertsEnable" xml:space="preserve"><value>Enable local chat spawn alerts</value></data>
   <data name="AlertsLead" xml:space="preserve"><value>Default minutes before opening</value></data>
   <data name="AlertsLeadRange" xml:space="preserve"><value>Range: {0}–{1} real minutes. Settings are shared; delivery records are separate for each character.</value></data>
@@ -260,7 +260,7 @@
   <data name="AlertsWaitingCharacter" xml:space="preserve"><value>Waiting for character data. Previous character reservations have been discarded.</value></data>
   <data name="AlertsStorageUnavailable" xml:space="preserve"><value>Alerts paused: settings or delivery records could not be saved. Resolve the storage issue and change a setting to retry. No alert was sent without a saved reservation.</value></data>
   <data name="AlertsForecastUnavailable" xml:space="preserve"><value>Waiting for a fresh, compatible time/weather forecast.</value></data>
-  <data name="AlertsWatching" xml:space="preserve"><value>Watching future deadlines for eligible favorites. Collection status may require opening the in-game Fish Guide.</value></data>
+  <data name="AlertsWatching" xml:space="preserve"><value>Watching future deadlines for the selected favorite alert audience.</value></data>
   <data name="AlertsOutputFailed" xml:space="preserve"><value>Could not update or output alerts. Reserved reminders are not replayed. Check the plugin log if this continues.</value></data>
   <data name="AlertsCounts" xml:space="preserve"><value>Eligible plans: {0} · Armed: {1} · Reminders sent this session: {2}</value></data>
   <data name="AlertsNext" xml:space="preserve"><value>Next reminder: {0} · local {1:MM-dd HH:mm:ss} · window starts {2:MM-dd HH:mm:ss}</value></data>
@@ -277,7 +277,7 @@
   <data name="AlertRemainingHours" xml:space="preserve"><value>in {0}h {1}m {2}s</value></data>
   <data name="AlertRemainingMinutes" xml:space="preserve"><value>in {0}m {1}s</value></data>
   <data name="AlertFavorites" xml:space="preserve"><value>Favorites</value></data>
-  <data name="AlertFavoritesHint" xml:space="preserve"><value>All favorites are listed, including fish excluded from alerts. Enable a per-fish time to override the default; disabling it restores the default. Overrides are shared and preserved when a favorite is removed. Only a final Uncaught status can trigger an alert.</value></data>
+  <data name="AlertFavoritesHint" xml:space="preserve"><value>All favorites are listed. Per-fish time overrides the default; uncheck it to use the default. Removing a favorite cancels future reminders and preserves its custom time and delivery history. Favorites and alert settings are shared between characters.</value></data>
   <data name="AlertFavoriteName" xml:space="preserve"><value>{0} (ID {1})</value></data>
   <data name="AlertCustomLead" xml:space="preserve"><value>Per-fish time</value></data>
   <data name="AlertFishMinutes" xml:space="preserve"><value>minutes before</value></data>
@@ -375,4 +375,8 @@
   <data name="ChatGmLinkshell7" xml:space="preserve"><value>GM linkshell 7</value></data>
   <data name="ChatGmLinkshell8" xml:space="preserve"><value>GM linkshell 8</value></data>
   <data name="ChatGmNoviceNetwork" xml:space="preserve"><value>GM Novice Network</value></data>
+  <data name="AlertUncaughtOnly" xml:space="preserve"><value>Alert for uncaught fish only</value></data>
+  <data name="AlertAutoRemove" xml:space="preserve"><value>Remove favorite on new Fish Guide registration</value></data>
+  <data name="AlertAutoRemoveHint" xml:space="preserve"><value>Independent of enabling alerts. A confirmed new-fish registration removes it from shared favorites. Opening the guide, changing manual collection status and catching an already registered fish do not trigger removal. Custom alert times and delivery history are preserved.</value></data>
+  <data name="AlertRemoveFavorite" xml:space="preserve"><value>Remove favorite</value></data>
 </root>

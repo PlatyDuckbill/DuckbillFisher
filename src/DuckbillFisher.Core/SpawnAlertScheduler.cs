@@ -1,5 +1,7 @@
 namespace DuckbillFisher.Core;
 
+public enum SpawnAlertAudience { AllFavorites, UncaughtOnly }
+
 public sealed record SpawnAlertCandidate(uint FishId, bool Favorite, CollectionStatus Collection, FishingWindow Window,
     int? LeadMinutes = null);
 public sealed record SpawnAlert(uint FishId, DateTimeOffset Start);
@@ -16,6 +18,13 @@ public sealed class SpawnAlertScheduler
     private TimeSpan previousElapsed;
     private int previousSession;
     private bool wasEnabled;
+
+    public static bool Includes(SpawnAlertAudience audience, CollectionStatus collection) => audience switch
+    {
+        SpawnAlertAudience.AllFavorites => true,
+        SpawnAlertAudience.UncaughtOnly => collection == CollectionStatus.Uncaught,
+        _ => false,
+    };
 
     public static FishingWindow? FindFutureWindow(DateTimeOffset now, int leadMinutes, FishingWindow? first,
         FishingRule rule, IReadOnlyList<WeatherChance> rates, long reservedStartUnixMilliseconds)
@@ -42,7 +51,7 @@ public sealed class SpawnAlertScheduler
     }
 
     public SpawnAlertEvaluation Evaluate(DateTimeOffset now, TimeSpan elapsed, int session, bool enabled,
-        int leadMinutes, IReadOnlyList<SpawnAlertCandidate> candidates)
+        int leadMinutes, SpawnAlertAudience audience, IReadOnlyList<SpawnAlertCandidate> candidates)
     {
         var delta = elapsed - previousElapsed;
         var rebase = previousUtc is null || session != previousSession || enabled != wasEnabled ||
@@ -54,7 +63,7 @@ public sealed class SpawnAlertScheduler
         {
             foreach (var fish in candidates)
             {
-                if (fish.FishId == 0 || !fish.Favorite || fish.Collection != CollectionStatus.Uncaught ||
+                if (fish.FishId == 0 || !fish.Favorite || !Includes(audience, fish.Collection) ||
                     fish.Window is not { Kind: FishingWindowKind.Upcoming, Start: { } start } || start <= now)
                     continue;
                 var lead = fish.LeadMinutes ?? leadMinutes;
