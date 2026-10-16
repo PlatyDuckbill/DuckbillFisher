@@ -220,4 +220,9 @@
   <data name="RowStateLocation" xml:space="preserve"><value>{0} · {1}</value></data>
   <data name="RowIntuition" xml:space="preserve"><value>직감 필요</value></data>
   <data name="RowFolklore" xml:space="preserve"><value>전승록 필요</value></data>
+  <data name="CurrentRegionOnly" xml:space="preserve"><value>현재 지역만</value></data>
+  <data name="CurrentRegionHint" xml:space="preserve"><value>현재 지역에 확인된 일반 낚시터가 하나 이상 있는 어종만 표시합니다. 검색·즐겨찾기·수집 필터와 함께 적용하며 먼바다·위치 미확인 어종은 제외합니다. 다른 필터 선택은 유지합니다.</value></data>
+  <data name="CurrentRegionName" xml:space="preserve"><value>현재 지역: {0} (일반 낚시터 기준)</value></data>
+  <data name="CurrentRegionUnavailable" xml:space="preserve"><value>로그아웃·지역 이동 중이거나 지역 정보를 기다리고 있습니다. 현재 지역 필터의 결과는 표시하지 않습니다.</value></data>
+  <data name="RegionForecastElsewhere" xml:space="preserve"><value>다른 지역의 추천 낚시터 기준: {0}</value></data>
 </root>

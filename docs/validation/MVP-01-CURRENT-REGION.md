@@ -1,0 +1,33 @@
+# MVP-01 현재 지역 필터
+
+날짜: 2026-10-16 · Plugin 0.1.14.0 · 인게임 검증 대기
+
+## 사용자 동작과 근거
+
+- ‘현재 지역만’을 켜면 현재 Territory ID의 일반 낚시터에 연결된 어종만 표시한다. 복수 낚시터 중 하나라도 일치하면 포함한다. 위치가 확인되지 않은 어종과 먼바다는 포함하지 않는다.
+- 검색·즐겨찾기·수집·수첩 포함·상세 자료 필터와 함께 적용한다. 토글/지역 변경이 다른 필터 선택을 바꾸지 않는다. 결과에서 사라진 선택 어종은 기존 동작대로 해제한다.
+- 현재 지역 이름과 일반 낚시터 기준임을 표시한다. 체크 위 툴팁에 조합/제외 범위를 설명한다. 로그아웃/지역 이동/조회 실패 시 안내와 빈 결과를 표시하며 전체 어종으로 돌아가지 않는다.
+- 목록의 장소는 현재 지역 낚시터를 우선한다. 조건과 예측이 다른 지역의 추천 낚시터 자료라면 각 줄에 이를 명시한다. 추천 장소의 예측을 현재 장소의 예측으로 다시 해석하지 않는다.
+- 설치된 KR Dalamud 15.0.3.6의 `Dalamud.xml`에서 공개 `IClientState.TerritoryType/IsLoggedIn`과 `ConditionFlag.BetweenAreas/BetweenAreas51`을 확인했다. 네이티브 포인터/오프셋/게임 입력은 추가하지 않았다.
+
+## 수명과 비용
+
+- `FishingRegionObserver`가 Framework.Update에서 공개 상태를 읽고 관리 스냅샷을 제공한다. 이름은 지역 변경 시 시트에서 읽으며 실패는 `Environment.TickCount64` 기준 1초 후 재시도한다. Dispose는 Update 구독을 해제하고 표본을 비운다.
+- `FishCatalog`는 목록 로드/재로드 때 일반 낚시터의 Territory→어종 ID 집합을 만든다. 지역/필터/기존 데이터가 바뀔 때만 UI의 기존 필터 결과를 갱신한다. 렌더링 중 시트 조회/원본 재탐색/장기 예측은 추가하지 않았다.
+- 검색·정렬·수집 판정·내장 원본·언어 변경 시 상태 유지 방식은 기존 계약을 따른다. 이름은 클라이언트 시트, UI는 한영 리소스다.
+- 진단은 preferences/v3으로 올려 `CurrentRegionOnly/Territory/RegionState/RegionFish` 한 줄을 추가했다. RegionFish는 다른 필터 적용 전 연결 수이며 Displayed와 구분한다. 이름/캐릭터 식별자는 새로 기록하지 않는다.
+
+## 실행한 확인
+
+- 별도 빌드: `dotnet build src/DuckbillFisher.Plugin/DuckbillFisher.Plugin.csproj --no-restore -c Debug -p:DalamudLibPath=C:/Users/hyogu/AppData/Roaming/XIVLauncherKR/addon/Hooks/dev/ -p:OutputPath=C:/Users/hyogu/Downloads/DuckbillFisher/.cache/current-region-build/` 성공, 경고·오류 0.
+- `pwsh -NoLogo -NoProfile -File scripts/check-localization.ps1`: 한영 221키/형식 인자 일치 확인.
+- 사용자 ‘언로드 완료.’ 확인 후 위 명령의 OutputPath 인자 없이 정규 Debug 빌드 성공, 경고·오류 0. 주 DLL/ko 0.1.14.0, Core 1.0.0.0, manifest InternalName DuckbillFisher/0.1.14.0/API 15 확인.
+- `git diff --check` 확인. 테스트는 추가/실행하지 않았다. 지역 이동·구독 해제/재로드·필터 조합의 실제 게임 동작은 미확인이다.
+
+## 인게임 확인 순서
+
+1. 기존 DLL 경로로 0.1.14.0 로드. 검색은 비우고 수집=전체, 즐겨찾기/상세 자료만을 끈 뒤 ‘현재 지역만’을 켠다. 표시 지역 이름이 실제 지역이고 목록 행의 낚시터도 같은 지역이어야 한다. 다른 필터를 남겼다면 결과 수가 줄어드는 것은 정상이다.
+2. 황금나비어(194)는 림사 로민사 상층 갑판에서 포함되고 하층 등 다른 지역에서는 제외되어야 한다. 이동 후 지역 이름/목록이 자동 갱신되어야 한다. 낚시터 없는 지역의 빈 결과는 정상이다.
+3. 지역 필터를 켠 상태에서 수집/즐겨찾기 필터를 바꾸고 한영 전환한다. 각 선택이 유지되며 조합대로 좁혀져야 한다. 지역 필터를 꺼도 다른 선택은 유지한다.
+4. 먼바다 포함을 켜도 현재 지역만이 켜져 있으면 먼바다 어종이 섞이지 않아야 한다. 지역 판정 실패 시 이전 지역 어종을 표시하지 않아야 한다.
+5. 기본 회신은 정상 여부와 지역 이동 결과다. 이상이 있을 때만 짧은 진단 한 개 또는 문제 화면을 받는다. 도감/전체 데이터 연결 검증은 반복하지 않는다.

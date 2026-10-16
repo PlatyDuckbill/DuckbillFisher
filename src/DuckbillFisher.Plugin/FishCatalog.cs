@@ -1,4 +1,5 @@
 using System.Text;
+using System.Collections.Frozen;
 using DuckbillFisher.Core;
 using Dalamud.Plugin.Services;
 using DuckbillFisher.Plugin.Localization;
@@ -32,6 +33,7 @@ internal sealed record FishGuideRow(uint FishParameterId, uint ItemId, string It
 
 internal sealed record FishCatalogView(IReadOnlyList<FishGuideRow> Rows, UiMessage Status)
 {
+    public IReadOnlyDictionary<uint, IReadOnlySet<uint>> FishByTerritory { get; init; } = FrozenDictionary<uint, IReadOnlySet<uint>>.Empty;
     public IReadOnlyDictionary<uint, FishingDetailView> RelatedDetails { get; init; } = new Dictionary<uint, FishingDetailView>();
     public IReadOnlyDictionary<uint, FishingWindow> Windows { get; init; } = new Dictionary<uint, FishingWindow>();
     public int ForecastRevision { get; init; }
@@ -226,6 +228,12 @@ internal sealed class FishCatalog : IDisposable
                 if (rows.Count == 0)
                     throw new InvalidDataException("FishParameter sheet is empty.");
                 view = new(rows.ToArray(), new(T.CatalogLoaded)) {
+                    FishByTerritory = rows.Where(row => row.IsDisplayable && !row.IsOceanFishing)
+                        .SelectMany(row => row.Spots.Where(spot => spot.TerritoryId != 0)
+                            .Select(spot => (spot.TerritoryId, row.FishParameterId)))
+                        .GroupBy(pair => pair.TerritoryId)
+                        .ToFrozenDictionary(group => group.Key,
+                            group => (IReadOnlySet<uint>)group.Select(pair => pair.FishParameterId).ToFrozenSet()),
                     RelatedDetails = rows.Where(row => row.Details is not null).ToDictionary(row => row.ItemId, row => row.Details!)
                 };
                 nextForecast = DateTimeOffset.MinValue;

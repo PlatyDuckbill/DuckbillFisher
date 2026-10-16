@@ -2,6 +2,11 @@ namespace DuckbillFisher.Plugin.Localization;
 
 internal enum TextKey
 {
+    CurrentRegionOnly,
+    CurrentRegionHint,
+    CurrentRegionName,
+    CurrentRegionUnavailable,
+    RegionForecastElsewhere,
     RowBaitPath,
     RowBaitUnknown,
     RowConditionsUnknown,

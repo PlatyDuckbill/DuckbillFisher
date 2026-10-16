@@ -220,4 +220,9 @@
   <data name="RowStateLocation" xml:space="preserve"><value>{0} · {1}</value></data>
   <data name="RowIntuition" xml:space="preserve"><value>Intuition required</value></data>
   <data name="RowFolklore" xml:space="preserve"><value>Folklore required</value></data>
+  <data name="CurrentRegionOnly" xml:space="preserve"><value>Current region only</value></data>
+  <data name="CurrentRegionHint" xml:space="preserve"><value>Includes fish with at least one known ordinary fishing spot in your current region. Combines with search, favorites and collection filters. Ocean fishing and unlocated fish are excluded. Other filter selections are preserved.</value></data>
+  <data name="CurrentRegionName" xml:space="preserve"><value>Current region: {0} (ordinary fishing spots)</value></data>
+  <data name="CurrentRegionUnavailable" xml:space="preserve"><value>Current region is unavailable while logged out, moving between areas, or waiting for region data. No fish are shown by this filter.</value></data>
+  <data name="RegionForecastElsewhere" xml:space="preserve"><value>Recommended spot in another region: {0}</value></data>
 </root>
