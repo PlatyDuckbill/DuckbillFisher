@@ -163,6 +163,7 @@ internal sealed class FishListPanel(FishCatalog catalog, ITextureProvider textur
             (!favoritesOnly || personal.Favorites.Contains(row.FishParameterId)) &&
             CollectionFilter.Matches(personal.Collection(row.FishParameterId, observed), (CollectionVisibility)collectionVisibility) &&
             (term.Length == 0 || row.Name.Contains(term, StringComparison.OrdinalIgnoreCase) ||
+             row.Ocean?.Area.Contains(term, StringComparison.OrdinalIgnoreCase) == true ||
              row.Spots.Any(spot => spot.Name.Contains(term, StringComparison.OrdinalIgnoreCase) || spot.Zone.Contains(term, StringComparison.OrdinalIgnoreCase)) ||
              row.FishParameterId.ToString(CultureInfo.InvariantCulture) == term));
         matches = (sort switch
@@ -201,9 +202,11 @@ internal sealed class FishListPanel(FishCatalog catalog, ITextureProvider textur
         else
             ImGui.Dummy(new Vector2(iconSize));
         ImGui.SetCursorPos(start + new Vector2(iconSize + 14, 4));
-        ImGui.TextUnformatted(fish.DisplayName);
+        ImGui.TextUnformatted(fish.IsOceanFishing ? UiText.Get(T.OceanRowLabel, fish.DisplayName) : fish.DisplayName);
         ImGui.SetCursorPos(start + new Vector2(iconSize + 14, 4 + ImGui.GetTextLineHeightWithSpacing()));
-        if (fish.Spots.FirstOrDefault() is { } spot)
+        if (fish.Ocean is { } ocean)
+            ImGui.TextUnformatted(UiText.Get(T.OceanArea, ocean.Area));
+        else if (fish.Spots.FirstOrDefault() is { } spot)
             ImGui.TextUnformatted(spot.Name);
         else
             ImGui.TextDisabled(UiText.Get(fish.IsDisplayable ? T.CatalogRowInfo : T.CatalogUnresolvedRow, fish.FishParameterId));
@@ -232,6 +235,7 @@ internal sealed class FishListPanel(FishCatalog catalog, ITextureProvider textur
         else
         {
             ImGui.TextUnformatted(selected.DisplayName);
+            if (selected.IsOceanFishing) ImGui.TextUnformatted(UiText.Get(T.OceanLabel));
             DrawPreferences(selected, personal, observed);
             ImGui.Separator();
             foreach (var spot in selected.Spots)
@@ -242,12 +246,14 @@ internal sealed class FishListPanel(FishCatalog catalog, ITextureProvider textur
             }
             if (mapService.Result is { } mapResult)
                 ImGui.TextWrapped(mapResult.Display);
-            if (selected.Details is not { } details)
+            if (selected.IsOceanFishing)
+                DrawOcean(selected.Ocean);
+            else if (selected.Details is not { } details)
                 ImGui.TextWrapped(UiText.Get(T.CatalogDetailsMissing));
             else
             {
                 ImGui.Separator();
-                conditions.Draw(details, personal);
+                conditions.Draw(details, personal, view.RelatedDetails);
                 ImGui.Separator();
                 if (view.Windows.TryGetValue(selected.FishParameterId, out var window))
                     DrawWindow(window);
@@ -260,6 +266,8 @@ internal sealed class FishListPanel(FishCatalog catalog, ITextureProvider textur
         if (ImGui.CollapsingHeader(UiText.Label(T.DataSourceLabel, "DataSource")))
         {
             ImGui.TextWrapped(UiText.Get(T.DataSourceInfo, FishingData.Dataset.DataVersion, FishingData.Dataset.SourceRevision[..8]));
+            ImGui.TextWrapped(UiText.Get(T.SourceCoverageInfo, FishingData.Dataset.Fish.Length, FishingData.Dataset.Spearfishing.Length,
+                FishingData.SpearUnknown));
             if (ImGui.Button(UiText.Label(T.CopyDataLicense, "CopyDataLicense")))
                 ImGui.SetClipboardText(FishingData.Notices);
         }
@@ -307,9 +315,10 @@ internal sealed class FishListPanel(FishCatalog catalog, ITextureProvider textur
         else
         {
             var view = catalog.View;
-            report.AppendLine("DuckbillFisher summary/v2");
+            report.AppendLine("DuckbillFisher summary/v3");
             Append($"Plugin={typeof(Plugin).Assembly.GetName().Version}; Rows={view.Rows.Count}; Status={view.Status.Key}");
             Append($"Dataset={FishingData.Dataset.DataVersion}; Details={view.Rows.Count(row => row.Details is not null)}/{FishingData.Dataset.Fish.Length}; BuildMatch={catalog.ConditionBuildMatches}");
+            Append($"Forecasts={view.Windows.Count}; OceanAreas={view.Rows.Count(row => row.Ocean is not null)}; SpearStored={FishingData.Dataset.Spearfishing.Length}; SpearUnknown={FishingData.SpearUnknown}");
             if (selectedFish is { } selected)
                 Append($"SelectedFish={selected.FishParameterId}; Item={selected.ItemId}; Ocean={selected.IsOceanFishing}; Collection={personal.Collection(selected.FishParameterId, observed)}");
         }
@@ -327,6 +336,26 @@ internal sealed class FishListPanel(FishCatalog catalog, ITextureProvider textur
         Append($"Uncaught={observed.Uncaught.Count}; GuideState={observed.GuideState}; GuideEntries={observed.GuideEntries}; Matched={observed.GuideMatched}; Mismatches={observed.GuideMismatches}");
         report.AppendLine("AutomaticUncaught=MatchedGameGuideSnapshot; ObservationsPersisted=False");
         return report.ToString();
+    }
+
+    private static void DrawOcean(OceanFishingView? ocean)
+    {
+        if (ocean is null)
+            ImGui.TextWrapped(UiText.Get(T.OceanArea, new UiMessage(T.ConditionUnknown)));
+        else
+        {
+            ImGui.TextWrapped(UiText.Get(T.OceanArea, ocean.Area));
+            ImGui.TextWrapped(UiText.Get(T.OceanSpot, ocean.FishingSpot));
+            if (ocean.RouteNames.Length > 0)
+                ImGui.TextWrapped(UiText.Get(T.OceanRoutes, string.Join(" / ", ocean.RouteNames)));
+            // Reporting enum ordinals are not assumed to match the game. Only label
+            // a complete three-period route cycle; a partial/unknown cycle stays unknown.
+            var times = ocean.VisitTimes.SequenceEqual(new byte[] { 1, 2, 3 })
+                ? string.Join(" / ", new[] { T.OceanTimeDay, T.OceanTimeSunset, T.OceanTimeNight }.Select(key => UiText.Get(key)))
+                : UiText.Get(T.ConditionUnknown);
+            ImGui.TextWrapped(UiText.Get(T.OceanVisitTimes, times));
+        }
+        ImGui.TextWrapped(UiText.Get(T.OceanScope));
     }
 
     private static void DrawWindow(FishingWindow window)

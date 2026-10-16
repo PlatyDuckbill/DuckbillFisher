@@ -109,7 +109,7 @@
   <data name="NativeCompatible" xml:space="preserve"><value>KR game build and DLLs match the inspected installation</value></data>
   <data name="CatalogDetailsOnly" xml:space="preserve"><value>Only fish with condition details</value></data>
   <data name="CatalogSortWindow" xml:space="preserve"><value>Next window</value></data>
-  <data name="CatalogDetailCoverage" xml:space="preserve"><value>Condition details cross-checked with source data: {0} fish</value></data>
+  <data name="CatalogDetailCoverage" xml:space="preserve"><value>Source information linked: {0} fish. Individual fields may be unknown.</value></data>
   <data name="CatalogDetailPrompt" xml:space="preserve"><value>Select a fish to view fishing spots and details.</value></data>
   <data name="CatalogDetailsMissing" xml:space="preserve"><value>Bait, hookset, and conditions for this fish are not available yet.</value></data>
   <data name="SpotLine" xml:space="preserve"><value>{0} · {1} (X:{2:F1} Y:{3:F1})</value></data>
@@ -185,4 +185,31 @@
   <data name="CollectionAutomaticUncaught" xml:space="preserve"><value>Uncaught (automatic)</value></data>
   <data name="CollectionGuideConfirmed" xml:space="preserve"><value>Collection states matched the complete game guide at the last lookup.</value></data>
   <data name="CollectionHelp" xml:space="preserve"><value>Collection filter help</value></data>
+  <data name="BaitAlternatives" xml:space="preserve"><value>Step {0}: choose one of these alternatives</value></data>
+  <data name="ConditionUnknown" xml:space="preserve"><value>Unknown</value></data>
+  <data name="ConditionsPartial" xml:space="preserve"><value>The source has no confirmed recommended location or complete conditions. Time/weather forecasts are unavailable; known bait information is shown.</value></data>
+  <data name="SnaggingRequired" xml:space="preserve"><value>Snagging</value></data>
+  <data name="LureModest" xml:space="preserve"><value>Modest Lure</value></data>
+  <data name="LureAmbitious" xml:space="preserve"><value>Ambitious Lure</value></data>
+  <data name="FishEyesSupport" xml:space="preserve"><value>Fish Eyes support: {0}. Standard forecasts do not apply this skill.</value></data>
+  <data name="ConditionSupported" xml:space="preserve"><value>Supported</value></data>
+  <data name="ConditionUnsupported" xml:space="preserve"><value>Not supported</value></data>
+  <data name="BigFishLabel" xml:space="preserve"><value>Big fish</value></data>
+  <data name="SourcePatchLabel" xml:space="preserve"><value>Source introduction patch: {0:0.##}</value></data>
+  <data name="RecommendedSpot" xml:space="preserve"><value>These conditions refer to the recommended location: {0} · {1}</value></data>
+  <data name="IntuitionDurationUnknown" xml:space="preserve"><value>Intuition duration: Unknown</value></data>
+  <data name="FolkloreItem" xml:space="preserve"><value>Required folklore book: {0}</value></data>
+  <data name="RequiredSkill" xml:space="preserve"><value>Required skill: {0}</value></data>
+  <data name="RelatedConditions" xml:space="preserve"><value>Show preparation conditions: {0}</value></data>
+  <data name="OceanLabel" xml:space="preserve"><value>Ocean fishing</value></data>
+  <data name="OceanRowLabel" xml:space="preserve"><value>{0} [Ocean fishing]</value></data>
+  <data name="OceanArea" xml:space="preserve"><value>Sea area: {0}</value></data>
+  <data name="OceanSpot" xml:space="preserve"><value>Fishing location: {0}</value></data>
+  <data name="OceanVisitTimes" xml:space="preserve"><value>Route visit periods: {0}</value></data>
+  <data name="OceanTimeSunset" xml:space="preserve"><value>Sunset</value></data>
+  <data name="OceanTimeDay" xml:space="preserve"><value>Day</value></data>
+  <data name="OceanTimeNight" xml:space="preserve"><value>Night</value></data>
+  <data name="OceanScope" xml:space="preserve"><value>Visit periods describe routes to this area, not this fish's catch restrictions. Fish-specific time, bait and special conditions are not established. Standard time/weather forecasts are not applied.</value></data>
+  <data name="OceanRoutes" xml:space="preserve"><value>Route destinations: {0}</value></data>
+  <data name="SourceCoverageInfo" xml:space="preserve"><value>Rod-fishing source records: {0}. Spearfishing records stored separately: {1} ({2} with unknown conditions); spearfishing UI and collection integration are pending.</value></data>
 </root>

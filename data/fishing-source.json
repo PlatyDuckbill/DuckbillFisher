@@ -4,7 +4,6 @@
   "file": "js/app/data.js",
   "sha256": "749F2644C9B5CFAC0D022C2A0E80835F69C74147A20373C4AF5E9A4E75A64B4A",
   "gameBuild": "2026.10.06.0000.0000",
-  "dataVersion": "kr-arr-2026-10-16",
-  "minimumPatch": 2,
-  "exclusiveMaximumPatch": 3
+  "yamlSha256": "75EFEB4E6DFBEF07DC05E66BB8326331391D5374E904192AEE41CCD7E8BAF149",
+  "dataVersion": "kr-all-source-2026-10-16"
 }

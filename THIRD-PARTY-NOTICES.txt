@@ -2,11 +2,12 @@ FFX|V Fish Tracker App / Carbuncle Plushy
 https://github.com/icykoneko/ff14-fish-tracker-app
 Revision: d0e1ab5bba62c2b57356e690a73676cd4751b64d
 
-Derived material: 140 ARR fishing condition records from private/fishData.yaml
+Derived material: 903 rod-fishing and 203 spearfishing records from private/fishData.yaml
 and js/app/data.js; weather target calculation adapted from js/app/weather.js.
 Changes: selected KR-matched IDs and conditions with the development importer,
-excluded 15 location-less helper records, omitted bite-time statistics;
-weather target arithmetic expressed in C#. Game names, icons, maps, and weather
+preserved missing-data markers and alternative baits, excluded four records
+without a matching KR log row, omitted bite-time statistics;
+weather target arithmetic expressed in C#. Displayed game names, icons, maps, and weather
 rates are read from the installed client and are not copied from this project.
 The upstream weather implementation credits Rougeadyn's SaintCoinach library.
 

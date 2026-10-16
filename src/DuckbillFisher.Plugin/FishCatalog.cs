@@ -26,11 +26,13 @@ internal sealed record FishGuideRow(uint FishParameterId, uint ItemId, string It
     public bool IsDisplayable => Resolution == FishRowResolution.Resolved;
     public IReadOnlyList<FishingSpotView> Spots { get; init; } = [];
     public FishingDetailView? Details { get; init; }
+    public OceanFishingView? Ocean { get; init; }
     public string DisplayName => string.IsNullOrWhiteSpace(Name) ? UiText.Get(T.MissingName) : Name;
 }
 
 internal sealed record FishCatalogView(IReadOnlyList<FishGuideRow> Rows, UiMessage Status)
 {
+    public IReadOnlyDictionary<uint, FishingDetailView> RelatedDetails { get; init; } = new Dictionary<uint, FishingDetailView>();
     public IReadOnlyDictionary<uint, FishingWindow> Windows { get; init; } = new Dictionary<uint, FishingWindow>();
     public int ForecastRevision { get; init; }
     public DateTimeOffset? ForecastAt { get; init; }
@@ -96,10 +98,27 @@ internal sealed class FishCatalog : IDisposable
             var now = DateTimeOffset.UtcNow;
             if (view.Rows.Count > 0 && (now >= nextForecast || now < lastForecast))
             {
-                var windows = view.Rows.Where(row => row.Details is not null).ToDictionary(
-                    row => row.FishParameterId,
-                    row => FishingAvailability.Find(now, row.Details!.Rule, row.Details.Spot.WeatherRates));
-                view = view with { Windows = windows, ForecastRevision = view.ForecastRevision + 1, ForecastAt = now };
+                var windows = new Dictionary<uint, FishingWindow>();
+                foreach (var row in view.Rows.Where(row => row.Details is { Spot: not null }))
+                {
+                    var detail = row.Details!;
+                    view.Windows.TryGetValue(row.FishParameterId, out var previous);
+                    // Keep absolute windows until a boundary. Counts/countdowns are rendered from UTC.
+                    // A bounded search with no result is retried each minute, not for every fish each second.
+                    var window = now >= lastForecast && previous is not null ? previous.Kind switch
+                    {
+                        FishingWindowKind.Always => previous,
+                        FishingWindowKind.Upcoming when previous.Start > now => previous,
+                        FishingWindowKind.Upcoming when previous.End > now => previous with { Kind = FishingWindowKind.Open },
+                        FishingWindowKind.Open when previous.End > now => previous,
+                        FishingWindowKind.NotFound when lastForecast.ToUnixTimeSeconds() / 60 == now.ToUnixTimeSeconds() / 60 => previous,
+                        _ => null,
+                    } : null;
+                    windows[row.FishParameterId] = window ?? FishingAvailability.Find(now, detail.Rule, detail.Spot!.WeatherRates);
+                }
+                var changed = windows.Count != view.Windows.Count || windows.Any(pair =>
+                    !view.Windows.TryGetValue(pair.Key, out var previous) || previous != pair.Value);
+                view = view with { Windows = windows, ForecastRevision = view.ForecastRevision + (changed ? 1 : 0), ForecastAt = now };
                 lastForecast = now;
                 nextForecast = now.AddSeconds(1);
             }
@@ -125,6 +144,7 @@ internal sealed class FishCatalog : IDisposable
                 var items = dataManager.GetExcelSheet<Item>()!;
                 var weathers = dataManager.GetExcelSheet<Weather>()!;
                 var actions = dataManager.GetExcelSheet<Lumina.Excel.Sheets.Action>()!;
+                var oceanSpots = LoadOceanSpots();
                 var rules = FishingData.Dataset.Fish.ToDictionary(rule => rule.ItemId);
                 var rows = new List<FishGuideRow>();
                 foreach (var fish in sheet)
@@ -158,10 +178,11 @@ internal sealed class FishCatalog : IDisposable
                     var fishSpots = spots.Values.Where(spot => spot.Items.Contains(item.RowId) ||
                         spot.View.Id == fish.FishingSpot.RowId).Select(spot => spot.View).ToArray();
                     FishingDetailView? details = null;
-                    if (conditionBuildMatches && rules.TryGetValue(item.RowId, out var rule) &&
-                        rule.FishParameterId == fish.RowId && spots.TryGetValue(rule.FishingSpotId, out var sourceSpot) &&
-                        (sourceSpot.Items.Contains(item.RowId) || fish.FishingSpot.RowId == rule.FishingSpotId))
+                    if (conditionBuildMatches && rules.TryGetValue(item.RowId, out var rule) && rule.FishParameterId == fish.RowId &&
+                        (rule.FishingSpotId == 0 || (spots.TryGetValue(rule.FishingSpotId, out var candidate) &&
+                         (candidate.Items.Contains(item.RowId) || fish.FishingSpot.RowId == rule.FishingSpotId))))
                     {
+                        spots.TryGetValue(rule.FishingSpotId, out var sourceSpot);
                         FishingItemView ItemView(uint id)
                         {
                             var value = items.GetRowOrDefault(id);
@@ -172,19 +193,25 @@ internal sealed class FishCatalog : IDisposable
                             var value = weathers.GetRowOrDefault(id);
                             return new(id, value?.Name.ExtractText() ?? "", (uint)Math.Max(0, value?.Icon ?? 0));
                         }
-                        var baits = rule.BaitPath.Select(ItemView).ToArray();
+                        var baits = rule.BaitSteps.Select(step => step.Select(ItemView).ToArray()).ToArray();
                         var currentWeather = rule.WeatherIds.Select(WeatherView).ToArray();
                         var previousWeather = rule.PreviousWeatherIds.Select(WeatherView).ToArray();
                         var predators = rule.Predators.Select(predator => ItemView(predator.ItemId)).ToArray();
                         // Inspected KR Action rows: player fishing skills; icons come from the sheet.
-                        var actionId = rule.Hookset == "Precision" ? 4179u : 4103u;
-                        var action = actions.GetRowOrDefault(actionId);
-                        FishingConditionIcon? hookset = action is { IsPlayerAction: true } skill &&
-                            skill.ClassJob.RowId == 18 && !string.IsNullOrWhiteSpace(skill.Name.ExtractText())
-                            ? new(actionId, skill.Name.ExtractText(), skill.Icon) : null;
-                        if (baits.Concat(predators).All(value => !string.IsNullOrWhiteSpace(value.Name)) &&
+                        FishingConditionIcon? Skill(uint id)
+                        {
+                            var action = id == 0 ? null : actions.GetRowOrDefault(id);
+                            return action is { IsPlayerAction: true } skill && skill.ClassJob.RowId == 18 &&
+                                !string.IsNullOrWhiteSpace(skill.Name.ExtractText()) ? new(id, skill.Name.ExtractText(), skill.Icon) : null;
+                        }
+                        var hookset = Skill(rule.Hookset switch { "Precision" => 4179u, "Powerful" => 4103u, _ => 0 });
+                        var folklore = fish.GatheringSubCategory.RowId != 0 ? ItemView(fish.GatheringSubCategory.Value.Item.RowId) : null;
+                        if (baits.SelectMany(step => step).Concat(predators).All(value => !string.IsNullOrWhiteSpace(value.Name)) &&
+                            (folklore is null || !string.IsNullOrWhiteSpace(folklore.Name)) &&
                             currentWeather.Concat(previousWeather).All(value => !string.IsNullOrWhiteSpace(value.Name)))
-                            details = new(rule, sourceSpot.View, baits, currentWeather, previousWeather, predators, hookset);
+                            details = new(rule, sourceSpot.View, baits, currentWeather, previousWeather, predators, hookset,
+                                Skill(rule.SnaggingRequired ? 4100u : 0),
+                                Skill(rule.Lure switch { "Modest" => 37595u, "Ambitious" => 37594u, _ => 0 }), folklore);
                     }
                     rows.Add(new(fish.RowId, item.RowId, item.RowType?.Name ?? "Unknown", name ?? "", fish.IsInLog)
                     {
@@ -193,11 +220,14 @@ internal sealed class FishCatalog : IDisposable
                         Resolution = resolution,
                         Spots = fishSpots,
                         Details = details,
+                        Ocean = fish.OceanStars > 0 && oceanSpots.TryGetValue(fish.FishingSpot.RowId, out var ocean) ? ocean : null,
                     });
                 }
                 if (rows.Count == 0)
                     throw new InvalidDataException("FishParameter sheet is empty.");
-                view = new(rows.ToArray(), new(T.CatalogLoaded));
+                view = new(rows.ToArray(), new(T.CatalogLoaded)) {
+                    RelatedDetails = rows.Where(row => row.Details is not null).ToDictionary(row => row.ItemId, row => row.Details!)
+                };
                 nextForecast = DateTimeOffset.MinValue;
             }
             catch (Exception ex)
@@ -206,6 +236,25 @@ internal sealed class FishCatalog : IDisposable
             }
             return view.Rows;
         }
+    }
+
+    private Dictionary<uint, OceanFishingView> LoadOceanSpots()
+    {
+        var result = new Dictionary<uint, OceanFishingView>();
+        var routes = dataManager.GetExcelSheet<IKDRoute>()!.Where(route => route.RowId != 0)
+            .Select(route => (Name: route.Name.ExtractText(), Spots: route.Spot.ToArray(), Times: route.Time.ToArray())).ToArray();
+        foreach (var spot in dataManager.GetExcelSheet<IKDSpot>()!.Where(spot => spot.RowId != 0))
+        {
+            var visits = routes.SelectMany(route => route.Spots.Select((target, index) => (target, index))
+                .Where(value => value.target.RowId == spot.RowId && value.index < route.Times.Length)
+                .Select(value => (route.Name, Time: route.Times[value.index].Value.TimeOfDay))).ToArray();
+            foreach (var location in new[] { spot.SpotMain, spot.SpotSub })
+                if (location.RowId != 0 && location.Value is { } fishingSpot)
+                    result[location.RowId] = new(spot.PlaceName.Value.Name.ExtractText(), fishingSpot.PlaceName.Value.Name.ExtractText(),
+                        visits.Select(visit => visit.Name).Where(name => !string.IsNullOrWhiteSpace(name)).Distinct().ToArray(),
+                        visits.Select(visit => visit.Time).Where(time => time is >= 1 and <= 3).Distinct().Order().ToArray());
+        }
+        return result;
     }
 
     private Dictionary<uint, (FishingSpotView View, HashSet<uint> Items)> LoadSpots()
@@ -241,11 +290,12 @@ internal sealed class FishCatalog : IDisposable
         var unresolved = snapshot.Rows.Where(row => !row.IsDisplayable).ToArray();
         var report = new StringBuilder();
         void Append(FormattableString line) => report.AppendLine(FormattableString.Invariant(line));
-        report.AppendLine("DuckbillFisher MVP-01/catalog/v3");
+        report.AppendLine("DuckbillFisher MVP-01/catalog/v4");
         Append($"Plugin: {typeof(Plugin).Assembly.GetName().Version}");
         Append($"Rows: {snapshot.Rows.Count}; displayable: {snapshot.Rows.Count - unresolved.Length}; unresolved: {unresolved.Length}; unresolved in log: {unresolved.Count(row => row.IsInLog)}");
         report.AppendLine($"Status: [{snapshot.Status.Key}] {snapshot.Status.Diagnostic}");
         Append($"Dataset: {FishingData.Dataset.DataVersion}; buildMatch={conditionBuildMatches}; detailRows={snapshot.Rows.Count(row => row.Details is not null)}; rowsWithSpots={snapshot.Rows.Count(row => row.Spots.Count > 0)}");
+        Append($"Coverage: oceanAreas={snapshot.Rows.Count(row => row.Ocean is not null)}; spearStored={FishingData.Dataset.Spearfishing.Length}; spearConditionsUnknown={FishingData.SpearUnknown}");
         Append($"ForecastAt: {snapshot.ForecastAt:O}; horizonPeriods={FishingAvailability.SearchPeriods}; normal time/weather only; no personal readiness inference");
         report.AppendLine($"Source: {FishingData.Dataset.SourceRepository}/tree/{FishingData.Dataset.SourceRevision}");
         report.AppendLine("Detail samples: up to 20, selected fish first, then ordered by FishParameter ID.");
@@ -254,7 +304,7 @@ internal sealed class FishCatalog : IDisposable
         {
             var detail = row.Details!;
             snapshot.Windows.TryGetValue(row.FishParameterId, out var window);
-            Append($"Detail: FishParameter={row.FishParameterId}; Item={row.ItemId}; spot={detail.Spot.Id}; territory={detail.Spot.TerritoryId}; map={detail.Spot.MapId}; x={detail.Spot.X:F4}; y={detail.Spot.Y:F4}; window={window?.Kind}; start={window?.Start:O}; end={window?.End:O}");
+            Append($"Detail: FishParameter={row.FishParameterId}; Item={row.ItemId}; spot={detail.Spot?.Id}; territory={detail.Spot?.TerritoryId}; map={detail.Spot?.MapId}; x={detail.Spot?.X:F4}; y={detail.Spot?.Y:F4}; window={window?.Kind}; start={window?.Start:O}; end={window?.End:O}");
         }
         foreach (var group in unresolved.GroupBy(row => row.Resolution).OrderBy(group => group.Key))
             Append($"Resolution: {group.Key}; count: {group.Count()}");

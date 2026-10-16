@@ -109,7 +109,7 @@
   <data name="NativeCompatible" xml:space="preserve"><value>조사한 KR 게임 빌드와 DLL 일치</value></data>
   <data name="CatalogDetailsOnly" xml:space="preserve"><value>상세 조건 있는 어종만</value></data>
   <data name="CatalogSortWindow" xml:space="preserve"><value>출현 시간순</value></data>
-  <data name="CatalogDetailCoverage" xml:space="preserve"><value>출처 자료와 대조한 상세 조건: {0}종</value></data>
+  <data name="CatalogDetailCoverage" xml:space="preserve"><value>출처 자료가 연결된 어종: {0}종. 일부 필드는 미확인일 수 있습니다.</value></data>
   <data name="CatalogDetailPrompt" xml:space="preserve"><value>목록에서 어종을 선택하면 낚시터와 상세 정보를 표시합니다.</value></data>
   <data name="CatalogDetailsMissing" xml:space="preserve"><value>이 어종의 미끼·낚아채기·출현 조건은 아직 준비 중입니다.</value></data>
   <data name="SpotLine" xml:space="preserve"><value>{0} · {1} (X:{2:F1} Y:{3:F1})</value></data>
@@ -185,4 +185,31 @@
   <data name="CollectionAutomaticUncaught" xml:space="preserve"><value>미수집 (자동)</value></data>
   <data name="CollectionGuideConfirmed" xml:space="preserve"><value>마지막 조회에서 게임 도감 전체 목록과 수집 상태가 일치했습니다.</value></data>
   <data name="CollectionHelp" xml:space="preserve"><value>수집 필터 안내</value></data>
+  <data name="BaitAlternatives" xml:space="preserve"><value>{0}단계: 다음 대체 후보 중 하나 선택</value></data>
+  <data name="ConditionUnknown" xml:space="preserve"><value>미확인</value></data>
+  <data name="ConditionsPartial" xml:space="preserve"><value>원본의 추천 낚시터 또는 전체 조건이 확인되지 않았습니다. 시간·날씨 예측은 제공하지 않으며, 확인된 미끼 정보만 표시합니다.</value></data>
+  <data name="SnaggingRequired" xml:space="preserve"><value>갈고리 낚시</value></data>
+  <data name="LureModest" xml:space="preserve"><value>소박한 루어</value></data>
+  <data name="LureAmbitious" xml:space="preserve"><value>거대한 루어</value></data>
+  <data name="FishEyesSupport" xml:space="preserve"><value>물고기의 눈 지원: {0}. 기본 예측에는 이 기술을 적용하지 않습니다.</value></data>
+  <data name="ConditionSupported" xml:space="preserve"><value>가능</value></data>
+  <data name="ConditionUnsupported" xml:space="preserve"><value>불가</value></data>
+  <data name="BigFishLabel" xml:space="preserve"><value>터주</value></data>
+  <data name="SourcePatchLabel" xml:space="preserve"><value>원본의 최초 추가 버전: {0:0.##}</value></data>
+  <data name="RecommendedSpot" xml:space="preserve"><value>이 조건의 추천 낚시터: {0} · {1}</value></data>
+  <data name="IntuitionDurationUnknown" xml:space="preserve"><value>직감 지속 시간: 미확인</value></data>
+  <data name="FolkloreItem" xml:space="preserve"><value>필요 전승록: {0}</value></data>
+  <data name="RequiredSkill" xml:space="preserve"><value>필요 기술: {0}</value></data>
+  <data name="RelatedConditions" xml:space="preserve"><value>준비 조건 펼치기: {0}</value></data>
+  <data name="OceanLabel" xml:space="preserve"><value>먼바다 낚시</value></data>
+  <data name="OceanRowLabel" xml:space="preserve"><value>{0} [먼바다]</value></data>
+  <data name="OceanArea" xml:space="preserve"><value>해역: {0}</value></data>
+  <data name="OceanSpot" xml:space="preserve"><value>낚시 장소: {0}</value></data>
+  <data name="OceanVisitTimes" xml:space="preserve"><value>항로의 방문 시간대: {0}</value></data>
+  <data name="OceanTimeSunset" xml:space="preserve"><value>저녁</value></data>
+  <data name="OceanTimeDay" xml:space="preserve"><value>낮</value></data>
+  <data name="OceanTimeNight" xml:space="preserve"><value>밤</value></data>
+  <data name="OceanScope" xml:space="preserve"><value>방문 시간대는 항로의 해역 방문 시간이며 이 어종의 어획 제한을 뜻하지 않습니다. 어종별 시간 제한·미끼·특수 조건은 확인 전입니다. 일반 낚시의 시간·날씨 예측은 적용하지 않습니다.</value></data>
+  <data name="OceanRoutes" xml:space="preserve"><value>항로 목적지: {0}</value></data>
+  <data name="SourceCoverageInfo" xml:space="preserve"><value>일반 낚시 원본 {0}종. 작살 자료는 별도 {1}건 보존({2}건 조건 미확인)하며 작살 화면·수집 연동은 후속입니다.</value></data>
 </root>

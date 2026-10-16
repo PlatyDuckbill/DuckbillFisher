@@ -13,13 +13,23 @@ public sealed record FishingRule
     public uint[] WeatherIds { get; init; } = [];
     public uint[] PreviousWeatherIds { get; init; } = [];
     public uint[] BaitPath { get; init; } = [];
+    public uint[][] BaitSteps { get; init; } = [];
     public string Hookset { get; init; } = "";
     public string Tug { get; init; } = "";
     public FishRequirement[] Predators { get; init; } = [];
     public double? IntuitionSeconds { get; init; }
     public bool FolkloreRequired { get; init; }
     public bool FishEyesSupported { get; init; }
+    public bool ConditionsKnown { get; init; } = true;
+    public bool SnaggingRequired { get; init; }
+    public string Lure { get; init; } = "";
+    public bool BigFish { get; init; }
+    public double Patch { get; init; }
 }
+
+/// <summary>Source spearfishing facts kept separate from rod fishing and character log IDs.</summary>
+public sealed record SpearfishingRule(uint ItemId, uint SpearfishingItemId, uint SourceSpotId,
+    string SourceName, string Gig, bool ConditionsKnown, FishRequirement[] Predators);
 
 public readonly record struct WeatherChance(uint WeatherId, int Chance);
 public enum FishingWindowKind { Unknown, Always, Open, Upcoming, NotFound }
@@ -61,7 +71,7 @@ public static class FishingAvailability
     public static FishingWindow Find(DateTimeOffset now, FishingRule rule, IReadOnlyList<WeatherChance> rates)
     {
         var unix = now.ToUnixTimeMilliseconds() / 1000.0;
-        if (unix < WeatherSeconds || !double.IsFinite(rule.StartHour) || !double.IsFinite(rule.EndHour)
+        if (!rule.ConditionsKnown || unix < WeatherSeconds || !double.IsFinite(rule.StartHour) || !double.IsFinite(rule.EndHour)
             || rule.StartHour < 0 || rule.StartHour >= 24 || rule.EndHour < 0 || rule.EndHour > 24
             || rule.StartHour == rule.EndHour)
             return new(FishingWindowKind.Unknown);
