@@ -108,7 +108,8 @@
   <data name="NativeCheckFailed" xml:space="preserve"><value>Unknown: 호환성 확인 실패 ({0}). 수집 비트 읽기를 비활성화했습니다.</value></data>
   <data name="NativeCompatible" xml:space="preserve"><value>조사한 KR 게임 빌드와 DLL 일치</value></data>
   <data name="CatalogDetailsOnly" xml:space="preserve"><value>상세 조건 있는 어종만</value></data>
-  <data name="CatalogSortWindow" xml:space="preserve"><value>출현 시간순</value></data>
+  <data name="CatalogSortWindow" xml:space="preserve"><value>남은 시간순</value></data>
+  <data name="CatalogSortWindowHint" xml:space="preserve"><value>현재 열린 창은 종료가 가까운 순, 이후 예정 창은 시작이 가까운 순입니다. 예측 미확인은 그 뒤, 상시 어종은 맨 아래입니다. 상시 어종을 제외하려면 ‘시간제만’을 켜세요. 일반 시간·날씨 창 기준이며 개인 준비 조건은 별도입니다.</value></data>
   <data name="CatalogDetailCoverage" xml:space="preserve"><value>출처 자료가 연결된 어종: {0}종. 일부 필드는 미확인일 수 있습니다.</value></data>
   <data name="CatalogDetailPrompt" xml:space="preserve"><value>목록에서 어종을 선택하면 낚시터와 상세 정보를 표시합니다.</value></data>
   <data name="CatalogDetailsMissing" xml:space="preserve"><value>이 어종의 미끼·낚아채기·출현 조건은 아직 준비 중입니다.</value></data>
@@ -141,9 +142,9 @@
   <data name="IntuitionDuration" xml:space="preserve"><value>직감 지속 시간: {0}초</value></data>
   <data name="FolkloreRequired" xml:space="preserve"><value>해당 전승록이 필요합니다.</value></data>
   <data name="ForecastAlways" xml:space="preserve"><value>시간·날씨 제한 없음</value></data>
-  <data name="ForecastOpen" xml:space="preserve"><value>시간·날씨 창 열림 · {0} 뒤 종료</value></data>
+  <data name="ForecastOpen" xml:space="preserve"><value>시간·날씨 창 열림 · 종료까지 {0}</value></data>
   <data name="ForecastOpenNoEnd" xml:space="preserve"><value>시간·날씨 창 열림 · 탐색 범위 내 종료 시점 미확인</value></data>
-  <data name="ForecastUpcoming" xml:space="preserve"><value>시간·날씨 창: {0} 후 시작 · 현지 시각 {1}</value></data>
+  <data name="ForecastUpcoming" xml:space="preserve"><value>시간·날씨 창 · 시작까지 {0} · 현지 시각 {1}</value></data>
   <data name="ForecastEnd" xml:space="preserve"><value>종료: 현지 시각 {0}</value></data>
   <data name="ForecastNotFound" xml:space="preserve"><value>앞으로 실제 시간 7일 범위에서 다음 창을 찾지 못했습니다.</value></data>
   <data name="ForecastUnknown" xml:space="preserve"><value>출현 시간 예측을 준비하지 못했습니다.</value></data>

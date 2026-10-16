@@ -93,6 +93,7 @@ internal sealed class FishListPanel(FishCatalog catalog, ITextureProvider textur
         ImGui.SetNextItemWidth(160);
         string[] sortNames = [UiText.Get(T.CatalogSortName), UiText.Get(T.CatalogSortId), UiText.Get(T.CatalogSortWindow), UiText.Get(T.CatalogSortFavorite)];
         changed |= ImGui.Combo(UiText.Label(T.CatalogSort, "CatalogSort"), ref sort, sortNames, sortNames.Length);
+        if (sort == 2 && ImGui.IsItemHovered()) ImGui.SetTooltip(UiText.Get(T.CatalogSortWindowHint));
         if (ImGui.Button(UiText.Label(T.ReloadFish, "ReloadCatalog")))
             catalog.RequestLoad(reload: true);
         ImGui.SameLine();
@@ -209,7 +210,8 @@ internal sealed class FishListPanel(FishCatalog catalog, ITextureProvider textur
         matches = (sort switch
         {
             0 => filtered.OrderBy(row => row.Name, NameComparer).ThenBy(row => row.FishParameterId),
-            2 => filtered.OrderBy(row => WindowSortKey(view, row.FishParameterId)).ThenBy(row => row.FishParameterId),
+            2 => filtered.OrderBy(row => WindowSortKey(view, row.FishParameterId))
+                .ThenBy(row => row.Name, NameComparer).ThenBy(row => row.FishParameterId),
             3 => filtered.OrderByDescending(row => personal.Favorites.Contains(row.FishParameterId))
                 .ThenBy(row => row.Name, NameComparer).ThenBy(row => row.FishParameterId),
             _ => filtered.OrderBy(row => row.FishParameterId),
@@ -297,13 +299,8 @@ internal sealed class FishListPanel(FishCatalog catalog, ITextureProvider textur
         }
     }
 
-    private static DateTimeOffset WindowSortKey(FishCatalogView view, uint id) =>
-        view.Windows.TryGetValue(id, out var window) ? window.Kind switch
-        {
-            FishingWindowKind.Open or FishingWindowKind.Always => DateTimeOffset.MinValue,
-            FishingWindowKind.Upcoming => window.Start ?? DateTimeOffset.MaxValue,
-            _ => DateTimeOffset.MaxValue,
-        } : DateTimeOffset.MaxValue;
+    private static (FishingWindowSortGroup Group, DateTimeOffset Time) WindowSortKey(FishCatalogView view, uint id) =>
+        FishingWindowOrdering.Key(view.Windows.GetValueOrDefault(id));
 
     private static IReadOnlySet<uint> RegionFish(FishCatalogView view, FishingRegionView location) =>
         location.State == FishingRegionState.Ready && view.FishByTerritory.TryGetValue(location.TerritoryId, out var fish)

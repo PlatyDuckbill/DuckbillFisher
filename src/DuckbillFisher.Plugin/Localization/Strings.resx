@@ -108,7 +108,8 @@
   <data name="NativeCheckFailed" xml:space="preserve"><value>Unknown: compatibility check failed ({0}). Native reads are disabled.</value></data>
   <data name="NativeCompatible" xml:space="preserve"><value>KR game build and DLLs match the inspected installation</value></data>
   <data name="CatalogDetailsOnly" xml:space="preserve"><value>Only fish with condition details</value></data>
-  <data name="CatalogSortWindow" xml:space="preserve"><value>Next window</value></data>
+  <data name="CatalogSortWindow" xml:space="preserve"><value>Time remaining</value></data>
+  <data name="CatalogSortWindowHint" xml:space="preserve"><value>Open windows: closing soonest first. Then upcoming windows: starting soonest first. Unavailable forecasts follow; always available fish are last. Use Time-restricted only to exclude unrestricted fish. Uses normal time/weather windows; personal requirements are separate.</value></data>
   <data name="CatalogDetailCoverage" xml:space="preserve"><value>Source information linked: {0} fish. Individual fields may be unknown.</value></data>
   <data name="CatalogDetailPrompt" xml:space="preserve"><value>Select a fish to view fishing spots and details.</value></data>
   <data name="CatalogDetailsMissing" xml:space="preserve"><value>Bait, hookset, and conditions for this fish are not available yet.</value></data>

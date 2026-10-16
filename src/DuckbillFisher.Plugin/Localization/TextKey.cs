@@ -120,6 +120,7 @@ internal enum TextKey
     Language,
     CatalogDetailsOnly,
     CatalogSortWindow,
+    CatalogSortWindowHint,
     CatalogDetailCoverage,
     CatalogDetailPrompt,
     CatalogDetailsMissing,
