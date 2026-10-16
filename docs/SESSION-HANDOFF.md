@@ -16,7 +16,7 @@
 - 게임: `C:\Program Files (x86)\FINAL FANTASY XIV - KOREA\game`.
 - 참조: `C:\Users\hyogu\AppData\Roaming\XIVLauncherKR\addon\Hooks\dev`.
 - 개발 DLL: `C:\Users\hyogu\Downloads\DuckbillFisher\src\DuckbillFisher.Plugin\bin\Debug\DuckbillFisher.dll`.
-- 정규 DLL 0.1.9.0 재로드 후 전체 1517종 대조/홍룡 자동 미수집 필터/도감 닫힘 후 유지 확인. 다음은 세션 격리 경계다. 다음 교체는 새 언로드 확인 필요.
+- 0.1.9.0 전체 도감 대조/홍룡 미수집 필터/도감 닫힘 후 유지와 동일 캐릭터 재접속 초기화·복구 확인. 다른 캐릭터는 없어 격리 실기 확인 보류. 다음 교체는 새 언로드 확인 필요.
 - PowerShell 5.1 읽기는 `-Encoding UTF8`; pwsh는 현재 샌드박스 밖 승인 실행 필요.
 
 ## 일반 구현 빌드
