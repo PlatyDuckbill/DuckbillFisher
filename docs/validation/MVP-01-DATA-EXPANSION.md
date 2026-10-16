@@ -1,6 +1,6 @@
 # 신생 에오르제아 상세 조건 확대
 
-날짜: 2026-10-16 · 대상: 0.1.11.0 · 인게임 검증 대기
+날짜: 2026-10-16 · 대상: 0.1.11.0 · 140종 연결/목록 표시·사용자 대표 확인 통과
 
 ## 범위와 근거
 
@@ -15,8 +15,16 @@
 - `dotnet run --project tools/FishingDataImport ...`: 140종 생성, 추천 낚시터 없는 15행 제외, 참조/형태 대조 실패 0. 낚시터 107곳·링크 아이템 58종·날씨 15종. 직감 7종·직전 날씨 12종·추천 경로 최대 4단계.
 - 기존 10종의 모든 규칙 필드를 비교해 변경 없음 확인. 스키마 v1 유지, dataset 버전 `kr-arr-2026-10-16`.
 - 별도 출력 `.cache/arr-details-build/`의 Plugin Debug 빌드 성공(경고·오류 0). 한영 리소스 181키/형식 인자 검사 통과. 테스트 추가/실행 없음.
-- 사용자 ‘언로드 완’ 확인 후 정규 Debug 빌드 성공(경고·오류 0). 주 DLL 241152바이트/0.1.11.0, Core 25088바이트, ko 리소스 21504바이트/0.1.11.0, manifest InternalName/버전/API 15 확인. 확대 어종의 인게임 표시는 대기다.
+- 사용자 ‘언로드 완’ 확인 후 정규 Debug 빌드 성공(경고·오류 0). 주 DLL 241152바이트/0.1.11.0, Core 25088바이트, ko 리소스 21504바이트/0.1.11.0, manifest InternalName/버전/API 15 확인.
 - 재현 산출물 `.cache/fishing-expanded-audit.json`은 기계별 로컬 감사 자료로 추적 제외한다. 입력 해시와 변환 도구로 재생성할 수 있다.
+
+## 인게임 결과
+
+- 사용자 summary/v2에서 Plugin=0.1.11.0, Rows=2512/CatalogLoaded, dataset=kr-arr-2026-10-16, Details=140/140, BuildMatch=True 확인.
+- DetailsOnly=True/CollectionFilter=All/FavoritesOnly=False에서 Displayed=140. 내장한 140종 모두 상세 연결됐고 목록 필터 결과도 일치한다.
+- 사용자 ‘전부 이상 없이 동작하는듯’ 응답으로 안내한 대표 화면 확인을 통과로 기록한다. 보고서의 선택 어종은 191이며 엔도세라스/쿠노의 개별 필드 캡처는 받지 않았다. 모든 어종의 실제 어획 조건 검증으로 확대하지 않는다.
+- GuideVisible=False/Scans=0/GuideState=NotSampled와 Caught=0/Uncaught=0/Collection=Unknown은 이번 세션의 도감 관찰 전 상태다. 자동 수집 기능의 실패나 전체 미수집으로 해석하지 않는다.
+- 이번 결과 반영은 문서만 변경했다. 빌드·리소스 검사·테스트를 재실행하지 않았다.
 
 ## 게임 확인 순서
 
