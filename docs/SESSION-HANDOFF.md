@@ -33,8 +33,8 @@
 - 현재 정규 DLL은 0.1.24.0이다. 사용자 새 언로드 확인 후 별도/정규 빌드 경고·오류 0/한영 387키·산출물 버전 확인 완료, 로드 후 대표 인게임 확인 대기다. 기존 행/링크/전체 채널·즐겨찾기 정책의 대표 결과도 아직 없다. 이후 교체에는 새 언로드 확인이 필요하다. [즐겨찾기 정책](validation/MVP-03-FAVORITE-POLICY.md), [최신 빌드/확인 순서](validation/MVP-01-COMPACT-CONTROLS.md).
 - 즐겨찾기 관리: 기본 전체 알림(수집됨/Unknown 포함), 미수집만 선택, 새 어종 등록 시 자동 해제(기본 꺼짐), 행 삭제. 자동 해제는 기존 검증된 KR 등록 이벤트에만 적용하고 도감 조회/수동 지정/반복 어획에는 적용하지 않는다. 개별 시간/기록·SE/링크를 유지한다.
 - 목록 기본: 남은 시간순·먼바다 제외·시간제만·등급 전체·수집한 어종 숨기기. 진단용 두 체크는 상세 진단 안에 있다. 목록 필터는 즐겨찾기 알림과 독립이며 전체 알림도 Unknown 상태 자체를 바꾸지 않는다. 서버 송신 없음/Native 게이트 유지.
-- 0.1.24.0은 채널 22개/분 단위 알림과 선택형 상단 Toast(기본 꺼짐)를 포함한다. 제외된 저장 채널은 시스템 대체, schema v6는 v1~v5 보존, alerts/v5는 Toast 추가. 설치 API 대조 통과. [채널](validation/MVP-03-ALERT-SIMPLIFICATION.md), [Toast](validation/MVP-03-TOAST.md).
-- 목록/즐겨찾기의 설정·진단을 접는 UI를 포함해 정규 빌드 완료. 이전 소스 수정 단계의 빌드 생략 뒤 사용자가 새 언로드를 확인하여 빌드를 진행했다. 테스트는 미실행. 다음은 로드 후 대표 화면/알림 확인이다. [UI 변경/실행 근거](validation/MVP-01-COMPACT-CONTROLS.md).
+- 정규 0.1.24.0의 채널 22개/분 단위 알림/접는 UI는 유지한다. Toast는 사용자에게 표시되지 않은 것으로 보고됐고 제거 요청을 받았다. [채널](validation/MVP-03-ALERT-SIMPLIFICATION.md), [UI](validation/MVP-01-COMPACT-CONTROLS.md).
+- 소스 0.1.25.0에서 Toast 주입/출력/설정/문구/발송 기록 표시 제거. schema v7은 v1~v6 허용, alerts/v6에서 Toast 필드 제거. 별도 빌드 경고·오류 0/한영 382키·diff 검사 통과, 테스트 미실행. 다음은 새 언로드 확인 후 정규 빌드/로드와 기존 설정/채팅/SE 유지 확인이다. Toast 재현 로그는 요청하지 않는다. [근거/확인 순서](validation/MVP-03-TOAST.md).
 - PowerShell 5.1 읽기는 `-Encoding UTF8`; pwsh는 현재 샌드박스 밖 승인 실행 필요.
 
 ## 일반 구현 빌드
@@ -46,7 +46,7 @@ dotnet build src/DuckbillFisher.Plugin/DuckbillFisher.Plugin.csproj --no-restore
 pwsh -NoLogo -NoProfile -File scripts/check-localization.ps1
 ```
 
-- 1차 빌드는 `-p:OutputPath=C:/Users/hyogu/Downloads/DuckbillFisher/.cache/toast-ui-build/` 추가.
+- 1차 빌드는 `-p:OutputPath=C:/Users/hyogu/Downloads/DuckbillFisher/.cache/no-toast-build/` 추가.
 - 성공 후 언로드 요청 → 사용자 확인 → 정규 Debug 빌드로 교체.
 - 실제 주 DLL/버전·Core DLL·ko 리소스 DLL·manifest 확인.
 - `scripts/build.ps1`은 테스트도 실행하므로 일반 구현 때 사용하지 않는다.

@@ -1,6 +1,16 @@
 # MVP-03 선택형 Toast
 
-날짜: 2026-10-16 · 정규 DLL 0.1.24.0 · 인게임 검증 대기
+날짜: 2026-10-16 · 0.1.24.0 도입 이력 · 0.1.25.0 제거 결정
+
+## 제거 결정과 현재 상태
+
+- 사용자 보고는 `팝업 따로 안 뜨는 것 같음`이며 실제 표시 통과로 기록하지 않는다. 사용자가 기능 제거를 요청하여 표시 원인 재조사 없이 제품 범위에서 제외했다. 아래 0.1.24.0 내용은 도입 이력이다.
+- 소스 0.1.25.0에서 IToastGui 주입/출력 호출/설정 체크/문구/발송 기록의 팝업 표시를 제거했다. 로컬 채팅/선택 SE/아이템·지도 링크/예약·영속 중복 방지와 접는 UI는 유지한다. 알림 진단은 Toast 필드를 제거한 `alerts/v6`다.
+- 설정 schema v7은 v1~v6를 받아들이며 삭제한 팝업 속성은 사용하지 않는다. 기존 즐겨찾기/개별 시간/채널/효과음/캐릭터 수동 기록/창 기록을 그대로 복사한다. 실제 저장 복원은 다음 로드에서 확인한다.
+- `dotnet build src/DuckbillFisher.Plugin/DuckbillFisher.Plugin.csproj --no-restore -c Debug -p:DalamudLibPath=C:/Users/hyogu/AppData/Roaming/XIVLauncherKR/addon/Hooks/dev/ -p:OutputPath=C:/Users/hyogu/Downloads/DuckbillFisher/.cache/no-toast-build/`: 경고·오류 0.
+- `pwsh -NoLogo -NoProfile -File scripts/check-localization.ps1`: 한영 382키/형식 인자 일치. `git diff --check` 통과. 제품 소스에 Toast 관련 참조가 남지 않은 것을 검색으로 확인했다. 지역 선택용 ImGui 팝업은 별개다. 테스트 추가/실행 없음.
+- 별도 산출물은 주 DLL 977920바이트/0.1.25.0, Core 39936바이트/1.0.0.0, ko 리소스 38912바이트/0.1.25.0이다. 정규 DLL은 0.1.24.0 유지, 새 언로드 확인 후 정규 빌드/로드 대기다.
+- 제거 버전 로드 후 팝업 옵션이 사라지고 기존 즐겨찾기/개별 시간/채널/SE가 복원되는지, 다음 자연스러운 알림에서 채팅 링크/분 단위 시간/효과음/한 줄 발송 기록이 유지되는지 확인한다. Toast 재현 로그는 요청하지 않는다.
 
 ## 범위와 사용자 동작
 

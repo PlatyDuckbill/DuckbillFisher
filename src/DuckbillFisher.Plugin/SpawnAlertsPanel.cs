@@ -38,7 +38,7 @@ internal sealed class SpawnAlertsPanel(FishPreferences preferences, SpawnAlerts 
         ImGui.BeginDisabled(!settings.CanEdit);
         if (ImGui.Checkbox(UiText.Label(T.AlertsEnable, "SpawnAlertsEnabled"), ref enabled))
             preferences.SetSpawnAlerts(enabled, settings.SpawnAlertLeadMinutes, settings.SpawnAlertChannel, settings.SpawnAlertSound,
-                settings.SpawnAlertAudience, settings.RemoveFavoriteOnRegistration, settings.SpawnAlertToastEnabled);
+                settings.SpawnAlertAudience, settings.RemoveFavoriteOnRegistration);
         ImGui.EndDisabled();
         if (view.Status.Key != T.AlertsWatching)
             ImGui.TextWrapped(view.Status.Display);
@@ -78,7 +78,6 @@ internal sealed class SpawnAlertsPanel(FishPreferences preferences, SpawnAlerts 
         var minutes = settings.SpawnAlertLeadMinutes;
         var channel = Math.Max(0, Array.IndexOf(ChatChannelChoices.All, settings.SpawnAlertChannel));
         var sound = settings.SpawnAlertSound;
-        var toastEnabled = settings.SpawnAlertToastEnabled;
         var uncaughtOnly = settings.SpawnAlertAudience == SpawnAlertAudience.UncaughtOnly;
         var removeOnRegistration = settings.RemoveFavoriteOnRegistration;
         ImGui.BeginDisabled(!settings.CanEdit);
@@ -103,13 +102,9 @@ internal sealed class SpawnAlertsPanel(FishPreferences preferences, SpawnAlerts 
             ImGui.TextWrapped(preview.Display);
         if (sound != 0 && !output.SoundAvailable)
             ImGui.TextWrapped(UiText.Get(T.AlertSoundUnavailable));
-        ImGui.BeginDisabled(!settings.CanEdit);
-        changed |= ImGui.Checkbox(UiText.Label(T.AlertToastEnable, "SpawnAlertToast"), ref toastEnabled);
-        if (ImGui.IsItemHovered()) ImGui.SetTooltip(UiText.Get(T.AlertToastHint));
-        ImGui.EndDisabled();
         if (changed)
             preferences.SetSpawnAlerts(enabled, minutes, ChatChannelChoices.All[channel], sound,
-                uncaughtOnly ? SpawnAlertAudience.UncaughtOnly : SpawnAlertAudience.AllFavorites, removeOnRegistration, toastEnabled);
+                uncaughtOnly ? SpawnAlertAudience.UncaughtOnly : SpawnAlertAudience.AllFavorites, removeOnRegistration);
         ImGui.TextWrapped(UiText.Get(T.AlertsLeadRange, SpawnAlertScheduler.MinLeadMinutes, SpawnAlertScheduler.MaxLeadMinutes));
         if (ImGui.CollapsingHeader(UiText.Label(T.AlertsRulesHeading, "SpawnAlertRules")))
         {
@@ -192,7 +187,7 @@ internal sealed class SpawnAlertsPanel(FishPreferences preferences, SpawnAlerts 
         for (var i = 0; i < view.History.Count; i++)
         {
             var entry = view.History[i];
-            var line = UiText.Get(entry.ToastQueued ? T.AlertHistoryToastLine : T.AlertHistoryLine, entry.SentAt.ToLocalTime(), entry.Fish.Name,
+            var line = UiText.Get(T.AlertHistoryLine, entry.SentAt.ToLocalTime(), entry.Fish.Name,
                 SpawnAlertOutput.Remaining(entry.Fish.Start - entry.SentAt), ChatChannelChoices.Name(entry.Channel),
                 entry.Sound == 0 ? new UiMessage(T.AlertSoundNone) : new UiMessage(entry.SoundPlayed ? T.AlertSoundNumber : T.AlertSoundSkipped, entry.Sound));
             ImGui.TextUnformatted(line);

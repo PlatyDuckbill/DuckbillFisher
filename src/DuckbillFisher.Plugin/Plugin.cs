@@ -28,7 +28,7 @@ public sealed class Plugin : IDalamudPlugin
 
     public Plugin(IDalamudPluginInterface pluginInterface, ICommandManager commandManager, ICondition conditions,
         IClientState clientState, IPlayerState playerState, IDataManager dataManager, IGameGui gameGui, IFramework framework,
-        ITextureProvider textureProvider, IPluginLog log, IChatGui chat, IToastGui toast)
+        ITextureProvider textureProvider, IPluginLog log, IChatGui chat)
     {
         this.pluginInterface = pluginInterface;
         this.commandManager = commandManager;
@@ -47,7 +47,7 @@ public sealed class Plugin : IDalamudPlugin
         fishCollection = new FishCollectionObserver(fishPreferences, fishCatalog, collectionReader, dataManager, gameGui, chat, framework, log);
         itemLinks = new FishingItemLinkService(chat, framework, fishPreferences);
         fishingRegion = new FishingRegionObserver(clientState, conditions, dataManager, framework);
-        alertOutput = new SpawnAlertOutput(framework, chat, toast, fishPreferences, collectionReader.IsCompatible, log);
+        alertOutput = new SpawnAlertOutput(framework, chat, fishPreferences, collectionReader.IsCompatible, log);
         spawnAlerts = new SpawnAlerts(fishCatalog, fishPreferences, fishCollection, framework, alertOutput, log);
         mainWindow = new MainWindow(fishingObserver, fishGuide, new FishListPanel(fishCatalog, textureProvider, fishingMap,
                 fishPreferences, fishCollection, new FishingConditionPanel(textureProvider, itemLinks), fishingRegion),
