@@ -1,0 +1,1685 @@
+{
+  "schemaVersion": 1,
+  "gameBuild": "2026.10.06.0000.0000",
+  "dataVersion": "kr-grades-2026-10-16",
+  "source": "Installed KR Item.Description category labels, corroborated by FishingNoteInfo and pinned condition data",
+  "conditionDataSha256": "E5C222C2CE309F90A76FEA80127B22D38298C111EEE4951D08DF04ECE2E422D9",
+  "descriptionSha256": "1E5F7F918B8F95AEDB2D8B83BE16AB53083CAB71E746C8BA54EC76071CA1B539",
+  "entries": [
+    {
+      "fishParameterId": 187,
+      "itemId": 7678,
+      "grade": "Big"
+    },
+    {
+      "fishParameterId": 188,
+      "itemId": 7679,
+      "grade": "Big"
+    },
+    {
+      "fishParameterId": 189,
+      "itemId": 7680,
+      "grade": "Big"
+    },
+    {
+      "fishParameterId": 190,
+      "itemId": 7681,
+      "grade": "Big"
+    },
+    {
+      "fishParameterId": 191,
+      "itemId": 7682,
+      "grade": "Big"
+    },
+    {
+      "fishParameterId": 192,
+      "itemId": 7683,
+      "grade": "Big"
+    },
+    {
+      "fishParameterId": 193,
+      "itemId": 7684,
+      "grade": "Big"
+    },
+    {
+      "fishParameterId": 194,
+      "itemId": 7685,
+      "grade": "Big"
+    },
+    {
+      "fishParameterId": 195,
+      "itemId": 7686,
+      "grade": "Big"
+    },
+    {
+      "fishParameterId": 196,
+      "itemId": 7687,
+      "grade": "Big"
+    },
+    {
+      "fishParameterId": 197,
+      "itemId": 7688,
+      "grade": "Big"
+    },
+    {
+      "fishParameterId": 198,
+      "itemId": 7689,
+      "grade": "Big"
+    },
+    {
+      "fishParameterId": 199,
+      "itemId": 7690,
+      "grade": "Big"
+    },
+    {
+      "fishParameterId": 200,
+      "itemId": 7691,
+      "grade": "Big"
+    },
+    {
+      "fishParameterId": 201,
+      "itemId": 7692,
+      "grade": "Big"
+    },
+    {
+      "fishParameterId": 202,
+      "itemId": 7693,
+      "grade": "Big"
+    },
+    {
+      "fishParameterId": 203,
+      "itemId": 7694,
+      "grade": "Big"
+    },
+    {
+      "fishParameterId": 204,
+      "itemId": 7695,
+      "grade": "Big"
+    },
+    {
+      "fishParameterId": 205,
+      "itemId": 7696,
+      "grade": "Big"
+    },
+    {
+      "fishParameterId": 206,
+      "itemId": 7697,
+      "grade": "Big"
+    },
+    {
+      "fishParameterId": 207,
+      "itemId": 7698,
+      "grade": "Big"
+    },
+    {
+      "fishParameterId": 208,
+      "itemId": 7699,
+      "grade": "Big"
+    },
+    {
+      "fishParameterId": 209,
+      "itemId": 7700,
+      "grade": "Big"
+    },
+    {
+      "fishParameterId": 210,
+      "itemId": 7701,
+      "grade": "Big"
+    },
+    {
+      "fishParameterId": 211,
+      "itemId": 7702,
+      "grade": "Big"
+    },
+    {
+      "fishParameterId": 212,
+      "itemId": 7703,
+      "grade": "Big"
+    },
+    {
+      "fishParameterId": 213,
+      "itemId": 7704,
+      "grade": "Big"
+    },
+    {
+      "fishParameterId": 214,
+      "itemId": 7705,
+      "grade": "Big"
+    },
+    {
+      "fishParameterId": 215,
+      "itemId": 7706,
+      "grade": "Big"
+    },
+    {
+      "fishParameterId": 216,
+      "itemId": 7707,
+      "grade": "Big"
+    },
+    {
+      "fishParameterId": 217,
+      "itemId": 7708,
+      "grade": "Big"
+    },
+    {
+      "fishParameterId": 218,
+      "itemId": 7709,
+      "grade": "Big"
+    },
+    {
+      "fishParameterId": 219,
+      "itemId": 7710,
+      "grade": "Big"
+    },
+    {
+      "fishParameterId": 220,
+      "itemId": 7711,
+      "grade": "Big"
+    },
+    {
+      "fishParameterId": 221,
+      "itemId": 7712,
+      "grade": "Big"
+    },
+    {
+      "fishParameterId": 222,
+      "itemId": 7713,
+      "grade": "Big"
+    },
+    {
+      "fishParameterId": 223,
+      "itemId": 7714,
+      "grade": "Big"
+    },
+    {
+      "fishParameterId": 224,
+      "itemId": 7902,
+      "grade": "Big"
+    },
+    {
+      "fishParameterId": 225,
+      "itemId": 7903,
+      "grade": "Big"
+    },
+    {
+      "fishParameterId": 226,
+      "itemId": 7904,
+      "grade": "Big"
+    },
+    {
+      "fishParameterId": 227,
+      "itemId": 7905,
+      "grade": "Big"
+    },
+    {
+      "fishParameterId": 228,
+      "itemId": 7906,
+      "grade": "Big"
+    },
+    {
+      "fishParameterId": 229,
+      "itemId": 7907,
+      "grade": "Big"
+    },
+    {
+      "fishParameterId": 230,
+      "itemId": 7908,
+      "grade": "Big"
+    },
+    {
+      "fishParameterId": 231,
+      "itemId": 7909,
+      "grade": "Big"
+    },
+    {
+      "fishParameterId": 232,
+      "itemId": 7910,
+      "grade": "Big"
+    },
+    {
+      "fishParameterId": 233,
+      "itemId": 7911,
+      "grade": "Big"
+    },
+    {
+      "fishParameterId": 234,
+      "itemId": 7912,
+      "grade": "Big"
+    },
+    {
+      "fishParameterId": 235,
+      "itemId": 7913,
+      "grade": "Big"
+    },
+    {
+      "fishParameterId": 236,
+      "itemId": 7914,
+      "grade": "Big"
+    },
+    {
+      "fishParameterId": 237,
+      "itemId": 7915,
+      "grade": "Big"
+    },
+    {
+      "fishParameterId": 238,
+      "itemId": 7916,
+      "grade": "Big"
+    },
+    {
+      "fishParameterId": 239,
+      "itemId": 7917,
+      "grade": "Big"
+    },
+    {
+      "fishParameterId": 240,
+      "itemId": 7918,
+      "grade": "Big"
+    },
+    {
+      "fishParameterId": 241,
+      "itemId": 7919,
+      "grade": "Big"
+    },
+    {
+      "fishParameterId": 242,
+      "itemId": 7920,
+      "grade": "Big"
+    },
+    {
+      "fishParameterId": 243,
+      "itemId": 7921,
+      "grade": "Big"
+    },
+    {
+      "fishParameterId": 244,
+      "itemId": 7922,
+      "grade": "Big"
+    },
+    {
+      "fishParameterId": 245,
+      "itemId": 7923,
+      "grade": "Big"
+    },
+    {
+      "fishParameterId": 246,
+      "itemId": 7924,
+      "grade": "Big"
+    },
+    {
+      "fishParameterId": 247,
+      "itemId": 7925,
+      "grade": "Big"
+    },
+    {
+      "fishParameterId": 248,
+      "itemId": 7926,
+      "grade": "Big"
+    },
+    {
+      "fishParameterId": 249,
+      "itemId": 7927,
+      "grade": "Big"
+    },
+    {
+      "fishParameterId": 250,
+      "itemId": 7928,
+      "grade": "Big"
+    },
+    {
+      "fishParameterId": 251,
+      "itemId": 7929,
+      "grade": "Big"
+    },
+    {
+      "fishParameterId": 252,
+      "itemId": 7930,
+      "grade": "Big"
+    },
+    {
+      "fishParameterId": 253,
+      "itemId": 7931,
+      "grade": "Big"
+    },
+    {
+      "fishParameterId": 254,
+      "itemId": 7932,
+      "grade": "Big"
+    },
+    {
+      "fishParameterId": 255,
+      "itemId": 7933,
+      "grade": "Big"
+    },
+    {
+      "fishParameterId": 256,
+      "itemId": 7934,
+      "grade": "Big"
+    },
+    {
+      "fishParameterId": 257,
+      "itemId": 7935,
+      "grade": "Big"
+    },
+    {
+      "fishParameterId": 258,
+      "itemId": 7936,
+      "grade": "Big"
+    },
+    {
+      "fishParameterId": 259,
+      "itemId": 7937,
+      "grade": "Big"
+    },
+    {
+      "fishParameterId": 260,
+      "itemId": 7938,
+      "grade": "Big"
+    },
+    {
+      "fishParameterId": 261,
+      "itemId": 7939,
+      "grade": "Big"
+    },
+    {
+      "fishParameterId": 262,
+      "itemId": 7940,
+      "grade": "Big"
+    },
+    {
+      "fishParameterId": 263,
+      "itemId": 7941,
+      "grade": "Big"
+    },
+    {
+      "fishParameterId": 264,
+      "itemId": 7942,
+      "grade": "Big"
+    },
+    {
+      "fishParameterId": 265,
+      "itemId": 7943,
+      "grade": "Big"
+    },
+    {
+      "fishParameterId": 266,
+      "itemId": 7944,
+      "grade": "Big"
+    },
+    {
+      "fishParameterId": 267,
+      "itemId": 7945,
+      "grade": "Big"
+    },
+    {
+      "fishParameterId": 268,
+      "itemId": 7946,
+      "grade": "Big"
+    },
+    {
+      "fishParameterId": 269,
+      "itemId": 7947,
+      "grade": "Big"
+    },
+    {
+      "fishParameterId": 270,
+      "itemId": 7948,
+      "grade": "Big"
+    },
+    {
+      "fishParameterId": 271,
+      "itemId": 7949,
+      "grade": "Big"
+    },
+    {
+      "fishParameterId": 272,
+      "itemId": 7950,
+      "grade": "Big"
+    },
+    {
+      "fishParameterId": 273,
+      "itemId": 7951,
+      "grade": "Big"
+    },
+    {
+      "fishParameterId": 274,
+      "itemId": 8752,
+      "grade": "Big"
+    },
+    {
+      "fishParameterId": 275,
+      "itemId": 8753,
+      "grade": "Big"
+    },
+    {
+      "fishParameterId": 276,
+      "itemId": 8754,
+      "grade": "Legendary"
+    },
+    {
+      "fishParameterId": 277,
+      "itemId": 8755,
+      "grade": "Big"
+    },
+    {
+      "fishParameterId": 278,
+      "itemId": 8756,
+      "grade": "Legendary"
+    },
+    {
+      "fishParameterId": 279,
+      "itemId": 8757,
+      "grade": "Big"
+    },
+    {
+      "fishParameterId": 280,
+      "itemId": 8758,
+      "grade": "Big"
+    },
+    {
+      "fishParameterId": 281,
+      "itemId": 8759,
+      "grade": "Big"
+    },
+    {
+      "fishParameterId": 282,
+      "itemId": 8760,
+      "grade": "Big"
+    },
+    {
+      "fishParameterId": 283,
+      "itemId": 8761,
+      "grade": "Big"
+    },
+    {
+      "fishParameterId": 284,
+      "itemId": 8762,
+      "grade": "Big"
+    },
+    {
+      "fishParameterId": 285,
+      "itemId": 8763,
+      "grade": "Legendary"
+    },
+    {
+      "fishParameterId": 286,
+      "itemId": 8764,
+      "grade": "Big"
+    },
+    {
+      "fishParameterId": 287,
+      "itemId": 8765,
+      "grade": "Big"
+    },
+    {
+      "fishParameterId": 288,
+      "itemId": 8766,
+      "grade": "Big"
+    },
+    {
+      "fishParameterId": 289,
+      "itemId": 8767,
+      "grade": "Big"
+    },
+    {
+      "fishParameterId": 290,
+      "itemId": 8768,
+      "grade": "Legendary"
+    },
+    {
+      "fishParameterId": 291,
+      "itemId": 8769,
+      "grade": "Big"
+    },
+    {
+      "fishParameterId": 292,
+      "itemId": 8770,
+      "grade": "Big"
+    },
+    {
+      "fishParameterId": 293,
+      "itemId": 8771,
+      "grade": "Big"
+    },
+    {
+      "fishParameterId": 294,
+      "itemId": 8772,
+      "grade": "Legendary"
+    },
+    {
+      "fishParameterId": 295,
+      "itemId": 8773,
+      "grade": "Big"
+    },
+    {
+      "fishParameterId": 296,
+      "itemId": 8774,
+      "grade": "Big"
+    },
+    {
+      "fishParameterId": 297,
+      "itemId": 8775,
+      "grade": "Legendary"
+    },
+    {
+      "fishParameterId": 298,
+      "itemId": 8776,
+      "grade": "Big"
+    },
+    {
+      "fishParameterId": 441,
+      "itemId": 15626,
+      "grade": "Big"
+    },
+    {
+      "fishParameterId": 442,
+      "itemId": 15627,
+      "grade": "Big"
+    },
+    {
+      "fishParameterId": 443,
+      "itemId": 15628,
+      "grade": "Big"
+    },
+    {
+      "fishParameterId": 444,
+      "itemId": 15629,
+      "grade": "Big"
+    },
+    {
+      "fishParameterId": 445,
+      "itemId": 15630,
+      "grade": "Big"
+    },
+    {
+      "fishParameterId": 446,
+      "itemId": 15631,
+      "grade": "Big"
+    },
+    {
+      "fishParameterId": 447,
+      "itemId": 15632,
+      "grade": "Big"
+    },
+    {
+      "fishParameterId": 448,
+      "itemId": 15633,
+      "grade": "Big"
+    },
+    {
+      "fishParameterId": 449,
+      "itemId": 15634,
+      "grade": "Big"
+    },
+    {
+      "fishParameterId": 450,
+      "itemId": 15635,
+      "grade": "Big"
+    },
+    {
+      "fishParameterId": 451,
+      "itemId": 15636,
+      "grade": "Big"
+    },
+    {
+      "fishParameterId": 452,
+      "itemId": 15637,
+      "grade": "Big"
+    },
+    {
+      "fishParameterId": 453,
+      "itemId": 15638,
+      "grade": "Big"
+    },
+    {
+      "fishParameterId": 454,
+      "itemId": 16745,
+      "grade": "Big"
+    },
+    {
+      "fishParameterId": 455,
+      "itemId": 16746,
+      "grade": "Big"
+    },
+    {
+      "fishParameterId": 456,
+      "itemId": 16747,
+      "grade": "Big"
+    },
+    {
+      "fishParameterId": 457,
+      "itemId": 16748,
+      "grade": "Big"
+    },
+    {
+      "fishParameterId": 458,
+      "itemId": 16749,
+      "grade": "Big"
+    },
+    {
+      "fishParameterId": 459,
+      "itemId": 16750,
+      "grade": "Big"
+    },
+    {
+      "fishParameterId": 460,
+      "itemId": 16751,
+      "grade": "Big"
+    },
+    {
+      "fishParameterId": 461,
+      "itemId": 16752,
+      "grade": "Big"
+    },
+    {
+      "fishParameterId": 462,
+      "itemId": 16753,
+      "grade": "Big"
+    },
+    {
+      "fishParameterId": 463,
+      "itemId": 16754,
+      "grade": "Big"
+    },
+    {
+      "fishParameterId": 464,
+      "itemId": 16756,
+      "grade": "Big"
+    },
+    {
+      "fishParameterId": 465,
+      "itemId": 16742,
+      "grade": "Big"
+    },
+    {
+      "fishParameterId": 466,
+      "itemId": 16743,
+      "grade": "Big"
+    },
+    {
+      "fishParameterId": 467,
+      "itemId": 16744,
+      "grade": "Big"
+    },
+    {
+      "fishParameterId": 468,
+      "itemId": 17577,
+      "grade": "Big"
+    },
+    {
+      "fishParameterId": 469,
+      "itemId": 17578,
+      "grade": "Big"
+    },
+    {
+      "fishParameterId": 470,
+      "itemId": 17579,
+      "grade": "Big"
+    },
+    {
+      "fishParameterId": 471,
+      "itemId": 17580,
+      "grade": "Big"
+    },
+    {
+      "fishParameterId": 472,
+      "itemId": 17581,
+      "grade": "Big"
+    },
+    {
+      "fishParameterId": 473,
+      "itemId": 17582,
+      "grade": "Big"
+    },
+    {
+      "fishParameterId": 474,
+      "itemId": 17583,
+      "grade": "Big"
+    },
+    {
+      "fishParameterId": 475,
+      "itemId": 17584,
+      "grade": "Big"
+    },
+    {
+      "fishParameterId": 476,
+      "itemId": 17585,
+      "grade": "Big"
+    },
+    {
+      "fishParameterId": 477,
+      "itemId": 17586,
+      "grade": "Big"
+    },
+    {
+      "fishParameterId": 478,
+      "itemId": 17587,
+      "grade": "Big"
+    },
+    {
+      "fishParameterId": 479,
+      "itemId": 17588,
+      "grade": "Legendary"
+    },
+    {
+      "fishParameterId": 480,
+      "itemId": 17589,
+      "grade": "Legendary"
+    },
+    {
+      "fishParameterId": 481,
+      "itemId": 17590,
+      "grade": "Legendary"
+    },
+    {
+      "fishParameterId": 482,
+      "itemId": 17591,
+      "grade": "Legendary"
+    },
+    {
+      "fishParameterId": 483,
+      "itemId": 17592,
+      "grade": "Legendary"
+    },
+    {
+      "fishParameterId": 484,
+      "itemId": 17593,
+      "grade": "Legendary"
+    },
+    {
+      "fishParameterId": 615,
+      "itemId": 20143,
+      "grade": "Big"
+    },
+    {
+      "fishParameterId": 639,
+      "itemId": 23057,
+      "grade": "Big"
+    },
+    {
+      "fishParameterId": 640,
+      "itemId": 23058,
+      "grade": "Big"
+    },
+    {
+      "fishParameterId": 641,
+      "itemId": 23059,
+      "grade": "Big"
+    },
+    {
+      "fishParameterId": 642,
+      "itemId": 23060,
+      "grade": "Big"
+    },
+    {
+      "fishParameterId": 643,
+      "itemId": 23061,
+      "grade": "Big"
+    },
+    {
+      "fishParameterId": 644,
+      "itemId": 23062,
+      "grade": "Big"
+    },
+    {
+      "fishParameterId": 645,
+      "itemId": 23063,
+      "grade": "Big"
+    },
+    {
+      "fishParameterId": 646,
+      "itemId": 23064,
+      "grade": "Big"
+    },
+    {
+      "fishParameterId": 647,
+      "itemId": 23065,
+      "grade": "Big"
+    },
+    {
+      "fishParameterId": 648,
+      "itemId": 23066,
+      "grade": "Big"
+    },
+    {
+      "fishParameterId": 649,
+      "itemId": 23067,
+      "grade": "Big"
+    },
+    {
+      "fishParameterId": 650,
+      "itemId": 23068,
+      "grade": "Big"
+    },
+    {
+      "fishParameterId": 651,
+      "itemId": 23069,
+      "grade": "Big"
+    },
+    {
+      "fishParameterId": 652,
+      "itemId": 23070,
+      "grade": "Big"
+    },
+    {
+      "fishParameterId": 660,
+      "itemId": 24205,
+      "grade": "Big"
+    },
+    {
+      "fishParameterId": 661,
+      "itemId": 24206,
+      "grade": "Big"
+    },
+    {
+      "fishParameterId": 662,
+      "itemId": 24207,
+      "grade": "Big"
+    },
+    {
+      "fishParameterId": 663,
+      "itemId": 24208,
+      "grade": "Big"
+    },
+    {
+      "fishParameterId": 664,
+      "itemId": 24209,
+      "grade": "Big"
+    },
+    {
+      "fishParameterId": 665,
+      "itemId": 24210,
+      "grade": "Big"
+    },
+    {
+      "fishParameterId": 666,
+      "itemId": 24211,
+      "grade": "Big"
+    },
+    {
+      "fishParameterId": 667,
+      "itemId": 24212,
+      "grade": "Big"
+    },
+    {
+      "fishParameterId": 668,
+      "itemId": 24213,
+      "grade": "Big"
+    },
+    {
+      "fishParameterId": 669,
+      "itemId": 24214,
+      "grade": "Big"
+    },
+    {
+      "fishParameterId": 670,
+      "itemId": 24215,
+      "grade": "Big"
+    },
+    {
+      "fishParameterId": 671,
+      "itemId": 24216,
+      "grade": "Big"
+    },
+    {
+      "fishParameterId": 672,
+      "itemId": 24217,
+      "grade": "Big"
+    },
+    {
+      "fishParameterId": 673,
+      "itemId": 24218,
+      "grade": "Big"
+    },
+    {
+      "fishParameterId": 674,
+      "itemId": 24881,
+      "grade": "Big"
+    },
+    {
+      "fishParameterId": 675,
+      "itemId": 24882,
+      "grade": "Big"
+    },
+    {
+      "fishParameterId": 676,
+      "itemId": 24883,
+      "grade": "Big"
+    },
+    {
+      "fishParameterId": 677,
+      "itemId": 24884,
+      "grade": "Big"
+    },
+    {
+      "fishParameterId": 678,
+      "itemId": 24885,
+      "grade": "Big"
+    },
+    {
+      "fishParameterId": 679,
+      "itemId": 24886,
+      "grade": "Big"
+    },
+    {
+      "fishParameterId": 680,
+      "itemId": 24887,
+      "grade": "Big"
+    },
+    {
+      "fishParameterId": 681,
+      "itemId": 24888,
+      "grade": "Big"
+    },
+    {
+      "fishParameterId": 682,
+      "itemId": 24889,
+      "grade": "Big"
+    },
+    {
+      "fishParameterId": 683,
+      "itemId": 24890,
+      "grade": "Big"
+    },
+    {
+      "fishParameterId": 684,
+      "itemId": 24891,
+      "grade": "Big"
+    },
+    {
+      "fishParameterId": 685,
+      "itemId": 24892,
+      "grade": "Big"
+    },
+    {
+      "fishParameterId": 686,
+      "itemId": 24893,
+      "grade": "Big"
+    },
+    {
+      "fishParameterId": 692,
+      "itemId": 24994,
+      "grade": "Legendary"
+    },
+    {
+      "fishParameterId": 693,
+      "itemId": 24990,
+      "grade": "Legendary"
+    },
+    {
+      "fishParameterId": 694,
+      "itemId": 24991,
+      "grade": "Legendary"
+    },
+    {
+      "fishParameterId": 695,
+      "itemId": 24992,
+      "grade": "Legendary"
+    },
+    {
+      "fishParameterId": 696,
+      "itemId": 24993,
+      "grade": "Legendary"
+    },
+    {
+      "fishParameterId": 697,
+      "itemId": 24995,
+      "grade": "Legendary"
+    },
+    {
+      "fishParameterId": 809,
+      "itemId": 28065,
+      "grade": "Big"
+    },
+    {
+      "fishParameterId": 810,
+      "itemId": 28066,
+      "grade": "Big"
+    },
+    {
+      "fishParameterId": 811,
+      "itemId": 28067,
+      "grade": "Big"
+    },
+    {
+      "fishParameterId": 812,
+      "itemId": 28068,
+      "grade": "Big"
+    },
+    {
+      "fishParameterId": 813,
+      "itemId": 28069,
+      "grade": "Big"
+    },
+    {
+      "fishParameterId": 814,
+      "itemId": 28070,
+      "grade": "Big"
+    },
+    {
+      "fishParameterId": 815,
+      "itemId": 28071,
+      "grade": "Big"
+    },
+    {
+      "fishParameterId": 816,
+      "itemId": 28072,
+      "grade": "Big"
+    },
+    {
+      "fishParameterId": 822,
+      "itemId": 28925,
+      "grade": "Big"
+    },
+    {
+      "fishParameterId": 823,
+      "itemId": 28926,
+      "grade": "Big"
+    },
+    {
+      "fishParameterId": 824,
+      "itemId": 28927,
+      "grade": "Big"
+    },
+    {
+      "fishParameterId": 825,
+      "itemId": 28928,
+      "grade": "Big"
+    },
+    {
+      "fishParameterId": 826,
+      "itemId": 28929,
+      "grade": "Big"
+    },
+    {
+      "fishParameterId": 827,
+      "itemId": 28930,
+      "grade": "Big"
+    },
+    {
+      "fishParameterId": 912,
+      "itemId": 30432,
+      "grade": "Big"
+    },
+    {
+      "fishParameterId": 913,
+      "itemId": 30433,
+      "grade": "Big"
+    },
+    {
+      "fishParameterId": 914,
+      "itemId": 30434,
+      "grade": "Big"
+    },
+    {
+      "fishParameterId": 915,
+      "itemId": 30435,
+      "grade": "Big"
+    },
+    {
+      "fishParameterId": 916,
+      "itemId": 30436,
+      "grade": "Big"
+    },
+    {
+      "fishParameterId": 917,
+      "itemId": 30437,
+      "grade": "Big"
+    },
+    {
+      "fishParameterId": 918,
+      "itemId": 30438,
+      "grade": "Big"
+    },
+    {
+      "fishParameterId": 919,
+      "itemId": 30439,
+      "grade": "Big"
+    },
+    {
+      "fishParameterId": 927,
+      "itemId": 32049,
+      "grade": "Big"
+    },
+    {
+      "fishParameterId": 928,
+      "itemId": 32050,
+      "grade": "Big"
+    },
+    {
+      "fishParameterId": 929,
+      "itemId": 32051,
+      "grade": "Big"
+    },
+    {
+      "fishParameterId": 930,
+      "itemId": 32052,
+      "grade": "Big"
+    },
+    {
+      "fishParameterId": 931,
+      "itemId": 32053,
+      "grade": "Big"
+    },
+    {
+      "fishParameterId": 932,
+      "itemId": 32054,
+      "grade": "Big"
+    },
+    {
+      "fishParameterId": 995,
+      "itemId": 33316,
+      "grade": "Big"
+    },
+    {
+      "fishParameterId": 996,
+      "itemId": 33317,
+      "grade": "Big"
+    },
+    {
+      "fishParameterId": 997,
+      "itemId": 33318,
+      "grade": "Big"
+    },
+    {
+      "fishParameterId": 998,
+      "itemId": 33319,
+      "grade": "Big"
+    },
+    {
+      "fishParameterId": 999,
+      "itemId": 33320,
+      "grade": "Big"
+    },
+    {
+      "fishParameterId": 1000,
+      "itemId": 33321,
+      "grade": "Big"
+    },
+    {
+      "fishParameterId": 1001,
+      "itemId": 33322,
+      "grade": "Big"
+    },
+    {
+      "fishParameterId": 1002,
+      "itemId": 33323,
+      "grade": "Big"
+    },
+    {
+      "fishParameterId": 1003,
+      "itemId": 33324,
+      "grade": "Big"
+    },
+    {
+      "fishParameterId": 1004,
+      "itemId": 33325,
+      "grade": "Big"
+    },
+    {
+      "fishParameterId": 1005,
+      "itemId": 33326,
+      "grade": "Big"
+    },
+    {
+      "fishParameterId": 1011,
+      "itemId": 33239,
+      "grade": "Legendary"
+    },
+    {
+      "fishParameterId": 1012,
+      "itemId": 33240,
+      "grade": "Legendary"
+    },
+    {
+      "fishParameterId": 1013,
+      "itemId": 33241,
+      "grade": "Legendary"
+    },
+    {
+      "fishParameterId": 1014,
+      "itemId": 33242,
+      "grade": "Legendary"
+    },
+    {
+      "fishParameterId": 1015,
+      "itemId": 33243,
+      "grade": "Legendary"
+    },
+    {
+      "fishParameterId": 1016,
+      "itemId": 33244,
+      "grade": "Legendary"
+    },
+    {
+      "fishParameterId": 1135,
+      "itemId": 36679,
+      "grade": "Big"
+    },
+    {
+      "fishParameterId": 1136,
+      "itemId": 36680,
+      "grade": "Big"
+    },
+    {
+      "fishParameterId": 1137,
+      "itemId": 36681,
+      "grade": "Big"
+    },
+    {
+      "fishParameterId": 1138,
+      "itemId": 36682,
+      "grade": "Big"
+    },
+    {
+      "fishParameterId": 1139,
+      "itemId": 36683,
+      "grade": "Big"
+    },
+    {
+      "fishParameterId": 1140,
+      "itemId": 36684,
+      "grade": "Big"
+    },
+    {
+      "fishParameterId": 1141,
+      "itemId": 36685,
+      "grade": "Big"
+    },
+    {
+      "fishParameterId": 1146,
+      "itemId": 37845,
+      "grade": "Big"
+    },
+    {
+      "fishParameterId": 1147,
+      "itemId": 37846,
+      "grade": "Big"
+    },
+    {
+      "fishParameterId": 1148,
+      "itemId": 37847,
+      "grade": "Big"
+    },
+    {
+      "fishParameterId": 1149,
+      "itemId": 37848,
+      "grade": "Big"
+    },
+    {
+      "fishParameterId": 1150,
+      "itemId": 37849,
+      "grade": "Big"
+    },
+    {
+      "fishParameterId": 1151,
+      "itemId": 37850,
+      "grade": "Big"
+    },
+    {
+      "fishParameterId": 1152,
+      "itemId": 37851,
+      "grade": "Big"
+    },
+    {
+      "fishParameterId": 1153,
+      "itemId": 37852,
+      "grade": "Big"
+    },
+    {
+      "fishParameterId": 1154,
+      "itemId": 37853,
+      "grade": "Big"
+    },
+    {
+      "fishParameterId": 1156,
+      "itemId": 38830,
+      "grade": "Big"
+    },
+    {
+      "fishParameterId": 1157,
+      "itemId": 38831,
+      "grade": "Big"
+    },
+    {
+      "fishParameterId": 1158,
+      "itemId": 38832,
+      "grade": "Big"
+    },
+    {
+      "fishParameterId": 1159,
+      "itemId": 38833,
+      "grade": "Big"
+    },
+    {
+      "fishParameterId": 1160,
+      "itemId": 38834,
+      "grade": "Big"
+    },
+    {
+      "fishParameterId": 1161,
+      "itemId": 38835,
+      "grade": "Big"
+    },
+    {
+      "fishParameterId": 1162,
+      "itemId": 38836,
+      "grade": "Big"
+    },
+    {
+      "fishParameterId": 1172,
+      "itemId": 39879,
+      "grade": "Big"
+    },
+    {
+      "fishParameterId": 1173,
+      "itemId": 39880,
+      "grade": "Big"
+    },
+    {
+      "fishParameterId": 1174,
+      "itemId": 39881,
+      "grade": "Big"
+    },
+    {
+      "fishParameterId": 1175,
+      "itemId": 39882,
+      "grade": "Big"
+    },
+    {
+      "fishParameterId": 1176,
+      "itemId": 39883,
+      "grade": "Big"
+    },
+    {
+      "fishParameterId": 1262,
+      "itemId": 41401,
+      "grade": "Big"
+    },
+    {
+      "fishParameterId": 1263,
+      "itemId": 41402,
+      "grade": "Big"
+    },
+    {
+      "fishParameterId": 1264,
+      "itemId": 41403,
+      "grade": "Big"
+    },
+    {
+      "fishParameterId": 1265,
+      "itemId": 41404,
+      "grade": "Big"
+    },
+    {
+      "fishParameterId": 1266,
+      "itemId": 41405,
+      "grade": "Big"
+    },
+    {
+      "fishParameterId": 1267,
+      "itemId": 41406,
+      "grade": "Big"
+    },
+    {
+      "fishParameterId": 1277,
+      "itemId": 41407,
+      "grade": "Legendary"
+    },
+    {
+      "fishParameterId": 1278,
+      "itemId": 41408,
+      "grade": "Legendary"
+    },
+    {
+      "fishParameterId": 1279,
+      "itemId": 41409,
+      "grade": "Legendary"
+    },
+    {
+      "fishParameterId": 1280,
+      "itemId": 41410,
+      "grade": "Legendary"
+    },
+    {
+      "fishParameterId": 1281,
+      "itemId": 41411,
+      "grade": "Legendary"
+    },
+    {
+      "fishParameterId": 1282,
+      "itemId": 41412,
+      "grade": "Legendary"
+    },
+    {
+      "fishParameterId": 1423,
+      "itemId": 44339,
+      "grade": "Big"
+    },
+    {
+      "fishParameterId": 1424,
+      "itemId": 44340,
+      "grade": "Big"
+    },
+    {
+      "fishParameterId": 1425,
+      "itemId": 44341,
+      "grade": "Big"
+    },
+    {
+      "fishParameterId": 1426,
+      "itemId": 44343,
+      "grade": "Big"
+    },
+    {
+      "fishParameterId": 1427,
+      "itemId": 44342,
+      "grade": "Big"
+    },
+    {
+      "fishParameterId": 1428,
+      "itemId": 44345,
+      "grade": "Big"
+    },
+    {
+      "fishParameterId": 1429,
+      "itemId": 44346,
+      "grade": "Big"
+    },
+    {
+      "fishParameterId": 1430,
+      "itemId": 44344,
+      "grade": "Big"
+    },
+    {
+      "fishParameterId": 1437,
+      "itemId": 47988,
+      "grade": "Big"
+    },
+    {
+      "fishParameterId": 1438,
+      "itemId": 47989,
+      "grade": "Big"
+    },
+    {
+      "fishParameterId": 1439,
+      "itemId": 47990,
+      "grade": "Big"
+    },
+    {
+      "fishParameterId": 1440,
+      "itemId": 47991,
+      "grade": "Big"
+    },
+    {
+      "fishParameterId": 1441,
+      "itemId": 47992,
+      "grade": "Big"
+    },
+    {
+      "fishParameterId": 1442,
+      "itemId": 47993,
+      "grade": "Big"
+    },
+    {
+      "fishParameterId": 1443,
+      "itemId": 47994,
+      "grade": "Big"
+    },
+    {
+      "fishParameterId": 1444,
+      "itemId": 47995,
+      "grade": "Big"
+    },
+    {
+      "fishParameterId": 1448,
+      "itemId": 46189,
+      "grade": "Big"
+    },
+    {
+      "fishParameterId": 1449,
+      "itemId": 46190,
+      "grade": "Big"
+    },
+    {
+      "fishParameterId": 1450,
+      "itemId": 46191,
+      "grade": "Big"
+    },
+    {
+      "fishParameterId": 1451,
+      "itemId": 46192,
+      "grade": "Big"
+    },
+    {
+      "fishParameterId": 1452,
+      "itemId": 46193,
+      "grade": "Big"
+    },
+    {
+      "fishParameterId": 1453,
+      "itemId": 46194,
+      "grade": "Big"
+    },
+    {
+      "fishParameterId": 1454,
+      "itemId": 46195,
+      "grade": "Big"
+    },
+    {
+      "fishParameterId": 1455,
+      "itemId": 46196,
+      "grade": "Big"
+    },
+    {
+      "fishParameterId": 1456,
+      "itemId": 49794,
+      "grade": "Big"
+    },
+    {
+      "fishParameterId": 1457,
+      "itemId": 49795,
+      "grade": "Big"
+    },
+    {
+      "fishParameterId": 1458,
+      "itemId": 49796,
+      "grade": "Big"
+    },
+    {
+      "fishParameterId": 1459,
+      "itemId": 49797,
+      "grade": "Big"
+    },
+    {
+      "fishParameterId": 1460,
+      "itemId": 49798,
+      "grade": "Big"
+    },
+    {
+      "fishParameterId": 1461,
+      "itemId": 49799,
+      "grade": "Big"
+    },
+    {
+      "fishParameterId": 1462,
+      "itemId": 49800,
+      "grade": "Big"
+    },
+    {
+      "fishParameterId": 1463,
+      "itemId": 49801,
+      "grade": "Big"
+    },
+    {
+      "fishParameterId": 1464,
+      "itemId": 51999,
+      "grade": "Big"
+    },
+    {
+      "fishParameterId": 1465,
+      "itemId": 52000,
+      "grade": "Big"
+    },
+    {
+      "fishParameterId": 1466,
+      "itemId": 52001,
+      "grade": "Big"
+    },
+    {
+      "fishParameterId": 1467,
+      "itemId": 52002,
+      "grade": "Big"
+    },
+    {
+      "fishParameterId": 1468,
+      "itemId": 52003,
+      "grade": "Big"
+    },
+    {
+      "fishParameterId": 1469,
+      "itemId": 52004,
+      "grade": "Big"
+    },
+    {
+      "fishParameterId": 1470,
+      "itemId": 52005,
+      "grade": "Big"
+    },
+    {
+      "fishParameterId": 1471,
+      "itemId": 52006,
+      "grade": "Big"
+    },
+    {
+      "fishParameterId": 1517,
+      "itemId": 52007,
+      "grade": "Legendary"
+    },
+    {
+      "fishParameterId": 1518,
+      "itemId": 52008,
+      "grade": "Legendary"
+    },
+    {
+      "fishParameterId": 1519,
+      "itemId": 52009,
+      "grade": "Legendary"
+    },
+    {
+      "fishParameterId": 1520,
+      "itemId": 52010,
+      "grade": "Legendary"
+    },
+    {
+      "fishParameterId": 1521,
+      "itemId": 52297,
+      "grade": "Legendary"
+    },
+    {
+      "fishParameterId": 1522,
+      "itemId": 52011,
+      "grade": "Legendary"
+    }
+  ]
+}

@@ -28,3 +28,17 @@ dotnet run --project tools/FishingDataImport -p:DalamudLibPath=C:/Users/hyogu/Ap
 - 낚시터 ID/지역/Item을 대조하고 핀 좌표는 한섭 시트로 계산한다. 외부 좌표와 다른 294/295/296/327번 낚시터는 인게임 확인 대기로 남긴다.
 
 예측은 기본 시간/날씨만 계산하며 개인의 직감·장비·스킬 상태와 모든 선행 어종 조건을 추론하지 않는다. [이번 검증과 게임 절차](../docs/validation/MVP-01-ALL-SOURCE-DATA.md)를 따른다.
+
+## 터주 등급 자료 (0.1.15.0)
+
+- `fish-classifications.kr.v1.json`은 조건 원본을 바꾸지 않는 별도 양성 분류 자료다. KR 빌드 `2026.10.06.0000.0000`의 일반 도감 1258종을 조사해 터주 335종(터주왕 36종 포함)의 FishParameter/Item ID 쌍을 보관한다. 이름·설명 전문·아이콘은 내보내지 않는다.
+- 개발 단계에서 KR Item.Description의 명시적 ‘터주왕’/‘터주’ 문구를 순서대로 확인하고 FishingNoteInfo.SpecialConditions=2 집합과 대조했다. 기존 고정 원본의 903종 bigFish 값과 불일치 0이다. SpecialConditions=2의 의미를 다른 빌드에 일반화하지 않는다.
+- 실행 중 UI 문자열/아이템 설명/패치 번호로 등급을 추정하지 않는다. 지원 빌드와 FishParameter/Item 쌍이 일치하는 ID 자료를 연결한다. 자료가 없는 어종을 터주왕이 아니라고 확정하는 용도로 쓰지 않는다.
+- 출력의 conditionDataSha256은 검수에 쓴 조건 JSON, descriptionSha256은 ID 순으로 읽은 설명 근거의 해시다. 분류 파일 SHA256은 `6DEE299D0BFECE79CE03FD0485B85649829FE23CFA86973D5D27A1D8D1B2ACBF`다.
+- 시간제는 등급과 별도다. 확인된 조건의 ET/현재·직전 날씨 제약이나 검수한 KR FishingNoteInfo의 양성 제한 플래그(1)를 사용한다. raw 0/2만으로 제한 없음으로 바꾸지 않는다.
+
+```powershell
+dotnet run --project tools/FishingDataImport -p:DalamudLibPath=C:/Users/hyogu/AppData/Roaming/XIVLauncherKR/addon/Hooks/dev/ -- --classifications "C:/Program Files (x86)/FINAL FANTASY XIV - KOREA/game" data/fishing.kr.v2.json .cache/fish-classifications.json .cache/fish-classifications-audit.json
+```
+
+결과: Inspected=1258 / SourceCompared=903 / PositiveTimingCompared=131 / BigIncludingLegendary=335 / Legendary=36 / Failed=0. 출력은 검토 후 제품 자료에 복사한다. 설명 문구/시트/빌드가 달라지면 다시 조사한다.

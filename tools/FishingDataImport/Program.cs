@@ -8,6 +8,11 @@ using Lumina.Data;
 using Lumina.Excel.Sheets;
 
 // Development-only, local files and client sheets. Never evaluates JavaScript or reads a game process.
+if (args.Length > 0 && args[0] == "--classifications")
+{
+    FishClassificationImport.Run(args.Skip(1).ToArray());
+    return;
+}
 if (args.Length != 6)
     throw new ArgumentException("Usage: FishingDataImport <manifest> <data.js> <fishData.yaml> <game-directory> <output.json> <audit.json>");
 var options = new JsonSerializerOptions { PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
