@@ -255,7 +255,7 @@
   <data name="AlertsEnable" xml:space="preserve"><value>로컬 채팅 출현 알림 켜기</value></data>
   <data name="AlertsLead" xml:space="preserve"><value>기본 사전 시간 (실제 분)</value></data>
   <data name="AlertsLeadRange" xml:space="preserve"><value>범위: 실제 {0}~{1}분. 설정은 공통이며 발송 기록은 캐릭터별로 구분합니다.</value></data>
-  <data name="AlertsPolicy" xml:space="preserve"><value>앞으로 도달할 시각만 예약합니다. 로그인·재로드·설정 변경·긴 중단 뒤 이미 지난 알림을 보내지 않습니다. 캐릭터별 출현 창 기록으로 중복을 막습니다. 채널은 본인에게 보이는 형식이며 다른 플레이어에게 전송하지 않습니다. 동시 대상은 효과음을 한 번 재생하며 채널 기본 소리는 끕니다. Toast는 후속입니다.</value></data>
+  <data name="AlertsPolicy" xml:space="preserve"><value>앞으로 도달할 시각만 예약합니다. 로그인·재로드·설정 변경·긴 중단 뒤 이미 지난 알림을 보내지 않습니다. 캐릭터별 출현 창 기록으로 중복을 막습니다. 채널은 본인에게 보이는 형식이며 다른 플레이어에게 전송하지 않습니다. 동시 대상은 선택 효과음을 한 번 재생하며 채널 기본 소리는 끕니다. 선택형 팝업은 같은 예약을 사용하고 출력 실패 시 재시도하지 않습니다. 시간·날씨 창은 개인 준비 완료를 뜻하지 않습니다.</value></data>
   <data name="AlertsDisabled" xml:space="preserve"><value>출현 알림이 꺼져 있습니다.</value></data>
   <data name="AlertsWaitingCharacter" xml:space="preserve"><value>캐릭터 정보를 기다립니다. 이전 캐릭터의 예약은 폐기했습니다.</value></data>
   <data name="AlertsStorageUnavailable" xml:space="preserve"><value>설정 또는 발송 기록을 저장할 수 없어 알림을 중지했습니다. 저장 문제를 해결한 뒤 설정을 변경해 재시도하세요. 기록 저장 없이 발송하지 않습니다.</value></data>
@@ -276,6 +276,11 @@
   <data name="AlertExtraHistory" xml:space="preserve"><value> · 외 {0}종은 발송 기록 참고</value></data>
   <data name="AlertRemainingHours" xml:space="preserve"><value>{0}시간 {1}분 후</value></data>
   <data name="AlertRemainingMinutes" xml:space="preserve"><value>{0}분 후</value></data>
+  <data name="AlertToastEnable" xml:space="preserve"><value>화면 팝업도 표시</value></data>
+  <data name="AlertToastHint" xml:space="preserve"><value>각 로컬 채팅 묶음과 함께 화면 상단에 팝업 하나를 표시합니다. 기본은 꺼짐입니다. 팝업은 어종 이름과 남은 분만 표시하고 아이템·지도 링크는 채팅에 유지합니다. 게임 설정이나 다른 플러그인에 따라 실제 표시가 달라질 수 있습니다.</value></data>
+  <data name="AlertToastFish" xml:space="preserve"><value>{0} {1}</value></data>
+  <data name="AlertToastMore" xml:space="preserve"><value>{0} · 외 {1}종</value></data>
+  <data name="AlertHistoryToastLine" xml:space="preserve"><value>{0:HH:mm:ss} · {1} · {2} · {3} · {4} · 팝업 요청</value></data>
   <data name="AlertFavorites" xml:space="preserve"><value>즐겨찾기</value></data>
   <data name="AlertFavoritesHint" xml:space="preserve"><value>모든 즐겨찾기를 표시합니다. 개별 시간을 끄면 기본 시간을 따릅니다. 즐겨찾기 삭제 시 미래 알림은 취소하고 개별 시간과 발송 기록은 보존합니다. 즐겨찾기와 알림 설정은 캐릭터 공통입니다.</value></data>
   <data name="AlertFavoriteName" xml:space="preserve"><value>{0} (ID {1})</value></data>

@@ -10,7 +10,7 @@ namespace DuckbillFisher.Plugin;
 
 internal sealed record SpawnAlertDisplay(uint FishId, uint ItemId, string Name, FishingSpotView Spot, DateTimeOffset Start, int LeadMinutes);
 internal sealed record SpawnAlertDelivery(DateTimeOffset SentAt, SpawnAlertDisplay Fish, XivChatType Channel,
-    int Sound, bool SoundPlayed);
+    int Sound, bool SoundPlayed, bool ToastQueued);
 internal enum FavoriteAlertState { Disabled, WaitingCharacter, Caught, Unknown, Unsupported, Always, Pending, Armed }
 internal sealed record FavoriteAlertView(uint FishId, string? Name, int LeadMinutes,
     FavoriteAlertState State, DateTimeOffset? Start)
@@ -176,9 +176,9 @@ internal sealed class SpawnAlerts : IDisposable
         if (batch.Length == 0)
             return;
         // One chat message per poll, regardless of how many fish share the deadline.
-        var soundPlayed = output.Print(batch, sentAt, personal);
+        var delivered = output.Print(batch, sentAt, personal);
         var history = batch.Reverse().Select(fish => new SpawnAlertDelivery(sentAt, fish, personal.SpawnAlertChannel,
-            personal.SpawnAlertSound, soundPlayed)).Concat(view.History).Take(200).ToArray();
+            personal.SpawnAlertSound, delivered.SoundPlayed, delivered.ToastQueued)).Concat(view.History).Take(200).ToArray();
         view = view with { Sent = view.Sent + batch.Length, Batches = view.Batches + 1, History = history };
     }
 
@@ -213,7 +213,7 @@ internal sealed class SpawnAlerts : IDisposable
         var snapshot = View;
         var settings = preferences.View;
         return string.Create(CultureInfo.InvariantCulture,
-            $"DuckbillFisher MVP-03/alerts/v4\nPlugin={typeof(Plugin).Assembly.GetName().Version}; Enabled={settings.SpawnAlertsEnabled}; LeadMinutes={settings.SpawnAlertLeadMinutes}; Channel={settings.SpawnAlertChannel}; Channels={ChatChannelChoices.All.Length}; Sound={settings.SpawnAlertSound}; SoundReady={output.SoundAvailable}; Session={snapshot.Session}; Status={snapshot.Status.Key}\nAudience={settings.SpawnAlertAudience}; RemoveOnRegistration={settings.RemoveFavoriteOnRegistration}; Favorites={snapshot.Favorites.Count}; CustomLeads={settings.FishAlertLeadMinutes.Count}; History={snapshot.History.Count}; Eligible={snapshot.Eligible}; Armed={snapshot.Armed}; Sent={snapshot.Sent}; Batches={snapshot.Batches}; Rebases={snapshot.Rebases}\nNextFish={snapshot.Next?.FishId}; NextLead={snapshot.Next?.LeadMinutes}; NextStart={snapshot.Next?.Start:O}; DueAt={snapshot.Next?.Start.AddMinutes(-snapshot.Next.LeadMinutes):O}\nDedup=PersistedWindowStartPerCharacter; CatchUp=False; PersonalReadiness=False");
+            $"DuckbillFisher MVP-03/alerts/v5\nPlugin={typeof(Plugin).Assembly.GetName().Version}; Enabled={settings.SpawnAlertsEnabled}; LeadMinutes={settings.SpawnAlertLeadMinutes}; Channel={settings.SpawnAlertChannel}; Channels={ChatChannelChoices.All.Length}; Sound={settings.SpawnAlertSound}; SoundReady={output.SoundAvailable}; Toast={settings.SpawnAlertToastEnabled}; Session={snapshot.Session}; Status={snapshot.Status.Key}\nAudience={settings.SpawnAlertAudience}; RemoveOnRegistration={settings.RemoveFavoriteOnRegistration}; Favorites={snapshot.Favorites.Count}; CustomLeads={settings.FishAlertLeadMinutes.Count}; History={snapshot.History.Count}; Eligible={snapshot.Eligible}; Armed={snapshot.Armed}; Sent={snapshot.Sent}; Batches={snapshot.Batches}; Rebases={snapshot.Rebases}\nNextFish={snapshot.Next?.FishId}; NextLead={snapshot.Next?.LeadMinutes}; NextStart={snapshot.Next?.Start:O}; DueAt={snapshot.Next?.Start.AddMinutes(-snapshot.Next.LeadMinutes):O}\nDedup=PersistedWindowStartPerCharacter; CatchUp=False; PersonalReadiness=False");
     }
 
     public void Dispose()

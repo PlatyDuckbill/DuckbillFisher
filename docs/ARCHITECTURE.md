@@ -65,6 +65,8 @@ Plugin의 `AssemblyName`은 `DuckbillFisher`다. 주 DLL은 `DuckbillFisher.dll`
 
 0.1.23.0의 Core `SpawnAlertAudience`는 전체/미수집만을 구분한다. 기본 전체는 Unknown도 대상으로 삼되 수집 상태 자체를 바꾸지 않는다. 새 등록 자동 해제는 이벤트 수신 당시 선택과 처리 당시 설정/세션을 함께 확인하여 기존 검증된 KR 등록 경로에서만 Framework의 preferences 저장/게시를 호출한다. 도감 스캔과 수동 지정은 이 경로를 호출하지 않는다. [정책/실패 동작](validation/MVP-03-FAVORITE-POLICY.md)을 따른다.
 
+0.1.24.0 소스의 선택형 Toast는 `SpawnAlertOutput`에서 기존 예약 묶음당 공개 `IToastGui.ShowNormal`을 한 번 호출한다. 채팅 큐 등록 후 팝업/SE 실패를 각각 기록하고 재시도하지 않는다. 호출 성공은 큐 등록이며 화면 표시와 구분한다. 별도 이벤트/타이머/지연 큐는 없고 schema v6는 기본 꺼짐 옵션만 추가한다. 채널 선택은 22개로 한정하되 기존 알려진 채널 ID를 읽어 시스템으로 대체한다. [근거/미실행 범위](validation/MVP-03-TOAST.md)를 따른다.
+
 - 수집 상태는 Caught / Uncaught / Unknown. 값 없음은 false가 아니다.
 - 수동 override는 자동 판정과 따로 저장하고 '자동 상태 사용'으로 복귀할 수 있게 한다.
 - 캐릭터 식별자는 로컬 설정 격리에만 사용하고 로그·공개 테스트 자료에 넣지 않는다.

@@ -38,6 +38,7 @@ internal sealed class SpawnAlertsPanel(FishPreferences preferences, SpawnAlerts 
         var minutes = settings.SpawnAlertLeadMinutes;
         var channel = Array.IndexOf(ChatChannelChoices.All, settings.SpawnAlertChannel);
         var sound = settings.SpawnAlertSound;
+        var toastEnabled = settings.SpawnAlertToastEnabled;
         var uncaughtOnly = settings.SpawnAlertAudience == SpawnAlertAudience.UncaughtOnly;
         var removeOnRegistration = settings.RemoveFavoriteOnRegistration;
         var changed = false;
@@ -55,9 +56,11 @@ internal sealed class SpawnAlertsPanel(FishPreferences preferences, SpawnAlerts 
         ImGui.SetNextItemWidth(180);
         var sounds = Enumerable.Range(0, 17).Select(value => value == 0 ? UiText.Get(T.AlertSoundNone) : UiText.Get(T.AlertSoundNumber, value)).ToArray();
         changed |= ImGui.Combo(UiText.Label(T.AlertSound, "SpawnAlertSound"), ref sound, sounds, sounds.Length);
+        changed |= ImGui.Checkbox(UiText.Label(T.AlertToastEnable, "SpawnAlertToast"), ref toastEnabled);
+        if (ImGui.IsItemHovered()) ImGui.SetTooltip(UiText.Get(T.AlertToastHint));
         if (changed)
             preferences.SetSpawnAlerts(enabled, minutes, ChatChannelChoices.All[channel], sound,
-                uncaughtOnly ? SpawnAlertAudience.UncaughtOnly : SpawnAlertAudience.AllFavorites, removeOnRegistration);
+                uncaughtOnly ? SpawnAlertAudience.UncaughtOnly : SpawnAlertAudience.AllFavorites, removeOnRegistration, toastEnabled);
         ImGui.EndDisabled();
         ImGui.SameLine();
         ImGui.BeginDisabled(sound == 0 || !output.SoundAvailable || !settings.HasCharacter);
@@ -171,7 +174,7 @@ internal sealed class SpawnAlertsPanel(FishPreferences preferences, SpawnAlerts 
         for (var i = 0; i < view.History.Count; i++)
         {
             var entry = view.History[i];
-            var line = UiText.Get(T.AlertHistoryLine, entry.SentAt.ToLocalTime(), entry.Fish.Name,
+            var line = UiText.Get(entry.ToastQueued ? T.AlertHistoryToastLine : T.AlertHistoryLine, entry.SentAt.ToLocalTime(), entry.Fish.Name,
                 SpawnAlertOutput.Remaining(entry.Fish.Start - entry.SentAt), ChatChannelChoices.Name(entry.Channel),
                 entry.Sound == 0 ? new UiMessage(T.AlertSoundNone) : new UiMessage(entry.SoundPlayed ? T.AlertSoundNumber : T.AlertSoundSkipped, entry.Sound));
             ImGui.TextUnformatted(line);

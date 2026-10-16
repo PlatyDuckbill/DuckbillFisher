@@ -255,7 +255,7 @@
   <data name="AlertsEnable" xml:space="preserve"><value>Enable local chat spawn alerts</value></data>
   <data name="AlertsLead" xml:space="preserve"><value>Default minutes before opening</value></data>
   <data name="AlertsLeadRange" xml:space="preserve"><value>Range: {0}–{1} real minutes. Settings are shared; delivery records are separate for each character.</value></data>
-  <data name="AlertsPolicy" xml:space="preserve"><value>Only future reminders are armed. Login, reload, settings changes and long pauses never replay missed alerts. Saved per-character window records prevent duplicates. Each channel is a local display type; no message is sent to other players. One sound plays per batch, with default channel sounds silenced. Toast is planned for later.</value></data>
+  <data name="AlertsPolicy" xml:space="preserve"><value>Only future reminders are armed. Login, reload, settings changes and long pauses never replay missed alerts. Saved per-character window records prevent duplicates. Each channel is a local display type; no message is sent to other players. One selected sound plays per batch, with default channel sounds silenced. Optional popups share the same reservation and are not retried if output fails. Time/weather windows do not establish personal readiness.</value></data>
   <data name="AlertsDisabled" xml:space="preserve"><value>Spawn alerts are disabled.</value></data>
   <data name="AlertsWaitingCharacter" xml:space="preserve"><value>Waiting for character data. Previous character reservations have been discarded.</value></data>
   <data name="AlertsStorageUnavailable" xml:space="preserve"><value>Alerts paused: settings or delivery records could not be saved. Resolve the storage issue and change a setting to retry. No alert was sent without a saved reservation.</value></data>
@@ -276,6 +276,11 @@
   <data name="AlertExtraHistory" xml:space="preserve"><value> · {0} more in delivery history</value></data>
   <data name="AlertRemainingHours" xml:space="preserve"><value>in {0}h {1}m</value></data>
   <data name="AlertRemainingMinutes" xml:space="preserve"><value>in {0}m</value></data>
+  <data name="AlertToastEnable" xml:space="preserve"><value>Also show a popup</value></data>
+  <data name="AlertToastHint" xml:space="preserve"><value>Show one popup at the top of the screen alongside each local chat batch. Disabled by default. Popups contain fish names and remaining minutes; item and map links stay in chat. Display may be affected by game settings or other plugins.</value></data>
+  <data name="AlertToastFish" xml:space="preserve"><value>{0} {1}</value></data>
+  <data name="AlertToastMore" xml:space="preserve"><value>{0} · +{1} more fish</value></data>
+  <data name="AlertHistoryToastLine" xml:space="preserve"><value>{0:HH:mm:ss} · {1} · {2} · {3} · {4} · popup queued</value></data>
   <data name="AlertFavorites" xml:space="preserve"><value>Favorites</value></data>
   <data name="AlertFavoritesHint" xml:space="preserve"><value>All favorites are listed. Per-fish time overrides the default; uncheck it to use the default. Removing a favorite cancels future reminders and preserves its custom time and delivery history. Favorites and alert settings are shared between characters.</value></data>
   <data name="AlertFavoriteName" xml:space="preserve"><value>{0} (ID {1})</value></data>

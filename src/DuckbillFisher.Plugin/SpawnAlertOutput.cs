@@ -1,4 +1,5 @@
 using System.Diagnostics;
+using Dalamud.Game.Gui.Toast;
 using Dalamud.Game.Text;
 using Dalamud.Game.Text.SeStringHandling;
 using Dalamud.Plugin.Services;
@@ -8,11 +9,14 @@ using T = DuckbillFisher.Plugin.Localization.TextKey;
 
 namespace DuckbillFisher.Plugin;
 
+internal readonly record struct SpawnAlertOutputResult(bool SoundPlayed, bool ToastQueued);
+
 /// <summary>Local chat payloads and the inspected KR chat sound call. No chat commands or server sends.</summary>
 internal sealed class SpawnAlertOutput : IDisposable
 {
     private readonly IFramework framework;
     private readonly IChatGui chat;
+    private readonly IToastGui toast;
     private readonly FishPreferences preferences;
     private readonly bool nativeCompatible;
     private readonly IPluginLog log;
@@ -25,10 +29,11 @@ internal sealed class SpawnAlertOutput : IDisposable
     private bool soundAvailable;
     private UiMessage? previewResult;
 
-    public SpawnAlertOutput(IFramework framework, IChatGui chat, FishPreferences preferences, bool nativeCompatible, IPluginLog log)
+    public SpawnAlertOutput(IFramework framework, IChatGui chat, IToastGui toast, FishPreferences preferences, bool nativeCompatible, IPluginLog log)
     {
         this.framework = framework;
         this.chat = chat;
+        this.toast = toast;
         this.preferences = preferences;
         this.nativeCompatible = nativeCompatible;
         this.log = log;
@@ -78,7 +83,7 @@ internal sealed class SpawnAlertOutput : IDisposable
         }
     }
 
-    public bool Print(IReadOnlyList<SpawnAlertDisplay> batch, DateTimeOffset now, FishPreferencesView settings)
+    public SpawnAlertOutputResult Print(IReadOnlyList<SpawnAlertDisplay> batch, DateTimeOffset now, FishPreferencesView settings)
     {
         if (!framework.IsInFrameworkUpdateThread)
             throw new InvalidOperationException("Alert output must run on Framework.Update.");
@@ -102,15 +107,32 @@ internal sealed class SpawnAlertOutput : IDisposable
             Type = settings.SpawnAlertChannel,
             Name = "DuckbillFisher", Message = message.Build(), Silent = true,
         });
-        if (settings.SpawnAlertSound == 0)
-            return false;
-        try { return PlaySound(settings.SpawnAlertSound); }
+        var toastQueued = false;
+        if (settings.SpawnAlertToastEnabled)
+        {
+            try
+            {
+                // One public API call per reserved batch; no second scheduler or replay queue.
+                var text = string.Join(" · ", batch.Take(3).Select(fish =>
+                    UiText.Get(T.AlertToastFish, fish.Name, Remaining(fish.Start - now))));
+                if (batch.Count > 3)
+                    text = UiText.Get(T.AlertToastMore, text, batch.Count - 3);
+                toast.ShowNormal(text, new ToastOptions { Position = ToastPosition.Top });
+                toastQueued = true;
+            }
+            catch (Exception ex)
+            {
+                log.Error(ex, "Could not queue the alert toast; local chat was already queued. No retry will be made.");
+            }
+        }
+        var soundPlayed = false;
+        try { soundPlayed = PlaySound(settings.SpawnAlertSound); }
         catch (Exception ex)
         {
             // Managed API failures only; chat already queued must remain in delivery history.
             log.Error(ex, "Could not play the alert sound; local chat was already queued.");
-            return false;
         }
+        return new(soundPlayed, toastQueued);
     }
 
     public static string Remaining(TimeSpan time)
