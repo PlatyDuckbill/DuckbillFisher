@@ -1,6 +1,6 @@
 # 목록 설정 저장·기본값 복원·도감 안내
 
-날짜: 2026-10-16 · 소스 0.1.26.0 · 정규 교체/인게임 확인 대기
+날짜: 2026-10-16 · 정규 DLL 0.1.26.0 · 인게임 확인 대기
 
 ## 사용자 동작과 저장 범위
 
@@ -25,7 +25,8 @@
 - 짧은 목록 진단 `preferences/v6`은 CatalogSaved/SettingsScope/SearchPersisted/DiagnosticsPersisted를 추가한다. 알림 `alerts/v6`과 수집 `collection/v2`는 유지한다.
 - `dotnet build src/DuckbillFisher.Plugin/DuckbillFisher.Plugin.csproj --no-restore -c Debug -p:DalamudLibPath=C:/Users/hyogu/AppData/Roaming/XIVLauncherKR/addon/Hooks/dev/ -p:OutputPath=C:/Users/hyogu/Downloads/DuckbillFisher/.cache/catalog-settings-build/`: 경고·오류 0.
 - `pwsh -NoLogo -NoProfile -File scripts/check-localization.ps1`: 한영 386키/형식 인자 일치. `git diff --check` 통과. 테스트는 요청이 없어 추가/실행하지 않았다.
-- 별도 산출물: 주 DLL 986624바이트/0.1.26.0, Core 39936바이트/1.0.0.0, ko 리소스 39936바이트/0.1.26.0, manifest DuckbillFisher/0.1.26.0/API 15. 정규 DLL은 0.1.25.0 유지. 새 언로드 확인 후 정규 빌드/로드 대기다.
+- 사용자 새 `언로드 완료` 확인 후 위 명령에서 OutputPath 옵션을 제외한 정규 Debug 빌드를 실행했다. 경고·오류 0, 한영 386키/형식 인자 검사 재통과. 테스트 미실행, 인게임 확인 대기다.
+- 별도/정규 산출물 모두 주 DLL 986624바이트/0.1.26.0, Core 39936바이트/1.0.0.0, ko 리소스 39936바이트/0.1.26.0, manifest DuckbillFisher/0.1.26.0/API 15 확인. 정규 DLL 교체 완료.
 
 ## 로드 후 대표 확인
 
