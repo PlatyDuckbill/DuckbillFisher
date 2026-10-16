@@ -1,15 +1,569 @@
 {
   "schemaVersion": 1,
-  "dataVersion": "kr-initial-2026-10-16",
+  "dataVersion": "kr-arr-2026-10-16",
   "region": "KR",
   "gameBuild": "2026.10.06.0000.0000",
   "sourceRepository": "https://github.com/icykoneko/ff14-fish-tracker-app",
   "sourceRevision": "d0e1ab5bba62c2b57356e690a73676cd4751b64d",
+  "sourceSha256": "749F2644C9B5CFAC0D022C2A0E80835F69C74147A20373C4AF5E9A4E75A64B4A",
   "sourceFiles": [
     "private/fishData.yaml",
     "js/app/data.js"
   ],
   "fish": [
+    {
+      "itemId": 4945,
+      "fishParameterId": 36,
+      "fishingSpotId": 54,
+      "sourceName": "Dark Sleeper",
+      "startHour": 15,
+      "endHour": 10,
+      "weatherIds": [],
+      "previousWeatherIds": [],
+      "baitPath": [
+        2592
+      ],
+      "hookset": "Precision",
+      "tug": "light",
+      "predators": [],
+      "intuitionSeconds": null,
+      "folkloreRequired": false,
+      "fishEyesSupported": true
+    },
+    {
+      "itemId": 4951,
+      "fishParameterId": 46,
+      "fishingSpotId": 3,
+      "sourceName": "Tricolored Carp",
+      "startHour": 0,
+      "endHour": 24,
+      "weatherIds": [],
+      "previousWeatherIds": [],
+      "baitPath": [
+        2594
+      ],
+      "hookset": "Powerful",
+      "tug": "medium",
+      "predators": [],
+      "intuitionSeconds": null,
+      "folkloreRequired": false,
+      "fishEyesSupported": true
+    },
+    {
+      "itemId": 4953,
+      "fishParameterId": 48,
+      "fishingSpotId": 98,
+      "sourceName": "Jade Eel",
+      "startHour": 17,
+      "endHour": 10,
+      "weatherIds": [],
+      "previousWeatherIds": [],
+      "baitPath": [
+        2594
+      ],
+      "hookset": "Powerful",
+      "tug": "medium",
+      "predators": [],
+      "intuitionSeconds": null,
+      "folkloreRequired": false,
+      "fishEyesSupported": true
+    },
+    {
+      "itemId": 4958,
+      "fishParameterId": 55,
+      "fishingSpotId": 80,
+      "sourceName": "Black Eel",
+      "startHour": 17,
+      "endHour": 10,
+      "weatherIds": [],
+      "previousWeatherIds": [],
+      "baitPath": [
+        2594
+      ],
+      "hookset": "Powerful",
+      "tug": "medium",
+      "predators": [],
+      "intuitionSeconds": null,
+      "folkloreRequired": false,
+      "fishEyesSupported": true
+    },
+    {
+      "itemId": 5544,
+      "fishParameterId": 74,
+      "fishingSpotId": 29,
+      "sourceName": "Lamp Marimo",
+      "startHour": 0,
+      "endHour": 24,
+      "weatherIds": [],
+      "previousWeatherIds": [],
+      "baitPath": [
+        2610
+      ],
+      "hookset": "Precision",
+      "tug": "light",
+      "predators": [],
+      "intuitionSeconds": null,
+      "folkloreRequired": false,
+      "fishEyesSupported": true
+    },
+    {
+      "itemId": 4898,
+      "fishParameterId": 83,
+      "fishingSpotId": 52,
+      "sourceName": "Fullmoon Sardine",
+      "startHour": 18,
+      "endHour": 6,
+      "weatherIds": [],
+      "previousWeatherIds": [],
+      "baitPath": [
+        2596
+      ],
+      "hookset": "Precision",
+      "tug": "light",
+      "predators": [],
+      "intuitionSeconds": null,
+      "folkloreRequired": false,
+      "fishEyesSupported": true
+    },
+    {
+      "itemId": 4985,
+      "fishParameterId": 103,
+      "fishingSpotId": 80,
+      "sourceName": "Trader Eel",
+      "startHour": 17,
+      "endHour": 10,
+      "weatherIds": [],
+      "previousWeatherIds": [],
+      "baitPath": [
+        2599
+      ],
+      "hookset": "Powerful",
+      "tug": "medium",
+      "predators": [],
+      "intuitionSeconds": null,
+      "folkloreRequired": false,
+      "fishEyesSupported": true
+    },
+    {
+      "itemId": 4991,
+      "fishParameterId": 113,
+      "fishingSpotId": 56,
+      "sourceName": "Thunderbolt Sculpin",
+      "startHour": 0,
+      "endHour": 24,
+      "weatherIds": [
+        7,
+        8
+      ],
+      "previousWeatherIds": [],
+      "baitPath": [
+        2620
+      ],
+      "hookset": "Powerful",
+      "tug": "medium",
+      "predators": [],
+      "intuitionSeconds": null,
+      "folkloreRequired": false,
+      "fishEyesSupported": true
+    },
+    {
+      "itemId": 4904,
+      "fishParameterId": 116,
+      "fishingSpotId": 74,
+      "sourceName": "Wahoo",
+      "startHour": 0,
+      "endHour": 24,
+      "weatherIds": [],
+      "previousWeatherIds": [],
+      "baitPath": [
+        2585,
+        4869
+      ],
+      "hookset": "Powerful",
+      "tug": "medium",
+      "predators": [],
+      "intuitionSeconds": null,
+      "folkloreRequired": false,
+      "fishEyesSupported": true
+    },
+    {
+      "itemId": 4905,
+      "fishParameterId": 117,
+      "fishingSpotId": 90,
+      "sourceName": "Raincaller",
+      "startHour": 0,
+      "endHour": 24,
+      "weatherIds": [
+        7,
+        15
+      ],
+      "previousWeatherIds": [],
+      "baitPath": [
+        2601
+      ],
+      "hookset": "Powerful",
+      "tug": "medium",
+      "predators": [],
+      "intuitionSeconds": null,
+      "folkloreRequired": false,
+      "fishEyesSupported": true
+    },
+    {
+      "itemId": 4994,
+      "fishParameterId": 118,
+      "fishingSpotId": 9,
+      "sourceName": "Oakroot",
+      "startHour": 17,
+      "endHour": 10,
+      "weatherIds": [],
+      "previousWeatherIds": [],
+      "baitPath": [
+        2601
+      ],
+      "hookset": "Powerful",
+      "tug": "medium",
+      "predators": [],
+      "intuitionSeconds": null,
+      "folkloreRequired": false,
+      "fishEyesSupported": true
+    },
+    {
+      "itemId": 4906,
+      "fishParameterId": 124,
+      "fishingSpotId": 101,
+      "sourceName": "Nautilus",
+      "startHour": 0,
+      "endHour": 24,
+      "weatherIds": [],
+      "previousWeatherIds": [],
+      "baitPath": [
+        2616,
+        4898
+      ],
+      "hookset": "Powerful",
+      "tug": "medium",
+      "predators": [],
+      "intuitionSeconds": null,
+      "folkloreRequired": false,
+      "fishEyesSupported": true
+    },
+    {
+      "itemId": 4999,
+      "fishParameterId": 125,
+      "fishingSpotId": 55,
+      "sourceName": "Archerfish",
+      "startHour": 0,
+      "endHour": 24,
+      "weatherIds": [
+        1,
+        2,
+        3,
+        4
+      ],
+      "previousWeatherIds": [],
+      "baitPath": [
+        2618
+      ],
+      "hookset": "Precision",
+      "tug": "light",
+      "predators": [],
+      "intuitionSeconds": null,
+      "folkloreRequired": false,
+      "fishEyesSupported": true
+    },
+    {
+      "itemId": 5007,
+      "fishParameterId": 140,
+      "fishingSpotId": 84,
+      "sourceName": "Paglth'an Discus",
+      "startHour": 0,
+      "endHour": 24,
+      "weatherIds": [
+        14,
+        2,
+        1
+      ],
+      "previousWeatherIds": [],
+      "baitPath": [
+        2603
+      ],
+      "hookset": "Powerful",
+      "tug": "medium",
+      "predators": [],
+      "intuitionSeconds": null,
+      "folkloreRequired": false,
+      "fishEyesSupported": true
+    },
+    {
+      "itemId": 5008,
+      "fishParameterId": 141,
+      "fishingSpotId": 21,
+      "sourceName": "Boxing Pleco",
+      "startHour": 0,
+      "endHour": 24,
+      "weatherIds": [],
+      "previousWeatherIds": [],
+      "baitPath": [
+        2603
+      ],
+      "hookset": "Powerful",
+      "tug": "medium",
+      "predators": [],
+      "intuitionSeconds": null,
+      "folkloreRequired": false,
+      "fishEyesSupported": true
+    },
+    {
+      "itemId": 4911,
+      "fishParameterId": 149,
+      "fishingSpotId": 71,
+      "sourceName": "Rock Lobster",
+      "startHour": 17,
+      "endHour": 22,
+      "weatherIds": [],
+      "previousWeatherIds": [],
+      "baitPath": [
+        2606
+      ],
+      "hookset": "Powerful",
+      "tug": "medium",
+      "predators": [],
+      "intuitionSeconds": null,
+      "folkloreRequired": false,
+      "fishEyesSupported": true
+    },
+    {
+      "itemId": 4913,
+      "fishParameterId": 155,
+      "fishingSpotId": 108,
+      "sourceName": "Little Thalaos",
+      "startHour": 0,
+      "endHour": 24,
+      "weatherIds": [
+        7,
+        8
+      ],
+      "previousWeatherIds": [],
+      "baitPath": [
+        2606
+      ],
+      "hookset": "Powerful",
+      "tug": "medium",
+      "predators": [],
+      "intuitionSeconds": null,
+      "folkloreRequired": false,
+      "fishEyesSupported": true
+    },
+    {
+      "itemId": 5016,
+      "fishParameterId": 157,
+      "fishingSpotId": 99,
+      "sourceName": "Giant Donko",
+      "startHour": 4,
+      "endHour": 9,
+      "weatherIds": [],
+      "previousWeatherIds": [],
+      "baitPath": [
+        2626
+      ],
+      "hookset": "Powerful",
+      "tug": "medium",
+      "predators": [],
+      "intuitionSeconds": null,
+      "folkloreRequired": false,
+      "fishEyesSupported": true
+    },
+    {
+      "itemId": 5017,
+      "fishParameterId": 158,
+      "fishingSpotId": 82,
+      "sourceName": "Sundisc",
+      "startHour": 10,
+      "endHour": 15,
+      "weatherIds": [
+        1,
+        2
+      ],
+      "previousWeatherIds": [],
+      "baitPath": [
+        2607
+      ],
+      "hookset": "Powerful",
+      "tug": "medium",
+      "predators": [],
+      "intuitionSeconds": null,
+      "folkloreRequired": false,
+      "fishEyesSupported": true
+    },
+    {
+      "itemId": 4915,
+      "fishParameterId": 159,
+      "fishingSpotId": 47,
+      "sourceName": "Mahi-mahi",
+      "startHour": 10,
+      "endHour": 18,
+      "weatherIds": [],
+      "previousWeatherIds": [],
+      "baitPath": [
+        2628
+      ],
+      "hookset": "Powerful",
+      "tug": "heavy",
+      "predators": [],
+      "intuitionSeconds": null,
+      "folkloreRequired": false,
+      "fishEyesSupported": true
+    },
+    {
+      "itemId": 4918,
+      "fishParameterId": 166,
+      "fishingSpotId": 63,
+      "sourceName": "Coelacanth",
+      "startHour": 18,
+      "endHour": 6,
+      "weatherIds": [],
+      "previousWeatherIds": [],
+      "baitPath": [
+        2616,
+        4898
+      ],
+      "hookset": "Powerful",
+      "tug": "medium",
+      "predators": [],
+      "intuitionSeconds": null,
+      "folkloreRequired": false,
+      "fishEyesSupported": true
+    },
+    {
+      "itemId": 5021,
+      "fishParameterId": 167,
+      "fishingSpotId": 24,
+      "sourceName": "Cadaver Carp",
+      "startHour": 0,
+      "endHour": 24,
+      "weatherIds": [
+        17
+      ],
+      "previousWeatherIds": [],
+      "baitPath": [
+        2625
+      ],
+      "hookset": "Powerful",
+      "tug": "medium",
+      "predators": [],
+      "intuitionSeconds": null,
+      "folkloreRequired": false,
+      "fishEyesSupported": true
+    },
+    {
+      "itemId": 5022,
+      "fishParameterId": 173,
+      "fishingSpotId": 9,
+      "sourceName": "Mushroom Crab",
+      "startHour": 0,
+      "endHour": 24,
+      "weatherIds": [
+        4,
+        3
+      ],
+      "previousWeatherIds": [],
+      "baitPath": [
+        2620,
+        4995
+      ],
+      "hookset": "Powerful",
+      "tug": "medium",
+      "predators": [],
+      "intuitionSeconds": null,
+      "folkloreRequired": false,
+      "fishEyesSupported": true
+    },
+    {
+      "itemId": 5023,
+      "fishParameterId": 174,
+      "fishingSpotId": 16,
+      "sourceName": "Judgment Staff",
+      "startHour": 0,
+      "endHour": 24,
+      "weatherIds": [
+        9,
+        10
+      ],
+      "previousWeatherIds": [],
+      "baitPath": [
+        2607
+      ],
+      "hookset": "Powerful",
+      "tug": "medium",
+      "predators": [],
+      "intuitionSeconds": null,
+      "folkloreRequired": false,
+      "fishEyesSupported": true
+    },
+    {
+      "itemId": 5027,
+      "fishParameterId": 178,
+      "fishingSpotId": 22,
+      "sourceName": "Heliobatis",
+      "startHour": 17,
+      "endHour": 9,
+      "weatherIds": [],
+      "previousWeatherIds": [],
+      "baitPath": [
+        2607
+      ],
+      "hookset": "Powerful",
+      "tug": "medium",
+      "predators": [],
+      "intuitionSeconds": null,
+      "folkloreRequired": false,
+      "fishEyesSupported": true
+    },
+    {
+      "itemId": 4924,
+      "fishParameterId": 180,
+      "fishingSpotId": 74,
+      "sourceName": "Titanic Sawfish",
+      "startHour": 9,
+      "endHour": 15,
+      "weatherIds": [
+        1,
+        2
+      ],
+      "previousWeatherIds": [],
+      "baitPath": [
+        2585,
+        4869,
+        4904
+      ],
+      "hookset": "Powerful",
+      "tug": "heavy",
+      "predators": [],
+      "intuitionSeconds": null,
+      "folkloreRequired": false,
+      "fishEyesSupported": true
+    },
+    {
+      "itemId": 5031,
+      "fishParameterId": 184,
+      "fishingSpotId": 58,
+      "sourceName": "Jungle Catfish",
+      "startHour": 0,
+      "endHour": 24,
+      "weatherIds": [],
+      "previousWeatherIds": [],
+      "baitPath": [
+        2599,
+        4978,
+        5011
+      ],
+      "hookset": "Powerful",
+      "tug": "medium",
+      "predators": [],
+      "intuitionSeconds": null,
+      "folkloreRequired": false,
+      "fishEyesSupported": true
+    },
     {
       "itemId": 7678,
       "fishParameterId": 187,
@@ -30,16 +584,54 @@
       "fishEyesSupported": true
     },
     {
-      "itemId": 7685,
-      "fishParameterId": 194,
-      "fishingSpotId": 36,
-      "sourceName": "Goldenfin",
+      "itemId": 7679,
+      "fishParameterId": 188,
+      "fishingSpotId": 39,
+      "sourceName": "Beguiler Chub",
       "startHour": 9,
       "endHour": 14,
       "weatherIds": [],
       "previousWeatherIds": [],
       "baitPath": [
-        2587
+        2586
+      ],
+      "hookset": "Precision",
+      "tug": "heavy",
+      "predators": [],
+      "intuitionSeconds": null,
+      "folkloreRequired": false,
+      "fishEyesSupported": true
+    },
+    {
+      "itemId": 7680,
+      "fishParameterId": 189,
+      "fishingSpotId": 44,
+      "sourceName": "Oschon's Print",
+      "startHour": 0,
+      "endHour": 24,
+      "weatherIds": [],
+      "previousWeatherIds": [],
+      "baitPath": [
+        2589
+      ],
+      "hookset": "Powerful",
+      "tug": "heavy",
+      "predators": [],
+      "intuitionSeconds": null,
+      "folkloreRequired": false,
+      "fishEyesSupported": true
+    },
+    {
+      "itemId": 7681,
+      "fishParameterId": 190,
+      "fishingSpotId": 43,
+      "sourceName": "Caterwauler",
+      "startHour": 0,
+      "endHour": 24,
+      "weatherIds": [],
+      "previousWeatherIds": [],
+      "baitPath": [
+        2586
       ],
       "hookset": "Precision",
       "tug": "heavy",
@@ -113,6 +705,25 @@
       "fishEyesSupported": true
     },
     {
+      "itemId": 7685,
+      "fishParameterId": 194,
+      "fishingSpotId": 36,
+      "sourceName": "Goldenfin",
+      "startHour": 9,
+      "endHour": 14,
+      "weatherIds": [],
+      "previousWeatherIds": [],
+      "baitPath": [
+        2587
+      ],
+      "hookset": "Precision",
+      "tug": "heavy",
+      "predators": [],
+      "intuitionSeconds": null,
+      "folkloreRequired": false,
+      "fishEyesSupported": true
+    },
+    {
       "itemId": 7686,
       "fishParameterId": 195,
       "fishingSpotId": 38,
@@ -155,6 +766,48 @@
       "fishEyesSupported": true
     },
     {
+      "itemId": 7688,
+      "fishParameterId": 197,
+      "fishingSpotId": 40,
+      "sourceName": "Great Gudgeon",
+      "startHour": 0,
+      "endHour": 24,
+      "weatherIds": [],
+      "previousWeatherIds": [],
+      "baitPath": [
+        2588
+      ],
+      "hookset": "Precision",
+      "tug": "heavy",
+      "predators": [],
+      "intuitionSeconds": null,
+      "folkloreRequired": false,
+      "fishEyesSupported": true
+    },
+    {
+      "itemId": 7689,
+      "fishParameterId": 198,
+      "fishingSpotId": 77,
+      "sourceName": "Dark Knight",
+      "startHour": 0,
+      "endHour": 24,
+      "weatherIds": [
+        4,
+        3,
+        11
+      ],
+      "previousWeatherIds": [],
+      "baitPath": [
+        2614
+      ],
+      "hookset": "Powerful",
+      "tug": "heavy",
+      "predators": [],
+      "intuitionSeconds": null,
+      "folkloreRequired": false,
+      "fishEyesSupported": true
+    },
+    {
       "itemId": 7690,
       "fishParameterId": 199,
       "fishingSpotId": 47,
@@ -165,6 +818,1945 @@
       "previousWeatherIds": [],
       "baitPath": [
         2628
+      ],
+      "hookset": "Powerful",
+      "tug": "heavy",
+      "predators": [],
+      "intuitionSeconds": null,
+      "folkloreRequired": false,
+      "fishEyesSupported": true
+    },
+    {
+      "itemId": 7691,
+      "fishParameterId": 200,
+      "fishingSpotId": 49,
+      "sourceName": "Sabertooth Cod",
+      "startHour": 16,
+      "endHour": 22,
+      "weatherIds": [],
+      "previousWeatherIds": [],
+      "baitPath": [
+        2589
+      ],
+      "hookset": "Powerful",
+      "tug": "heavy",
+      "predators": [],
+      "intuitionSeconds": null,
+      "folkloreRequired": false,
+      "fishEyesSupported": true
+    },
+    {
+      "itemId": 7692,
+      "fishParameterId": 201,
+      "fishingSpotId": 75,
+      "sourceName": "Dream Goby",
+      "startHour": 17,
+      "endHour": 3,
+      "weatherIds": [],
+      "previousWeatherIds": [],
+      "baitPath": [
+        2588
+      ],
+      "hookset": "Precision",
+      "tug": "heavy",
+      "predators": [],
+      "intuitionSeconds": null,
+      "folkloreRequired": false,
+      "fishEyesSupported": true
+    },
+    {
+      "itemId": 7693,
+      "fishParameterId": 202,
+      "fishingSpotId": 64,
+      "sourceName": "Navigator's Brand",
+      "startHour": 9,
+      "endHour": 14,
+      "weatherIds": [
+        1,
+        2
+      ],
+      "previousWeatherIds": [],
+      "baitPath": [
+        2628
+      ],
+      "hookset": "Powerful",
+      "tug": "heavy",
+      "predators": [],
+      "intuitionSeconds": null,
+      "folkloreRequired": false,
+      "fishEyesSupported": true
+    },
+    {
+      "itemId": 7694,
+      "fishParameterId": 203,
+      "fishingSpotId": 6,
+      "sourceName": "Dark Ambusher",
+      "startHour": 21,
+      "endHour": 3,
+      "weatherIds": [],
+      "previousWeatherIds": [],
+      "baitPath": [
+        2586,
+        4927
+      ],
+      "hookset": "Precision",
+      "tug": "heavy",
+      "predators": [],
+      "intuitionSeconds": null,
+      "folkloreRequired": false,
+      "fishEyesSupported": true
+    },
+    {
+      "itemId": 7695,
+      "fishParameterId": 204,
+      "fishingSpotId": 19,
+      "sourceName": "Judgeray",
+      "startHour": 17,
+      "endHour": 21,
+      "weatherIds": [],
+      "previousWeatherIds": [],
+      "baitPath": [
+        2623
+      ],
+      "hookset": "Powerful",
+      "tug": "heavy",
+      "predators": [],
+      "intuitionSeconds": null,
+      "folkloreRequired": false,
+      "fishEyesSupported": true
+    },
+    {
+      "itemId": 7696,
+      "fishParameterId": 205,
+      "fishingSpotId": 91,
+      "sourceName": "Bloody Brewer",
+      "startHour": 0,
+      "endHour": 24,
+      "weatherIds": [],
+      "previousWeatherIds": [],
+      "baitPath": [
+        2588
+      ],
+      "hookset": "Powerful",
+      "tug": "heavy",
+      "predators": [],
+      "intuitionSeconds": null,
+      "folkloreRequired": false,
+      "fishEyesSupported": true
+    },
+    {
+      "itemId": 7697,
+      "fishParameterId": 206,
+      "fishingSpotId": 50,
+      "sourceName": "Faerie Queen",
+      "startHour": 0,
+      "endHour": 24,
+      "weatherIds": [
+        4,
+        3,
+        5
+      ],
+      "previousWeatherIds": [],
+      "baitPath": [
+        2626
+      ],
+      "hookset": "Powerful",
+      "tug": "heavy",
+      "predators": [],
+      "intuitionSeconds": null,
+      "folkloreRequired": false,
+      "fishEyesSupported": true
+    },
+    {
+      "itemId": 7698,
+      "fishParameterId": 207,
+      "fishingSpotId": 76,
+      "sourceName": "Slime King",
+      "startHour": 19,
+      "endHour": 24,
+      "weatherIds": [],
+      "previousWeatherIds": [],
+      "baitPath": [
+        2588
+      ],
+      "hookset": "Precision",
+      "tug": "heavy",
+      "predators": [],
+      "intuitionSeconds": null,
+      "folkloreRequired": false,
+      "fishEyesSupported": true
+    },
+    {
+      "itemId": 7699,
+      "fishParameterId": 208,
+      "fishingSpotId": 18,
+      "sourceName": "Blue Widow",
+      "startHour": 9,
+      "endHour": 14,
+      "weatherIds": [],
+      "previousWeatherIds": [],
+      "baitPath": [
+        2611
+      ],
+      "hookset": "Powerful",
+      "tug": "heavy",
+      "predators": [],
+      "intuitionSeconds": null,
+      "folkloreRequired": false,
+      "fishEyesSupported": true
+    },
+    {
+      "itemId": 7700,
+      "fishParameterId": 209,
+      "fishingSpotId": 3,
+      "sourceName": "Ghost Carp",
+      "startHour": 21,
+      "endHour": 3,
+      "weatherIds": [
+        7
+      ],
+      "previousWeatherIds": [],
+      "baitPath": [
+        2594
+      ],
+      "hookset": "Powerful",
+      "tug": "heavy",
+      "predators": [],
+      "intuitionSeconds": null,
+      "folkloreRequired": false,
+      "fishEyesSupported": true
+    },
+    {
+      "itemId": 7701,
+      "fishParameterId": 210,
+      "fishingSpotId": 100,
+      "sourceName": "Carp Diem",
+      "startHour": 9,
+      "endHour": 14,
+      "weatherIds": [
+        4,
+        3
+      ],
+      "previousWeatherIds": [],
+      "baitPath": [
+        2614
+      ],
+      "hookset": "Precision",
+      "tug": "heavy",
+      "predators": [],
+      "intuitionSeconds": null,
+      "folkloreRequired": false,
+      "fishEyesSupported": true
+    },
+    {
+      "itemId": 7702,
+      "fishParameterId": 211,
+      "fishingSpotId": 79,
+      "sourceName": "Mud Pilgrim",
+      "startHour": 17,
+      "endHour": 7,
+      "weatherIds": [
+        7,
+        8
+      ],
+      "previousWeatherIds": [],
+      "baitPath": [
+        2592
+      ],
+      "hookset": "Powerful",
+      "tug": "heavy",
+      "predators": [],
+      "intuitionSeconds": null,
+      "folkloreRequired": false,
+      "fishEyesSupported": true
+    },
+    {
+      "itemId": 7703,
+      "fishParameterId": 212,
+      "fishingSpotId": 96,
+      "sourceName": "Old Softie",
+      "startHour": 17,
+      "endHour": 21,
+      "weatherIds": [],
+      "previousWeatherIds": [],
+      "baitPath": [
+        2590
+      ],
+      "hookset": "Precision",
+      "tug": "heavy",
+      "predators": [],
+      "intuitionSeconds": null,
+      "folkloreRequired": false,
+      "fishEyesSupported": true
+    },
+    {
+      "itemId": 7704,
+      "fishParameterId": 213,
+      "fishingSpotId": 78,
+      "sourceName": "Marrow Sucker",
+      "startHour": 20,
+      "endHour": 3,
+      "weatherIds": [
+        7,
+        8
+      ],
+      "previousWeatherIds": [],
+      "baitPath": [
+        2597
+      ],
+      "hookset": "Powerful",
+      "tug": "heavy",
+      "predators": [],
+      "intuitionSeconds": null,
+      "folkloreRequired": false,
+      "fishEyesSupported": true
+    },
+    {
+      "itemId": 7705,
+      "fishParameterId": 214,
+      "fishingSpotId": 2,
+      "sourceName": "Chirurgeon",
+      "startHour": 0,
+      "endHour": 24,
+      "weatherIds": [],
+      "previousWeatherIds": [],
+      "baitPath": [
+        2586,
+        4927
+      ],
+      "hookset": "Precision",
+      "tug": "heavy",
+      "predators": [],
+      "intuitionSeconds": null,
+      "folkloreRequired": false,
+      "fishEyesSupported": true
+    },
+    {
+      "itemId": 7706,
+      "fishParameterId": 215,
+      "fishingSpotId": 73,
+      "sourceName": "Mud Golem",
+      "startHour": 21,
+      "endHour": 3,
+      "weatherIds": [],
+      "previousWeatherIds": [],
+      "baitPath": [
+        2594
+      ],
+      "hookset": "Powerful",
+      "tug": "heavy",
+      "predators": [],
+      "intuitionSeconds": null,
+      "folkloreRequired": false,
+      "fishEyesSupported": true
+    },
+    {
+      "itemId": 7707,
+      "fishParameterId": 216,
+      "fishingSpotId": 35,
+      "sourceName": "Octomammoth",
+      "startHour": 9,
+      "endHour": 17,
+      "weatherIds": [],
+      "previousWeatherIds": [],
+      "baitPath": [
+        2587,
+        4874
+      ],
+      "hookset": "Powerful",
+      "tug": "heavy",
+      "predators": [],
+      "intuitionSeconds": null,
+      "folkloreRequired": false,
+      "fishEyesSupported": true
+    },
+    {
+      "itemId": 7708,
+      "fishParameterId": 217,
+      "fishingSpotId": 81,
+      "sourceName": "Matron Carp",
+      "startHour": 15,
+      "endHour": 21,
+      "weatherIds": [],
+      "previousWeatherIds": [],
+      "baitPath": [
+        2590
+      ],
+      "hookset": "Powerful",
+      "tug": "heavy",
+      "predators": [],
+      "intuitionSeconds": null,
+      "folkloreRequired": false,
+      "fishEyesSupported": true
+    },
+    {
+      "itemId": 7709,
+      "fishParameterId": 218,
+      "fishingSpotId": 41,
+      "sourceName": "High Perch",
+      "startHour": 5,
+      "endHour": 8,
+      "weatherIds": [],
+      "previousWeatherIds": [],
+      "baitPath": [
+        2617
+      ],
+      "hookset": "Powerful",
+      "tug": "heavy",
+      "predators": [],
+      "intuitionSeconds": null,
+      "folkloreRequired": false,
+      "fishEyesSupported": true
+    },
+    {
+      "itemId": 7710,
+      "fishParameterId": 219,
+      "fishingSpotId": 45,
+      "sourceName": "Syldra",
+      "startHour": 0,
+      "endHour": 24,
+      "weatherIds": [
+        7
+      ],
+      "previousWeatherIds": [],
+      "baitPath": [
+        2596
+      ],
+      "hookset": "Precision",
+      "tug": "heavy",
+      "predators": [],
+      "intuitionSeconds": null,
+      "folkloreRequired": false,
+      "fishEyesSupported": true
+    },
+    {
+      "itemId": 7711,
+      "fishParameterId": 220,
+      "fishingSpotId": 70,
+      "sourceName": "Rivet Oyster",
+      "startHour": 0,
+      "endHour": 24,
+      "weatherIds": [],
+      "previousWeatherIds": [],
+      "baitPath": [
+        2619
+      ],
+      "hookset": "Powerful",
+      "tug": "heavy",
+      "predators": [],
+      "intuitionSeconds": null,
+      "folkloreRequired": false,
+      "fishEyesSupported": true
+    },
+    {
+      "itemId": 7712,
+      "fishParameterId": 221,
+      "fishingSpotId": 46,
+      "sourceName": "Jacques the Snipper",
+      "startHour": 21,
+      "endHour": 3,
+      "weatherIds": [],
+      "previousWeatherIds": [],
+      "baitPath": [
+        2589
+      ],
+      "hookset": "Precision",
+      "tug": "heavy",
+      "predators": [],
+      "intuitionSeconds": null,
+      "folkloreRequired": false,
+      "fishEyesSupported": true
+    },
+    {
+      "itemId": 7713,
+      "fishParameterId": 222,
+      "fishingSpotId": 90,
+      "sourceName": "Stormdancer",
+      "startHour": 17,
+      "endHour": 2,
+      "weatherIds": [
+        7,
+        15
+      ],
+      "previousWeatherIds": [],
+      "baitPath": [
+        2601
+      ],
+      "hookset": "Powerful",
+      "tug": "heavy",
+      "predators": [],
+      "intuitionSeconds": null,
+      "folkloreRequired": false,
+      "fishEyesSupported": true
+    },
+    {
+      "itemId": 7714,
+      "fishParameterId": 223,
+      "fishingSpotId": 72,
+      "sourceName": "Glimmerscale",
+      "startHour": 0,
+      "endHour": 24,
+      "weatherIds": [
+        1,
+        2
+      ],
+      "previousWeatherIds": [],
+      "baitPath": [
+        2594
+      ],
+      "hookset": "Precision",
+      "tug": "heavy",
+      "predators": [],
+      "intuitionSeconds": null,
+      "folkloreRequired": false,
+      "fishEyesSupported": true
+    },
+    {
+      "itemId": 7902,
+      "fishParameterId": 224,
+      "fishingSpotId": 97,
+      "sourceName": "Cupfish",
+      "startHour": 17,
+      "endHour": 18.5,
+      "weatherIds": [],
+      "previousWeatherIds": [],
+      "baitPath": [
+        2597
+      ],
+      "hookset": "Precision",
+      "tug": "heavy",
+      "predators": [],
+      "intuitionSeconds": null,
+      "folkloreRequired": false,
+      "fishEyesSupported": true
+    },
+    {
+      "itemId": 7903,
+      "fishParameterId": 225,
+      "fishingSpotId": 48,
+      "sourceName": "Meteor Survivor",
+      "startHour": 3,
+      "endHour": 5,
+      "weatherIds": [
+        3,
+        4,
+        5
+      ],
+      "previousWeatherIds": [],
+      "baitPath": [
+        2591
+      ],
+      "hookset": "Powerful",
+      "tug": "heavy",
+      "predators": [],
+      "intuitionSeconds": null,
+      "folkloreRequired": false,
+      "fishEyesSupported": true
+    },
+    {
+      "itemId": 7904,
+      "fishParameterId": 226,
+      "fishingSpotId": 67,
+      "sourceName": "Joan of Trout",
+      "startHour": 4,
+      "endHour": 6,
+      "weatherIds": [],
+      "previousWeatherIds": [],
+      "baitPath": [
+        2614
+      ],
+      "hookset": "Powerful",
+      "tug": "heavy",
+      "predators": [],
+      "intuitionSeconds": null,
+      "folkloreRequired": false,
+      "fishEyesSupported": true
+    },
+    {
+      "itemId": 7905,
+      "fishParameterId": 227,
+      "fishingSpotId": 66,
+      "sourceName": "Toramafish",
+      "startHour": 17,
+      "endHour": 19.5,
+      "weatherIds": [
+        3,
+        4
+      ],
+      "previousWeatherIds": [],
+      "baitPath": [
+        2620,
+        4995
+      ],
+      "hookset": "Powerful",
+      "tug": "heavy",
+      "predators": [],
+      "intuitionSeconds": null,
+      "folkloreRequired": false,
+      "fishEyesSupported": true
+    },
+    {
+      "itemId": 7906,
+      "fishParameterId": 228,
+      "fishingSpotId": 71,
+      "sourceName": "Fingers",
+      "startHour": 17.5,
+      "endHour": 18,
+      "weatherIds": [],
+      "previousWeatherIds": [],
+      "baitPath": [
+        2606
+      ],
+      "hookset": "Powerful",
+      "tug": "heavy",
+      "predators": [],
+      "intuitionSeconds": null,
+      "folkloreRequired": false,
+      "fishEyesSupported": true
+    },
+    {
+      "itemId": 7907,
+      "fishParameterId": 229,
+      "fishingSpotId": 10,
+      "sourceName": "The Assassin",
+      "startHour": 21,
+      "endHour": 23,
+      "weatherIds": [],
+      "previousWeatherIds": [],
+      "baitPath": [
+        2594
+      ],
+      "hookset": "Powerful",
+      "tug": "heavy",
+      "predators": [],
+      "intuitionSeconds": null,
+      "folkloreRequired": false,
+      "fishEyesSupported": true
+    },
+    {
+      "itemId": 7908,
+      "fishParameterId": 230,
+      "fishingSpotId": 11,
+      "sourceName": "Vip Viper",
+      "startHour": 18,
+      "endHour": 19,
+      "weatherIds": [],
+      "previousWeatherIds": [],
+      "baitPath": [
+        2594
+      ],
+      "hookset": "Powerful",
+      "tug": "heavy",
+      "predators": [],
+      "intuitionSeconds": null,
+      "folkloreRequired": false,
+      "fishEyesSupported": true
+    },
+    {
+      "itemId": 7909,
+      "fishParameterId": 231,
+      "fishingSpotId": 51,
+      "sourceName": "The Greatest Bream in the World",
+      "startHour": 20,
+      "endHour": 23,
+      "weatherIds": [],
+      "previousWeatherIds": [],
+      "baitPath": [
+        2613
+      ],
+      "hookset": "Powerful",
+      "tug": "heavy",
+      "predators": [],
+      "intuitionSeconds": null,
+      "folkloreRequired": false,
+      "fishEyesSupported": true
+    },
+    {
+      "itemId": 7910,
+      "fishParameterId": 232,
+      "fishingSpotId": 69,
+      "sourceName": "Dirty Herry",
+      "startHour": 20,
+      "endHour": 22,
+      "weatherIds": [],
+      "previousWeatherIds": [],
+      "baitPath": [
+        2606
+      ],
+      "hookset": "Powerful",
+      "tug": "heavy",
+      "predators": [],
+      "intuitionSeconds": null,
+      "folkloreRequired": false,
+      "fishEyesSupported": true
+    },
+    {
+      "itemId": 7911,
+      "fishParameterId": 233,
+      "fishingSpotId": 83,
+      "sourceName": "Old Hollow Eyes",
+      "startHour": 0,
+      "endHour": 24,
+      "weatherIds": [
+        4
+      ],
+      "previousWeatherIds": [],
+      "baitPath": [
+        2592,
+        4948
+      ],
+      "hookset": "Powerful",
+      "tug": "heavy",
+      "predators": [],
+      "intuitionSeconds": null,
+      "folkloreRequired": false,
+      "fishEyesSupported": true
+    },
+    {
+      "itemId": 7912,
+      "fishParameterId": 234,
+      "fishingSpotId": 7,
+      "sourceName": "Sylphsbane",
+      "startHour": 0,
+      "endHour": 24,
+      "weatherIds": [
+        7
+      ],
+      "previousWeatherIds": [],
+      "baitPath": [
+        2594,
+        4948
+      ],
+      "hookset": "Powerful",
+      "tug": "heavy",
+      "predators": [],
+      "intuitionSeconds": null,
+      "folkloreRequired": false,
+      "fishEyesSupported": true
+    },
+    {
+      "itemId": 7913,
+      "fishParameterId": 235,
+      "fishingSpotId": 13,
+      "sourceName": "Floating Boulder",
+      "startHour": 0,
+      "endHour": 8,
+      "weatherIds": [
+        4,
+        3
+      ],
+      "previousWeatherIds": [],
+      "baitPath": [
+        2595
+      ],
+      "hookset": "Powerful",
+      "tug": "heavy",
+      "predators": [],
+      "intuitionSeconds": null,
+      "folkloreRequired": false,
+      "fishEyesSupported": true
+    },
+    {
+      "itemId": 7914,
+      "fishParameterId": 236,
+      "fishingSpotId": 14,
+      "sourceName": "The Grinner",
+      "startHour": 0,
+      "endHour": 24,
+      "weatherIds": [],
+      "previousWeatherIds": [],
+      "baitPath": [
+        2597
+      ],
+      "hookset": "Powerful",
+      "tug": "heavy",
+      "predators": [],
+      "intuitionSeconds": null,
+      "folkloreRequired": false,
+      "fishEyesSupported": true
+    },
+    {
+      "itemId": 7915,
+      "fishParameterId": 237,
+      "fishingSpotId": 52,
+      "sourceName": "Shark Tuna",
+      "startHour": 19,
+      "endHour": 21,
+      "weatherIds": [
+        1,
+        2
+      ],
+      "previousWeatherIds": [],
+      "baitPath": [
+        2596,
+        4898
+      ],
+      "hookset": "Powerful",
+      "tug": "heavy",
+      "predators": [],
+      "intuitionSeconds": null,
+      "folkloreRequired": false,
+      "fishEyesSupported": true
+    },
+    {
+      "itemId": 7916,
+      "fishParameterId": 238,
+      "fishingSpotId": 98,
+      "sourceName": "Worm of Nym",
+      "startHour": 19,
+      "endHour": 22,
+      "weatherIds": [],
+      "previousWeatherIds": [],
+      "baitPath": [
+        2594
+      ],
+      "hookset": "Powerful",
+      "tug": "heavy",
+      "predators": [],
+      "intuitionSeconds": null,
+      "folkloreRequired": false,
+      "fishEyesSupported": true
+    },
+    {
+      "itemId": 7917,
+      "fishParameterId": 239,
+      "fishingSpotId": 104,
+      "sourceName": "Twitchbeard",
+      "startHour": 4,
+      "endHour": 6,
+      "weatherIds": [
+        1,
+        2
+      ],
+      "previousWeatherIds": [],
+      "baitPath": [
+        2596,
+        4898
+      ],
+      "hookset": "Powerful",
+      "tug": "heavy",
+      "predators": [],
+      "intuitionSeconds": null,
+      "folkloreRequired": false,
+      "fishEyesSupported": true
+    },
+    {
+      "itemId": 7918,
+      "fishParameterId": 240,
+      "fishingSpotId": 80,
+      "sourceName": "The Warden's Wand",
+      "startHour": 17.5,
+      "endHour": 20,
+      "weatherIds": [
+        1
+      ],
+      "previousWeatherIds": [],
+      "baitPath": [
+        2599
+      ],
+      "hookset": "Powerful",
+      "tug": "heavy",
+      "predators": [],
+      "intuitionSeconds": null,
+      "folkloreRequired": false,
+      "fishEyesSupported": true
+    },
+    {
+      "itemId": 7919,
+      "fishParameterId": 241,
+      "fishingSpotId": 106,
+      "sourceName": "Spearnose",
+      "startHour": 21,
+      "endHour": 24,
+      "weatherIds": [
+        4,
+        3
+      ],
+      "previousWeatherIds": [],
+      "baitPath": [
+        2607
+      ],
+      "hookset": "Precision",
+      "tug": "heavy",
+      "predators": [],
+      "intuitionSeconds": null,
+      "folkloreRequired": false,
+      "fishEyesSupported": true
+    },
+    {
+      "itemId": 7920,
+      "fishParameterId": 242,
+      "fishingSpotId": 4,
+      "sourceName": "Levinlight",
+      "startHour": 18,
+      "endHour": 23,
+      "weatherIds": [],
+      "previousWeatherIds": [],
+      "baitPath": [
+        2597
+      ],
+      "hookset": "Precision",
+      "tug": "heavy",
+      "predators": [],
+      "intuitionSeconds": null,
+      "folkloreRequired": false,
+      "fishEyesSupported": true
+    },
+    {
+      "itemId": 7921,
+      "fishParameterId": 243,
+      "fishingSpotId": 12,
+      "sourceName": "The Sinker",
+      "startHour": 21.5,
+      "endHour": 3,
+      "weatherIds": [
+        1,
+        2
+      ],
+      "previousWeatherIds": [],
+      "baitPath": [
+        2617
+      ],
+      "hookset": "Powerful",
+      "tug": "heavy",
+      "predators": [],
+      "intuitionSeconds": null,
+      "folkloreRequired": false,
+      "fishEyesSupported": true
+    },
+    {
+      "itemId": 7922,
+      "fishParameterId": 244,
+      "fishingSpotId": 15,
+      "sourceName": "The Gobfather",
+      "startHour": 0,
+      "endHour": 24,
+      "weatherIds": [
+        9,
+        10
+      ],
+      "previousWeatherIds": [],
+      "baitPath": [
+        2599,
+        4978
+      ],
+      "hookset": "Powerful",
+      "tug": "heavy",
+      "predators": [],
+      "intuitionSeconds": null,
+      "folkloreRequired": false,
+      "fishEyesSupported": true
+    },
+    {
+      "itemId": 7923,
+      "fishParameterId": 245,
+      "fishingSpotId": 105,
+      "sourceName": "Sweetnewt",
+      "startHour": 23,
+      "endHour": 4,
+      "weatherIds": [
+        4
+      ],
+      "previousWeatherIds": [],
+      "baitPath": [
+        2592,
+        4942
+      ],
+      "hookset": "Powerful",
+      "tug": "heavy",
+      "predators": [],
+      "intuitionSeconds": null,
+      "folkloreRequired": false,
+      "fishEyesSupported": true
+    },
+    {
+      "itemId": 7924,
+      "fishParameterId": 246,
+      "fishingSpotId": 53,
+      "sourceName": "Bombardfish",
+      "startHour": 9,
+      "endHour": 15,
+      "weatherIds": [
+        1
+      ],
+      "previousWeatherIds": [],
+      "baitPath": [
+        2598
+      ],
+      "hookset": "Powerful",
+      "tug": "heavy",
+      "predators": [],
+      "intuitionSeconds": null,
+      "folkloreRequired": false,
+      "fishEyesSupported": true
+    },
+    {
+      "itemId": 7925,
+      "fishParameterId": 247,
+      "fishingSpotId": 54,
+      "sourceName": "The Salter",
+      "startHour": 17,
+      "endHour": 20,
+      "weatherIds": [],
+      "previousWeatherIds": [],
+      "baitPath": [
+        2599
+      ],
+      "hookset": "Precision",
+      "tug": "light",
+      "predators": [],
+      "intuitionSeconds": null,
+      "folkloreRequired": false,
+      "fishEyesSupported": true
+    },
+    {
+      "itemId": 7926,
+      "fishParameterId": 248,
+      "fishingSpotId": 61,
+      "sourceName": "The Lone Ripper",
+      "startHour": 0,
+      "endHour": 24,
+      "weatherIds": [
+        6
+      ],
+      "previousWeatherIds": [],
+      "baitPath": [
+        2619
+      ],
+      "hookset": "Powerful",
+      "tug": "heavy",
+      "predators": [],
+      "intuitionSeconds": null,
+      "folkloreRequired": false,
+      "fishEyesSupported": true
+    },
+    {
+      "itemId": 7927,
+      "fishParameterId": 249,
+      "fishingSpotId": 155,
+      "sourceName": "King of the Spring",
+      "startHour": 16,
+      "endHour": 18.75,
+      "weatherIds": [],
+      "previousWeatherIds": [],
+      "baitPath": [
+        2626
+      ],
+      "hookset": "Powerful",
+      "tug": "heavy",
+      "predators": [],
+      "intuitionSeconds": null,
+      "folkloreRequired": false,
+      "fishEyesSupported": true
+    },
+    {
+      "itemId": 7928,
+      "fishParameterId": 250,
+      "fishingSpotId": 84,
+      "sourceName": "Discobolus",
+      "startHour": 12,
+      "endHour": 18,
+      "weatherIds": [
+        14
+      ],
+      "previousWeatherIds": [],
+      "baitPath": [
+        2603
+      ],
+      "hookset": "Powerful",
+      "tug": "heavy",
+      "predators": [],
+      "intuitionSeconds": null,
+      "folkloreRequired": false,
+      "fishEyesSupported": true
+    },
+    {
+      "itemId": 7929,
+      "fishParameterId": 251,
+      "fishingSpotId": 85,
+      "sourceName": "Iron Noose",
+      "startHour": 0,
+      "endHour": 24,
+      "weatherIds": [
+        4
+      ],
+      "previousWeatherIds": [],
+      "baitPath": [
+        2620
+      ],
+      "hookset": "Powerful",
+      "tug": "heavy",
+      "predators": [],
+      "intuitionSeconds": null,
+      "folkloreRequired": false,
+      "fishEyesSupported": true
+    },
+    {
+      "itemId": 7930,
+      "fishParameterId": 252,
+      "fishingSpotId": 87,
+      "sourceName": "Olgoi-Khorkhoi",
+      "startHour": 0,
+      "endHour": 24,
+      "weatherIds": [
+        14
+      ],
+      "previousWeatherIds": [],
+      "baitPath": [
+        2600,
+        5035
+      ],
+      "hookset": "Powerful",
+      "tug": "heavy",
+      "predators": [],
+      "intuitionSeconds": null,
+      "folkloreRequired": false,
+      "fishEyesSupported": true
+    },
+    {
+      "itemId": 7931,
+      "fishParameterId": 253,
+      "fishingSpotId": 86,
+      "sourceName": "Magic Carpet",
+      "startHour": 9,
+      "endHour": 16,
+      "weatherIds": [
+        14
+      ],
+      "previousWeatherIds": [],
+      "baitPath": [
+        2600,
+        5035
+      ],
+      "hookset": "Powerful",
+      "tug": "heavy",
+      "predators": [],
+      "intuitionSeconds": null,
+      "folkloreRequired": false,
+      "fishEyesSupported": true
+    },
+    {
+      "itemId": 7932,
+      "fishParameterId": 254,
+      "fishingSpotId": 26,
+      "sourceName": "Daniffen's Mark",
+      "startHour": 0,
+      "endHour": 24,
+      "weatherIds": [
+        16
+      ],
+      "previousWeatherIds": [],
+      "baitPath": [
+        2623
+      ],
+      "hookset": "Powerful",
+      "tug": "heavy",
+      "predators": [],
+      "intuitionSeconds": null,
+      "folkloreRequired": false,
+      "fishEyesSupported": true
+    },
+    {
+      "itemId": 7933,
+      "fishParameterId": 255,
+      "fishingSpotId": 31,
+      "sourceName": "Charon's Lantern",
+      "startHour": 22,
+      "endHour": 4,
+      "weatherIds": [],
+      "previousWeatherIds": [],
+      "baitPath": [
+        2603
+      ],
+      "hookset": "Precision",
+      "tug": "heavy",
+      "predators": [],
+      "intuitionSeconds": null,
+      "folkloreRequired": false,
+      "fishEyesSupported": true
+    },
+    {
+      "itemId": 7934,
+      "fishParameterId": 256,
+      "fishingSpotId": 5,
+      "sourceName": "The Green Jester",
+      "startHour": 18,
+      "endHour": 21,
+      "weatherIds": [],
+      "previousWeatherIds": [],
+      "baitPath": [
+        2599
+      ],
+      "hookset": "Powerful",
+      "tug": "heavy",
+      "predators": [],
+      "intuitionSeconds": null,
+      "folkloreRequired": false,
+      "fishEyesSupported": true
+    },
+    {
+      "itemId": 7935,
+      "fishParameterId": 257,
+      "fishingSpotId": 92,
+      "sourceName": "Bloodbath",
+      "startHour": 0,
+      "endHour": 24,
+      "weatherIds": [
+        9
+      ],
+      "previousWeatherIds": [],
+      "baitPath": [
+        2599,
+        4978
+      ],
+      "hookset": "Powerful",
+      "tug": "heavy",
+      "predators": [],
+      "intuitionSeconds": null,
+      "folkloreRequired": false,
+      "fishEyesSupported": true
+    },
+    {
+      "itemId": 7936,
+      "fishParameterId": 258,
+      "fishingSpotId": 16,
+      "sourceName": "Son of Levin",
+      "startHour": 0,
+      "endHour": 24,
+      "weatherIds": [
+        10
+      ],
+      "previousWeatherIds": [],
+      "baitPath": [
+        2607
+      ],
+      "hookset": "Powerful",
+      "tug": "heavy",
+      "predators": [],
+      "intuitionSeconds": null,
+      "folkloreRequired": false,
+      "fishEyesSupported": true
+    },
+    {
+      "itemId": 7937,
+      "fishParameterId": 259,
+      "fishingSpotId": 99,
+      "sourceName": "Thundergut",
+      "startHour": 19.5,
+      "endHour": 2.75,
+      "weatherIds": [
+        7
+      ],
+      "previousWeatherIds": [],
+      "baitPath": [
+        2601
+      ],
+      "hookset": "Powerful",
+      "tug": "heavy",
+      "predators": [],
+      "intuitionSeconds": null,
+      "folkloreRequired": false,
+      "fishEyesSupported": true
+    },
+    {
+      "itemId": 7938,
+      "fishParameterId": 260,
+      "fishingSpotId": 55,
+      "sourceName": "The Drowned Sniper",
+      "startHour": 0,
+      "endHour": 24,
+      "weatherIds": [
+        1,
+        2
+      ],
+      "previousWeatherIds": [],
+      "baitPath": [
+        2618
+      ],
+      "hookset": "Powerful",
+      "tug": "heavy",
+      "predators": [],
+      "intuitionSeconds": null,
+      "folkloreRequired": false,
+      "fishEyesSupported": true
+    },
+    {
+      "itemId": 7939,
+      "fishParameterId": 261,
+      "fishingSpotId": 56,
+      "sourceName": "The Terpsichorean",
+      "startHour": 0,
+      "endHour": 24,
+      "weatherIds": [
+        4
+      ],
+      "previousWeatherIds": [],
+      "baitPath": [
+        2599
+      ],
+      "hookset": "Powerful",
+      "tug": "heavy",
+      "predators": [],
+      "intuitionSeconds": null,
+      "folkloreRequired": false,
+      "fishEyesSupported": true
+    },
+    {
+      "itemId": 7940,
+      "fishParameterId": 262,
+      "fishingSpotId": 57,
+      "sourceName": "Mirrorscale",
+      "startHour": 9,
+      "endHour": 16,
+      "weatherIds": [
+        1,
+        2
+      ],
+      "previousWeatherIds": [],
+      "baitPath": [
+        2592,
+        4948
+      ],
+      "hookset": "Precision",
+      "tug": "heavy",
+      "predators": [],
+      "intuitionSeconds": null,
+      "folkloreRequired": false,
+      "fishEyesSupported": true
+    },
+    {
+      "itemId": 7941,
+      "fishParameterId": 263,
+      "fishingSpotId": 62,
+      "sourceName": "Helmsman's Hand",
+      "startHour": 9,
+      "endHour": 15,
+      "weatherIds": [
+        4,
+        3,
+        5
+      ],
+      "previousWeatherIds": [],
+      "baitPath": [
+        2587,
+        4872
+      ],
+      "hookset": "Powerful",
+      "tug": "heavy",
+      "predators": [],
+      "intuitionSeconds": null,
+      "folkloreRequired": false,
+      "fishEyesSupported": true
+    },
+    {
+      "itemId": 7942,
+      "fishParameterId": 264,
+      "fishingSpotId": 82,
+      "sourceName": "The Thousand-year Itch",
+      "startHour": 0,
+      "endHour": 24,
+      "weatherIds": [
+        4
+      ],
+      "previousWeatherIds": [],
+      "baitPath": [
+        2601
+      ],
+      "hookset": "Powerful",
+      "tug": "heavy",
+      "predators": [],
+      "intuitionSeconds": null,
+      "folkloreRequired": false,
+      "fishEyesSupported": true
+    },
+    {
+      "itemId": 7943,
+      "fishParameterId": 265,
+      "fishingSpotId": 89,
+      "sourceName": "Hannibal",
+      "startHour": 22,
+      "endHour": 4,
+      "weatherIds": [
+        4
+      ],
+      "previousWeatherIds": [],
+      "baitPath": [
+        2626,
+        4995
+      ],
+      "hookset": "Powerful",
+      "tug": "heavy",
+      "predators": [],
+      "intuitionSeconds": null,
+      "folkloreRequired": false,
+      "fishEyesSupported": true
+    },
+    {
+      "itemId": 7944,
+      "fishParameterId": 266,
+      "fishingSpotId": 30,
+      "sourceName": "Dawn Maiden",
+      "startHour": 5,
+      "endHour": 7,
+      "weatherIds": [
+        1,
+        2
+      ],
+      "previousWeatherIds": [],
+      "baitPath": [
+        2623
+      ],
+      "hookset": "Powerful",
+      "tug": "heavy",
+      "predators": [],
+      "intuitionSeconds": null,
+      "folkloreRequired": false,
+      "fishEyesSupported": true
+    },
+    {
+      "itemId": 7945,
+      "fishParameterId": 267,
+      "fishingSpotId": 28,
+      "sourceName": "Starbright",
+      "startHour": 20,
+      "endHour": 4,
+      "weatherIds": [
+        1,
+        2
+      ],
+      "previousWeatherIds": [],
+      "baitPath": [
+        2597,
+        4937
+      ],
+      "hookset": "Powerful",
+      "tug": "heavy",
+      "predators": [],
+      "intuitionSeconds": null,
+      "folkloreRequired": false,
+      "fishEyesSupported": true
+    },
+    {
+      "itemId": 7946,
+      "fishParameterId": 268,
+      "fishingSpotId": 32,
+      "sourceName": "The Matriarch",
+      "startHour": 0,
+      "endHour": 24,
+      "weatherIds": [],
+      "previousWeatherIds": [],
+      "baitPath": [
+        2599,
+        4937
+      ],
+      "hookset": "Precision",
+      "tug": "heavy",
+      "predators": [],
+      "intuitionSeconds": null,
+      "folkloreRequired": false,
+      "fishEyesSupported": true
+    },
+    {
+      "itemId": 7947,
+      "fishParameterId": 269,
+      "fishingSpotId": 20,
+      "sourceName": "Shadowstreak",
+      "startHour": 4.5,
+      "endHour": 10,
+      "weatherIds": [
+        4
+      ],
+      "previousWeatherIds": [],
+      "baitPath": [
+        2624
+      ],
+      "hookset": "Powerful",
+      "tug": "heavy",
+      "predators": [],
+      "intuitionSeconds": null,
+      "folkloreRequired": false,
+      "fishEyesSupported": true
+    },
+    {
+      "itemId": 7948,
+      "fishParameterId": 270,
+      "fishingSpotId": 101,
+      "sourceName": "The Captain's Chalice",
+      "startHour": 23.5,
+      "endHour": 1.0833333333333333,
+      "weatherIds": [],
+      "previousWeatherIds": [],
+      "baitPath": [
+        2616,
+        4898
+      ],
+      "hookset": "Powerful",
+      "tug": "heavy",
+      "predators": [],
+      "intuitionSeconds": null,
+      "folkloreRequired": false,
+      "fishEyesSupported": true
+    },
+    {
+      "itemId": 7949,
+      "fishParameterId": 271,
+      "fishingSpotId": 34,
+      "sourceName": "Anomalocaris",
+      "startHour": 10,
+      "endHour": 15,
+      "weatherIds": [
+        1,
+        2
+      ],
+      "previousWeatherIds": [],
+      "baitPath": [
+        2605,
+        5040
+      ],
+      "hookset": "Powerful",
+      "tug": "heavy",
+      "predators": [],
+      "intuitionSeconds": null,
+      "folkloreRequired": false,
+      "fishEyesSupported": true
+    },
+    {
+      "itemId": 7950,
+      "fishParameterId": 272,
+      "fishingSpotId": 65,
+      "sourceName": "Frilled Shark",
+      "startHour": 17,
+      "endHour": 3,
+      "weatherIds": [
+        4,
+        3,
+        5
+      ],
+      "previousWeatherIds": [],
+      "baitPath": [
+        2585,
+        4869,
+        4904,
+        4919
+      ],
+      "hookset": "Powerful",
+      "tug": "heavy",
+      "predators": [],
+      "intuitionSeconds": null,
+      "folkloreRequired": false,
+      "fishEyesSupported": true
+    },
+    {
+      "itemId": 7951,
+      "fishParameterId": 273,
+      "fishingSpotId": 22,
+      "sourceName": "Aetherlouse",
+      "startHour": 3,
+      "endHour": 13,
+      "weatherIds": [
+        17
+      ],
+      "previousWeatherIds": [],
+      "baitPath": [
+        2603
+      ],
+      "hookset": "Powerful",
+      "tug": "heavy",
+      "predators": [],
+      "intuitionSeconds": null,
+      "folkloreRequired": false,
+      "fishEyesSupported": true
+    },
+    {
+      "itemId": 8752,
+      "fishParameterId": 274,
+      "fishingSpotId": 58,
+      "sourceName": "Imperial Goldfish",
+      "startHour": 0,
+      "endHour": 24,
+      "weatherIds": [],
+      "previousWeatherIds": [],
+      "baitPath": [
+        2599,
+        4978
+      ],
+      "hookset": "Powerful",
+      "tug": "heavy",
+      "predators": [
+        {
+          "itemId": 5031,
+          "count": 3
+        }
+      ],
+      "intuitionSeconds": 600,
+      "folkloreRequired": false,
+      "fishEyesSupported": true
+    },
+    {
+      "itemId": 8753,
+      "fishParameterId": 275,
+      "fishingSpotId": 107,
+      "sourceName": "The Old Man in the Sea",
+      "startHour": 0,
+      "endHour": 24,
+      "weatherIds": [
+        1
+      ],
+      "previousWeatherIds": [
+        7,
+        8
+      ],
+      "baitPath": [
+        2587,
+        4874,
+        4888
+      ],
+      "hookset": "Powerful",
+      "tug": "heavy",
+      "predators": [],
+      "intuitionSeconds": null,
+      "folkloreRequired": false,
+      "fishEyesSupported": true
+    },
+    {
+      "itemId": 8754,
+      "fishParameterId": 276,
+      "fishingSpotId": 108,
+      "sourceName": "Nepto Dragon",
+      "startHour": 0,
+      "endHour": 24,
+      "weatherIds": [
+        7,
+        8
+      ],
+      "previousWeatherIds": [],
+      "baitPath": [
+        2606
+      ],
+      "hookset": "Powerful",
+      "tug": "heavy",
+      "predators": [
+        {
+          "itemId": 4913,
+          "count": 3
+        }
+      ],
+      "intuitionSeconds": 350,
+      "folkloreRequired": false,
+      "fishEyesSupported": false
+    },
+    {
+      "itemId": 8755,
+      "fishParameterId": 277,
+      "fishingSpotId": 63,
+      "sourceName": "Coelacanthus",
+      "startHour": 22,
+      "endHour": 3,
+      "weatherIds": [
+        4,
+        3,
+        5
+      ],
+      "previousWeatherIds": [],
+      "baitPath": [
+        2596,
+        4898
+      ],
+      "hookset": "Powerful",
+      "tug": "heavy",
+      "predators": [],
+      "intuitionSeconds": null,
+      "folkloreRequired": false,
+      "fishEyesSupported": true
+    },
+    {
+      "itemId": 8756,
+      "fishParameterId": 278,
+      "fishingSpotId": 63,
+      "sourceName": "Endoceras",
+      "startHour": 20,
+      "endHour": 4,
+      "weatherIds": [
+        4,
+        3,
+        5
+      ],
+      "previousWeatherIds": [
+        1,
+        2
+      ],
+      "baitPath": [
+        2596,
+        4898
+      ],
+      "hookset": "Powerful",
+      "tug": "heavy",
+      "predators": [],
+      "intuitionSeconds": null,
+      "folkloreRequired": false,
+      "fishEyesSupported": false
+    },
+    {
+      "itemId": 8757,
+      "fishParameterId": 279,
+      "fishingSpotId": 102,
+      "sourceName": "Seahag",
+      "startHour": 19,
+      "endHour": 2,
+      "weatherIds": [
+        1,
+        2
+      ],
+      "previousWeatherIds": [],
+      "baitPath": [
+        2585,
+        4869,
+        4904
+      ],
+      "hookset": "Powerful",
+      "tug": "heavy",
+      "predators": [],
+      "intuitionSeconds": null,
+      "folkloreRequired": false,
+      "fishEyesSupported": true
+    },
+    {
+      "itemId": 8758,
+      "fishParameterId": 280,
+      "fishingSpotId": 25,
+      "sourceName": "Ignus Horn",
+      "startHour": 0,
+      "endHour": 24,
+      "weatherIds": [
+        1,
+        2
+      ],
+      "previousWeatherIds": [
+        17
+      ],
+      "baitPath": [
+        2603
+      ],
+      "hookset": "Precision",
+      "tug": "heavy",
+      "predators": [],
+      "intuitionSeconds": null,
+      "folkloreRequired": false,
+      "fishEyesSupported": true
+    },
+    {
+      "itemId": 8759,
+      "fishParameterId": 281,
+      "fishingSpotId": 23,
+      "sourceName": "Void Bass",
+      "startHour": 0,
+      "endHour": 24,
+      "weatherIds": [
+        17
+      ],
+      "previousWeatherIds": [
+        1,
+        2
+      ],
+      "baitPath": [
+        2603
+      ],
+      "hookset": "Powerful",
+      "tug": "heavy",
+      "predators": [],
+      "intuitionSeconds": null,
+      "folkloreRequired": false,
+      "fishEyesSupported": true
+    },
+    {
+      "itemId": 8760,
+      "fishParameterId": 282,
+      "fishingSpotId": 21,
+      "sourceName": "Cornelia",
+      "startHour": 0,
+      "endHour": 24,
+      "weatherIds": [],
+      "previousWeatherIds": [],
+      "baitPath": [
+        2625
+      ],
+      "hookset": "Powerful",
+      "tug": "heavy",
+      "predators": [
+        {
+          "itemId": 5008,
+          "count": 5
+        }
+      ],
+      "intuitionSeconds": 300,
+      "folkloreRequired": false,
+      "fishEyesSupported": true
+    },
+    {
+      "itemId": 8761,
+      "fishParameterId": 283,
+      "fishingSpotId": 24,
+      "sourceName": "Ninja Betta",
+      "startHour": 18,
+      "endHour": 9,
+      "weatherIds": [
+        17
+      ],
+      "previousWeatherIds": [],
+      "baitPath": [
+        2592,
+        4942,
+        5002
+      ],
+      "hookset": "Powerful",
+      "tug": "heavy",
+      "predators": [],
+      "intuitionSeconds": null,
+      "folkloreRequired": false,
+      "fishEyesSupported": true
+    },
+    {
+      "itemId": 8762,
+      "fishParameterId": 284,
+      "fishingSpotId": 94,
+      "sourceName": "Canavan",
+      "startHour": 8,
+      "endHour": 18,
+      "weatherIds": [
+        17
+      ],
+      "previousWeatherIds": [],
+      "baitPath": [
+        2599,
+        4978,
+        5011
+      ],
+      "hookset": "Powerful",
+      "tug": "heavy",
+      "predators": [],
+      "intuitionSeconds": null,
+      "folkloreRequired": false,
+      "fishEyesSupported": true
+    },
+    {
+      "itemId": 8763,
+      "fishParameterId": 285,
+      "fishingSpotId": 94,
+      "sourceName": "Kuno the Killer",
+      "startHour": 0,
+      "endHour": 24,
+      "weatherIds": [],
+      "previousWeatherIds": [],
+      "baitPath": [
+        2599,
+        4978,
+        5002
+      ],
+      "hookset": "Powerful",
+      "tug": "heavy",
+      "predators": [
+        {
+          "itemId": 8762,
+          "count": 1
+        }
+      ],
+      "intuitionSeconds": 1400,
+      "folkloreRequired": false,
+      "fishEyesSupported": false
+    },
+    {
+      "itemId": 8764,
+      "fishParameterId": 286,
+      "fishingSpotId": 74,
+      "sourceName": "Pirate's Bane",
+      "startHour": 0,
+      "endHour": 24,
+      "weatherIds": [],
+      "previousWeatherIds": [],
+      "baitPath": [
+        2585,
+        4869,
+        4904
+      ],
+      "hookset": "Powerful",
+      "tug": "heavy",
+      "predators": [
+        {
+          "itemId": 4904,
+          "count": 6
+        }
+      ],
+      "intuitionSeconds": 120,
+      "folkloreRequired": false,
+      "fishEyesSupported": true
+    },
+    {
+      "itemId": 8765,
+      "fishParameterId": 287,
+      "fishingSpotId": 103,
+      "sourceName": "Ndendecki",
+      "startHour": 18,
+      "endHour": 5,
+      "weatherIds": [
+        4
+      ],
+      "previousWeatherIds": [],
+      "baitPath": [
+        2599,
+        4978,
+        5002
+      ],
+      "hookset": "Powerful",
+      "tug": "heavy",
+      "predators": [],
+      "intuitionSeconds": null,
+      "folkloreRequired": false,
+      "fishEyesSupported": true
+    },
+    {
+      "itemId": 8766,
+      "fishParameterId": 288,
+      "fishingSpotId": 95,
+      "sourceName": "Bat-o'-Nine-Tails",
+      "startHour": 0,
+      "endHour": 24,
+      "weatherIds": [
+        4,
+        3,
+        1,
+        2
+      ],
+      "previousWeatherIds": [
+        7
+      ],
+      "baitPath": [
+        2599,
+        4978
+      ],
+      "hookset": "Powerful",
+      "tug": "heavy",
+      "predators": [],
+      "intuitionSeconds": null,
+      "folkloreRequired": false,
+      "fishEyesSupported": true
+    },
+    {
+      "itemId": 8767,
+      "fishParameterId": 289,
+      "fishingSpotId": 88,
+      "sourceName": "Wootz Knifefish Zenith",
+      "startHour": 1,
+      "endHour": 3.3333333333333335,
+      "weatherIds": [
+        4
+      ],
+      "previousWeatherIds": [
+        1,
+        2
+      ],
+      "baitPath": [
+        2599,
+        4978
       ],
       "hookset": "Powerful",
       "tug": "heavy",
@@ -199,31 +2791,224 @@
       "fishEyesSupported": false
     },
     {
-      "itemId": 8754,
-      "fishParameterId": 276,
-      "fishingSpotId": 108,
-      "sourceName": "Nepto Dragon",
-      "startHour": 0,
-      "endHour": 24,
+      "itemId": 8769,
+      "fishParameterId": 291,
+      "fishingSpotId": 29,
+      "sourceName": "Darkstar",
+      "startHour": 19,
+      "endHour": 4,
       "weatherIds": [
-        7,
-        8
+        16,
+        15
       ],
       "previousWeatherIds": [],
       "baitPath": [
-        2606
+        2599,
+        4937
       ],
       "hookset": "Powerful",
       "tug": "heavy",
       "predators": [
         {
-          "itemId": 4913,
-          "count": 3
+          "itemId": 5544,
+          "count": 5
         }
       ],
-      "intuitionSeconds": 350,
+      "intuitionSeconds": 180,
+      "folkloreRequired": false,
+      "fishEyesSupported": true
+    },
+    {
+      "itemId": 8770,
+      "fishParameterId": 292,
+      "fishingSpotId": 33,
+      "sourceName": "Blue Corpse",
+      "startHour": 0,
+      "endHour": 24,
+      "weatherIds": [
+        1,
+        2
+      ],
+      "previousWeatherIds": [
+        16,
+        15
+      ],
+      "baitPath": [
+        2607
+      ],
+      "hookset": "Precision",
+      "tug": "heavy",
+      "predators": [],
+      "intuitionSeconds": null,
+      "folkloreRequired": false,
+      "fishEyesSupported": true
+    },
+    {
+      "itemId": 8771,
+      "fishParameterId": 293,
+      "fishingSpotId": 27,
+      "sourceName": "Mahar",
+      "startHour": 0,
+      "endHour": 24,
+      "weatherIds": [
+        16
+      ],
+      "previousWeatherIds": [
+        1,
+        2
+      ],
+      "baitPath": [
+        2605,
+        5040
+      ],
+      "hookset": "Powerful",
+      "tug": "heavy",
+      "predators": [],
+      "intuitionSeconds": null,
+      "folkloreRequired": false,
+      "fishEyesSupported": true
+    },
+    {
+      "itemId": 8772,
+      "fishParameterId": 294,
+      "fishingSpotId": 27,
+      "sourceName": "Shonisaurus",
+      "startHour": 0,
+      "endHour": 24,
+      "weatherIds": [
+        16
+      ],
+      "previousWeatherIds": [
+        1,
+        2
+      ],
+      "baitPath": [
+        2605,
+        5040,
+        8771
+      ],
+      "hookset": "Powerful",
+      "tug": "heavy",
+      "predators": [],
+      "intuitionSeconds": null,
       "folkloreRequired": false,
       "fishEyesSupported": false
+    },
+    {
+      "itemId": 8773,
+      "fishParameterId": 295,
+      "fishingSpotId": 9,
+      "sourceName": "Magicked Mushroom",
+      "startHour": 0,
+      "endHour": 24,
+      "weatherIds": [
+        4,
+        3
+      ],
+      "previousWeatherIds": [
+        7,
+        9
+      ],
+      "baitPath": [
+        2620,
+        4995
+      ],
+      "hookset": "Powerful",
+      "tug": "heavy",
+      "predators": [],
+      "intuitionSeconds": null,
+      "folkloreRequired": false,
+      "fishEyesSupported": true
+    },
+    {
+      "itemId": 8774,
+      "fishParameterId": 296,
+      "fishingSpotId": 17,
+      "sourceName": "Giant Takitaro",
+      "startHour": 0,
+      "endHour": 24,
+      "weatherIds": [
+        9,
+        10
+      ],
+      "previousWeatherIds": [],
+      "baitPath": [
+        2603
+      ],
+      "hookset": "Powerful",
+      "tug": "heavy",
+      "predators": [],
+      "intuitionSeconds": null,
+      "folkloreRequired": false,
+      "fishEyesSupported": true
+    },
+    {
+      "itemId": 8775,
+      "fishParameterId": 297,
+      "fishingSpotId": 17,
+      "sourceName": "Namitaro",
+      "startHour": 0,
+      "endHour": 24,
+      "weatherIds": [],
+      "previousWeatherIds": [],
+      "baitPath": [
+        2624
+      ],
+      "hookset": "Powerful",
+      "tug": "heavy",
+      "predators": [
+        {
+          "itemId": 8774,
+          "count": 1
+        }
+      ],
+      "intuitionSeconds": 60,
+      "folkloreRequired": false,
+      "fishEyesSupported": false
+    },
+    {
+      "itemId": 8776,
+      "fishParameterId": 298,
+      "fishingSpotId": 93,
+      "sourceName": "Blood Red Bonytongue",
+      "startHour": 4.5,
+      "endHour": 11.5,
+      "weatherIds": [
+        4
+      ],
+      "previousWeatherIds": [
+        1,
+        2
+      ],
+      "baitPath": [
+        2599,
+        4978
+      ],
+      "hookset": "Powerful",
+      "tug": "heavy",
+      "predators": [],
+      "intuitionSeconds": null,
+      "folkloreRequired": false,
+      "fishEyesSupported": true
+    },
+    {
+      "itemId": 10123,
+      "fishParameterId": 299,
+      "fishingSpotId": 51,
+      "sourceName": "Gigant Clam",
+      "startHour": 23,
+      "endHour": 2,
+      "weatherIds": [],
+      "previousWeatherIds": [],
+      "baitPath": [
+        2619
+      ],
+      "hookset": "Powerful",
+      "tug": "heavy",
+      "predators": [],
+      "intuitionSeconds": null,
+      "folkloreRequired": false,
+      "fishEyesSupported": true
     }
   ]
 }

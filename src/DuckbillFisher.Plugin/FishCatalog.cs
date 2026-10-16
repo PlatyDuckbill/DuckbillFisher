@@ -67,6 +67,7 @@ internal sealed class FishCatalog : IDisposable
     }
 
     public FishCatalogView View { get { lock (gate) return view; } }
+    public bool ConditionBuildMatches => conditionBuildMatches;
 
     public void RequestLoad(bool reload = false)
     {
@@ -221,7 +222,7 @@ internal sealed class FishCatalog : IDisposable
             if (map.SizeFactor == 0 || map.TerritoryType.RowId != territory.RowId)
                 continue;
             // FishingSpot X/Z are image coordinates; MapLinkPayload expects readable map coordinates.
-            // Cross-checked against the pinned Fish Tracker coordinates for all ten initial fish.
+            // The development importer cross-checks these against the pinned source coordinates.
             var x = 1f + spot.X * 41f / 2048f / (map.SizeFactor / 100f);
             var y = 1f + spot.Z * 41f / 2048f / (map.SizeFactor / 100f);
             var weather = territory.WeatherRate.Value;
@@ -234,20 +235,22 @@ internal sealed class FishCatalog : IDisposable
         return result;
     }
 
-    public string CreateReport()
+    public string CreateReport(uint? selectedFishParameterId = null)
     {
         var snapshot = View;
         var unresolved = snapshot.Rows.Where(row => !row.IsDisplayable).ToArray();
         var report = new StringBuilder();
         void Append(FormattableString line) => report.AppendLine(FormattableString.Invariant(line));
-        report.AppendLine("DuckbillFisher MVP-01/catalog/v2");
+        report.AppendLine("DuckbillFisher MVP-01/catalog/v3");
         Append($"Plugin: {typeof(Plugin).Assembly.GetName().Version}");
         Append($"Rows: {snapshot.Rows.Count}; displayable: {snapshot.Rows.Count - unresolved.Length}; unresolved: {unresolved.Length}; unresolved in log: {unresolved.Count(row => row.IsInLog)}");
         report.AppendLine($"Status: [{snapshot.Status.Key}] {snapshot.Status.Diagnostic}");
         Append($"Dataset: {FishingData.Dataset.DataVersion}; buildMatch={conditionBuildMatches}; detailRows={snapshot.Rows.Count(row => row.Details is not null)}; rowsWithSpots={snapshot.Rows.Count(row => row.Spots.Count > 0)}");
         Append($"ForecastAt: {snapshot.ForecastAt:O}; horizonPeriods={FishingAvailability.SearchPeriods}; normal time/weather only; no personal readiness inference");
         report.AppendLine($"Source: {FishingData.Dataset.SourceRepository}/tree/{FishingData.Dataset.SourceRevision}");
-        foreach (var row in snapshot.Rows.Where(row => row.Details is not null))
+        report.AppendLine("Detail samples: up to 20, selected fish first, then ordered by FishParameter ID.");
+        foreach (var row in snapshot.Rows.Where(row => row.Details is not null)
+            .OrderByDescending(row => row.FishParameterId == selectedFishParameterId).ThenBy(row => row.FishParameterId).Take(20))
         {
             var detail = row.Details!;
             snapshot.Windows.TryGetValue(row.FishParameterId, out var window);

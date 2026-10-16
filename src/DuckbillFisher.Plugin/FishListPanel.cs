@@ -303,12 +303,13 @@ internal sealed class FishListPanel(FishCatalog catalog, ITextureProvider textur
         var report = new StringBuilder();
         void Append(FormattableString line) => report.AppendLine(line.ToString(CultureInfo.InvariantCulture));
         if (full)
-            report.AppendLine(catalog.CreateReport());
+            report.AppendLine(catalog.CreateReport(selectedFish?.FishParameterId));
         else
         {
             var view = catalog.View;
-            report.AppendLine("DuckbillFisher summary/v1");
+            report.AppendLine("DuckbillFisher summary/v2");
             Append($"Plugin={typeof(Plugin).Assembly.GetName().Version}; Rows={view.Rows.Count}; Status={view.Status.Key}");
+            Append($"Dataset={FishingData.Dataset.DataVersion}; Details={view.Rows.Count(row => row.Details is not null)}/{FishingData.Dataset.Fish.Length}; BuildMatch={catalog.ConditionBuildMatches}");
             if (selectedFish is { } selected)
                 Append($"SelectedFish={selected.FishParameterId}; Item={selected.ItemId}; Ocean={selected.IsOceanFishing}; Collection={personal.Collection(selected.FishParameterId, observed)}");
         }
