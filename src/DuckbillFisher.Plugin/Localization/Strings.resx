@@ -236,12 +236,16 @@
   <data name="RowGradeLabel" xml:space="preserve"><value>[{0}] {1}</value></data>
   <data name="GeographyHeading" xml:space="preserve"><value>Region and expansion selection</value></data>
   <data name="GeographySelection" xml:space="preserve"><value>Regions: {0} · Expansions: {1}</value></data>
-  <data name="GeographyHint" xml:space="preserve"><value>Select any number of regions and expansions. Within a group, any selection may match; the same fishing spot must satisfy all selected groups and Current region only. Expansion refers to the spot's expansion, not the fish's introduction patch. All clears only that group. A specific selection excludes ocean fish and unknown locations.</value></data>
+  <data name="GeographyHint" xml:space="preserve"><value>Check any expansions to narrow the region picker. No expansion checks means all expansions. Region choices are grouped by expansion and can be searched. Existing region selections outside that scope are preserved until you clear them. The same spot must satisfy the selected region, expansion and Current region only. A specific selection excludes ocean fish and unknown locations.</value></data>
   <data name="GeographyExpansion" xml:space="preserve"><value>Spot expansion</value></data>
   <data name="GeographyAll" xml:space="preserve"><value>All (unrestricted)</value></data>
   <data name="GeographyNoOptions" xml:space="preserve"><value>No matching known fishing regions.</value></data>
   <data name="GeographyRegion" xml:space="preserve"><value>Region</value></data>
   <data name="GeographySearch" xml:space="preserve"><value>Search regions</value></data>
-  <data name="GeographyRegionOption" xml:space="preserve"><value>{0} ({1})</value></data>
   <data name="GeographySelectedCount" xml:space="preserve"><value>{0} selected</value></data>
+  <data name="GeographyChooseRegions" xml:space="preserve"><value>Choose regions: {0}</value></data>
+  <data name="GeographyClearRegions" xml:space="preserve"><value>Clear region selection</value></data>
+  <data name="GeographyScopeCount" xml:space="preserve"><value>{0} regions in the selected expansions · {1} search results</value></data>
+  <data name="GeographyHiddenRegions" xml:space="preserve"><value>{0} selected regions are outside the selected expansions and still affect the filter. Hover to see their names.</value></data>
+  <data name="GeographyClearHidden" xml:space="preserve"><value>Clear regions outside these expansions</value></data>
 </root>
