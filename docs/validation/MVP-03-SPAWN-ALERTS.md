@@ -30,8 +30,8 @@
 - `IDalamudPluginInterface.SavePluginConfig` → `PluginConfigurations.Save`는 `ReliableFileStorage.WriteAllTextAsync(...).GetAwaiter().GetResult()` 완료를 기다리는 것을 설치 DLL IL에서 확인했다. 외부 설정/계정 자료는 읽지 않았다.
 - 별도 빌드: `dotnet build src/DuckbillFisher.Plugin/DuckbillFisher.Plugin.csproj --no-restore -c Debug -p:DalamudLibPath=C:/Users/hyogu/AppData/Roaming/XIVLauncherKR/addon/Hooks/dev/ -p:OutputPath=C:/Users/hyogu/Downloads/DuckbillFisher/.cache/spawn-alert-build/`.
 - 별도 빌드 경고·오류 0. `pwsh -NoLogo -NoProfile -File scripts/check-localization.ps1`: 한영 265키/형식 인자 일치. `git diff --check` 통과. 테스트는 요청이 없어 추가/실행하지 않았다.
-- 별도 산출물 확인: 주 DLL 937472바이트/0.1.20.0, Core 39424바이트/1.0.0.0, ko 리소스 30720바이트/0.1.20.0, manifest DuckbillFisher/0.1.20.0/API 15. 정규 DLL은 914432바이트/0.1.19.0으로 유지됨을 확인했다.
-- 정규 DLL은 0.1.19.0 유지, 새 언로드 확인과 정규 빌드 대기. 0.1.20.0 로드/실제 알림/설정 유지/중복·복귀 동작은 인게임 검증 대기다.
+- 별도/정규 산출물 확인: 주 DLL 937472바이트/0.1.20.0, Core 39424바이트/1.0.0.0, ko 리소스 30720바이트/0.1.20.0, manifest DuckbillFisher/0.1.20.0/API 15. 교체 전 정규 DLL 914432바이트/0.1.19.0 유지도 확인했다.
+- 사용자 ‘언로드 완료’ 후 OutputPath 지정 없는 정규 빌드 경고·오류 0, 한영 265키 검사를 재확인했다. 0.1.20.0 로드/실제 알림/설정 유지/중복·복귀 동작은 인게임 검증 대기다.
 - Teamcraft/바다구렁이 차이는 [기존 기록](MVP-03-OPEN-WINDOW-DIAGNOSTICS.md)의 미해결 후속 조사로 유지한다. 이번 작업에서는 재조사/로그 요청/예측 공식 변경을 하지 않았다.
 
 ## 첫 인게임 확인
