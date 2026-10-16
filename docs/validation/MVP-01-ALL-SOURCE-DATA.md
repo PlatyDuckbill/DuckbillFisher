@@ -1,6 +1,6 @@
 # 전체 원본 도입과 일부 조건 표시
 
-날짜: 2026-10-16 · 대상 0.1.12.0 · 별도 빌드 통과/정규 교체·인게임 검증 대기
+날짜: 2026-10-16 · 대상 0.1.12.0 · 정규 빌드/교체 완료·인게임 검증 대기
 
 ## 도입 범위
 
@@ -36,7 +36,7 @@
 - `dotnet run --project tools/FishingDataImport ...` 성공: Regular=903, WithSpot=872, Spear=203, SpearMissing=115, Excluded=4, CoordinateDifferences=4, Failed=0. 원본 전체를 읽고 개별 Item/날씨/장소/지도/전승록을 실제 KR 시트와 대조했다.
 - 별도 Plugin Debug 빌드 `.cache/all-details-build/` 성공: 경고·오류 0. 한영 리소스 208키/형식 인자 검사 통과.
 - 별도 DLL 내장 JSON을 읽어 schema=2/일반 903/작살 203 확인. 로컬 시트 감사에서 먼바다 259/259·해역 순환 13/13 확인. 제품 실행 성능/레이아웃은 인게임 확인 대기다.
-- 정규 DLL은 아직 0.1.11.0이다. 새 언로드 확인 후 정규 빌드가 필요하다. 테스트 추가/실행은 하지 않았다. 과거 예측 검증을 새 전체 원본의 게임 검증으로 확대하지 않는다.
+- 사용자 ‘언로드 완’ 확인 후 정규 Debug 빌드 성공(경고·오류 0). 주 DLL 840192바이트/0.1.12.0, Core 29696바이트, ko 리소스 23552바이트/0.1.12.0, manifest InternalName/버전/API 15 확인. 인게임 검증 대기다. 테스트 추가/실행은 하지 않았다. 과거 예측 검증을 새 전체 원본의 게임 검증으로 확대하지 않는다.
 - 짧은 진단 summary/v3에 Details/Forecasts/OceanAreas/SpearStored/SpearUnknown을 추가했다. 전체 catalog/v4의 상세 표본 제한은 20종을 유지한다.
 
 ## 게임 확인
