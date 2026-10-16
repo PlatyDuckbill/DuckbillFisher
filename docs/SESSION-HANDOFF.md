@@ -17,7 +17,7 @@
 - 참조: `C:\Users\hyogu\AppData\Roaming\XIVLauncherKR\addon\Hooks\dev`.
 - 개발 DLL: `C:\Users\hyogu\Downloads\DuckbillFisher\src\DuckbillFisher.Plugin\bin\Debug\DuckbillFisher.dll`.
 - 0.1.9.0 전체 도감 대조/홍룡 미수집 필터/도감 닫힘 후 유지와 동일 캐릭터 재접속 초기화·복구 확인. 다른 캐릭터는 없어 격리 실기 확인 보류. 다음 교체는 새 언로드 확인 필요.
-- 최신 정규 DLL은 사용자 언로드 후 교체한 0.1.10.0이다. 미끼/생미끼/직감 대상의 로컬 채팅 아이템 링크와 낚아채기/날씨 아이콘 재로드 확인 대기. [확인 절차](validation/MVP-01-ITEM-LINKS-ICONS.md)를 따른다.
+- 최신 정규 DLL 0.1.10.0의 아이템 링크/조건 아이콘은 사용자 ‘정상’ 응답으로 대표 어종 확인 통과. 한영 조합은 별도 미확인. 다음은 상세 데이터 확대 범위 선정이다. [결과](validation/MVP-01-ITEM-LINKS-ICONS.md)를 따른다.
 - PowerShell 5.1 읽기는 `-Encoding UTF8`; pwsh는 현재 샌드박스 밖 승인 실행 필요.
 
 ## 일반 구현 빌드
