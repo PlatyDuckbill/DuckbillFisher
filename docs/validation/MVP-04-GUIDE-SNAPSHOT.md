@@ -1,6 +1,6 @@
 # 게임 도감 목록과 대조한 자동 미수집
 
-날짜: 2026-10-16 · Plugin 0.1.9.0 · 인게임 검증 대기
+날짜: 2026-10-16 · Plugin 0.1.9.0 · 전체 목록 대조/홍룡 자동 미수집 필터 확인
 
 ## 조사 결과와 판정 기준
 
@@ -40,7 +40,15 @@ pwsh -NoLogo -NoProfile -File scripts/inspect-fish-guide-snapshot.ps1 -DalamudPa
 ```
 
 - 사용자 언로드 확인 후 정규 Debug 빌드도 경고·오류 0. 실제 주 DLL/manifest의 0.1.9.0, Core DLL과 한국어 리소스 DLL을 확인했다.
-- 이번 구현에서 테스트를 추가/실행하지 않았다. 실제 낚시/작살 전환·재접속·캐릭터 격리·전체 1517행 표본 성립과 자동 미수집은 인게임 검증 대기다.
+- 전체 1517행의 표본 성립과 홍룡 자동 미수집은 아래 사용자 결과로 확인했다. 신규 등록 시 미수집 제거·낚시/작살 전환·재접속·캐릭터 격리·한영 전환 조합은 추가 확인 대기다.
+
+## 사용자 결과
+
+- 사용자 ‘정상 동작함’과 summary/v1 보고서로 확인했다. 수동 Caught/Uncaught는 모두 0건이다.
+- GuideState=Complete, GuideEntries=1517, Matched=1517, Mismatches=0. 자동 Caught=739와 Uncaught=778의 합이 대상 1517종과 일치한다.
+- SelectedFish=696/Item=24993/Collection=Uncaught, CollectionFilter=UncaughtOnly/Displayed=1로 홍룡의 자동 미수집과 필터 적용을 확인했다. 먼바다 제외와 상세 조건 필터 해제 상태다.
+- GuideVisible=False에서도 마지막 정상 조회의 미수집 집합과 홍룡 선택이 유지됐다. 이번 보고서의 등록 이벤트는 0건이므로 0.1.9.0의 등록 후 미수집 제거를 검증한 것은 아니다.
+- 이번 결과 반영은 문서만 변경했으며 DLL·빌드·테스트를 변경/실행하지 않았다. 이미 확인한 기본 판정의 반복 로그는 요청하지 않는다.
 
 ## 사용자 확인 순서
 
