@@ -14,7 +14,7 @@ internal static class FishClassificationImport
         if (args.Length != 4)
             throw new ArgumentException("Usage: --classifications <game-directory> <condition-data.json> <output.json> <audit.json>");
         var options = new JsonSerializerOptions { PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
-            WriteIndented = true, Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping };
+            WriteIndented = true, NewLine = "\n", Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping };
         var inputBytes = File.ReadAllBytes(args[1]);
         using var conditions = JsonDocument.Parse(inputBytes);
         var build = conditions.RootElement.GetProperty("gameBuild").GetString()!;
@@ -66,7 +66,8 @@ internal static class FishClassificationImport
         Require(entries.Count > 0 && legendary > 0 && compared == rules.Count, "Incomplete classification audit");
         var output = new { schemaVersion = 1, gameBuild = build, dataVersion = "kr-grades-2026-10-16",
             source = "Installed KR Item.Description category labels, corroborated by FishingNoteInfo and pinned condition data",
-            conditionDataSha256 = Convert.ToHexString(SHA256.HashData(inputBytes)),
+            conditionDataSha256 = Convert.ToHexString(SHA256.HashData(Encoding.UTF8.GetBytes(
+                Encoding.UTF8.GetString(inputBytes).Replace("\r\n", "\n")))),
             descriptionSha256 = Convert.ToHexString(SHA256.HashData(Encoding.UTF8.GetBytes(evidence.ToString()))),
             entries };
         File.WriteAllText(args[2], JsonSerializer.Serialize(output, options) + "\n");

@@ -2,6 +2,16 @@ namespace DuckbillFisher.Plugin.Localization;
 
 internal enum TextKey
 {
+    TimeRestrictedOnly,
+    TimeRestrictedHint,
+    GradeAll,
+    GradeBigIncludingLegendary,
+    GradeLegendaryOnly,
+    GradeFilter,
+    GradeFilterHint,
+    GradeLegendaryLabel,
+    GradeBigLabel,
+    RowGradeLabel,
     CurrentRegionOnly,
     CurrentRegionHint,
     CurrentRegionName,
@@ -56,7 +66,6 @@ internal enum TextKey
     CatalogFavoritesOnly,
     CollectionAll,
     CollectionHideCaught,
-    CollectionUncaughtOnly,
     CollectionCaughtOnly,
     CollectionUnknownOnly,
     CollectionVisibility,

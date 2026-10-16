@@ -156,11 +156,10 @@
   <data name="CatalogFavoritesOnly" xml:space="preserve"><value>즐겨찾기만</value></data>
   <data name="CollectionAll" xml:space="preserve"><value>전체</value></data>
   <data name="CollectionHideCaught" xml:space="preserve"><value>수집한 어종 숨기기</value></data>
-  <data name="CollectionUncaughtOnly" xml:space="preserve"><value>미수집만</value></data>
   <data name="CollectionCaughtOnly" xml:space="preserve"><value>수집됨만</value></data>
   <data name="CollectionUnknownOnly" xml:space="preserve"><value>미확인만</value></data>
   <data name="CollectionVisibility" xml:space="preserve"><value>수집 상태 필터</value></data>
-  <data name="CollectionFilterHint" xml:space="preserve"><value>게임 어류도감의 낚시 탭을 열어 주세요. 전체 도감 목록과 수집 비트가 일치하면 미수집도 확인하며, 조회 불가·불완전한 데이터는 미확인으로 남깁니다. 새 어종 등록은 수집됨으로 반영합니다. ‘수집한 어종 숨기기’는 미확인도 표시합니다. ‘미수집만’은 자동 확인과 수동 기록에 함께 적용되며 수동 지정이 우선합니다.</value></data>
+  <data name="CollectionFilterHint" xml:space="preserve"><value>게임 어류도감의 낚시 탭을 열어 주세요. 전체 도감 목록과 수집 비트가 일치하면 미수집도 확인하며, 조회 불가·불완전한 데이터는 미확인으로 남깁니다. 새 어종 등록은 수집됨으로 반영합니다. ‘수집한 어종 숨기기’는 미확인도 표시하며, 수동 지정이 자동 관찰보다 우선합니다.</value></data>
   <data name="ManualPlayerRequired" xml:space="preserve"><value>수동 수집 기록을 변경하려면 캐릭터에 접속해 주세요.</value></data>
   <data name="PreferencesLoadFailed" xml:space="preserve"><value>설정을 읽을 수 없거나 지원하지 않는 형식입니다. 기존 파일을 보존하기 위해 변경을 비활성화했습니다.</value></data>
   <data name="PreferencesSaveFailed" xml:space="preserve"><value>설정을 저장하지 못했습니다. 이전 상태를 표시하고 있으니 변경을 다시 시도해 주세요.</value></data>
@@ -225,4 +224,14 @@
   <data name="CurrentRegionName" xml:space="preserve"><value>현재 지역: {0} (일반 낚시터 기준)</value></data>
   <data name="CurrentRegionUnavailable" xml:space="preserve"><value>로그아웃·지역 이동 중이거나 지역 정보를 기다리고 있습니다. 현재 지역 필터의 결과는 표시하지 않습니다.</value></data>
   <data name="RegionForecastElsewhere" xml:space="preserve"><value>다른 지역의 추천 낚시터 기준: {0}</value></data>
+  <data name="TimeRestrictedOnly" xml:space="preserve"><value>시간제만</value></data>
+  <data name="TimeRestrictedHint" xml:space="preserve"><value>ET 시간대·현재 날씨·직전 날씨 중 확인된 제약이 있는 어종만 표시합니다. 현재 출현 중이라는 뜻은 아닙니다. 먼바다 등 조건 미확인 어종은 제외하며 등급·지역·수집·즐겨찾기·검색과 함께 적용합니다.</value></data>
+  <data name="GradeAll" xml:space="preserve"><value>전체</value></data>
+  <data name="GradeBigIncludingLegendary" xml:space="preserve"><value>터주 (터주왕 포함)</value></data>
+  <data name="GradeLegendaryOnly" xml:space="preserve"><value>터주왕만</value></data>
+  <data name="GradeFilter" xml:space="preserve"><value>어종 등급</value></data>
+  <data name="GradeFilterHint" xml:space="preserve"><value>터주는 터주왕을 포함합니다. ‘전체’는 등급 제한만 해제하며 다른 필터 선택은 유지하고 함께 적용합니다. 등급 미확인은 특정 등급 선택에서 제외합니다.</value></data>
+  <data name="GradeLegendaryLabel" xml:space="preserve"><value>터주왕</value></data>
+  <data name="GradeBigLabel" xml:space="preserve"><value>터주</value></data>
+  <data name="RowGradeLabel" xml:space="preserve"><value>[{0}] {1}</value></data>
 </root>

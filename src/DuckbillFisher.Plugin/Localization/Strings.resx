@@ -156,11 +156,10 @@
   <data name="CatalogFavoritesOnly" xml:space="preserve"><value>Favorites only</value></data>
   <data name="CollectionAll" xml:space="preserve"><value>All</value></data>
   <data name="CollectionHideCaught" xml:space="preserve"><value>Hide caught</value></data>
-  <data name="CollectionUncaughtOnly" xml:space="preserve"><value>Uncaught only</value></data>
   <data name="CollectionCaughtOnly" xml:space="preserve"><value>Caught only</value></data>
   <data name="CollectionUnknownOnly" xml:space="preserve"><value>Unknown only</value></data>
   <data name="CollectionVisibility" xml:space="preserve"><value>Collection filter</value></data>
-  <data name="CollectionFilterHint" xml:space="preserve"><value>Open the Fishing tab of the in-game Fish Guide. Uncaught is confirmed only after the complete guide list matches the collection bits; unavailable or incomplete data remains Unknown. New registrations update Caught. Hide caught keeps Unknown visible. Uncaught only includes automatic observations and manual records, with manual records taking priority.</value></data>
+  <data name="CollectionFilterHint" xml:space="preserve"><value>Open the Fishing tab of the in-game Fish Guide. Uncaught is confirmed only after the complete guide list matches the collection bits; unavailable or incomplete data remains Unknown. New registrations update Caught. Hide caught keeps Unknown visible. Manual records take priority over automatic observations.</value></data>
   <data name="ManualPlayerRequired" xml:space="preserve"><value>Log in to edit this character's manual collection records.</value></data>
   <data name="PreferencesLoadFailed" xml:space="preserve"><value>Preferences could not be loaded or use an unsupported format. Editing is disabled to preserve the existing file.</value></data>
   <data name="PreferencesSaveFailed" xml:space="preserve"><value>Preferences could not be saved. The previous state is still displayed; please try the change again.</value></data>
@@ -225,4 +224,14 @@
   <data name="CurrentRegionName" xml:space="preserve"><value>Current region: {0} (ordinary fishing spots)</value></data>
   <data name="CurrentRegionUnavailable" xml:space="preserve"><value>Current region is unavailable while logged out, moving between areas, or waiting for region data. No fish are shown by this filter.</value></data>
   <data name="RegionForecastElsewhere" xml:space="preserve"><value>Recommended spot in another region: {0}</value></data>
+  <data name="TimeRestrictedOnly" xml:space="preserve"><value>Time/weather restricted only</value></data>
+  <data name="TimeRestrictedHint" xml:space="preserve"><value>Show fish with a confirmed ET time, weather or previous-weather restriction. This does not mean the window is open now. Unknown restrictions, including unverified ocean fish conditions, are excluded. Combines with grade, region, collection, favorites and search.</value></data>
+  <data name="GradeAll" xml:space="preserve"><value>All grades</value></data>
+  <data name="GradeBigIncludingLegendary" xml:space="preserve"><value>Big fish (including legendary)</value></data>
+  <data name="GradeLegendaryOnly" xml:space="preserve"><value>Legendary fish only</value></data>
+  <data name="GradeFilter" xml:space="preserve"><value>Fish grade</value></data>
+  <data name="GradeFilterHint" xml:space="preserve"><value>Big fish includes legendary fish. All grades removes only this grade restriction. Other filter selections are preserved and applied together. Unverified grades are excluded from specific grade selections.</value></data>
+  <data name="GradeLegendaryLabel" xml:space="preserve"><value>Legendary fish</value></data>
+  <data name="GradeBigLabel" xml:space="preserve"><value>Big fish</value></data>
+  <data name="RowGradeLabel" xml:space="preserve"><value>[{0}] {1}</value></data>
 </root>

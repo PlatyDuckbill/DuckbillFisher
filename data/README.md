@@ -34,7 +34,7 @@ dotnet run --project tools/FishingDataImport -p:DalamudLibPath=C:/Users/hyogu/Ap
 - `fish-classifications.kr.v1.json`은 조건 원본을 바꾸지 않는 별도 양성 분류 자료다. KR 빌드 `2026.10.06.0000.0000`의 일반 도감 1258종을 조사해 터주 335종(터주왕 36종 포함)의 FishParameter/Item ID 쌍을 보관한다. 이름·설명 전문·아이콘은 내보내지 않는다.
 - 개발 단계에서 KR Item.Description의 명시적 ‘터주왕’/‘터주’ 문구를 순서대로 확인하고 FishingNoteInfo.SpecialConditions=2 집합과 대조했다. 기존 고정 원본의 903종 bigFish 값과 불일치 0이다. SpecialConditions=2의 의미를 다른 빌드에 일반화하지 않는다.
 - 실행 중 UI 문자열/아이템 설명/패치 번호로 등급을 추정하지 않는다. 지원 빌드와 FishParameter/Item 쌍이 일치하는 ID 자료를 연결한다. 자료가 없는 어종을 터주왕이 아니라고 확정하는 용도로 쓰지 않는다.
-- 출력의 conditionDataSha256은 검수에 쓴 조건 JSON, descriptionSha256은 ID 순으로 읽은 설명 근거의 해시다. 분류 파일 SHA256은 `6DEE299D0BFECE79CE03FD0485B85649829FE23CFA86973D5D27A1D8D1B2ACBF`다.
+- 출력과 조건 입력 해시는 LF로 정규화해 OS별 줄바꿈에 의존하지 않는다. conditionDataSha256은 검수에 쓴 조건 JSON, descriptionSha256은 ID 순으로 읽은 설명 근거의 해시다. 분류 파일 SHA256은 `0C407F8A04CBFCAB53EC0A5BF8EA4B0C6DC9812C73E339E54A8BDF892ADAA31C`다.
 - 시간제는 등급과 별도다. 확인된 조건의 ET/현재·직전 날씨 제약이나 검수한 KR FishingNoteInfo의 양성 제한 플래그(1)를 사용한다. raw 0/2만으로 제한 없음으로 바꾸지 않는다.
 
 ```powershell

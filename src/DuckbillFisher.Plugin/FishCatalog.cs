@@ -28,6 +28,8 @@ internal sealed record FishGuideRow(uint FishParameterId, uint ItemId, string It
     public IReadOnlyList<FishingSpotView> Spots { get; init; } = [];
     public FishingDetailView? Details { get; init; }
     public OceanFishingView? Ocean { get; init; }
+    public FishGrade Grade { get; init; }
+    public FishTimeRestriction TimeRestriction { get; init; }
     public string DisplayName => string.IsNullOrWhiteSpace(Name) ? UiText.Get(T.MissingName) : Name;
 }
 
@@ -67,6 +69,7 @@ internal sealed class FishCatalog : IDisposable
         catch (IOException) { conditionBuildMatches = false; }
         catch (UnauthorizedAccessException) { conditionBuildMatches = false; }
         _ = FishingData.Notices;
+        _ = FishClassificationData.ByFishId;
         framework.Update += OnUpdate;
     }
 
@@ -148,6 +151,9 @@ internal sealed class FishCatalog : IDisposable
                 var actions = dataManager.GetExcelSheet<Lumina.Excel.Sheets.Action>()!;
                 var oceanSpots = LoadOceanSpots();
                 var rules = FishingData.Dataset.Fish.ToDictionary(rule => rule.ItemId);
+                var notes = dataManager.GetExcelSheet<FishingNoteInfo>()!.Where(note => note.Item.RowId != 0)
+                    .GroupBy(note => note.Item.RowId).Where(group => group.Count() == 1)
+                    .ToDictionary(group => group.Key, group => group.Single());
                 var rows = new List<FishGuideRow>();
                 foreach (var fish in sheet)
                 {
@@ -215,6 +221,23 @@ internal sealed class FishCatalog : IDisposable
                                 Skill(rule.SnaggingRequired ? 4100u : 0),
                                 Skill(rule.Lure switch { "Modest" => 37595u, "Ambitious" => 37594u, _ => 0 }), folklore);
                     }
+                    var grade = FishGrade.Unknown;
+                    var timing = FishTimeRestriction.Unknown;
+                    if (conditionBuildMatches && fish.RowId > 0 && fish.IsInLog && fish.OceanStars == 0 &&
+                        item.Is<Item>() && resolution == FishRowResolution.Resolved)
+                    {
+                        if (FishClassificationData.Dataset.GameBuild == FishingData.Dataset.GameBuild &&
+                            FishClassificationData.ByFishId.TryGetValue(fish.RowId, out var entry) && entry.ItemId == item.RowId)
+                            grade = entry.Grade;
+                        else if (details is not null)
+                            grade = details.Rule.BigFish ? FishGrade.Big : FishGrade.Regular;
+                        if (details?.Rule is { ConditionsKnown: true } known)
+                            timing = known.StartHour != 0 || known.EndHour != 24 || known.WeatherIds.Length > 0 || known.PreviousWeatherIds.Length > 0
+                                ? FishTimeRestriction.Restricted : FishTimeRestriction.Unrestricted;
+                        else if (notes.TryGetValue(item.RowId, out var note) && (note.TimeRestriction == 1 || note.WeatherRestriction == 1))
+                            timing = FishTimeRestriction.Restricted;
+                        // Raw 0/2 restriction flags do not establish unrestricted conditions.
+                    }
                     rows.Add(new(fish.RowId, item.RowId, item.RowType?.Name ?? "Unknown", name ?? "", fish.IsInLog)
                     {
                         IconId = iconId,
@@ -222,6 +245,8 @@ internal sealed class FishCatalog : IDisposable
                         Resolution = resolution,
                         Spots = fishSpots,
                         Details = details,
+                        Grade = grade,
+                        TimeRestriction = timing,
                         Ocean = fish.OceanStars > 0 && oceanSpots.TryGetValue(fish.FishingSpot.RowId, out var ocean) ? ocean : null,
                     });
                 }
@@ -298,12 +323,13 @@ internal sealed class FishCatalog : IDisposable
         var unresolved = snapshot.Rows.Where(row => !row.IsDisplayable).ToArray();
         var report = new StringBuilder();
         void Append(FormattableString line) => report.AppendLine(FormattableString.Invariant(line));
-        report.AppendLine("DuckbillFisher MVP-01/catalog/v4");
+        report.AppendLine("DuckbillFisher MVP-01/catalog/v5");
         Append($"Plugin: {typeof(Plugin).Assembly.GetName().Version}");
         Append($"Rows: {snapshot.Rows.Count}; displayable: {snapshot.Rows.Count - unresolved.Length}; unresolved: {unresolved.Length}; unresolved in log: {unresolved.Count(row => row.IsInLog)}");
         report.AppendLine($"Status: [{snapshot.Status.Key}] {snapshot.Status.Diagnostic}");
         Append($"Dataset: {FishingData.Dataset.DataVersion}; buildMatch={conditionBuildMatches}; detailRows={snapshot.Rows.Count(row => row.Details is not null)}; rowsWithSpots={snapshot.Rows.Count(row => row.Spots.Count > 0)}");
         Append($"Coverage: oceanAreas={snapshot.Rows.Count(row => row.Ocean is not null)}; spearStored={FishingData.Dataset.Spearfishing.Length}; spearConditionsUnknown={FishingData.SpearUnknown}");
+        Append($"Classification: dataset={FishClassificationData.Dataset.DataVersion}; bigIncludingLegendary={snapshot.Rows.Count(row => row.Grade is FishGrade.Big or FishGrade.Legendary)}; legendary={snapshot.Rows.Count(row => row.Grade == FishGrade.Legendary)}; restricted={snapshot.Rows.Count(row => row.TimeRestriction == FishTimeRestriction.Restricted)}");
         Append($"ForecastAt: {snapshot.ForecastAt:O}; horizonPeriods={FishingAvailability.SearchPeriods}; normal time/weather only; no personal readiness inference");
         report.AppendLine($"Source: {FishingData.Dataset.SourceRepository}/tree/{FishingData.Dataset.SourceRevision}");
         report.AppendLine("Detail samples: up to 20, selected fish first, then ordered by FishParameter ID.");
