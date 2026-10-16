@@ -115,10 +115,10 @@ internal sealed class SpawnAlertOutput : IDisposable
 
     public static string Remaining(TimeSpan time)
     {
-        var seconds = Math.Max(0, (int)Math.Ceiling(time.TotalSeconds));
-        return seconds >= 3600
-            ? UiText.Get(T.AlertRemainingHours, seconds / 3600, seconds / 60 % 60, seconds % 60)
-            : UiText.Get(T.AlertRemainingMinutes, seconds / 60, seconds % 60);
+        var minutes = Math.Max(0, (int)Math.Ceiling(time.TotalMinutes));
+        return minutes >= 60
+            ? UiText.Get(T.AlertRemainingHours, minutes / 60, minutes % 60)
+            : UiText.Get(T.AlertRemainingMinutes, minutes);
     }
 
     private unsafe bool NativeSoundReady() => nativeCompatible && framework.IsInFrameworkUpdateThread &&

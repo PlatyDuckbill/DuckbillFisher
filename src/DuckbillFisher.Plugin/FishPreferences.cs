@@ -92,6 +92,9 @@ internal sealed class FishPreferences : IDisposable
                         SpawnAlertChannel.CrossWorldLinkshell1 => XivChatType.CrossLinkShell1,
                         _ => XivChatType.SystemMessage,
                     });
+                // A removed display channel must not invalidate favorites or character records.
+                if (!ChatChannelChoices.Supports((XivChatType)configuration.SpawnAlertChannelId))
+                    configuration.SpawnAlertChannelId = (ushort)XivChatType.SystemMessage;
                 configuration.Version = FishPreferencesConfiguration.CurrentVersion;
                 writable = true;
             }
@@ -326,7 +329,7 @@ internal sealed class FishPreferences : IDisposable
         !value.Favorites.Contains(0) && value.Characters is not null &&
         value.Characters.All(pair => pair.Key != 0 && pair.Value is not null && !pair.Value.ContainsKey(0)) &&
         value.SpawnAlertLeadMinutes is >= SpawnAlertScheduler.MinLeadMinutes and <= SpawnAlertScheduler.MaxLeadMinutes &&
-        (value.Version <= 3 ? Enum.IsDefined(value.SpawnAlertChannel) : ChatChannelChoices.Supports((XivChatType)value.SpawnAlertChannelId)) &&
+        (value.Version <= 3 ? Enum.IsDefined(value.SpawnAlertChannel) : ChatChannelChoices.IsKnown((XivChatType)value.SpawnAlertChannelId)) &&
         value.SpawnAlertSound is >= 0 and <= 16 &&
         Enum.IsDefined(value.SpawnAlertAudience) &&
         value.FishAlertLeadMinutes is not null && value.FishAlertLeadMinutes.All(pair => pair.Key != 0 &&

@@ -274,8 +274,8 @@
   <data name="AlertSoundUnavailable" xml:space="preserve"><value>현재 환경에서 게임 효과음을 사용할 수 없습니다. 캐릭터 접속 상태를 확인하세요. 채팅 알림은 계속 사용할 수 있습니다.</value></data>
   <data name="AlertSoundSkipped" xml:space="preserve"><value>SE.{0} 생략됨</value></data>
   <data name="AlertExtraHistory" xml:space="preserve"><value> · 외 {0}종은 발송 기록 참고</value></data>
-  <data name="AlertRemainingHours" xml:space="preserve"><value>{0}시간 {1}분 {2}초 후</value></data>
-  <data name="AlertRemainingMinutes" xml:space="preserve"><value>{0}분 {1}초 후</value></data>
+  <data name="AlertRemainingHours" xml:space="preserve"><value>{0}시간 {1}분 후</value></data>
+  <data name="AlertRemainingMinutes" xml:space="preserve"><value>{0}분 후</value></data>
   <data name="AlertFavorites" xml:space="preserve"><value>즐겨찾기</value></data>
   <data name="AlertFavoritesHint" xml:space="preserve"><value>모든 즐겨찾기를 표시합니다. 개별 시간을 끄면 기본 시간을 따릅니다. 즐겨찾기 삭제 시 미래 알림은 취소하고 개별 시간과 발송 기록은 보존합니다. 즐겨찾기와 알림 설정은 캐릭터 공통입니다.</value></data>
   <data name="AlertFavoriteName" xml:space="preserve"><value>{0} (ID {1})</value></data>

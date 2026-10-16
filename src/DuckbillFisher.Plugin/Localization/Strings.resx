@@ -274,8 +274,8 @@
   <data name="AlertSoundUnavailable" xml:space="preserve"><value>Game sound is unavailable in this environment. Check that a character is logged in. Chat alerts can still work.</value></data>
   <data name="AlertSoundSkipped" xml:space="preserve"><value>SE.{0} skipped</value></data>
   <data name="AlertExtraHistory" xml:space="preserve"><value> · {0} more in delivery history</value></data>
-  <data name="AlertRemainingHours" xml:space="preserve"><value>in {0}h {1}m {2}s</value></data>
-  <data name="AlertRemainingMinutes" xml:space="preserve"><value>in {0}m {1}s</value></data>
+  <data name="AlertRemainingHours" xml:space="preserve"><value>in {0}h {1}m</value></data>
+  <data name="AlertRemainingMinutes" xml:space="preserve"><value>in {0}m</value></data>
   <data name="AlertFavorites" xml:space="preserve"><value>Favorites</value></data>
   <data name="AlertFavoritesHint" xml:space="preserve"><value>All favorites are listed. Per-fish time overrides the default; uncheck it to use the default. Removing a favorite cancels future reminders and preserves its custom time and delivery history. Favorites and alert settings are shared between characters.</value></data>
   <data name="AlertFavoriteName" xml:space="preserve"><value>{0} (ID {1})</value></data>
