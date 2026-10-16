@@ -252,7 +252,7 @@
   <data name="TabAlerts" xml:space="preserve"><value>Favorites management</value></data>
   <data name="AlertsRulesHeading" xml:space="preserve"><value>Delivery rules and scope</value></data>
   <data name="AlertsIntro" xml:space="preserve"><value>Manage favorites and their local reminders. By default, all favorites can alert regardless of collection status. Uncaught only uses the final collection status with manual overrides first and excludes Unknown. List filters are independent. Normal time/weather windows do not establish personal readiness.</value></data>
-  <data name="AlertsEnable" xml:space="preserve"><value>Enable local chat spawn alerts</value></data>
+  <data name="AlertsEnable" xml:space="preserve"><value>Enable spawn alerts</value></data>
   <data name="AlertsLead" xml:space="preserve"><value>Default minutes before opening</value></data>
   <data name="AlertsLeadRange" xml:space="preserve"><value>Range: {0}–{1} real minutes. Settings are shared; delivery records are separate for each character.</value></data>
   <data name="AlertsPolicy" xml:space="preserve"><value>Only future reminders are armed. Login, reload, settings changes and long pauses never replay missed alerts. Saved per-character window records prevent duplicates. Each channel is a local display type; no message is sent to other players. One selected sound plays per batch, with default channel sounds silenced. Optional popups share the same reservation and are not retried if output fails. Time/weather windows do not establish personal readiness.</value></data>
@@ -281,6 +281,18 @@
   <data name="AlertToastFish" xml:space="preserve"><value>{0} {1}</value></data>
   <data name="AlertToastMore" xml:space="preserve"><value>{0} · +{1} more fish</value></data>
   <data name="AlertHistoryToastLine" xml:space="preserve"><value>{0:HH:mm:ss} · {1} · {2} · {3} · {4} · popup queued</value></data>
+  <data name="AlertSettingsHeading" xml:space="preserve"><value>Alert settings</value></data>
+  <data name="AlertDiagnosticsHeading" xml:space="preserve"><value>Alert diagnostics</value></data>
+  <data name="AlertFavoritesCount" xml:space="preserve"><value>{0} favorites shown · hover for details</value></data>
+  <data name="CatalogFiltersHeading" xml:space="preserve"><value>List filters ({0} active)</value></data>
+  <data name="CatalogFiltersSummary" xml:space="preserve"><value>Time restrictions only: {0}
+Fish grade: {1}
+Favorites only: {2}
+Current region only: {3}
+Include ocean fish: {4}
+In fish log only: {5}</value></data>
+  <data name="OptionOn" xml:space="preserve"><value>On</value></data>
+  <data name="OptionOff" xml:space="preserve"><value>Off</value></data>
   <data name="AlertFavorites" xml:space="preserve"><value>Favorites</value></data>
   <data name="AlertFavoritesHint" xml:space="preserve"><value>All favorites are listed. Per-fish time overrides the default; uncheck it to use the default. Removing a favorite cancels future reminders and preserves its custom time and delivery history. Favorites and alert settings are shared between characters.</value></data>
   <data name="AlertFavoriteName" xml:space="preserve"><value>{0} (ID {1})</value></data>

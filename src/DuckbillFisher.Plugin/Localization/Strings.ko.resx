@@ -252,7 +252,7 @@
   <data name="TabAlerts" xml:space="preserve"><value>즐겨찾기 관리</value></data>
   <data name="AlertsRulesHeading" xml:space="preserve"><value>발송 규칙과 범위</value></data>
   <data name="AlertsIntro" xml:space="preserve"><value>즐겨찾기와 본인 알림을 관리합니다. 기본은 수집 여부와 무관한 전체 알림입니다. 미수집만 알림은 수동 지정이 우선인 최종 상태를 사용하며 미확인은 제외합니다. 목록 필터와 독립적이며, 일반 시간·날씨 창은 개인 준비 완료를 뜻하지 않습니다.</value></data>
-  <data name="AlertsEnable" xml:space="preserve"><value>로컬 채팅 출현 알림 켜기</value></data>
+  <data name="AlertsEnable" xml:space="preserve"><value>출현 알림 켜기</value></data>
   <data name="AlertsLead" xml:space="preserve"><value>기본 사전 시간 (실제 분)</value></data>
   <data name="AlertsLeadRange" xml:space="preserve"><value>범위: 실제 {0}~{1}분. 설정은 공통이며 발송 기록은 캐릭터별로 구분합니다.</value></data>
   <data name="AlertsPolicy" xml:space="preserve"><value>앞으로 도달할 시각만 예약합니다. 로그인·재로드·설정 변경·긴 중단 뒤 이미 지난 알림을 보내지 않습니다. 캐릭터별 출현 창 기록으로 중복을 막습니다. 채널은 본인에게 보이는 형식이며 다른 플레이어에게 전송하지 않습니다. 동시 대상은 선택 효과음을 한 번 재생하며 채널 기본 소리는 끕니다. 선택형 팝업은 같은 예약을 사용하고 출력 실패 시 재시도하지 않습니다. 시간·날씨 창은 개인 준비 완료를 뜻하지 않습니다.</value></data>
@@ -281,6 +281,18 @@
   <data name="AlertToastFish" xml:space="preserve"><value>{0} {1}</value></data>
   <data name="AlertToastMore" xml:space="preserve"><value>{0} · 외 {1}종</value></data>
   <data name="AlertHistoryToastLine" xml:space="preserve"><value>{0:HH:mm:ss} · {1} · {2} · {3} · {4} · 팝업 요청</value></data>
+  <data name="AlertSettingsHeading" xml:space="preserve"><value>알림 설정</value></data>
+  <data name="AlertDiagnosticsHeading" xml:space="preserve"><value>알림 진단</value></data>
+  <data name="AlertFavoritesCount" xml:space="preserve"><value>표시 즐겨찾기 {0}종 · 마우스를 올리면 안내 표시</value></data>
+  <data name="CatalogFiltersHeading" xml:space="preserve"><value>목록 필터 ({0}개 적용)</value></data>
+  <data name="CatalogFiltersSummary" xml:space="preserve"><value>시간제만: {0}
+어종 등급: {1}
+즐겨찾기만: {2}
+현재 지역만: {3}
+먼바다 포함: {4}
+수첩 포함 어종만: {5}</value></data>
+  <data name="OptionOn" xml:space="preserve"><value>켬</value></data>
+  <data name="OptionOff" xml:space="preserve"><value>끔</value></data>
   <data name="AlertFavorites" xml:space="preserve"><value>즐겨찾기</value></data>
   <data name="AlertFavoritesHint" xml:space="preserve"><value>모든 즐겨찾기를 표시합니다. 개별 시간을 끄면 기본 시간을 따릅니다. 즐겨찾기 삭제 시 미래 알림은 취소하고 개별 시간과 발송 기록은 보존합니다. 즐겨찾기와 알림 설정은 캐릭터 공통입니다.</value></data>
   <data name="AlertFavoriteName" xml:space="preserve"><value>{0} (ID {1})</value></data>

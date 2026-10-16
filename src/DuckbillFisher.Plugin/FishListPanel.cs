@@ -77,53 +77,50 @@ internal sealed class FishListPanel(FishCatalog catalog, ITextureProvider textur
             selectedFish = selectedId is { } selected ? view.Rows.FirstOrDefault(row => row.FishParameterId == selected) : null;
         }
         lastRows = view.Rows;
-        ImGui.TextWrapped(view.Status.Display);
+        if (view.Status.Key != T.CatalogLoaded)
+            ImGui.TextWrapped(view.Status.Display);
         ImGui.SetNextItemWidth(280);
         changed |= ImGui.InputText(UiText.Label(T.FishSearch, "CatalogSearch"), ref search, 100);
-        changed |= ImGui.Checkbox(UiText.Label(T.CatalogInLogOnly, "CatalogInLogOnly"), ref inLogOnly);
-        ImGui.SameLine();
-        ImGui.SetNextItemWidth(160);
-        string[] sortNames = [UiText.Get(T.CatalogSortName), UiText.Get(T.CatalogSortId), UiText.Get(T.CatalogSortWindow), UiText.Get(T.CatalogSortFavorite)];
-        changed |= ImGui.Combo(UiText.Label(T.CatalogSort, "CatalogSort"), ref sort, sortNames, sortNames.Length);
-        if (sort == 2 && ImGui.IsItemHovered()) ImGui.SetTooltip(UiText.Get(T.CatalogSortWindowHint));
-        if (ImGui.Button(UiText.Label(T.ReloadFish, "ReloadCatalog")))
-            catalog.RequestLoad(reload: true);
-        ImGui.SameLine();
-        if (ImGui.Button(UiText.Label(T.CopyCatalogReport, "CopyCatalogReport")))
-            ImGui.SetClipboardText(CreateReport(personal, observed));
-        if (ImGui.CollapsingHeader(UiText.Label(T.CatalogDiagnostics, "CatalogDiagnostics")))
+        if (ImGui.BeginTable("CatalogPrimaryControls", 2, ImGuiTableFlags.SizingStretchSame))
         {
-            ImGui.TextWrapped(UiText.Get(T.CatalogDiagnosticsHint));
-            changed |= ImGui.Checkbox(UiText.Label(T.CatalogShowUnresolved, "CatalogShowUnresolved"), ref showUnresolved);
-            changed |= ImGui.Checkbox(UiText.Label(T.CatalogDetailsOnly, "CatalogDetailsOnly"), ref detailsOnly);
-            if (ImGui.Button(UiText.Label(T.CopyFullCatalogReport, "CopyFullCatalogReport")))
-                ImGui.SetClipboardText(CreateReport(personal, observed, full: true));
+            ImGui.TableNextColumn();
+            ImGui.TextUnformatted(UiText.Get(T.CatalogSort));
+            ImGui.SetNextItemWidth(-1);
+            string[] sortNames = [UiText.Get(T.CatalogSortName), UiText.Get(T.CatalogSortId), UiText.Get(T.CatalogSortWindow), UiText.Get(T.CatalogSortFavorite)];
+            changed |= ImGui.Combo("###CatalogSort", ref sort, sortNames, sortNames.Length);
+            if (sort == 2 && ImGui.IsItemHovered()) ImGui.SetTooltip(UiText.Get(T.CatalogSortWindowHint));
+            ImGui.TableNextColumn();
+            ImGui.TextUnformatted(UiText.Get(T.CollectionVisibility));
+            ImGui.SetNextItemWidth(-1);
+            string[] collectionNames = [UiText.Get(T.CollectionAll), UiText.Get(T.CollectionHideCaught),
+                UiText.Get(T.CollectionCaughtOnly), UiText.Get(T.CollectionUnknownOnly)];
+            changed |= ImGui.Combo("###CatalogCollectionVisibility", ref collectionVisibility, collectionNames, collectionNames.Length);
+            ImGui.EndTable();
         }
-        changed |= ImGui.Checkbox(UiText.Label(T.CatalogIncludeOceanFish, "CatalogIncludeOceanFish"), ref includeOceanFish);
-        ImGui.SameLine();
-        changed |= ImGui.Checkbox(UiText.Label(T.CurrentRegionOnly, "CatalogCurrentRegionOnly"), ref currentRegionOnly);
-        if (ImGui.IsItemHovered()) ImGui.SetTooltip(UiText.Get(T.CurrentRegionHint));
+        changed |= DrawFilters();
         if (currentRegionOnly)
             ImGui.TextWrapped(location.State == FishingRegionState.Ready
                 ? UiText.Get(T.CurrentRegionName, location.Name) : UiText.Get(T.CurrentRegionUnavailable));
         changed |= geography.Draw(view.Geography);
-        changed |= ImGui.Checkbox(UiText.Label(T.TimeRestrictedOnly, "CatalogTimeRestrictedOnly"), ref timeRestrictedOnly);
-        if (ImGui.IsItemHovered()) ImGui.SetTooltip(UiText.Get(T.TimeRestrictedHint));
-        ImGui.SameLine();
-        ImGui.SetNextItemWidth(190);
-        string[] gradeNames = [UiText.Get(T.GradeAll), UiText.Get(T.GradeBigIncludingLegendary), UiText.Get(T.GradeLegendaryOnly)];
-        changed |= ImGui.Combo(UiText.Label(T.GradeFilter, "CatalogGradeFilter"), ref gradeVisibility, gradeNames, gradeNames.Length);
-        if (ImGui.IsItemHovered()) ImGui.SetTooltip(UiText.Get(T.GradeFilterHint));
-        changed |= ImGui.Checkbox(UiText.Label(T.CatalogFavoritesOnly, "CatalogFavoritesOnly"), ref favoritesOnly);
-        ImGui.SameLine();
-        ImGui.SetNextItemWidth(180);
-        string[] collectionNames = [UiText.Get(T.CollectionAll), UiText.Get(T.CollectionHideCaught),
-            UiText.Get(T.CollectionCaughtOnly), UiText.Get(T.CollectionUnknownOnly)];
-        changed |= ImGui.Combo(UiText.Label(T.CollectionVisibility, "CatalogCollectionVisibility"), ref collectionVisibility,
-            collectionNames, collectionNames.Length);
-        ImGui.TextWrapped(UiText.Get(T.CollectionObservedCount, observed.Caught.Count, observed.Uncaught.Count, observed.Status));
+        if (ImGui.CollapsingHeader(UiText.Label(T.CatalogDiagnostics, "CatalogDiagnostics")))
+        {
+            ImGui.TextWrapped(view.Status.Display);
+            ImGui.TextWrapped(UiText.Get(T.CatalogDiagnosticsHint));
+            changed |= ImGui.Checkbox(UiText.Label(T.CatalogShowUnresolved, "CatalogShowUnresolved"), ref showUnresolved);
+            changed |= ImGui.Checkbox(UiText.Label(T.CatalogDetailsOnly, "CatalogDetailsOnly"), ref detailsOnly);
+            if (ImGui.Button(UiText.Label(T.ReloadFish, "ReloadCatalog")))
+                catalog.RequestLoad(reload: true);
+            if (ImGui.Button(UiText.Label(T.CopyCatalogReport, "CopyCatalogReport")))
+                ImGui.SetClipboardText(CreateReport(personal, observed));
+            if (ImGui.Button(UiText.Label(T.CopyFullCatalogReport, "CopyFullCatalogReport")))
+                ImGui.SetClipboardText(CreateReport(personal, observed, full: true));
+        }
         if (ImGui.CollapsingHeader(UiText.Label(T.CollectionHelp, "CollectionHelp")))
+        {
+            ImGui.TextWrapped(UiText.Get(T.CollectionObservedCount, observed.Caught.Count, observed.Uncaught.Count, observed.Status));
             ImGui.TextWrapped(UiText.Get(T.CollectionFilterHint));
+            ImGui.TextWrapped(UiText.Get(T.CatalogDetailsPending));
+        }
         if (!personal.HasCharacter)
             ImGui.TextWrapped(UiText.Get(T.ManualPlayerRequired));
         if (personal.Error is { } error)
@@ -136,7 +133,6 @@ internal sealed class FishListPanel(FishCatalog catalog, ITextureProvider textur
         ImGui.TextUnformatted(UiText.Get(T.CatalogCount, matches.Length, view.Rows.Count));
         if (unresolvedCount > 0)
             ImGui.TextWrapped(UiText.Get(T.CatalogUnresolvedCount, unresolvedCount));
-        ImGui.TextWrapped(UiText.Get(T.CatalogDetailsPending));
         ImGui.Separator();
 
         if (ImGui.BeginTable("CatalogLayout", 2, ImGuiTableFlags.Resizable | ImGuiTableFlags.BordersInnerV))
@@ -149,6 +145,31 @@ internal sealed class FishListPanel(FishCatalog catalog, ITextureProvider textur
             ImGui.EndChild();
             ImGui.EndTable();
         }
+    }
+
+    private bool DrawFilters()
+    {
+        string[] gradeNames = [UiText.Get(T.GradeAll), UiText.Get(T.GradeBigIncludingLegendary), UiText.Get(T.GradeLegendaryOnly)];
+        var active = (inLogOnly ? 1 : 0) + (!includeOceanFish ? 1 : 0) + (timeRestrictedOnly ? 1 : 0) +
+            (favoritesOnly ? 1 : 0) + (currentRegionOnly ? 1 : 0) + (gradeVisibility != 0 ? 1 : 0);
+        var open = ImGui.CollapsingHeader($"{UiText.Get(T.CatalogFiltersHeading, active)}###CatalogFilters");
+        if (ImGui.IsItemHovered())
+            ImGui.SetTooltip(UiText.Get(T.CatalogFiltersSummary,
+                new UiMessage(timeRestrictedOnly ? T.OptionOn : T.OptionOff), gradeNames[gradeVisibility],
+                new UiMessage(favoritesOnly ? T.OptionOn : T.OptionOff), new UiMessage(currentRegionOnly ? T.OptionOn : T.OptionOff),
+                new UiMessage(includeOceanFish ? T.OptionOn : T.OptionOff), new UiMessage(inLogOnly ? T.OptionOn : T.OptionOff)));
+        if (!open) return false;
+        var changed = ImGui.Checkbox(UiText.Label(T.TimeRestrictedOnly, "CatalogTimeRestrictedOnly"), ref timeRestrictedOnly);
+        if (ImGui.IsItemHovered()) ImGui.SetTooltip(UiText.Get(T.TimeRestrictedHint));
+        ImGui.SetNextItemWidth(190);
+        changed |= ImGui.Combo(UiText.Label(T.GradeFilter, "CatalogGradeFilter"), ref gradeVisibility, gradeNames, gradeNames.Length);
+        if (ImGui.IsItemHovered()) ImGui.SetTooltip(UiText.Get(T.GradeFilterHint));
+        changed |= ImGui.Checkbox(UiText.Label(T.CatalogFavoritesOnly, "CatalogFavoritesOnly"), ref favoritesOnly);
+        changed |= ImGui.Checkbox(UiText.Label(T.CurrentRegionOnly, "CatalogCurrentRegionOnly"), ref currentRegionOnly);
+        if (ImGui.IsItemHovered()) ImGui.SetTooltip(UiText.Get(T.CurrentRegionHint));
+        changed |= ImGui.Checkbox(UiText.Label(T.CatalogIncludeOceanFish, "CatalogIncludeOceanFish"), ref includeOceanFish);
+        changed |= ImGui.Checkbox(UiText.Label(T.CatalogInLogOnly, "CatalogInLogOnly"), ref inLogOnly);
+        return changed;
     }
 
     private void DrawRows(FishCatalogView view, FishPreferencesView personal, FishCollectionView observed, FishingRegionView location)
