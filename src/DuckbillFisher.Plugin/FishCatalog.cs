@@ -123,6 +123,7 @@ internal sealed class FishCatalog : IDisposable
                 var spots = LoadSpots();
                 var items = dataManager.GetExcelSheet<Item>()!;
                 var weathers = dataManager.GetExcelSheet<Weather>()!;
+                var actions = dataManager.GetExcelSheet<Lumina.Excel.Sheets.Action>()!;
                 var rules = FishingData.Dataset.Fish.ToDictionary(rule => rule.ItemId);
                 var rows = new List<FishGuideRow>();
                 foreach (var fish in sheet)
@@ -160,14 +161,29 @@ internal sealed class FishCatalog : IDisposable
                         rule.FishParameterId == fish.RowId && spots.TryGetValue(rule.FishingSpotId, out var sourceSpot) &&
                         (sourceSpot.Items.Contains(item.RowId) || fish.FishingSpot.RowId == rule.FishingSpotId))
                     {
-                        string ItemName(uint id) => items.GetRowOrDefault(id)?.Name.ExtractText() ?? "";
-                        string WeatherName(uint id) => weathers.GetRowOrDefault(id)?.Name.ExtractText() ?? "";
-                        var baits = rule.BaitPath.Select(ItemName).ToArray();
-                        var currentWeather = rule.WeatherIds.Select(WeatherName).ToArray();
-                        var previousWeather = rule.PreviousWeatherIds.Select(WeatherName).ToArray();
-                        var predators = rule.Predators.Select(predator => ItemName(predator.ItemId)).ToArray();
-                        if (baits.Concat(currentWeather).Concat(previousWeather).Concat(predators).All(value => !string.IsNullOrWhiteSpace(value)))
-                            details = new(rule, sourceSpot.View, baits, currentWeather, previousWeather, predators);
+                        FishingItemView ItemView(uint id)
+                        {
+                            var value = items.GetRowOrDefault(id);
+                            return new(id, value?.Name.ExtractText() ?? "", value?.Icon ?? 0);
+                        }
+                        FishingConditionIcon WeatherView(uint id)
+                        {
+                            var value = weathers.GetRowOrDefault(id);
+                            return new(id, value?.Name.ExtractText() ?? "", (uint)Math.Max(0, value?.Icon ?? 0));
+                        }
+                        var baits = rule.BaitPath.Select(ItemView).ToArray();
+                        var currentWeather = rule.WeatherIds.Select(WeatherView).ToArray();
+                        var previousWeather = rule.PreviousWeatherIds.Select(WeatherView).ToArray();
+                        var predators = rule.Predators.Select(predator => ItemView(predator.ItemId)).ToArray();
+                        // Inspected KR Action rows: player fishing skills; icons come from the sheet.
+                        var actionId = rule.Hookset == "Precision" ? 4179u : 4103u;
+                        var action = actions.GetRowOrDefault(actionId);
+                        FishingConditionIcon? hookset = action is { IsPlayerAction: true } skill &&
+                            skill.ClassJob.RowId == 18 && !string.IsNullOrWhiteSpace(skill.Name.ExtractText())
+                            ? new(actionId, skill.Name.ExtractText(), skill.Icon) : null;
+                        if (baits.Concat(predators).All(value => !string.IsNullOrWhiteSpace(value.Name)) &&
+                            currentWeather.Concat(previousWeather).All(value => !string.IsNullOrWhiteSpace(value.Name)))
+                            details = new(rule, sourceSpot.View, baits, currentWeather, previousWeather, predators, hookset);
                     }
                     rows.Add(new(fish.RowId, item.RowId, item.RowType?.Name ?? "Unknown", name ?? "", fish.IsInLog)
                     {

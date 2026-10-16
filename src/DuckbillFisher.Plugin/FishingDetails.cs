@@ -6,8 +6,12 @@ namespace DuckbillFisher.Plugin;
 internal sealed record FishingSpotView(uint Id, string Name, string Zone, uint TerritoryId, uint MapId,
     float X, float Y, WeatherChance[] WeatherRates);
 
-internal sealed record FishingDetailView(FishingRule Rule, FishingSpotView Spot, string[] BaitNames,
-    string[] WeatherNames, string[] PreviousWeatherNames, string[] PredatorNames);
+internal sealed record FishingItemView(uint Id, string Name, uint IconId);
+internal sealed record FishingConditionIcon(uint Id, string Name, uint IconId);
+
+internal sealed record FishingDetailView(FishingRule Rule, FishingSpotView Spot, FishingItemView[] BaitPath,
+    FishingConditionIcon[] Weather, FishingConditionIcon[] PreviousWeather, FishingItemView[] Predators,
+    FishingConditionIcon? Hookset);
 
 internal sealed class FishingDataset
 {

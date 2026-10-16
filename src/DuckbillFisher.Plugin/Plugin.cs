@@ -20,6 +20,7 @@ public sealed class Plugin : IDalamudPlugin
     private readonly FishingMapService fishingMap;
     private readonly FishPreferences fishPreferences;
     private readonly FishCollectionObserver fishCollection;
+    private readonly FishingItemLinkService itemLinks;
     private bool disposed;
 
     public Plugin(IDalamudPluginInterface pluginInterface, ICommandManager commandManager, ICondition conditions,
@@ -41,7 +42,9 @@ public sealed class Plugin : IDalamudPlugin
         fishingMap = new FishingMapService(gameGui, clientState, framework);
         fishPreferences = new FishPreferences(pluginInterface, clientState, playerState, framework, log);
         fishCollection = new FishCollectionObserver(fishPreferences, fishCatalog, collectionReader, dataManager, gameGui, chat, framework, log);
-        mainWindow = new MainWindow(fishingObserver, fishGuide, new FishListPanel(fishCatalog, textureProvider, fishingMap, fishPreferences, fishCollection),
+        itemLinks = new FishingItemLinkService(chat, framework, fishPreferences);
+        mainWindow = new MainWindow(fishingObserver, fishGuide, new FishListPanel(fishCatalog, textureProvider, fishingMap,
+                fishPreferences, fishCollection, new FishingConditionPanel(textureProvider, itemLinks)),
             () => commandInfo.HelpMessage = UiText.Get(TextKey.CommandHelp));
         windows.AddWindow(mainWindow);
         pluginInterface.UiBuilder.Draw += windows.Draw;
@@ -66,6 +69,7 @@ public sealed class Plugin : IDalamudPlugin
         fishCatalog.Dispose();
         fishingMap.Dispose();
         fishCollection.Dispose();
+        itemLinks.Dispose();
         fishPreferences.Dispose();
         windows.RemoveAllWindows();
     }

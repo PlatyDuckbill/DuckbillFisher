@@ -13,7 +13,7 @@ namespace DuckbillFisher.Plugin;
 
 /// <summary>Displays cached static rows, session-local collection observations, and manual overrides.</summary>
 internal sealed class FishListPanel(FishCatalog catalog, ITextureProvider textures, FishingMapService mapService,
-    FishPreferences preferences, FishCollectionObserver collection)
+    FishPreferences preferences, FishCollectionObserver collection, FishingConditionPanel conditions)
 {
     private static readonly StringComparer NameComparer = StringComparer.Create(CultureInfo.GetCultureInfo("ko-KR"), true);
     private IReadOnlyList<FishGuideRow>? lastRows;
@@ -246,24 +246,8 @@ internal sealed class FishListPanel(FishCatalog catalog, ITextureProvider textur
                 ImGui.TextWrapped(UiText.Get(T.CatalogDetailsMissing));
             else
             {
-                var rule = details.Rule;
                 ImGui.Separator();
-                ImGui.TextWrapped(UiText.Get(T.BaitPathLabel, string.Join(" → ", details.BaitNames)));
-                ImGui.TextWrapped(UiText.Get(T.HooksetLabel, new UiMessage(rule.Hookset == "Precision" ? T.HooksetPrecision : T.HooksetPowerful)));
-                ImGui.TextWrapped(UiText.Get(T.TugLabel, rule.Tug switch { "light" => "!", "medium" => "!!", _ => "!!!" }));
-                ImGui.TextWrapped(rule.StartHour == 0 && rule.EndHour == 24 ? UiText.Get(T.TimeAllDay)
-                    : UiText.Get(T.TimeConditionLabel, EtClock(rule.StartHour), EtClock(rule.EndHour)));
-                ImGui.TextWrapped(UiText.Get(T.WeatherConditionLabel, WeatherNames(details.WeatherNames)));
-                ImGui.TextWrapped(UiText.Get(T.PreviousWeatherConditionLabel, WeatherNames(details.PreviousWeatherNames)));
-                if (rule.Predators.Length > 0)
-                {
-                    var requirements = rule.Predators.Select((predator, index) => UiText.Get(T.PredatorLabel, details.PredatorNames[index], predator.Count));
-                    ImGui.TextWrapped(UiText.Get(T.IntuitionConditions, string.Join(", ", requirements)));
-                    if (rule.IntuitionSeconds is { } seconds)
-                        ImGui.TextWrapped(UiText.Get(T.IntuitionDuration, seconds));
-                }
-                if (rule.FolkloreRequired)
-                    ImGui.TextWrapped(UiText.Get(T.FolkloreRequired));
+                conditions.Draw(details, personal);
                 ImGui.Separator();
                 if (view.Windows.TryGetValue(selected.FishParameterId, out var window))
                     DrawWindow(window);
@@ -343,9 +327,6 @@ internal sealed class FishListPanel(FishCatalog catalog, ITextureProvider textur
         report.AppendLine("AutomaticUncaught=MatchedGameGuideSnapshot; ObservationsPersisted=False");
         return report.ToString();
     }
-
-    private static string EtClock(double hour) => $"{(int)hour:00}:{(int)Math.Round(hour % 1 * 60):00}";
-    private static string WeatherNames(string[] names) => names.Length == 0 ? UiText.Get(T.NoWeatherRestriction) : string.Join(" / ", names);
 
     private static void DrawWindow(FishingWindow window)
     {

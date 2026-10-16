@@ -119,7 +119,15 @@
   <data name="MapOpened" xml:space="preserve"><value>Opened the map with a flag at {0}.</value></data>
   <data name="MapOpenFailed" xml:space="preserve"><value>Could not open the map for {0}.</value></data>
   <data name="MapError" xml:space="preserve"><value>Map request failed: {0}</value></data>
-  <data name="BaitPathLabel" xml:space="preserve"><value>Bait / mooch sequence: {0}</value></data>
+  <data name="BaitPathHeading" xml:space="preserve"><value>Bait → mooch sequence</value></data>
+  <data name="BaitStepLabel" xml:space="preserve"><value>{0}. {1}</value></data>
+  <data name="WeatherHeading" xml:space="preserve"><value>Current weather (any of these)</value></data>
+  <data name="PreviousWeatherHeading" xml:space="preserve"><value>Previous weather (any of these)</value></data>
+  <data name="IntuitionHeading" xml:space="preserve"><value>Intuition catches required (verify progress separately)</value></data>
+  <data name="ItemLinkHint" xml:space="preserve"><value>{0}&#10;Click to display a game item link in your chat log.</value></data>
+  <data name="ItemLinkPrinted" xml:space="preserve"><value>Displayed a link for {0} in your chat log. Click that link to view the item.</value></data>
+  <data name="ItemLinkPlayerRequired" xml:space="preserve"><value>Item links require a logged-in character. Click again after changing characters.</value></data>
+  <data name="ItemLinkError" xml:space="preserve"><value>Could not display the item link: {0}</value></data>
   <data name="HooksetLabel" xml:space="preserve"><value>With Patience: {0}</value></data>
   <data name="HooksetPrecision" xml:space="preserve"><value>Precision Hookset</value></data>
   <data name="HooksetPowerful" xml:space="preserve"><value>Powerful Hookset</value></data>
@@ -130,7 +138,6 @@
   <data name="PreviousWeatherConditionLabel" xml:space="preserve"><value>Previous weather condition: {0}</value></data>
   <data name="NoWeatherRestriction" xml:space="preserve"><value>No restriction</value></data>
   <data name="PredatorLabel" xml:space="preserve"><value>{0} × {1}</value></data>
-  <data name="IntuitionConditions" xml:space="preserve"><value>Intuition catches: {0} (check your progress separately)</value></data>
   <data name="IntuitionDuration" xml:space="preserve"><value>Intuition duration: {0} seconds</value></data>
   <data name="FolkloreRequired" xml:space="preserve"><value>The relevant folklore book is required.</value></data>
   <data name="ForecastAlways" xml:space="preserve"><value>No time or weather restriction</value></data>
