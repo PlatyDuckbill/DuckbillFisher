@@ -19,8 +19,9 @@
 
 - `dotnet build src/DuckbillFisher.Plugin/DuckbillFisher.Plugin.csproj --no-restore -c Debug -p:DalamudLibPath=C:/Users/hyogu/AppData/Roaming/XIVLauncherKR/addon/Hooks/dev/ -p:OutputPath=C:/Users/hyogu/Downloads/DuckbillFisher/.cache/favorite-policy-build/`: 경고·오류 0.
 - `pwsh -NoLogo -NoProfile -File scripts/check-localization.ps1`: 한영 375키/형식 인자 일치. `git diff --check` 통과. 테스트는 요청이 없어 추가/실행하지 않았다.
-- 별도 산출물: 주 DLL 975360바이트/0.1.23.0, Core 39936바이트/1.0.0.0, ko 리소스 38400바이트/0.1.23.0, manifest DuckbillFisher/0.1.23.0/API 15. 정규 주 DLL 971264바이트/0.1.22.0 유지 확인.
-- 정규 DLL 0.1.22.0 유지. 새 언로드 확인 후 정규 빌드/로드와 변경 UI/대상 전환/삭제/새 등록 자동 해제는 인게임 검증 대기다. 0.1.22.0의 아이템 링크/전체 채널·행 표시 대표 확인도 아직 별도 결과가 없으므로 통과로 올리지 않는다.
+- 사용자 새 언로드 확인 후 위 빌드 명령에서 OutputPath 옵션을 제외한 정규 Debug 빌드 실행: 경고·오류 0. 리소스 검사도 다시 실행하여 한영 375키/형식 인자 일치를 확인했다.
+- 별도/정규 산출물 모두 주 DLL 975360바이트/0.1.23.0, Core 39936바이트/1.0.0.0, ko 리소스 38400바이트/0.1.23.0, manifest DuckbillFisher/0.1.23.0/API 15를 확인했다.
+- 정규 DLL 0.1.23.0 교체 완료. 로드 후 변경 UI/대상 전환/삭제/새 등록 자동 해제는 인게임 검증 대기다. 0.1.22.0의 아이템 링크/전체 채널·행 표시 대표 확인도 아직 별도 결과가 없으므로 통과로 올리지 않는다.
 - 기존 자료와 API 경로만 사용했으며 외부 자료 도입/런타임 HTTP/서버 채팅/게임 조작을 추가하지 않았다. Teamcraft 후속 조사를 재개하지 않았다.
 
 ## 첫 인게임 확인
