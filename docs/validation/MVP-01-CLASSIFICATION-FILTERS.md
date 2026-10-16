@@ -1,6 +1,6 @@
 # MVP-01 분류 필터와 수집 선택 정리
 
-날짜: 2026-10-16 · Plugin 0.1.15.0 · 인게임 검증 대기
+날짜: 2026-10-16 · Plugin 0.1.15.0 · 런타임 집계/필터 조합 표본 확인
 
 ## 사용자 선택과 계약
 
@@ -26,7 +26,15 @@
 - 실제 DLL에서 내장 JSON을 읽어 분류 335/터주왕 36/지원 빌드 일치를 확인했다. `git diff --check` 확인. 테스트는 추가/실행하지 않았다. 정량 성능/게임 조합 검증과 구분한다.
 - 진단은 summary/v4·preferences/v4·catalog/v5다. 분류 버전/양성 수와 Grade/Timing, TimeRestrictedOnly/GradeFilter를 추가했다. 전체 상세 표본 제한은 20종으로 유지한다.
 
-## 인게임 확인 순서
+## 인게임 결과
+
+- 사용자 summary/v4: Plugin=0.1.15.0, BuildMatch=True, 분류 kr-grades-2026-10-16의 Big=335/Legendary=36/Restricted=443을 확인했다. 정적 검수 수와 일치한다.
+- GradeFilter=LegendaryOnly, CollectionFilter=CaughtOnly, TimeRestrictedOnly=False에서 Displayed=7이다. 검색 내용과 개별 7종 명단은 보고서에 없으므로 전체 수집 터주왕 수/개별 포함 정확성까지 단정하지 않는다. 수집 선택이 인덱스 축소 후에도 CaughtOnly로 매핑되는 표본이다.
+- ManualCaught=0/ManualUncaught=0, 도감 Complete/Entries=1517/Matched=1517/Mismatches=0, 수집 739/미수집 778이다. UnknownReads=0이며 기존 게임 관찰이 연결되어 있다.
+- Territory=962/RegionState=Ready/RegionFish=14, CurrentRegionOnly=False다. 해당 지역 연결 수는 현재 결과의 지역 제한을 뜻하지 않는다. 즐겨찾기/상세 자료만도 꺼져 있고 먼바다 포함은 꺼져 있다.
+- 한영 전환 후 유지·수집 네 항목 화면·모든 조합은 별도로 확인받지 않았다. 이번 결과 기록은 문서만 변경했고 빌드/리소스 검사/테스트를 재실행하지 않았다.
+
+## 재현 순서
 
 1. 기존 개발 DLL로 0.1.15.0 로드. 검색 비우기, 수집=전체, 현재 지역만/즐겨찾기/상세 자료만/시간제만 해제, 수첩 포함만 켜기로 시작한다. 등급 터주(왕 포함)는 335종, 터주왕만은 36종이 기대값이다.
 2. 등급 전체에서 시간제만 켜면 443종이 기대값이다. 터주/터주왕과 함께 켤 수 있으며 ‘시간제’가 현재 출현 중만을 뜻하지 않아야 한다. 다른 필터가 남으면 수는 줄어든다.
