@@ -1,6 +1,6 @@
 # 전체 원본 도입과 일부 조건 표시
 
-날짜: 2026-10-16 · 대상 0.1.12.0 · 정규 빌드/교체 완료·인게임 검증 대기
+날짜: 2026-10-16 · 대상 0.1.12.0 · 전체 연결 수/사용자 대표 화면 확인 통과
 
 ## 도입 범위
 
@@ -35,9 +35,17 @@
 
 - `dotnet run --project tools/FishingDataImport ...` 성공: Regular=903, WithSpot=872, Spear=203, SpearMissing=115, Excluded=4, CoordinateDifferences=4, Failed=0. 원본 전체를 읽고 개별 Item/날씨/장소/지도/전승록을 실제 KR 시트와 대조했다.
 - 별도 Plugin Debug 빌드 `.cache/all-details-build/` 성공: 경고·오류 0. 한영 리소스 208키/형식 인자 검사 통과.
-- 별도 DLL 내장 JSON을 읽어 schema=2/일반 903/작살 203 확인. 로컬 시트 감사에서 먼바다 259/259·해역 순환 13/13 확인. 제품 실행 성능/레이아웃은 인게임 확인 대기다.
-- 사용자 ‘언로드 완’ 확인 후 정규 Debug 빌드 성공(경고·오류 0). 주 DLL 840192바이트/0.1.12.0, Core 29696바이트, ko 리소스 23552바이트/0.1.12.0, manifest InternalName/버전/API 15 확인. 인게임 검증 대기다. 테스트 추가/실행은 하지 않았다. 과거 예측 검증을 새 전체 원본의 게임 검증으로 확대하지 않는다.
+- 별도 DLL 내장 JSON을 읽어 schema=2/일반 903/작살 203 확인. 로컬 시트 감사에서 먼바다 259/259·해역 순환 13/13 확인. 정량적인 실행 성능 측정은 별도 미확인이다.
+- 사용자 ‘언로드 완’ 확인 후 정규 Debug 빌드 성공(경고·오류 0). 주 DLL 840192바이트/0.1.12.0, Core 29696바이트, ko 리소스 23552바이트/0.1.12.0, manifest InternalName/버전/API 15 확인. 테스트 추가/실행은 하지 않았다. 과거 예측 검증을 새 전체 원본의 게임 검증으로 확대하지 않는다.
 - 짧은 진단 summary/v3에 Details/Forecasts/OceanAreas/SpearStored/SpearUnknown을 추가했다. 전체 catalog/v4의 상세 표본 제한은 20종을 유지한다.
+
+## 인게임 결과
+
+- 사용자 summary/v3에서 Plugin=0.1.12.0/Rows=2512/CatalogLoaded, Details=903/903/BuildMatch=True, Forecasts=872/OceanAreas=259/SpearStored=203/SpearUnknown=115를 확인했다. 런타임 연결 수가 정적 대조와 일치한다.
+- 선택 어종은 FishParameter 898/Item 29782/Ocean=True, DetailsOnly=False/IncludeOceanFish=True/Displayed=20이다. Displayed는 그 시점 검색/필터 결과이며 전체 연결 수와 구분한다.
+- 사용자 ‘문제 없음’으로 안내한 대표 화면 확인을 통과로 기록한다. 개별 어종의 필드별 캡처는 받지 않았고 모든 어획 조건/창 시각/좌표의 정확성까지 검증했다고 확대하지 않는다.
+- GuideVisible=False/Scans=0/GuideState=NotSampled, Caught=0/Uncaught=0/Collection=Unknown은 이번 세션 도감 관찰 전 상태다. 자동 수집 실패나 전체 미수집을 뜻하지 않는다.
+- 이번 결과 반영은 문서만 변경했으며 빌드/리소스 검사/테스트를 재실행하지 않았다. 한영 전환 조합·외부 좌표 차이 4곳·실제 게임 ET/날씨 대조는 별도 미확인으로 유지한다.
 
 ## 게임 확인
 
