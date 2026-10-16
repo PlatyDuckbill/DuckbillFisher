@@ -21,8 +21,8 @@
 - 첫 별도 빌드는 ImGui.Combo의 다섯 번째 인자를 맞지 않는 오버로드로 전달해 CS1503 1건으로 실패했다. 기존에 지원되는 네 인자 형태로 수정하고 재빌드했다.
 - `dotnet build src/DuckbillFisher.Plugin/DuckbillFisher.Plugin.csproj --no-restore -c Debug -p:DalamudLibPath=C:/Users/hyogu/AppData/Roaming/XIVLauncherKR/addon/Hooks/dev/ -p:OutputPath=C:/Users/hyogu/Downloads/DuckbillFisher/.cache/alert-catalog-build/`: 수정 후 경고·오류 0.
 - `pwsh -NoLogo -NoProfile -File scripts/check-localization.ps1`: 한영 371키/형식 인자 일치. 설치 DLL enum과 리소스 대조는 영어/한국어 각 81/81개 채널 이름 확인. `git diff --check` 통과. 테스트는 요청이 없어 추가/실행하지 않았다.
-- 별도 산출물: 주 DLL 971264바이트/0.1.22.0, Core 39936바이트/1.0.0.0, ko 리소스 37888바이트/0.1.22.0, manifest DuckbillFisher/0.1.22.0/API 15. 정규 DLL 961024바이트/0.1.21.0 유지 확인.
-- 새 언로드 확인과 정규 빌드 대기. 두 화면의 아이콘/남은 시간/선택/언어 전환, 아이템 링크 클릭, 전체 채널 선택·기존 선택 복원, 한 줄 기록은 인게임 검증 대기다. 메타데이터 대조를 81채널 실제 출력 확인으로 표현하지 않는다.
+- 별도/정규 산출물: 주 DLL 971264바이트/0.1.22.0, Core 39936바이트/1.0.0.0, ko 리소스 37888바이트/0.1.22.0, manifest DuckbillFisher/0.1.22.0/API 15. 교체 전 정규 DLL 961024바이트/0.1.21.0 유지도 확인했다.
+- 사용자 ‘언로드 완료’ 후 OutputPath 없는 정규 빌드 경고·오류 0과 한영 371키 검사를 재확인했다. 두 화면의 아이콘/남은 시간/선택/언어 전환, 아이템 링크 클릭, 전체 채널 선택·기존 선택 복원, 한 줄 기록은 인게임 검증 대기다. 메타데이터 대조를 81채널 실제 출력 확인으로 표현하지 않는다.
 
 ## 첫 인게임 확인
 
