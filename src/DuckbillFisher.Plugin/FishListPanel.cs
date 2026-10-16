@@ -16,6 +16,7 @@ internal sealed class FishListPanel(FishCatalog catalog, ITextureProvider textur
     FishPreferences preferences, FishCollectionObserver collection, FishingConditionPanel conditions, FishingRegionObserver region)
 {
     private static readonly StringComparer NameComparer = StringComparer.Create(CultureInfo.GetCultureInfo("ko-KR"), true);
+    private static readonly Vector4 OpenWindowBackground = new(0.10f, 0.48f, 0.30f, 0.28f);
     private static readonly CollectionVisibility[] CollectionChoices =
         [CollectionVisibility.All, CollectionVisibility.HideCaught, CollectionVisibility.CaughtOnly, CollectionVisibility.UnknownOnly];
     private static readonly FishGradeVisibility[] GradeChoices =
@@ -230,6 +231,16 @@ internal sealed class FishListPanel(FishCatalog catalog, ITextureProvider textur
         ImGui.PushID((int)fish.FishParameterId);
         var start = ImGui.GetCursorPos();
         var rowWidth = ImGui.GetContentRegionAvail().X;
+        view.Windows.TryGetValue(fish.FishParameterId, out var forecast);
+        // Draw below Selectable so the theme's selection/hover states remain visible.
+        // Expired snapshots and always-available fish must not look like open limited windows.
+        if (!fish.IsOceanFishing && forecast is { Kind: FishingWindowKind.Open } &&
+            (forecast.Start is null || forecast.Start <= now) && (forecast.End is null || now < forecast.End))
+        {
+            var screen = ImGui.GetCursorScreenPos();
+            ImGui.GetWindowDrawList().AddRectFilled(screen, screen + new Vector2(rowWidth, height),
+                ImGui.GetColorU32(OpenWindowBackground));
+        }
         if (ImGui.Selectable("###CatalogRow", selectedId == fish.FishParameterId,
                 ImGuiSelectableFlags.None, new Vector2(rowWidth, height)))
         {
@@ -266,8 +277,7 @@ internal sealed class FishListPanel(FishCatalog catalog, ITextureProvider textur
         var state = personal.Favorites.Contains(fish.FishParameterId)
             ? UiText.Get(T.FavoriteRowState, collection) : collection.Display;
         var window = fish.IsOceanFishing ? UiText.Get(T.RowOceanWindow)
-            : view.Windows.TryGetValue(fish.FishParameterId, out var forecast)
-                ? FormatWindow(forecast, now) : UiText.Get(T.ForecastUnknown);
+            : forecast is not null ? FormatWindow(forecast, now) : UiText.Get(T.ForecastUnknown);
         var usesOtherRegion = locationScoped && rowSpot is not null && fish.Details?.Spot is { } recommended &&
             recommended.TerritoryId != rowSpot.TerritoryId;
         if (usesOtherRegion)
@@ -397,13 +407,17 @@ internal sealed class FishListPanel(FishCatalog catalog, ITextureProvider textur
         else
         {
             var view = catalog.View;
-            report.AppendLine("DuckbillFisher summary/v4");
+            report.AppendLine("DuckbillFisher summary/v5");
             Append($"Plugin={typeof(Plugin).Assembly.GetName().Version}; Rows={view.Rows.Count}; Status={view.Status.Key}");
             Append($"Dataset={FishingData.Dataset.DataVersion}; Details={view.Rows.Count(row => row.Details is not null)}/{FishingData.Dataset.Fish.Length}; BuildMatch={catalog.ConditionBuildMatches}");
             Append($"Forecasts={view.Windows.Count}; OceanAreas={view.Rows.Count(row => row.Ocean is not null)}; SpearStored={FishingData.Dataset.Spearfishing.Length}; SpearUnknown={FishingData.SpearUnknown}");
             Append($"Classification={FishClassificationData.Dataset.DataVersion}; Big={view.Rows.Count(row => row.Grade is FishGrade.Big or FishGrade.Legendary)}; Legendary={view.Rows.Count(row => row.Grade == FishGrade.Legendary)}; Restricted={view.Rows.Count(row => row.TimeRestriction == FishTimeRestriction.Restricted)}");
             if (selectedFish is { } selected)
+            {
                 Append($"SelectedFish={selected.FishParameterId}; Item={selected.ItemId}; Ocean={selected.IsOceanFishing}; Collection={personal.Collection(selected.FishParameterId, observed)}; Grade={selected.Grade}; Timing={selected.TimeRestriction}");
+                var forecast = view.Windows.GetValueOrDefault(selected.FishParameterId);
+                Append($"SelectedForecast={forecast?.Kind.ToString() ?? "Unknown"}; ForecastAt={view.ForecastAt:O}; Start={forecast?.Start:O}; End={forecast?.End:O}; CopiedAt={DateTimeOffset.UtcNow:O}");
+            }
         }
         report.AppendLine("DuckbillFisher MVP-01/preferences/v5");
         Append($"Ready={personal.HasCharacter}; Editable={personal.CanEdit}; Session={personal.Session}; Favorites={personal.Favorites.Count}");

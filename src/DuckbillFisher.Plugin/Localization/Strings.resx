@@ -12,7 +12,7 @@
   <data name="CatalogSortName" xml:space="preserve"><value>Name</value></data>
   <data name="CatalogSortId" xml:space="preserve"><value>Fish ID</value></data>
   <data name="CatalogCount" xml:space="preserve"><value>{0} displayed rows / {1} source sheet rows</value></data>
-  <data name="CatalogDetailsPending" xml:space="preserve"><value>Select a fish for collection records, spots, maps, and cross-checked conditions. Bite-time statistics are planned separately.</value></data>
+  <data name="CatalogDetailsPending" xml:space="preserve"><value>Select a fish for details. Green rows have an open time/weather window; personal requirements are separate.</value></data>
   <data name="CatalogNoMatches" xml:space="preserve"><value>No matching fish. Try changing the search or filter.</value></data>
   <data name="CatalogRowInfo" xml:space="preserve"><value>ID {0}</value></data>
   <data name="CopyCatalogReport" xml:space="preserve"><value>Copy short diagnostics</value></data>

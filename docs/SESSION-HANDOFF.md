@@ -27,7 +27,8 @@
 - 0.1.16.0 필터 기능은 대표 확인 통과, 후보 64/6·모순 선택 빈 결과 확인. UI 문제는 별도로 개선했다. [결과](validation/MVP-01-GEOGRAPHY-FILTERS.md).
 - 지역/확장팩은 복수 선택, 확장팩은 낚시터 소속 기준이다. 그룹 안 OR/같은 낚시터에서 그룹 간 AND를 적용하며 현재 지역만과도 함께 적용한다. ExVersion 0은 신생이며 미확인은 null로 구분한다. 선택 후보는 로컬 자료에서 64지역/6확장팩이다.
 - 0.1.17.0은 별도/정규 빌드 경고·오류 0, 한영 244키 검사와 사용자 ‘정상’으로 확장팩 체크/지역 선택 UI 대표 확인 통과. [결과](validation/MVP-01-GEOGRAPHY-PICKER-UI.md).
-- 현재 정규 DLL은 0.1.18.0이다. 별도/정규 빌드 경고·오류 0/한영 245키 검사 통과. DLL/Core/ko/manifest 확인과 사용자 ‘정렬은 잘 됨’으로 대표 확인 통과. 열린 창 종료순→예정 창 시작순→미확인→상시, 동률 이름/ID이며 지역은 기존 필터로만 적용한다. [근거](validation/MVP-01-REMAINING-TIME-SORT.md). 다음은 바다구렁이(24215/670)의 Teamcraft 활성/Plugin 약 6시간 차이 조사와 열린 창 배경 구분이다. 다음 교체는 새 언로드 확인 필요.
+- 0.1.18.0 남은 시간순은 사용자 ‘정렬은 잘 됨’으로 대표 확인 통과. 열린 창 종료순→예정 창 시작순→미확인→상시, 동률 이름/ID이며 지역은 기존 필터로만 적용한다. [근거](validation/MVP-01-REMAINING-TIME-SORT.md).
+- 현재 정규 DLL은 0.1.19.0이다. 별도/정규 빌드 경고·오류 0/한영 245키 검사, 언로드 후 DLL/Core/ko/manifest 확인 완료. 열린 제한 창 녹색 배경·summary/v5 선택 예측 시각 한 줄을 추가했고 인게임 확인 대기. 바다구렁이(24215/670) 화면 차이는 고정 Teamcraft 계산과 Plugin 값이 일치하나 실제 사이트 표시 원인은 미확정이다. [조사/다음 확인](validation/MVP-03-OPEN-WINDOW-DIAGNOSTICS.md). 다음 교체는 새 언로드 확인 필요.
 - PowerShell 5.1 읽기는 `-Encoding UTF8`; pwsh는 현재 샌드박스 밖 승인 실행 필요.
 
 ## 일반 구현 빌드
@@ -39,7 +40,7 @@ dotnet build src/DuckbillFisher.Plugin/DuckbillFisher.Plugin.csproj --no-restore
 pwsh -NoLogo -NoProfile -File scripts/check-localization.ps1
 ```
 
-- 1차 빌드는 `-p:OutputPath=C:/Users/hyogu/Downloads/DuckbillFisher/.cache/remaining-time-build/` 추가.
+- 1차 빌드는 `-p:OutputPath=C:/Users/hyogu/Downloads/DuckbillFisher/.cache/open-window-build/` 추가.
 - 성공 후 언로드 요청 → 사용자 확인 → 정규 Debug 빌드로 교체.
 - 실제 주 DLL/버전·Core DLL·ko 리소스 DLL·manifest 확인.
 - `scripts/build.ps1`은 테스트도 실행하므로 일반 구현 때 사용하지 않는다.

@@ -12,7 +12,7 @@
   <data name="CatalogSortName" xml:space="preserve"><value>이름순</value></data>
   <data name="CatalogSortId" xml:space="preserve"><value>어종 ID순</value></data>
   <data name="CatalogCount" xml:space="preserve"><value>표시 결과 {0}행 / 원본 시트 전체 {1}행</value></data>
-  <data name="CatalogDetailsPending" xml:space="preserve"><value>어종을 선택해 수집 기록·낚시터·지도와 대조한 상세 조건을 확인하세요. 입질 초 수 통계는 후속 작업입니다.</value></data>
+  <data name="CatalogDetailsPending" xml:space="preserve"><value>어종을 선택하면 상세 정보를 표시합니다. 녹색 배경은 시간·날씨 창이 열린 어종이며 개인 준비 조건은 별도입니다.</value></data>
   <data name="CatalogNoMatches" xml:space="preserve"><value>검색 결과가 없습니다. 검색어나 필터를 바꿔 보세요.</value></data>
   <data name="CatalogRowInfo" xml:space="preserve"><value>ID {0}</value></data>
   <data name="CopyCatalogReport" xml:space="preserve"><value>짧은 진단 복사</value></data>
