@@ -28,9 +28,9 @@
 
 - `dotnet build src/DuckbillFisher.Plugin/DuckbillFisher.Plugin.csproj --no-restore -c Debug -p:DalamudLibPath=C:/Users/hyogu/AppData/Roaming/XIVLauncherKR/addon/Hooks/dev/ -p:OutputPath=C:/Users/hyogu/Downloads/DuckbillFisher/.cache/alert-management-build/`: 경고·오류 0.
 - `pwsh -NoLogo -NoProfile -File scripts/check-localization.ps1`: 한영 293키/형식 인자 일치. `git diff --check` 통과. 테스트는 요청이 없어 추가/실행하지 않았다.
-- 별도 산출물: 주 DLL 961024바이트/0.1.21.0, Core 39936바이트/1.0.0.0, ko 리소스 33280바이트/0.1.21.0, manifest DuckbillFisher/0.1.21.0/API 15. 정규 DLL 937472바이트/0.1.20.0 유지 확인.
+- 별도/정규 산출물: 주 DLL 961024바이트/0.1.21.0, Core 39936바이트/1.0.0.0, ko 리소스 33280바이트/0.1.21.0, manifest DuckbillFisher/0.1.21.0/API 15. 교체 전 정규 DLL 937472바이트/0.1.20.0 유지도 확인했다.
 - API 조사 스크립트의 pwsh 접근 실패는 동일 스크립트를 승인 실행해 완료했다. 결과는 설치 DLL 메타데이터 대조이며 실제 효과음 재생 증거가 아니다.
-- 현재 정규 DLL 0.1.20.0 유지. 새 언로드 확인 후 정규 빌드/로드가 필요하다. 화면·스크롤·개별 예약·채널/SE·지도 링크·발송 기록·설정 복원은 인게임 검증 대기다.
+- 사용자 ‘언로드 완료’ 후 OutputPath 없는 정규 빌드 경고·오류 0과 한영 293키 검사를 재확인했다. 현재 정규 DLL 0.1.21.0의 화면·스크롤·개별 예약·채널/SE·지도 링크·발송 기록·설정 복원은 인게임 검증 대기다.
 
 ## 첫 인게임 확인
 
