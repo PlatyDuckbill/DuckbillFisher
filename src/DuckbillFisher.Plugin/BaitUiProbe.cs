@@ -17,6 +17,7 @@ internal sealed class BaitUiProbe : IDisposable
     private readonly IAddonLifecycle lifecycle;
     private readonly FishPreferences preferences;
     private readonly Func<bool> compatible;
+    private readonly NativeBaitUiReader baitReader;
     private readonly object gate = new();
     private readonly HashSet<string> observedNames = new(StringComparer.Ordinal);
     private sealed record RequestState(int Session, long At);
@@ -25,13 +26,15 @@ internal sealed class BaitUiProbe : IDisposable
     private string status = "Idle";
     private int reportSession = -1;
     private int polls;
+    private long firstVisibleAt;
     private bool disposed;
 
     public BaitUiProbe(IGameGui gui, IFramework framework, IAddonLifecycle lifecycle,
-        FishPreferences preferences, Func<bool> compatible)
+        FishPreferences preferences, Func<bool> compatible, NativeBaitUiReader baitReader)
     {
         this.gui = gui; this.framework = framework; this.lifecycle = lifecycle;
         this.preferences = preferences; this.compatible = compatible;
+        this.baitReader = baitReader;
         framework.Update += Update;
         lifecycle.RegisterListener(AddonEvent.PostSetup, ObserveAddonName);
         lifecycle.RegisterListener(AddonEvent.PostRefresh, ObserveAddonName);
@@ -87,7 +90,7 @@ internal sealed class BaitUiProbe : IDisposable
         }
     }
 
-    private static string Header(int session) => "DuckbillFisher bait-ui/v3\n" +
+    private static string Header(int session) => "DuckbillFisher bait-ui/v4\n" +
         $"Plugin={typeof(BaitUiProbe).Assembly.GetName().Version}; ProbeBuild={typeof(BaitUiProbe).Module.ModuleVersionId.ToString()[..8]}; Session={session}\n";
 
     public void Request(int session)
@@ -99,6 +102,7 @@ internal sealed class BaitUiProbe : IDisposable
             reportSession = session;
             report = null;
             polls = 0;
+            firstVisibleAt = 0;
             observedNames.Clear();
             status = "Queued";
             pending = new(session, Stopwatch.GetTimestamp());
@@ -152,7 +156,7 @@ internal sealed class BaitUiProbe : IDisposable
             }
             if (!personal.HasCharacter || personal.Session != request.Session || !framework.IsInFrameworkUpdateThread || !compatible())
             { Finish("Unavailable"); return; }
-            var names = new[] { "FishingBait", "FishBait" }.Concat(observedNames.Where(name =>
+            var names = new[] { "Bait" }.Concat(observedNames.Where(name =>
                 name.Contains("Bait", StringComparison.OrdinalIgnoreCase))).Distinct().ToArray();
             status = "WaitingForAddon";
             foreach (var name in names)
@@ -161,6 +165,9 @@ internal sealed class BaitUiProbe : IDisposable
                 if (handle.IsNull) continue;
                 var addon = (AtkUnitBase*)handle.Address;
                 if (!addon->IsVisible) { status = "AddonHidden"; continue; }
+                // Wait for initial tooltip attachments; retain only the managed timestamp.
+                if (firstVisibleAt == 0) firstVisibleAt = Stopwatch.GetTimestamp();
+                if (Stopwatch.GetElapsedTime(firstVisibleAt).TotalMilliseconds < 250) return;
                 var manager = addon->UldManager;
                 if (addon->AtkValuesCount > 1024 || manager.NodeListCount > 512 ||
                     (addon->AtkValuesCount > 0 && addon->AtkValues == null) || manager.NodeList == null)
@@ -184,6 +191,8 @@ internal sealed class BaitUiProbe : IDisposable
                     nodes.Add($"{node->NodeId}:{(uint)node->Type}:{node->Width}x{node->Height}");
                 }
                 output.AppendLine("GridNodes=" + string.Join(',', nodes));
+                var binding = baitReader.Read(0, diagnostics: true);
+                output.AppendLine($"BindingState={binding.State}; TooltipBindings={binding.Bindings}");
                 output.AppendLine("ReadOnly=True; NoSelectionOrHighlightInference=True");
                 Finish("Captured", output.ToString());
                 return;

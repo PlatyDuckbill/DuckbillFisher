@@ -33,6 +33,7 @@ public sealed class Plugin : IDalamudPlugin
     private readonly BaitStockObserver baitStock;
     private readonly BaitPreparation baitPreparation;
     private readonly BaitUiProbe baitUiProbe;
+    private readonly BaitFinder baitFinder;
     private bool disposed;
 
     public Plugin(IDalamudPluginInterface pluginInterface, ICommandManager commandManager, ICondition conditions,
@@ -66,9 +67,19 @@ public sealed class Plugin : IDalamudPlugin
         baitStock = new BaitStockObserver(inventory, clientState, playerState, conditions, framework, fishPreferences, () => collectionReader.IsCompatible);
         var preparationQuery = new CatalogQueryState(fishPreferences.View.Catalog);
         baitPreparation = new BaitPreparation(fishCatalog, fishPreferences, fishCollection, fishingRegion, preparationQuery, framework);
-        baitUiProbe = new BaitUiProbe(gameGui, framework, addonLifecycle, fishPreferences, () => collectionReader.IsCompatible);
-        var preparationPanel = new BaitPreparationPanel(baitPreparation, baitStock, fishPreferences, textureProvider, itemLinks, baitUiProbe);
-        var detailPanel = new FishDetailPanel(fishPreferences, textureProvider, fishingMap, new FishingConditionPanel(textureProvider, itemLinks, baitStock));
+        var baitReader = new NativeBaitUiReader(gameGui, framework, () => collectionReader.IsCompatible);
+        baitFinder = new BaitFinder(framework, addonLifecycle, fishPreferences, baitStock, baitReader,
+            () => collectionReader.IsCompatible, () =>
+            {
+                var personal = fishPreferences.View;
+                if (!personal.HasCharacter || !clientState.IsLoggedIn || !playerState.IsLoaded || playerState.ContentId != personal.CharacterId)
+                    return null;
+                var sample = activityReader.Read(personal.CharacterId, playerState.ClassJob.RowId == 18);
+                return sample.Availability == FishingReadState.Ready ? sample.EquippedBait : null;
+            });
+        baitUiProbe = new BaitUiProbe(gameGui, framework, addonLifecycle, fishPreferences, () => collectionReader.IsCompatible, baitReader);
+        var preparationPanel = new BaitPreparationPanel(baitPreparation, baitStock, fishPreferences, textureProvider, itemLinks, baitUiProbe, baitFinder);
+        var detailPanel = new FishDetailPanel(fishPreferences, textureProvider, fishingMap, new FishingConditionPanel(textureProvider, itemLinks, baitStock, baitFinder));
         detailWindow = new FishDetailWindow(fishCatalog, fishPreferences, fishCollection, detailPanel, guideOpener);
         timerWindow = new CastingTimerWindow(fishingTracker, fishCatalog, fishPreferences, fishCollection, textureProvider, fishingMap, detailWindow.Show);
         compactObserver = new CompactFishObserver(fishCatalog, fishPreferences, framework, fishCollection, fishingRegion);
@@ -86,6 +97,7 @@ public sealed class Plugin : IDalamudPlugin
         windows.AddWindow(detailWindow);
         windows.AddWindow(timerWindow);
         pluginInterface.UiBuilder.Draw += windows.Draw;
+        pluginInterface.UiBuilder.Draw += baitFinder.DrawOverlay;
         pluginInterface.UiBuilder.OpenMainUi += OpenMainUi;
         pluginInterface.UiBuilder.OpenConfigUi += mainWindow.OpenSettings;
     }
@@ -106,6 +118,7 @@ public sealed class Plugin : IDalamudPlugin
 
         disposed = true;
         pluginInterface.UiBuilder.Draw -= windows.Draw;
+        pluginInterface.UiBuilder.Draw -= baitFinder.DrawOverlay;
         pluginInterface.UiBuilder.OpenMainUi -= OpenMainUi;
         pluginInterface.UiBuilder.OpenConfigUi -= mainWindow.OpenSettings;
         commandManager.RemoveHandler(Command);
@@ -113,6 +126,7 @@ public sealed class Plugin : IDalamudPlugin
         baitPreparation.Dispose();
         baitStock.Dispose();
         baitUiProbe.Dispose();
+        baitFinder.Dispose();
         spawnAlerts.Dispose();
         alertOutput.Dispose();
         fishingObserver.Dispose();

@@ -601,4 +601,15 @@ Main inventory only. An unknown quantity is not zero.</value></data>
   <data name="BaitProbeUnavailable" xml:space="preserve"><value>Character or runtime conditions prevented observation. Copy the diagnostic result.</value></data>
   <data name="BaitProbeUnsupportedShape" xml:space="preserve"><value>The UI data layout was unexpected. Observation stopped; the diagnostic result can be copied.</value></data>
   <data name="BaitProbeCancelled" xml:space="preserve"><value>Observation cancelled. The current diagnostic status can still be copied.</value></data>
+  <data name="BaitFind" xml:space="preserve"><value>Find bait</value></data>
+  <data name="BaitFindHint" xml:space="preserve"><value>Find this bait in the game bait selection UI. Open that UI yourself and select the highlighted bait. Requires an available inventory count greater than zero. Finding expires after 60 seconds; no bait is selected automatically.</value></data>
+  <data name="BaitFindCancel" xml:space="preserve"><value>Cancel finding</value></data>
+  <data name="BaitFindWaiting" xml:space="preserve"><value>{0}: open the game bait selection UI.</value></data>
+  <data name="BaitFindHighlighted" xml:space="preserve"><value>{0}: highlighted in the game bait selection UI.</value></data>
+  <data name="BaitFindBindingUnavailable" xml:space="preserve"><value>{0}: the visible UI entry could not be identified. No highlight is shown.</value></data>
+  <data name="BaitFindSelected" xml:space="preserve"><value>{0}: already selected.</value></data>
+  <data name="BaitFindExpired" xml:space="preserve"><value>{0}: finding expired.</value></data>
+  <data name="BaitFindClosed" xml:space="preserve"><value>{0}: finding ended when the bait selection UI closed or was recreated.</value></data>
+  <data name="BaitFindCancelled" xml:space="preserve"><value>{0}: finding cancelled.</value></data>
+  <data name="BaitFindUnavailable" xml:space="preserve"><value>{0}: bait highlighting is unavailable in the current UI or runtime. Other features remain available.</value></data>
 </root>

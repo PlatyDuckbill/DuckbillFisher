@@ -1,6 +1,22 @@
-# 미끼 준비 · 0.2.10.1 개발 확인
+# 미끼 준비 · 0.3.0.0 개발 확인
 
-기록: 2026-10-18. 사용자 요청은 미끼 준비·찾기 구현과 이번 배포까지다. 현재 준비 목록/수량 표시와 읽기 전용 미끼 UI 진단을 정규 DLL에 반영했다. 사용자가 소지 수량 일치를 대표 확인했다. 첫 UI 보고서는NotOpen이었고20초 대기 수집v2로 바꿔 표본을 다시 요청했다. 강조는 미구현이다. 기능 전체 완료/Release 검증/원격 게시로 해석하지 않는다.
+기록: 2026-10-18. 사용자 요청은 미끼 준비·찾기 구현과 이번 배포까지다. 수량 일치와0.2.10.1/v3 수집·복사는 사용자 대표 확인을 받았다. 새 기능의 최종 버전은 사용자 요청으로0.3.0.0이다. 미끼 찾기 후보를 정규 DLL에 반영했으며 실제 Item 연결·강조는 인게임 검증 대기다. Release 패키지/원격 게시 완료가 아니다.
+
+## 0.3.0.0 · 명시적 미끼 찾기 후보
+
+- 실제 addon 이름은 `Bait`, KR ULD 경로는 `ui/uld/fishingbait.uld`다. v3의 숫자13은 Item ID로 사용하지 않는다. KR ItemUICategory33의188개 유효 미끼 중 아이콘 중복 그룹45개를 확인했으므로 아이콘 이미지로 대상을 추정하지 않는다. 준비 목록의 실제 첫 미끼는93개였다.
+- `NativeBaitUiReader`를 Plugin에 격리했다. 공개 GetUIModule/GetAddonByName으로 현재 Framework의 포인터를 받고 KR 도구 설명의 node→Item 계약만 조사한다. 부모 addon ID·Item 도구 설명·DetailKind.Item/ItemId·정확한 Item ID가 일치하는 단일 그리드만 찾는다. InventoryItem 종류의 같은 union 값은 컨테이너이므로 Item ID로 해석하지 않는다. 아직 실제 Bait UI가 이 계약을 사용하는지는 표본으로 확인하지 않았다.
+- ULD의17~41번은1005 버튼/44×48이고 내부 노드1~5에 이미지·아이콘·충돌 영역이 있다. 풀 번호를 미끼 순서로 사용하지 않는다. 노드 수/종류/크기·부모·표시/좌표·회전/범위와 map 크기를 제한한다. 빌려온 포인터는 해당 Framework 호출에서만 읽고 managed 좌표와 상태만 전달한다.
+- 게임 UI에 쓰거나 선택 함수를 호출하지 않는다. `BaitFinder`는 준비 목록/상세 첫 미끼의 명시적 클릭 하나를 유지하고, 확인된 영역에 ImGui 전경 테두리만 그린다. 오래된 좌표150ms는 표시하지 않는다. 취소/새 요청/60초 만료/세션 변경/로그아웃/지원 실패/한 번 열린 UI 닫기·재생성/검증된 현재 미끼 일치 때 해제한다. 준비 목록 소지 수량을 확인할 수 있고1개 이상일 때만 요청한다. 선택되지 않은 미끼로 확인해야 강조를 볼 수 있다.
+- 바인딩 부재·스크롤/숨김·예상 밖 구조는 강조만 중단/유보한다. 기존 지원 프로필과 도감/타이머 가드를 변경하지 않는다. 아이템 링크 클릭과 실제 게임에서의 사용자 미끼 선택을 유지한다. 프로필 밖 환경이나 가방 조회 불가에서 찾기는 비활성이다.
+- v4 진단은 `Bait`를 직접 조회하고 초기 표시250ms 뒤 노드의 제한된 도구 설명 연결만 복사한다. 항상 복사 가능한v3 정책을 유지한다. UI 본문·주소·캐릭터 ID는 출력하지 않는다. 연결이 없다면 실제 자료를 받아 이 어댑터만 보완하며 순서/아이콘 추정을 추가하지 않는다.
+
+### 추가 읽기 근거와 실행
+
+- 고정 [UIModule](https://github.com/aers/FFXIVClientStructs/blob/5ecda407c82597890b41f704e087381fc7dfb912/FFXIVClientStructs/FFXIV/Client/UI/UIModule.cs)의 embedded RaptureAtkModule offset `0xD2690`과 [AtkTooltipManager](https://github.com/aers/FFXIVClientStructs/blob/5ecda407c82597890b41f704e087381fc7dfb912/FFXIVClientStructs/FFXIV/Component/GUI/AtkTooltipManager.cs)의 map/ItemArgs 계약을 확인했다. MIT 참조 자료이며 구현을 복제하지 않았다. 내부 필드는 공개 C# 접근이 불가하여 세 정확한 KR DLL에서 확인한 offset 한 곳으로 읽는다. virtual getter/시그니처/새 네이티브 함수 호출은 추가하지 않았다.
+- `.cache/bait-preparation/highlight-layouts.json`: UIModule/RaptureAtkModule/AtkModule/AtkStage/tooltip와 중첩 args/component/matrix/map/tree/pair/pointer16종의 모든 인스턴스 필드 offset/형식·크기가 현재/최저/친구 DLL에서 일치했다. 기본 UI/가방6종은 앞선 대조를 유지한다. 공개 listener의 이름 지정 overload4개와 PostSetup=1/PreFinalize=6도 세 조합에서 확인했다. 실제 게임 Item 바인딩이나 친구 실기를 확인한 것은 아니다.
+- 최초 컴파일은 wrapper의 내부 Struct 접근, 다음 컴파일은 내부 embedded 필드 접근으로 각각 실패했다. 공개 Address와 위에서 직접 대조한 offset 경계로 수정한 뒤 현재/최저/친구 참조 및 정규 Debug 빌드 모두 경고0/오류0. 한영602키/형식 인자 검사 통과. 후보/정규 Plugin/Core/ko/manifest 해시4/4 일치, manifest0.3.0.0/API15. 테스트 추가·실행 없음.
+- 현재 확인 순서: 아직 선택하지 않은 보유 미끼의 ‘미끼 찾기’→사용자가 게임 미끼 UI 열기→정확한 한 칸 테두리/직접 선택 후 해제/닫고 다시 열면 해제 확인. 연결 안내가 나오거나 테두리가 없으면 개발자 진단v4의 BindingState/TooltipBindings 줄만 받는다. 그 뒤 Release 패키지와 추출본 실기 확인을 거쳐 이번 배포를 진행한다.
 
 ## 0.2.10.1 · 복사 불가 피드백 대응
 
@@ -16,7 +32,7 @@
 
 사용자0.2.10.1/ProbeBuild9e8d3e1a/Session1: Status=Visible, **Addon=Bait**, Values=8, Nodes=52, Scale=1, Numeric=2:i:13, NumericOmitted=0. 노드17~41이 모두1005/44×48로 관찰됐고 FrameworkPolls=73/Progress=Captured/Pending=False/ObservedAddonNames=Bait였다. v3 수집·복사 대표 확인을 받았다. 앞서 두 이름으로 못 찾던 실제 UI는Bait이며 ULD 이름FishingBait와 구분한다. 숫자 자료에 Item ID가 없으므로13이나 그리드 순서에서 미끼를 추정하지 않는다. 사용자가 새 기능의 배포 버전을0.3으로 올리도록 요청해 다음 구현/최종 배포는0.3.0.0으로 진행한다. 강조는 아직 미구현이다.
 
-## 구현한 범위
+## 0.2.10.0/1의 준비 목록·진단 구현
 
 - 메인 ‘어종 목록’ 필터 옆 ‘미끼 준비’ 버튼으로 목록을 연다. 준비 대상은 기본 즐겨찾기 전체/현재 메인 목록의 검색·필터 결과 전체다. 화면에 보이는 행 수로 제한하지 않는다.
 - `CatalogQuery`는 기존 메인 검색/진단/일반 필터 판정을 공유한다. UI는 불변 쿼리를 게시하고 준비 서비스가 Framework에서 변경 때만 집계한다. 수집/수동 우선·현재 지역·지역/확장팩·등급 등 기존 의미를 유지하며 알림 정책을 바꾸지 않는다.
@@ -47,8 +63,8 @@
 정규 주 DLL: `C:\Users\hyogu\Downloads\DuckbillFisher\src\DuckbillFisher.Plugin\bin\Debug\DuckbillFisher.dll`.
 
 1. 일반 소지품에 있는 미끼의 실제 수량과 준비 목록/상세 수량을 비교한다. 즐겨찾기 기본/현재 필터 전체 전환, 스크롤 밖 목표 포함·검색/수집 필터·첫 미끼/대체 후보·없는 미끼만을 대표 확인한다.
-2. 사용자 ‘수량 일치’는 대표 확인으로 기록했다. v1의NotOpen을 미끼 UI가 실제로 닫혀 있었다는 증거로 확대하지 않는다. v2의 복사 불가 피드백 후 위 v3 절차로 자료를 요청했다. 개인정보/반복 전체 로그를 요구하지 않는다.
-3. 실제 숫자 자료/항목 연결을 확인한 뒤에만 단일 미끼 강조·대기/닫기/취소/만료/캐릭터 격리를 구현한다. 현재 ‘미끼 찾기’가 동작하는 것으로 표현하지 않는다.
+2. 사용자 ‘수량 일치’와v3 수집·복사는 대표 확인으로 기록했다. v1의NotOpen을 미끼 UI가 실제로 닫혀 있었다는 증거로 확대하지 않는다. 반복 전체 로그를 요구하지 않는다.
+3. 0.3.0.0의 보유한 다른 미끼로 단일 강조·선택/닫기/취소·60초 만료를 확인한다. 새 후보 구현을 실제 동작 확인으로 확대하지 않는다. 실패하면v4의BindingState/TooltipBindings 줄로 실제 Item 계약을 확인하고 해당 어댑터만 보완한다.
 4. 구현·자료 대조/리소스 검사·커밋 후 최저 지원 참조로 Release 빌드와 `scripts/prepare-release.ps1`을 수행한다. ZIP 추출본의 대표 인게임 확인을 받은 뒤 정상 push/새 태그/Release/익명 다운로드·해시 확인→설치 JSON 순으로 게시한다. 이미 검증한 Debug를 Release ZIP 실행 확인으로 대신하지 않는다.
 
 배포 목표는 이번에 승인됐지만 미검증 산출물 게시 금지는 유지한다. 남은 일반 데이터0.2.9.0의 대표 화면 확인도 이 새 작업 시작으로 완료 처리하지 않는다.

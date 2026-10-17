@@ -7,7 +7,7 @@ using T = DuckbillFisher.Plugin.Localization.TextKey;
 namespace DuckbillFisher.Plugin;
 
 internal sealed class BaitPreparationPanel(BaitPreparation preparation, BaitStockObserver stock,
-    FishPreferences preferences, ITextureProvider textures, FishingItemLinkService links, BaitUiProbe probe)
+    FishPreferences preferences, ITextureProvider textures, FishingItemLinkService links, BaitUiProbe probe, BaitFinder finder)
 {
     private bool missingOnly;
 
@@ -42,6 +42,7 @@ internal sealed class BaitPreparationPanel(BaitPreparation preparation, BaitStoc
         var view = preparation.View;
         if (view.Session != personal.Session) view = new(personal.Session, 0, [], []);
         ImGui.TextDisabled(UiText.Get(T.BaitPreparationCounts, view.TargetCount, view.Entries.Length, view.Missing.Length));
+        finder.DrawStatus();
         var height = Math.Clamp(ImGui.GetMainViewport().WorkSize.Y * 0.4f, ImGui.GetFontSize() * 8, ImGui.GetFontSize() * 23);
         if (ImGui.BeginChild("BaitPreparationItems", new Vector2(0, height)))
         {
@@ -63,6 +64,8 @@ internal sealed class BaitPreparationPanel(BaitPreparation preparation, BaitStoc
                 else ImGui.TextUnformatted(count is { } quantity ? UiText.Get(T.BaitQuantity, quantity) : UiText.Get(T.BaitQuantityUnknown));
                 UiWidgets.Tooltip(UiText.Get(T.BaitTargetsCount, entry.Targets.Length));
                 if (entry.Alternative) { ImGui.SameLine(); ImGui.TextDisabled(UiText.Get(T.BaitAlternative)); }
+                ImGui.SameLine();
+                finder.DrawButton(entry.Item, personal.Session);
                 if (open)
                 {
                     foreach (var fish in entry.Targets) ImGui.TextWrapped(fish.DisplayName);
