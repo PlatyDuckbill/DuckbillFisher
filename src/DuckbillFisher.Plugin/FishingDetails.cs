@@ -17,7 +17,11 @@ internal sealed record FishingConditionIcon(uint Id, string Name, uint IconId);
 internal sealed record FishingDetailView(FishingRule Rule, FishingSpotView? Spot, FishingItemView[][] BaitSteps,
     FishingConditionIcon[] Weather, FishingConditionIcon[] PreviousWeather, FishingItemView[] Predators,
     FishingConditionIcon? Hookset, FishingConditionIcon? Snagging, FishingConditionIcon? Lure,
-    FishingItemView? Folklore);
+    FishingItemView? Folklore)
+{
+    public FishingConditionIcon? Intuition { get; init; }
+    public FishingConditionIcon? FishEyes { get; init; }
+}
 
 internal sealed record OceanFishingView(string Area, string FishingSpot, string[] RouteNames, byte[] VisitTimes);
 

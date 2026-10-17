@@ -9,7 +9,7 @@ namespace DuckbillFisher.Plugin;
 internal sealed class FishingConditionPanel(ITextureProvider textures, FishingItemLinkService itemLinks)
 {
     public void Draw(FishingDetailView details, FishPreferencesView personal,
-        IReadOnlyDictionary<uint, FishingDetailView> related, bool includeRelated = true)
+        IReadOnlyDictionary<uint, FishingDetailView> related)
     {
         var rule = details.Rule;
         if (ImGui.BeginTable("Conditions", 2, ImGuiTableFlags.SizingFixedFit))
@@ -26,6 +26,8 @@ internal sealed class FishingConditionPanel(ITextureProvider textures, FishingIt
                     if (alternative > 0) ImGui.TextDisabled(UiText.Get(T.ConditionOr));
                     var item = details.BaitSteps[step][alternative];
                     Item(item, item.Name, $"Bait{step}/{item.Id}", personal);
+                    if (related.TryGetValue(item.Id, out var intermediate)) StepConditions(intermediate);
+                    else if (step > 0) ImGui.TextDisabled(UiText.Get(T.StepConditionsUnknown));
                 }
             }
             Label(T.DetailHookset);
@@ -52,39 +54,62 @@ internal sealed class FishingConditionPanel(ITextureProvider textures, FishingIt
             ImGui.EndTable();
         }
         if (itemLinks.Result is { } result && result.Key != T.ItemLinkPrinted) ImGui.TextWrapped(result.Display);
-        if (details.Predators.Length > 0)
-        {
-            UiWidgets.Heading(T.IntuitionHeading);
-            for (var index = 0; index < details.Predators.Length; index++)
-                Item(details.Predators[index], UiText.Get(T.PredatorLabel, details.Predators[index].Name, rule.Predators[index].Count), $"Predator{index}", personal);
-            ImGui.TextWrapped(rule.IntuitionSeconds is { } seconds
-                ? UiText.Get(T.IntuitionDuration, seconds) : UiText.Get(T.IntuitionDurationUnknown));
-        }
         if (rule.FolkloreRequired)
         {
             UiWidgets.Heading(T.DetailFolklore);
             if (details.Folklore is { } book) Item(book, book.Name, "Folklore", personal);
             else ImGui.TextWrapped(UiText.Get(T.FolkloreRequired));
         }
-        if (includeRelated)
-        {
-            foreach (var item in details.BaitSteps.SelectMany(step => step).Concat(details.Predators).DistinctBy(item => item.Id))
-            {
-                if (!related.TryGetValue(item.Id, out var detail)) continue;
-                if (!ImGui.CollapsingHeader($"{UiText.Get(T.RelatedConditions, item.Name)}###Related{item.Id}")) continue;
-                ImGui.PushID((int)item.Id);
-                Draw(detail, personal, related, includeRelated: false);
-                ImGui.PopID();
-            }
-        }
-        if (ImGui.CollapsingHeader(UiText.Label(T.DetailAdditional, "AdditionalConditions")))
-        {
-            ImGui.TextWrapped(UiText.Get(T.FishEyesSupport, new UiMessage(rule.FishEyesSupported ? T.ConditionSupported : T.ConditionUnsupported)));
-            ImGui.TextWrapped(UiText.Get(T.SourcePatchLabel, rule.Patch));
-            if (details.Spot is { } spot) ImGui.TextWrapped(UiText.Get(T.RecommendedSpot, spot.Zone, spot.Name));
-        }
+        ImGui.Spacing();
+        ImGui.TextDisabled(UiText.Get(T.PatchLabel, rule.Patch));
     }
 
+    public void DrawIntuition(FishingDetailView details, FishPreferencesView personal,
+        IReadOnlyDictionary<uint, FishingDetailView> related)
+    {
+        ImGui.Spacing();
+        ImGui.PushStyleColor(ImGuiCol.TableRowBg, new System.Numerics.Vector4(0.30f, 0.18f, 0.45f, 0.55f));
+        if (ImGui.BeginTable("IntuitionHighlight", 1, ImGuiTableFlags.RowBg | ImGuiTableFlags.Borders))
+        {
+            ImGui.TableNextRow();
+            ImGui.TableNextColumn();
+            UiWidgets.GameIcon(textures, details.Intuition?.IconId ?? 0, IconSize, UiText.Get(T.IntuitionRequired));
+            ImGui.SameLine();
+            ImGui.TextUnformatted(UiText.Get(T.IntuitionRequired));
+            ImGui.TextDisabled(UiText.Get(T.IntuitionAllRequired));
+            for (var index = 0; index < details.Predators.Length; index++)
+            {
+                var item = details.Predators[index];
+                Item(item, UiText.Get(T.PredatorLabel, item.Name, details.Rule.Predators[index].Count), $"Predator{index}", personal);
+                if (related.TryGetValue(item.Id, out var prey)) StepConditions(prey);
+            }
+            ImGui.TextWrapped(details.Rule.IntuitionSeconds is { } seconds
+                ? UiText.Get(T.IntuitionDuration, seconds) : UiText.Get(T.IntuitionDurationUnknown));
+            ImGui.EndTable();
+        }
+        ImGui.PopStyleColor();
+    }
+
+    private void StepConditions(FishingDetailView detail)
+    {
+        if (detail.Hookset is { } hookset)
+        {
+            UiWidgets.GameIcon(textures, hookset.IconId, IconSize, UiText.Get(T.HooksetLabel, hookset.Name));
+            ImGui.SameLine();
+        }
+        ImGui.TextDisabled(UiText.Get(T.StepBite, detail.Rule.Tug switch
+            { "light" => "!", "medium" => "!!", "heavy" => "!!!", _ => UiText.Get(T.ConditionUnknown) }));
+        if (!detail.Rule.ConditionsKnown) ImGui.TextWrapped(UiText.Get(T.ConditionsPartial));
+        else if (detail.Rule.StartHour != 0 || detail.Rule.EndHour != 24)
+            ImGui.TextDisabled(UiText.Get(T.TimeConditionLabel, EtClock(detail.Rule.StartHour), EtClock(detail.Rule.EndHour)));
+        if (detail.PreviousWeather.Length > 0)
+            ImGui.TextWrapped(UiText.Get(T.PreviousWeatherConditionLabel, string.Join(" / ", detail.PreviousWeather.Select(weather => weather.Name))));
+        if (detail.Weather.Length > 0)
+            ImGui.TextWrapped(UiText.Get(T.WeatherConditionLabel, string.Join(" / ", detail.Weather.Select(weather => weather.Name))));
+        if (detail.Rule.SnaggingRequired) Skill(detail.Snagging, T.SnaggingRequired);
+        if (detail.Rule.Lure.Length > 0) Skill(detail.Lure, detail.Rule.Lure == "Modest" ? T.LureModest : T.LureAmbitious);
+        if (detail.Predators.Length > 0) ImGui.TextDisabled(UiText.Get(T.IntuitionRequired));
+    }
     private static float IconSize => ImGui.GetTextLineHeightWithSpacing() * 1.35f;
     private static void Label(T key)
     {

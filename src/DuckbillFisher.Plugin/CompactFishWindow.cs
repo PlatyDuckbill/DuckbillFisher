@@ -15,6 +15,8 @@ internal sealed class CompactFishWindow : Window
     private readonly FishCollectionObserver collection;
     private readonly FishRowRenderer rows;
     private readonly Action<FishGuideRow> showDetail;
+    private bool jumpUpcoming;
+    private bool jumpTop;
     public Action? ShowMain { get; set; }
 
     public CompactFishWindow(CompactFishObserver observer, FishPreferences preferences, FishCollectionObserver collection,
@@ -38,15 +40,12 @@ internal sealed class CompactFishWindow : Window
     public override void Draw()
     {
         var personal = preferences.View;
-        var favorites = personal.Compact.FavoritesOnly;
-        ImGui.BeginDisabled(!personal.CanEdit);
-        if (ImGui.Checkbox(UiText.Label(T.CatalogFavoritesOnly, "CompactFavorites"), ref favorites))
-            preferences.SetCompact(personal.Compact with { FavoritesOnly = favorites });
-        ImGui.EndDisabled();
+        ImGui.TextDisabled(UiText.Get(T.CompactSharedFilters));
+        UiWidgets.Tooltip(UiText.Get(T.CompactSharedFiltersHint));
         ImGui.SameLine();
         if (UiWidgets.IconButton(FontAwesomeIcon.Cog, "CompactOptions", UiText.Get(T.CompactOptions))) ImGui.OpenPopup("CompactOptions");
         ImGui.SameLine();
-        if (UiWidgets.IconButton(FontAwesomeIcon.List, "OpenMain", UiText.Get(T.OpenMainWindow))) ShowMain?.Invoke();
+        if (UiWidgets.IconButton(FontAwesomeIcon.List, "OpenMain", UiText.Get(T.ToggleMainWindow))) ShowMain?.Invoke();
         ImGui.SetNextWindowSizeConstraints(new Vector2(ImGui.GetFontSize() * 23, 0),
             new Vector2(ImGui.GetFontSize() * 30, ImGui.GetMainViewport().WorkSize.Y * 0.8f));
         if (ImGui.BeginPopup("CompactOptions"))
@@ -62,10 +61,17 @@ internal sealed class CompactFishWindow : Window
         }
         if (personal.Error is { } error) ImGui.TextWrapped(error.Display);
         var view = observer.View;
+        ImGui.BeginDisabled(view.Upcoming.Length == 0);
+        if (ImGui.SmallButton(UiText.Label(T.JumpUpcoming, "CompactJumpUpcoming"))) jumpUpcoming = true;
+        ImGui.EndDisabled();
+        ImGui.SameLine();
+        if (ImGui.SmallButton(UiText.Label(T.JumpTop, "CompactJumpTop"))) jumpTop = true;
         if (ImGui.BeginChild("CompactRows"))
         {
+            if (jumpTop) { ImGui.SetScrollY(0); jumpTop = false; }
             if (view.Status.Key != T.CatalogLoaded) ImGui.TextWrapped(view.Status.Display);
             Group(T.CompactOpen, view.Open, personal);
+            if (jumpUpcoming) { ImGui.SetScrollY(ImGui.GetCursorPosY() - ImGui.GetStyle().WindowPadding.Y); jumpUpcoming = false; }
             Group(T.CompactUpcoming, view.Upcoming, personal);
             if (view.Status.Key == T.CatalogLoaded && view.Open.Length == 0 && view.Upcoming.Length == 0)
                 ImGui.TextWrapped(UiText.Get(T.CompactEmpty, personal.Compact.UpcomingMinutes));
@@ -82,15 +88,16 @@ internal sealed class CompactFishWindow : Window
         var clipper = ImGui.ImGuiListClipper();
         try
         {
-            clipper.Begin(entries.Length, FishRowRenderer.CompactHeight + ImGui.GetStyle().ItemSpacing.Y);
+            var height = FishRowRenderer.GetHeight(ImGui.GetContentRegionAvail().X, compact: true);
+            clipper.Begin(entries.Length, height + ImGui.GetStyle().ItemSpacing.Y);
             while (clipper.Step())
                 for (var i = clipper.DisplayStart; i < clipper.DisplayEnd; i++)
                 {
                     var entry = entries[i];
                     var state = UiText.Get(FishRowRenderer.CollectionKey(personal, observed, entry.Fish.FishParameterId));
-                    var place = entry.Fish.Details?.Spot?.Name ?? entry.Fish.Spots.FirstOrDefault()?.Name ?? UiText.Get(T.DetailLocationUnknown);
-                    if (rows.Draw(entry.Fish, FishRowRenderer.CompactHeight, false, state, place, entry.Window, now,
-                        favorite: personal.Favorites.Contains(entry.Fish.FishParameterId), compact: true)) showDetail(entry.Fish);
+                    var place = entry.Spot?.Name ?? UiText.Get(T.DetailLocationUnknown);
+                    if (rows.Draw(entry.Fish, height, false, state, place, entry.Window, now,
+                        usesOtherRegion: entry.UsesOtherRegion, favorite: personal.Favorites.Contains(entry.Fish.FishParameterId), compact: true)) showDetail(entry.Fish);
                 }
         }
         finally { clipper.Destroy(); }

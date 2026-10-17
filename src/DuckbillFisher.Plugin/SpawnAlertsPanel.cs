@@ -168,7 +168,7 @@ internal sealed class SpawnAlertsPanel(FishPreferences preferences, SpawnAlerts 
     private void DrawFavoriteRows(FishPreferencesView settings)
     {
         if (matches.Length == 0) ImGui.TextWrapped(UiText.Get(T.FavoritesEmpty));
-        var baseHeight = FishRowRenderer.Height;
+        var baseHeight = FishRowRenderer.GetHeight(ImGui.GetContentRegionAvail().X);
         var narrow = ImGui.GetContentRegionAvail().X < ImGui.GetFontSize() * 20;
         var rowHeight = baseHeight + ImGui.GetFrameHeightWithSpacing() * (narrow ? 2 : 1) + ImGui.GetTextLineHeightWithSpacing() + 8;
         var observed = collection.View;
@@ -188,7 +188,7 @@ internal sealed class SpawnAlertsPanel(FishPreferences preferences, SpawnAlerts 
                         var state = UiText.Get(FishRowRenderer.CollectionKey(settings, observed, fish.FishId));
                         var place = row.Ocean is { } ocean ? UiText.Get(T.OceanArea, ocean.Area) : row.Spots.FirstOrDefault()?.Name
                             ?? UiText.Get(row.IsDisplayable ? T.CatalogRowInfo : T.CatalogUnresolvedRow, row.FishParameterId);
-                        if (rows.Draw(row, baseHeight, selectedId == fish.FishId, state, place, fish.Window, now, favorite: true))
+                        if (rows.Draw(row, baseHeight, selectedId == fish.FishId, state, place, fish.Window, now))
                         {
                             resetDetailScroll |= selectedId != fish.FishId;
                             selectedId = fish.FishId;

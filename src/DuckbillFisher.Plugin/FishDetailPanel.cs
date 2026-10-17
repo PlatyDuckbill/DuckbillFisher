@@ -33,6 +33,17 @@ internal sealed class FishDetailPanel(FishPreferences preferences, ITextureProvi
             ImGui.EndTable();
         }
         DrawActions(fish, personal, observed);
+        if (fish.Details is { } headerDetails)
+        {
+            if (headerDetails.FishEyes is { } eyes)
+            {
+                UiWidgets.GameIcon(textures, eyes.IconId, ImGui.GetTextLineHeightWithSpacing() * 1.4f,
+                    UiText.Get(headerDetails.Rule.FishEyesSupported ? T.FishEyesAvailable : T.FishEyesUnavailable, eyes.Name));
+                ImGui.SameLine();
+            }
+            ImGui.TextWrapped(UiText.Get(headerDetails.Rule.FishEyesSupported ? T.FishEyesAvailable : T.FishEyesUnavailable,
+                headerDetails.FishEyes?.Name ?? UiText.Get(T.ConditionUnknown)));
+        }
         if (!personal.HasCharacter) ImGui.TextWrapped(UiText.Get(T.ManualPlayerRequired));
         if (personal.Error is { } error) ImGui.TextWrapped(error.Display);
 
@@ -40,15 +51,11 @@ internal sealed class FishDetailPanel(FishPreferences preferences, ITextureProvi
         if (fish.IsOceanFishing) DrawOcean(fish.Ocean);
         else
         {
-            UiWidgets.Icon(FontAwesomeIcon.Clock);
-            ImGui.SameLine();
             catalog.Windows.TryGetValue(fish.FishParameterId, out var window);
-            ImGui.TextWrapped(window is null ? UiText.Get(T.ForecastUnknown) : FishRowRenderer.FormatWindow(window, DateTimeOffset.UtcNow));
-            if (window?.Start is { } start && window.End is { } end)
-                ImGui.TextDisabled(UiText.Get(T.WindowLocalRange, start.ToLocalTime(), end.ToLocalTime()));
-            ImGui.TextWrapped(UiText.Get(T.ForecastBriefScope));
-            UiWidgets.Tooltip(UiText.Get(T.ForecastScope));
+            FishingWindowPanel.Draw(window, DateTimeOffset.UtcNow);
         }
+
+        if (fish.Details is { Predators.Length: > 0 } intuitionDetails) conditions.DrawIntuition(intuitionDetails, personal, catalog.RelatedDetails);
 
         UiWidgets.Heading(T.DetailLocations);
         foreach (var spot in fish.Spots)

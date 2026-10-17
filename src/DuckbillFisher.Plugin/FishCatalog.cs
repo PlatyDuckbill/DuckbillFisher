@@ -151,6 +151,7 @@ internal sealed class FishCatalog : IDisposable
                 var items = dataManager.GetExcelSheet<Item>()!;
                 var weathers = dataManager.GetExcelSheet<Weather>()!;
                 var actions = dataManager.GetExcelSheet<Lumina.Excel.Sheets.Action>()!;
+                var statuses = dataManager.GetExcelSheet<Status>();
                 var oceanSpots = LoadOceanSpots();
                 var rules = FishingData.Dataset.Fish.ToDictionary(rule => rule.ItemId);
                 var notes = dataManager.GetExcelSheet<FishingNoteInfo>()!.Where(note => note.Item.RowId != 0)
@@ -221,7 +222,13 @@ internal sealed class FishCatalog : IDisposable
                             currentWeather.Concat(previousWeather).All(value => !string.IsNullOrWhiteSpace(value.Name)))
                             details = new(rule, sourceSpot.View, baits, currentWeather, previousWeather, predators, hookset,
                                 Skill(rule.SnaggingRequired ? 4100u : 0),
-                                Skill(rule.Lure switch { "Modest" => 37595u, "Ambitious" => 37594u, _ => 0 }), folklore);
+                                Skill(rule.Lure switch { "Modest" => 37595u, "Ambitious" => 37594u, _ => 0 }), folklore)
+                            {
+                                // KR Status 568 and Action 4105 inspected in the installed client on 2026-10-17.
+                                Intuition = rule.Predators.Length > 0 && statuses?.GetRowOrDefault(568) is { } intuition
+                                    ? new(568, intuition.Name.ExtractText(), intuition.Icon) : null,
+                                FishEyes = Skill(4105),
+                            };
                     }
                     var grade = FishGrade.Unknown;
                     var timing = FishTimeRestriction.Unknown;

@@ -1,6 +1,6 @@
 # 세션 인수인계
 
-갱신: 2026-10-17 · 0.1.27.0 정규 반영 · UI/UX 인게임 검증 대기
+갱신: 2026-10-17 · 0.1.28.0 별도 빌드 · 새 언로드 확인 대기
 
 ## 재개 순서
 
@@ -22,14 +22,14 @@
 ## 이번 UI 구조와 정책
 
 - 메인: 어종 목록/즐겨찾기 관리/설정. 목록/즐겨찾기의 클릭은 오른쪽 상세 패널을 갱신한다.
-- 간략: 메인 버튼 또는 `/duckbillfisher compact`로 열기. 현재 출현 종료순→예정 시작순, 기본 즐겨찾기/30분 이내. 전체 전환/1~180분 설정 가능.
+- 간략: 메인 버튼 또는 `/duckbillfisher compact`로 열기. 현재 출현 종료순→예정 시작순/기본 30분 이내·1~180분 설정. 0.1.28.0은 메인 필터를 공유하고 독립 즐겨찾기 체크를 제거했다.
 - 독립 상세: 간략 창 클릭 시 하나를 재사용한다. 메인을 열지 않으며 세 창은 각각 닫을 수 있다.
-- 간략 필터와 메인 필터/알림 대상은 독립이다. 상시/먼바다/예측 미확인은 간략 목록에서 제외한다. 개인 준비 충족을 확정하지 않는다.
+- 0.1.28.0 사용자 결정: 간략과 메인은 일반 필터 전체 공유, 검색어/예정 분만 별도. CatalogFilter 공통 판정이며 알림 대상은 독립이다. 상시/먼바다/예측 미확인은 간략에서 제외한다.
 - 개발자 도구는 설정에서 켠다. 진단 표시만 제어하고 수집/예측/알림 서비스는 그대로 작동한다. 끌 때 진단용 두 필터를 해제한다.
 - 수집 상태는 메뉴 하나에서 수동 지정하고 수동일 때만 복귀 버튼 표시. 자동 접미사 없음/수동 접미사 유지. Unknown은 미수집이 아니다.
-- schema v9: v1~v8 허용, 언어/개발자 모드/간략 설정 추가. v8의 자동 즐겨찾기 해제 사용자 선택 보존. preferences/v7만 진단 필드 추가.
+- 수정본 schema v10: v1~v9 허용, 기존 일반 필터/예정 분 보존, 과거 간략 FavoritesOnly 무시. preferences/v8에 CompactFilters=SharedCatalog 표시. 수집/알림/자동 해제 선택은 그대로다.
 - `FishDetailPanel` 공통 상세, `UiWidgets` 아이콘/배너, `CompactFishObserver` Framework 1초 필터/수명 관리. Draw에서 전체 검색/장기 예측/파일 읽기 없음.
-- 다음은 세 창/작은 창 배치/아이콘과 상태 조작의 대표 인게임 확인이다. 정상 여부와 문제 화면을 먼저 받는다.
+- 0.1.28.0은 메인 토글/폭별 배치/예정 이동/직감 아이콘·강조/날짜·미끼 단계/중복 별·한국어 용어 정리를 포함한다. 별도 빌드/한영 447키 검사 통과. 새 언로드 확인을 요청했으며 정규 DLL은 0.1.27.0이다. 응답 후 정규 빌드/버전 확인이 다음 작업이다. [변경/확인 순서](validation/MVP-01-UI-FEEDBACK.md).
 
 ## 일반 구현 빌드
 
@@ -40,7 +40,7 @@ dotnet build src/DuckbillFisher.Plugin/DuckbillFisher.Plugin.csproj --no-restore
 pwsh -NoLogo -NoProfile -File scripts/check-localization.ps1
 ```
 
-- 별도 출력은 `-p:OutputPath=C:/Users/hyogu/Downloads/DuckbillFisher/.cache/ui-redesign-build/` 추가.
+- 별도 출력은 `-p:OutputPath=C:/Users/hyogu/Downloads/DuckbillFisher/.cache/ui-feedback-build/` 추가.
 - PowerShell 5.1 파일 읽기는 `-Encoding UTF8`. 이번 환경에서 pwsh/정규 빌드/git 쓰기 모두 실행됐다.
 - 실제 주 DLL·Core·ko 리소스 DLL·manifest 확인 후 파일을 명시해 스테이징/커밋한다. 빌드 결과/캐시/사용자 파일 제외.
 

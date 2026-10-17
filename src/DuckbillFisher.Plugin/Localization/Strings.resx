@@ -142,9 +142,9 @@
   <data name="IntuitionDuration" xml:space="preserve"><value>Intuition duration: {0} seconds</value></data>
   <data name="FolkloreRequired" xml:space="preserve"><value>The relevant folklore book is required.</value></data>
   <data name="ForecastAlways" xml:space="preserve"><value>No time or weather restriction</value></data>
-  <data name="ForecastOpen" xml:space="preserve"><value>Time/weather window open · closes in {0}</value></data>
-  <data name="ForecastOpenNoEnd" xml:space="preserve"><value>Time/weather window open · end not found within the search horizon</value></data>
-  <data name="ForecastUpcoming" xml:space="preserve"><value>Time/weather window in {0} · local time {1}</value></data>
+  <data name="ForecastOpen" xml:space="preserve"><value>Available now · ends in {0}</value></data>
+  <data name="ForecastOpenNoEnd" xml:space="preserve"><value>Available now</value></data>
+  <data name="ForecastUpcoming" xml:space="preserve"><value>Starts in {0} · {1}</value></data>
   <data name="ForecastEnd" xml:space="preserve"><value>Ends: local time {0}</value></data>
   <data name="ForecastNotFound" xml:space="preserve"><value>No matching window found within the next seven real days.</value></data>
   <data name="ForecastUnknown" xml:space="preserve"><value>Availability forecast is not available.</value></data>
@@ -432,9 +432,28 @@ In fish log only: {5}</value></data>
   <data name="OpenMainWindow" xml:space="preserve"><value>Open main window</value></data>
   <data name="OpenCompactWindow" xml:space="preserve"><value>Open compact view</value></data>
   <data name="CompactHorizon" xml:space="preserve"><value>Upcoming minutes</value></data>
-  <data name="CompactScope" xml:space="preserve"><value>Open windows, then upcoming windows within 1–180 minutes. Uses its own favorites filter. Always available, unknown, and ocean fish are excluded. This is not a guarantee of catchability.</value></data>
+  <data name="CompactScope" xml:space="preserve"><value>Uses the main catalog filters. Lists open windows, then upcoming windows within 1–180 minutes. Search is separate. Always available, unknown and ocean fish are excluded.</value></data>
   <data name="CompactOpen" xml:space="preserve"><value>Open now · {0}</value></data>
   <data name="CompactUpcoming" xml:space="preserve"><value>Upcoming · {0}</value></data>
-  <data name="CompactEmpty" xml:space="preserve"><value>No limited windows open or starting within {0} minutes. Add favorites, switch to all fish, or extend the time range.</value></data>
+  <data name="CompactEmpty" xml:space="preserve"><value>No matching fish open or starting within {0} minutes. Adjust the main filters or extend this window&apos;s range.</value></data>
   <data name="FavoritesEmpty" xml:space="preserve"><value>No matching favorites. Add fish with the star in the catalog, or clear your search.</value></data>
+  <data name="CompactSharedFilters" xml:space="preserve"><value>Main filters</value></data>
+  <data name="CompactSharedFiltersHint" xml:space="preserve"><value>Uses the main catalog collection, region, expansion, grade, time and favorites filters. Search and this window&apos;s upcoming range are separate.</value></data>
+  <data name="ToggleMainWindow" xml:space="preserve"><value>Show / hide main window</value></data>
+  <data name="JumpUpcoming" xml:space="preserve"><value>Upcoming ↓</value></data>
+  <data name="JumpTop" xml:space="preserve"><value>Top ↑</value></data>
+  <data name="IntuitionRequired" xml:space="preserve"><value>Fisher&apos;s Intuition required</value></data>
+  <data name="IntuitionAllRequired" xml:space="preserve"><value>Catch all of the following</value></data>
+  <data name="FishEyesAvailable" xml:space="preserve"><value>{0} supported</value></data>
+  <data name="FishEyesUnavailable" xml:space="preserve"><value>{0} not supported</value></data>
+  <data name="WindowOpen" xml:space="preserve"><value>Available now</value></data>
+  <data name="WindowUpcoming" xml:space="preserve"><value>Upcoming</value></data>
+  <data name="WindowToday" xml:space="preserve"><value>Today {0:HH:mm}</value></data>
+  <data name="WindowTomorrow" xml:space="preserve"><value>Tomorrow {0:HH:mm}</value></data>
+  <data name="WindowOtherDay" xml:space="preserve"><value>{0:MM/dd HH:mm}</value></data>
+  <data name="WindowSameDayRange" xml:space="preserve"><value>{0} – {1:HH:mm}</value></data>
+  <data name="WindowCrossDayRange" xml:space="preserve"><value>{0} → {1}</value></data>
+  <data name="PatchLabel" xml:space="preserve"><value>Patch {0:0.0#}</value></data>
+  <data name="StepBite" xml:space="preserve"><value>Bite {0}</value></data>
+  <data name="StepConditionsUnknown" xml:space="preserve"><value>Hookset not confirmed</value></data>
 </root>

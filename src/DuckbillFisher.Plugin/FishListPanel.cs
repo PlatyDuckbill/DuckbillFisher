@@ -49,6 +49,8 @@ internal sealed class FishListPanel(FishCatalog catalog, ITextureProvider textur
     private readonly FishGeographyPanel geography = new();
     private bool restoredSettings;
     private bool resetDetailScroll;
+    private bool jumpUpcoming;
+    private int upcomingIndex = -1;
 
     public bool DeveloperMode { get; set; }
     public void Draw()
@@ -161,8 +163,16 @@ internal sealed class FishListPanel(FishCatalog catalog, ITextureProvider textur
         // Rebuild only for data or user input changes, never on every frame or scroll step.
         if (changed || refresh || (sort == 2 && lastForecastRevision != view.ForecastRevision))
             UpdateMatches(view, personal, observed, location, changed);
+        if (lastForecastRevision != view.ForecastRevision)
+            upcomingIndex = Array.FindIndex(matches, row => view.Windows.GetValueOrDefault(row.FishParameterId)?.Kind == FishingWindowKind.Upcoming);
         lastForecastRevision = view.ForecastRevision;
         ImGui.TextDisabled(UiText.Get(T.ResultCount, matches.Length));
+        ImGui.SameLine();
+        ImGui.BeginDisabled(upcomingIndex < 0);
+        if (ImGui.SmallButton(UiText.Label(T.JumpUpcoming, "CatalogJumpUpcoming"))) jumpUpcoming = true;
+        ImGui.EndDisabled();
+        ImGui.SameLine();
+        if (ImGui.SmallButton(UiText.Label(T.JumpTop, "CatalogJumpTop"))) resetScroll = true;
         if (DeveloperMode && unresolvedCount > 0)
             ImGui.TextWrapped(UiText.Get(T.CatalogUnresolvedCount, unresolvedCount));
         ImGui.Separator();
@@ -246,7 +256,12 @@ internal sealed class FishListPanel(FishCatalog catalog, ITextureProvider textur
             }
             if (matches.Length == 0)
                 ImGui.TextWrapped(UiText.Get(T.CatalogNoMatches));
-            var rowHeight = FishRowRenderer.Height;
+            var rowHeight = FishRowRenderer.GetHeight(ImGui.GetContentRegionAvail().X);
+            if (jumpUpcoming)
+            {
+                if (upcomingIndex >= 0) ImGui.SetScrollY(upcomingIndex * (rowHeight + ImGui.GetStyle().ItemSpacing.Y));
+                jumpUpcoming = false;
+            }
             var now = DateTimeOffset.UtcNow;
             var clipper = ImGui.ImGuiListClipper();
             try
@@ -268,16 +283,11 @@ internal sealed class FishListPanel(FishCatalog catalog, ITextureProvider textur
         FishingRegionView location, bool reset)
     {
         var term = search.Trim();
-        var localFish = RegionFish(view, location);
-        var scope = view.Rows.Where(row => (!inLogOnly || row.IsInLog) &&
-            (!currentRegionOnly || localFish.Contains(row.FishParameterId)) &&
-            (!geography.HasSelection || geography.Matches(row, location, currentRegionOnly))).ToArray();
+        var filter = new CatalogFilter(CurrentCatalogSettings());
+        var scope = view.Rows.Where(row => filter.MatchesScope(row, location)).ToArray();
         unresolvedCount = scope.Count(row => !row.IsDisplayable);
         var filtered = scope.Where(row => (showUnresolved || row.IsDisplayable) && (!detailsOnly || row.Details is not null) &&
-            (includeOceanFish || !row.IsOceanFishing) &&
-            FishClassificationFilter.Matches(row.Grade, row.TimeRestriction, timeRestrictedOnly, GradeChoices[gradeVisibility]) &&
-            (!favoritesOnly || personal.Favorites.Contains(row.FishParameterId)) &&
-            CollectionFilter.Matches(personal.Collection(row.FishParameterId, observed), CollectionChoices[collectionVisibility]) &&
+            filter.Matches(row, personal, observed, location) &&
             (term.Length == 0 || row.Name.Contains(term, StringComparison.OrdinalIgnoreCase) ||
              row.Ocean?.Area.Contains(term, StringComparison.OrdinalIgnoreCase) == true ||
              row.Spots.Any(spot => spot.Name.Contains(term, StringComparison.OrdinalIgnoreCase) || spot.Zone.Contains(term, StringComparison.OrdinalIgnoreCase)) ||
@@ -291,6 +301,7 @@ internal sealed class FishListPanel(FishCatalog catalog, ITextureProvider textur
                 .ThenBy(row => row.Name, NameComparer).ThenBy(row => row.FishParameterId),
             _ => filtered.OrderBy(row => row.FishParameterId),
         }).ToArray();
+        upcomingIndex = Array.FindIndex(matches, row => view.Windows.GetValueOrDefault(row.FishParameterId)?.Kind == FishingWindowKind.Upcoming);
         if (selectedId is { } selected && !matches.Any(row => row.FishParameterId == selected))
         {
             selectedId = null;
@@ -355,12 +366,12 @@ internal sealed class FishListPanel(FishCatalog catalog, ITextureProvider textur
                 Append($"SelectedForecast={forecast?.Kind.ToString() ?? "Unknown"}; ForecastAt={view.ForecastAt:O}; Start={forecast?.Start:O}; End={forecast?.End:O}; CopiedAt={DateTimeOffset.UtcNow:O}");
             }
         }
-        report.AppendLine("DuckbillFisher MVP-01/preferences/v7");
+        report.AppendLine("DuckbillFisher MVP-01/preferences/v8");
         Append($"Ready={personal.HasCharacter}; Editable={personal.CanEdit}; Session={personal.Session}; Favorites={personal.Favorites.Count}");
         Append($"ManualCaught={personal.ManualCaught.Count(pair => pair.Value)}; ManualUncaught={personal.ManualCaught.Count(pair => !pair.Value)}");
         Append($"CollectionFilter={CollectionChoices[collectionVisibility]}; FavoritesOnly={favoritesOnly}; Sort={sort}; Displayed={matches.Length}");
         Append($"CatalogSaved={personal.Catalog.Matches(CurrentCatalogSettings())}; SettingsScope=Shared; SearchPersisted=False; DiagnosticsPersisted=False");
-        Append($"InterfaceLanguage={personal.Language}; DeveloperMode={personal.DeveloperMode}; CompactFavoritesOnly={personal.Compact.FavoritesOnly}; CompactUpcomingMinutes={personal.Compact.UpcomingMinutes}");
+        Append($"InterfaceLanguage={personal.Language}; DeveloperMode={personal.DeveloperMode}; CompactFilters=SharedCatalog; CompactFavoritesOnly={personal.Catalog.FavoritesOnly}; CompactUpcomingMinutes={personal.Compact.UpcomingMinutes}");
         Append($"InLogOnly={inLogOnly}; IncludeOceanFish={includeOceanFish}; DetailsOnly={detailsOnly}; ShowUnresolved={showUnresolved}");
         var location = region.View;
         Append($"CurrentRegionOnly={currentRegionOnly}; Territory={location.TerritoryId}; RegionState={location.State}; RegionFish={RegionFish(catalog.View, location).Count}");

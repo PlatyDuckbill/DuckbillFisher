@@ -104,3 +104,5 @@ Plugin의 `AssemblyName`은 `DuckbillFisher`다. 주 DLL은 `DuckbillFisher.dll`
 `FishDetailPanel`은 메인 목록/즐겨찾기의 오른쪽과 단일 `FishDetailWindow`에서 공유한다. 화면은 기존 큐를 통해서만 수집 지정/지도/링크를 요청한다. 독립 상세는 세션 변경 시 선택을 비운다. `CompactFishObserver`는 창이 열릴 때만 Framework에서 단조 시계 1초 간격으로 기존 예측을 필터링하며, `CompactFishWindow`는 게시된 배열의 보이는 행만 그린다. 닫기/재오픈/Dispose에서 갱신 중지/표본 초기화/이벤트 해제를 수행한다. 예측 알고리즘과 알림 예약은 가져오지 않는다.
 
 schema v9의 언어·개발자 옵션·간략 설정은 기존 preferences 저장 큐에 합쳐 저장하며 v1~v8을 허용한다. v8에서 저장한 자동 즐겨찾기 해제 선택은 유지한다. 공통 아이콘/배너는 `UiWidgets`, 조건 정렬은 `FishingConditionPanel`, 목록의 아이콘 요약 캐시는 `FishRowRenderer`가 담당한다. 상세 근거는 [이번 구현 기록](validation/MVP-01-UI-UX-REDESIGN.md)에 있다.
+
+0.1.28.0의 `CatalogFilter`는 메인/간략의 일반 조건을 공유하며 검색·진단·정렬과 간략 예정 범위는 각 화면에 남긴다. 캐릭터 수집 상태는 기존 세션/수동 우선 판정으로 전달한다. `FishingWindowPanel`은 날짜/색상/문구만 담당한다. 미끼 단계는 RelatedDetails의 짧은 사실만 표시하고 전체 상세를 재귀 렌더링하지 않는다. schema v10/preferences/v8과 기존 설정 보존은 [피드백 구현](validation/MVP-01-UI-FEEDBACK.md)을 따른다.
