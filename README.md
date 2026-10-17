@@ -10,6 +10,7 @@ A Dalamud fishing companion for **FFXIV Korea**. Find your next fish, keep track
 
 - Browse fish with game icons, search, collection filters, regions, grades, and saved filter presets.
 - Check baits, mooch chains, time/weather conditions, and upcoming availability. Open fishing spots directly on the map.
+- Prepare first baits for favorites or the full filtered list, with inventory counts and unresolved fish listed separately. Find owned baits with page markers and highlights in the game's bait UI; change pages and select baits yourself.
 - Track favorites with local chat alerts and optional sound effects.
 - Use the quick list for fish available now or coming up soon.
 - Follow your casts with a timer, bait snapshots, and character-specific fishing records.
