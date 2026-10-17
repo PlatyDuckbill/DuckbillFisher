@@ -71,3 +71,4 @@
 - 본인 PC의 설치가 현재15.0.3.7로 바뀌었고 dev/버전 폴더의 세 DLL MVID/SHA256이 위 고정 배포와 모두 같음을 직접 확인했다. 본인 Dalamud 로그도15.0.3.7/f3eeb5e18을 기록한다. 배포 저장소의 최신 revision은 여전히a96111f9다.
 - 현재 Matches는 MVID 불일치·Assembly.Location 없음·파일 SHA256 불일치를 모두 false로 축약한다. 따라서 친구 로그만으로 실제 파일 차이와 로드 방식 차이를 구분할 수 없다. [Assembly.Location 문서](https://learn.microsoft.com/en-us/dotnet/api/system.reflection.assembly.location?view=net-10.0)는 바이트 배열 로드에서 빈 경로를 반환한다고 설명한다. 이는 조사 후보이며 친구의 로드 방식이 그렇다고 확인한 것은 아니다.
 - 친구의 실행 경로에 있는 세 DLL과 version.json을 받아 `.cache/friend-runtime/`에서 비교하도록 요청했다. 현재 폴더는 준비했으며 파일은 아직 없다. 실제 파일의 출처·MVID/SHA·필드/메서드 IL을 대조한 뒤 수정 범위를 정한다. 친구 파일/캐시/게임 데이터는 Git에 넣지 않는다. 현재 단계에서 가드 완화·새 버전 빌드/게시·추가 테스트는 하지 않았다.
+- 이후 Downloads/15.0.3.7.zip에서 사용자 파일을 확보해 dal4kr 고정 배포와 동일함을 확인했다.8개 사용 타입/IL 대조 후 복수 조합 지원0.2.6.0을 구현했다. 새 진행 상태는 [dal4kr 근거/검증](NATIVE-RUNTIME-DAL4KR.md)을 따른다.

@@ -1,6 +1,6 @@
 # 세션 인수인계
 
-갱신: 2026-10-17 · 공개0.2.5.0 본인 정상 / 친구 동일 버전의 모듈 차단 조사 중
+갱신: 2026-10-17 · 친구 dal4kr 빌드 확인 / 수정0.2.6.0 인게임 확인 대기
 
 ## 재개 순서
 
@@ -8,10 +8,12 @@
 2. UI 작업은 [합의된 구조](UI-UX-REDESIGN.md), [분석·구현·확인 순서](validation/MVP-01-UI-UX-REDESIGN.md)를 읽는다.
 3. 큰 디자인 변경은 선택지/차이를 질문하고 답변 후 구현한다. 기존 세 화면+별도 타이머/팝업/메인 히스토리 탭 추가는 사용자 합의 완료다.
 4. 사용자 `tmp_note.md`는 읽기·수정·스테이징하지 않는다. 전체 로그/과거 이력은 기본 요청하지 않는다.
-5. [친구0.2.5.0 추가 실패](validation/NATIVE-RUNTIME-15.0.3.7.md#친구0250의-추가-실패-조사-중)를 이어간다. 공개 업데이트/본인 정상 확인 뒤 친구는 같은15.0.3.7/게임 빌드에서도 모듈3개 모두 mismatch다. 본인 dev/버전 폴더 파일은 알려진 프로필과 일치한다. 현재 진단은 MVID/경로 없음/SHA 불일치를 구분 못하므로 친구 실제 DLL3개/version.json을 `.cache/friend-runtime/`에 요청했다. 준비 폴더는 아직 비어 있다. 같은 전체 로그 재요청/추측 가드 완화 금지.
+5. [dal4kr 지원0.2.6.0](validation/NATIVE-RUNTIME-DAL4KR.md)을 이어간다. 사용자 파일은 Downloads/15.0.3.7.zip에 있었고 필요한4개만 `.cache/friend-runtime/`에 추출했다. 친구 모듈은 dal4kr의 고정 공개 배포와 같고8개 네이티브 타입/IL이 기존wasdcxz와 동일하다. 복수 배포 조합을 정확히 대조하는0.2.6.0 구현 완료. 파일/로그 반복 요청이나 단순 버전 허용 금지.
+
+- 새 후보 `.cache/release-validation/0.2.6.0/DuckbillFisher.dll`, ZIP `artifacts/share/0.2.6.0/`. 두 배포 참조 Debug/최저15.0.3.6 참조 Release 모두 경고0/오류0·557키·패키지 검사 통과. 새 인게임 확인 대기/테스트 없음. 확인 뒤 새 릴리스/기존 JSON 업데이트를 진행하고 친구는 정상 Dalamud 업데이트로 확인한다. 현재 공개 버전은0.2.5.0이며 정규/현재 로드 DLL 교체 없음.
 
 - 확인 DLL `.cache/release-validation/0.2.5.0/DuckbillFisher.dll`, 패키지 `artifacts/share/0.2.5.0/`. 기존/새 참조 Debug와 기존 참조 Release 경고0/오류0·한영557키·패키지 검사 통과. 사용자 ‘잘 됨’으로 도감/수집·타이머 대표 확인 완료, 확인한 ZIP 그대로 게시한다. 실제 친구15.0.3.7 업데이트 후 결과는 별도 확인 대기/테스트 없음. 정규·현재 로드 파일 직접 교체/기존 Release 덮어쓰기 없음.
-- 구현d5c5899/확인638b77d·v0.2.5.0 태그/Release415761624·JSON b2d2cab 게시 완료. 같은 공유 URL0.2.5.0/HTTP200·ZIP/아이콘/설명 일치·CI 실행0 확인. 친구 업데이트 후 실제 결과는 차단 지속으로 확인했다. 런타임 파일은 실제 근거 대조 전까지 추가 허용하지 않았고 새 DLL 빌드·게시도 아직 없다.
+- 구현d5c5899/확인638b77d·v0.2.5.0 태그/Release415761624·JSON b2d2cab 게시 완료. 같은 공유 URL0.2.5.0/HTTP200·ZIP/아이콘/설명 일치·CI 실행0 확인. 친구의 차단 지속은 실제 dal4kr 파일 대조 후 위0.2.6.0 후보로 대응했다. 새 버전 원격 게시와 친구의 실제 동작 확인은 대기다.
 
 - 최종 게시 준비물: `artifacts/share/0.2.4.0-final/` ZIP/체크섬/후보 JSON. 설명 가독성만 LF/글머리표로 수정하고 Packager 대상만 재실행했다. 기존 확인 ZIP/추출본은 보존, 최종 ZIP과 Description만 다르고 나머지5파일/다른 필드는 동일하다. 빌드/한영555키/내장 자료 검사 유지, 한영 검사 재통과, 정규 Debug 교체/테스트 없음.
 - source eb8c3ce/v0.2.4.0 태그/Release415750305·설치 JSON d0c2c50 정상 게시 완료. [공유 URL](https://raw.githubusercontent.com/PlatyDuckbill/DuckbillFisher/main/repo/pluginmaster.json)은 익명 HTTP200/1항목/API15/0.2.4.0/설명15줄/manifest 일치, 설치·업데이트·아이콘200/ZIP·원본 이미지 해시 일치다. 이번 CI 실행0건(`[skip ci]`)/테스트 없음. gh 없이 credential manager 인증을 메모리에서만 사용했다. tmp_note.md/자격 증명/빌드 산출물 스테이징 금지.
@@ -20,7 +22,7 @@
 
 - 작업 폴더: `C:\Users\hyogu\Downloads\DuckbillFisher`.
 - 게임: `C:\Program Files (x86)\FINAL FANTASY XIV - KOREA\game`, KR 빌드 2026.10.06.0000.0000.
-- 참조: `C:\Users\hyogu\AppData\Roaming\XIVLauncherKR\addon\Hooks\dev`, Dalamud 15.0.3.6/API15.
+- 현재 로컬 참조: `C:\Users\hyogu\AppData\Roaming\XIVLauncherKR\addon\Hooks\dev`, wasdcxz Dalamud15.0.3.7/API15. Release 최저 참조15.0.3.6은 `.cache/compat-15.0.3.6/full/`에 고정 원본으로 복구했다.
 - 개발 DLL: `C:\Users\hyogu\Downloads\DuckbillFisher\src\DuckbillFisher.Plugin\bin\Debug\DuckbillFisher.dll`.
 - 현재 정규0.2.4.0: 별도/정규 빌드 경고·오류0, 한영555키/형식 인자, Plugin/Core/ko/manifest 버전 및 별도/정규 SHA256 일치 확인. 테스트 미실행.
 - 이전 언로드 확인으로 정규 반영 후 ‘확인 완료’로 대표 확인을 받았다. ‘간이 목록’은 사용자 선택 명칭이다. 이번 배포에서는 Debug 파일을 교체하지 않고 ZIP 추출 Release를 확인받았으며 설명만 수정해 원격 게시했다. 현재 추출본 개발 등록이 있을 수 있으므로 배포 설치 전에 언로드/등록 비활성화가 필요하다.
