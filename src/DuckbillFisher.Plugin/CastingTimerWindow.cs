@@ -52,13 +52,18 @@ internal sealed class CastingTimerWindow : Window
         ImGui.EndDisabled();
         DrawFishPopup(view);
 
-        var bait = view.Native?.EquippedBait;
+        var timed = view.Active ?? view.CurrentRecords.FirstOrDefault();
+        var usesFishBait = timed?.BaitKind is FishingBaitKind.Mooch or FishingBaitKind.Swimbait;
+        var bait = usesFishBait ? timed?.BaitItemId : view.Native?.EquippedBait;
         if (bait is { } id && view.Items.TryGetValue(id, out var item))
         {
             UiWidgets.GameIcon(textures, item.IconId, ImGui.GetTextLineHeightWithSpacing(), item.Name);
             ImGui.SameLine();
         }
-        ImGui.TextUnformatted(UiText.Get(T.TimerEquippedBait, FishingTimeText.Item(view, bait)));
+        var baitLabel = bait is > 0 ? FishingTimeText.Item(view, bait) : usesFishBait
+            ? UiText.Get(timed?.BaitKind == FishingBaitKind.Swimbait ? T.HistorySwimbaitUnknown : T.HistoryMoochUnknown)
+            : UiText.Get(T.ConditionUnknown);
+        ImGui.TextUnformatted(UiText.Get(usesFishBait ? T.TimerCastBait : T.TimerEquippedBait, baitLabel));
         var phase = view.Native?.Phase;
         var label = view.State switch
         {
@@ -69,7 +74,6 @@ internal sealed class CastingTimerWindow : Window
             _ => phase switch { 1 => T.TimerCasting, 12 => T.TimerWaiting, 5 => T.TimerBite, 6 => T.TimerHook,
                 2 => T.TimerReturning, 3 => T.TimerStopping, 4 => T.TimerRodReady, 0 => T.TimerIdle, _ => T.TimerObserving },
         };
-        var timed = view.Active ?? view.CurrentRecords.FirstOrDefault();
         var elapsed = timed is not null && FishingTimeText.DisplaySeconds(timed, view, tracker.Now) is { } seconds
             ? FishingTimeText.Elapsed(TimeSpan.FromSeconds(seconds)) : "—";
         ImGui.TextUnformatted(UiText.Get(T.TimerCastLine, new UiMessage(label), elapsed));

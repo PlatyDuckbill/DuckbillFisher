@@ -559,8 +559,9 @@ In fish log only: {5}</value></data>
   <data name="TripInProgress" xml:space="preserve"><value>In progress</value></data>
   <data name="TripEnded" xml:space="preserve"><value>Ended</value></data>
   <data name="TripLocationTitle" xml:space="preserve"><value>{0} · {1}</value></data>
-  <data name="TripSummary" xml:space="preserve"><value>{0} · {1} casts · {2} caught · {3} cancelled/interrupted · {4} unknown · {5}</value></data>
+  <data name="TripSummary" xml:space="preserve"><value>{0} · {1} casts · {2} caught · {3} failed · {4} cancelled/interrupted · {5} unknown · {6}</value></data>
   <data name="TripDeleteTitle" xml:space="preserve"><value>Delete fishing records</value></data>
   <data name="TripDeleteQuestion" xml:space="preserve"><value>Delete {0} selected fishing records? This cannot be undone.</value></data>
   <data name="TimerLastSpot" xml:space="preserve"><value>Last fishing spot · {0}</value></data>
+  <data name="TimerCastBait" xml:space="preserve"><value>Cast bait: {0}</value></data>
 </root>

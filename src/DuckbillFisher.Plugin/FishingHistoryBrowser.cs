@@ -97,7 +97,7 @@ internal sealed class FishingHistoryBrowser(FishingTracker tracker, FishCatalog 
     }
     private static string Date(FishingTripSummary trip) => (trip.FirstCastUtc ?? trip.StartedUtc)?.ToLocalTime().ToString("g", UiText.Culture) ?? UiText.Get(T.HistoryStartUnknown);
     private static string Summary(FishingTripSummary trip) => UiText.Get(T.TripSummary, Date(trip), trip.Casts, trip.Caught,
-        trip.Cancelled + trip.Interrupted, trip.Unknown, new UiMessage(trip.IsActive ? T.TripInProgress : T.TripEnded));
+        trip.Failed, trip.Cancelled + trip.Interrupted, trip.Unknown, new UiMessage(trip.IsActive ? T.TripInProgress : T.TripEnded));
     private void Confirm(int session, Guid[] ids)
     {
         deleteSession = session;

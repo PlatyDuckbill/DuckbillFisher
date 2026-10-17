@@ -559,8 +559,9 @@
   <data name="TripInProgress" xml:space="preserve"><value>진행 중</value></data>
   <data name="TripEnded" xml:space="preserve"><value>종료</value></data>
   <data name="TripLocationTitle" xml:space="preserve"><value>{0} · {1}</value></data>
-  <data name="TripSummary" xml:space="preserve"><value>{0} · 시전 {1}회 · 성공 {2}회 · 회수·중단 {3}회 · 미확인 {4}회 · {5}</value></data>
+  <data name="TripSummary" xml:space="preserve"><value>{0} · 시전 {1}회 · 성공 {2}회 · 실패 {3}회 · 회수·중단 {4}회 · 미확인 {5}회 · {6}</value></data>
   <data name="TripDeleteTitle" xml:space="preserve"><value>낚시 기록 삭제</value></data>
   <data name="TripDeleteQuestion" xml:space="preserve"><value>선택한 낚시 기록 {0}묶음을 삭제하시겠습니까? 삭제 후 복구할 수 없습니다.</value></data>
   <data name="TimerLastSpot" xml:space="preserve"><value>최근 낚시터 · {0}</value></data>
+  <data name="TimerCastBait" xml:space="preserve"><value>사용 미끼: {0}</value></data>
 </root>

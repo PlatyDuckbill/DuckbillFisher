@@ -30,7 +30,7 @@ internal sealed record FishingTrackerView(int Revision, int Session, FishingTrac
     public bool HistoryWritable { get; init; }
 }
 
-/// <summary>Validated normal-cast observations only. Collection and notification policies are not modified.</summary>
+/// <summary>KR contract-guarded public logs and inspected native phases. Collection and notifications remain separate.</summary>
 internal sealed class FishingTracker : IDisposable
 {
     private readonly IClientState client;
@@ -79,6 +79,9 @@ internal sealed class FishingTracker : IDisposable
     private FishingSpotView? pendingSpot;
     private FishingSpotView? lastConfirmedSpot;
     private TimeSpan pendingSpotAt;
+    private LogFact? pendingMooch;
+    private int moochLogs, moochApplied, failures;
+    private uint lastFailureLog;
     private long lastSequence;
     private int archiveRevision = -1;
     private IReadOnlyList<FishingTripSummary> archiveTrips = [], trips = [];
@@ -124,10 +127,11 @@ internal sealed class FishingTracker : IDisposable
                 now - lastTick > TimeSpan.FromSeconds(5) || state != FishingTrackerState.Ready) return;
             if (FishingLogContracts.Actor(message, player.CharacterName, (ushort)player.HomeWorld.RowId) != FishingLogActor.Local)
             { ignored++; return; }
-            // Only these contracts have representative KR runtime evidence. Other results stay unknown.
-            if (message.LogMessageId is not (1110 or 1111 or 1116 or 3512 or 5584)) { ignored++; return; }
+            // Each ID also passed the installed KR macro fingerprint. Missing/other actors stay unknown.
+            if (message.LogMessageId is not (1110 or 1111 or 1116 or 1121 or 3512 or 5584) &&
+                !IsFailureLog(message.LogMessageId)) { ignored++; return; }
             uint value = 0;
-            if (message.LogMessageId is 1110 or 3512)
+            if (message.LogMessageId is 1110 or 1118 or 1121 or 3512)
             {
                 if (!message.TryGetIntParameter(0, out var number) || number <= 0) { ignored++; return; }
                 value = (uint)number;
@@ -177,6 +181,7 @@ internal sealed class FishingTracker : IDisposable
                 detailLoading = detailError = false;
                 requestedDetail = null; requestedDeletes.Clear(); deletedTrips.Clear();
                 casts = catches = retrieves = ignored = 0;
+                moochLogs = moochApplied = failures = 0; lastFailureLog = 0;
                 ResetLocation();
                 state = character == 0 ? FishingTrackerState.Waiting : FishingTrackerState.Loading;
                 if (character != 0) storage.Load(character);
@@ -281,6 +286,12 @@ internal sealed class FishingTracker : IDisposable
                 if (spot is not null && history.CastStartedAt is { } start && fact.At >= start && fact.At - start < TimeSpan.FromSeconds(1))
                     history.SetSpot(spot.Id);
             }
+            else if (fact.Id == 1121)
+            {
+                moochLogs++;
+                if (fishByItem.ContainsKey(fact.Value)) pendingMooch = fact;
+                else ignored++;
+            }
             else if (fact.Id == 1116 && history.Active is not null && native?.Phase is 5 or 6 &&
                 history.CastStartedAt is { } hookStart && fact.At >= hookStart)
                 history.Hook(fact.At);
@@ -289,10 +300,37 @@ internal sealed class FishingTracker : IDisposable
             { history.End(fact.At, fact.Utc, FishingOutcome.Caught, FishingEndReason.CatchLog, fact.Value, 1); catches++; }
             else if (fact.Id == 5584 && history.Active is not null)
             { history.End(fact.At, fact.Utc, FishingOutcome.Cancelled, FishingEndReason.ManualRetrieve); retrieves++; }
+            else if (IsFailureLog(fact.Id) && history.Active is not null && native?.Phase is 2 or 4 &&
+                history.CastStartedAt is { } failureStart && fact.At >= failureStart)
+            {
+                // 1118 names the fish that escaped. 3515 names lost bait, never a caught fish.
+                uint? missedFish = fact.Id == 1118 && fishByItem.ContainsKey(fact.Value) ? fact.Value : null;
+                history.End(fact.At, fact.Utc, FishingOutcome.Failed, FishingEndReason.FailureLog, missedFish);
+                lastFailureLog = fact.Id; failures++;
+            }
+            else if (IsFailureLog(fact.Id)) ignored++;
             else if (fact.Id is 1116 or 3512 or 5584) ignored++;
             // 1111 announces quitting; only the observed return to phase 0 ends the continuous session.
         }
     }
+
+    private static bool IsFailureLog(uint id) => id is 1117 or 1118 or 1119 or 1120 or 1127 or 1129 or 3515 or 3527;
+
+    private void ApplyMooch(TimeSpan now, FishingNativeSample current)
+    {
+        if (pendingMooch is not { } fact) return;
+        if (now - fact.At > TimeSpan.FromSeconds(2)) { pendingMooch = null; return; }
+        var kind = CastBaitKind(current);
+        if (current.Phase is not (1 or 12) || kind is not (FishingBaitKind.Mooch or FishingBaitKind.Swimbait) ||
+            history.Active is not { BiteSeconds: null, HookSeconds: null } || history.CastStartedAt is not { } start ||
+            Math.Abs((fact.At - start).TotalSeconds) > 2) return;
+        if (history.SetCastBait(fact.Value, kind)) moochApplied++;
+        pendingMooch = null;
+    }
+
+    private static FishingBaitKind CastBaitKind(FishingNativeSample sample) =>
+        (sample.BaitFlags.GetValueOrDefault() & 0x20) != 0 ? FishingBaitKind.Swimbait :
+        (sample.BaitFlags.GetValueOrDefault() & 0x10) != 0 ? FishingBaitKind.Mooch : FishingBaitKind.Equipped;
 
     private void ObservePhase(TimeSpan now, DateTimeOffset utc, FishingNativeSample current)
     {
@@ -300,9 +338,8 @@ internal sealed class FishingTracker : IDisposable
         if (phase == 1 && previousPhase is not null && previousPhase != 1)
         {
             spot = now - pendingSpotAt <= TimeSpan.FromSeconds(2) ? pendingSpot : spot;
-            var kind = (current.BaitFlags.GetValueOrDefault() & 0x20) != 0 ? FishingBaitKind.Swimbait :
-                (current.BaitFlags.GetValueOrDefault() & 0x10) != 0 ? FishingBaitKind.Mooch : FishingBaitKind.Equipped;
-            // The actual mooch/swimbait item is not yet runtime-validated. Never snapshot equipped bait as that fish.
+            var kind = CastBaitKind(current);
+            // Equipped bait is never substituted for mooch. A matching local 1121 supplies its item separately.
             var bait = kind == FishingBaitKind.Equipped && current.EquippedBait is > 0 ? current.EquippedBait : null;
             history.Start(now, utc, territory, spot?.Id, bait, kind, seenIdle);
             if (history.Trip?.Sequence == 0) history.SetSequence(++lastSequence);
@@ -310,6 +347,7 @@ internal sealed class FishingTracker : IDisposable
             casts++;
             readyAt = null;
         }
+        ApplyMooch(now, current);
         if (phase == 5) history.Bite(now);
         if (phase == 6) history.Hook(now);
         if (phase == 0)
@@ -334,9 +372,10 @@ internal sealed class FishingTracker : IDisposable
         history.EndSession(now, utc, reason);
         Persist();
         pending.Clear();
+        pendingMooch = null;
     }
     private void ResetLocation()
-    { previousPhase = null; seenIdle = false; readyAt = null; spot = pendingSpot = lastConfirmedSpot = null; pendingSpotAt = TimeSpan.Zero; territory = 0; pending.Clear(); allSpotFish = remainingSpotFish = []; filterSpot = null; }
+    { previousPhase = null; seenIdle = false; readyAt = null; spot = pendingSpot = lastConfirmedSpot = null; pendingSpotAt = TimeSpan.Zero; pendingMooch = null; territory = 0; pending.Clear(); allSpotFish = remainingSpotFish = []; filterSpot = null; }
 
     private bool UpdateArchive()
     {
@@ -454,7 +493,7 @@ internal sealed class FishingTracker : IDisposable
     public string CreateReport()
     {
         lock (gate) return string.Create(CultureInfo.InvariantCulture,
-            $"DuckbillFisher MVP-02/timer/v2\nPlugin={typeof(Plugin).Assembly.GetName().Version}; Session={session}; State={state}; Read={native?.Availability}; Phase={native?.Phase}\nTrips={trips.Count}; CurrentRecords={view.CurrentRecords.Count}; Active={history.Active is not null}; Casts={casts}; Catches={catches}; Retrieves={retrieves}; Ignored={ignored}; Contracts={validLogs.Count}/{FishingLogContracts.Count}\nSpot={spot?.Id}; PendingSpot={pendingSpot?.Id}; Equipped={native?.EquippedBait}; Storage={view.Storage}; PersistEnabled={writable}\nTimerEnd=HookObservation; TripLimit={FishingAttempts.TripCapacity}; CastLimit={FishingAttempts.Capacity}\nActualMoochBait=Unknown; UnvalidatedResults=Unknown; OutcomeDoesNotSetCollection=True");
+            $"DuckbillFisher MVP-02/timer/v3\nPlugin={typeof(Plugin).Assembly.GetName().Version}; Session={session}; State={state}; Read={native?.Availability}; Phase={native?.Phase}\nTrips={trips.Count}; CurrentRecords={view.CurrentRecords.Count}; Active={history.Active is not null}; Casts={casts}; Catches={catches}; Retrieves={retrieves}; Ignored={ignored}; Contracts={validLogs.Count}/{FishingLogContracts.Count}\nSpot={spot?.Id}; PendingSpot={pendingSpot?.Id}; Equipped={native?.EquippedBait}; Storage={view.Storage}; PersistEnabled={writable}\nTimerEnd=HookObservation; TripLimit={FishingAttempts.TripCapacity}; CastLimit={FishingAttempts.Capacity}\nMoochLogs={moochLogs}; MoochApplied={moochApplied}; Failures={failures}; LastFailureLog={lastFailureLog}\nActualMoochBait=LocalLog1121AndCastFlags; UnvalidatedResults=Unknown; OutcomeDoesNotSetCollection=True");
     }
 
     public void Dispose()

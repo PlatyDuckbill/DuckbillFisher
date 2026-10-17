@@ -39,6 +39,8 @@ MVP-02/F07·F13의 [화면/보관 합의와 KR 조사](CASTING-TIMER-HISTORY.md)
 
 0.2.2.0은 사용자 승인으로100묶음×최근2000회/schema2 묶음별 원자 파일로 확장한다. Core는 묶음 총 횟수/보관 행을 구분하고, Store는 요약 캐시/선택 상세 지연 읽기/이전schema1 가져오기/종료 기록 정리·삭제를 담당한다. FishingHistoryBrowser가 메인의 요약→상세·확인 삭제를 맡고 타이머는 현재 묶음만 표시한다. UI 요청은 캐릭터 세션과 함께 Framework에서 검증한다. 대표 경과는 낚아채기 관찰에서 멈추고 결과 수신 경과는 별도 보존한다. [수명·실패·확인](validation/MVP-02-HISTORY-MANAGEMENT.md).
 
+0.2.3.0은 본인1121의 Item 후보를2초만 보관하고 시전 시작/생미끼 플래그/Phase1·12와 대조해 시작 미끼를 확정한다. 실패는 KR 계약이 일치한 본인 로그와 활성 시전·Phase2·4가 함께 있을 때만 Failed로 기록한다. 원시 Phase2만으로 실패를 추정하지 않는다. Native 주소/읽기 범위는 바꾸지 않았으며 과거 미확인 기록은 보정하지 않는다. [실제 표본·정적 계약·확인 경계](validation/MVP-02-MOOCH-FAILURE.md).
+
 0.1.33.0의 FishGuideOpenService는 연동 안내의 명시적 클릭을 Framework에서 한 번 처리하고 검증한 KR Agent API로 낚시 탭을 연다. 세션/캐릭터/요청 만료·DLL 가드·구독 해제를 적용하며 도감 준비 판정은 기존 관찰기만 담당한다. [게임 접근 근거](validation/MVP-01-GUIDE-OPEN.md).
 
 사용자 문구는 상태/게임 접근과 분리한다. 상태와 이력은 번역 문자열 대신 UiMessage의 키/인자를 보관하고 UI/진단 출력에서 각각 표현한다. 추가 언어와 패키징은 [다국어 지침](LOCALIZATION.md)을 따른다.

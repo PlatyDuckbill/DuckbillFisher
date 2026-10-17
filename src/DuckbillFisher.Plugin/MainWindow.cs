@@ -68,16 +68,9 @@ internal sealed class MainWindow : Window
         }
         fishList.DeveloperMode = settings.DeveloperMode;
         spawnAlerts.DeveloperMode = settings.DeveloperMode;
+        DrawShortcuts();
         if (ImGui.BeginTabBar("DiagnosticsTabs"))
         {
-            ImGui.PushFont(UiBuilder.IconFont);
-            if (ImGui.TabItemButton($"{FontAwesomeIcon.CompressAlt.ToIconString()}###OpenCompactWindow", ImGuiTabItemFlags.Trailing)) ShowCompact?.Invoke();
-            ImGui.PopFont();
-            UiWidgets.Tooltip(UiText.Get(T.OpenCompactWindow));
-            ImGui.PushFont(UiBuilder.IconFont);
-            if (ImGui.TabItemButton($"{FontAwesomeIcon.Stopwatch.ToIconString()}###OpenTimer", ImGuiTabItemFlags.Trailing)) ShowTimer?.Invoke();
-            ImGui.PopFont();
-            UiWidgets.Tooltip(UiText.Get(T.CastingTimerTitle));
             if (ImGui.BeginTabItem(UiText.Label(T.TabCatalog, "CatalogTab")))
             {
                 fishList.Draw();
@@ -115,6 +108,34 @@ internal sealed class MainWindow : Window
             }
             ImGui.EndTabBar();
         }
+    }
+
+    private void DrawShortcuts()
+    {
+        var compact = UiText.Get(T.CompactWindowTitle);
+        var timer = UiText.Get(T.CastingTimerTitle);
+        var padding = ImGui.GetStyle().FramePadding;
+        var iconWidth = ImGui.GetFrameHeight();
+        var compactWidth = iconWidth + ImGui.CalcTextSize(compact).X + padding.X * 2;
+        var timerWidth = iconWidth + ImGui.CalcTextSize(timer).X + padding.X * 2;
+        var available = ImGui.GetContentRegionAvail().X;
+        ImGui.SetCursorPosX(ImGui.GetCursorPosX() + Math.Max(0, available - compactWidth - timerWidth - ImGui.GetStyle().ItemSpacing.X));
+        if (Shortcut(FontAwesomeIcon.List, compact, "OpenCompactWindow", compactWidth)) ShowCompact?.Invoke();
+        UiWidgets.Tooltip(UiText.Get(T.OpenCompactWindow));
+        ImGui.SameLine();
+        if (Shortcut(FontAwesomeIcon.Stopwatch, timer, "OpenTimer", timerWidth)) ShowTimer?.Invoke();
+        UiWidgets.Tooltip(timer);
+    }
+
+    private static bool Shortcut(FontAwesomeIcon icon, string label, string id, float width)
+    {
+        var clicked = ImGui.Button($"###{id}", new Vector2(width, ImGui.GetFrameHeight()));
+        var origin = ImGui.GetItemRectMin() + ImGui.GetStyle().FramePadding;
+        var draw = ImGui.GetWindowDrawList();
+        var color = ImGui.GetColorU32(ImGuiCol.Text);
+        draw.AddText(UiBuilder.IconFont, ImGui.GetFontSize(), origin, color, icon.ToIconString());
+        draw.AddText(origin + new Vector2(ImGui.GetFrameHeight(), 0), color, label);
+        return clicked;
     }
 
     private void DrawSettings(FishPreferencesView settings)

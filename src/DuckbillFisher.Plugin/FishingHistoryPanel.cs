@@ -107,10 +107,10 @@ internal sealed class FishingHistoryPanel(FishingTracker tracker, ITextureProvid
         var next = ImGui.GetCursorPos();
         var line = ImGui.GetTextLineHeightWithSpacing();
         var icon = line * 2;
-        var itemId = row.FishItemId ?? row.BaitItemId;
+        var itemId = row.Outcome == FishingOutcome.Caught ? row.FishItemId : null;
         var iconId = itemId is { } value && view.Items.TryGetValue(value, out var item) ? item.IconId : 0;
         ImGui.SetCursorPos(start + new Vector2(4, 4));
-        UiWidgets.GameIcon(textures, iconId, icon, FishingTimeText.Item(view, itemId));
+        if (itemId is > 0) UiWidgets.GameIcon(textures, iconId, icon, FishingTimeText.Item(view, itemId));
         var textX = icon + 12;
         var textWidth = Math.Max(1, width - textX - 4);
         var time = row.StartedUtc?.ToLocalTime().ToString("HH:mm:ss", UiText.Culture) ?? "—";
@@ -170,6 +170,7 @@ internal sealed class FishingHistoryPanel(FishingTracker tracker, ITextureProvid
     private static T Reason(FishingEndReason value) => value switch
     {
         FishingEndReason.None => T.HistoryPending, FishingEndReason.CatchLog => T.HistoryCaught,
+        FishingEndReason.FailureLog => T.HistoryFailed,
         FishingEndReason.ManualRetrieve => T.HistoryCancelled, FishingEndReason.RodFolded => T.HistoryRodFolded,
         FishingEndReason.Logout => T.HistoryLogout, FishingEndReason.Travel => T.HistoryTravel,
         FishingEndReason.Reload => T.HistoryReload, FishingEndReason.ObservationGap => T.HistoryGap,

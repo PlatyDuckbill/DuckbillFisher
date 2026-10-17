@@ -556,4 +556,5 @@ internal enum TextKey
     TripDeleteTitle,
     TripDeleteQuestion,
     TimerLastSpot,
+    TimerCastBait,
 }

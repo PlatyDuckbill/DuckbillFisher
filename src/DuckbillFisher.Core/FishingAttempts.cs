@@ -1,7 +1,7 @@
 namespace DuckbillFisher.Core;
 
 public enum FishingOutcome { Pending, Caught, Failed, Cancelled, Interrupted, Unknown }
-public enum FishingEndReason { None, CatchLog, ManualRetrieve, RodFolded, NativeFinished, NextCast, Logout, Travel, Reload, ObservationGap, ReadUnavailable, UnsupportedMode }
+public enum FishingEndReason { None, CatchLog, ManualRetrieve, RodFolded, NativeFinished, NextCast, Logout, Travel, Reload, ObservationGap, ReadUnavailable, UnsupportedMode, FailureLog }
 public enum FishingBaitKind { Unknown, Equipped, Mooch, Swimbait }
 
 public sealed record FishingAttempt(Guid Id, Guid SessionId, DateTimeOffset? SessionStartedUtc,
@@ -69,6 +69,15 @@ public sealed class FishingAttempts
         if (Active is null || Active.SpotId is not null || spot == 0) return;
         if (Trip is not null && Trip.SpotId is null) Trip = Trip with { SpotId = spot };
         ReplaceActive(Active with { SpotId = spot });
+    }
+
+    public bool SetCastBait(uint item, FishingBaitKind kind)
+    {
+        if (Active is not { BiteSeconds: null, HookSeconds: null } || item == 0 ||
+            kind is not (FishingBaitKind.Mooch or FishingBaitKind.Swimbait) ||
+            Active.BaitKind is FishingBaitKind.Mooch or FishingBaitKind.Swimbait && Active.BaitItemId is not null) return false;
+        ReplaceActive(Active with { BaitItemId = item, BaitKind = kind });
+        return true;
     }
 
     public void Bite(TimeSpan now)
