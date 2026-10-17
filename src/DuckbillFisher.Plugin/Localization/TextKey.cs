@@ -604,4 +604,5 @@ internal enum TextKey
     BaitFindClosed,
     BaitFindCancelled,
     BaitFindUnavailable,
+    BaitFindPageWaiting,
 }

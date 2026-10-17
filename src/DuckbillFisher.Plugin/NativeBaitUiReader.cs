@@ -8,7 +8,7 @@ using Lumina.Excel.Sheets;
 
 namespace DuckbillFisher.Plugin;
 
-internal enum BaitUiState { Unavailable, NotOpen, UnsupportedShape, BindingUnavailable, NotVisible, InvalidGeometry, Found }
+internal enum BaitUiState { Unavailable, NotOpen, UnsupportedShape, BindingUnavailable, NotOnPage, NotVisible, InvalidGeometry, Found }
 internal sealed record BaitUiReading(BaitUiState State, Vector2 Position = default, Vector2 Size = default,
     string Bindings = "", int Matches = 0, uint MatchedNode = 0);
 
@@ -49,6 +49,7 @@ internal sealed class NativeBaitUiReader(IGameGui gui, IFramework framework, Fun
         if (tooltips.LongCount is < 0 or > 8192) return new(BaitUiState.UnsupportedShape);
         var bindings = diagnostics ? new List<string>(25) : null;
         var matches = 0;
+        var visibleBaits = 0;
         AtkResNode* matched = null;
         var grids = 0;
         for (var i = 0; i < nodes.NodeListCount; i++)
@@ -88,13 +89,18 @@ internal sealed class NativeBaitUiReader(IGameGui gui, IFramework framework, Fun
                 if (item != 0 && item != id) ambiguous = true;
                 item = id;
             }
+            if (!ambiguous && item != 0 && Visible(node)) visibleBaits++;
             if (!ambiguous && item == target && target != 0) { matched = node; matches++; }
         }
         var report = bindings is null ? "" : $"MapCount={tooltips.LongCount}; Entries=" + string.Join(',', bindings.Take(100));
         if (grids != 25) return new(BaitUiState.UnsupportedShape, Bindings: report);
+        if (matches == 0 && target != 0 && visibleBaits > 0)
+            return new(BaitUiState.NotOnPage, Bindings: report);
         if (matches != 1 || matched == null) return new(BaitUiState.BindingUnavailable, Bindings: report, Matches: matches);
-        if (!Visible(matched) || !Visible(addon->RootNode))
+        if (!Visible(addon->RootNode))
             return new(BaitUiState.NotVisible, Bindings: report, Matches: matches, MatchedNode: matched->NodeId);
+        if (!Visible(matched))
+            return new(BaitUiState.NotOnPage, Bindings: report, Matches: matches, MatchedNode: matched->NodeId);
         var position = new Vector2(matched->ScreenX, matched->ScreenY);
         var scale = matched->Transform;
         var size = new Vector2(matched->Width * scale.M11, matched->Height * scale.M22);

@@ -7,21 +7,11 @@ using T = DuckbillFisher.Plugin.Localization.TextKey;
 namespace DuckbillFisher.Plugin;
 
 internal sealed class BaitPreparationPanel(BaitPreparation preparation, BaitStockObserver stock,
-    FishPreferences preferences, ITextureProvider textures, FishingItemLinkService links, BaitUiProbe probe, BaitFinder finder)
+    FishPreferences preferences, ITextureProvider textures, FishingItemLinkService links, BaitUiProbe probe)
 {
     private bool missingOnly;
 
-    public void DrawButton()
-    {
-        if (ImGui.Button(UiText.Label(T.BaitPreparation, "BaitPreparation"))) ImGui.OpenPopup("BaitPreparationPopup");
-        ImGui.SetNextWindowSizeConstraints(new Vector2(ImGui.GetFontSize() * 28, 0),
-            new Vector2(ImGui.GetFontSize() * 45, ImGui.GetMainViewport().WorkSize.Y * 0.8f));
-        if (!ImGui.BeginPopup("BaitPreparationPopup", ImGuiWindowFlags.NoScrollbar)) return;
-        Draw();
-        ImGui.EndPopup();
-    }
-
-    private void Draw()
+    public void Draw()
     {
         var personal = preferences.View;
         var source = (int)preparation.Source;
@@ -30,8 +20,6 @@ internal sealed class BaitPreparationPanel(BaitPreparation preparation, BaitStoc
         if (ImGui.Combo(UiText.Label(T.BaitSource, "BaitSource"), ref source, choices, choices.Length))
             preparation.SetSource((BaitPreparationSource)source);
         UiWidgets.Tooltip(UiText.Get(source == 0 ? T.BaitSourceFavoritesHint : T.BaitSourceCatalogHint));
-        ImGui.SameLine();
-        if (ImGui.SmallButton(UiText.Label(T.Close, "CloseBaitPreparation"))) ImGui.CloseCurrentPopup();
         var inventory = stock.View;
         var ready = personal.HasCharacter && inventory.Session == personal.Session && inventory.State == BaitStockState.Ready;
         ImGui.TextDisabled(UiText.Get(T.BaitBagScope));
@@ -42,8 +30,8 @@ internal sealed class BaitPreparationPanel(BaitPreparation preparation, BaitStoc
         var view = preparation.View;
         if (view.Session != personal.Session) view = new(personal.Session, 0, [], []);
         ImGui.TextDisabled(UiText.Get(T.BaitPreparationCounts, view.TargetCount, view.Entries.Length, view.Missing.Length));
-        finder.DrawStatus();
-        var height = Math.Clamp(ImGui.GetMainViewport().WorkSize.Y * 0.4f, ImGui.GetFontSize() * 8, ImGui.GetFontSize() * 23);
+        var footer = personal.DeveloperMode ? ImGui.GetTextLineHeightWithSpacing() * 5 : 0;
+        var height = Math.Max(ImGui.GetTextLineHeight() * 3, ImGui.GetContentRegionAvail().Y - footer);
         if (ImGui.BeginChild("BaitPreparationItems", new Vector2(0, height)))
         {
             if (view.Entries.Length == 0) ImGui.TextWrapped(UiText.Get(T.BaitPreparationEmpty));
@@ -64,8 +52,6 @@ internal sealed class BaitPreparationPanel(BaitPreparation preparation, BaitStoc
                 else ImGui.TextUnformatted(count is { } quantity ? UiText.Get(T.BaitQuantity, quantity) : UiText.Get(T.BaitQuantityUnknown));
                 UiWidgets.Tooltip(UiText.Get(T.BaitTargetsCount, entry.Targets.Length));
                 if (entry.Alternative) { ImGui.SameLine(); ImGui.TextDisabled(UiText.Get(T.BaitAlternative)); }
-                ImGui.SameLine();
-                finder.DrawButton(entry.Item, personal.Session);
                 if (open)
                 {
                     foreach (var fish in entry.Targets) ImGui.TextWrapped(fish.DisplayName);

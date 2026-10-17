@@ -9,7 +9,7 @@ using T = DuckbillFisher.Plugin.Localization.TextKey;
 
 namespace DuckbillFisher.Plugin;
 
-internal enum BaitFindState { Idle, Waiting, Highlighted, BindingUnavailable, Unavailable, Cancelled, Expired, Closed, Selected }
+internal enum BaitFindState { Idle, Waiting, WaitingForPage, Highlighted, BindingUnavailable, Unavailable, Cancelled, Expired, Closed, Selected }
 internal sealed record BaitFindView(int Session, uint Item, string Name, BaitFindState State, long SampledAt = 0,
     Vector2 Position = default, Vector2 Size = default);
 
@@ -93,6 +93,7 @@ internal sealed class BaitFinder : IDisposable
             view = view with { State = result.State switch
                 {
                     BaitUiState.Found => BaitFindState.Highlighted,
+                    BaitUiState.NotOnPage => BaitFindState.WaitingForPage,
                     BaitUiState.NotVisible or BaitUiState.InvalidGeometry => BaitFindState.Unavailable,
                     _ => BaitFindState.BindingUnavailable,
                 },
@@ -127,6 +128,7 @@ internal sealed class BaitFinder : IDisposable
         var message = UiText.Get(current.State switch
         {
             BaitFindState.Waiting => T.BaitFindWaiting, BaitFindState.Highlighted => T.BaitFindHighlighted,
+            BaitFindState.WaitingForPage => T.BaitFindPageWaiting,
             BaitFindState.BindingUnavailable => T.BaitFindBindingUnavailable, BaitFindState.Selected => T.BaitFindSelected,
             BaitFindState.Expired => T.BaitFindExpired, BaitFindState.Closed => T.BaitFindClosed,
             BaitFindState.Cancelled => T.BaitFindCancelled, _ => T.BaitFindUnavailable,
