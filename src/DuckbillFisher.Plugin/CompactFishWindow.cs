@@ -40,12 +40,19 @@ internal sealed class CompactFishWindow : Window
     public override void Draw()
     {
         var personal = preferences.View;
-        ImGui.TextDisabled(UiText.Get(T.CompactSharedFilters));
-        UiWidgets.Tooltip(UiText.Get(T.CompactSharedFiltersHint));
+        var view = observer.View;
+        ImGui.BeginDisabled(view.Upcoming.Length == 0);
+        if (ImGui.Button(UiText.Label(T.JumpUpcoming, "CompactJumpUpcoming"))) jumpUpcoming = true;
+        ImGui.EndDisabled();
+        ImGui.SameLine();
+        if (UiWidgets.IconButton(FontAwesomeIcon.ArrowUp, "CompactJumpTop", UiText.Get(T.JumpTop))) jumpTop = true;
+        var right = ImGui.GetCursorPosX() + ImGui.GetContentRegionAvail().X;
+        ImGui.SameLine();
+        ImGui.SetCursorPosX(Math.Max(ImGui.GetCursorPosX(),
+            right - ImGui.GetFrameHeight() * 2 - ImGui.GetStyle().ItemSpacing.X));
+        if (UiWidgets.IconButton(FontAwesomeIcon.List, "OpenMain", UiText.Get(T.ToggleMainWindow))) ShowMain?.Invoke();
         ImGui.SameLine();
         if (UiWidgets.IconButton(FontAwesomeIcon.Cog, "CompactOptions", UiText.Get(T.CompactOptions))) ImGui.OpenPopup("CompactOptions");
-        ImGui.SameLine();
-        if (UiWidgets.IconButton(FontAwesomeIcon.List, "OpenMain", UiText.Get(T.ToggleMainWindow))) ShowMain?.Invoke();
         ImGui.SetNextWindowSizeConstraints(new Vector2(ImGui.GetFontSize() * 23, 0),
             new Vector2(ImGui.GetFontSize() * 30, ImGui.GetMainViewport().WorkSize.Y * 0.8f));
         if (ImGui.BeginPopup("CompactOptions"))
@@ -60,12 +67,6 @@ internal sealed class CompactFishWindow : Window
             ImGui.EndPopup();
         }
         if (personal.Error is { } error) ImGui.TextWrapped(error.Display);
-        var view = observer.View;
-        ImGui.BeginDisabled(view.Upcoming.Length == 0);
-        if (ImGui.SmallButton(UiText.Label(T.JumpUpcoming, "CompactJumpUpcoming"))) jumpUpcoming = true;
-        ImGui.EndDisabled();
-        ImGui.SameLine();
-        if (ImGui.SmallButton(UiText.Label(T.JumpTop, "CompactJumpTop"))) jumpTop = true;
         if (ImGui.BeginChild("CompactRows"))
         {
             if (jumpTop) { ImGui.SetScrollY(0); jumpTop = false; }

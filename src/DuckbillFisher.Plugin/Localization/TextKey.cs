@@ -452,4 +452,5 @@ internal enum TextKey
     WindowInline,
     ConditionsSpotMissing,
     ConditionsSpotMissingHint,
+    ForecastUnavailable,
 }

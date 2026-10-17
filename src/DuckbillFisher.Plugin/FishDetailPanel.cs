@@ -20,25 +20,30 @@ internal sealed class FishDetailPanel(FishPreferences preferences, ITextureProvi
         }
         ImGui.PushID((int)fish.FishParameterId);
         var patch = fish.Details is { } patchDetails ? UiText.Get(T.PatchLabel, patchDetails.Rule.Patch) : "";
-        if (ImGui.BeginTable("DetailTitle", patch.Length > 0 ? 3 : 2, ImGuiTableFlags.SizingFixedFit))
+        if (ImGui.BeginTable("DetailTitle", 2, ImGuiTableFlags.SizingFixedFit))
         {
             ImGui.TableSetupColumn("Icon", ImGuiTableColumnFlags.WidthFixed, ImGui.GetFontSize() * 3);
             ImGui.TableSetupColumn("Name", ImGuiTableColumnFlags.WidthStretch);
-            if (patch.Length > 0) ImGui.TableSetupColumn("Patch", ImGuiTableColumnFlags.WidthFixed, ImGui.CalcTextSize(patch).X);
             ImGui.TableNextColumn();
             UiWidgets.GameIcon(textures, fish.IconId, ImGui.GetFontSize() * 3, fish.DisplayName);
             ImGui.TableNextColumn();
-            ImGui.TextWrapped(fish.DisplayName);
-
-            if (patch.Length > 0)
+            if (ImGui.BeginTable("DetailName", patch.Length > 0 ? 2 : 1, ImGuiTableFlags.SizingFixedFit))
             {
+                ImGui.TableSetupColumn("Name", ImGuiTableColumnFlags.WidthStretch);
+                if (patch.Length > 0) ImGui.TableSetupColumn("Patch", ImGuiTableColumnFlags.WidthFixed, ImGui.CalcTextSize(patch).X);
                 ImGui.TableNextColumn();
-                ImGui.SetCursorPosX(ImGui.GetCursorPosX() + Math.Max(0, ImGui.GetContentRegionAvail().X - ImGui.CalcTextSize(patch).X));
-                ImGui.TextDisabled(patch);
+                ImGui.TextWrapped(fish.DisplayName);
+                if (patch.Length > 0)
+                {
+                    ImGui.TableNextColumn();
+                    ImGui.SetCursorPosX(ImGui.GetCursorPosX() + Math.Max(0, ImGui.GetContentRegionAvail().X - ImGui.CalcTextSize(patch).X));
+                    ImGui.TextDisabled(patch);
+                }
+                ImGui.EndTable();
             }
+            DrawActions(fish, personal, observed);
             ImGui.EndTable();
         }
-        DrawActions(fish, personal, observed);
         if (!personal.HasCharacter) ImGui.TextWrapped(UiText.Get(T.ManualPlayerRequired));
         if (personal.Error is { } error) ImGui.TextWrapped(error.Display);
 
@@ -57,11 +62,11 @@ internal sealed class FishDetailPanel(FishPreferences preferences, ITextureProvi
         foreach (var spot in fish.Spots)
         {
             if (!ImGui.BeginTable($"Spot{spot.Id}", 2, ImGuiTableFlags.SizingFixedFit)) continue;
-            ImGui.TableSetupColumn("Map", ImGuiTableColumnFlags.WidthFixed, ImGui.GetFrameHeight());
+            ImGui.TableSetupColumn("Map", ImGuiTableColumnFlags.WidthFixed, UiWidgets.MapPinWidth(ImGui.GetFrameHeight()));
             ImGui.TableSetupColumn("Place", ImGuiTableColumnFlags.WidthStretch);
             ImGui.TableNextColumn();
             ImGui.BeginDisabled(!personal.HasCharacter);
-            if (UiWidgets.IconButton(FontAwesomeIcon.MapMarkerAlt, "OpenMap", UiText.Get(T.OpenFishingMap))) maps.Request(spot);
+            if (UiWidgets.MapPinButton("OpenMap", UiText.Get(personal.HasCharacter ? T.OpenFishingMap : T.MapPlayerRequired), ImGui.GetFrameHeight())) maps.Request(spot);
             ImGui.EndDisabled();
             ImGui.TableNextColumn();
             ImGui.TextWrapped(UiText.Get(T.SpotLine, spot.Zone, spot.Name, spot.X, spot.Y));

@@ -459,4 +459,5 @@
   <data name="WindowInline" xml:space="preserve"><value>{0}  |  {1}</value></data>
   <data name="ConditionsSpotMissing" xml:space="preserve"><value>조건 자료에 낚시터가 연결되어 있지 않아 출현 시간을 계산할 수 없습니다.</value></data>
   <data name="ConditionsSpotMissingHint" xml:space="preserve"><value>게임에서 읽은 낚시터 목록은 표시할 수 있지만, 현재 조건 자료와 어떤 낚시터를 함께 사용할지는 확인되지 않았습니다.</value></data>
+  <data name="ForecastUnavailable" xml:space="preserve"><value>예측 정보 없음</value></data>
 </root>

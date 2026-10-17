@@ -70,20 +70,13 @@ internal static class UiWidgets
 
     public static bool MapPinButton(string id, string tooltip, float height)
     {
-        ImGui.PushStyleColor(ImGuiCol.Button, new Vector4(0.13f, 0.29f, 0.43f, 1));
-        ImGui.PushStyleColor(ImGuiCol.ButtonHovered, new Vector4(0.20f, 0.45f, 0.65f, 1));
-        ImGui.PushStyleColor(ImGuiCol.ButtonActive, new Vector4(0.10f, 0.37f, 0.58f, 1));
-        var clicked = ImGui.Button($"###{id}", new Vector2(MapPinWidth(height), height));
-        var min = ImGui.GetItemRectMin();
-        var draw = ImGui.GetWindowDrawList();
-        var center = min + new Vector2(MapPinWidth(height) / 2, height * 0.33f);
-        var radius = height * 0.25f;
-        var color = ImGui.GetColorU32(new Vector4(1, 0.84f, 0.35f, 1));
-        draw.AddTriangleFilled(center + new Vector2(-radius * 0.85f, radius * 0.2f),
-            center + new Vector2(radius * 0.85f, radius * 0.2f), min + new Vector2(MapPinWidth(height) / 2, height * 0.93f), color);
-        draw.AddCircleFilled(center, radius, color);
-        draw.AddCircleFilled(center, radius * 0.38f, ImGui.GetColorU32(ImGuiCol.Button));
-        ImGui.PopStyleColor(3);
+        ImGui.PushStyleColor(ImGuiCol.Button, Vector4.Zero);
+        ImGui.PushStyleVar(ImGuiStyleVar.FramePadding, Vector2.Zero);
+        ImGui.PushFont(UiBuilder.IconFont);
+        var clicked = ImGui.Button($"{FontAwesomeIcon.MapMarkedAlt.ToIconString()}###{id}", new Vector2(MapPinWidth(height), height));
+        ImGui.PopFont();
+        ImGui.PopStyleVar();
+        ImGui.PopStyleColor();
         Tooltip(tooltip);
         return clicked;
     }

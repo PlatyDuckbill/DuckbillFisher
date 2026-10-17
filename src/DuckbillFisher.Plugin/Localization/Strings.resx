@@ -459,4 +459,5 @@ In fish log only: {5}</value></data>
   <data name="WindowInline" xml:space="preserve"><value>{0}  |  {1}</value></data>
   <data name="ConditionsSpotMissing" xml:space="preserve"><value>The condition data does not link this fish to a fishing spot, so its availability cannot be forecast.</value></data>
   <data name="ConditionsSpotMissingHint" xml:space="preserve"><value>Game fishing spots may still be listed. The condition data does not identify which location to use for this forecast.</value></data>
+  <data name="ForecastUnavailable" xml:space="preserve"><value>No forecast available</value></data>
 </root>

@@ -12,6 +12,12 @@ internal static class FishingWindowPanel
 {
     public static void Draw(FishingWindow? window, DateTimeOffset now, UiMessage? unavailableReason = null)
     {
+        if (unavailableReason is { } reason && (window is null || window.Kind == FishingWindowKind.Unknown))
+        {
+            ImGui.TextDisabled(UiText.Get(T.ForecastUnavailable));
+            UiWidgets.Tooltip(reason.Display);
+            return;
+        }
         var open = window?.Kind == FishingWindowKind.Open && (window.Start is null || window.Start <= now) &&
             (window.End is null || now < window.End);
         var text = open ? UiText.Get(T.WindowOpen) : window?.Kind switch
@@ -19,7 +25,7 @@ internal static class FishingWindowPanel
             FishingWindowKind.Upcoming => UiText.Get(T.WindowUpcoming),
             FishingWindowKind.Always => UiText.Get(T.ForecastAlways),
             FishingWindowKind.NotFound => UiText.Get(T.ForecastNotFound),
-            _ => unavailableReason?.Display ?? UiText.Get(T.ForecastUnknown),
+            _ => UiText.Get(T.ForecastUnknown),
         };
         ImGui.PushStyleColor(ImGuiCol.ChildBg, open ? new Vector4(0.10f, 0.48f, 0.30f, 0.40f) : new Vector4(0.18f, 0.23f, 0.29f, 0.40f));
         var width = Math.Max(1, ImGui.GetContentRegionAvail().X - 24);
@@ -35,7 +41,6 @@ internal static class FishingWindowPanel
             UiWidgets.Icon(FontAwesomeIcon.Clock);
             ImGui.SameLine();
             ImGui.TextWrapped(text);
-            if (unavailableReason?.Key == T.ConditionsSpotMissing) UiWidgets.Tooltip(UiText.Get(T.ConditionsSpotMissingHint));
             if (line.Length > 0)
             {
                 var screen = ImGui.GetCursorScreenPos();
