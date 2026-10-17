@@ -1,6 +1,6 @@
 # 세션 인수인계
 
-갱신: 2026-10-17 · Release0.2.4.0 사용자 확인 완료 / 첫 원격 배포 진행
+갱신: 2026-10-17 · Release0.2.4.0 게시 / 설치 JSON 최종 접근 확인 진행
 
 ## 재개 순서
 
@@ -11,7 +11,7 @@
 5. 첫 배포를 진행한다. 사용자 ‘Release 확인 완료’로 ZIP의 실행/재로드 대표 확인을 받았다. [첫 배포 기록](validation/RELEASE-0.2.4.0.md)과 [배포 가이드](DISTRIBUTION.md)를 읽고 이어간다. 다른 실패/복수/보관·한영 조합 등의 미확인 범위는 확대하지 않는다.
 
 - 최종 게시 준비물: `artifacts/share/0.2.4.0-final/` ZIP/체크섬/후보 JSON. 설명 가독성만 LF/글머리표로 수정하고 Packager 대상만 재실행했다. 기존 확인 ZIP/추출본은 보존, 최종 ZIP과 Description만 다르고 나머지5파일/다른 필드는 동일하다. 빌드/한영555키/내장 자료 검사 유지, 한영 검사 재통과, 정규 Debug 교체/테스트 없음.
-- 공개 origin/게시 권한 확인, 아직 원격 push/태그/Release/설치 JSON 게시 없음. 사용자는 이번 범위의 정상 push/태그/Release/JSON 게시를 승인했다. 확인 후 ZIP 게시→익명 확인→JSON 게시 순서다. 기존 CI가 테스트를 실행하므로 게시 커밋은 `[skip ci]`를 사용한다. gh는 없으며 Git credential manager 인증을 메모리에서만 써 GitHub API를 사용한다. tmp_note.md/자격 증명/빌드 산출물 스테이징 금지.
+- 사용자 승인 범위에서 source eb8c3ce/main와v0.2.4.0 태그 정상 push, GitHub Release415750305 공개 완료. ZIP/체크섬/아이콘 익명 HTTP·해시 통과 후 repo JSON을 반영했다. JSON 정상 push/최종 익명 확인을 마친 뒤 실제 저장소 설치를 안내한다. 기존 CI는 게시 커밋의 `[skip ci]`로 생략한다. gh 없이 기존 credential manager를 메모리에서만 사용했다. tmp_note.md/자격 증명/빌드 산출물 스테이징 금지.
 
 ## 환경과 DLL
 

@@ -40,8 +40,10 @@ pwsh -NoLogo -NoProfile -File scripts/prepare-release.ps1 -PackagePath src/Duckb
 - 기존 Debug 0.2.4.0의 탐색 줄/간이 목록과 0.2.3.0 생미끼/실패 표시는 사용자 대표 확인 범위다. Release ZIP 실행 확인으로 확대하지 않는다.
 - 사용자가 **Release 확인 완료**로 요청한 실행·재로드 절차의 대표 확인을 알렸다. 모든 특수 어획/다른 캐릭터/상한 복구의 확인으로 확대하지 않는다.
 - 설명 가독성 피드백으로 csproj Description에 명시적 LF/빈 줄/글머리표를 추가했다. 설치된 Packager15의 `DefaultDalamudPackagerRelease` 대상만 실행해 재컴파일 없이 manifest와 ZIP을 재생성했다. 최종 ZIP은 `artifacts/share/0.2.4.0-final/`, 318,411바이트, SHA256 `d85b31b1f326f725a40ca5c0578b18de33c4e223a4021d70fce3fea6eb09ce8f`다. 두 ZIP의 6항목 대조에서 Description만 변경됐으며 나머지 5파일·manifest의 다른 필드는 동일하다. 원래 확인 ZIP은 보존했고 로드된 개발 파일은 교체하지 않았다. 한영555키 검사 재통과, 테스트 없음.
-- GitHub Release/태그/원격 push/실제 설치 목록 반영은 아직 하지 않았다. `repo/pluginmaster.json`은 빈 배열이다.
-- 이후: 사용자 Release 확인 → 소스/태그 push → ZIP/체크섬 Release 게시 → 익명 다운로드 해시/아이콘 확인 → 설치 JSON 게시 → 익명 JSON/링크 확인 → Dalamud 설치 확인. 더 높은 버전의 실제 업데이트는 첫 배포만으로 검증했다고 하지 않는다.
+- 사용자 확인 후 기존 origin/main 정상 push, 소스 커밋 `eb8c3cef8d62c12c8af0bad74a2d9b303ec02cdb`에 `v0.2.4.0` 태그 생성·push 완료. 기존 이력/태그/릴리스 덮어쓰기 없음. 실행 파일은 초기 빌드 때의 Git 정보 `337c4b0`을 포함하며 빌드 당시의 메타데이터 수정과 최종 설명 변경 이력을 이 기록에 구분했다. 태그 뒤 실행 파일을 재컴파일하지 않았다.
+- GitHub API로 draft 생성→ZIP/체크섬 업로드(size/digest 대조)→공개 순서로 Release `415750305` 게시 완료. 공개 시각 `2026-10-17T10:52:08Z`. [릴리스](https://github.com/PlatyDuckbill/DuckbillFisher/releases/tag/v0.2.4.0). GitHub의 draft 업로드 응답에 임시 untagged URL이 있었으나 공개 후 정식 v0.2.4.0 URL을 확인했다.
+- 로그인 없는 정식 ZIP 다운로드 318,411바이트/SHA256 최종값 일치, `.sha256` HTTP200/내용 일치. 첫 검사에서 PowerShell의 binary 응답을 문자열로 처리한 오류가 있어 UTF8 디코딩 후 재검사해 통과했다. 아이콘 HTTP200/287,302바이트/원본 해시 일치. 이 확인 뒤에만 실제 repo JSON에 설치/업데이트 항목을 반영했다.
+- JSON 원격 게시 후 최종 익명 GET/링크 검사를 이어 진행한다. 실제 Dalamud 저장소 설치와 더 높은 버전 업데이트는 HTTP 확인만으로 검증했다고 하지 않는다.
 
 ## 공식 근거와 적용
 

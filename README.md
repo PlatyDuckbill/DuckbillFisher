@@ -18,9 +18,7 @@ Korean and English interface options are available. Fish, item, and location nam
 
 ## Install
 
-**First release preparation is in progress. The repository index is not active yet.**
-
-Once published, add this URL to Dalamud's custom plugin repositories, then install **DuckbillFisher** from the plugin installer:
+Add this URL to Dalamud's custom plugin repositories, then install **DuckbillFisher** from the plugin installer:
 
 ```text
 https://raw.githubusercontent.com/PlatyDuckbill/DuckbillFisher/main/repo/pluginmaster.json
@@ -32,7 +30,7 @@ Open with `/duckbillfisher`. The same repository supplies future updates through
 
 ## Supported environment and limits
 
-- First release candidate: **0.2.4.0**, built for **Dalamud API 15**.
+- Current release: **[0.2.4.0](https://github.com/PlatyDuckbill/DuckbillFisher/releases/tag/v0.2.4.0)**, built for **Dalamud API 15**.
 - Representative game checks use Korean client **2026.10.06.0000.0000** and **XIVLauncherKR Dalamud 15.0.3.6**. Other regional clients are not verified.
 - Native observations require the inspected KR game and DLL versions. A patch can disable these features until compatibility is reviewed.
 - Forecasts describe ordinary time/weather conditions. They do not confirm personal prerequisites or guarantee a catch. Some conditions, ocean fishing, and spearfishing have incomplete coverage.

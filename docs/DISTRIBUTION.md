@@ -3,8 +3,8 @@
 ## 이번 배포 상태
 
 - 첫 배포 버전은 **0.2.4.0 / Dalamud API 15**다. 사용자가 Release 실행·재로드의 대표 확인을 완료했다. 미확인 기능 전체의 보증으로 확대하지 않는다.
-- 공개 GitHub 저장소와 게시 권한 확인, 영어 소개·512×512 원본 아이콘 연결, Release 빌드·패키지 검사 완료. 설명만 LF/글머리표로 개선했으며 검증한 실행 파일은 동일하다. GitHub Release와 설치 목록은 게시 진행 전이다.
-- `repo/pluginmaster.json`은 확인 완료 전까지 빈 배열을 유지한다. 아래 URL은 아직 설치 가능한 목록이 아니다.
+- 공개 GitHub 저장소와 게시 권한 확인, 영어 소개·512×512 원본 아이콘 연결, Release 빌드·패키지 검사 완료. 설명만 LF/글머리표로 개선했으며 검증한 실행 파일은 동일하다.
+- [GitHub Release 0.2.4.0](https://github.com/PlatyDuckbill/DuckbillFisher/releases/tag/v0.2.4.0)와 태그를 게시했다. ZIP·체크섬·아이콘 익명 다운로드/해시 확인 통과 후 `repo/pluginmaster.json`에 설치 항목을 반영했다. JSON 원격 반영 후 최종 익명 접근 확인과 실제 Dalamud 설치 확인을 구분한다.
 - 자세한 산출물·확인 범위는 [첫 배포 기록](validation/RELEASE-0.2.4.0.md)을 따른다.
 
 ```text
@@ -24,7 +24,7 @@ Dalamud가 JSON을 읽고 ZIP을 내려받아 설치하며 이후 더 높은 버
 
 공식 저장소 제출·승인은 이번 범위가 아니다. 커스텀 저장소는 인증 없는 HTTP GET으로 접근할 수 있어야 하므로 공유 URL은 공개 주소다. [공식 규격](https://dalamud.dev/plugin-publishing/custom-repositories/).
 
-## 사용자 설치 절차: 게시 완료 후
+## 사용자 설치 절차
 
 1. XIVLauncherKR로 게임을 실행하고 Dalamud 설정을 연다.
 2. 커스텀 플러그인 저장소 항목에 위 JSON URL을 추가·활성화하고 저장한다. 메뉴 이름은 사용하는 Dalamud 언어/버전에 따라 다를 수 있다.
