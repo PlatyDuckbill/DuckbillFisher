@@ -1,6 +1,6 @@
 # 세션 인수인계
 
-갱신: 2026-10-17 · 첫 커스텀 저장소 배포 준비 / Release0.2.4.0 인게임 확인 대기
+갱신: 2026-10-17 · Release0.2.4.0 사용자 확인 완료 / 첫 원격 배포 진행
 
 ## 재개 순서
 
@@ -8,9 +8,9 @@
 2. UI 작업은 [합의된 구조](UI-UX-REDESIGN.md), [분석·구현·확인 순서](validation/MVP-01-UI-UX-REDESIGN.md)를 읽는다.
 3. 큰 디자인 변경은 선택지/차이를 질문하고 답변 후 구현한다. 기존 세 화면+별도 타이머/팝업/메인 히스토리 탭 추가는 사용자 합의 완료다.
 4. 사용자 `tmp_note.md`는 읽기·수정·스테이징하지 않는다. 전체 로그/과거 이력은 기본 요청하지 않는다.
-5. 첫 배포를 진행한다. 정규0.2.3.0 생미끼/실패와 [0.2.4.0 탐색/간이 목록](validation/MVP-01-MAIN-NAVIGATION.md)의 대표 확인은 유지한다. 새 Release ZIP의 실행 확인은 별도 대기다. [첫 배포 기록](validation/RELEASE-0.2.4.0.md)과 [배포 가이드](DISTRIBUTION.md)를 읽고 이어간다. 다른 실패/복수/보관·한영 조합 등의 미확인 범위는 확대하지 않는다.
+5. 첫 배포를 진행한다. 사용자 ‘Release 확인 완료’로 ZIP의 실행/재로드 대표 확인을 받았다. [첫 배포 기록](validation/RELEASE-0.2.4.0.md)과 [배포 가이드](DISTRIBUTION.md)를 읽고 이어간다. 다른 실패/복수/보관·한영 조합 등의 미확인 범위는 확대하지 않는다.
 
-- 준비물: `artifacts/share/0.2.4.0/` ZIP/체크섬/후보 JSON, 추출본 `.cache/release-validation/0.2.4.0/DuckbillFisher.dll`. 직접 Release 빌드 경고0/오류0·한영555키·6파일/내장 자료 해시 검사 통과. 정규 Debug 교체/테스트 없음. 사용자에게 Release 실행·도감/낚시1회·재로드 확인을 요청했다.
+- 최종 게시 준비물: `artifacts/share/0.2.4.0-final/` ZIP/체크섬/후보 JSON. 설명 가독성만 LF/글머리표로 수정하고 Packager 대상만 재실행했다. 기존 확인 ZIP/추출본은 보존, 최종 ZIP과 Description만 다르고 나머지5파일/다른 필드는 동일하다. 빌드/한영555키/내장 자료 검사 유지, 한영 검사 재통과, 정규 Debug 교체/테스트 없음.
 - 공개 origin/게시 권한 확인, 아직 원격 push/태그/Release/설치 JSON 게시 없음. 사용자는 이번 범위의 정상 push/태그/Release/JSON 게시를 승인했다. 확인 후 ZIP 게시→익명 확인→JSON 게시 순서다. 기존 CI가 테스트를 실행하므로 게시 커밋은 `[skip ci]`를 사용한다. gh는 없으며 Git credential manager 인증을 메모리에서만 써 GitHub API를 사용한다. tmp_note.md/자격 증명/빌드 산출물 스테이징 금지.
 
 ## 환경과 DLL

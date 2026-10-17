@@ -2,8 +2,8 @@
 
 ## 이번 배포 상태
 
-- 첫 배포 후보는 **0.2.4.0 / Dalamud API 15**다. 기존 대표 확인은 Debug DLL 기준이며 배포 ZIP의 Release 실행 확인은 별도로 받는다.
-- 공개 GitHub 저장소와 게시 권한 확인, 영어 소개·512×512 원본 아이콘 연결, Release 빌드·패키지 검사 완료. **Release 인게임 확인 대기이며 GitHub Release와 설치 목록은 아직 게시하지 않았다.**
+- 첫 배포 버전은 **0.2.4.0 / Dalamud API 15**다. 사용자가 Release 실행·재로드의 대표 확인을 완료했다. 미확인 기능 전체의 보증으로 확대하지 않는다.
+- 공개 GitHub 저장소와 게시 권한 확인, 영어 소개·512×512 원본 아이콘 연결, Release 빌드·패키지 검사 완료. 설명만 LF/글머리표로 개선했으며 검증한 실행 파일은 동일하다. GitHub Release와 설치 목록은 게시 진행 전이다.
 - `repo/pluginmaster.json`은 확인 완료 전까지 빈 배열을 유지한다. 아래 URL은 아직 설치 가능한 목록이 아니다.
 - 자세한 산출물·확인 범위는 [첫 배포 기록](validation/RELEASE-0.2.4.0.md)을 따른다.
 
@@ -59,6 +59,8 @@ pwsh -NoLogo -NoProfile -File scripts/prepare-release.ps1 `
 | `pluginmaster.json` | 확인 후 repo에 반영할 후보 |
 
 `prepare-release.ps1`은 필수 파일·허용 목록·API·버전을 확인한 뒤 로컬에 ZIP·체크섬·JSON을 만든다. 원격 게시나 실제 `repo/pluginmaster.json` 변경은 하지 않으며 기존 결과를 덮어쓰지 않는다. 재생성할 때는 새 출력 경로를 쓰고 확인한 ZIP의 해시가 바뀌면 실행 확인도 다시 구분한다.
+
+이번 최종 산출물은 `artifacts/share/0.2.4.0-final/`이다. 실행 확인 뒤 설명 가독성만 수정했으며 직접 재컴파일하지 않고 `dotnet msbuild ... -t:DefaultDalamudPackagerRelease -p:Configuration=Release`로 manifest/ZIP만 재생성했다. 원래 ZIP과 비교해 Description 외 5파일 및 다른 manifest 필드가 동일함을 확인했다. 향후 기능·실행 파일이 달라지는 수정의 실행 확인을 생략하는 절차는 아니다.
 
 한국어 위성 리소스 `ko/DuckbillFisher.resources.dll`이 반드시 포함되어야 한다. 요구 파일은 `scripts/package-files.ps1`을 따른다. 아이콘은 사용자가 제공한 원본을 바이트 변경 없이 이동했으며 `IconUrl`로 연결했다. 미리보기 스크린샷이 아니므로 `ImageUrls`에는 중복 등록하지 않았다. 아이콘 1:1·64~512픽셀 기준은 [공식 이미지 안내](https://dalamud.dev/plugin-publishing/submission/)를 참고했다.
 

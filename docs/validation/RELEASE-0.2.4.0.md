@@ -38,7 +38,8 @@ pwsh -NoLogo -NoProfile -File scripts/prepare-release.ps1 -PackagePath src/Duckb
 ## 인게임 확인과 게시 경계
 
 - 기존 Debug 0.2.4.0의 탐색 줄/간이 목록과 0.2.3.0 생미끼/실패 표시는 사용자 대표 확인 범위다. Release ZIP 실행 확인으로 확대하지 않는다.
-- 현재: **Release ZIP 인게임 확인 대기**. 로드·목록/간이 목록/타이머·한영·도감 연동·낚시1회·재로드 후 설정/기록 확인을 요청했다. 확인 결과는 이 구역에 이어 기록한다.
+- 사용자가 **Release 확인 완료**로 요청한 실행·재로드 절차의 대표 확인을 알렸다. 모든 특수 어획/다른 캐릭터/상한 복구의 확인으로 확대하지 않는다.
+- 설명 가독성 피드백으로 csproj Description에 명시적 LF/빈 줄/글머리표를 추가했다. 설치된 Packager15의 `DefaultDalamudPackagerRelease` 대상만 실행해 재컴파일 없이 manifest와 ZIP을 재생성했다. 최종 ZIP은 `artifacts/share/0.2.4.0-final/`, 318,411바이트, SHA256 `d85b31b1f326f725a40ca5c0578b18de33c4e223a4021d70fce3fea6eb09ce8f`다. 두 ZIP의 6항목 대조에서 Description만 변경됐으며 나머지 5파일·manifest의 다른 필드는 동일하다. 원래 확인 ZIP은 보존했고 로드된 개발 파일은 교체하지 않았다. 한영555키 검사 재통과, 테스트 없음.
 - GitHub Release/태그/원격 push/실제 설치 목록 반영은 아직 하지 않았다. `repo/pluginmaster.json`은 빈 배열이다.
 - 이후: 사용자 Release 확인 → 소스/태그 push → ZIP/체크섬 Release 게시 → 익명 다운로드 해시/아이콘 확인 → 설치 JSON 게시 → 익명 JSON/링크 확인 → Dalamud 설치 확인. 더 높은 버전의 실제 업데이트는 첫 배포만으로 검증했다고 하지 않는다.
 
@@ -47,4 +48,5 @@ pwsh -NoLogo -NoProfile -File scripts/prepare-release.ps1 -PackagePath src/Duckb
 - [커스텀 저장소](https://dalamud.dev/plugin-publishing/custom-repositories/): 인증 없는 배열 JSON, 설치/업데이트 링크, IconUrl/ImageUrls 역할. SDK15 manifest의 나머지 필드는 그대로 보존했다.
 - [이미지 규격](https://dalamud.dev/plugin-publishing/submission/): 아이콘 1:1, 64~512픽셀. 원본512 PNG를 그대로 사용했다. 공식 저장소 제출 절차를 수행한 것은 아니다.
 - [메타데이터](https://dalamud.dev/plugin-development/plugin-metadata/): Punchline/Description/IconUrl. 실제 설치된 DalamudPackager15 targets에서도 IconUrl 전달을 확인했다.
+- [정확한 D15 설치 화면 소스](https://github.com/goatcorp/Dalamud/blob/896d83190a34e7ff92deef967ba635ebb7dbdbae/Dalamud/Interface/Internal/Windows/PluginInstaller/PluginInstallerWindow.cs#L2718)는 Description을 TextWrapped로 표시한다. 따라서 Markdown/인라인 이미지 대신 실제 LF와 글머리표를 사용한다. [아이콘 로더](https://github.com/goatcorp/Dalamud/blob/896d83190a34e7ff92deef967ba635ebb7dbdbae/Dalamud/Interface/Internal/Windows/PluginImageCache.cs#L444)는 개발용 로컬 이미지가 없으면 IconUrl을 읽으므로 태그 게시 전 raw URL은 미접근 상태였다. 이미지 자체나 게임 UI 코드는 변경하지 않았다.
 - [GitHub CI 생략](https://docs.github.com/en/actions/how-tos/manage-workflow-runs/skip-workflow-runs): 기존 push 테스트 워크플로우는 수정하지 않고 이번 테스트 미실행 요청을 유지한다.

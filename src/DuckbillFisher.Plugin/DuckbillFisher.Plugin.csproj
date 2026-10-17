@@ -7,7 +7,7 @@
     <Author>PlatyDuckbill</Author>
     <Name>DuckbillFisher</Name>
     <Punchline>Let Duckbill guide your next catch.</Punchline>
-    <Description>A fishing companion for FFXIV Korea. Browse fish, baits and time/weather conditions, open fishing spots on the map, filter your collection, and get local alerts for favorites. Includes a casting timer and character-specific fishing records. Open with /duckbillfisher. Korean and English UI; game names follow your client. Verified only on the supported Korean client and Dalamud build. Does not automate fishing.</Description>
+    <Description>Let Duckbill guide your next catch.&#xA;A fishing companion for FFXIV Korea.&#xA;&#xA;• Browse fish with collection, region and availability filters.&#xA;• Check baits, mooch chains and time/weather conditions.&#xA;• Open fishing spots directly on the map.&#xA;• Get local alerts for favorites, with optional sounds.&#xA;• See fish available now or soon in the quick list.&#xA;• Follow casts with a timer and personal fishing records.&#xA;&#xA;Open: /duckbillfisher&#xA;UI: English / Korean. Game names follow your client.&#xA;&#xA;Verified on the supported Korean client and Dalamud build only.&#xA;Does not automate fishing.</Description>
     <RepoUrl>https://github.com/PlatyDuckbill/DuckbillFisher</RepoUrl>
     <Tags>fishing;fish;collection;Korea;한국어</Tags>
     <IconUrl>https://raw.githubusercontent.com/PlatyDuckbill/DuckbillFisher/v$(Version)/assets/duckbillfisher-icon.png</IconUrl>
