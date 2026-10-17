@@ -1,6 +1,6 @@
 # 세션 인수인계
 
-갱신: 2026-10-17 · Release0.2.4.0 게시 / 설치 JSON 최종 접근 확인 진행
+갱신: 2026-10-17 · 첫 배포0.2.4.0 게시·익명 접근 확인 완료
 
 ## 재개 순서
 
@@ -8,10 +8,10 @@
 2. UI 작업은 [합의된 구조](UI-UX-REDESIGN.md), [분석·구현·확인 순서](validation/MVP-01-UI-UX-REDESIGN.md)를 읽는다.
 3. 큰 디자인 변경은 선택지/차이를 질문하고 답변 후 구현한다. 기존 세 화면+별도 타이머/팝업/메인 히스토리 탭 추가는 사용자 합의 완료다.
 4. 사용자 `tmp_note.md`는 읽기·수정·스테이징하지 않는다. 전체 로그/과거 이력은 기본 요청하지 않는다.
-5. 첫 배포를 진행한다. 사용자 ‘Release 확인 완료’로 ZIP의 실행/재로드 대표 확인을 받았다. [첫 배포 기록](validation/RELEASE-0.2.4.0.md)과 [배포 가이드](DISTRIBUTION.md)를 읽고 이어간다. 다른 실패/복수/보관·한영 조합 등의 미확인 범위는 확대하지 않는다.
+5. 첫 배포0.2.4.0 완료. 사용자 Release 실행/재로드 대표 확인→ZIP 게시→익명 해시 확인→JSON 게시·익명 확인까지 완료했다. 다음은 실제 Dalamud 저장소 설치/아이콘/설명 확인이다. [배포 기록](validation/RELEASE-0.2.4.0.md)과 [가이드](DISTRIBUTION.md)를 따른다. 다른 실패/복수/보관·한영 조합 등의 미확인 범위는 확대하지 않는다.
 
 - 최종 게시 준비물: `artifacts/share/0.2.4.0-final/` ZIP/체크섬/후보 JSON. 설명 가독성만 LF/글머리표로 수정하고 Packager 대상만 재실행했다. 기존 확인 ZIP/추출본은 보존, 최종 ZIP과 Description만 다르고 나머지5파일/다른 필드는 동일하다. 빌드/한영555키/내장 자료 검사 유지, 한영 검사 재통과, 정규 Debug 교체/테스트 없음.
-- 사용자 승인 범위에서 source eb8c3ce/main와v0.2.4.0 태그 정상 push, GitHub Release415750305 공개 완료. ZIP/체크섬/아이콘 익명 HTTP·해시 통과 후 repo JSON을 반영했다. JSON 정상 push/최종 익명 확인을 마친 뒤 실제 저장소 설치를 안내한다. 기존 CI는 게시 커밋의 `[skip ci]`로 생략한다. gh 없이 기존 credential manager를 메모리에서만 사용했다. tmp_note.md/자격 증명/빌드 산출물 스테이징 금지.
+- source eb8c3ce/v0.2.4.0 태그/Release415750305·설치 JSON d0c2c50 정상 게시 완료. [공유 URL](https://raw.githubusercontent.com/PlatyDuckbill/DuckbillFisher/main/repo/pluginmaster.json)은 익명 HTTP200/1항목/API15/0.2.4.0/설명15줄/manifest 일치, 설치·업데이트·아이콘200/ZIP·원본 이미지 해시 일치다. 이번 CI 실행0건(`[skip ci]`)/테스트 없음. gh 없이 credential manager 인증을 메모리에서만 사용했다. tmp_note.md/자격 증명/빌드 산출물 스테이징 금지.
 
 ## 환경과 DLL
 
@@ -20,9 +20,9 @@
 - 참조: `C:\Users\hyogu\AppData\Roaming\XIVLauncherKR\addon\Hooks\dev`, Dalamud 15.0.3.6/API15.
 - 개발 DLL: `C:\Users\hyogu\Downloads\DuckbillFisher\src\DuckbillFisher.Plugin\bin\Debug\DuckbillFisher.dll`.
 - 현재 정규0.2.4.0: 별도/정규 빌드 경고·오류0, 한영555키/형식 인자, Plugin/Core/ko/manifest 버전 및 별도/정규 SHA256 일치 확인. 테스트 미실행.
-- 사용자가 이번 작업 전에 준 언로드 완료 확인으로 정규 반영했고 이후 ‘확인 완료’로 대표 확인을 받았다. ‘간이 목록’은 사용자가 선택한 이름이며 버튼/제목/도움말/툴팁에 적용했다. 푸시/릴리스 없음.
+- 이전 언로드 확인으로 정규 반영 후 ‘확인 완료’로 대표 확인을 받았다. ‘간이 목록’은 사용자 선택 명칭이다. 이번 배포에서는 Debug 파일을 교체하지 않고 ZIP 추출 Release를 확인받았으며 설명만 수정해 원격 게시했다. 현재 추출본 개발 등록이 있을 수 있으므로 배포 설치 전에 언로드/등록 비활성화가 필요하다.
 - 0.2.3.0은 생미끼 실제 Item/명시적 실패/어획 없는 행의 빈 아이콘/메인 우측 바로가기를 포함한다. Native 추가 접근 없이 본인 로그·현재 시전·단계·시간을 대조한다. timer/v3, 한영555키. 같은 표본을 반복 요청하지 않는다.
-- 0.1.26.0 사용자 `다 잘됨` 대표 확인 유지. 0.1.27.0 사용 피드백을 반영했으며 0.1.28.0 사용 피드백을 반영했고 0.1.29.0 결과는 아직 없다. 커밋은 로컬 보존이며 푸시/릴리스하지 않았다.
+- 과거 UI의 대표 확인/미확인 구분은 STATUS와 각 validation을 따른다. 이번 원격 push는 로컬에 보존했던 낚시 기록/UI 변경 이력도 포함한다. 과거 각 버전을 따로 릴리스한 것은 아니다.
 
 ## 이번 UI 구조와 정책
 

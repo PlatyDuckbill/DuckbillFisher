@@ -4,7 +4,7 @@
 
 - 첫 배포 버전은 **0.2.4.0 / Dalamud API 15**다. 사용자가 Release 실행·재로드의 대표 확인을 완료했다. 미확인 기능 전체의 보증으로 확대하지 않는다.
 - 공개 GitHub 저장소와 게시 권한 확인, 영어 소개·512×512 원본 아이콘 연결, Release 빌드·패키지 검사 완료. 설명만 LF/글머리표로 개선했으며 검증한 실행 파일은 동일하다.
-- [GitHub Release 0.2.4.0](https://github.com/PlatyDuckbill/DuckbillFisher/releases/tag/v0.2.4.0)와 태그를 게시했다. ZIP·체크섬·아이콘 익명 다운로드/해시 확인 통과 후 `repo/pluginmaster.json`에 설치 항목을 반영했다. JSON 원격 반영 후 최종 익명 접근 확인과 실제 Dalamud 설치 확인을 구분한다.
+- [GitHub Release 0.2.4.0](https://github.com/PlatyDuckbill/DuckbillFisher/releases/tag/v0.2.4.0)와 태그를 게시했다. ZIP·체크섬·아이콘 익명 다운로드/해시 확인 통과 후 저장소 JSON을 게시했다. 아래 실제 URL의 HTTP200/1항목/0.2.4.0/API15/설명15줄/ZIP manifest 일치, 설치·업데이트·아이콘200 확인 완료. 실제 Dalamud 저장소 설치와 다음 버전 업데이트는 별도 확인 대기다.
 - 자세한 산출물·확인 범위는 [첫 배포 기록](validation/RELEASE-0.2.4.0.md)을 따른다.
 
 ```text

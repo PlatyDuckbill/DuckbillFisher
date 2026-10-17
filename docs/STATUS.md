@@ -1,6 +1,6 @@
 # 현재 상태
 
-갱신: 2026-10-17 · Release0.2.4.0 게시 / 설치 JSON 최종 접근 확인 진행
+갱신: 2026-10-17 · 첫 배포0.2.4.0 게시·익명 접근 확인 완료
 
 ## 환경
 
@@ -29,9 +29,9 @@
 
 ## 이번 작업
 
-- 첫 배포 후보는0.2.4.0/API15다. 공개 GitHub 저장소/게시 권한 확인, 영어 소개·원본512 아이콘 정리, 직접 Release 빌드 경고0/오류0·한영555키·prepare-release/ZIP6파일·내장 데이터/고지 해시 검사 통과. 기능·정규 Debug DLL 변경과 테스트 실행은 없다. [배포 기록](validation/RELEASE-0.2.4.0.md), [설치·게시 가이드](DISTRIBUTION.md).
+- 첫 배포는0.2.4.0/API15다. 공개 GitHub 저장소/게시 권한 확인, 영어 소개·원본512 아이콘 정리, 직접 Release 빌드 경고0/오류0·한영555키·prepare-release/ZIP6파일·내장 데이터/고지 해시 검사 통과. 기능·정규 Debug DLL 변경과 테스트 실행은 없다. [배포 기록](validation/RELEASE-0.2.4.0.md), [설치·게시 가이드](DISTRIBUTION.md).
 - 사용자 ‘Release 확인 완료’로 배포용 실행/재로드 대표 확인을 받았다. 가독성 피드백의 LF/글머리표는 Packager만 재실행해 반영했다. 최종 ZIP `artifacts/share/0.2.4.0-final/`, SHA256 `d85b31b1f326f725a40ca5c0578b18de33c4e223a4021d70fce3fea6eb09ce8f`. Description만 변경, 나머지5파일/다른 manifest 필드 동일. 정규/현재 로드 파일 교체 없음.
-- 소스 `eb8c3ce`/태그v0.2.4.0 정상 push 및 [GitHub Release](https://github.com/PlatyDuckbill/DuckbillFisher/releases/tag/v0.2.4.0) 게시 완료. ZIP·체크섬·512 아이콘의 익명 HTTP/해시 대조 통과 후 설치 JSON을 반영했다. JSON 원격 게시/최종 접근 확인과 실제 Dalamud 설치 확인을 이어 구분한다.
+- 소스 `eb8c3ce`/태그v0.2.4.0 및 [GitHub Release](https://github.com/PlatyDuckbill/DuckbillFisher/releases/tag/v0.2.4.0) 게시 완료. ZIP/체크섬/512 아이콘 익명 HTTP·해시 통과 후 `d0c2c50`에서 설치 JSON 게시. [실제 저장소 URL](https://raw.githubusercontent.com/PlatyDuckbill/DuckbillFisher/main/repo/pluginmaster.json) HTTP200/1항목/API15/버전/설명15줄/ZIP manifest 일치와 설치·업데이트·아이콘 HTTP200 확인. 게시 push의 CI 실행0건, 테스트 없음. 실제 Dalamud 저장소 설치와 더 높은 버전 업데이트는 별도 확인 대기.
 
 - MVP-02/F07·F13의0.2.0.0 KR 표본은 만능 루어/쪽빛청어/안갯빛 마을, 일반 시전·성공·직접 회수·완전 종료를 확인했다. [실제 근거](validation/MVP-02-CASTING-PROBE.md). 정규0.2.1.0 사용자 사진에서 기록5행(성공3/중단2) 표시를 확인했으나 팝업 불동작/시간 정지/기록 구성 개선 요청을 받았다. 저장·재로드 확인으로 확대하지 않는다. [초기 구현](validation/MVP-02-TIMER-HISTORY.md).
 - 사용자 승인한0.2.2.0은 낚아채기 관찰에서 경과 정지, 글자 어종 버튼/위치 이벤트 순서 보완, 타이머 현재 묶음만 표시, 메인 ‘낚시 기록’ 요약→같은 탭 상세/확인 삭제를 구현했다. 최종 합의는 캐릭터별100묶음×최근2000회, 진행 중 보호/총 횟수 유지다. 묶음별schema2 파일/선택 상세 비동기 읽기/schema1 원본 유지 가져오기. 새 언로드 확인 후 정규 반영 완료. 별도/정규 빌드 경고0/오류0·한영554키/출력 검사 통과, 인게임 확인 대기. 미검증 결과는 Unknown, 테스트 없음. [저장·확인 순서](validation/MVP-02-HISTORY-MANAGEMENT.md).
@@ -56,7 +56,7 @@
 
 ## 다음 작업과 보류
 
-1. 설치 JSON을 정상 push하고 최종 익명 JSON/모든 링크를 확인한다. 이후 실제 Dalamud에서 개발 플러그인 비활성화→저장소 URL 추가→설치/아이콘/설명 확인을 안내한다. 더 높은 버전 업데이트 확인은 후속이다. 테스트 CI는 `[skip ci]`로 생략, 정규 개발 DLL 교체는 새 언로드 확인 필요. 다른 결과/보관·한영 조합 등의 확장 확인은 [남은 목록](ROADMAP.md#현재-남은-작업)에 유지한다.
+1. 실제 Dalamud에서 개발 플러그인 비활성화→저장소 URL 추가→DuckbillFisher 설치/아이콘/설명 표시를 확인한다. Release DLL 실행 확인과 HTTP 배포 확인은 완료했으나 설치기 동선·친구 PC·더 높은 버전 업데이트까지 확인한 것은 아니다. 정규 개발 DLL 교체는 새 언로드 확인 필요. 다른 결과/보관·한영 조합 등의 확장 확인은 [남은 목록](ROADMAP.md#현재-남은-작업)에 유지한다.
 2. 사용자 요청으로 Teamcraft/바다구렁이 불일치는 미해결 후속 조사로 보류한다. 다음 구현에서 조사/같은 로그 요청을 재개하거나 예측 공식을 추측 변경하지 않는다. 알림은 기존 일반 시간·날씨 예측을 사용하며 예측 정확성 검증 완료로 표현하지 않는다.
 3. 신규 등록 시 자동 미수집 제거·작살 모드 전환·한영 조합은 추가 확인 대기. 다른 캐릭터 격리는 사용자 ‘다른 캐릭터 없음’으로 실기 확인 보류이며 진행을 막지 않는다.
 4. 동일 캐릭터 재접속·홍룡 기본 판정은 통과했으므로 반복 요청하지 않는다.

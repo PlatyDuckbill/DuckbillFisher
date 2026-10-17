@@ -43,7 +43,8 @@ pwsh -NoLogo -NoProfile -File scripts/prepare-release.ps1 -PackagePath src/Duckb
 - 사용자 확인 후 기존 origin/main 정상 push, 소스 커밋 `eb8c3cef8d62c12c8af0bad74a2d9b303ec02cdb`에 `v0.2.4.0` 태그 생성·push 완료. 기존 이력/태그/릴리스 덮어쓰기 없음. 실행 파일은 초기 빌드 때의 Git 정보 `337c4b0`을 포함하며 빌드 당시의 메타데이터 수정과 최종 설명 변경 이력을 이 기록에 구분했다. 태그 뒤 실행 파일을 재컴파일하지 않았다.
 - GitHub API로 draft 생성→ZIP/체크섬 업로드(size/digest 대조)→공개 순서로 Release `415750305` 게시 완료. 공개 시각 `2026-10-17T10:52:08Z`. [릴리스](https://github.com/PlatyDuckbill/DuckbillFisher/releases/tag/v0.2.4.0). GitHub의 draft 업로드 응답에 임시 untagged URL이 있었으나 공개 후 정식 v0.2.4.0 URL을 확인했다.
 - 로그인 없는 정식 ZIP 다운로드 318,411바이트/SHA256 최종값 일치, `.sha256` HTTP200/내용 일치. 첫 검사에서 PowerShell의 binary 응답을 문자열로 처리한 오류가 있어 UTF8 디코딩 후 재검사해 통과했다. 아이콘 HTTP200/287,302바이트/원본 해시 일치. 이 확인 뒤에만 실제 repo JSON에 설치/업데이트 항목을 반영했다.
-- JSON 원격 게시 후 최종 익명 GET/링크 검사를 이어 진행한다. 실제 Dalamud 저장소 설치와 더 높은 버전 업데이트는 HTTP 확인만으로 검증했다고 하지 않는다.
+- 설치 JSON은 `d0c2c50`으로 정상 push했다. 실제 raw main URL의 익명 GET HTTP200/배열1항목/0.2.4.0/API15/숨김/테스트 전용 아님 확인. Description15줄/아이콘/버전이 다운로드 ZIP manifest와 같고, 공개 JSON의 설치/업데이트 URL이 같으며 해당 ZIP·아이콘 HEAD 모두200이다. 로컬 `.cache/release-remote-check/publication.json`에 결과를 보관했다. GitHub API에서 source/tag/설치 JSON push의 workflow 실행0건 확인. 테스트 없음.
+- 배포 제공 URL: `https://raw.githubusercontent.com/PlatyDuckbill/DuckbillFisher/main/repo/pluginmaster.json`. 실제 Dalamud 설치기의 설치·아이콘/설명 표시와 친구 PC, 더 높은 버전 업데이트는 아직 확인하지 않았다. 기존 개발 등록을 비활성화하고 이 URL로 설치하도록 안내한다.
 
 ## 공식 근거와 적용
 
