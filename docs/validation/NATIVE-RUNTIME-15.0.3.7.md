@@ -63,3 +63,11 @@
 - 로그인 없는 정식 URL의 ZIP/체크섬 HTTP200, ZIP SHA2565105b7b50292cb018032a2b3f6984b1672e94ad1093c05440bd401bd52ee0b4d 동일, 태그 아이콘 HTTP200/원본 해시 동일을 확인했다.
 - 이 확인 뒤에만 기존 repo/pluginmaster.json을0.2.5.0 설치/업데이트 URL로 갱신했다. 공개 JSON 최종 접근 확인과 실제 친구 PC의 업데이트·세 기능 확인은 구분한다. 새로운 빌드·게임 파일 교체·테스트 실행은 하지 않았다.
 - 저장소 변경은 `b2d2cab`으로 정상 push했다. 첫 공유 URL 검사에서는 GitHub raw의 캐시가0.2.4.0을 반환해 최종 버전 검사가 실패했다. 원본 커밋 URL/refs/heads/main/Contents API는0.2.5.0과 일치했고 이후11:24:11Z에 같은 공유 URL도0.2.5.0/API15/HTTP200을 확인했다. ZIP manifest/설명/아이콘 일치와 설치/업데이트/아이콘200, 게시 CI 실행0건도 확인했다. 결과는 `.cache/release-remote-check/0.2.5.0/publication.json`에 보관했다. 주소 변경/기존 릴리스 덮어쓰기 없음.
+
+## 친구0.2.5.0의 추가 실패: 조사 중
+
+- 사용자는 본인 PC의 배포 버전은 동작하지만 친구 PC에서는 계속 차단된다고 보고했다. 새 진단은 Plugin0.2.5.0 / Dalamud15.0.3.7 / 동일 게임 빌드이며 NativeProfile=none, NativeStatus=NativeDllMismatch, MismatchedModules=Dalamud,FFXIVClientStructs,InteropGenerator.Runtime이다. 도감 두 UI와 정적 목록은 실제로 감지되었다.
+- 0.2.5.0 게시 성공/본인 PC 대표 확인과 친구의 기능 해결은 구분한다. 현재 증상은 미해결이다. 버전 번호만 같다고 같은 파일 조합으로 판단하지 않는다.
+- 본인 PC의 설치가 현재15.0.3.7로 바뀌었고 dev/버전 폴더의 세 DLL MVID/SHA256이 위 고정 배포와 모두 같음을 직접 확인했다. 본인 Dalamud 로그도15.0.3.7/f3eeb5e18을 기록한다. 배포 저장소의 최신 revision은 여전히a96111f9다.
+- 현재 Matches는 MVID 불일치·Assembly.Location 없음·파일 SHA256 불일치를 모두 false로 축약한다. 따라서 친구 로그만으로 실제 파일 차이와 로드 방식 차이를 구분할 수 없다. [Assembly.Location 문서](https://learn.microsoft.com/en-us/dotnet/api/system.reflection.assembly.location?view=net-10.0)는 바이트 배열 로드에서 빈 경로를 반환한다고 설명한다. 이는 조사 후보이며 친구의 로드 방식이 그렇다고 확인한 것은 아니다.
+- 친구의 실행 경로에 있는 세 DLL과 version.json을 받아 `.cache/friend-runtime/`에서 비교하도록 요청했다. 현재 폴더는 준비했으며 파일은 아직 없다. 실제 파일의 출처·MVID/SHA·필드/메서드 IL을 대조한 뒤 수정 범위를 정한다. 친구 파일/캐시/게임 데이터는 Git에 넣지 않는다. 현재 단계에서 가드 완화·새 버전 빌드/게시·추가 테스트는 하지 않았다.
