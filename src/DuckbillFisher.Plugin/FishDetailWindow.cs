@@ -12,6 +12,7 @@ internal sealed class FishDetailWindow : Window
     private readonly FishPreferences preferences;
     private readonly FishCollectionObserver collection;
     private readonly FishDetailPanel panel;
+    private readonly FishGuideOpenService guideOpener;
     private uint? selectedId;
     private FishGuideRow? selected;
     private IReadOnlyList<FishGuideRow>? lastRows;
@@ -19,12 +20,13 @@ internal sealed class FishDetailWindow : Window
     private bool resetScroll;
 
     public FishDetailWindow(FishCatalog catalog, FishPreferences preferences, FishCollectionObserver collection,
-        FishDetailPanel panel) : base("DuckbillFisher###DuckbillFisher.Detail")
+        FishDetailPanel panel, FishGuideOpenService guideOpener) : base("DuckbillFisher###DuckbillFisher.Detail")
     {
         this.catalog = catalog;
         this.preferences = preferences;
         this.collection = collection;
         this.panel = panel;
+        this.guideOpener = guideOpener;
         Size = new Vector2(420, 600);
         SizeCondition = ImGuiCond.FirstUseEver;
         SizeConstraints = new WindowSizeConstraints { MinimumSize = new Vector2(320, 300), MaximumSize = new Vector2(float.MaxValue) };
@@ -58,7 +60,7 @@ internal sealed class FishDetailWindow : Window
             selected = selectedId is { } id ? view.Rows.FirstOrDefault(fish => fish.FishParameterId == id) : null;
         }
         if (resetScroll) { ImGui.SetScrollY(0); resetScroll = false; }
-        UiWidgets.GuideBanner(collection.View, personal);
+        UiWidgets.GuideBanner(collection.View, personal, guideOpener);
         panel.Draw(selected, view, personal, collection.View);
     }
 }

@@ -453,4 +453,7 @@ internal enum TextKey
     ConditionsSpotMissing,
     ConditionsSpotMissingHint,
     ForecastUnavailable,
+    OpenFishGuide,
+    GuideOpenUnavailable,
+    GuideOpenDataWaiting,
 }

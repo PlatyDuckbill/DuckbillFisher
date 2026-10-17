@@ -113,13 +113,16 @@ internal static class UiWidgets
         ImGui.Spacing();
     }
 
-    public static void GuideBanner(FishCollectionView collection, FishPreferencesView personal)
+    public static void GuideBanner(FishCollectionView collection, FishPreferencesView personal, FishGuideOpenService opener)
     {
         if (collection.GuidePrompt(personal.Session, personal.HasCharacter) is not { } prompt) return;
         ImGui.PushStyleColor(ImGuiCol.ChildBg, new Vector4(0.42f, 0.29f, 0.06f, 0.72f));
         var text = UiText.Get(prompt.Key == T.CollectionGuideOpenRequired ? T.GuideBannerOpen : T.GuideBannerRetry);
         var width = Math.Max(1, ImGui.GetContentRegionAvail().X - ImGui.GetFrameHeight() - 24);
-        var height = Math.Max(ImGui.GetFrameHeight(), ImGui.CalcTextSize(text, false, width).Y) + 16;
+        var failure = opener.Failure(personal.Session);
+        var height = Math.Max(ImGui.GetFrameHeight(), ImGui.CalcTextSize(text, false, width).Y) + 16
+            + ImGui.GetFrameHeightWithSpacing();
+        if (failure is not null) height += ImGui.CalcTextSize(failure.Display, false, width).Y + ImGui.GetStyle().ItemSpacing.Y;
         if (ImGui.BeginChild("GuideSyncBanner", new Vector2(0, height), true,
             ImGuiWindowFlags.NoScrollbar | ImGuiWindowFlags.NoScrollWithMouse))
         {
@@ -129,6 +132,11 @@ internal static class UiWidgets
             ImGui.TextUnformatted(text);
             ImGui.PopTextWrapPos();
             Tooltip(prompt.Display);
+            ImGui.BeginDisabled(!opener.IsSupported);
+            if (ImGui.Button(UiText.Label(T.OpenFishGuide, "OpenFishGuide"))) opener.Request(personal);
+            ImGui.EndDisabled();
+            if (!opener.IsSupported) Tooltip(UiText.Get(T.GuideOpenUnavailable));
+            if (failure is not null) ImGui.TextWrapped(failure.Display);
         }
         ImGui.EndChild();
         ImGui.PopStyleColor();

@@ -29,9 +29,11 @@ Plugin의 `AssemblyName`은 `DuckbillFisher`다. 주 DLL은 `DuckbillFisher.dll`
 | Game adapter | 로그인/지역/시전/수집 상태를 관찰하여 관리 객체의 snapshot/event로 전달 |
 | UI | snapshot을 표시하고 사용자 선택을 전달 |
 | Storage | JSON 설정 로드/검증/저장, 버전별 migration, 캐릭터별 상태 분리 |
-| Notifications/Map | 허용된 로컬 출력, 사용자 클릭에 따른 지도 열기 |
+| Notifications/Map | 허용된 로컬 출력, 사용자 클릭에 따른 지도/어류도감 열기 |
 
 인터페이스는 실제 테스트와 어댑터 경계에 필요한 것만 만든다. 공개 API 유무는 ENV-03에서 확인하며 `CastStarted` 같은 개념적 이벤트 이름을 실제 Dalamud API로 오인하지 않는다.
+
+0.1.33.0의 FishGuideOpenService는 연동 안내의 명시적 클릭을 Framework에서 한 번 처리하고 검증한 KR Agent API로 낚시 탭을 연다. 세션/캐릭터/요청 만료·DLL 가드·구독 해제를 적용하며 도감 준비 판정은 기존 관찰기만 담당한다. [게임 접근 근거](validation/MVP-01-GUIDE-OPEN.md).
 
 사용자 문구는 상태/게임 접근과 분리한다. 상태와 이력은 번역 문자열 대신 UiMessage의 키/인자를 보관하고 UI/진단 출력에서 각각 표현한다. 추가 언어와 패키징은 [다국어 지침](LOCALIZATION.md)을 따른다.
 

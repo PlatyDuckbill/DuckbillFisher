@@ -8,7 +8,8 @@ using T = DuckbillFisher.Plugin.Localization.TextKey;
 namespace DuckbillFisher.Plugin;
 
 internal sealed class SpawnAlertsPanel(FishPreferences preferences, SpawnAlerts alerts, SpawnAlertOutput output,
-    FishCollectionObserver collection, ITextureProvider textures, FishCatalog catalog, FishDetailPanel detailPanel, FishingMapService maps)
+    FishCollectionObserver collection, ITextureProvider textures, FishCatalog catalog, FishDetailPanel detailPanel, FishingMapService maps,
+    FishGuideOpenService guideOpener)
 {
     private readonly FishRowRenderer rows = new(textures, maps);
     private uint? selectedId;
@@ -48,7 +49,7 @@ internal sealed class SpawnAlertsPanel(FishPreferences preferences, SpawnAlerts 
             ImGui.TextWrapped(view.Status.Display);
         if (settings.Error is { } error)
             ImGui.TextWrapped(error.Display);
-        UiWidgets.GuideBanner(collection.View, settings);
+        UiWidgets.GuideBanner(collection.View, settings, guideOpener);
         ImGui.TextWrapped(UiText.Get(T.AlertsCounts, view.Eligible, view.Armed, view.Sent));
         if (view.Next is { } next && ImGui.IsItemHovered())
             ImGui.SetTooltip(UiText.Get(T.AlertsNext, next.Name, next.Start.AddMinutes(-next.LeadMinutes).ToLocalTime(),
