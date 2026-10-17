@@ -31,7 +31,7 @@ Open with `/duckbillfisher`. The same repository supplies future updates through
 
 ## Supported environment and limits
 
-- Current release: **[0.2.6.0](https://github.com/PlatyDuckbill/DuckbillFisher/releases/tag/v0.2.6.0)**, built for **Dalamud API 15**.
+- Current release: **[0.3.0.0](https://github.com/PlatyDuckbill/DuckbillFisher/releases/tag/v0.3.0.0)**, built for **Dalamud API 15**. Bait preparation and manual bait-finding guidance are included; representative checks of the extracted Release package passed on the developer's KR installation.
 - Representative game checks use Korean client **2026.10.06.0000.0000** and **XIVLauncherKR Dalamud 15.0.3.6**. Other regional clients are not verified.
 - Version 0.2.6.0 supports the inspected **wasdcxz and dal4kr builds of KR Dalamud 15.0.3.7**. These distributions share a version number but have distinct module identities. Representative checks of fish-guide opening, collection sync, and the casting timer passed on both the local PC and the friend's dal4kr installation after updating.
 - Native observations require the inspected KR game and DLL versions. A patch can disable these features until compatibility is reviewed.

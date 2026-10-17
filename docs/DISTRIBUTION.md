@@ -2,7 +2,7 @@
 
 ## 이번 배포 상태
 
-- 현재 공개 버전은 **0.2.6.0/API15**이며 본인/친구의 도감·수집·타이머 대표 확인 완료다. 아래0.2.4/0.2.5 설명은 배포 이력이다.0.3.0.0은 최저 지원 참조Release/패키지 검사를 마치고 ZIP 추출본 실기 확인 대기다. 아직 설치 목록을 갱신하지 않았다. [현재 후보/산출물](validation/RELEASE-0.3.0.0.md), [공개0.2.6.0 기록](validation/NATIVE-RUNTIME-DAL4KR.md).
+- 현재 Release는 **[0.3.0.0/API15](https://github.com/PlatyDuckbill/DuckbillFisher/releases/tag/v0.3.0.0)**다. 사용자 ZIP 추출본 대표 확인 후 같은 ZIP을 게시했고 익명 ZIP/체크섬/아이콘 HTTP200·해시 일치를 확인했다. 기존 저장소 URL의 설치 목록도0.3.0.0으로 갱신하며 최종 공유 URL 확인은 아래 배포 기록에 남긴다. 아래0.2.4/0.2.5 설명은 배포 이력이다. [현재 배포/확인 범위](validation/RELEASE-0.3.0.0.md), [0.2.6.0 친구 호환성 확인](validation/NATIVE-RUNTIME-DAL4KR.md).
 - 첫 배포 버전은 **0.2.4.0 / Dalamud API 15**다. 사용자가 Release 실행·재로드의 대표 확인을 완료했다. 미확인 기능 전체의 보증으로 확대하지 않는다.
 - 공개 GitHub 저장소와 게시 권한 확인, 영어 소개·512×512 원본 아이콘 연결, Release 빌드·패키지 검사 완료. 설명만 LF/글머리표로 개선했으며 검증한 실행 파일은 동일하다.
 - [GitHub Release 0.2.4.0](https://github.com/PlatyDuckbill/DuckbillFisher/releases/tag/v0.2.4.0)와 태그를 게시했다. ZIP·체크섬·아이콘 익명 다운로드/해시 확인 통과 후 저장소 JSON을 게시했다. 아래 실제 URL의 HTTP200/1항목/0.2.4.0/API15/설명15줄/ZIP manifest 일치, 설치·업데이트·아이콘200 확인 완료. 실제 Dalamud 저장소 설치와 다음 버전 업데이트는 별도 확인 대기다.
