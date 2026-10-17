@@ -1,6 +1,6 @@
 # 0.1.35.0 목록 폭 대응·기본 등급
 
-갱신: 2026-10-17 · 별도 빌드 완료 · 정규 반영/인게임 확인 대기
+갱신: 2026-10-17 · 정규 반영 완료 · 인게임 확인 대기
 
 ## 사용자 확인과 합의
 
@@ -23,7 +23,8 @@
 - SESSION-HANDOFF의 dotnet build에 `-p:OutputPath=C:/Users/hyogu/Downloads/DuckbillFisher/.cache/ui-refine-build/` 추가 → 경고 0/오류 0.
 - `pwsh -NoLogo -NoProfile -File scripts/check-localization.ps1` → 한영 456키/형식 인자 일치. `git diff --check` 통과.
 - 코드 확인: 전승록의 표시 분기는 FishingConditionPanel 상세에 유지, 공통 목록/요약에서 제거. 기존 설정 읽기는 저장한 Catalog.Copy를 사용하며 새 기본값으로 교체하지 않는다.
-- 테스트 추가/실행 없음. tmp_note.md 접근 없음. 정규 DLL은 0.1.34.0 유지하며 이번 수정의 새 언로드 확인 뒤 정규 빌드가 필요하다. 푸시/릴리스 없음.
+- 사용자 새 언로드 완료 확인 후 정규 dotnet build → 경고 0/오류 0. 한영 456키 검사 재실행 통과. 정규 DuckbillFisher.dll 1,039,360바이트/0.1.35.0, Core 39,936바이트/1.0.0.0, ko 리소스 45,056바이트/0.1.35.0. Manifest InternalName DuckbillFisher/AssemblyVersion 0.1.35.0/API15 확인.
+- 테스트 추가/실행 없음. tmp_note.md 접근 없음. 푸시/릴리스 없음.
 
 ## 인게임 확인 순서
 
