@@ -55,7 +55,7 @@ public sealed class Plugin : IDalamudPlugin
         guideOpener = new FishGuideOpenService(gameGui, clientState, playerState, framework, fishPreferences, fishCatalog, collectionReader);
         fishCollection = new FishCollectionObserver(fishPreferences, fishCatalog, collectionReader, dataManager, gameGui, chat, framework, log);
         fishingTracker = new FishingTracker(clientState, playerState, conditions, framework, chat, dataManager,
-            fishPreferences, fishCatalog, fishCollection, activityReader, new FishingHistoryStore(pluginInterface.GetPluginConfigDirectory()));
+            fishPreferences, fishCatalog, fishCollection, activityReader, new FishingHistoryStore(pluginInterface.GetPluginConfigDirectory(), log));
         itemLinks = new FishingItemLinkService(chat, framework, fishPreferences);
         fishingRegion = new FishingRegionObserver(clientState, conditions, dataManager, framework);
         alertOutput = new SpawnAlertOutput(framework, chat, fishPreferences, collectionReader.IsCompatible, log);

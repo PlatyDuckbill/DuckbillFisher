@@ -506,7 +506,8 @@ In fish log only: {5}</value></data>
   <data name="HistoryUnavailable" xml:space="preserve"><value>Observation unavailable</value></data>
   <data name="HistoryMoochUnknown" xml:space="preserve"><value>Mooch bait unknown</value></data>
   <data name="HistorySwimbaitUnknown" xml:space="preserve"><value>Selected swimbait unknown</value></data>
-  <data name="HistoryStorageError" xml:space="preserve"><value>A record file could not be read, saved, or deleted. New records remain in this session's memory.</value></data>
+  <data name="HistoryStorageError" xml:space="preserve"><value>A record file could not be verified. Saving and deletion are paused to preserve the files. New records remain in memory for this run.</value></data>
+  <data name="HistoryWriteRetry" xml:space="preserve"><value>Saving or deletion could not be completed. Retrying every {0} seconds; pending changes remain in memory for this run.</value></data>
   <data name="HistoryLoading" xml:space="preserve"><value>Loading fishing history…</value></data>
   <data name="HistoryEmpty" xml:space="preserve"><value>No recorded casts yet.</value></data>
   <data name="HistoryRecent" xml:space="preserve"><value>Recent casts · {0}</value></data>

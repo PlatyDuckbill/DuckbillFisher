@@ -559,4 +559,5 @@ internal enum TextKey
     TimerCastBait,
     NativeRuntimeUnsupported,
     NativeFeaturesBlocked,
+    HistoryWriteRetry,
 }

@@ -34,7 +34,7 @@ internal sealed class FishingHistoryPanel(FishingTracker tracker, ITextureProvid
         if (view.Storage is FishingStorageState.ReadFailed or FishingStorageState.InvalidFile or FishingStorageState.WriteFailed || view.DetailError && table)
         {
             ImGui.PushStyleColor(ImGuiCol.Text, new Vector4(1, .72f, .3f, 1));
-            ImGui.TextWrapped(UiText.Get(T.HistoryStorageError));
+            ImGui.TextWrapped(StorageMessage(view));
             ImGui.PopStyleColor();
         }
         if (ImGui.BeginChild(id))
@@ -59,6 +59,11 @@ internal sealed class FishingHistoryPanel(FishingTracker tracker, ITextureProvid
         }
         ImGui.EndChild();
     }
+
+    internal static string StorageMessage(FishingTrackerView view) =>
+        view.Storage == FishingStorageState.WriteFailed && view.HistoryWritable && !view.DetailError
+            ? UiText.Get(T.HistoryWriteRetry, (int)FishingHistoryStore.RetryInterval.TotalSeconds)
+            : UiText.Get(T.HistoryStorageError);
 
     private void DrawTable(FishingTrackerView view, IReadOnlyList<FishingAttempt> records)
     {

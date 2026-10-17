@@ -506,7 +506,8 @@
   <data name="HistoryUnavailable" xml:space="preserve"><value>관찰 불가</value></data>
   <data name="HistoryMoochUnknown" xml:space="preserve"><value>생미끼 어종 미확인</value></data>
   <data name="HistorySwimbaitUnknown" xml:space="preserve"><value>보관 생미끼 어종 미확인</value></data>
-  <data name="HistoryStorageError" xml:space="preserve"><value>기록 파일을 읽거나 저장·삭제하지 못했습니다. 새 기록은 현재 세션의 메모리에 유지합니다.</value></data>
+  <data name="HistoryStorageError" xml:space="preserve"><value>기록 파일을 확인할 수 없어 원본 보존을 위해 저장·삭제를 중지했습니다. 새 기록은 이번 실행의 메모리에만 유지합니다.</value></data>
+  <data name="HistoryWriteRetry" xml:space="preserve"><value>기록 저장·삭제를 완료하지 못해 {0}초마다 재시도합니다. 완료되지 않은 변경은 이번 실행의 메모리에 유지됩니다.</value></data>
   <data name="HistoryLoading" xml:space="preserve"><value>낚시 기록을 불러오는 중…</value></data>
   <data name="HistoryEmpty" xml:space="preserve"><value>아직 기록된 캐스팅이 없습니다.</value></data>
   <data name="HistoryRecent" xml:space="preserve"><value>최근 낚시 · {0}회</value></data>

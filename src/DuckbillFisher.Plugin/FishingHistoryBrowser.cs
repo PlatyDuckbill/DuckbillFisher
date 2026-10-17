@@ -42,7 +42,7 @@ internal sealed class FishingHistoryBrowser(FishingTracker tracker, FishCatalog 
             ImGui.TextDisabled(UiText.Get(T.TripCapacity, view.Trips.Count, FishingAttempts.TripCapacity));
             Diagnostics(developerMode);
             if (view.Storage is FishingStorageState.ReadFailed or FishingStorageState.InvalidFile or FishingStorageState.WriteFailed)
-                ImGui.TextWrapped(UiText.Get(T.HistoryStorageError));
+                ImGui.TextWrapped(FishingHistoryPanel.StorageMessage(view));
             if (ImGui.BeginChild("TripSummaries"))
             {
                 if (view.Trips.Count == 0) ImGui.TextWrapped(UiText.Get(view.State == FishingTrackerState.Loading ? T.HistoryLoading : T.TripEmpty));

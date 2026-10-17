@@ -1,6 +1,6 @@
 # 세션 인수인계
 
-갱신: 2026-10-17 · 0.2.6.0 친구 PC 업데이트·도감·수집·타이머 대표 확인 완료
+갱신: 2026-10-17 · 0.2.7.0 기록 안정성 수정 / 인게임 확인 대기
 
 ## 재개 순서
 
@@ -8,15 +8,10 @@
 2. UI 작업은 [합의된 구조](UI-UX-REDESIGN.md), [분석·구현·확인 순서](validation/MVP-01-UI-UX-REDESIGN.md)를 읽는다.
 3. 큰 디자인 변경은 선택지/차이를 질문하고 답변 후 구현한다. 기존 세 화면+별도 타이머/팝업/메인 히스토리 탭 추가는 사용자 합의 완료다.
 4. 사용자 `tmp_note.md`는 읽기·수정·스테이징하지 않는다. 전체 로그/과거 이력은 기본 요청하지 않는다.
-5. [dal4kr 지원0.2.6.0](validation/NATIVE-RUNTIME-DAL4KR.md)은 로컬 대표 확인·게시 완료다. 태그6fc2fc1/Release415773597/설치 JSON7179f43. 기존 공유 URL의0.2.6.0/API15/HTTP200·manifest/15줄 설명 일치·설치/업데이트/아이콘200·게시 CI 실행0 확인. 친구의 일반 업데이트 후 도감·수집·타이머 대표 확인도 통과해 이번 호환성 수정은 종료했다. 다음 작업은 ROADMAP에서 사용자와 정한다. 실제 파일·8개 타입/IL 대조는 끝났으므로 파일/로그 반복 요청이나 단순 버전 허용 금지.
+5. [기록 안정성0.2.7.0](validation/MVP-02-HISTORY-STABILITY.md)을 이어간다. 구현/별도 Debug 경고0·오류0/한영558키 검사 완료, 테스트 없음. 사용자의 새 언로드 확인이 필요하며 현재 정규·로드 DLL을 교체하지 않았다. 새 확인용 묶음으로 복원·삭제 후 재등장 방지를 확인한다. 사용자 파일/실제 낚시 기록에 자동 실패 주입·삭제를 하지 않는다.
+6. 현재 공개0.2.6.0은 친구의 일반 업데이트 후 도감·수집·타이머까지 대표 확인 완료다. 태그6fc2fc1/Release415773597/설치 JSON7179f43, 공개 URL·ZIP/아이콘 해시·API15 확인. [dal4kr 근거/결과](validation/NATIVE-RUNTIME-DAL4KR.md). 같은 파일/로그를 재요청하거나 런타임 가드를 풀지 않는다.
 
-- 새 후보 `.cache/release-validation/0.2.6.0/DuckbillFisher.dll`, ZIP `artifacts/share/0.2.6.0/`. 두 배포 참조 Debug/최저15.0.3.6 참조 Release 모두 경고0/오류0·557키·패키지 검사 통과. 사용자 로컬 대표 확인 완료/테스트 없음. 태그6fc2fc1/v0.2.6.0·Release415773597 게시와 익명 다운로드/해시 검사 통과. 기존 JSON/실제 공유 URL 확인과 친구의 정상 업데이트·도감·수집·타이머 대표 확인을 완료했다. 정규/현재 로드 DLL 직접 교체 없음.
-
-- 확인 DLL `.cache/release-validation/0.2.5.0/DuckbillFisher.dll`, 패키지 `artifacts/share/0.2.5.0/`. 기존/새 참조 Debug와 기존 참조 Release 경고0/오류0·한영557키·패키지 검사 통과. 사용자 ‘잘 됨’으로 도감/수집·타이머 대표 확인 완료, 확인한 ZIP 그대로 게시한다. 실제 친구15.0.3.7 업데이트 후 결과는 별도 확인 대기/테스트 없음. 정규·현재 로드 파일 직접 교체/기존 Release 덮어쓰기 없음.
-- 구현d5c5899/확인638b77d·v0.2.5.0 태그/Release415761624·JSON b2d2cab 게시 완료. 같은 공유 URL0.2.5.0/HTTP200·ZIP/아이콘/설명 일치·CI 실행0 확인. 친구의 차단 지속은 실제 dal4kr 파일 대조 후 위0.2.6.0 후보로 대응했다. 0.2.6.0 원격 게시 후 친구의 실제 동작도 대표 확인을 통과했다.
-
-- 최종 게시 준비물: `artifacts/share/0.2.4.0-final/` ZIP/체크섬/후보 JSON. 설명 가독성만 LF/글머리표로 수정하고 Packager 대상만 재실행했다. 기존 확인 ZIP/추출본은 보존, 최종 ZIP과 Description만 다르고 나머지5파일/다른 필드는 동일하다. 빌드/한영555키/내장 자료 검사 유지, 한영 검사 재통과, 정규 Debug 교체/테스트 없음.
-- source eb8c3ce/v0.2.4.0 태그/Release415750305·설치 JSON d0c2c50 정상 게시 완료. [공유 URL](https://raw.githubusercontent.com/PlatyDuckbill/DuckbillFisher/main/repo/pluginmaster.json)은 익명 HTTP200/1항목/API15/0.2.4.0/설명15줄/manifest 일치, 설치·업데이트·아이콘200/ZIP·원본 이미지 해시 일치다. 이번 CI 실행0건(`[skip ci]`)/테스트 없음. gh 없이 credential manager 인증을 메모리에서만 사용했다. tmp_note.md/자격 증명/빌드 산출물 스테이징 금지.
+- 후보 DLL: `.cache/history-stability-build/DuckbillFisher.dll`(0.2.7.0). 정상 개발 DLL은 아래 경로다. 공개 JSON/릴리스/ZIP 갱신 없음. 새 배포 시15.0.3.6의 최저 지원 참조로 Release 빌드·패키지 확인·인게임 확인을 별도로 진행한다.
 
 ## 환경과 DLL
 

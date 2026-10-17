@@ -60,7 +60,6 @@ internal sealed class FishingTracker : IDisposable
     private int session = -1;
     private bool initialized, loaded, writable, disposed;
     private int savedRevision = -1;
-    private TimeSpan nextSaveRetry;
     private int revision, casts, catches, retrieves, ignored;
     private int? previousPhase;
     private bool seenIdle;
@@ -194,8 +193,10 @@ internal sealed class FishingTracker : IDisposable
                 var archive = storage.View(character);
                 if (archive.State == FishingStorageState.Loading) return;
                 loaded = true;
-                writable = archive.State == FishingStorageState.Ready;
+                writable = archive.Writable;
             }
+            // Restore the sequence and write permission before observing a new cast.
+            var archiveChanged = UpdateArchive();
             var before = history.Revision;
             var indexed = false;
             if (!ReferenceEquals(indexedRows, catalog.View.Rows))
@@ -250,7 +251,7 @@ internal sealed class FishingTracker : IDisposable
                 }
             }
             lastTick = now;
-            var archiveChanged = UpdateArchive();
+            archiveChanged |= UpdateArchive();
             var selectionChanged = UpdateSelection();
             var observed = collection.View;
             var browsingSpot = spot ?? lastConfirmedSpot;
@@ -380,6 +381,7 @@ internal sealed class FishingTracker : IDisposable
     private bool UpdateArchive()
     {
         var archive = storage.View(character);
+        writable = archive.Writable;
         if (archiveRevision == archive.Revision && view.Records == history.Records) return false;
         archiveRevision = archive.Revision;
         archiveTrips = archive.Trips;
@@ -448,11 +450,8 @@ internal sealed class FishingTracker : IDisposable
     private void Persist()
     {
         if (!loaded || !writable || character == 0 || history.Trip is null || deletedTrips.Contains(history.Trip.Id)) return;
-        if (savedRevision == history.Revision &&
-            (storage.State(character) != FishingStorageState.WriteFailed || clock.Elapsed < nextSaveRetry)) return;
-        savedRevision = history.Revision;
-        nextSaveRetry = clock.Elapsed + TimeSpan.FromSeconds(5);
-        storage.Save(character, history.Trip, history.Records);
+        if (savedRevision == history.Revision) return;
+        if (storage.Save(character, history.Trip, history.Records)) savedRevision = history.Revision;
     }
     private bool ResolveItems()
     {
