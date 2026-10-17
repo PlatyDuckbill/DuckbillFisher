@@ -1,6 +1,6 @@
 # 현재 상태
 
-갱신: 2026-10-18 · 0.3.0.0 Release 빌드/패키지 검사 완료 · ZIP 실기 확인 뒤 게시 대기
+갱신: 2026-10-18 · 0.3.0.0 Release 추출본 사용자 대표 확인 완료 · 동일 ZIP 게시 진행
 
 ## 환경
 
@@ -44,11 +44,11 @@
 - 공개0.2.6.0/API15는 본인·친구 PC의 업데이트/도감 열기/수집/타이머 대표 확인 완료. wasdcxz/dal4kr15.0.3.7 정확한 모듈 가드 유지. [근거/게시](validation/NATIVE-RUNTIME-DAL4KR.md).
 - 커스텀 저장소: `https://raw.githubusercontent.com/PlatyDuckbill/DuckbillFisher/main/repo/pluginmaster.json`.
 - 태그v0.2.6.0=6fc2fc1 / Release415773597 / 설치 JSON7179f43. 공개 URL/ZIP/아이콘 해시/API15 확인 완료.
-- 사용자 배포 요청으로0.3.0.0 최저 참조 Release 빌드 경고0/오류0·한영606키와패키지 검사를 완료했다. ZIP370,524바이트/SHA256 시작4EC80617, 추출7파일/내장 자료 해시 일치. `.cache/release-validation/0.3.0.0/DuckbillFisher.dll`의 사용자 대표 확인 대기. 후보ZIP/JSON만 생성했고 새 태그/릴리스/공개 JSON/push 없음. [산출물/순서](validation/RELEASE-0.3.0.0.md).
+- 사용자 ‘Release 확인 완료’로0.3.0.0 추출본의 목록/도감/간이 목록·준비/찾기·타이머/기록·한영/재로드 대표 확인을 받았다. 최저 참조Release 경고0/오류0·한영606키, ZIP370,524바이트/SHA256 시작4EC80617, 추출7파일/내장 자료 해시 일치. 같은 ZIP으로 게시 진행하며 전체 테마/친구 새 기능 전수 확인은 별도다. [산출물/순서](validation/RELEASE-0.3.0.0.md).
 
 ## 다음 한 작업과 보류
 
-1. [Release 추출본](validation/RELEASE-0.3.0.0.md) 사용자 확인을 받은 뒤 동일ZIP으로push/태그/Release/익명 다운로드 확인→공개JSON 갱신/URL 확인을 진행한다. 미끼 표식/준비 표시의 세부 확인 대기는 [근거](validation/BAIT-PREPARATION.md)를 따른다. 빌드 성공을 실기 확인으로 올리지 않는다.
+1. [확인한 Release ZIP](validation/RELEASE-0.3.0.0.md)을 재빌드하지 않고push/태그/Release/익명 다운로드 확인→공개JSON 갱신/URL 확인을 진행한다. 사용자 대표 확인과 전체 테마/친구 새 기능 전수 확인은 구분한다.
 2. 정규0.2.9.0 데이터 대표 화면도 확인 대기다. 새 작업 시작을 이전 검증 완료로 취급하지 않는다. 나머지 [터주작 후보](TROPHY-FISHING-PROPOSALS.md), 먼바다·작살은 후속, 잔여11종은 검증 가능한 근거가 생길 때 보완한다.
 3. 복수 어획·수량은 사용자 요청으로 후속. 다른 실패/소장품/소지 불가/방생 구분도 정확한 KR 표본부터 연결한다.
 4. Teamcraft/바다구렁이 예측 불일치는 미해결 후속 조사다. 이번에 재조사/로그 요청/공식 변경하지 않았다. 입질 초 수 통계도 보류한다.
