@@ -10,11 +10,18 @@ public sealed record FishingAttempt(Guid Id, Guid SessionId, DateTimeOffset? Ses
     DateTimeOffset? EndedUtc = null, double? DurationSeconds = null, uint? FishItemId = null, int? Quantity = null,
     double? BiteSeconds = null, double? HookSeconds = null);
 
+public sealed record FishingTripSummary(Guid Id, long Sequence, uint TerritoryId, uint? SpotId,
+    DateTimeOffset? StartedUtc, DateTimeOffset? EndedUtc, bool IsActive, int Casts, int Retained,
+    int Caught, int Failed, int Cancelled, int Interrupted, int Unknown, FishingEndReason EndReason)
+{
+    public DateTimeOffset? FirstCastUtc { get; init; }
+}
+
 /// <summary>Single-writer cast/session history. Inputs are copied observations and caller-controlled times.</summary>
 public sealed class FishingAttempts
 {
-    public const int Capacity = 1000;
-    public const int RecentCapacity = 100;
+    public const int Capacity = 2000;
+    public const int TripCapacity = 100;
     private readonly List<FishingAttempt> records = [];
     private IReadOnlyList<FishingAttempt> snapshot = Array.Empty<FishingAttempt>();
     private Guid? sessionId;
@@ -25,17 +32,13 @@ public sealed class FishingAttempts
     public TimeSpan? SessionStartedAt { get; private set; }
     public DateTimeOffset? SessionStartedUtc => sessionUtc;
     public bool HasSession => sessionId is not null;
+    public FishingTripSummary? Trip { get; private set; }
     public IReadOnlyList<FishingAttempt> Records => snapshot;
 
-    public void Restore(IEnumerable<FishingAttempt> saved)
+    public void SetSequence(long sequence)
     {
-        records.Clear();
-        records.AddRange(saved.Take(Capacity).Select(row => row.Outcome == FishingOutcome.Pending
-            ? row with { Outcome = FishingOutcome.Interrupted, EndReason = FishingEndReason.Reload } : row));
-        Active = null;
-        sessionId = null;
-        sessionUtc = null;
-        CastStartedAt = SessionStartedAt = null;
+        if (Trip is null || Trip.Sequence != 0) return;
+        Trip = Trip with { Sequence = sequence };
         Publish();
     }
 
@@ -45,21 +48,26 @@ public sealed class FishingAttempts
         if (Active is not null) End(now, utc, FishingOutcome.Unknown, FishingEndReason.NextCast);
         if (sessionId is null)
         {
+            records.Clear();
             sessionId = Guid.NewGuid();
             sessionUtc = sessionStartKnown ? utc : null;
             SessionStartedAt = sessionStartKnown ? now : null;
+            Trip = new(sessionId.Value, 0, territory, spot, sessionUtc, null, true, 0, 0, 0, 0, 0, 0, 0, FishingEndReason.None);
+            Trip = Trip with { FirstCastUtc = castStartKnown ? utc : null };
         }
         CastStartedAt = castStartKnown ? now : null;
         Active = new(Guid.NewGuid(), sessionId.Value, sessionUtc, territory, spot, bait, baitKind,
             castStartKnown ? utc : null);
         records.Insert(0, Active);
         if (records.Count > Capacity) records.RemoveAt(records.Count - 1);
+        Trip = Trip! with { Casts = Trip!.Casts + 1, Retained = records.Count, SpotId = Trip.SpotId ?? spot };
         Publish();
     }
 
     public void SetSpot(uint spot)
     {
         if (Active is null || Active.SpotId is not null || spot == 0) return;
+        if (Trip is not null && Trip.SpotId is null) Trip = Trip with { SpotId = spot };
         ReplaceActive(Active with { SpotId = spot });
     }
 
@@ -84,6 +92,15 @@ public sealed class FishingAttempts
             FishItemId = fish, Quantity = quantity };
         Active = null;
         CastStartedAt = null;
+        if (Trip is not null)
+            Trip = Trip with
+            {
+                Caught = Trip.Caught + (outcome == FishingOutcome.Caught ? 1 : 0),
+                Failed = Trip.Failed + (outcome == FishingOutcome.Failed ? 1 : 0),
+                Cancelled = Trip.Cancelled + (outcome == FishingOutcome.Cancelled ? 1 : 0),
+                Interrupted = Trip.Interrupted + (outcome == FishingOutcome.Interrupted ? 1 : 0),
+                Unknown = Trip.Unknown + (outcome == FishingOutcome.Unknown ? 1 : 0),
+            };
         Publish();
     }
 
@@ -91,6 +108,7 @@ public sealed class FishingAttempts
     {
         End(now, utc, FishingOutcome.Interrupted, reason);
         if (sessionId is null) return;
+        if (Trip is not null) Trip = Trip with { IsActive = false, EndedUtc = utc, EndReason = reason };
         sessionId = null;
         sessionUtc = null;
         SessionStartedAt = null;

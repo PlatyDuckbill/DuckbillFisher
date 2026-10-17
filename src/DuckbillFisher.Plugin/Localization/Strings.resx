@@ -506,7 +506,7 @@ In fish log only: {5}</value></data>
   <data name="HistoryUnavailable" xml:space="preserve"><value>Observation unavailable</value></data>
   <data name="HistoryMoochUnknown" xml:space="preserve"><value>Mooch bait unknown</value></data>
   <data name="HistorySwimbaitUnknown" xml:space="preserve"><value>Selected swimbait unknown</value></data>
-  <data name="HistoryStorageError" xml:space="preserve"><value>History could not be saved or restored. Existing files are preserved; new records remain in memory.</value></data>
+  <data name="HistoryStorageError" xml:space="preserve"><value>A record file could not be read, saved, or deleted. New records remain in this session's memory.</value></data>
   <data name="HistoryLoading" xml:space="preserve"><value>Loading fishing history…</value></data>
   <data name="HistoryEmpty" xml:space="preserve"><value>No recorded casts yet.</value></data>
   <data name="HistoryRecent" xml:space="preserve"><value>Recent casts · {0}</value></data>
@@ -535,4 +535,32 @@ In fish log only: {5}</value></data>
   <data name="TimerFishCount" xml:space="preserve"><value>{0} fish</value></data>
   <data name="TimerNoFish" xml:space="preserve"><value>No fish match this collection filter.</value></data>
   <data name="HistoryCastAt" xml:space="preserve"><value>Cast at: {0}</value></data>
+  <data name="TimerSpotFishButton" xml:space="preserve"><value>View fish</value></data>
+  <data name="TimerCurrentHistory" xml:space="preserve"><value>This fishing trip · {0} casts</value></data>
+  <data name="TimerCurrentEmpty" xml:space="preserve"><value>Cast to start a new fishing record.</value></data>
+  <data name="HistoryResultTime" xml:space="preserve"><value>Cast → result received: {0:0.0}s</value></data>
+  <data name="TripResultColumn" xml:space="preserve"><value>Result</value></data>
+  <data name="TripBaitColumn" xml:space="preserve"><value>Bait at cast</value></data>
+  <data name="TripCastColumn" xml:space="preserve"><value>Cast time</value></data>
+  <data name="TripEtColumn" xml:space="preserve"><value>ET</value></data>
+  <data name="TripHookColumn" xml:space="preserve"><value>Cast elapsed</value></data>
+  <data name="TripBack" xml:space="preserve"><value>Back to records</value></data>
+  <data name="TripDelete" xml:space="preserve"><value>Delete record</value></data>
+  <data name="TripActiveProtected" xml:space="preserve"><value>Records in progress are protected. Finish fishing before deleting them.</value></data>
+  <data name="TripTruncated" xml:space="preserve"><value>Showing the latest {0} of {1} casts.</value></data>
+  <data name="TripDeleteAll" xml:space="preserve"><value>Delete completed records</value></data>
+  <data name="TripCapacity" xml:space="preserve"><value>{0}/{1} records</value></data>
+  <data name="TripEmpty" xml:space="preserve"><value>No fishing records yet. Cast to begin.</value></data>
+  <data name="TripLocationColumn" xml:space="preserve"><value>Fishing spot</value></data>
+  <data name="TripDateColumn" xml:space="preserve"><value>Started</value></data>
+  <data name="TripCastsColumn" xml:space="preserve"><value>Casts</value></data>
+  <data name="TripCaughtColumn" xml:space="preserve"><value>Caught</value></data>
+  <data name="TripStatusColumn" xml:space="preserve"><value>Status</value></data>
+  <data name="TripInProgress" xml:space="preserve"><value>In progress</value></data>
+  <data name="TripEnded" xml:space="preserve"><value>Ended</value></data>
+  <data name="TripLocationTitle" xml:space="preserve"><value>{0} · {1}</value></data>
+  <data name="TripSummary" xml:space="preserve"><value>{0} · {1} casts · {2} caught · {3} cancelled/interrupted · {4} unknown · {5}</value></data>
+  <data name="TripDeleteTitle" xml:space="preserve"><value>Delete fishing records</value></data>
+  <data name="TripDeleteQuestion" xml:space="preserve"><value>Delete {0} selected fishing records? This cannot be undone.</value></data>
+  <data name="TimerLastSpot" xml:space="preserve"><value>Last fishing spot · {0}</value></data>
 </root>

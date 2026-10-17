@@ -22,31 +22,16 @@ internal static class FishingTimeText
     }
     public static string Item(FishingTrackerView view, uint? id) => id is not > 0 ? UiText.Get(T.ConditionUnknown) :
         view.Items.TryGetValue(id.Value, out var item) && item.Name.Length > 0 ? item.Name : UiText.Get(T.HistoryItemUnknown, id.Value);
+    public static double? DisplaySeconds(FishingAttempt row, FishingTrackerView view, TimeSpan now) =>
+        row.HookSeconds ?? (row.Id == view.Active?.Id && view.CastStartedAt is { } start ? (now - start).TotalSeconds : row.DurationSeconds);
 }
 
-/// <summary>Shared recent/full history. Constant-height entries and cached session separators.</summary>
+/// <summary>Shared current-trip/detail rows. No synthetic group headers or reserved separator rows.</summary>
 internal sealed class FishingHistoryPanel(FishingTracker tracker, ITextureProvider textures, Action<FishGuideRow> showDetail)
 {
-    private IReadOnlyList<FishingAttempt>? lastRecords;
-    private Entry[] entries = [];
-    private int lastLimit;
-
-    public void Draw(FishingTrackerView view, int limit, string id)
+    public void Draw(FishingTrackerView view, IReadOnlyList<FishingAttempt> records, string id, bool table = false)
     {
-        if (!ReferenceEquals(lastRecords, view.Records) || lastLimit != limit)
-        {
-            lastRecords = view.Records;
-            lastLimit = limit;
-            var result = new List<Entry>();
-            Guid? session = null;
-            foreach (var record in view.Records.Take(limit))
-            {
-                if (session != record.SessionId) { result.Add(new(record, true)); session = record.SessionId; }
-                result.Add(new(record, false));
-            }
-            entries = result.ToArray();
-        }
-        if (view.Storage is FishingStorageState.ReadFailed or FishingStorageState.InvalidFile or FishingStorageState.WriteFailed)
+        if (view.Storage is FishingStorageState.ReadFailed or FishingStorageState.InvalidFile or FishingStorageState.WriteFailed || view.DetailError && table)
         {
             ImGui.PushStyleColor(ImGuiCol.Text, new Vector4(1, .72f, .3f, 1));
             ImGui.TextWrapped(UiText.Get(T.HistoryStorageError));
@@ -54,37 +39,69 @@ internal sealed class FishingHistoryPanel(FishingTracker tracker, ITextureProvid
         }
         if (ImGui.BeginChild(id))
         {
-            if (view.Records.Count == 0)
-                ImGui.TextWrapped(UiText.Get(view.State == FishingTrackerState.Loading ? T.HistoryLoading : T.HistoryEmpty));
-            var height = ImGui.GetTextLineHeightWithSpacing() * 2 + 8;
-            var clipper = ImGui.ImGuiListClipper();
-            try
+            if (records.Count == 0)
+                ImGui.TextWrapped(UiText.Get(view.DetailLoading || view.State == FishingTrackerState.Loading ? T.HistoryLoading :
+                    table ? T.HistoryEmpty : T.TimerCurrentEmpty));
+            if (table && ImGui.GetContentRegionAvail().X > ImGui.GetFontSize() * 42)
+                DrawTable(view, records);
+            else
             {
-                clipper.Begin(entries.Length, height + ImGui.GetStyle().ItemSpacing.Y);
-                while (clipper.Step())
-                    for (var i = clipper.DisplayStart; i < clipper.DisplayEnd; i++) DrawEntry(entries[i], view, height);
+                var height = ImGui.GetTextLineHeightWithSpacing() * 2 + 8;
+                var clipper = ImGui.ImGuiListClipper();
+                try
+                {
+                    clipper.Begin(records.Count, height + ImGui.GetStyle().ItemSpacing.Y);
+                    while (clipper.Step())
+                        for (var i = clipper.DisplayStart; i < clipper.DisplayEnd; i++) DrawCompact(records[i], view, height);
+                }
+                finally { clipper.Destroy(); }
             }
-            finally { clipper.Destroy(); }
         }
         ImGui.EndChild();
     }
 
-    private void DrawEntry(Entry entry, FishingTrackerView view, float height)
+    private void DrawTable(FishingTrackerView view, IReadOnlyList<FishingAttempt> records)
     {
-        var row = entry.Record;
-        ImGui.PushID($"{row.Id:N}-{entry.Header}");
+        if (!ImGui.BeginTable("TripAttempts", 5, ImGuiTableFlags.RowBg | ImGuiTableFlags.SizingStretchProp)) return;
+        ImGui.TableSetupColumn(UiText.Label(T.TripResultColumn, "Result"), ImGuiTableColumnFlags.WidthStretch, 2);
+        ImGui.TableSetupColumn(UiText.Label(T.TripBaitColumn, "Bait"), ImGuiTableColumnFlags.WidthStretch, 2);
+        ImGui.TableSetupColumn(UiText.Label(T.TripCastColumn, "CastAt"), ImGuiTableColumnFlags.WidthFixed, ImGui.GetFontSize() * 7);
+        ImGui.TableSetupColumn(UiText.Label(T.TripEtColumn, "CastEt"), ImGuiTableColumnFlags.WidthFixed, ImGui.GetFontSize() * 5);
+        ImGui.TableSetupColumn(UiText.Label(T.TripHookColumn, "CastElapsed"), ImGuiTableColumnFlags.WidthFixed, ImGui.GetFontSize() * 7);
+        ImGui.TableHeadersRow();
+        var height = ImGui.GetFrameHeight() + 6;
+        var clipper = ImGui.ImGuiListClipper();
+        try
+        {
+            clipper.Begin(records.Count, height);
+            while (clipper.Step())
+                for (var i = clipper.DisplayStart; i < clipper.DisplayEnd; i++)
+                {
+                    var row = records[i];
+                    ImGui.PushID(row.Id.ToString("N"));
+                    ImGui.TableNextRow(ImGuiTableRowFlags.None, height);
+                    ImGui.TableNextColumn();
+                    var clicked = ImGui.Selectable(Result(row, view) + "###Attempt", false,
+                        ImGuiSelectableFlags.SpanAllColumns | ImGuiSelectableFlags.AllowItemOverlap, new Vector2(0, height - ImGui.GetStyle().CellPadding.Y * 2));
+                    var hovered = ImGui.IsItemHovered();
+                    ImGui.TableNextColumn(); ImGui.TextUnformatted(Bait(row, view));
+                    ImGui.TableNextColumn(); ImGui.TextUnformatted(row.StartedUtc?.ToLocalTime().ToString("HH:mm:ss", UiText.Culture) ?? "—");
+                    ImGui.TableNextColumn(); ImGui.TextUnformatted(row.StartedUtc is { } utc ? FishingTimeText.Et(utc) : "—");
+                    ImGui.TableNextColumn(); ImGui.TextUnformatted(Duration(row, view));
+                    if (hovered) Tooltip(row, view);
+                    OpenResult(clicked, row);
+                    ImGui.PopID();
+                }
+        }
+        finally { clipper.Destroy(); }
+        ImGui.EndTable();
+    }
+
+    private void DrawCompact(FishingAttempt row, FishingTrackerView view, float height)
+    {
+        ImGui.PushID(row.Id.ToString("N"));
         var start = ImGui.GetCursorPos();
         var width = ImGui.GetContentRegionAvail().X;
-        if (entry.Header)
-        {
-            ImGui.TextDisabled(UiText.Get(T.HistorySession,
-                row.SessionStartedUtc?.ToLocalTime().ToString("g", UiText.Culture) ?? UiText.Get(T.HistoryStartUnknown)));
-            ImGui.Separator();
-            ImGui.SetCursorPos(start);
-            ImGui.Dummy(new Vector2(width, height));
-            ImGui.PopID();
-            return;
-        }
         var clicked = ImGui.Selectable("###Attempt", false, ImGuiSelectableFlags.AllowItemOverlap, new Vector2(width, height));
         var hovered = ImGui.IsItemHovered();
         var next = ImGui.GetCursorPos();
@@ -98,41 +115,45 @@ internal sealed class FishingHistoryPanel(FishingTracker tracker, ITextureProvid
         var textWidth = Math.Max(1, width - textX - 4);
         var time = row.StartedUtc?.ToLocalTime().ToString("HH:mm:ss", UiText.Culture) ?? "—";
         var timeWidth = Math.Min(ImGui.CalcTextSize(time).X, textWidth * .35f);
-        var outcome = UiText.Get(Outcome(row.Outcome));
-        var result = row.FishItemId is > 0
-            ? row.Quantity is > 1
-                ? UiText.Get(T.HistoryFishQuantityOutcome, FishingTimeText.Item(view, row.FishItemId), row.Quantity.Value, outcome)
-                : UiText.Get(T.HistoryFishOutcome, FishingTimeText.Item(view, row.FishItemId), outcome)
-            : outcome;
         ImGui.SetCursorPos(start + new Vector2(textX, 4));
-        Clipped(result, Math.Max(1, textWidth - timeWidth - 8));
+        Clipped(Result(row, view), Math.Max(1, textWidth - timeWidth - 8));
         ImGui.SetCursorPos(start + new Vector2(width - timeWidth - 4, 4));
         Clipped(time, timeWidth);
-        var duration = row.Id == view.Active?.Id && view.CastStartedAt is { } at
-            ? (tracker.Now - at).TotalSeconds : row.DurationSeconds;
-        var elapsed = duration is { } seconds ? UiText.Get(T.HistorySeconds, seconds) : UiText.Get(T.ConditionUnknown);
-        var bait = row.BaitItemId is not null ? FishingTimeText.Item(view, row.BaitItemId) : UiText.Get(row.BaitKind switch
-            { FishingBaitKind.Mooch => T.HistoryMoochUnknown, FishingBaitKind.Swimbait => T.HistorySwimbaitUnknown, _ => T.ConditionUnknown });
-        var et = row.StartedUtc is { } utc ? FishingTimeText.Et(utc) : "—";
         ImGui.SetCursorPos(start + new Vector2(textX, 4 + line));
-        Clipped(UiText.Get(T.HistoryTiming, bait, elapsed, et), textWidth);
+        Clipped(UiText.Get(T.HistoryTiming, Bait(row, view), Duration(row, view),
+            row.StartedUtc is { } utc ? FishingTimeText.Et(utc) : "—"), textWidth);
         ImGui.SetCursorPos(next);
-        if (hovered)
-        {
-            ImGui.BeginTooltip();
-            ImGui.TextUnformatted(result);
-            ImGui.TextUnformatted(UiText.Get(T.HistoryTiming, bait, elapsed, et));
-            if (row.StartedUtc is { } castUtc)
-                ImGui.TextUnformatted(UiText.Get(T.HistoryCastAt, castUtc.ToLocalTime().ToString("G", UiText.Culture)));
-            ImGui.TextUnformatted(UiText.Get(T.HistoryReason, UiText.Get(Reason(row.EndReason))));
-            if (row.BiteSeconds is { } bite) ImGui.TextUnformatted(UiText.Get(T.HistoryBiteTime, bite));
-            if (row.HookSeconds is { } hook) ImGui.TextUnformatted(UiText.Get(T.HistoryHookTime, hook));
-            ImGui.EndTooltip();
-        }
-        if (clicked && row.FishItemId is { } fish && tracker.FishForItem(fish) is { } target) showDetail(target);
+        if (hovered) Tooltip(row, view);
+        OpenResult(clicked, row);
         ImGui.PopID();
     }
-
+    private string Duration(FishingAttempt row, FishingTrackerView view) =>
+        FishingTimeText.DisplaySeconds(row, view, tracker.Now) is { } seconds ? UiText.Get(T.HistorySeconds, seconds) : UiText.Get(T.ConditionUnknown);
+    private static string Bait(FishingAttempt row, FishingTrackerView view) => row.BaitItemId is not null
+        ? FishingTimeText.Item(view, row.BaitItemId) : UiText.Get(row.BaitKind switch
+        { FishingBaitKind.Mooch => T.HistoryMoochUnknown, FishingBaitKind.Swimbait => T.HistorySwimbaitUnknown, _ => T.ConditionUnknown });
+    private static string Result(FishingAttempt row, FishingTrackerView view)
+    {
+        var outcome = UiText.Get(Outcome(row.Outcome));
+        return row.FishItemId is > 0 ? row.Quantity is > 1
+            ? UiText.Get(T.HistoryFishQuantityOutcome, FishingTimeText.Item(view, row.FishItemId), row.Quantity.Value, outcome)
+            : UiText.Get(T.HistoryFishOutcome, FishingTimeText.Item(view, row.FishItemId), outcome) : outcome;
+    }
+    private void Tooltip(FishingAttempt row, FishingTrackerView view)
+    {
+        ImGui.BeginTooltip();
+        ImGui.TextUnformatted(Result(row, view));
+        if (row.StartedUtc is { } castUtc) ImGui.TextUnformatted(UiText.Get(T.HistoryCastAt, castUtc.ToLocalTime().ToString("G", UiText.Culture)));
+        ImGui.TextUnformatted(UiText.Get(T.HistoryTiming, Bait(row, view), Duration(row, view),
+            row.StartedUtc is { } utc ? FishingTimeText.Et(utc) : "—"));
+        if (row.DurationSeconds is { } total) ImGui.TextUnformatted(UiText.Get(T.HistoryResultTime, total));
+        if (row.HookSeconds is { } hook) ImGui.TextUnformatted(UiText.Get(T.HistoryHookTime, hook));
+        if (row.BiteSeconds is { } bite) ImGui.TextUnformatted(UiText.Get(T.HistoryBiteTime, bite));
+        ImGui.TextUnformatted(UiText.Get(T.HistoryReason, UiText.Get(Reason(row.EndReason))));
+        ImGui.EndTooltip();
+    }
+    private void OpenResult(bool clicked, FishingAttempt row)
+    { if (clicked && row.FishItemId is { } fish && tracker.FishForItem(fish) is { } target) showDetail(target); }
     internal static void Clipped(string text, float width)
     {
         var position = ImGui.GetCursorScreenPos();
@@ -155,5 +176,4 @@ internal sealed class FishingHistoryPanel(FishingTracker tracker, ITextureProvid
         FishingEndReason.ReadUnavailable or FishingEndReason.UnsupportedMode => T.HistoryUnavailable,
         _ => T.HistoryUnknown,
     };
-    private sealed record Entry(FishingAttempt Record, bool Header);
 }

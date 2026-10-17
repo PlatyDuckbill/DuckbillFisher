@@ -17,8 +17,7 @@ internal sealed class MainWindow : Window
     private readonly SpawnAlertsPanel spawnAlerts;
     private readonly Action languageChanged;
     private readonly FishPreferences preferences;
-    private readonly FishingTracker fishingTracker;
-    private readonly FishingHistoryPanel fishingHistory;
+    private readonly FishingHistoryBrowser fishingHistory;
     public Action? ShowCompact { get; set; }
     public Action? ShowTimer { get; set; }
     private string[] markerLabels = Markers.Select(key => UiText.Get(key)).ToArray();
@@ -32,7 +31,7 @@ internal sealed class MainWindow : Window
 
     public MainWindow(FishingActivityProbe observer, FishGuideDiagnostics fishGuide, FishListPanel fishList,
         SpawnAlertsPanel spawnAlerts, FishPreferences preferences, Action languageChanged,
-        FishingTracker fishingTracker, FishingHistoryPanel fishingHistory) : base("DuckbillFisher###DuckbillFisher.Main")
+        FishingHistoryBrowser fishingHistory) : base("DuckbillFisher###DuckbillFisher.Main")
     {
         this.observer = observer;
         this.fishGuide = fishGuide;
@@ -40,7 +39,6 @@ internal sealed class MainWindow : Window
         this.spawnAlerts = spawnAlerts;
         this.languageChanged = languageChanged;
         this.preferences = preferences;
-        this.fishingTracker = fishingTracker;
         this.fishingHistory = fishingHistory;
         spawnAlerts.ShowSettings = OpenSettings;
         UiText.SetLanguage(preferences.View.Language);
@@ -92,16 +90,7 @@ internal sealed class MainWindow : Window
             }
             if (ImGui.BeginTabItem(UiText.Label(T.TabHistory, "FishingHistoryTab")))
             {
-                var activity = fishingTracker.View;
-                if (ImGui.Button(UiText.Label(T.CastingTimerTitle, "OpenCastingTimer"))) ShowTimer?.Invoke();
-                ImGui.SameLine();
-                ImGui.TextDisabled(UiText.Get(T.HistoryCapacity, activity.Records.Count, DuckbillFisher.Core.FishingAttempts.Capacity));
-                if (settings.DeveloperMode)
-                {
-                    ImGui.SameLine();
-                    if (ImGui.Button(UiText.Label(T.CopyTimerReport, "CopyTimerReport"))) ImGui.SetClipboardText(fishingTracker.CreateReport());
-                }
-                fishingHistory.Draw(activity, DuckbillFisher.Core.FishingAttempts.Capacity, "MainFishingHistory");
+                fishingHistory.Draw(settings.DeveloperMode, ShowTimer);
                 ImGui.EndTabItem();
             }
             if (ImGui.BeginTabItem(UiText.Label(T.TabSettings, "SettingsTab"),

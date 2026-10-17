@@ -68,8 +68,8 @@ public sealed class Plugin : IDalamudPlugin
         mainWindow = new MainWindow(fishingObserver, fishGuide, new FishListPanel(fishCatalog, textureProvider, detailPanel,
                 fishPreferences, fishCollection, fishingRegion, fishingMap, guideOpener),
             new SpawnAlertsPanel(fishPreferences, spawnAlerts, alertOutput, fishCollection, textureProvider, fishCatalog, detailPanel, fishingMap, guideOpener), fishPreferences,
-            () => commandInfo.HelpMessage = UiText.Get(TextKey.CommandHelp), fishingTracker,
-            new FishingHistoryPanel(fishingTracker, textureProvider, detailWindow.Show));
+            () => commandInfo.HelpMessage = UiText.Get(TextKey.CommandHelp),
+            new FishingHistoryBrowser(fishingTracker, fishCatalog, new FishingHistoryPanel(fishingTracker, textureProvider, detailWindow.Show)));
         mainWindow.ShowCompact = () => compactWindow.IsOpen = true;
         mainWindow.ShowTimer = timerWindow.Toggle;
         compactWindow.ShowMain = mainWindow.Toggle;

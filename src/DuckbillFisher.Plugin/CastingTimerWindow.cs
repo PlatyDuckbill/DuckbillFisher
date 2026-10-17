@@ -41,13 +41,14 @@ internal sealed class CastingTimerWindow : Window
     {
         var view = tracker.View;
         var spot = view.Spot;
-        var spotLabel = spot?.Name ?? UiText.Get(view.HasSession ? T.DetailLocationUnknown : T.TimerSpotPending);
-        var buttonSize = ImGui.GetFrameHeight();
+        var spotLabel = spot is not null ? view.IsLastSpot ? UiText.Get(T.TimerLastSpot, spot.Name) : spot.Name
+            : UiText.Get(view.HasSession ? T.DetailLocationUnknown : T.TimerSpotPending);
+        var buttonSize = ImGui.CalcTextSize(UiText.Get(T.TimerSpotFishButton)).X + ImGui.GetStyle().FramePadding.X * 2;
         FishingHistoryPanel.Clipped(spotLabel, Math.Max(1, ImGui.GetContentRegionAvail().X - buttonSize - 10));
         UiWidgets.Tooltip(spotLabel);
         ImGui.SameLine();
         ImGui.BeginDisabled(spot is null);
-        if (UiWidgets.IconButton(FontAwesomeIcon.Fish, "TimerSpotFish", UiText.Get(T.TimerSpotFish))) ImGui.OpenPopup("TimerSpotFishPopup");
+        if (ImGui.Button(UiText.Label(T.TimerSpotFishButton, "TimerSpotFish"))) ImGui.OpenPopup("TimerSpotFishPopup");
         ImGui.EndDisabled();
         DrawFishPopup(view);
 
@@ -68,17 +69,19 @@ internal sealed class CastingTimerWindow : Window
             _ => phase switch { 1 => T.TimerCasting, 12 => T.TimerWaiting, 5 => T.TimerBite, 6 => T.TimerHook,
                 2 => T.TimerReturning, 3 => T.TimerStopping, 4 => T.TimerRodReady, 0 => T.TimerIdle, _ => T.TimerObserving },
         };
-        var elapsed = view.CastStartedAt is { } started ? FishingTimeText.Elapsed(tracker.Now - started) : "—";
+        var timed = view.Active ?? view.CurrentRecords.FirstOrDefault();
+        var elapsed = timed is not null && FishingTimeText.DisplaySeconds(timed, view, tracker.Now) is { } seconds
+            ? FishingTimeText.Elapsed(TimeSpan.FromSeconds(seconds)) : "—";
         ImGui.TextUnformatted(UiText.Get(T.TimerCastLine, new UiMessage(label), elapsed));
-        var et = view.Active?.StartedUtc is { } utc ? FishingTimeText.Et(utc) : "—";
+        var et = timed?.StartedUtc is { } utc ? FishingTimeText.Et(utc) : "—";
         ImGui.TextDisabled(UiText.Get(T.TimerCastEt, et));
         var sessionTime = view.SessionStartedUtc?.ToLocalTime().ToString("HH:mm:ss", UiText.Culture) ?? "—";
         var sessionElapsed = view.SessionStartedAt is { } sessionStart ? FishingTimeText.Elapsed(tracker.Now - sessionStart) : "—";
         ImGui.TextUnformatted(UiText.Get(T.TimerSessionLine, sessionTime, sessionElapsed));
         UiWidgets.Tooltip(UiText.Get(T.TimerStartUnknownHint));
         ImGui.Separator();
-        ImGui.TextUnformatted(UiText.Get(T.HistoryRecent, Math.Min(view.Records.Count, FishingAttempts.RecentCapacity)));
-        history.Draw(view, FishingAttempts.RecentCapacity, "TimerHistory");
+        ImGui.TextUnformatted(UiText.Get(T.TimerCurrentHistory, view.CurrentTrip?.Casts ?? 0));
+        history.Draw(view, view.CurrentRecords, "TimerHistory");
     }
 
     private void DrawFishPopup(FishingTrackerView view)
@@ -86,7 +89,7 @@ internal sealed class CastingTimerWindow : Window
         var viewport = ImGui.GetMainViewport().WorkSize;
         ImGui.SetNextWindowSize(new Vector2(Math.Min(560, viewport.X * .85f), Math.Min(600, viewport.Y * .75f)), ImGuiCond.Appearing);
         if (!ImGui.BeginPopup("TimerSpotFishPopup", ImGuiWindowFlags.NoScrollbar | ImGuiWindowFlags.NoScrollWithMouse)) return;
-        ImGui.TextUnformatted(view.Spot?.Name ?? UiText.Get(T.TimerSpotPending));
+        ImGui.TextUnformatted(view.Spot is { } popupSpot ? view.IsLastSpot ? UiText.Get(T.TimerLastSpot, popupSpot.Name) : popupSpot.Name : UiText.Get(T.TimerSpotPending));
         if (ImGui.Button(UiText.Label(hideCaught ? T.TimerHideCaught : T.TimerAllFish, "TimerCollectionFilter"))) hideCaught = !hideCaught;
         var matches = hideCaught ? view.RemainingSpotFish : view.AllSpotFish;
         ImGui.SameLine();

@@ -18,6 +18,16 @@ internal sealed record FishingTrackerView(int Revision, int Session, FishingTrac
 {
     public FishGuideRow[] AllSpotFish { get; init; } = [];
     public FishGuideRow[] RemainingSpotFish { get; init; } = [];
+    public IReadOnlyList<FishingTripSummary> Trips { get; init; } = [];
+    public FishingTripSummary? CurrentTrip { get; init; }
+    public IReadOnlyList<FishingAttempt> CurrentRecords { get; init; } = [];
+    public FishingTripSummary? SelectedTrip { get; init; }
+    public IReadOnlyList<FishingAttempt> SelectedRecords { get; init; } = [];
+    public bool DetailLoading { get; init; }
+    public bool DetailError { get; init; }
+    public IReadOnlyDictionary<uint, string> TerritoryNames { get; init; } = new Dictionary<uint, string>();
+    public bool IsLastSpot { get; init; }
+    public bool HistoryWritable { get; init; }
 }
 
 /// <summary>Validated normal-cast observations only. Collection and notification policies are not modified.</summary>
@@ -54,7 +64,7 @@ internal sealed class FishingTracker : IDisposable
     private int revision, casts, catches, retrieves, ignored;
     private int? previousPhase;
     private bool seenIdle;
-    private TimeSpan lastTick, spotAt;
+    private TimeSpan lastTick;
     private TimeSpan? readyAt;
     private uint territory;
     private FishingSpotView? spot;
@@ -66,6 +76,20 @@ internal sealed class FishingTracker : IDisposable
     private FishGuideRow[] allSpotFish = [], remainingSpotFish = [];
     private int filterPreferences = -1, filterCollection = -1;
     private uint? filterSpot;
+    private FishingSpotView? pendingSpot;
+    private FishingSpotView? lastConfirmedSpot;
+    private TimeSpan pendingSpotAt;
+    private long lastSequence;
+    private int archiveRevision = -1;
+    private IReadOnlyList<FishingTripSummary> archiveTrips = [], trips = [];
+    private readonly HashSet<Guid> deletedTrips = [];
+    private readonly Dictionary<uint, string> territoryNames = [];
+    private (int Session, Guid? Trip)? requestedDetail;
+    private readonly Queue<(int Session, Guid[] Trips)> requestedDeletes = new();
+    private Guid? selectedTrip;
+    private FishingTripSummary? selectedSummary;
+    private IReadOnlyList<FishingAttempt> selectedRecords = [];
+    private bool detailLoading, detailError;
 
     public FishingTracker(IClientState client, IPlayerState player, ICondition conditions, IFramework framework,
         IChatGui chat, IDataManager data, FishPreferences preferences, FishCatalog catalog, FishCollectionObserver collection,
@@ -82,6 +106,10 @@ internal sealed class FishingTracker : IDisposable
     public FishingTrackerView View { get { lock (gate) return view; } }
     public TimeSpan Now => clock.Elapsed;
     public FishGuideRow? FishForItem(uint id) { lock (gate) return fishByItem.GetValueOrDefault(id); }
+    public void SelectTrip(int expectedSession, Guid? id)
+    { lock (gate) if (!disposed) requestedDetail = (expectedSession, id); }
+    public void DeleteTrips(int expectedSession, IEnumerable<Guid> ids)
+    { lock (gate) if (!disposed) requestedDeletes.Enqueue((expectedSession, ids.Distinct().ToArray())); }
 
     private void OnLog(ILogMessage message)
     {
@@ -142,6 +170,12 @@ internal sealed class FishingTracker : IDisposable
                 savedRevision = -1;
                 loaded = writable = false;
                 native = null;
+                archiveTrips = trips = [];
+                archiveRevision = -1;
+                lastSequence = 0;
+                selectedTrip = null; selectedSummary = null; selectedRecords = [];
+                detailLoading = detailError = false;
+                requestedDetail = null; requestedDeletes.Clear(); deletedTrips.Clear();
                 casts = catches = retrieves = ignored = 0;
                 ResetLocation();
                 state = character == 0 ? FishingTrackerState.Waiting : FishingTrackerState.Loading;
@@ -152,10 +186,10 @@ internal sealed class FishingTracker : IDisposable
             if (!loaded)
             {
                 lastTick = now;
-                if (!storage.TryTakeLoad(character, out var result)) return;
-                history.Restore(result.Records);
+                var archive = storage.View(character);
+                if (archive.State == FishingStorageState.Loading) return;
                 loaded = true;
-                writable = result.State == FishingStorageState.Ready;
+                writable = archive.State == FishingStorageState.Ready;
             }
             var before = history.Revision;
             var indexed = false;
@@ -211,21 +245,24 @@ internal sealed class FishingTracker : IDisposable
                 }
             }
             lastTick = now;
+            var archiveChanged = UpdateArchive();
+            var selectionChanged = UpdateSelection();
             var observed = collection.View;
-            var filtersChanged = indexed || filterSpot != spot?.Id || filterPreferences != personal.Revision || filterCollection != observed.Revision;
+            var browsingSpot = spot ?? lastConfirmedSpot;
+            var filtersChanged = indexed || filterSpot != browsingSpot?.Id || filterPreferences != personal.Revision || filterCollection != observed.Revision;
             if (filtersChanged)
             {
-                filterSpot = spot?.Id;
+                filterSpot = browsingSpot?.Id;
                 filterPreferences = personal.Revision;
                 filterCollection = observed.Revision;
-                allSpotFish = spot is not null ? fishBySpot.GetValueOrDefault(spot.Id, []) : [];
+                allSpotFish = browsingSpot is not null ? fishBySpot.GetValueOrDefault(browsingSpot.Id, []) : [];
                 remainingSpotFish = allSpotFish.Where(f => personal.Collection(f.FishParameterId, observed) != CollectionStatus.Caught).ToArray();
             }
             var itemsChanged = ResolveItems();
             Persist();
             if (before != history.Revision || previousNative != native || previousState != state ||
                 previousSpot != spot || itemsChanged || view.Records != history.Records ||
-                view.Storage != storage.State(character) || view.Ignored != ignored || filtersChanged) Publish();
+                view.Storage != storage.State(character) || view.Ignored != ignored || filtersChanged || archiveChanged || selectionChanged) Publish();
         }
     }
 
@@ -237,8 +274,10 @@ internal sealed class FishingTracker : IDisposable
             { ignored++; continue; }
             if (fact.Id == 1110)
             {
-                spotAt = fact.At;
-                spot = byPlace.TryGetValue((territory, fact.Value), out var candidates) && candidates.Length == 1 ? candidates[0] : null;
+                pendingSpotAt = fact.At;
+                pendingSpot = byPlace.TryGetValue((territory, fact.Value), out var candidates) && candidates.Length == 1 ? candidates[0] : null;
+                if (pendingSpot is not null) lastConfirmedSpot = pendingSpot;
+                if (native?.Phase != 0) spot = pendingSpot;
                 if (spot is not null && history.CastStartedAt is { } start && fact.At >= start && fact.At - start < TimeSpan.FromSeconds(1))
                     history.SetSpot(spot.Id);
             }
@@ -260,12 +299,14 @@ internal sealed class FishingTracker : IDisposable
         var phase = current.Phase;
         if (phase == 1 && previousPhase is not null && previousPhase != 1)
         {
-            if (now - spotAt > TimeSpan.FromSeconds(1)) spot = null;
+            spot = now - pendingSpotAt <= TimeSpan.FromSeconds(2) ? pendingSpot : spot;
             var kind = (current.BaitFlags.GetValueOrDefault() & 0x20) != 0 ? FishingBaitKind.Swimbait :
                 (current.BaitFlags.GetValueOrDefault() & 0x10) != 0 ? FishingBaitKind.Mooch : FishingBaitKind.Equipped;
             // The actual mooch/swimbait item is not yet runtime-validated. Never snapshot equipped bait as that fish.
             var bait = kind == FishingBaitKind.Equipped && current.EquippedBait is > 0 ? current.EquippedBait : null;
             history.Start(now, utc, territory, spot?.Id, bait, kind, seenIdle);
+            if (history.Trip?.Sequence == 0) history.SetSequence(++lastSequence);
+            pendingSpot = null;
             casts++;
             readyAt = null;
         }
@@ -295,15 +336,84 @@ internal sealed class FishingTracker : IDisposable
         pending.Clear();
     }
     private void ResetLocation()
-    { previousPhase = null; seenIdle = false; readyAt = null; spot = null; spotAt = TimeSpan.Zero; territory = 0; pending.Clear(); allSpotFish = remainingSpotFish = []; filterSpot = null; }
+    { previousPhase = null; seenIdle = false; readyAt = null; spot = pendingSpot = lastConfirmedSpot = null; pendingSpotAt = TimeSpan.Zero; territory = 0; pending.Clear(); allSpotFish = remainingSpotFish = []; filterSpot = null; }
+
+    private bool UpdateArchive()
+    {
+        var archive = storage.View(character);
+        if (archiveRevision == archive.Revision && view.Records == history.Records) return false;
+        archiveRevision = archive.Revision;
+        archiveTrips = archive.Trips;
+        lastSequence = Math.Max(lastSequence, archiveTrips.Select(s => s.Sequence).DefaultIfEmpty(0).Max());
+        var combined = archiveTrips.ToList();
+        if (history.Trip is { } current && !deletedTrips.Contains(current.Id))
+        { combined.RemoveAll(s => s.Id == current.Id); combined.Add(current); }
+        trips = Array.AsReadOnly(combined.OrderByDescending(s => s.Sequence).Take(FishingAttempts.TripCapacity).ToArray());
+        foreach (var id in trips.Select(t => t.TerritoryId).Distinct())
+        {
+            if (territoryNames.ContainsKey(id)) continue;
+            try { territoryNames[id] = data.GetExcelSheet<TerritoryType>()?.GetRowOrDefault(id)?.PlaceName.Value.Name.ExtractText() ?? ""; }
+            catch (Exception) { territoryNames[id] = ""; }
+        }
+        return true;
+    }
+
+    private bool UpdateSelection()
+    {
+        var changed = false;
+        while (requestedDeletes.TryDequeue(out var request))
+        {
+            if (request.Session != session || !writable) continue;
+            var ids = request.Trips.Where(id => trips.Any(t => t.Id == id && !t.IsActive) &&
+                !(history.HasSession && history.Trip?.Id == id)).ToArray();
+            foreach (var id in ids) deletedTrips.Add(id);
+            storage.Delete(character, ids);
+        }
+        if (requestedDetail is { } selection)
+        {
+            requestedDetail = null;
+            if (selection.Session == session)
+            {
+                selectedTrip = selection.Trip;
+                selectedSummary = null; selectedRecords = []; detailError = detailLoading = false;
+                if (selectedTrip is { } id && trips.Any(t => t.Id == id))
+                {
+                    if (history.Trip?.Id != id) { detailLoading = true; storage.RequestDetail(character, id); }
+                }
+                else selectedTrip = null;
+                changed = true;
+            }
+        }
+        if (selectedTrip is { } selected)
+        {
+            var summary = trips.FirstOrDefault(t => t.Id == selected);
+            if (summary is null)
+            { selectedTrip = null; selectedSummary = null; selectedRecords = []; detailLoading = detailError = false; return true; }
+            if (selectedSummary != summary) { selectedSummary = summary; changed = true; }
+            if (history.Trip?.Id == selected && !deletedTrips.Contains(selected))
+            {
+                changed |= !ReferenceEquals(selectedRecords, history.Records);
+                selectedRecords = history.Records;
+                detailLoading = false;
+            }
+            else if (detailLoading && storage.TryTakeDetail(character, selected, out var result))
+            {
+                detailLoading = false;
+                detailError = result.State != FishingStorageState.Ready;
+                selectedRecords = result.Records;
+                changed = true;
+            }
+        }
+        return changed;
+    }
     private void Persist()
     {
-        if (!loaded || !writable || character == 0) return;
+        if (!loaded || !writable || character == 0 || history.Trip is null || deletedTrips.Contains(history.Trip.Id)) return;
         if (savedRevision == history.Revision &&
             (storage.State(character) != FishingStorageState.WriteFailed || clock.Elapsed < nextSaveRetry)) return;
         savedRevision = history.Revision;
         nextSaveRetry = clock.Elapsed + TimeSpan.FromSeconds(5);
-        storage.Save(character, history.Records);
+        storage.Save(character, history.Trip, history.Records);
     }
     private bool ResolveItems()
     {
@@ -311,6 +421,8 @@ internal sealed class FishingTracker : IDisposable
         Need(native?.EquippedBait);
         if (view.Records != history.Records)
             foreach (var record in history.Records) { Need(record.BaitItemId); Need(record.FishItemId); }
+        if (!ReferenceEquals(view.SelectedRecords, selectedRecords))
+            foreach (var record in selectedRecords) { Need(record.BaitItemId); Need(record.FishItemId); }
         var changed = false;
         for (var i = 0; i < 16 && neededItems.TryDequeue(out var id); i++)
         {
@@ -326,15 +438,23 @@ internal sealed class FishingTracker : IDisposable
     }
     private FishingTrackerView Snapshot() => new(revision, session, state, history.Records, history.Active,
         history.CastStartedAt, history.SessionStartedAt, history.SessionStartedUtc, history.HasSession,
-        native, spot, items.ToFrozenDictionary(), character == 0 ? FishingStorageState.Loading : storage.State(character),
+        native, spot ?? lastConfirmedSpot, items.ToFrozenDictionary(), character == 0 ? FishingStorageState.Loading : storage.State(character),
         casts, catches, retrieves, ignored, validLogs.Count)
-        { AllSpotFish = allSpotFish, RemainingSpotFish = remainingSpotFish };
+        {
+            AllSpotFish = allSpotFish, RemainingSpotFish = remainingSpotFish, Trips = trips,
+            CurrentTrip = history.HasSession ? history.Trip : null,
+            CurrentRecords = history.HasSession ? history.Records : Array.Empty<FishingAttempt>(),
+            SelectedTrip = selectedSummary, SelectedRecords = selectedRecords,
+            DetailLoading = detailLoading, DetailError = detailError, TerritoryNames = territoryNames.ToFrozenDictionary(),
+            IsLastSpot = spot is null && lastConfirmedSpot is not null,
+            HistoryWritable = writable,
+        };
     private void Publish() { revision++; view = Snapshot(); }
 
     public string CreateReport()
     {
         lock (gate) return string.Create(CultureInfo.InvariantCulture,
-            $"DuckbillFisher MVP-02/timer/v1\nPlugin={typeof(Plugin).Assembly.GetName().Version}; Session={session}; State={state}; Read={native?.Availability}; Phase={native?.Phase}\nRecords={history.Records.Count}; Active={history.Active is not null}; Casts={casts}; Catches={catches}; Retrieves={retrieves}; Ignored={ignored}; Contracts={validLogs.Count}/{FishingLogContracts.Count}\nSpot={spot?.Id}; Equipped={native?.EquippedBait}; Storage={view.Storage}; PersistEnabled={writable}\nActualMoochBait=Unknown; UnvalidatedResults=Unknown; OutcomeDoesNotSetCollection=True");
+            $"DuckbillFisher MVP-02/timer/v2\nPlugin={typeof(Plugin).Assembly.GetName().Version}; Session={session}; State={state}; Read={native?.Availability}; Phase={native?.Phase}\nTrips={trips.Count}; CurrentRecords={view.CurrentRecords.Count}; Active={history.Active is not null}; Casts={casts}; Catches={catches}; Retrieves={retrieves}; Ignored={ignored}; Contracts={validLogs.Count}/{FishingLogContracts.Count}\nSpot={spot?.Id}; PendingSpot={pendingSpot?.Id}; Equipped={native?.EquippedBait}; Storage={view.Storage}; PersistEnabled={writable}\nTimerEnd=HookObservation; TripLimit={FishingAttempts.TripCapacity}; CastLimit={FishingAttempts.Capacity}\nActualMoochBait=Unknown; UnvalidatedResults=Unknown; OutcomeDoesNotSetCollection=True");
     }
 
     public void Dispose()
