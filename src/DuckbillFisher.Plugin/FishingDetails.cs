@@ -1,5 +1,6 @@
 using System.Text.Json;
 using DuckbillFisher.Core;
+using DuckbillFisher.Plugin.Localization;
 
 namespace DuckbillFisher.Plugin;
 
@@ -20,7 +21,8 @@ internal sealed record FishingDetailView(FishingRule Rule, FishingSpotView? Spot
     FishingItemView? Folklore)
 {
     public FishingConditionIcon? Intuition { get; init; }
-    public FishingConditionIcon? FishEyes { get; init; }
+    public UiMessage ConditionWarning => new(Rule.FishingSpotId == 0
+        ? Localization.TextKey.ConditionsSpotMissing : Localization.TextKey.ConditionsPartial);
 }
 
 internal sealed record OceanFishingView(string Area, string FishingSpot, string[] RouteNames, byte[] VisitTimes);

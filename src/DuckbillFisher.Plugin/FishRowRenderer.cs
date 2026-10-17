@@ -49,11 +49,8 @@ internal sealed class FishRowRenderer(ITextureProvider textures, FishingMapServi
         UiWidgets.GameIcon(textures, fish.IconId, iconSize, fish.DisplayName);
         if (fish.Details is { Predators.Length: > 0 } intuition)
         {
-            var badge = ImGui.GetTextLineHeight();
+            var badge = MathF.Round(ImGui.GetTextLineHeightWithSpacing() * 1.15f);
             ImGui.SetCursorPos(start + new Vector2(4 + iconSize - badge, 4));
-            var screen = ImGui.GetCursorScreenPos();
-            ImGui.GetWindowDrawList().AddRectFilled(screen - new Vector2(1), screen + new Vector2(badge + 1),
-                ImGui.GetColorU32(new Vector4(0.08f, 0.04f, 0.12f, 0.95f)));
             UiWidgets.GameIcon(textures, intuition.Intuition?.IconId ?? 0, badge, UiText.Get(T.IntuitionRequired));
         }
         if (favorite)
@@ -80,16 +77,17 @@ internal sealed class FishRowRenderer(ITextureProvider textures, FishingMapServi
         var time = fish.IsOceanFishing ? UiText.Get(T.RowOceanWindow)
             : forecast is not null ? CompactWindow(forecast, now) : UiText.Get(T.ForecastUnknown);
         var timerWidth = Math.Min(ImGui.CalcTextSize(time).X, textWidth * 0.53f);
-        var pinSize = ImGui.GetTextLineHeight();
+        var pinSize = MathF.Round(ImGui.GetTextLineHeightWithSpacing() - 1);
+        var pinWidth = UiWidgets.MapPinWidth(pinSize);
         ImGui.SetCursorPos(start + new Vector2(textX, 4 + line));
         ImGui.BeginDisabled(!canOpenMap || spot is null);
-        var pinClicked = UiWidgets.IconButton(FontAwesomeIcon.MapMarkerAlt, "RowMap", spot is null
-            ? UiText.Get(T.MapUnavailable) : UiText.Get(T.OpenFishingMap), size: pinSize);
+        var pinClicked = UiWidgets.MapPinButton("RowMap", !canOpenMap ? UiText.Get(T.MapPlayerRequired) : spot is null
+            ? UiText.Get(T.MapUnavailable) : UiText.Get(T.OpenFishingMap), pinSize);
         var pinHovered = ImGui.IsItemHovered(ImGuiHoveredFlags.AllowWhenDisabled);
         ImGui.EndDisabled();
         if (pinClicked && spot is not null) maps.Request(spot);
-        ImGui.SetCursorPos(start + new Vector2(textX + pinSize + 5, 4 + line));
-        LineText(place, Math.Max(1, textWidth - timerWidth - pinSize - 16), true);
+        ImGui.SetCursorPos(start + new Vector2(textX + pinWidth + 5, 4 + line));
+        LineText(place, Math.Max(1, textWidth - timerWidth - pinWidth - 16), true);
         ImGui.SetCursorPos(start + new Vector2(textX + textWidth - timerWidth, 4 + line));
         LineText(time, timerWidth, false);
         UiWidgets.Tooltip(usesOtherRegion ? UiText.Get(T.RegionForecastElsewhere, time)
@@ -135,7 +133,7 @@ internal sealed class FishRowRenderer(ITextureProvider textures, FishingMapServi
         }
         var conditions = new List<RowToken>();
         if (!details.Rule.ConditionsKnown)
-            conditions.Add(new(0, UiText.Get(T.ConditionUnknown), UiText.Get(T.ConditionsPartial)));
+            conditions.Add(new(0, UiText.Get(T.ConditionUnknown), details.ConditionWarning.Display));
         else
         {
             if (details.PreviousWeather.Length > 0)

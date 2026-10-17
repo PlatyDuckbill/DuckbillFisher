@@ -20,7 +20,7 @@ internal sealed record FishRowSummary(string Bait, string Conditions)
         var parts = new List<string>();
         var rule = details.Rule;
         if (!rule.ConditionsKnown)
-            parts.Add(UiText.Get(T.RowConditionsUnknown));
+            parts.Add(details.ConditionWarning.Display);
         else
         {
             if (rule.StartHour != 0 || rule.EndHour != 24)

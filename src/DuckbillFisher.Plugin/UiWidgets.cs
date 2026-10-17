@@ -48,7 +48,12 @@ internal static class UiWidgets
         if (iconId != 0 && textures.TryGetFromGameIcon(new GameIconLookup(iconId), out var texture) &&
             texture.TryGetWrap(out var image, out _))
         {
-            ImGui.Image(image.Handle, new Vector2(size));
+            var box = new Vector2(size);
+            var scale = size / Math.Max(1, Math.Max(image.Width, image.Height));
+            var actual = new Vector2(Math.Max(1, MathF.Round(image.Width * scale)), Math.Max(1, MathF.Round(image.Height * scale)));
+            var position = ImGui.GetCursorScreenPos() + (box - actual) / 2;
+            ImGui.GetWindowDrawList().AddImage(image.Handle, position, position + actual);
+            ImGui.Dummy(box);
             available = true;
         }
         else
@@ -59,6 +64,28 @@ internal static class UiWidgets
         }
         Tooltip(tooltip);
         return available;
+    }
+
+    public static float MapPinWidth(float height) => height + 4;
+
+    public static bool MapPinButton(string id, string tooltip, float height)
+    {
+        ImGui.PushStyleColor(ImGuiCol.Button, new Vector4(0.13f, 0.29f, 0.43f, 1));
+        ImGui.PushStyleColor(ImGuiCol.ButtonHovered, new Vector4(0.20f, 0.45f, 0.65f, 1));
+        ImGui.PushStyleColor(ImGuiCol.ButtonActive, new Vector4(0.10f, 0.37f, 0.58f, 1));
+        var clicked = ImGui.Button($"###{id}", new Vector2(MapPinWidth(height), height));
+        var min = ImGui.GetItemRectMin();
+        var draw = ImGui.GetWindowDrawList();
+        var center = min + new Vector2(MapPinWidth(height) / 2, height * 0.33f);
+        var radius = height * 0.25f;
+        var color = ImGui.GetColorU32(new Vector4(1, 0.84f, 0.35f, 1));
+        draw.AddTriangleFilled(center + new Vector2(-radius * 0.85f, radius * 0.2f),
+            center + new Vector2(radius * 0.85f, radius * 0.2f), min + new Vector2(MapPinWidth(height) / 2, height * 0.93f), color);
+        draw.AddCircleFilled(center, radius, color);
+        draw.AddCircleFilled(center, radius * 0.38f, ImGui.GetColorU32(ImGuiCol.Button));
+        ImGui.PopStyleColor(3);
+        Tooltip(tooltip);
+        return clicked;
     }
 
     public static bool FavoriteButton(string id, bool favorite)

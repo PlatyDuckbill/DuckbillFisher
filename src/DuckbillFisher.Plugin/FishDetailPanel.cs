@@ -29,9 +29,7 @@ internal sealed class FishDetailPanel(FishPreferences preferences, ITextureProvi
             UiWidgets.GameIcon(textures, fish.IconId, ImGui.GetFontSize() * 3, fish.DisplayName);
             ImGui.TableNextColumn();
             ImGui.TextWrapped(fish.DisplayName);
-            if (fish.IsOceanFishing) ImGui.TextDisabled(UiText.Get(T.OceanLabel));
-            else if (fish.Grade is FishGrade.Big or FishGrade.Legendary)
-                ImGui.TextDisabled(UiText.Get(fish.Grade == FishGrade.Legendary ? T.GradeLegendaryLabel : T.GradeBigLabel));
+
             if (patch.Length > 0)
             {
                 ImGui.TableNextColumn();
@@ -49,7 +47,8 @@ internal sealed class FishDetailPanel(FishPreferences preferences, ITextureProvi
         else
         {
             catalog.Windows.TryGetValue(fish.FishParameterId, out var window);
-            FishingWindowPanel.Draw(window, DateTimeOffset.UtcNow);
+            FishingWindowPanel.Draw(window, DateTimeOffset.UtcNow,
+                fish.Details is { Rule.ConditionsKnown: false } partial ? partial.ConditionWarning : null);
         }
 
         if (fish.Details is { Predators.Length: > 0 } intuitionDetails) conditions.DrawIntuition(intuitionDetails, personal, catalog.RelatedDetails);
@@ -81,26 +80,28 @@ internal sealed class FishDetailPanel(FishPreferences preferences, ITextureProvi
 
     private void DrawActions(FishGuideRow fish, FishPreferencesView personal, FishCollectionView observed)
     {
+        var grade = fish.IsOceanFishing ? UiText.Get(T.OceanLabel)
+            : fish.Grade is FishGrade.Big or FishGrade.Legendary
+                ? UiText.Get(fish.Grade == FishGrade.Legendary ? T.GradeLegendaryLabel : T.GradeBigLabel) : "";
+        if (!ImGui.BeginTable("DetailActions", grade.Length > 0 ? 3 : 2, ImGuiTableFlags.SizingFixedFit)) return;
+        if (grade.Length > 0) ImGui.TableSetupColumn("Grade", ImGuiTableColumnFlags.WidthFixed, ImGui.CalcTextSize(grade).X + 4);
+        ImGui.TableSetupColumn("Favorite", ImGuiTableColumnFlags.WidthFixed, ImGui.GetFrameHeight());
+        ImGui.TableSetupColumn("Collection", ImGuiTableColumnFlags.WidthStretch);
+        if (grade.Length > 0)
+        {
+            ImGui.TableNextColumn();
+            ImGui.AlignTextToFramePadding();
+            ImGui.TextDisabled(grade);
+        }
+        ImGui.TableNextColumn();
         ImGui.BeginDisabled(!personal.CanEdit || !fish.IsDisplayable);
         var favorite = personal.Favorites.Contains(fish.FishParameterId);
-        if (UiWidgets.FavoriteButton("Favorite", favorite))
-            preferences.SetFavorite(fish.FishParameterId, !favorite);
+        if (UiWidgets.FavoriteButton("Favorite", favorite)) preferences.SetFavorite(fish.FishParameterId, !favorite);
         ImGui.EndDisabled();
-        ImGui.SameLine();
-        if (fish.Details is { } detail)
-        {
-            ImGui.BeginDisabled(!detail.Rule.FishEyesSupported);
-            UiWidgets.GameIcon(textures, detail.FishEyes?.IconId ?? 0, ImGui.GetFrameHeight(),
-                UiText.Get(detail.Rule.FishEyesSupported ? T.FishEyesAvailable : T.FishEyesUnavailable,
-                    detail.FishEyes?.Name ?? UiText.Get(T.ConditionUnknown)));
-            ImGui.EndDisabled();
-            if (!detail.Rule.FishEyesSupported)
-                ImGui.GetWindowDrawList().AddLine(ImGui.GetItemRectMin(), ImGui.GetItemRectMax(), ImGui.GetColorU32(ImGuiCol.Text), 1.5f);
-            ImGui.SameLine();
-        }
+        ImGui.TableNextColumn();
         var manual = personal.ManualCaught.ContainsKey(fish.FishParameterId);
         ImGui.BeginDisabled(!personal.CanEdit || !personal.HasCharacter || !fish.IsDisplayable);
-        ImGui.SetNextItemWidth(Math.Max(ImGui.GetFontSize() * 5,
+        ImGui.SetNextItemWidth(Math.Max(1,
             ImGui.GetContentRegionAvail().X - (manual ? ImGui.GetFrameHeightWithSpacing() : 0)));
         if (ImGui.BeginCombo("###CollectionState", UiText.Get(FishRowRenderer.CollectionKey(personal, observed, fish.FishParameterId))))
         {
@@ -118,8 +119,8 @@ internal sealed class FishDetailPanel(FishPreferences preferences, ITextureProvi
                 preferences.SetManualCaught(fish.FishParameterId, null, personal.Session);
         }
         ImGui.EndDisabled();
+        ImGui.EndTable();
     }
-
     private static void DrawOcean(OceanFishingView? ocean)
     {
         if (ocean is null) ImGui.TextWrapped(UiText.Get(T.OceanArea, new UiMessage(T.ConditionUnknown)));

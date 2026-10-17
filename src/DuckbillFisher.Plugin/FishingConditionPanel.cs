@@ -40,9 +40,10 @@ internal sealed class FishingConditionPanel(ITextureProvider textures, FishingIt
             Label(T.DetailTug);
             ImGui.TextUnformatted(rule.Tug switch { "light" => "!", "medium" => "!!", "heavy" => "!!!", _ => UiText.Get(T.ConditionUnknown) });
             Label(T.DetailTime);
-            ImGui.TextWrapped(!rule.ConditionsKnown ? UiText.Get(T.ConditionsPartial)
+            ImGui.TextWrapped(!rule.ConditionsKnown ? UiText.Get(T.ConditionUnknown)
                 : rule.StartHour == 0 && rule.EndHour == 24 ? UiText.Get(T.TimeAllDay)
                 : UiText.Get(T.TimeConditionLabel, EtClock(rule.StartHour), EtClock(rule.EndHour)));
+            if (!rule.ConditionsKnown) UiWidgets.Tooltip(details.ConditionWarning.Display);
             if (rule.ConditionsKnown)
             {
                 Label(T.DetailPreviousWeather);
@@ -130,7 +131,7 @@ internal sealed class FishingConditionPanel(ITextureProvider textures, FishingIt
         }
         else parts.Add(UiText.Get(T.StepConditionsUnknown));
         ImGui.TextDisabled(tug);
-        if (!detail.Rule.ConditionsKnown) parts.Add(UiText.Get(T.ConditionsPartial));
+        if (!detail.Rule.ConditionsKnown) parts.Add(detail.ConditionWarning.Display);
         else if (detail.Rule.StartHour != 0 || detail.Rule.EndHour != 24)
         {
             var time = UiText.Get(T.TimeConditionLabel, EtClock(detail.Rule.StartHour), EtClock(detail.Rule.EndHour));

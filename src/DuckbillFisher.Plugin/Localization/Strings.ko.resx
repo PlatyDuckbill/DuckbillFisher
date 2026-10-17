@@ -167,8 +167,8 @@
   <data name="FavoriteRowState" xml:space="preserve"><value>즐겨찾기 · {0}</value></data>
   <data name="FavoriteToggle" xml:space="preserve"><value>즐겨찾기</value></data>
   <data name="ManualCollectionLabel" xml:space="preserve"><value>수집 상태: {0}</value></data>
-  <data name="MarkCaught" xml:space="preserve"><value>수집됨으로 지정</value></data>
-  <data name="MarkUncaught" xml:space="preserve"><value>미수집으로 지정</value></data>
+  <data name="MarkCaught" xml:space="preserve"><value>수집됨으로 수동 지정</value></data>
+  <data name="MarkUncaught" xml:space="preserve"><value>미수집으로 수동 지정</value></data>
   <data name="ClearManualCollection" xml:space="preserve"><value>수동 지정 해제</value></data>
   <data name="PreferenceScope" xml:space="preserve"><value>즐겨찾기는 공통이며 수동 기록은 캐릭터별로 저장하고 우선 적용합니다. 수동 지정을 해제하면 현재 자동 확인 결과를 따르며 확인 전인 어종은 미확인입니다.</value></data>
   <data name="CollectionManualCaught" xml:space="preserve"><value>수집됨 (수동)</value></data>
@@ -187,7 +187,7 @@
   <data name="CollectionHelp" xml:space="preserve"><value>수집 필터 안내</value></data>
   <data name="BaitAlternatives" xml:space="preserve"><value>{0}단계: 다음 대체 후보 중 하나 선택</value></data>
   <data name="ConditionUnknown" xml:space="preserve"><value>미확인</value></data>
-  <data name="ConditionsPartial" xml:space="preserve"><value>원본의 추천 낚시터 또는 전체 조건이 확인되지 않았습니다. 시간·날씨 예측은 제공하지 않으며, 확인된 미끼 정보만 표시합니다.</value></data>
+  <data name="ConditionsPartial" xml:space="preserve"><value>시간·날씨 조건 미확인</value></data>
   <data name="SnaggingRequired" xml:space="preserve"><value>갈고리 낚시</value></data>
   <data name="LureModest" xml:space="preserve"><value>소박한 루어</value></data>
   <data name="LureAmbitious" xml:space="preserve"><value>거대한 루어</value></data>
@@ -457,4 +457,6 @@
   <data name="StepBite" xml:space="preserve"><value>입질 {0}</value></data>
   <data name="StepConditionsUnknown" xml:space="preserve"><value>낚아채기 정보 미확인</value></data>
   <data name="WindowInline" xml:space="preserve"><value>{0}  |  {1}</value></data>
+  <data name="ConditionsSpotMissing" xml:space="preserve"><value>조건 자료에 낚시터가 연결되어 있지 않아 출현 시간을 계산할 수 없습니다.</value></data>
+  <data name="ConditionsSpotMissingHint" xml:space="preserve"><value>게임에서 읽은 낚시터 목록은 표시할 수 있지만, 현재 조건 자료와 어떤 낚시터를 함께 사용할지는 확인되지 않았습니다.</value></data>
 </root>

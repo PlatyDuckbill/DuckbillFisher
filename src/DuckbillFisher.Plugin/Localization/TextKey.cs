@@ -450,4 +450,6 @@ internal enum TextKey
     StepBite,
     StepConditionsUnknown,
     WindowInline,
+    ConditionsSpotMissing,
+    ConditionsSpotMissingHint,
 }

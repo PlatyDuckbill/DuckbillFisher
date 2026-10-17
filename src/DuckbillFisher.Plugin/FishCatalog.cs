@@ -224,10 +224,9 @@ internal sealed class FishCatalog : IDisposable
                                 Skill(rule.SnaggingRequired ? 4100u : 0),
                                 Skill(rule.Lure switch { "Modest" => 37595u, "Ambitious" => 37594u, _ => 0 }), folklore)
                             {
-                                // KR Status 568 and Action 4105 inspected in the installed client on 2026-10-17.
+                                // KR Status 568 inspected in the installed client on 2026-10-17.
                                 Intuition = rule.Predators.Length > 0 && statuses?.GetRowOrDefault(568) is { } intuition
                                     ? new(568, intuition.Name.ExtractText(), intuition.Icon) : null,
-                                FishEyes = Skill(4105),
                             };
                     }
                     var grade = FishGrade.Unknown;

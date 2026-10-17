@@ -167,8 +167,8 @@
   <data name="FavoriteRowState" xml:space="preserve"><value>Favorite · {0}</value></data>
   <data name="FavoriteToggle" xml:space="preserve"><value>Favorite</value></data>
   <data name="ManualCollectionLabel" xml:space="preserve"><value>Collection: {0}</value></data>
-  <data name="MarkCaught" xml:space="preserve"><value>Mark caught</value></data>
-  <data name="MarkUncaught" xml:space="preserve"><value>Mark uncaught</value></data>
+  <data name="MarkCaught" xml:space="preserve"><value>Manually mark caught</value></data>
+  <data name="MarkUncaught" xml:space="preserve"><value>Manually mark uncaught</value></data>
   <data name="ClearManualCollection" xml:space="preserve"><value>Clear manual status</value></data>
   <data name="PreferenceScope" xml:space="preserve"><value>Favorites are shared. Manual records are saved per character and take priority. Clearing a manual record follows the current automatic observation; unconfirmed fish remain Unknown.</value></data>
   <data name="CollectionManualCaught" xml:space="preserve"><value>Caught (manual)</value></data>
@@ -187,7 +187,7 @@
   <data name="CollectionHelp" xml:space="preserve"><value>Collection filter help</value></data>
   <data name="BaitAlternatives" xml:space="preserve"><value>Step {0}: choose one of these alternatives</value></data>
   <data name="ConditionUnknown" xml:space="preserve"><value>Unknown</value></data>
-  <data name="ConditionsPartial" xml:space="preserve"><value>The source has no confirmed recommended location or complete conditions. Time/weather forecasts are unavailable; known bait information is shown.</value></data>
+  <data name="ConditionsPartial" xml:space="preserve"><value>Time and weather conditions are unconfirmed.</value></data>
   <data name="SnaggingRequired" xml:space="preserve"><value>Snagging</value></data>
   <data name="LureModest" xml:space="preserve"><value>Modest Lure</value></data>
   <data name="LureAmbitious" xml:space="preserve"><value>Ambitious Lure</value></data>
@@ -457,4 +457,6 @@ In fish log only: {5}</value></data>
   <data name="StepBite" xml:space="preserve"><value>Bite {0}</value></data>
   <data name="StepConditionsUnknown" xml:space="preserve"><value>Hookset not confirmed</value></data>
   <data name="WindowInline" xml:space="preserve"><value>{0}  |  {1}</value></data>
+  <data name="ConditionsSpotMissing" xml:space="preserve"><value>The condition data does not link this fish to a fishing spot, so its availability cannot be forecast.</value></data>
+  <data name="ConditionsSpotMissingHint" xml:space="preserve"><value>Game fishing spots may still be listed. The condition data does not identify which location to use for this forecast.</value></data>
 </root>

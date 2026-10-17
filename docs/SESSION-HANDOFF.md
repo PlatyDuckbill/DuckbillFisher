@@ -1,6 +1,6 @@
 # 세션 인수인계
 
-갱신: 2026-10-17 · 0.1.30.0 설정 콜백 수정 별도 빌드 · 정규 반영 대기
+갱신: 2026-10-17 · 0.1.31.0 정규 반영 완료 · 인게임 확인 대기
 
 ## 재개 순서
 
@@ -15,8 +15,8 @@
 - 게임: `C:\Program Files (x86)\FINAL FANTASY XIV - KOREA\game`, KR 빌드 2026.10.06.0000.0000.
 - 참조: `C:\Users\hyogu\AppData\Roaming\XIVLauncherKR\addon\Hooks\dev`, Dalamud 15.0.3.6/API15.
 - 개발 DLL: `C:\Users\hyogu\Downloads\DuckbillFisher\src\DuckbillFisher.Plugin\bin\Debug\DuckbillFisher.dll`.
-- 현재 정규 0.1.29.0: 별도/정규 빌드 경고·오류 0, 한영 448키/형식 인자, Plugin/Core/ko/manifest 버전 확인. 테스트 미실행.
-- 이번 작업 시작 때 언로드 완료/정규 교체 승인 받음 → 별도 빌드/검사 → 정규 반영 완료. 이후 새 기능 교체는 해당 작업의 로드 상태/승인을 따른다.
+- 현재 정규 0.1.31.0: 별도/정규 빌드 경고·오류 0, 한영 450키/형식 인자, Plugin/Core/ko/manifest 버전 확인. 테스트 미실행.
+- 사용자 최신 언로드 완료 확인 후 글자 없는 지도 아이콘/명확한 안내 문장 수정과 정규 빌드 완료. 이후 새 기능 교체는 해당 작업의 로드 상태/승인을 따른다.
 - 0.1.26.0 사용자 `다 잘됨` 대표 확인 유지. 0.1.27.0 사용 피드백을 반영했으며 0.1.28.0 사용 피드백을 반영했고 0.1.29.0 결과는 아직 없다. 커밋은 로컬 보존이며 푸시/릴리스하지 않았다.
 
 ## 이번 UI 구조와 정책
@@ -31,7 +31,8 @@
 - `FishDetailPanel` 공통 상세, `UiWidgets` 아이콘/배너, `CompactFishObserver` Framework 1초 필터/수명 관리. Draw에서 전체 검색/장기 예측/파일 읽기 없음.
 - 0.1.29.0은 목록 직접 핀/이름·수집 및 위치·시간 정렬/직감 배지, 상세 Patch 우측/작은 물고기의 눈/옆 조건/시간 한 줄을 적용했다. 새 언로드 확인 후 정규 빌드·한영 448키 통과. 다음은 [배치/상호작용 확인](validation/MVP-01-UI-ALIGNMENT.md)이다.
 
-- 0.1.30.0 OpenConfigUi 누락 경고 수정 별도 빌드/448키 검사 통과. 새 언로드 확인 후 정규 빌드가 필요하다. MainWindow.OpenSettings를 로드/해제 시 구독/해제하고 실제 설정 탭으로 이동한다. [확인 순서](validation/CONFIG-UI-CALLBACK.md).
+- 0.1.31.0은 물고기의 눈 표시 제거/등급·별·수집 선택 한 줄/명시적 수동 지정/직감 배지 종횡비·배경 정리/글자 없는 지도 아이콘/낚시터 연결 누락 안내를 포함한다. 데이터/예측/수집/알림 정책은 그대로다. [변경과 다음 확인](validation/MVP-01-UI-REFINEMENT.md).
+- 0.1.30.0 OpenConfigUi 누락 경고 수정도 정규 0.1.31.0에 포함했다. MainWindow.OpenSettings를 로드/해제 시 구독/해제하고 실제 설정 탭으로 이동한다. [확인 순서](validation/CONFIG-UI-CALLBACK.md).
 
 ## 일반 구현 빌드
 
@@ -42,7 +43,7 @@ dotnet build src/DuckbillFisher.Plugin/DuckbillFisher.Plugin.csproj --no-restore
 pwsh -NoLogo -NoProfile -File scripts/check-localization.ps1
 ```
 
-- 별도 출력은 `-p:OutputPath=C:/Users/hyogu/Downloads/DuckbillFisher/.cache/ui-alignment-build/` 추가.
+- 별도 출력은 `-p:OutputPath=C:/Users/hyogu/Downloads/DuckbillFisher/.cache/ui-refine-build/` 추가.
 - PowerShell 5.1 파일 읽기는 `-Encoding UTF8`. 이번 환경에서 pwsh/정규 빌드/git 쓰기 모두 실행됐다.
 - 실제 주 DLL·Core·ko 리소스 DLL·manifest 확인 후 파일을 명시해 스테이징/커밋한다. 빌드 결과/캐시/사용자 파일 제외.
 
