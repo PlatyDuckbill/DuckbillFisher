@@ -49,6 +49,7 @@ internal sealed class FishListPanel(FishCatalog catalog, ITextureProvider textur
     private bool timeRestrictedOnly;
     private int gradeVisibility;
     private readonly FishGeographyPanel geography = new();
+    private readonly CatalogPresetsPanel presets = new(preferences);
     private bool restoredSettings;
     private bool resetDetailScroll;
     private bool jumpUpcoming;
@@ -113,6 +114,15 @@ internal sealed class FishListPanel(FishCatalog catalog, ITextureProvider textur
         UiWidgets.Tooltip(UiText.Get(T.CollectionVisibility));
         UiWidgets.FlowNext(ImGui.GetFontSize() * 7, toolbarRight);
         filtersChanged |= DrawFilters(view.Geography);
+        UiWidgets.FlowNext(ImGui.GetFontSize() * 7, toolbarRight);
+        if (presets.Draw(personal, CurrentCatalogSettings()) is { } preset)
+        {
+            ApplyCatalogSettings(preset);
+            search = "";
+            showUnresolved = false;
+            detailsOnly = false;
+            filtersChanged = true;
+        }
         UiWidgets.FlowNext(ImGui.GetFrameHeight(), toolbarRight);
         if (UiWidgets.IconButton(FontAwesomeIcon.Undo, "RestoreCatalogDefaults", UiText.Get(T.CatalogRestoreDefaults)))
         {
@@ -204,6 +214,16 @@ internal sealed class FishListPanel(FishCatalog catalog, ITextureProvider textur
             new Vector2(ImGui.GetFontSize() * 38, ImGui.GetMainViewport().WorkSize.Y * 0.85f));
         if (!ImGui.BeginPopup("CatalogFiltersPopup")) return false;
         var changed = false;
+        if (ImGui.Button(UiText.Label(T.CatalogShowAll, "CatalogShowAll")))
+        {
+            ApplyCatalogSettings(CatalogSettings.AllFish(SortChoices[sort]));
+            search = "";
+            showUnresolved = false;
+            detailsOnly = false;
+            changed = true;
+        }
+        UiWidgets.Tooltip(UiText.Get(T.CatalogShowAllHint));
+        ImGui.Separator();
         changed |= ImGui.Checkbox(UiText.Label(T.TimeRestrictedOnly, "CatalogTimeRestrictedOnly"), ref timeRestrictedOnly);
         if (ImGui.IsItemHovered()) ImGui.SetTooltip(UiText.Get(T.TimeRestrictedHint));
         ImGui.SetNextItemWidth(190);
@@ -364,7 +384,7 @@ internal sealed class FishListPanel(FishCatalog catalog, ITextureProvider textur
                 Append($"SelectedForecast={forecast?.Kind.ToString() ?? "Unknown"}; ForecastAt={view.ForecastAt:O}; Start={forecast?.Start:O}; End={forecast?.End:O}; CopiedAt={DateTimeOffset.UtcNow:O}");
             }
         }
-        report.AppendLine("DuckbillFisher MVP-01/preferences/v8");
+        report.AppendLine("DuckbillFisher MVP-01/preferences/v9");
         Append($"Ready={personal.HasCharacter}; Editable={personal.CanEdit}; Session={personal.Session}; Favorites={personal.Favorites.Count}");
         Append($"ManualCaught={personal.ManualCaught.Count(pair => pair.Value)}; ManualUncaught={personal.ManualCaught.Count(pair => !pair.Value)}");
         Append($"CollectionFilter={CollectionChoices[collectionVisibility]}; FavoritesOnly={favoritesOnly}; Sort={sort}; Displayed={matches.Length}");
@@ -376,6 +396,7 @@ internal sealed class FishListPanel(FishCatalog catalog, ITextureProvider textur
         Append($"TimeRestrictedOnly={timeRestrictedOnly}; GradeFilter={GradeChoices[gradeVisibility]}");
         Append($"Regions={string.Join(',', geography.Regions.Order().Select(id => id.ToString(CultureInfo.InvariantCulture)))}; Expansions={string.Join(',', geography.Expansions.Order().Select(id => id.ToString(CultureInfo.InvariantCulture)))}; RegionOptions={catalog.View.Geography.Regions.Length}; ExpansionOptions={catalog.View.Geography.Expansions.Length}");
         Append($"CollectionSource=ManualOverrideThenGameObservation; StorageError={personal.Error?.Key.ToString() ?? "none"}");
+        Append($"CatalogPresets={personal.CatalogPresets.Count}; PresetError={personal.CatalogPresetError?.Key.ToString() ?? "none"}");
         report.AppendLine().AppendLine("DuckbillFisher MVP-04/collection/v2");
         Append($"Session={observed.Session}; Caught={observed.Caught.Count}; Eligible={observed.EligibleRows}; GuideVisible={observed.GuideVisible}");
         Append($"Scans={observed.Scans}; RawFalse={observed.RawFalse}; UnknownReads={observed.Unknown}; RegistrationContract={observed.RegistrationContract}");

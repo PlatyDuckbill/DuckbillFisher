@@ -21,8 +21,7 @@ internal sealed record FishingDetailView(FishingRule Rule, FishingSpotView? Spot
     FishingItemView? Folklore)
 {
     public FishingConditionIcon? Intuition { get; init; }
-    public UiMessage ConditionWarning => new(Rule.FishingSpotId == 0
-        ? Localization.TextKey.ConditionsSpotMissing : Localization.TextKey.ConditionsPartial);
+    public UiMessage ConditionWarning => new(Localization.TextKey.ConditionsPartial);
 }
 
 internal sealed record OceanFishingView(string Area, string FishingSpot, string[] RouteNames, byte[] VisitTimes);

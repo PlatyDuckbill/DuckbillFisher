@@ -457,12 +457,24 @@ In fish log only: {5}</value></data>
   <data name="StepBite" xml:space="preserve"><value>Bite {0}</value></data>
   <data name="StepConditionsUnknown" xml:space="preserve"><value>Hookset not confirmed</value></data>
   <data name="WindowInline" xml:space="preserve"><value>{0}  |  {1}</value></data>
-  <data name="ConditionsSpotMissing" xml:space="preserve"><value>The condition data does not link this fish to a fishing spot, so its availability cannot be forecast.</value></data>
-  <data name="ConditionsSpotMissingHint" xml:space="preserve"><value>Game fishing spots may still be listed. The condition data does not identify which location to use for this forecast.</value></data>
   <data name="ForecastUnavailable" xml:space="preserve"><value>No forecast available</value></data>
   <data name="OpenFishGuide" xml:space="preserve"><value>Open Fish Guide</value></data>
   <data name="GuideOpenUnavailable" xml:space="preserve"><value>The guide cannot be opened directly in this environment. Open the Fish Guide from the game menu.</value></data>
   <data name="GuideOpenDataWaiting" xml:space="preserve"><value>The fish list is loading. Please try again shortly.</value></data>
   <data name="DetailWeatherTransition" xml:space="preserve"><value>Weather</value></data>
   <data name="RowForecastNotFound" xml:space="preserve"><value>No forecast in 7d</value></data>
+  <data name="CatalogShowAll" xml:space="preserve"><value>Show all fish</value></data>
+  <data name="CatalogShowAllHint" xml:space="preserve"><value>Clear the search and all regular filters. Include every collection state, grade, timing, region, ocean fish, and fish outside the log. Keep the sort order and exclude unresolved rows.</value></data>
+  <data name="PresetButton" xml:space="preserve"><value>Presets</value></data>
+  <data name="PresetScope" xml:space="preserve"><value>Save filters and sorting together. Search and diagnostic options are excluded and cleared when loading. Deleting a preset keeps the current filters.</value></data>
+  <data name="PresetCount" xml:space="preserve"><value>Saved presets {0}/{1}</value></data>
+  <data name="PresetName" xml:space="preserve"><value>New preset name</value></data>
+  <data name="PresetSaveCurrent" xml:space="preserve"><value>Save current filters and sort</value></data>
+  <data name="PresetLimit" xml:space="preserve"><value>You can save up to {0} presets. Delete an existing preset before saving another.</value></data>
+  <data name="PresetDuplicateName" xml:space="preserve"><value>A preset with this name already exists. Enter a different name.</value></data>
+  <data name="PresetInvalidName" xml:space="preserve"><value>Enter a name of 1–{0} characters without line breaks.</value></data>
+  <data name="PresetEmpty" xml:space="preserve"><value>No saved presets.</value></data>
+  <data name="PresetDelete" xml:space="preserve"><value>Delete</value></data>
+  <data name="PresetDeleteQuestion" xml:space="preserve"><value>Delete the preset “{0}”?</value></data>
+  <data name="Cancel" xml:space="preserve"><value>Cancel</value></data>
 </root>

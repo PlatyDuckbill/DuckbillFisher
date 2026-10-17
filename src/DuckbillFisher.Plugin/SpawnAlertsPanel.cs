@@ -17,6 +17,7 @@ internal sealed class SpawnAlertsPanel(FishPreferences preferences, SpawnAlerts 
     private IReadOnlyList<FavoriteAlertView>? lastFavorites;
     private int lastFavoritesRevision = -1;
     private FavoriteAlertView[] matches = [];
+    private bool hasStateRows;
     private string search = "";
     private FishGuideRow? selectedRow;
     private bool resetDetailScroll;
@@ -144,6 +145,7 @@ internal sealed class SpawnAlertsPanel(FishPreferences preferences, SpawnAlerts 
                 fish.Row?.Spots.Any(spot => spot.Name.Contains(term, StringComparison.OrdinalIgnoreCase) ||
                     spot.Zone.Contains(term, StringComparison.OrdinalIgnoreCase)) == true ||
                 fish.FishId.ToString(System.Globalization.CultureInfo.InvariantCulture) == term)).ToArray();
+            hasStateRows = matches.Any(fish => fish.State != FavoriteAlertState.Armed);
             if (selectedId is { } selected && !settings.Favorites.Contains(selected))
                 selectedId = null;
             selectedRow = selectedId is { } id ? view.Favorites.FirstOrDefault(fish => fish.FishId == id)?.Row : null;
@@ -171,7 +173,8 @@ internal sealed class SpawnAlertsPanel(FishPreferences preferences, SpawnAlerts 
         if (matches.Length == 0) ImGui.TextWrapped(UiText.Get(T.FavoritesEmpty));
         var baseHeight = FishRowRenderer.GetHeight(ImGui.GetContentRegionAvail().X);
         var narrow = ImGui.GetContentRegionAvail().X < ImGui.GetFontSize() * 20;
-        var rowHeight = baseHeight + ImGui.GetFrameHeightWithSpacing() * (narrow ? 2 : 1) + ImGui.GetTextLineHeightWithSpacing() + 8;
+        var rowHeight = baseHeight + ImGui.GetFrameHeightWithSpacing() * (narrow ? 2 : 1) +
+            (hasStateRows ? ImGui.GetTextLineHeightWithSpacing() : 0) + 8;
         var observed = collection.View;
         var now = DateTimeOffset.UtcNow;
         var clipper = ImGui.ImGuiListClipper();
@@ -215,10 +218,13 @@ internal sealed class SpawnAlertsPanel(FishPreferences preferences, SpawnAlerts 
                     if (UiWidgets.FavoriteButton("RemoveAlertFavorite", true))
                         preferences.SetFavorite(fish.FishId, false);
                     ImGui.EndDisabled();
-                    ImGui.TextDisabled(UiText.Get(StateKey(fish.State)));
-                    if (ImGui.IsItemHovered()) ImGui.SetTooltip(fish.LeadMinutes == settings.AlertLead(fish.FishId) && fish.Start is { } start
-                        ? UiText.Get(T.AlertFavoriteNext, start.AddMinutes(-fish.LeadMinutes).ToLocalTime(), start.ToLocalTime())
-                        : UiText.Get(T.AlertNoReservation));
+                    if (fish.State != FavoriteAlertState.Armed)
+                    {
+                        ImGui.TextDisabled(UiText.Get(StateKey(fish.State)));
+                        if (ImGui.IsItemHovered()) ImGui.SetTooltip(fish.LeadMinutes == settings.AlertLead(fish.FishId) && fish.Start is { } start
+                            ? UiText.Get(T.AlertFavoriteNext, start.AddMinutes(-fish.LeadMinutes).ToLocalTime(), start.ToLocalTime())
+                            : UiText.Get(T.AlertNoReservation));
+                    }
                     ImGui.Separator();
                     ImGui.SetCursorPosY(rowY + rowHeight);
                     ImGui.PopID();

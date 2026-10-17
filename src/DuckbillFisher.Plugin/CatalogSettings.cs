@@ -18,6 +18,12 @@ public sealed record CatalogSettings
     public uint[] Regions { get; init; } = [];
     public uint[] Expansions { get; init; } = [];
 
+    public static CatalogSettings AllFish(CatalogSort sort) => new()
+    {
+        Sort = sort, Collection = CollectionVisibility.All, Grade = FishGradeVisibility.All,
+        InLogOnly = false, IncludeOceanFish = true, TimeRestrictedOnly = false,
+    };
+
     public bool IsValid() => Enum.IsDefined(Sort) && Enum.IsDefined(Grade) &&
         Collection is CollectionVisibility.All or CollectionVisibility.HideCaught or CollectionVisibility.CaughtOnly or CollectionVisibility.UnknownOnly &&
         Regions is not null && Regions.All(id => id != 0) && Expansions is not null;

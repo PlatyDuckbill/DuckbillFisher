@@ -15,7 +15,7 @@ public enum SpawnAlertChannel { System, Say, CrossWorldLinkshell1 }
 // Public for Dalamud's configuration serializer. Content IDs stay in local configuration only.
 public sealed class FishPreferencesConfiguration : IPluginConfiguration
 {
-    public const int CurrentVersion = 10;
+    public const int CurrentVersion = 11;
     public int Version { get; set; } = CurrentVersion;
     public HashSet<uint> Favorites { get; set; } = [];
     public Dictionary<ulong, Dictionary<uint, bool>> Characters { get; set; } = [];
@@ -27,6 +27,7 @@ public sealed class FishPreferencesConfiguration : IPluginConfiguration
     public SpawnAlertAudience SpawnAlertAudience { get; set; } = SpawnAlertAudience.AllFavorites;
     public bool RemoveFavoriteOnRegistration { get; set; } = true;
     public CatalogSettings Catalog { get; set; } = new();
+    public List<CatalogPreset> CatalogPresets { get; set; } = [];
     public UiLanguage Language { get; set; } = UiLanguage.Korean;
     public bool DeveloperMode { get; set; }
     public CompactViewSettings Compact { get; set; } = new();
@@ -46,6 +47,8 @@ internal sealed record FishPreferencesView(int Revision, int Session, bool HasCh
     public SpawnAlertAudience SpawnAlertAudience { get; init; } = SpawnAlertAudience.AllFavorites;
     public bool RemoveFavoriteOnRegistration { get; init; } = true;
     public CatalogSettings Catalog { get; init; } = new();
+    public IReadOnlyList<CatalogPreset> CatalogPresets { get; init; } = [];
+    public UiMessage? CatalogPresetError { get; init; }
     public UiLanguage Language { get; init; } = UiLanguage.Korean;
     public bool DeveloperMode { get; init; }
     public CompactViewSettings Compact { get; init; } = new();
@@ -71,6 +74,7 @@ internal sealed class FishPreferences : IDisposable
     private (bool Enabled, int LeadMinutes, XivChatType Channel, int Sound, SpawnAlertAudience Audience, bool RemoveOnRegistration)? pendingAlerts;
     private readonly Dictionary<uint, int?> pendingFishAlerts = [];
     private CatalogSettings? pendingCatalog;
+    private PresetEdit? pendingPreset;
     private (UiLanguage Language, bool DeveloperMode)? pendingInterface;
     private CompactViewSettings? pendingCompact;
     private FishPreferencesConfiguration configuration = new();
@@ -110,6 +114,8 @@ internal sealed class FishPreferences : IDisposable
                 if (loaded.Version < 8)
                     configuration.RemoveFavoriteOnRegistration = true;
                 configuration.Catalog = loaded.Catalog.Copy();
+                // A malformed optional preset must not discard favorites or character records.
+                configuration.CatalogPresets = CatalogPreset.ReadValid(loaded.CatalogPresets);
                 configuration.Version = FishPreferencesConfiguration.CurrentVersion;
                 writable = true;
             }
@@ -152,6 +158,20 @@ internal sealed class FishPreferences : IDisposable
         lock (gate)
             if (!disposed && writable && fishId != 0)
                 pending.Enqueue(new(fishId, favorite, false, view.Session));
+    }
+
+    public void SaveCatalogPreset(string name, CatalogSettings settings)
+    {
+        name = name.Trim();
+        lock (gate)
+            if (!disposed && writable && CatalogPreset.ValidName(name) && settings.IsValid())
+                pendingPreset = new(new(Guid.NewGuid(), name, settings.Copy()), Guid.Empty);
+    }
+
+    public void DeleteCatalogPreset(Guid id)
+    {
+        lock (gate)
+            if (!disposed && writable && id != Guid.Empty) pendingPreset = new(null, id);
     }
 
     public void SetManualCaught(uint fishId, bool? caught, int expectedSession)
@@ -256,13 +276,31 @@ internal sealed class FishPreferences : IDisposable
             }
             else if (stateErrorChanged)
                 Publish();
-            if (pending.Count == 0 && pendingAlerts is null && pendingFishAlerts.Count == 0 && pendingCatalog is null && pendingInterface is null && pendingCompact is null)
+            if (pending.Count == 0 && pendingAlerts is null && pendingFishAlerts.Count == 0 && pendingCatalog is null && pendingPreset is null && pendingInterface is null && pendingCompact is null)
                 return;
             var candidate = CopyConfiguration();
             var changed = false;
+            if (pendingPreset is { } presetEdit)
+            {
+                pendingPreset = null;
+                view = view with { CatalogPresetError = null };
+                if (presetEdit.Add is { } preset)
+                {
+                    if (candidate.CatalogPresets.Count >= CatalogPreset.MaxCount)
+                        view = view with { CatalogPresetError = new(T.PresetLimit, CatalogPreset.MaxCount) };
+                    else if (candidate.CatalogPresets.Any(value => string.Equals(value.Name, preset.Name, StringComparison.OrdinalIgnoreCase)))
+                        view = view with { CatalogPresetError = new(T.PresetDuplicateName) };
+                    else
+                    {
+                        candidate.CatalogPresets.Add(preset);
+                        changed = true;
+                    }
+                }
+                else changed = candidate.CatalogPresets.RemoveAll(value => value.Id == presetEdit.Remove) > 0;
+            }
             if (pendingCompact is { } compact)
             {
-                changed = candidate.Compact != compact;
+                changed |= candidate.Compact != compact;
                 candidate.Compact = compact;
                 pendingCompact = null;
             }
@@ -343,6 +381,8 @@ internal sealed class FishPreferences : IDisposable
             SpawnAlertChannel = (XivChatType)configuration.SpawnAlertChannelId, SpawnAlertSound = configuration.SpawnAlertSound,
             SpawnAlertAudience = configuration.SpawnAlertAudience, RemoveFavoriteOnRegistration = configuration.RemoveFavoriteOnRegistration,
             Catalog = configuration.Catalog.Copy(),
+            CatalogPresets = configuration.CatalogPresets.Select(value => value.Copy()).ToArray(),
+            CatalogPresetError = view.CatalogPresetError,
             Language = configuration.Language, DeveloperMode = configuration.DeveloperMode,
             Compact = configuration.Compact,
             FishAlertLeadMinutes = configuration.FishAlertLeadMinutes.ToFrozenDictionary(),
@@ -360,6 +400,7 @@ internal sealed class FishPreferences : IDisposable
         SpawnAlertChannelId = configuration.SpawnAlertChannelId, SpawnAlertSound = configuration.SpawnAlertSound,
         SpawnAlertAudience = configuration.SpawnAlertAudience, RemoveFavoriteOnRegistration = configuration.RemoveFavoriteOnRegistration,
         Catalog = configuration.Catalog.Copy(),
+        CatalogPresets = configuration.CatalogPresets.Select(value => value.Copy()).ToList(),
         Language = configuration.Language, DeveloperMode = configuration.DeveloperMode,
         Compact = configuration.Compact,
         FishAlertLeadMinutes = new(configuration.FishAlertLeadMinutes),
@@ -385,7 +426,7 @@ internal sealed class FishPreferences : IDisposable
     }
 
     private static bool IsValid(FishPreferencesConfiguration value) =>
-        value.Version is 1 or 2 or 3 or 4 or 5 or 6 or 7 or 8 or 9 or FishPreferencesConfiguration.CurrentVersion && value.Favorites is not null &&
+        value.Version is 1 or 2 or 3 or 4 or 5 or 6 or 7 or 8 or 9 or 10 or FishPreferencesConfiguration.CurrentVersion && value.Favorites is not null &&
         Enum.IsDefined(value.Language) &&
         value.Compact is not null && value.Compact.IsValid() &&
         value.Catalog is not null && value.Catalog.IsValid() &&
@@ -409,6 +450,7 @@ internal sealed class FishPreferences : IDisposable
             pendingAlerts = null;
             pendingFishAlerts.Clear();
             pendingCatalog = null;
+            pendingPreset = null;
             pendingInterface = null;
             pendingCompact = null;
         }
@@ -416,4 +458,5 @@ internal sealed class FishPreferences : IDisposable
     }
 
     private sealed record Edit(uint FishId, bool? Value, bool Manual, int Session);
+    private sealed record PresetEdit(CatalogPreset? Add, Guid Remove);
 }

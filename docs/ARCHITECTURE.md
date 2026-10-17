@@ -43,6 +43,8 @@ Plugin의 `AssemblyName`은 `DuckbillFisher`다. 주 DLL은 `DuckbillFisher.dll`
 
 ## 시간과 성능
 
+0.1.36.0의 CatalogPresetsPanel은 팝업 표시/선택만, CatalogPreset은 상한·이름·복사, FishPreferences(schema v11)는 기존 Framework 편집 큐/설정 저장을 담당한다. 이전 v1~v10과 기록을 유지하고 잘못된 선택적 프리셋만 제외한다. presets는 필터+정렬 복사이며 검색·진단은 포함하지 않는다. [저장 경계/인게임 확인](validation/MVP-01-FILTER-PRESETS.md).
+
 - 0.1.7.0의 FishCollectionObserver는 FishPreferences의 현재 세션을 따르는 수집됨 관찰이다. NativeFishCollectionReader를 수첩 진단과 공유하고 기존 가드 안에서 FishGuide2 표시 중 1초마다 True만 수집한다. IChatGui.LogMessage의 검증한 KR 도감 등록 ID/숫자 Item 매개변수도 제한된 큐를 거쳐 Framework에서 적용한다. False는 Unknown이며 수동 override가 자동 관찰보다 우선한다. 자동 관찰은 세션 메모리에만 보관한다. API 근거·등록 입력 계약과 남은 검증은 [자동 수집 검증](validation/MVP-04-COLLECTION.md)을 따른다.
 
 - 0.1.6.0의 FishPreferences는 공개 IPlayerState.ContentId/IsLoaded와 IClientState.IsLoggedIn을 Framework.Update에서 읽는다. 즐겨찾기는 공통, 수동 수집 bool은 캐릭터/FishParameter ID별로 보관한다. UI는 변경 요청만 큐에 넣고 서비스가 적용 직전 세션을 확인해 다른 캐릭터로 넘어간 수동 요청을 폐기한다. 로그인 전/조회 실패에는 수동 상태를 비우고 변경을 막는다. 불변 snapshot의 revision이 바뀔 때만 목록 필터를 다시 계산한다.

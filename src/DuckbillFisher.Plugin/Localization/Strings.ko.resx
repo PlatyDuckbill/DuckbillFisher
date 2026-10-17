@@ -457,12 +457,24 @@
   <data name="StepBite" xml:space="preserve"><value>입질 {0}</value></data>
   <data name="StepConditionsUnknown" xml:space="preserve"><value>낚아채기 정보 미확인</value></data>
   <data name="WindowInline" xml:space="preserve"><value>{0}  |  {1}</value></data>
-  <data name="ConditionsSpotMissing" xml:space="preserve"><value>조건 자료에 낚시터가 연결되어 있지 않아 출현 시간을 계산할 수 없습니다.</value></data>
-  <data name="ConditionsSpotMissingHint" xml:space="preserve"><value>게임에서 읽은 낚시터 목록은 표시할 수 있지만, 현재 조건 자료와 어떤 낚시터를 함께 사용할지는 확인되지 않았습니다.</value></data>
   <data name="ForecastUnavailable" xml:space="preserve"><value>예측 정보 없음</value></data>
   <data name="OpenFishGuide" xml:space="preserve"><value>어류도감 열기</value></data>
   <data name="GuideOpenUnavailable" xml:space="preserve"><value>이 환경에서는 도감을 바로 열 수 없습니다. 게임 메뉴에서 어류도감을 열어 주세요.</value></data>
   <data name="GuideOpenDataWaiting" xml:space="preserve"><value>어종 목록을 불러오는 중입니다. 잠시 후 다시 눌러 주세요.</value></data>
   <data name="DetailWeatherTransition" xml:space="preserve"><value>날씨</value></data>
   <data name="RowForecastNotFound" xml:space="preserve"><value>7일 내 예측 없음</value></data>
+  <data name="CatalogShowAll" xml:space="preserve"><value>전체 보기</value></data>
+  <data name="CatalogShowAllHint" xml:space="preserve"><value>검색어와 모든 일반 필터를 해제합니다. 수집 여부·등급·시간제·지역 제한 없이 먼바다와 도감 밖 어종도 표시합니다. 정렬은 유지하며 확인 불가 행은 제외합니다.</value></data>
+  <data name="PresetButton" xml:space="preserve"><value>프리셋</value></data>
+  <data name="PresetScope" xml:space="preserve"><value>필터와 정렬을 함께 저장합니다. 검색어와 진단 옵션은 저장하지 않으며 불러올 때 해제합니다. 프리셋을 삭제해도 현재 필터는 유지합니다.</value></data>
+  <data name="PresetCount" xml:space="preserve"><value>저장한 프리셋 {0}/{1}</value></data>
+  <data name="PresetName" xml:space="preserve"><value>새 프리셋 이름</value></data>
+  <data name="PresetSaveCurrent" xml:space="preserve"><value>현재 필터·정렬 저장</value></data>
+  <data name="PresetLimit" xml:space="preserve"><value>최대 {0}개까지 저장할 수 있습니다. 기존 프리셋을 삭제한 뒤 저장해 주세요.</value></data>
+  <data name="PresetDuplicateName" xml:space="preserve"><value>같은 이름의 프리셋이 있습니다. 다른 이름을 입력해 주세요.</value></data>
+  <data name="PresetInvalidName" xml:space="preserve"><value>이름은 1~{0}자로 입력해 주세요. 줄바꿈은 사용할 수 없습니다.</value></data>
+  <data name="PresetEmpty" xml:space="preserve"><value>저장한 프리셋이 없습니다.</value></data>
+  <data name="PresetDelete" xml:space="preserve"><value>삭제</value></data>
+  <data name="PresetDeleteQuestion" xml:space="preserve"><value>‘{0}’ 프리셋을 삭제할까요?</value></data>
+  <data name="Cancel" xml:space="preserve"><value>취소</value></data>
 </root>
