@@ -28,7 +28,7 @@
   <data name="English" xml:space="preserve"><value>English</value></data>
   <data name="TabGuide" xml:space="preserve"><value>Fish log diagnostics</value></data>
   <data name="TabFishing" xml:space="preserve"><value>Fishing observations</value></data>
-  <data name="CommandHelp" xml:space="preserve"><value>Toggle the DuckbillFisher window.</value></data>
+  <data name="CommandHelp" xml:space="preserve"><value>Open DuckbillFisher. Use /duckbillfisher compact for the compact window.</value></data>
   <data name="CommandConflict" xml:space="preserve"><value>Command already registered: {0}</value></data>
   <data name="GuideIntro" xml:space="preserve"><value>Open the in-game Fish Guide and click a fish below to read its caught bit. This is a diagnostic sample, not an automatic collection filter.</value></data>
   <data name="LoginState" xml:space="preserve"><value>Logged in: {0} | Player data loaded: {1}</value></data>
@@ -133,8 +133,8 @@
   <data name="HooksetPrecision" xml:space="preserve"><value>Precision Hookset</value></data>
   <data name="HooksetPowerful" xml:space="preserve"><value>Powerful Hookset</value></data>
   <data name="TugLabel" xml:space="preserve"><value>Tug strength: {0}</value></data>
-  <data name="TimeConditionLabel" xml:space="preserve"><value>Time: ET {0}–{1}</value></data>
-  <data name="TimeAllDay" xml:space="preserve"><value>Time: all Eorzean day</value></data>
+  <data name="TimeConditionLabel" xml:space="preserve"><value>ET {0}–{1}</value></data>
+  <data name="TimeAllDay" xml:space="preserve"><value>All day</value></data>
   <data name="WeatherConditionLabel" xml:space="preserve"><value>Current weather condition: {0}</value></data>
   <data name="PreviousWeatherConditionLabel" xml:space="preserve"><value>Previous weather condition: {0}</value></data>
   <data name="NoWeatherRestriction" xml:space="preserve"><value>No restriction</value></data>
@@ -181,8 +181,8 @@
   <data name="CollectionLogUnavailable" xml:space="preserve"><value>Fish Guide lookup is available; new-registration updates are unavailable for this installation.</value></data>
   <data name="CollectionObservedCount" xml:space="preserve"><value>Automatic observations: {0} caught / {1} uncaught · {2}</value></data>
   <data name="AutomaticObservationLabel" xml:space="preserve"><value>Game observation: {0}</value></data>
-  <data name="CollectionAutomaticCaught" xml:space="preserve"><value>Caught (automatic)</value></data>
-  <data name="CollectionAutomaticUncaught" xml:space="preserve"><value>Uncaught (automatic)</value></data>
+  <data name="CollectionAutomaticCaught" xml:space="preserve"><value>Caught</value></data>
+  <data name="CollectionAutomaticUncaught" xml:space="preserve"><value>Uncaught</value></data>
   <data name="CollectionGuideConfirmed" xml:space="preserve"><value>Collection states matched the complete game guide at the last lookup.</value></data>
   <data name="CollectionHelp" xml:space="preserve"><value>Collection filter help</value></data>
   <data name="BaitAlternatives" xml:space="preserve"><value>Step {0}: choose one of these alternatives</value></data>
@@ -212,7 +212,7 @@
   <data name="OceanScope" xml:space="preserve"><value>Visit periods describe routes to this area, not this fish's catch restrictions. Fish-specific time, bait and special conditions are not established. Standard time/weather forecasts are not applied.</value></data>
   <data name="OceanRoutes" xml:space="preserve"><value>Route destinations: {0}</value></data>
   <data name="SourceCoverageInfo" xml:space="preserve"><value>Rod-fishing source records: {0}. Spearfishing records stored separately: {1} ({2} with unknown conditions); spearfishing UI and collection integration are pending.</value></data>
-  <data name="RowBaitPath" xml:space="preserve"><value>Bait → mooch: {0}</value></data>
+  <data name="RowBaitPath" xml:space="preserve"><value>{0}</value></data>
   <data name="RowBaitUnknown" xml:space="preserve"><value>Bait: unconfirmed</value></data>
   <data name="RowConditionsUnknown" xml:space="preserve"><value>Time/weather conditions: unconfirmed</value></data>
   <data name="RowOceanConditions" xml:space="preserve"><value>Fish-specific conditions are unconfirmed; see area details.</value></data>
@@ -279,8 +279,8 @@
   <data name="AlertSettingsHeading" xml:space="preserve"><value>Alert settings</value></data>
   <data name="AlertDiagnosticsHeading" xml:space="preserve"><value>Alert diagnostics</value></data>
   <data name="AlertFavoritesCount" xml:space="preserve"><value>{0} favorites shown · hover for details</value></data>
-  <data name="CatalogFiltersHeading" xml:space="preserve"><value>List filters ({0} active)</value></data>
-  <data name="CatalogRestoreDefaults" xml:space="preserve"><value>Restore default filters and sort</value></data>
+  <data name="CatalogFiltersHeading" xml:space="preserve"><value>Filters · {0}</value></data>
+  <data name="CatalogRestoreDefaults" xml:space="preserve"><value>Reset filters / sort</value></data>
   <data name="CatalogSavedHint" xml:space="preserve"><value>List filters, sort, regions and expansions are saved across reloads and shared between characters. Restore defaults also clears the current search and diagnostic checks. Favorites, collection records and alert settings are preserved.</value></data>
   <data name="CollectionGuideOpenRequired" xml:space="preserve"><value>Collection data has not been confirmed for this session. Please open the Fishing tab of the in-game Fish Guide once. Unconfirmed fish remain Unknown.</value></data>
   <data name="CollectionGuideRetryRequired" xml:space="preserve"><value>Collection data could not be fully confirmed. Please open the Fishing tab of the in-game Fish Guide and wait briefly. Unconfirmed fish remain Unknown.</value></data>
@@ -395,4 +395,46 @@ In fish log only: {5}</value></data>
   <data name="AlertAutoRemove" xml:space="preserve"><value>Remove favorite on new Fish Guide registration</value></data>
   <data name="AlertAutoRemoveHint" xml:space="preserve"><value>Enabled by default; turning it off is saved. Independent of enabling alerts. A confirmed new-fish registration removes it from shared favorites. Opening the guide, changing manual collection status and catching an already registered fish do not trigger removal. Custom alert times and delivery history are preserved.</value></data>
   <data name="AlertRemoveFavorite" xml:space="preserve"><value>Remove favorite</value></data>
+  <data name="TabSettings" xml:space="preserve"><value>Settings</value></data>
+  <data name="InterfaceSettings" xml:space="preserve"><value>Interface</value></data>
+  <data name="DeveloperMode" xml:space="preserve"><value>Show developer tools</value></data>
+  <data name="DeveloperModeHint" xml:space="preserve"><value>Shows diagnostics and observation tools. Normal collection and alerts work with this off.</value></data>
+  <data name="GuideBannerOpen" xml:space="preserve"><value>Open the in-game Fish Guide → Fishing once to load collection status.</value></data>
+  <data name="GuideBannerRetry" xml:space="preserve"><value>Collection sync incomplete. Open Fish Guide → Fishing and wait briefly.</value></data>
+  <data name="DetailAvailability" xml:space="preserve"><value>Availability</value></data>
+  <data name="DetailLocations" xml:space="preserve"><value>Fishing spots</value></data>
+  <data name="DetailLocationUnknown" xml:space="preserve"><value>Fishing spot not available</value></data>
+  <data name="DetailConditions" xml:space="preserve"><value>Fishing conditions</value></data>
+  <data name="DetailBait" xml:space="preserve"><value>Bait</value></data>
+  <data name="DetailHookset" xml:space="preserve"><value>Hookset</value></data>
+  <data name="DetailTug" xml:space="preserve"><value>Bite</value></data>
+  <data name="DetailTime" xml:space="preserve"><value>ET</value></data>
+  <data name="DetailPreviousWeather" xml:space="preserve"><value>Previous</value></data>
+  <data name="DetailWeather" xml:space="preserve"><value>Current</value></data>
+  <data name="DetailRequired" xml:space="preserve"><value>Required</value></data>
+  <data name="DetailFolklore" xml:space="preserve"><value>Folklore</value></data>
+  <data name="DetailAdditional" xml:space="preserve"><value>More information</value></data>
+  <data name="ConditionOr" xml:space="preserve"><value>or</value></data>
+  <data name="ConditionAny" xml:space="preserve"><value>Any one of these</value></data>
+  <data name="CollectionControlHint" xml:space="preserve"><value>Change collection status manually. Use Reset to return to the game observation; unknown remains unknown.</value></data>
+  <data name="ForecastBriefScope" xml:space="preserve"><value>Time and weather only · Check personal requirements</value></data>
+  <data name="WindowLocalRange" xml:space="preserve"><value>{0:MM-dd HH:mm} – {1:MM-dd HH:mm} (local)</value></data>
+  <data name="SearchPlaceholder" xml:space="preserve"><value>Search fish, fishing spot, or ID…</value></data>
+  <data name="ResultCount" xml:space="preserve"><value>{0} fish</value></data>
+  <data name="WeatherTransitionHint" xml:space="preserve"><value>Previous weather → current weather; both must match. Slashes are alternatives.</value></data>
+  <data name="RowEtRange" xml:space="preserve"><value>ET {0}–{1}</value></data>
+  <data name="RowEndsIn" xml:space="preserve"><value>Ends {0}</value></data>
+  <data name="RowStartsIn" xml:space="preserve"><value>Starts {0}</value></data>
+  <data name="RowCountdown" xml:space="preserve"><value>{0:00}:{1:00}:{2:00}</value></data>
+  <data name="DetailWindowTitle" xml:space="preserve"><value>Fish details</value></data>
+  <data name="CompactWindowTitle" xml:space="preserve"><value>Fishing windows</value></data>
+  <data name="CompactOptions" xml:space="preserve"><value>Compact view options</value></data>
+  <data name="OpenMainWindow" xml:space="preserve"><value>Open main window</value></data>
+  <data name="OpenCompactWindow" xml:space="preserve"><value>Open compact view</value></data>
+  <data name="CompactHorizon" xml:space="preserve"><value>Upcoming minutes</value></data>
+  <data name="CompactScope" xml:space="preserve"><value>Open windows, then upcoming windows within 1–180 minutes. Uses its own favorites filter. Always available, unknown, and ocean fish are excluded. This is not a guarantee of catchability.</value></data>
+  <data name="CompactOpen" xml:space="preserve"><value>Open now · {0}</value></data>
+  <data name="CompactUpcoming" xml:space="preserve"><value>Upcoming · {0}</value></data>
+  <data name="CompactEmpty" xml:space="preserve"><value>No limited windows open or starting within {0} minutes. Add favorites, switch to all fish, or extend the time range.</value></data>
+  <data name="FavoritesEmpty" xml:space="preserve"><value>No matching favorites. Add fish with the star in the catalog, or clear your search.</value></data>
 </root>

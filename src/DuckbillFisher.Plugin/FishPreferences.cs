@@ -15,7 +15,7 @@ public enum SpawnAlertChannel { System, Say, CrossWorldLinkshell1 }
 // Public for Dalamud's configuration serializer. Content IDs stay in local configuration only.
 public sealed class FishPreferencesConfiguration : IPluginConfiguration
 {
-    public const int CurrentVersion = 8;
+    public const int CurrentVersion = 9;
     public int Version { get; set; } = CurrentVersion;
     public HashSet<uint> Favorites { get; set; } = [];
     public Dictionary<ulong, Dictionary<uint, bool>> Characters { get; set; } = [];
@@ -27,6 +27,9 @@ public sealed class FishPreferencesConfiguration : IPluginConfiguration
     public SpawnAlertAudience SpawnAlertAudience { get; set; } = SpawnAlertAudience.AllFavorites;
     public bool RemoveFavoriteOnRegistration { get; set; } = true;
     public CatalogSettings Catalog { get; set; } = new();
+    public UiLanguage Language { get; set; } = UiLanguage.Korean;
+    public bool DeveloperMode { get; set; }
+    public CompactViewSettings Compact { get; set; } = new();
     public Dictionary<uint, int> FishAlertLeadMinutes { get; set; } = [];
     // Last reserved window start per fish/character. Also suppresses repeats after clock rollback.
     public Dictionary<ulong, Dictionary<uint, long>> AlertWindows { get; set; } = [];
@@ -43,6 +46,9 @@ internal sealed record FishPreferencesView(int Revision, int Session, bool HasCh
     public SpawnAlertAudience SpawnAlertAudience { get; init; } = SpawnAlertAudience.AllFavorites;
     public bool RemoveFavoriteOnRegistration { get; init; } = true;
     public CatalogSettings Catalog { get; init; } = new();
+    public UiLanguage Language { get; init; } = UiLanguage.Korean;
+    public bool DeveloperMode { get; init; }
+    public CompactViewSettings Compact { get; init; } = new();
     public IReadOnlyDictionary<uint, int> FishAlertLeadMinutes { get; init; } = FrozenDictionary<uint, int>.Empty;
     public int AlertLead(uint id) => FishAlertLeadMinutes.GetValueOrDefault(id, SpawnAlertLeadMinutes);
     internal IReadOnlyDictionary<uint, long> ReservedAlertWindows { get; init; } = FrozenDictionary<uint, long>.Empty;
@@ -65,6 +71,8 @@ internal sealed class FishPreferences : IDisposable
     private (bool Enabled, int LeadMinutes, XivChatType Channel, int Sound, SpawnAlertAudience Audience, bool RemoveOnRegistration)? pendingAlerts;
     private readonly Dictionary<uint, int?> pendingFishAlerts = [];
     private CatalogSettings? pendingCatalog;
+    private (UiLanguage Language, bool DeveloperMode)? pendingInterface;
+    private CompactViewSettings? pendingCompact;
     private FishPreferencesConfiguration configuration = new();
     private FishPreferencesView view = new(0, 0, false, false,
         FrozenSet<uint>.Empty, FrozenDictionary<uint, bool>.Empty, null);
@@ -118,6 +126,19 @@ internal sealed class FishPreferences : IDisposable
     }
 
     public FishPreferencesView View { get { lock (gate) return view; } }
+
+    public void SetInterface(UiLanguage language, bool developerMode)
+    {
+        lock (gate)
+            if (!disposed && writable && Enum.IsDefined(language))
+                pendingInterface = (language, developerMode);
+    }
+
+    public void SetCompact(CompactViewSettings settings)
+    {
+        lock (gate)
+            if (!disposed && writable && settings.IsValid()) pendingCompact = settings;
+    }
 
     public void SetCatalogSettings(CatalogSettings settings)
     {
@@ -235,13 +256,26 @@ internal sealed class FishPreferences : IDisposable
             }
             else if (stateErrorChanged)
                 Publish();
-            if (pending.Count == 0 && pendingAlerts is null && pendingFishAlerts.Count == 0 && pendingCatalog is null)
+            if (pending.Count == 0 && pendingAlerts is null && pendingFishAlerts.Count == 0 && pendingCatalog is null && pendingInterface is null && pendingCompact is null)
                 return;
             var candidate = CopyConfiguration();
             var changed = false;
+            if (pendingCompact is { } compact)
+            {
+                changed = candidate.Compact != compact;
+                candidate.Compact = compact;
+                pendingCompact = null;
+            }
+            if (pendingInterface is { } ui)
+            {
+                changed |= candidate.Language != ui.Language || candidate.DeveloperMode != ui.DeveloperMode;
+                candidate.Language = ui.Language;
+                candidate.DeveloperMode = ui.DeveloperMode;
+                pendingInterface = null;
+            }
             if (pendingCatalog is { } catalogSettings)
             {
-                changed = !candidate.Catalog.Matches(catalogSettings);
+                changed |= !candidate.Catalog.Matches(catalogSettings);
                 candidate.Catalog = catalogSettings;
                 pendingCatalog = null;
             }
@@ -309,6 +343,8 @@ internal sealed class FishPreferences : IDisposable
             SpawnAlertChannel = (XivChatType)configuration.SpawnAlertChannelId, SpawnAlertSound = configuration.SpawnAlertSound,
             SpawnAlertAudience = configuration.SpawnAlertAudience, RemoveFavoriteOnRegistration = configuration.RemoveFavoriteOnRegistration,
             Catalog = configuration.Catalog.Copy(),
+            Language = configuration.Language, DeveloperMode = configuration.DeveloperMode,
+            Compact = configuration.Compact,
             FishAlertLeadMinutes = configuration.FishAlertLeadMinutes.ToFrozenDictionary(),
             ReservedAlertWindows = characterId != 0 && configuration.AlertWindows.TryGetValue(characterId, out var windows)
                 ? windows.ToFrozenDictionary() : FrozenDictionary<uint, long>.Empty,
@@ -324,6 +360,8 @@ internal sealed class FishPreferences : IDisposable
         SpawnAlertChannelId = configuration.SpawnAlertChannelId, SpawnAlertSound = configuration.SpawnAlertSound,
         SpawnAlertAudience = configuration.SpawnAlertAudience, RemoveFavoriteOnRegistration = configuration.RemoveFavoriteOnRegistration,
         Catalog = configuration.Catalog.Copy(),
+        Language = configuration.Language, DeveloperMode = configuration.DeveloperMode,
+        Compact = configuration.Compact,
         FishAlertLeadMinutes = new(configuration.FishAlertLeadMinutes),
         AlertWindows = configuration.AlertWindows.ToDictionary(pair => pair.Key, pair => new Dictionary<uint, long>(pair.Value)),
     };
@@ -347,7 +385,9 @@ internal sealed class FishPreferences : IDisposable
     }
 
     private static bool IsValid(FishPreferencesConfiguration value) =>
-        value.Version is 1 or 2 or 3 or 4 or 5 or 6 or 7 or FishPreferencesConfiguration.CurrentVersion && value.Favorites is not null &&
+        value.Version is 1 or 2 or 3 or 4 or 5 or 6 or 7 or 8 or FishPreferencesConfiguration.CurrentVersion && value.Favorites is not null &&
+        Enum.IsDefined(value.Language) &&
+        value.Compact is not null && value.Compact.IsValid() &&
         value.Catalog is not null && value.Catalog.IsValid() &&
         !value.Favorites.Contains(0) && value.Characters is not null &&
         value.Characters.All(pair => pair.Key != 0 && pair.Value is not null && !pair.Value.ContainsKey(0)) &&
@@ -369,6 +409,8 @@ internal sealed class FishPreferences : IDisposable
             pendingAlerts = null;
             pendingFishAlerts.Clear();
             pendingCatalog = null;
+            pendingInterface = null;
+            pendingCompact = null;
         }
         framework.Update -= OnUpdate;
     }

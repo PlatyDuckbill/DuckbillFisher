@@ -16,7 +16,7 @@ internal sealed record FishRowSummary(string Bait, string Conditions)
         // Parentheses preserve alternatives within one step instead of implying another mooch.
         var path = string.Join(" → ", details.BaitSteps.Select(step => step.Length > 1
             ? $"({string.Join(" / ", step.Select(item => item.Name))})"
-            : step[0].Name));
+            : step.Length == 1 ? step[0].Name : UiText.Get(T.ConditionUnknown)));
         var parts = new List<string>();
         var rule = details.Rule;
         if (!rule.ConditionsKnown)
@@ -42,7 +42,7 @@ internal sealed record FishRowSummary(string Bait, string Conditions)
         parts.Add(UiText.Get(T.HooksetLabel, details.Hookset?.Name ?? UiText.Get(rule.Hookset switch
             { "Precision" => T.HooksetPrecision, "Powerful" => T.HooksetPowerful, _ => T.ConditionUnknown })));
 
-        return new(UiText.Get(T.RowBaitPath, path), string.Join(" · ", parts));
+        return new(path.Length == 0 ? UiText.Get(T.RowBaitUnknown) : UiText.Get(T.RowBaitPath, path), string.Join(" · ", parts));
     }
 
     private static string EtClock(double hour) => $"{(int)hour:00}:{(int)Math.Round(hour % 1 * 60):00}";

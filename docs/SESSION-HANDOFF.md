@@ -1,66 +1,54 @@
 # 세션 인수인계
 
-갱신: 2026-10-16
+갱신: 2026-10-17 · 0.1.27.0 정규 반영 · UI/UX 인게임 검증 대기
 
 ## 재개 순서
 
-1. AGENTS.md와 STATUS.md를 읽고 `git status --short`로 기존 수정 확인.
-2. WORKFLOW/validation은 관련 절차/근거가 필요할 때만 해당 구역 조회.
-3. 과거 이력·긴 로그를 매번 전부 읽거나 대화에 붙이지 않는다.
-4. 통과한 황금나비어 숨김·가라루파 등록·지도 핀 검증은 반복 요청하지 않는다.
-5. 사용자 파일 `tmp_note.md`는 읽기·수정·스테이징하지 않는다.
+1. AGENTS.md/STATUS.md와 `git status --short`부터 확인한다.
+2. UI 작업은 [합의된 구조](UI-UX-REDESIGN.md), [분석·구현·확인 순서](validation/MVP-01-UI-UX-REDESIGN.md)를 읽는다.
+3. 큰 디자인 변경은 선택지/차이를 질문하고 답변 후 구현한다. 이미 승인된 최대 세 창 구성을 재승인받을 필요는 없다.
+4. 사용자 `tmp_note.md`는 읽기·수정·스테이징하지 않는다. 전체 로그/과거 이력은 기본 요청하지 않는다.
 
 ## 환경과 DLL
 
 - 작업 폴더: `C:\Users\hyogu\Downloads\DuckbillFisher`.
-- 게임: `C:\Program Files (x86)\FINAL FANTASY XIV - KOREA\game`.
-- 참조: `C:\Users\hyogu\AppData\Roaming\XIVLauncherKR\addon\Hooks\dev`.
+- 게임: `C:\Program Files (x86)\FINAL FANTASY XIV - KOREA\game`, KR 빌드 2026.10.06.0000.0000.
+- 참조: `C:\Users\hyogu\AppData\Roaming\XIVLauncherKR\addon\Hooks\dev`, Dalamud 15.0.3.6/API15.
 - 개발 DLL: `C:\Users\hyogu\Downloads\DuckbillFisher\src\DuckbillFisher.Plugin\bin\Debug\DuckbillFisher.dll`.
-- 0.1.9.0 전체 도감 대조/홍룡 미수집 필터/도감 닫힘 후 유지와 동일 캐릭터 재접속 초기화·복구 확인. 다른 캐릭터는 없어 격리 실기 확인 보류. 다음 교체는 새 언로드 확인 필요.
-- 정규 DLL 0.1.12.0의 일반 903종/예측 대상 872종/먼바다 259종·작살 보존 203건(115건 미확인) 런타임 수치와 사용자 ‘문제 없음’으로 대표 확인 통과. 다음 교체에는 새 언로드 확인 필요. [이번 결과/남은 검증](validation/MVP-01-ALL-SOURCE-DATA.md)을 따른다.
-- 0.1.13.0 목록 요약은 사용자 ‘정상임’으로 대표 확인 통과. [결과](validation/MVP-01-LIST-SUMMARY.md).
-- 0.1.14.0 현재 지역 필터는 사용자 ‘정상’으로 대표 확인 통과. [결과](validation/MVP-01-CURRENT-REGION.md).
-- 현재 지역은 일반 낚시터의 Territory ID 기준이며 먼바다·위치 미확인 어종을 제외한다. 다른 필터 선택은 유지한다. 먼바다 방문 시간대를 어종별 제한으로 해석하지 않는다.
-- 0.1.15.0의 분류 335/왕 36/시간제 443과 터주왕+수집됨 결과 7종 확인. 한영/모든 선택 화면은 별도 미확인이다. [결과](validation/MVP-01-CLASSIFICATION-FILTERS.md).
-- 사용자 선택은 시간제 체크 + 전체/터주(왕 포함)/터주왕 단일 선택이다. 다른 필터와 AND, 등급 전체는 다른 선택을 유지한다. 검수 ID 자료는 터주 335/왕 36종이다. 미확인 분류를 특정 등급/시간제로 추측하지 않는다.
-- 수집 UI의 ‘미수집만’을 제거했고 네 항목을 명시적으로 Core enum에 매핑한다. 기존 수집 숨김/내부 Unknown/자동 관찰/수동 우선순위는 유지한다.
-- 0.1.16.0 필터 기능은 대표 확인 통과, 후보 64/6·모순 선택 빈 결과 확인. UI 문제는 별도로 개선했다. [결과](validation/MVP-01-GEOGRAPHY-FILTERS.md).
-- 지역/확장팩은 복수 선택, 확장팩은 낚시터 소속 기준이다. 그룹 안 OR/같은 낚시터에서 그룹 간 AND를 적용하며 현재 지역만과도 함께 적용한다. ExVersion 0은 신생이며 미확인은 null로 구분한다. 선택 후보는 로컬 자료에서 64지역/6확장팩이다.
-- 0.1.17.0은 별도/정규 빌드 경고·오류 0, 한영 244키 검사와 사용자 ‘정상’으로 확장팩 체크/지역 선택 UI 대표 확인 통과. [결과](validation/MVP-01-GEOGRAPHY-PICKER-UI.md).
-- 0.1.18.0 남은 시간순은 사용자 ‘정렬은 잘 됨’으로 대표 확인 통과. 열린 창 종료순→예정 창 시작순→미확인→상시, 동률 이름/ID이며 지역은 기존 필터로만 적용한다. [근거](validation/MVP-01-REMAINING-TIME-SORT.md).
-- 0.1.19.0은 별도/정규 빌드 경고·오류 0/한영 245키 검사와 사용자 ‘배경 로드 문제 없음’으로 대표 확인 통과. summary/v5 선택 예측 시각과 같은 시점 Teamcraft 활성 응답도 확보했다.
-- Teamcraft/바다구렁이 차이는 사용자 요청으로 미해결 후속 조사에 보류했다. 다음 작업에서 조사/로그 요청을 재개하지 않고 기존 예측을 임의 수정하지 않는다. 당시 자료와 제외한 가설은 [조사 기록](validation/MVP-03-OPEN-WINDOW-DIAGNOSTICS.md)에 보존했다.
-- 현재 정규 DLL은 0.1.26.0이다. 별도/정규 빌드 경고·오류 0/한영 386키·산출물 버전 확인과 사용자 `다 잘됨`으로 목록 설정/자동 해제 기본값/도감 안내 대표 확인 통과. 모든 과거 기능/경계 확인으로 확대하지 않는다. 이후 교체에는 새 언로드 확인이 필요하다. [최신 범위/결과](validation/MVP-01-CATALOG-SETTINGS.md).
-- 즐겨찾기 관리: 기본 전체 알림(수집됨/Unknown 포함), 미수집만 선택, 새 어종 등록 시 자동 해제(0.1.26.0부터 기본 켜짐), 행 삭제. 자동 해제는 기존 검증된 KR 등록 이벤트에만 적용하고 도감 조회/수동 지정/반복 어획에는 적용하지 않는다. 개별 시간/기록·SE/링크를 유지한다.
-- 목록 기본: 남은 시간순·먼바다 제외·시간제만·등급 전체·수집한 어종 숨기기. 진단용 두 체크는 상세 진단 안에 있다. 목록 필터는 즐겨찾기 알림과 독립이며 전체 알림도 Unknown 상태 자체를 바꾸지 않는다. 서버 송신 없음/Native 게이트 유지.
-- 정규 0.1.24.0의 채널 22개/분 단위 알림/접는 UI는 유지한다. Toast는 사용자에게 표시되지 않은 것으로 보고됐고 제거 요청을 받았다. [채널](validation/MVP-03-ALERT-SIMPLIFICATION.md), [UI](validation/MVP-01-COMPACT-CONTROLS.md).
-- 0.1.25.0에서 Toast 주입/출력/설정/문구/발송 기록 표시 제거. schema v7은 v1~v6 허용, alerts/v6에서 Toast 필드 제거. 정규 빌드와 한영 382키·diff 검사 통과, 테스트 미실행. 다음은 로드 후 기존 설정/채팅/SE 유지 확인이다. Toast 재현 로그는 요청하지 않는다. [근거/확인 순서](validation/MVP-03-TOAST.md).
-- 0.1.26.0: 일반 목록 필터/정렬/지역·확장팩 공통 저장과 복원 버튼, 자동 해제 기본 켜짐, 세션 도감 Complete 전 안내. schema v8은 이전 자동 해제를 켜짐으로 한 번 적용하고 v8 이후 선택은 보존한다. 사용자 대표 확인 통과, 테스트 미실행. [정책/실행 근거](validation/MVP-01-CATALOG-SETTINGS.md).
-- [UI/UX 전면 개편](UI-UX-REDESIGN.md)은 조사/일부 수정 후 사용자 요청으로 일시 중단했다. 재개 첫 단계는 화면 구조 질의와 사용자 답변이며 간략 뷰·별도 상세 창은 후보일 뿐이다. 코드 4개 파일의 미완성 변경은 빌드하지 말고 합의된 설계에 맞춰 이어간다. 정규 DLL 0.1.26.0 유지, 이번 작업의 언로드 완료/교체 승인은 이미 받았다.
-- PowerShell 5.1 읽기는 `-Encoding UTF8`; pwsh는 현재 샌드박스 밖 승인 실행 필요.
+- 현재 정규 0.1.27.0: 별도/정규 빌드 경고·오류 0, 한영 428키/형식 인자, Plugin/Core/ko/manifest 버전 확인. 테스트 미실행.
+- 이번 작업 시작 때 언로드 완료/정규 교체 승인 받음 → 별도 빌드/검사 → 정규 반영 완료. 이후 새 기능 교체는 해당 작업의 로드 상태/승인을 따른다.
+- 0.1.26.0 사용자 `다 잘됨` 대표 확인 유지. 0.1.27.0 로드/시각 결과는 아직 없다. 커밋은 로컬 보존이며 푸시/릴리스하지 않았다.
+
+## 이번 UI 구조와 정책
+
+- 메인: 어종 목록/즐겨찾기 관리/설정. 목록/즐겨찾기의 클릭은 오른쪽 상세 패널을 갱신한다.
+- 간략: 메인 버튼 또는 `/duckbillfisher compact`로 열기. 현재 출현 종료순→예정 시작순, 기본 즐겨찾기/30분 이내. 전체 전환/1~180분 설정 가능.
+- 독립 상세: 간략 창 클릭 시 하나를 재사용한다. 메인을 열지 않으며 세 창은 각각 닫을 수 있다.
+- 간략 필터와 메인 필터/알림 대상은 독립이다. 상시/먼바다/예측 미확인은 간략 목록에서 제외한다. 개인 준비 충족을 확정하지 않는다.
+- 개발자 도구는 설정에서 켠다. 진단 표시만 제어하고 수집/예측/알림 서비스는 그대로 작동한다. 끌 때 진단용 두 필터를 해제한다.
+- 수집 상태는 메뉴 하나에서 수동 지정하고 수동일 때만 복귀 버튼 표시. 자동 접미사 없음/수동 접미사 유지. Unknown은 미수집이 아니다.
+- schema v9: v1~v8 허용, 언어/개발자 모드/간략 설정 추가. v8의 자동 즐겨찾기 해제 사용자 선택 보존. preferences/v7만 진단 필드 추가.
+- `FishDetailPanel` 공통 상세, `UiWidgets` 아이콘/배너, `CompactFishObserver` Framework 1초 필터/수명 관리. Draw에서 전체 검색/장기 예측/파일 읽기 없음.
+- 다음은 세 창/작은 창 배치/아이콘과 상태 조작의 대표 인게임 확인이다. 정상 여부와 문제 화면을 먼저 받는다.
 
 ## 일반 구현 빌드
 
-테스트는 사용자 요청 때만 추가/실행한다. 아래 명령은 테스트를 실행하지 않는다.
+테스트는 명시 요청 때만 추가/실행한다. `scripts/build.ps1`은 테스트를 실행하므로 사용하지 않는다.
 
 ```powershell
 dotnet build src/DuckbillFisher.Plugin/DuckbillFisher.Plugin.csproj --no-restore -c Debug -p:DalamudLibPath=C:/Users/hyogu/AppData/Roaming/XIVLauncherKR/addon/Hooks/dev/
 pwsh -NoLogo -NoProfile -File scripts/check-localization.ps1
 ```
 
-- 1차 빌드는 `-p:OutputPath=C:/Users/hyogu/Downloads/DuckbillFisher/.cache/catalog-settings-build/` 추가.
-- 성공 후 언로드 요청 → 사용자 확인 → 정규 Debug 빌드로 교체.
-- 실제 주 DLL/버전·Core DLL·ko 리소스 DLL·manifest 확인.
-- `scripts/build.ps1`은 테스트도 실행하므로 일반 구현 때 사용하지 않는다.
-- 파일을 명시해 커밋한다. 현재 Git 메타데이터 쓰기는 별도 실행 승인 필요. 푸시는 하지 않는다.
+- 별도 출력은 `-p:OutputPath=C:/Users/hyogu/Downloads/DuckbillFisher/.cache/ui-redesign-build/` 추가.
+- PowerShell 5.1 파일 읽기는 `-Encoding UTF8`. 이번 환경에서 pwsh/정규 빌드/git 쓰기 모두 실행됐다.
+- 실제 주 DLL·Core·ko 리소스 DLL·manifest 확인 후 파일을 명시해 스테이징/커밋한다. 빌드 결과/캐시/사용자 파일 제외.
 
-## 유지할 사실
+## 유지할 경계와 보류
 
-- 최신 기능·검증 수치·보류는 [STATUS](STATUS.md)를 따른다.
-- 자동 수집은 True 관찰/등록 이벤트를 사용한다. 자동 미수집은 0.1.9.0의 게임 도감 전체 목록 대조 후만 적용한다. False·IsLoaded·창 표시만으로 확정하지 않는다. [근거와 다음 확인](validation/MVP-04-GUIDE-SNAPSHOT.md)을 따른다.
-- 네이티브 접근은 조사한 KR 빌드와 DLL SHA/MVID 일치 조건 유지.
-- 짧은 진단을 기본 요청한다. 전체 진단은 관련 오류 조사에 한정하고 가능하면 파일로 받는다.
-- 조건 데이터 재생성은 `data/README.md`를 따른다. 현재 제품 입력은 schema v2의 fishing.kr.v2.json이며 v1은 과거 이력이다. JS/YAML 해시는 data/fishing-source.json에 고정했다.
-- 별도 fish-classifications.kr.v1.json은 KR 설명을 개발 중 검수한 숫자 ID 자료다. 재생성은 같은 도구의 --classifications 모드, 출력/조건 해시는 LF로 정규화한다. UI 표시 문자열을 실행 중 판정에 사용하지 않는다.
-- 새 대화는 이 문서와 STATUS로 재개한다. 호스트가 지원하면 수동 `/compact` 사용 가능. 에이전트가 압축 주기를 직접 바꾸지는 못한다.
-- [정리 전 인수인계](history/SESSION-HANDOFF-before-context-cleanup-2026-10-16.md)는 필요할 때만 조회한다.
+- 자동 수집은 True/검증된 등록 이벤트, 자동 미수집은 전체 도감 1517종 대조 뒤만 사용한다. 수동 우선, 캐릭터 세션 격리 유지. [근거](validation/MVP-04-GUIDE-SNAPSHOT.md).
+- 새 등록 자동 즐겨찾기 해제 기본 켜짐. 도감 조회/수동 지정/반복 어획은 해제 트리거가 아니다. 로컬 채팅/SE/아이템·지도 링크, 예약/중복 방지 유지.
+- Teamcraft/바다구렁이 차이는 사용자 요청으로 미해결 후속 조사다. 재조사/로그 요청/예측 공식 임의 수정 금지. Toast는 제거 상태 유지.
+- 다른 캐릭터 격리는 사용 가능한 캐릭터가 없어 실기 보류. 입질 초 수 통계/작살 UI/외부 좌표 차이 확인은 후속이다.
+- 정적 수치/검증된 과거 범위는 STATUS를 따른다. UI 언어와 게임 데이터 언어는 다르며 글로벌 빌드 지원으로 표현하지 않는다.
+- 데이터 재생성은 data/README.md와 고정 원본 해시를 따른다. SDK/네이티브 오프셋/데이터 갱신은 별도 작업이다.

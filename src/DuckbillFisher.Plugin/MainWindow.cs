@@ -15,6 +15,8 @@ internal sealed class MainWindow : Window
     private readonly FishListPanel fishList;
     private readonly SpawnAlertsPanel spawnAlerts;
     private readonly Action languageChanged;
+    private readonly FishPreferences preferences;
+    public Action? ShowCompact { get; set; }
     private string[] markerLabels = Markers.Select(key => UiText.Get(key)).ToArray();
     private IReadOnlyList<FishGuideRow>? lastRows;
     private FishGuideRow[] matches = [];
@@ -22,30 +24,40 @@ internal sealed class MainWindow : Window
     private string search = "";
     private int lastSession = -1;
     private int selectedMarker;
+    private bool selectSettings;
 
     public MainWindow(FishingConditionObserver observer, FishGuideDiagnostics fishGuide, FishListPanel fishList,
-        SpawnAlertsPanel spawnAlerts, Action languageChanged) : base("DuckbillFisher###DuckbillFisher.Main")
+        SpawnAlertsPanel spawnAlerts, FishPreferences preferences, Action languageChanged) : base("DuckbillFisher###DuckbillFisher.Main")
     {
         this.observer = observer;
         this.fishGuide = fishGuide;
         this.fishList = fishList;
         this.spawnAlerts = spawnAlerts;
         this.languageChanged = languageChanged;
-        Size = new Vector2(820, 560);
+        this.preferences = preferences;
+        spawnAlerts.ShowSettings = () => selectSettings = true;
+        UiText.SetLanguage(preferences.View.Language);
+        markerLabels = Markers.Select(key => UiText.Get(key)).ToArray();
+        languageChanged();
+        Size = new Vector2(980, 680);
         SizeCondition = ImGuiCond.FirstUseEver;
-        SizeConstraints = new WindowSizeConstraints { MinimumSize = new Vector2(520, 400), MaximumSize = new Vector2(float.MaxValue) };
+        SizeConstraints = new WindowSizeConstraints { MinimumSize = new Vector2(700, 450), MaximumSize = new Vector2(float.MaxValue) };
+        Flags = ImGuiWindowFlags.NoScrollbar | ImGuiWindowFlags.NoScrollWithMouse;
     }
 
     public override void Draw()
     {
-        var language = (int)UiText.Language;
-        ImGui.SetNextItemWidth(150);
-        if (ImGui.Combo(UiText.Label(T.Language, "Language"), ref language, LanguageNames, LanguageNames.Length))
+        var settings = preferences.View;
+        if (UiText.Language != settings.Language)
         {
-            UiText.SetLanguage((UiLanguage)language);
+            UiText.SetLanguage(settings.Language);
             markerLabels = Markers.Select(key => UiText.Get(key)).ToArray();
             languageChanged();
         }
+        fishList.DeveloperMode = settings.DeveloperMode;
+        spawnAlerts.DeveloperMode = settings.DeveloperMode;
+        if (ImGui.SmallButton(UiText.Label(T.OpenCompactWindow, "OpenCompactWindow"))) ShowCompact?.Invoke();
+        UiWidgets.Tooltip(UiText.Get(T.CompactScope));
         if (ImGui.BeginTabBar("DiagnosticsTabs"))
         {
             if (ImGui.BeginTabItem(UiText.Label(T.TabCatalog, "CatalogTab")))
@@ -53,23 +65,52 @@ internal sealed class MainWindow : Window
                 fishList.Draw();
                 ImGui.EndTabItem();
             }
-            if (ImGui.BeginTabItem(UiText.Label(T.TabGuide, "GuideTab")))
-            {
-                DrawFishGuide();
-                ImGui.EndTabItem();
-            }
             if (ImGui.BeginTabItem(UiText.Label(T.TabAlerts, "SpawnAlertsTab")))
             {
                 spawnAlerts.Draw();
                 ImGui.EndTabItem();
             }
-            if (ImGui.BeginTabItem(UiText.Label(T.TabFishing, "FishingTab")))
+            if (ImGui.BeginTabItem(UiText.Label(T.TabSettings, "SettingsTab"),
+                selectSettings ? ImGuiTabItemFlags.SetSelected : ImGuiTabItemFlags.None))
             {
-                DrawFishingObservation();
+                if (ImGui.BeginChild("SettingsContent")) DrawSettings(settings);
+                ImGui.EndChild();
+                ImGui.EndTabItem();
+            }
+            selectSettings = false;
+            if (settings.DeveloperMode && ImGui.BeginTabItem(UiText.Label(T.TabGuide, "GuideTab")))
+            {
+                if (ImGui.BeginChild("GuideDiagnosticsContent")) DrawFishGuide();
+                ImGui.EndChild();
+                ImGui.EndTabItem();
+            }
+            if (settings.DeveloperMode && ImGui.BeginTabItem(UiText.Label(T.TabFishing, "FishingTab")))
+            {
+                if (ImGui.BeginChild("FishingDiagnosticsContent")) DrawFishingObservation();
+                ImGui.EndChild();
                 ImGui.EndTabItem();
             }
             ImGui.EndTabBar();
         }
+    }
+
+    private void DrawSettings(FishPreferencesView settings)
+    {
+        UiWidgets.Heading(T.InterfaceSettings);
+        var language = (int)settings.Language;
+        var developer = settings.DeveloperMode;
+        ImGui.BeginDisabled(!settings.CanEdit);
+        ImGui.SetNextItemWidth(ImGui.GetFontSize() * 12);
+        var changed = ImGui.Combo(UiText.Label(T.Language, "Language"), ref language, LanguageNames, LanguageNames.Length);
+        changed |= ImGui.Checkbox(UiText.Label(T.DeveloperMode, "DeveloperMode"), ref developer);
+        ImGui.EndDisabled();
+        UiWidgets.Tooltip(UiText.Get(T.DeveloperModeHint));
+        if (changed) preferences.SetInterface((UiLanguage)language, developer);
+        if (settings.Error is { } error) ImGui.TextWrapped(error.Display);
+        UiWidgets.Heading(T.AlertSettingsHeading);
+        spawnAlerts.DrawSettings();
+        UiWidgets.Heading(T.DataSourceLabel);
+        FishDetailPanel.DrawSources();
     }
 
     private void DrawFishGuide()

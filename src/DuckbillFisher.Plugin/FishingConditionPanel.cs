@@ -1,145 +1,128 @@
-using System.Numerics;
 using Dalamud.Bindings.ImGui;
-using Dalamud.Interface.Textures;
 using Dalamud.Plugin.Services;
 using DuckbillFisher.Plugin.Localization;
 using T = DuckbillFisher.Plugin.Localization.TextKey;
 
 namespace DuckbillFisher.Plugin;
 
-/// <summary>Renders cached condition references. Sheets and game actions stay outside Draw.</summary>
+/// <summary>Aligned conditions using cached references; links only enqueue explicit user clicks.</summary>
 internal sealed class FishingConditionPanel(ITextureProvider textures, FishingItemLinkService itemLinks)
 {
     public void Draw(FishingDetailView details, FishPreferencesView personal,
         IReadOnlyDictionary<uint, FishingDetailView> related, bool includeRelated = true)
     {
         var rule = details.Rule;
-        ImGui.TextUnformatted(UiText.Get(T.BaitPathHeading));
-        for (var index = 0; index < details.BaitSteps.Length; index++)
+        if (ImGui.BeginTable("Conditions", 2, ImGuiTableFlags.SizingFixedFit))
         {
-            if (details.BaitSteps[index].Length > 1)
-                ImGui.TextWrapped(UiText.Get(T.BaitAlternatives, index + 1));
-            foreach (var item in details.BaitSteps[index])
+            ImGui.TableSetupColumn("Label", ImGuiTableColumnFlags.WidthFixed, ImGui.GetFontSize() * 5.5f);
+            ImGui.TableSetupColumn("Value", ImGuiTableColumnFlags.WidthStretch);
+            Label(T.DetailBait);
+            if (details.BaitSteps.Length == 0) ImGui.TextUnformatted(UiText.Get(T.ConditionUnknown));
+            for (var step = 0; step < details.BaitSteps.Length; step++)
             {
-                DrawItem(item, UiText.Get(T.BaitStepLabel, index + 1, item.Name), $"BaitStep{index}/{item.Id}", personal);
-                if (includeRelated) DrawRelated(item, related, personal, $"BaitRelated{index}/{item.Id}");
+                if (step > 0) ImGui.TextUnformatted("↓");
+                for (var alternative = 0; alternative < details.BaitSteps[step].Length; alternative++)
+                {
+                    if (alternative > 0) ImGui.TextDisabled(UiText.Get(T.ConditionOr));
+                    var item = details.BaitSteps[step][alternative];
+                    Item(item, item.Name, $"Bait{step}/{item.Id}", personal);
+                }
             }
-        }
-        if (itemLinks.Result is { } result)
-            ImGui.TextWrapped(result.Display);
-
-        ImGui.Separator();
-        if (details.Hookset is { } hookset)
-        {
-            DrawIcon(hookset.IconId);
-            ImGui.SameLine();
-        }
-        ImGui.TextWrapped(UiText.Get(T.HooksetLabel, details.Hookset?.Name ?? UiText.Get(rule.Hookset switch
-            { "Precision" => T.HooksetPrecision, "Powerful" => T.HooksetPowerful, _ => T.ConditionUnknown })));
-        ImGui.TextWrapped(UiText.Get(T.TugLabel, rule.Tug switch { "light" => "!", "medium" => "!!", "heavy" => "!!!", _ => UiText.Get(T.ConditionUnknown) }));
-        if (rule.ConditionsKnown)
-        {
-            ImGui.TextWrapped(rule.StartHour == 0 && rule.EndHour == 24 ? UiText.Get(T.TimeAllDay)
+            Label(T.DetailHookset);
+            UiWidgets.Tooltip(UiText.Get(T.HooksetLabel, details.Hookset?.Name ?? UiText.Get(T.ConditionUnknown)));
+            if (details.Hookset is { } hookset)
+                UiWidgets.GameIcon(textures, hookset.IconId, IconSize, UiText.Get(T.HooksetLabel, hookset.Name));
+            else ImGui.TextWrapped(UiText.Get(rule.Hookset switch
+                { "Precision" => T.HooksetPrecision, "Powerful" => T.HooksetPowerful, _ => T.ConditionUnknown }));
+            Label(T.DetailTug);
+            ImGui.TextUnformatted(rule.Tug switch { "light" => "!", "medium" => "!!", "heavy" => "!!!", _ => UiText.Get(T.ConditionUnknown) });
+            Label(T.DetailTime);
+            ImGui.TextWrapped(!rule.ConditionsKnown ? UiText.Get(T.ConditionsPartial)
+                : rule.StartHour == 0 && rule.EndHour == 24 ? UiText.Get(T.TimeAllDay)
                 : UiText.Get(T.TimeConditionLabel, EtClock(rule.StartHour), EtClock(rule.EndHour)));
-            DrawWeather(T.WeatherHeading, T.WeatherConditionLabel, details.Weather);
-            DrawWeather(T.PreviousWeatherHeading, T.PreviousWeatherConditionLabel, details.PreviousWeather);
+            if (rule.ConditionsKnown)
+            {
+                Label(T.DetailPreviousWeather);
+                Weather(details.PreviousWeather, T.PreviousWeatherConditionLabel);
+                Label(T.DetailWeather);
+                Weather(details.Weather, T.WeatherConditionLabel);
+            }
+            if (rule.SnaggingRequired) { Label(T.DetailRequired); Skill(details.Snagging, T.SnaggingRequired); }
+            if (rule.Lure.Length > 0) { Label(T.DetailRequired); Skill(details.Lure, rule.Lure == "Modest" ? T.LureModest : T.LureAmbitious); }
+            ImGui.EndTable();
         }
-        else
-            ImGui.TextWrapped(UiText.Get(T.ConditionsPartial));
-        if (rule.SnaggingRequired)
-            DrawRequiredSkill(details.Snagging, T.SnaggingRequired);
-        if (rule.Lure.Length > 0)
-            DrawRequiredSkill(details.Lure, rule.Lure == "Modest" ? T.LureModest : T.LureAmbitious);
-        ImGui.TextWrapped(UiText.Get(T.FishEyesSupport,
-            new UiMessage(rule.FishEyesSupported ? T.ConditionSupported : T.ConditionUnsupported)));
-        if (rule.BigFish) ImGui.TextUnformatted(UiText.Get(T.BigFishLabel));
-        ImGui.TextWrapped(UiText.Get(T.SourcePatchLabel, rule.Patch));
-        if (details.Spot is { } spot)
-            ImGui.TextWrapped(UiText.Get(T.RecommendedSpot, spot.Zone, spot.Name));
-
+        if (itemLinks.Result is { } result && result.Key != T.ItemLinkPrinted) ImGui.TextWrapped(result.Display);
         if (details.Predators.Length > 0)
         {
-            ImGui.TextWrapped(UiText.Get(T.IntuitionHeading));
+            UiWidgets.Heading(T.IntuitionHeading);
             for (var index = 0; index < details.Predators.Length; index++)
-            {
-                DrawItem(details.Predators[index], UiText.Get(T.PredatorLabel, details.Predators[index].Name, rule.Predators[index].Count),
-                    $"Predator{index}", personal);
-                if (includeRelated) DrawRelated(details.Predators[index], related, personal, $"PredatorRelated{index}");
-            }
-            if (rule.IntuitionSeconds is { } seconds)
-                ImGui.TextWrapped(UiText.Get(T.IntuitionDuration, seconds));
-            else
-                ImGui.TextWrapped(UiText.Get(T.IntuitionDurationUnknown));
+                Item(details.Predators[index], UiText.Get(T.PredatorLabel, details.Predators[index].Name, rule.Predators[index].Count), $"Predator{index}", personal);
+            ImGui.TextWrapped(rule.IntuitionSeconds is { } seconds
+                ? UiText.Get(T.IntuitionDuration, seconds) : UiText.Get(T.IntuitionDurationUnknown));
         }
         if (rule.FolkloreRequired)
         {
-            ImGui.TextWrapped(UiText.Get(T.FolkloreRequired));
-            if (details.Folklore is { } book)
-                DrawItem(book, UiText.Get(T.FolkloreItem, book.Name), "FolkloreBook", personal);
+            UiWidgets.Heading(T.DetailFolklore);
+            if (details.Folklore is { } book) Item(book, book.Name, "Folklore", personal);
+            else ImGui.TextWrapped(UiText.Get(T.FolkloreRequired));
         }
-    }
-
-    private void DrawRequiredSkill(FishingConditionIcon? skill, T fallback)
-    {
-        if (skill is not null) { DrawIcon(skill.IconId); ImGui.SameLine(); }
-        ImGui.TextWrapped(UiText.Get(T.RequiredSkill, skill?.Name ?? UiText.Get(fallback)));
-    }
-
-    private void DrawRelated(FishingItemView item, IReadOnlyDictionary<uint, FishingDetailView> related,
-        FishPreferencesView personal, string id)
-    {
-        if (!related.TryGetValue(item.Id, out var detail)) return;
-        if (ImGui.CollapsingHeader($"{UiText.Get(T.RelatedConditions, item.Name)}###{id}"))
+        if (includeRelated)
         {
-            ImGui.PushID(id);
-            Draw(detail, personal, related, includeRelated: false);
-            ImGui.PopID();
+            foreach (var item in details.BaitSteps.SelectMany(step => step).Concat(details.Predators).DistinctBy(item => item.Id))
+            {
+                if (!related.TryGetValue(item.Id, out var detail)) continue;
+                if (!ImGui.CollapsingHeader($"{UiText.Get(T.RelatedConditions, item.Name)}###Related{item.Id}")) continue;
+                ImGui.PushID((int)item.Id);
+                Draw(detail, personal, related, includeRelated: false);
+                ImGui.PopID();
+            }
+        }
+        if (ImGui.CollapsingHeader(UiText.Label(T.DetailAdditional, "AdditionalConditions")))
+        {
+            ImGui.TextWrapped(UiText.Get(T.FishEyesSupport, new UiMessage(rule.FishEyesSupported ? T.ConditionSupported : T.ConditionUnsupported)));
+            ImGui.TextWrapped(UiText.Get(T.SourcePatchLabel, rule.Patch));
+            if (details.Spot is { } spot) ImGui.TextWrapped(UiText.Get(T.RecommendedSpot, spot.Zone, spot.Name));
         }
     }
 
-    private void DrawItem(FishingItemView item, string label, string id, FishPreferencesView personal)
+    private static float IconSize => ImGui.GetTextLineHeightWithSpacing() * 1.35f;
+    private static void Label(T key)
+    {
+        ImGui.TableNextRow();
+        ImGui.TableNextColumn();
+        ImGui.TextDisabled(UiText.Get(key));
+        ImGui.TableNextColumn();
+    }
+
+    private void Item(FishingItemView item, string name, string id, FishPreferencesView personal)
     {
         ImGui.PushID(id);
         ImGui.BeginDisabled(!personal.HasCharacter);
-        DrawIcon(item.IconId);
-        if (personal.HasCharacter && ImGui.IsItemClicked(ImGuiMouseButton.Left))
-            itemLinks.Request(item, personal.Session);
-        if (ImGui.IsItemHovered(ImGuiHoveredFlags.AllowWhenDisabled))
-            ImGui.SetTooltip(UiText.Get(T.ItemLinkHint, item.Name));
+        UiWidgets.GameIcon(textures, item.IconId, IconSize, UiText.Get(T.ItemLinkHint, item.Name));
+        if (personal.HasCharacter && ImGui.IsItemClicked()) itemLinks.Request(item, personal.Session);
         ImGui.SameLine();
-        if (ImGui.SmallButton($"{label}###ItemLink"))
-            itemLinks.Request(item, personal.Session);
+        ImGui.TextWrapped(name);
+        if (personal.HasCharacter && ImGui.IsItemClicked()) itemLinks.Request(item, personal.Session);
+        UiWidgets.Tooltip(UiText.Get(T.ItemLinkHint, item.Name));
         ImGui.EndDisabled();
-        if (ImGui.IsItemHovered(ImGuiHoveredFlags.AllowWhenDisabled))
-            ImGui.SetTooltip(UiText.Get(T.ItemLinkHint, item.Name));
         ImGui.PopID();
     }
 
-    private void DrawWeather(T heading, T unrestrictedLabel, FishingConditionIcon[] conditions)
+    private void Skill(FishingConditionIcon? skill, T fallback)
     {
-        if (conditions.Length == 0)
-        {
-            ImGui.TextWrapped(UiText.Get(unrestrictedLabel, new UiMessage(T.NoWeatherRestriction)));
-            return;
-        }
-        ImGui.TextUnformatted(UiText.Get(heading));
-        foreach (var condition in conditions)
-        {
-            DrawIcon(condition.IconId);
-            ImGui.SameLine();
-            ImGui.TextUnformatted(condition.Name);
-        }
+        if (skill is null) ImGui.TextWrapped(UiText.Get(fallback));
+        else UiWidgets.GameIcon(textures, skill.IconId, IconSize, UiText.Get(T.RequiredSkill, skill.Name));
     }
 
-    private void DrawIcon(uint iconId)
+    private void Weather(FishingConditionIcon[] options, T label)
     {
-        var size = new Vector2(ImGui.GetTextLineHeightWithSpacing() * 1.5f);
-        // The shared texture wrap belongs to Dalamud and must not be disposed here.
-        if (iconId != 0 && textures.TryGetFromGameIcon(new GameIconLookup(iconId), out var icon) &&
-            icon.TryGetWrap(out var wrap, out _))
-            ImGui.Image(wrap.Handle, size);
-        else
-            ImGui.Dummy(size);
+        if (options.Length == 0) { ImGui.TextUnformatted(UiText.Get(T.NoWeatherRestriction)); return; }
+        for (var i = 0; i < options.Length; i++)
+        {
+            if (i > 0 && ImGui.GetContentRegionAvail().X > IconSize * 3) ImGui.SameLine();
+            UiWidgets.GameIcon(textures, options[i].IconId, IconSize, UiText.Get(label, options[i].Name));
+        }
+        if (options.Length > 1) ImGui.TextDisabled(UiText.Get(T.ConditionAny));
     }
 
     private static string EtClock(double hour) => $"{(int)hour:00}:{(int)Math.Round(hour % 1 * 60):00}";

@@ -98,3 +98,9 @@ Plugin의 `AssemblyName`은 `DuckbillFisher`다. 주 DLL은 `DuckbillFisher.dll`
 - 수집 성공/실패/지연, 수동 override 우선순위, 캐릭터 전환 격리.
 - 시전 시작/중복/취소/완료/생미끼/로그아웃 상태 전이, OS 시각 변경에도 경과 타이머 유지.
 - Plugin은 Windows에서 로드/언로드/재로드, 채널별 알림 1회, 지도 좌표를 직접 확인한다.
+
+## 0.1.27.0 UI 책임과 수명
+
+`FishDetailPanel`은 메인 목록/즐겨찾기의 오른쪽과 단일 `FishDetailWindow`에서 공유한다. 화면은 기존 큐를 통해서만 수집 지정/지도/링크를 요청한다. 독립 상세는 세션 변경 시 선택을 비운다. `CompactFishObserver`는 창이 열릴 때만 Framework에서 단조 시계 1초 간격으로 기존 예측을 필터링하며, `CompactFishWindow`는 게시된 배열의 보이는 행만 그린다. 닫기/재오픈/Dispose에서 갱신 중지/표본 초기화/이벤트 해제를 수행한다. 예측 알고리즘과 알림 예약은 가져오지 않는다.
+
+schema v9의 언어·개발자 옵션·간략 설정은 기존 preferences 저장 큐에 합쳐 저장하며 v1~v8을 허용한다. v8에서 저장한 자동 즐겨찾기 해제 선택은 유지한다. 공통 아이콘/배너는 `UiWidgets`, 조건 정렬은 `FishingConditionPanel`, 목록의 아이콘 요약 캐시는 `FishRowRenderer`가 담당한다. 상세 근거는 [이번 구현 기록](validation/MVP-01-UI-UX-REDESIGN.md)에 있다.

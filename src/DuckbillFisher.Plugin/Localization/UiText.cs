@@ -3,7 +3,7 @@ using System.Resources;
 
 namespace DuckbillFisher.Plugin.Localization;
 
-internal enum UiLanguage { Korean, English }
+public enum UiLanguage { Korean, English }
 
 internal static class UiText
 {
