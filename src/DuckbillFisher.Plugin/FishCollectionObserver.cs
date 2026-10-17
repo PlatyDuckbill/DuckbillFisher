@@ -84,6 +84,7 @@ internal sealed class FishCollectionObserver : IDisposable
     }
 
     public FishCollectionView View { get { lock (gate) return view; } }
+    public string RuntimeDiagnostic => reader.RuntimeDiagnostic;
 
     private void OnLogMessage(ILogMessage message)
     {

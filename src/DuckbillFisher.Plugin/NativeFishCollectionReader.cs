@@ -1,6 +1,4 @@
-using System.Reflection;
 using System.Collections.Frozen;
-using System.Security.Cryptography;
 using Dalamud.Plugin.Services;
 using DuckbillFisher.Plugin.Localization;
 using NativePlayerState = FFXIVClientStructs.FFXIV.Client.Game.UI.PlayerState;
@@ -30,18 +28,20 @@ internal sealed record FishGuideSnapshot(FishGuideSnapshotState State, int Entri
 internal sealed class NativeFishCollectionReader
 {
     private const uint MaxValidatedFishParameterId = 1522;
-    private const string SupportedGameVersion = "2026.10.06.0000.0000";
     private readonly IFramework framework;
+    private readonly NativeRuntimeCompatibility runtime;
     private readonly UiMessage? unsupportedReason;
 
     public NativeFishCollectionReader(IFramework framework)
     {
         this.framework = framework;
         // File/assembly checks happen once during construction, never in Draw or a native read.
-        unsupportedReason = CheckCompatibility();
+        runtime = NativeRuntimeCompatibility.Inspect();
+        unsupportedReason = runtime.Failure;
     }
 
-    public string GameVersion { get; private set; } = "unknown";
+    public string GameVersion => runtime.GameVersion;
+    public string RuntimeDiagnostic => runtime.Diagnostic;
     public UiMessage Compatibility => unsupportedReason ?? new(T.NativeCompatible);
     public bool IsCompatible => unsupportedReason is null;
 
@@ -135,43 +135,4 @@ internal sealed class NativeFishCollectionReader
         };
     }
 
-    private UiMessage? CheckCompatibility()
-    {
-        try
-        {
-            var processPath = Environment.ProcessPath;
-            if (processPath is null || !Path.GetFileName(processPath).Equals("ffxiv_dx11.exe", StringComparison.OrdinalIgnoreCase))
-                return new(T.NativeWrongProcess);
-            var versionPath = Path.Combine(Path.GetDirectoryName(processPath)!, "ffxivgame.ver");
-            GameVersion = File.ReadAllText(versionPath).Trim();
-            if (GameVersion != SupportedGameVersion)
-                return new(T.NativeGameMismatch);
-
-            // Check loaded module identity as well as the installed file, including dirty builds.
-            if (!Matches(typeof(IPlayerState).Assembly,
-                    "d2fe7e59-9fb6-480d-9e6d-00ece6410e34",
-                    "D93BE6AB790D89FE980920B2BE03BC0CD41ADDA9AAE104121854C0CC86D5A063") ||
-                !Matches(typeof(NativePlayerState).Assembly,
-                    "f13b1f1f-fd4a-441a-bdac-b3c5abb3675f",
-                    "8CC4C29DA5899F547CAEC065569151DEF545CB190B9A8488A23D9B0FAD03FCF2") ||
-                !Matches(typeof(InteropGenerator.Runtime.BitArray).Assembly,
-                    "f8f9f456-aaf5-4b57-9551-9fae48c2eb8b",
-                    "84638B1F76F3DEEEA0EAA2554559A3E5C925474035C79861BFC0F1B842A6C64F"))
-                return new(T.NativeDllMismatch);
-            return null;
-        }
-        catch (Exception ex)
-        {
-            // Only managed file/metadata checks run here. No native memory is read.
-            return new(T.NativeCheckFailed, ex.GetType().Name);
-        }
-    }
-
-    private static bool Matches(Assembly assembly, string moduleId, string sha256)
-    {
-        if (assembly.ManifestModule.ModuleVersionId != Guid.Parse(moduleId) || string.IsNullOrEmpty(assembly.Location))
-            return false;
-        using var stream = File.OpenRead(assembly.Location);
-        return Convert.ToHexString(SHA256.HashData(stream)) == sha256;
-    }
 }

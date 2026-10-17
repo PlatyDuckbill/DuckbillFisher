@@ -125,7 +125,9 @@ internal static class UiWidgets
     {
         if (collection.GuidePrompt(personal.Session, personal.HasCharacter) is not { } prompt) return;
         ImGui.PushStyleColor(ImGuiCol.ChildBg, new Vector4(0.42f, 0.29f, 0.06f, 0.72f));
-        var text = UiText.Get(prompt.Key == T.CollectionGuideOpenRequired ? T.GuideBannerOpen : T.GuideBannerRetry);
+        var text = opener.IsSupported
+            ? UiText.Get(prompt.Key == T.CollectionGuideOpenRequired ? T.GuideBannerOpen : T.GuideBannerRetry)
+            : UiText.Get(T.NativeFeaturesBlocked, opener.CompatibilityReason.Display);
         var width = Math.Max(1, ImGui.GetContentRegionAvail().X - ImGui.GetFrameHeight() - 24);
         var failure = opener.Failure(personal.Session);
         var height = Math.Max(ImGui.GetFrameHeight(), ImGui.CalcTextSize(text, false, width).Y) + 16
@@ -139,11 +141,11 @@ internal static class UiWidgets
             ImGui.PushTextWrapPos(ImGui.GetCursorPosX() + width);
             ImGui.TextUnformatted(text);
             ImGui.PopTextWrapPos();
-            Tooltip(prompt.Display);
+            Tooltip(opener.IsSupported ? prompt.Display : opener.CompatibilityReason.Display);
             ImGui.BeginDisabled(!opener.IsSupported);
             if (ImGui.Button(UiText.Label(T.OpenFishGuide, "OpenFishGuide"))) opener.Request(personal);
             ImGui.EndDisabled();
-            if (!opener.IsSupported) Tooltip(UiText.Get(T.GuideOpenUnavailable));
+            if (!opener.IsSupported) Tooltip(opener.CompatibilityReason.Display);
             if (failure is not null) ImGui.TextWrapped(failure.Display);
         }
         ImGui.EndChild();

@@ -557,4 +557,6 @@ internal enum TextKey
     TripDeleteQuestion,
     TimerLastSpot,
     TimerCastBait,
+    NativeRuntimeUnsupported,
+    NativeFeaturesBlocked,
 }

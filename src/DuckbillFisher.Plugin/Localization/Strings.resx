@@ -564,4 +564,6 @@ In fish log only: {5}</value></data>
   <data name="TripDeleteQuestion" xml:space="preserve"><value>Delete {0} selected fishing records? This cannot be undone.</value></data>
   <data name="TimerLastSpot" xml:space="preserve"><value>Last fishing spot · {0}</value></data>
   <data name="TimerCastBait" xml:space="preserve"><value>Cast bait: {0}</value></data>
+  <data name="NativeRuntimeUnsupported" xml:space="preserve"><value>Dalamud {0} has not been validated. Supported KR runtime versions: {1}. Collection sync and the casting timer are disabled.</value></data>
+  <data name="NativeFeaturesBlocked" xml:space="preserve"><value>Collection sync, direct guide opening and the casting timer are unavailable in this environment. Opening the guide manually will not resolve this.&#xA;{0}</value></data>
 </root>

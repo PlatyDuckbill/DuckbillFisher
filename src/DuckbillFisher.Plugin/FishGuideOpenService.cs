@@ -36,6 +36,7 @@ internal sealed class FishGuideOpenService : IDisposable
     }
 
     public bool IsSupported => compatibility.IsCompatible;
+    public UiMessage CompatibilityReason => compatibility.Compatibility;
 
     public UiMessage? Failure(int session)
     {

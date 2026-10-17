@@ -1,6 +1,6 @@
 # 세션 인수인계
 
-갱신: 2026-10-17 · 첫 배포0.2.4.0 게시·익명 접근 확인 완료
+갱신: 2026-10-17 · 친구15.0.3.7 차단 원인 확인 / 수정0.2.5.0 인게임 확인 대기
 
 ## 재개 순서
 
@@ -8,7 +8,9 @@
 2. UI 작업은 [합의된 구조](UI-UX-REDESIGN.md), [분석·구현·확인 순서](validation/MVP-01-UI-UX-REDESIGN.md)를 읽는다.
 3. 큰 디자인 변경은 선택지/차이를 질문하고 답변 후 구현한다. 기존 세 화면+별도 타이머/팝업/메인 히스토리 탭 추가는 사용자 합의 완료다.
 4. 사용자 `tmp_note.md`는 읽기·수정·스테이징하지 않는다. 전체 로그/과거 이력은 기본 요청하지 않는다.
-5. 첫 배포0.2.4.0 완료. 사용자 Release 실행/재로드 대표 확인→ZIP 게시→익명 해시 확인→JSON 게시·익명 확인까지 완료했다. 다음은 실제 Dalamud 저장소 설치/아이콘/설명 확인이다. [배포 기록](validation/RELEASE-0.2.4.0.md)과 [가이드](DISTRIBUTION.md)를 따른다. 다른 실패/복수/보관·한영 조합 등의 미확인 범위는 확대하지 않는다.
+5. 우선 [15.0.3.7 호환성 수정](validation/NATIVE-RUNTIME-15.0.3.7.md)을 이어간다. 친구0.2.4.0 설치 후 Game2026.10.06과Dalamud15.0.3.7의 NativeDllMismatch로 세 기능이 차단됐다.0.2.5.0은 새 배포 파일의 정적 대조 후 정확한 조합만 추가했다. 사용자는 추가 로그보다 해결 진행을 원한다. 같은 진단 재요청/추측 가드 해제 금지.
+
+- 다음 확인 DLL `.cache/release-validation/0.2.5.0/DuckbillFisher.dll`, 패키지 `artifacts/share/0.2.5.0/`. 15.0.3.6/15.0.3.7 참조 Debug와 기존 참조 Release 빌드 경고0/오류0·한영557키·패키지 검사 통과. 새 인게임 확인 대기/테스트 없음. 정규·현재 로드 파일과 공개 설치0.2.4.0은 유지했다. 검증 후0.2.5.0을 별도 태그/ZIP으로 업데이트하며 기존 Release를 덮어쓰지 않는다.
 
 - 최종 게시 준비물: `artifacts/share/0.2.4.0-final/` ZIP/체크섬/후보 JSON. 설명 가독성만 LF/글머리표로 수정하고 Packager 대상만 재실행했다. 기존 확인 ZIP/추출본은 보존, 최종 ZIP과 Description만 다르고 나머지5파일/다른 필드는 동일하다. 빌드/한영555키/내장 자료 검사 유지, 한영 검사 재통과, 정규 Debug 교체/테스트 없음.
 - source eb8c3ce/v0.2.4.0 태그/Release415750305·설치 JSON d0c2c50 정상 게시 완료. [공유 URL](https://raw.githubusercontent.com/PlatyDuckbill/DuckbillFisher/main/repo/pluginmaster.json)은 익명 HTTP200/1항목/API15/0.2.4.0/설명15줄/manifest 일치, 설치·업데이트·아이콘200/ZIP·원본 이미지 해시 일치다. 이번 CI 실행0건(`[skip ci]`)/테스트 없음. gh 없이 credential manager 인증을 메모리에서만 사용했다. tmp_note.md/자격 증명/빌드 산출물 스테이징 금지.

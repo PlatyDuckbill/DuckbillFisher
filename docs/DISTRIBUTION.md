@@ -6,6 +6,7 @@
 - 공개 GitHub 저장소와 게시 권한 확인, 영어 소개·512×512 원본 아이콘 연결, Release 빌드·패키지 검사 완료. 설명만 LF/글머리표로 개선했으며 검증한 실행 파일은 동일하다.
 - [GitHub Release 0.2.4.0](https://github.com/PlatyDuckbill/DuckbillFisher/releases/tag/v0.2.4.0)와 태그를 게시했다. ZIP·체크섬·아이콘 익명 다운로드/해시 확인 통과 후 저장소 JSON을 게시했다. 아래 실제 URL의 HTTP200/1항목/0.2.4.0/API15/설명15줄/ZIP manifest 일치, 설치·업데이트·아이콘200 확인 완료. 실제 Dalamud 저장소 설치와 다음 버전 업데이트는 별도 확인 대기다.
 - 자세한 산출물·확인 범위는 [첫 배포 기록](validation/RELEASE-0.2.4.0.md)을 따른다.
+- 친구의15.0.3.7에서 공통 네이티브 가드 차단을 확인했다. 수정 후보0.2.5.0은 정확한 새 배포 조합의 정적 대조·빌드까지 완료했고 인게임 확인 전이므로 아직 게시하지 않았다. [진행 상태](validation/NATIVE-RUNTIME-15.0.3.7.md)를 따른다.0.2.4.0을 덮어쓰지 않는다.
 
 ```text
 https://raw.githubusercontent.com/PlatyDuckbill/DuckbillFisher/main/repo/pluginmaster.json

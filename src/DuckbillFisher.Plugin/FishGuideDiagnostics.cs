@@ -243,7 +243,7 @@ internal sealed class FishGuideDiagnostics : IDisposable
         {
             var report = new StringBuilder();
             void AppendInvariant(FormattableString line) => report.AppendLine(FormattableString.Invariant(line));
-            report.AppendLine("DuckbillFisher ENV-03/fish-guide-native/v2");
+            report.AppendLine("DuckbillFisher ENV-03/fish-guide-native/v3");
             AppendInvariant($"Plugin: {typeof(Plugin).Assembly.GetName().Version}; Dalamud: {typeof(IPlayerState).Assembly.GetName().Version}");
             AppendInvariant($"Session: {view.Session}; sampled: {view.HasSample}; IsLoggedIn={view.IsLoggedIn}; IsLoaded={view.IsLoaded?.ToString() ?? "not sampled"}");
             AppendInvariant($"FishGuide2={view.FishGuideVisible}; FishingNote={view.FishingNoteVisible}; loginFallback={view.LoginFallback}");
@@ -251,6 +251,7 @@ internal sealed class FishGuideDiagnostics : IDisposable
             AppendInvariant($"FishParameter rows: {view.Rows.Count}; IsInLog rows: {view.InLogCount}; max IsInLog RowId: {view.MaxInLogId}");
             report.AppendLine(view.Status.Diagnostic);
             AppendInvariant($"Game build: {collectionReader.GameVersion}; native compatibility: {collectionReader.Compatibility.Diagnostic}");
+            report.AppendLine(collectionReader.RuntimeDiagnostic);
             // Only include a selection that belongs to the currently published snapshot.
             if (selected is not null && view.Rows.Contains(selected))
             {

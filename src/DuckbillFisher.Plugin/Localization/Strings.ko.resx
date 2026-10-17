@@ -564,4 +564,6 @@
   <data name="TripDeleteQuestion" xml:space="preserve"><value>선택한 낚시 기록 {0}묶음을 삭제하시겠습니까? 삭제 후 복구할 수 없습니다.</value></data>
   <data name="TimerLastSpot" xml:space="preserve"><value>최근 낚시터 · {0}</value></data>
   <data name="TimerCastBait" xml:space="preserve"><value>사용 미끼: {0}</value></data>
+  <data name="NativeRuntimeUnsupported" xml:space="preserve"><value>Dalamud {0}은 아직 검증되지 않았습니다. 지원하는 KR 버전: {1}. 수집 연동과 캐스팅 타이머가 중지되었습니다.</value></data>
+  <data name="NativeFeaturesBlocked" xml:space="preserve"><value>현재 환경에서는 수집 연동·도감 바로 열기·캐스팅 타이머를 사용할 수 없습니다. 도감을 수동으로 열어도 해결되지 않습니다.&#xA;{0}</value></data>
 </root>
