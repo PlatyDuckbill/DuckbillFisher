@@ -45,6 +45,7 @@ pwsh -NoLogo -NoProfile -File scripts/prepare-release.ps1 -PackagePath src/Duckb
 - 로그인 없는 정식 ZIP 다운로드 318,411바이트/SHA256 최종값 일치, `.sha256` HTTP200/내용 일치. 첫 검사에서 PowerShell의 binary 응답을 문자열로 처리한 오류가 있어 UTF8 디코딩 후 재검사해 통과했다. 아이콘 HTTP200/287,302바이트/원본 해시 일치. 이 확인 뒤에만 실제 repo JSON에 설치/업데이트 항목을 반영했다.
 - 설치 JSON은 `d0c2c50`으로 정상 push했다. 실제 raw main URL의 익명 GET HTTP200/배열1항목/0.2.4.0/API15/숨김/테스트 전용 아님 확인. Description15줄/아이콘/버전이 다운로드 ZIP manifest와 같고, 공개 JSON의 설치/업데이트 URL이 같으며 해당 ZIP·아이콘 HEAD 모두200이다. 로컬 `.cache/release-remote-check/publication.json`에 결과를 보관했다. GitHub API에서 source/tag/설치 JSON push의 workflow 실행0건 확인. 테스트 없음.
 - 배포 제공 URL: `https://raw.githubusercontent.com/PlatyDuckbill/DuckbillFisher/main/repo/pluginmaster.json`. 실제 Dalamud 설치기의 설치·아이콘/설명 표시와 친구 PC, 더 높은 버전 업데이트는 아직 확인하지 않았다. 기존 개발 등록을 비활성화하고 이 URL로 설치하도록 안내한다.
+- 사용자 목록 미표시 문의에서 공개 JSON HTTP200/0.2.4.0/API15를 재확인했다. 로컬 Dalamud 설정은 저장소4개/Duckbill 주소 없음/숨김 아님이며 해당 URL의 fetch 로그도 없었다. 사진의5번 입력란과 D15 `ThirdRepoSettingsEntry` 소스 대조로 입력 후 `＋` 추가→설정 저장이 필요한 상태임을 안내했다. 실행 중 Dalamud 설정은 직접 수정하지 않았다. 설치 성공을 확인한 것으로 확대하지 않는다.
 
 ## 공식 근거와 적용
 
