@@ -90,7 +90,12 @@ internal sealed class BaitFinder : IDisposable
             wasOpen = true;
             if (result.State is BaitUiState.Unavailable or BaitUiState.UnsupportedShape)
             { Finish(BaitFindState.Unavailable); return; }
-            view = view with { State = result.State == BaitUiState.Found ? BaitFindState.Highlighted : BaitFindState.BindingUnavailable,
+            view = view with { State = result.State switch
+                {
+                    BaitUiState.Found => BaitFindState.Highlighted,
+                    BaitUiState.NotVisible or BaitUiState.InvalidGeometry => BaitFindState.Unavailable,
+                    _ => BaitFindState.BindingUnavailable,
+                },
                 SampledAt = Stopwatch.GetTimestamp(), Position = result.Position, Size = result.Size };
         }
     }

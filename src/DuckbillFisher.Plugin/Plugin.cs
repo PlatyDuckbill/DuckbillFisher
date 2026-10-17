@@ -67,7 +67,7 @@ public sealed class Plugin : IDalamudPlugin
         baitStock = new BaitStockObserver(inventory, clientState, playerState, conditions, framework, fishPreferences, () => collectionReader.IsCompatible);
         var preparationQuery = new CatalogQueryState(fishPreferences.View.Catalog);
         baitPreparation = new BaitPreparation(fishCatalog, fishPreferences, fishCollection, fishingRegion, preparationQuery, framework);
-        var baitReader = new NativeBaitUiReader(gameGui, framework, () => collectionReader.IsCompatible);
+        var baitReader = new NativeBaitUiReader(gameGui, framework, () => collectionReader.IsCompatible, dataManager);
         baitFinder = new BaitFinder(framework, addonLifecycle, fishPreferences, baitStock, baitReader,
             () => collectionReader.IsCompatible, () =>
             {
@@ -77,7 +77,7 @@ public sealed class Plugin : IDalamudPlugin
                 var sample = activityReader.Read(personal.CharacterId, playerState.ClassJob.RowId == 18);
                 return sample.Availability == FishingReadState.Ready ? sample.EquippedBait : null;
             });
-        baitUiProbe = new BaitUiProbe(gameGui, framework, addonLifecycle, fishPreferences, () => collectionReader.IsCompatible, baitReader);
+        baitUiProbe = new BaitUiProbe(gameGui, framework, addonLifecycle, fishPreferences, () => collectionReader.IsCompatible, baitReader, baitFinder);
         var preparationPanel = new BaitPreparationPanel(baitPreparation, baitStock, fishPreferences, textureProvider, itemLinks, baitUiProbe, baitFinder);
         var detailPanel = new FishDetailPanel(fishPreferences, textureProvider, fishingMap, new FishingConditionPanel(textureProvider, itemLinks, baitStock, baitFinder));
         detailWindow = new FishDetailWindow(fishCatalog, fishPreferences, fishCollection, detailPanel, guideOpener);

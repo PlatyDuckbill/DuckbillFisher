@@ -4,19 +4,33 @@ using FFXIVClientStructs.FFXIV.Client.UI;
 using FFXIVClientStructs.FFXIV.Client.Enums;
 using FFXIVClientStructs.FFXIV.Component.GUI;
 using FFXIVClientStructs.Interop;
+using Lumina.Excel.Sheets;
 
 namespace DuckbillFisher.Plugin;
 
-internal enum BaitUiState { Unavailable, NotOpen, UnsupportedShape, BindingUnavailable, NotVisible, Found }
+internal enum BaitUiState { Unavailable, NotOpen, UnsupportedShape, BindingUnavailable, NotVisible, InvalidGeometry, Found }
 internal sealed record BaitUiReading(BaitUiState State, Vector2 Position = default, Vector2 Size = default,
-    string Bindings = "");
+    string Bindings = "", int Matches = 0, uint MatchedNode = 0);
 
 /// <summary>Borrowed KR UI pointers stay inside one Framework callback. No native function calls or writes.</summary>
-internal sealed class NativeBaitUiReader(IGameGui gui, IFramework framework, Func<bool> compatible)
+internal sealed class NativeBaitUiReader(IGameGui gui, IFramework framework, Func<bool> compatible, IDataManager data)
 {
     // The embedded field is internal in the supplied binding. Offset 0xD2690 was checked in all
     // three exact KR DLL profiles and their pinned source; avoid invoking the virtual getter.
     private const int RaptureAtkModuleOffset = 0xD2690;
+    // KR ItemUICategory 33 is fishing bait, checked against the installed sheet and UI sample.
+    private const uint BaitCategory = 33;
+    private readonly Dictionary<uint, bool> baitItems = [];
+
+    private bool IsBait(uint item)
+    {
+        if (baitItems.TryGetValue(item, out var known)) return known;
+        var sheet = data.GetExcelSheet<Item>();
+        if (sheet is null) return false;
+        known = sheet.TryGetRow(item, out var row) && row.ItemUICategory.RowId == BaitCategory;
+        baitItems[item] = known;
+        return known;
+    }
     public unsafe BaitUiReading Read(uint target, bool diagnostics = false)
     {
         if (!framework.IsInFrameworkUpdateThread || !compatible()) return new(BaitUiState.Unavailable);
@@ -63,9 +77,14 @@ internal sealed class NativeBaitUiReader(IGameGui gui, IFramework framework, Fun
                 { bindings?.Add($"{node->NodeId}/{child->NodeId}:type={(byte)info->Type}"); continue; }
                 var args = info->AtkTooltipArgs.ItemArgs;
                 bindings?.Add($"{node->NodeId}/{child->NodeId}:type={(byte)info->Type}:kind={(byte)args.Kind}:id={args.ItemId}");
-                // InventoryItem stores a container at the same union offset. Never interpret it as an item ID.
-                if (args.Kind is not (DetailKind.Item or DetailKind.ItemId) || args.ItemId <= 0) continue;
+                // The KR Bait collision tooltip uses Kind=None with a real item ID (v5 sample).
+                // Accept that exact UI shape only, and cross-check the installed item category.
+                // InventoryItem stores a container at this offset and remains excluded.
+                var baitTooltip = args.Kind == DetailKind.None && info->Type == (AtkTooltipType.Text | AtkTooltipType.Item)
+                    && childIndex >= 0 && child->NodeId == 5;
+                if ((!baitTooltip && args.Kind is not (DetailKind.Item or DetailKind.ItemId)) || args.ItemId <= 0) continue;
                 var id = (uint)args.ItemId;
+                if (!IsBait(id)) continue;
                 if (item != 0 && item != id) ambiguous = true;
                 item = id;
             }
@@ -73,8 +92,9 @@ internal sealed class NativeBaitUiReader(IGameGui gui, IFramework framework, Fun
         }
         var report = bindings is null ? "" : $"MapCount={tooltips.LongCount}; Entries=" + string.Join(',', bindings.Take(100));
         if (grids != 25) return new(BaitUiState.UnsupportedShape, Bindings: report);
-        if (matches != 1 || matched == null) return new(BaitUiState.BindingUnavailable, Bindings: report);
-        if (!Visible(matched) || !Visible(addon->RootNode)) return new(BaitUiState.NotVisible, Bindings: report);
+        if (matches != 1 || matched == null) return new(BaitUiState.BindingUnavailable, Bindings: report, Matches: matches);
+        if (!Visible(matched) || !Visible(addon->RootNode))
+            return new(BaitUiState.NotVisible, Bindings: report, Matches: matches, MatchedNode: matched->NodeId);
         var position = new Vector2(matched->ScreenX, matched->ScreenY);
         var scale = matched->Transform;
         var size = new Vector2(matched->Width * scale.M11, matched->Height * scale.M22);
@@ -86,8 +106,8 @@ internal sealed class NativeBaitUiReader(IGameGui gui, IFramework framework, Fun
             Math.Abs(scale.M12) > 0.01f || Math.Abs(scale.M21) > 0.01f ||
             position.X < root->ScreenX || position.Y < root->ScreenY ||
             position.X + size.X > rootEnd.X + 1 || position.Y + size.Y > rootEnd.Y + 1)
-            return new(BaitUiState.NotVisible, Bindings: report);
-        return new(BaitUiState.Found, position, size, report);
+            return new(BaitUiState.InvalidGeometry, position, size, report, matches, matched->NodeId);
+        return new(BaitUiState.Found, position, size, report, matches, matched->NodeId);
     }
 
     private static unsafe bool Visible(AtkResNode* node)

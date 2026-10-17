@@ -4,6 +4,14 @@
 
 ## 0.3.0.0 · 명시적 미끼 찾기 후보
 
+### v5 실제 Item 연결과 Kind 처리 보완
+
+- 사용자 v5/ProbeBuild9d46e715에서도 찾기 실패.25개 모두 `type=3; kind=0`이며 Item ID가 들어 있었다.0은 고정 [DetailKind 소스](https://github.com/aers/FFXIVClientStructs/blob/5ecda407c82597890b41f704e087381fc7dfb912/FFXIVClientStructs/FFXIV/Client/Enums/DetailKind.cs)의None이다. Kind1/11만 허용하던 코드가 실제 Bait UI 항목을 다시 제외했다. 이전 Flags 수정으로 전체 기능이 해결된 것은 아니었다.
+- 실측 ID25개를 설치된 KR Item 시트와 대조해 유효/이름 있음/ItemUICategory33(낚시용 미끼)/서로 다른 ID가 모두25개임을 확인했다. 첫20619=매달린 피라미, 마지막36593=고등어 살. `.cache/bait-preparation/v5-items.json`은 개발 자료 대조 결과이며 테스트/가짜 자료가 아니다. ItemArgs 원본은 Kind가InventoryItem인 경우를 컨테이너 union으로 별도 설명하며, None이 모든 UI에서 Item ID임을 보장하지는 않는다.
+- None 처리는 정확한 KR 프로필/실제 addon=Bait/검사한25개1005 버튼/내부 충돌 노드5/부모 addon ID/정확한Text|Item 조합에서만 허용한다. 모든 후보는 실제 ItemUICategory33도 대조하고 요청 ID와 일치하는 단일 항목만 강조한다. 컨테이너/다른Kind·다른범주·중복/숨김·잘못된 좌표는 계속 제외한다. 범주 확인은 Framework의 개별 Row 조회를 캐시하며 렌더링/전체 시트 검색은 하지 않는다. 새 오프셋/게임 쓰기/함수 호출/런타임 HTTP 없음.
+- 이전v4/v5의 BindingState는 대상0으로 읽은 자료여서 실제 요청 미끼의 매칭/좌표 판정이 아니었다. v6는 자료 수집 시작 시 같은 세션의 최근 명시적 찾기 대상을 복사하고 TargetItem/Matches/Node/Rect와Kind·Item 연결을 함께 보고한다. 대상이 없으면ObservedOnly로 표시하고 숨김과InvalidGeometry를 구분한다. 주소/문자열/캐릭터 ID는 출력하지 않는다.
+- 버튼 위치는 합의한 제목 오른쪽 단일 버튼을 유지한다. 현재/최저/친구 및 정규 Debug 빌드 모두 경고0/오류0, 한영602키 검사 통과. 테스트 추가·실행/Release 게시 없음. 같은 정규0.3.0.0 재로드 뒤 실제 강조를 재확인하며 실패하면v6의BindingState 한 줄만 받는다. 사용자 성공 확인/ZIP 확인 전에는 배포하지 않는다.
+
 ### 첫 실제 실패와 수정
 
 - 사용자 화면에서 보유 미끼/현재 페이지 여부와 무관하게 ‘항목을 식별할 수 없음’이 표시됐다. v4/ProbeBuild91ea3678은 MapCount182, 그리드17~41의 충돌 노드5 모두 `type=3`을 보고했다. addon 조회/노드 도구 설명 연결 자체의 실패는 아니었다.
@@ -12,7 +20,7 @@
 - 진단v5는 type와Kind/Item ID를 함께 출력한다. 버전은 미게시 후보0.3.0.0을 유지하고 ProbeBuild로 구분한다. 현재/최저/친구 및 정규 Debug 빌드 모두 경고0/오류0, 한영602키 검사 통과. 테스트 실행/Release 게시 없음. 같은 주 DLL 재로드 뒤 먼저 실제 강조를 확인하고, 실패하면v5의BindingState 줄만 받는다.
 
 - 실제 addon 이름은 `Bait`, KR ULD 경로는 `ui/uld/fishingbait.uld`다. v3의 숫자13은 Item ID로 사용하지 않는다. KR ItemUICategory33의188개 유효 미끼 중 아이콘 중복 그룹45개를 확인했으므로 아이콘 이미지로 대상을 추정하지 않는다. 준비 목록의 실제 첫 미끼는93개였다.
-- `NativeBaitUiReader`를 Plugin에 격리했다. 공개 GetUIModule/GetAddonByName으로 현재 Framework의 포인터를 받고 KR 도구 설명의 node→Item 계약만 조사한다. 부모 addon ID·Item 도구 설명·DetailKind.Item/ItemId·정확한 Item ID가 일치하는 단일 그리드만 찾는다. InventoryItem 종류의 같은 union 값은 컨테이너이므로 Item ID로 해석하지 않는다. 아직 실제 Bait UI가 이 계약을 사용하는지는 표본으로 확인하지 않았다.
+- `NativeBaitUiReader`를 Plugin에 격리했다. 공개 GetUIModule/GetAddonByName으로 현재 Framework의 포인터를 받고 KR 도구 설명의 node→Item 계약만 조사한다. 최초 구현은DetailKind.Item/ItemId만 허용했으나 실제Bait는 위v5의None이었다. 수정본은 한정된 형태/실제 미끼 범주를 대조하며 정확한 단일 요청 Item ID를 찾는다. InventoryItem 종류의 같은 union 값은 컨테이너이므로 Item ID로 해석하지 않는다. 강조의 실제 성공은 아직 확인 대기다.
 - ULD의17~41번은1005 버튼/44×48이고 내부 노드1~5에 이미지·아이콘·충돌 영역이 있다. 풀 번호를 미끼 순서로 사용하지 않는다. 노드 수/종류/크기·부모·표시/좌표·회전/범위와 map 크기를 제한한다. 빌려온 포인터는 해당 Framework 호출에서만 읽고 managed 좌표와 상태만 전달한다.
 - 게임 UI에 쓰거나 선택 함수를 호출하지 않는다. `BaitFinder`는 준비 목록/상세 첫 미끼의 명시적 클릭 하나를 유지하고, 확인된 영역에 ImGui 전경 테두리만 그린다. 오래된 좌표150ms는 표시하지 않는다. 취소/새 요청/60초 만료/세션 변경/로그아웃/지원 실패/한 번 열린 UI 닫기·재생성/검증된 현재 미끼 일치 때 해제한다. 준비 목록 소지 수량을 확인할 수 있고1개 이상일 때만 요청한다. 선택되지 않은 미끼로 확인해야 강조를 볼 수 있다.
 - 바인딩 부재·스크롤/숨김·예상 밖 구조는 강조만 중단/유보한다. 기존 지원 프로필과 도감/타이머 가드를 변경하지 않는다. 아이템 링크 클릭과 실제 게임에서의 사용자 미끼 선택을 유지한다. 프로필 밖 환경이나 가방 조회 불가에서 찾기는 비활성이다.
@@ -23,7 +31,7 @@
 - 고정 [UIModule](https://github.com/aers/FFXIVClientStructs/blob/5ecda407c82597890b41f704e087381fc7dfb912/FFXIVClientStructs/FFXIV/Client/UI/UIModule.cs)의 embedded RaptureAtkModule offset `0xD2690`과 [AtkTooltipManager](https://github.com/aers/FFXIVClientStructs/blob/5ecda407c82597890b41f704e087381fc7dfb912/FFXIVClientStructs/FFXIV/Component/GUI/AtkTooltipManager.cs)의 map/ItemArgs 계약을 확인했다. MIT 참조 자료이며 구현을 복제하지 않았다. 내부 필드는 공개 C# 접근이 불가하여 세 정확한 KR DLL에서 확인한 offset 한 곳으로 읽는다. virtual getter/시그니처/새 네이티브 함수 호출은 추가하지 않았다.
 - `.cache/bait-preparation/highlight-layouts.json`: UIModule/RaptureAtkModule/AtkModule/AtkStage/tooltip와 중첩 args/component/matrix/map/tree/pair/pointer16종의 모든 인스턴스 필드 offset/형식·크기가 현재/최저/친구 DLL에서 일치했다. 기본 UI/가방6종은 앞선 대조를 유지한다. 공개 listener의 이름 지정 overload4개와 PostSetup=1/PreFinalize=6도 세 조합에서 확인했다. 실제 게임 Item 바인딩이나 친구 실기를 확인한 것은 아니다.
 - 최초 컴파일은 wrapper의 내부 Struct 접근, 다음 컴파일은 내부 embedded 필드 접근으로 각각 실패했다. 공개 Address와 위에서 직접 대조한 offset 경계로 수정한 뒤 현재/최저/친구 참조 및 정규 Debug 빌드 모두 경고0/오류0. 한영602키/형식 인자 검사 통과. 후보/정규 Plugin/Core/ko/manifest 해시4/4 일치, manifest0.3.0.0/API15. 테스트 추가·실행 없음.
-- 현재 확인 순서: 아직 선택하지 않은 보유 미끼의 ‘미끼 찾기’→사용자가 게임 미끼 UI 열기→정확한 한 칸 테두리/직접 선택 후 해제/닫고 다시 열면 해제 확인. 연결 안내가 나오거나 테두리가 없으면 개발자 진단v5의 BindingState/TooltipBindings 줄만 받는다. 그 뒤 Release 패키지와 추출본 실기 확인을 거쳐 이번 배포를 진행한다.
+- 현재 확인 순서: 아직 선택하지 않은 보유 미끼의 ‘미끼 찾기’→사용자가 게임 미끼 UI 열기→정확한 한 칸 테두리/직접 선택 후 해제/닫고 다시 열면 해제 확인. 연결 안내가 나오거나 테두리가 없으면 개발자 진단v6의 BindingState 한 줄만 받는다. 그 뒤 Release 패키지와 추출본 실기 확인을 거쳐 이번 배포를 진행한다.
 
 ## 0.2.10.1 · 복사 불가 피드백 대응
 
@@ -71,7 +79,7 @@
 
 1. 일반 소지품에 있는 미끼의 실제 수량과 준비 목록/상세 수량을 비교한다. 즐겨찾기 기본/현재 필터 전체 전환, 스크롤 밖 목표 포함·검색/수집 필터·첫 미끼/대체 후보·없는 미끼만을 대표 확인한다.
 2. 사용자 ‘수량 일치’와v3 수집·복사는 대표 확인으로 기록했다. v1의NotOpen을 미끼 UI가 실제로 닫혀 있었다는 증거로 확대하지 않는다. 반복 전체 로그를 요구하지 않는다.
-3. 0.3.0.0 수정본의 보유한 다른 미끼로 단일 강조·선택/닫기/취소·60초 만료를 확인한다. 새 후보 구현을 실제 동작 확인으로 확대하지 않는다. 실패하면v5의BindingState/TooltipBindings 줄로 실제 Item 계약을 확인하고 해당 어댑터만 보완한다.
+3. 0.3.0.0 수정본의 보유한 다른 미끼로 단일 강조·선택/닫기/취소·60초 만료를 확인한다. 새 후보 구현을 실제 동작 확인으로 확대하지 않는다. 실패하면v6의BindingState 한 줄로 실제 Item/매칭/좌표 계약을 확인하고 해당 어댑터만 보완한다.
 4. 구현·자료 대조/리소스 검사·커밋 후 최저 지원 참조로 Release 빌드와 `scripts/prepare-release.ps1`을 수행한다. ZIP 추출본의 대표 인게임 확인을 받은 뒤 정상 push/새 태그/Release/익명 다운로드·해시 확인→설치 JSON 순으로 게시한다. 이미 검증한 Debug를 Release ZIP 실행 확인으로 대신하지 않는다.
 
 배포 목표는 이번에 승인됐지만 미검증 산출물 게시 금지는 유지한다. 남은 일반 데이터0.2.9.0의 대표 화면 확인도 이 새 작업 시작으로 완료 처리하지 않는다.

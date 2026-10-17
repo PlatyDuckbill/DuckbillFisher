@@ -18,9 +18,10 @@ internal sealed class BaitUiProbe : IDisposable
     private readonly FishPreferences preferences;
     private readonly Func<bool> compatible;
     private readonly NativeBaitUiReader baitReader;
+    private readonly BaitFinder finder;
     private readonly object gate = new();
     private readonly HashSet<string> observedNames = new(StringComparer.Ordinal);
-    private sealed record RequestState(int Session, long At);
+    private sealed record RequestState(int Session, long At, uint Target);
     private RequestState? pending;
     private string? report;
     private string status = "Idle";
@@ -30,11 +31,12 @@ internal sealed class BaitUiProbe : IDisposable
     private bool disposed;
 
     public BaitUiProbe(IGameGui gui, IFramework framework, IAddonLifecycle lifecycle,
-        FishPreferences preferences, Func<bool> compatible, NativeBaitUiReader baitReader)
+        FishPreferences preferences, Func<bool> compatible, NativeBaitUiReader baitReader, BaitFinder finder)
     {
         this.gui = gui; this.framework = framework; this.lifecycle = lifecycle;
         this.preferences = preferences; this.compatible = compatible;
         this.baitReader = baitReader;
+        this.finder = finder;
         framework.Update += Update;
         lifecycle.RegisterListener(AddonEvent.PostSetup, ObserveAddonName);
         lifecycle.RegisterListener(AddonEvent.PostRefresh, ObserveAddonName);
@@ -90,7 +92,7 @@ internal sealed class BaitUiProbe : IDisposable
         }
     }
 
-    private static string Header(int session) => "DuckbillFisher bait-ui/v5\n" +
+    private static string Header(int session) => "DuckbillFisher bait-ui/v6\n" +
         $"Plugin={typeof(BaitUiProbe).Assembly.GetName().Version}; ProbeBuild={typeof(BaitUiProbe).Module.ModuleVersionId.ToString()[..8]}; Session={session}\n";
 
     public void Request(int session)
@@ -105,7 +107,8 @@ internal sealed class BaitUiProbe : IDisposable
             firstVisibleAt = 0;
             observedNames.Clear();
             status = "Queued";
-            pending = new(session, Stopwatch.GetTimestamp());
+            var target = finder.View;
+            pending = new(session, Stopwatch.GetTimestamp(), target.Session == session ? target.Item : 0);
         }
     }
 
@@ -191,8 +194,9 @@ internal sealed class BaitUiProbe : IDisposable
                     nodes.Add($"{node->NodeId}:{(uint)node->Type}:{node->Width}x{node->Height}");
                 }
                 output.AppendLine("GridNodes=" + string.Join(',', nodes));
-                var binding = baitReader.Read(0, diagnostics: true);
-                output.AppendLine($"BindingState={binding.State}; TooltipBindings={binding.Bindings}");
+                var binding = baitReader.Read(request.Target, diagnostics: true);
+                var state = request.Target == 0 && binding.State == BaitUiState.BindingUnavailable ? "ObservedOnly" : binding.State.ToString();
+                output.AppendLine(FormattableString.Invariant($"BindingState={state}; TargetItem={request.Target}; Matches={binding.Matches}; Node={binding.MatchedNode}; Rect={binding.Position.X:0.##},{binding.Position.Y:0.##},{binding.Size.X:0.##},{binding.Size.Y:0.##}; TooltipBindings={binding.Bindings}"));
                 output.AppendLine("ReadOnly=True; NoSelectionOrHighlightInference=True");
                 Finish("Captured", output.ToString());
                 return;
