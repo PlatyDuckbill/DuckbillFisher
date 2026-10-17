@@ -1,6 +1,6 @@
 # 0.1.32.0 상세 제목·간략 도구 모음 정리
 
-갱신: 2026-10-17 · 별도 빌드 완료 · 정규 반영/인게임 검증 대기
+갱신: 2026-10-17 · 정규 반영 완료 · 인게임 검증 대기
 
 ## 사용자 피드백 반영
 
@@ -15,7 +15,7 @@
 - SESSION-HANDOFF의 dotnet build에 `-p:OutputPath=C:/Users/hyogu/Downloads/DuckbillFisher/.cache/ui-refine-build/` 추가 → 경고 0/오류 0.
 - `pwsh -NoLogo -NoProfile -File scripts/check-localization.ps1` → 한영 451키/형식 인자 일치.
 - `git diff --check` 통과. 테스트 추가·실행 없음. 사용자 tmp_note.md 읽기/수정/스테이징 없음.
-- 정규 DLL은 0.1.31.0 유지. WORKFLOW에 따라 이번 수정에 대한 새 언로드 확인 뒤 0.1.32.0 정규 빌드가 필요하다. 푸시·릴리스 없음.
+- WORKFLOW에 따라 이번 수정에 대한 새 언로드 완료 확인을 받고 정규 dotnet build 실행 → 경고 0/오류 0. 정규 DuckbillFisher.dll 1,031,168바이트/0.1.32.0, Core 39,936바이트/1.0.0.0, ko 리소스 44,544바이트/0.1.32.0. Manifest InternalName DuckbillFisher/AssemblyVersion 0.1.32.0/API15 확인. 리소스 검사 재실행 통과. 푸시·릴리스 없음.
 
 ## 인게임 확인 순서
 
