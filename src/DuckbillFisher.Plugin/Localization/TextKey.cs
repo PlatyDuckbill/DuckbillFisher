@@ -586,4 +586,11 @@ internal enum TextKey
     BaitProbeCopy,
     BaitProbeReady,
     BaitProbeWaiting,
+    BaitProbeCancel,
+    BaitProbeIdle,
+    BaitProbeCaptured,
+    BaitProbeNotObserved,
+    BaitProbeUnavailable,
+    BaitProbeUnsupportedShape,
+    BaitProbeCancelled,
 }

@@ -1,11 +1,11 @@
 # 세션 인수인계
 
-갱신: 2026-10-18 · 정규0.2.10.0 미끼 준비 첫 단계 / KR UI 표본 대기 / 배포 승인·공개0.2.6.0 유지
+갱신: 2026-10-18 · 정규0.2.10.1 미끼 UI 진단 복사 개선 / KR 표본 대기 / 배포 승인·공개0.2.6.0 유지
 
 ## 재개 순서
 
 1. AGENTS.md/STATUS.md와 `git status --short`를 확인한다. 사용자 `tmp_note.md`는 읽기·수정·스테이징하지 않는다.
-2. 다음 한 작업은 [0.2.10.0 미끼 UI v2 표본/강조 구현](validation/BAIT-PREPARATION.md)이다. 사용자는 소지 수량 일치를 대표 확인했고 UI v1은NotOpen이었다. 정규의20초 대기 수집v2로 ‘수집 먼저→게임 미끼 UI 열기→복사’ 표본을 재요청했다. 실제 숫자/항목 연결 없이 강조하지 않는다. 데이터0.2.9.0 대표 확인도 남아 있다.
+2. 다음 한 작업은 [0.2.10.1 미끼 UI v3 표본/강조 구현](validation/BAIT-PREPARATION.md)이다. 수량 일치 대표 확인/v1 NotOpen/v2 복사 불가 피드백을 구분한다. v3는상시 복사/취소/남은 초·화면 시계 만료·공개 UI 이름을 기록한다. ‘수집→게임 미끼 UI 열기→언제든 복사’ 표본을 요청했다. 실제 숫자/항목 연결 없이 강조하지 않는다. 데이터0.2.9.0 대표 확인도 남아 있다.
 3. [잔여 보고서](reports/fishing-data-2026-10-17/remaining.md)에 일반 핵심11종·선택 메타데이터355종·먼바다259종·작살115건의 전체 이름/ID/이유가 있다. 일반 상세1258/1258과 모든 필드 완성은 구분한다.
 4. 사용자 상시 지시로 언로드는 기본 상태다. 별도→정규 빌드 후 주 DLL 절대 경로를 제공하고 다시 언로드를 묻지 않는다. 실제 파일 잠금 실패 시 원인만 보고한다.
 5. 공개0.2.6.0은 친구 업데이트/도감/수집/타이머 대표 확인 완료. 이번0.2.10.0은 배포까지 승인됐다. 강조 구현 뒤 최저 지원 참조 Release/패키지/추출본 인게임 확인을 받고 Release/다운로드 확인→저장소 JSON 순으로 게시한다. 미검증 ZIP은 게시하지 않는다.
@@ -22,7 +22,7 @@
 - SDK10.0.402 / Dalamud.NET.Sdk15.0.0 / x64/net10.0-windows. 의존성 버전은 변경하지 않았다.
 - 정규 주 DLL: `C:\Users\hyogu\Downloads\DuckbillFisher\src\DuckbillFisher.Plugin\bin\Debug\DuckbillFisher.dll`.
 - 후보 `.cache/data-completion-build/`, 최저 참조 `.cache/data-completion-oldrefs/`, 정규 빌드 모두 경고0/오류0. 한영559키/형식 인자 통과, Plugin/ko/manifest0.2.9.0·Core1.0.0.0·API15.
-- 정규0.2.10.0 후보 `.cache/bait-preparation-build/`, 최저 `.cache/bait-preparation-oldrefs/`, 친구 `.cache/bait-preparation-friendrefs/`와 정규 빌드 경고0/오류0·한영584키. 정규/후보 Plugin/Core/ko/manifest 해시4/4 일치. 수량 일치만 대표 확인, 미끼 UI 표본/강조·패키지준비·원격 게시 대기.
+- 정규0.2.10.1 후보 `.cache/bait-preparation-build/`, 최저 `.cache/bait-preparation-oldrefs/`, 친구 `.cache/bait-preparation-friendrefs/`와 정규 빌드 경고0/오류0·한영591키. 정규/후보 Plugin/Core/ko/manifest 해시4/4 일치. 수량 일치만 대표 확인, 실제 v3 복사/강조·패키지준비·원격 게시 대기.
 
 ## 이번 데이터 구현
 

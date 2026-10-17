@@ -79,13 +79,19 @@ internal sealed class BaitPreparationPanel(BaitPreparation preparation, BaitStoc
         ImGui.EndChild();
         if (personal.DeveloperMode)
         {
+            ImGui.BeginDisabled(probe.IsWaiting);
             if (ImGui.SmallButton(UiText.Label(T.BaitProbeRequest, "BaitUiProbeRequest"))) probe.Request(personal.Session);
-            ImGui.SameLine();
-            ImGui.BeginDisabled(probe.Report is null || probe.IsWaiting);
-            if (ImGui.SmallButton(UiText.Label(T.BaitProbeCopy, "BaitUiProbeCopy"))) ImGui.SetClipboardText(probe.Report!);
             ImGui.EndDisabled();
-            if (probe.IsWaiting) ImGui.TextWrapped(UiText.Get(T.BaitProbeWaiting));
-            else if (probe.Report is not null) ImGui.TextWrapped(UiText.Get(T.BaitProbeReady));
+            ImGui.SameLine();
+            if (ImGui.SmallButton(UiText.Label(T.BaitProbeCopy, "BaitUiProbeCopy"))) ImGui.SetClipboardText(probe.Report);
+            if (probe.IsWaiting)
+            {
+                ImGui.SameLine();
+                if (ImGui.SmallButton(UiText.Label(T.BaitProbeCancel, "BaitUiProbeCancel"))) probe.Cancel();
+                ImGui.TextWrapped(UiText.Get(T.BaitProbeWaiting, probe.SecondsRemaining));
+            }
+            else ImGui.TextWrapped(probe.StatusMessage.Display);
+            UiWidgets.Tooltip(UiText.Get(T.BaitProbeReady));
         }
     }
 

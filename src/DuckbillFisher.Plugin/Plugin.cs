@@ -37,7 +37,7 @@ public sealed class Plugin : IDalamudPlugin
 
     public Plugin(IDalamudPluginInterface pluginInterface, ICommandManager commandManager, ICondition conditions,
         IClientState clientState, IPlayerState playerState, IDataManager dataManager, IGameGui gameGui, IFramework framework,
-        ITextureProvider textureProvider, IPluginLog log, IChatGui chat, IGameInventory inventory)
+        ITextureProvider textureProvider, IPluginLog log, IChatGui chat, IGameInventory inventory, IAddonLifecycle addonLifecycle)
     {
         this.pluginInterface = pluginInterface;
         this.commandManager = commandManager;
@@ -66,7 +66,7 @@ public sealed class Plugin : IDalamudPlugin
         baitStock = new BaitStockObserver(inventory, clientState, playerState, conditions, framework, fishPreferences, () => collectionReader.IsCompatible);
         var preparationQuery = new CatalogQueryState(fishPreferences.View.Catalog);
         baitPreparation = new BaitPreparation(fishCatalog, fishPreferences, fishCollection, fishingRegion, preparationQuery, framework);
-        baitUiProbe = new BaitUiProbe(gameGui, framework, fishPreferences, () => collectionReader.IsCompatible);
+        baitUiProbe = new BaitUiProbe(gameGui, framework, addonLifecycle, fishPreferences, () => collectionReader.IsCompatible);
         var preparationPanel = new BaitPreparationPanel(baitPreparation, baitStock, fishPreferences, textureProvider, itemLinks, baitUiProbe);
         var detailPanel = new FishDetailPanel(fishPreferences, textureProvider, fishingMap, new FishingConditionPanel(textureProvider, itemLinks, baitStock));
         detailWindow = new FishDetailWindow(fishCatalog, fishPreferences, fishCollection, detailPanel, guideOpener);

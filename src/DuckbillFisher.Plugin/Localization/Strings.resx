@@ -592,6 +592,13 @@ In fish log only: {5}</value></data>
 Main inventory only. An unknown quantity is not zero.</value></data>
   <data name="BaitProbeRequest" xml:space="preserve"><value>Sample open bait UI</value></data>
   <data name="BaitProbeCopy" xml:space="preserve"><value>Copy bait UI sample</value></data>
-  <data name="BaitProbeReady" xml:space="preserve"><value>Read-only UI sample is ready to copy. This does not select a bait.</value></data>
-  <data name="BaitProbeWaiting" xml:space="preserve"><value>Open the game bait selection UI within 20 seconds. The sample is captured automatically when visible.</value></data>
+  <data name="BaitProbeReady" xml:space="preserve"><value>You can always copy the current diagnostic status, including waiting or failure.</value></data>
+  <data name="BaitProbeWaiting" xml:space="preserve"><value>Open the game bait selection UI. Waiting: {0}s. You can copy the current status while waiting.</value></data>
+  <data name="BaitProbeCancel" xml:space="preserve"><value>Cancel observation</value></data>
+  <data name="BaitProbeIdle" xml:space="preserve"><value>Start observation to collect bait UI data. The diagnostic status can be copied at any time.</value></data>
+  <data name="BaitProbeCaptured" xml:space="preserve"><value>Bait UI data was captured. Copy the diagnostic result.</value></data>
+  <data name="BaitProbeNotObserved" xml:space="preserve"><value>The bait UI was not observed within 20 seconds. Copy the diagnostic result, including detected UI names.</value></data>
+  <data name="BaitProbeUnavailable" xml:space="preserve"><value>Character or runtime conditions prevented observation. Copy the diagnostic result.</value></data>
+  <data name="BaitProbeUnsupportedShape" xml:space="preserve"><value>The UI data layout was unexpected. Observation stopped; the diagnostic result can be copied.</value></data>
+  <data name="BaitProbeCancelled" xml:space="preserve"><value>Observation cancelled. The current diagnostic status can still be copied.</value></data>
 </root>
