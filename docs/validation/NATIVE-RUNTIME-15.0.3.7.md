@@ -55,3 +55,10 @@
 - prepare-release.ps1로 `artifacts/share/0.2.5.0/` ZIP/체크섬/후보 JSON 생성. ZIP SHA256 **5105B7B50292CB018032A2B3F6984B1672E94AD1093C05440BD401BD52EE0B4D**. `.cache/release-validation/0.2.5.0/` 추출본 전 항목이 ZIP과 해시 동일하며 Plugin/ko0.2.5.0·Core1.0.0.0·manifest/API15 일치다.
 - 사용자는 위 추출본을 사용한 도감 연동·타이머/기록 확인 요청에 **‘잘 됨’**으로 대표 확인을 알렸다. 제공된 결과만으로 실행 PC의 런타임이15.0.3.7이었다고 가정하지 않는다. 친구15.0.3.7의 업데이트 후 세 기능 확인은 별도다.
 - 확인한 ZIP은 재빌드/변경하지 않고 같은 SHA256으로 게시한다. 정규 개발 DLL·현재 로드 파일을 직접 교체하지 않았으며 기존0.2.4.0 태그/릴리스는 유지한다. 공개 ZIP→익명 다운로드 해시→저장소 JSON 업데이트 순서를 따른다.
+
+## 원격 게시
+
+- 구현 `d5c5899`와 대표 확인 기록 `638b77d`를 기존 origin/main에 정상 push하고 소스 `638b77d6238213b1129a74468a44024a6b34c47a`에 v0.2.5.0 태그를 생성·push했다. 기존0.2.4.0은 덮어쓰지 않았다.
+- [GitHub Release0.2.5.0](https://github.com/PlatyDuckbill/DuckbillFisher/releases/tag/v0.2.5.0), ID415761624, 공개 시각2026-10-17T11:19:46Z. 확인한 ZIP322,416바이트/체크섬을 draft에 업로드하고 size/digest 대조 후 공개했다.
+- 로그인 없는 정식 URL의 ZIP/체크섬 HTTP200, ZIP SHA2565105b7b50292cb018032a2b3f6984b1672e94ad1093c05440bd401bd52ee0b4d 동일, 태그 아이콘 HTTP200/원본 해시 동일을 확인했다.
+- 이 확인 뒤에만 기존 repo/pluginmaster.json을0.2.5.0 설치/업데이트 URL로 갱신한다. 공개 JSON 최종 접근 확인과 실제 친구 PC의 업데이트·세 기능 확인은 구분한다. 새로운 빌드·게임 파일 교체·테스트 실행은 하지 않았다.

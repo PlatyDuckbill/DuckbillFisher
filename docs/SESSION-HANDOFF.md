@@ -1,6 +1,6 @@
 # 세션 인수인계
 
-갱신: 2026-10-17 · 수정0.2.5.0 사용자 대표 확인 완료 / 업데이트 게시 진행
+갱신: 2026-10-17 · 수정0.2.5.0 Release 게시 / 저장소 업데이트 최종 확인 진행
 
 ## 재개 순서
 
@@ -11,6 +11,7 @@
 5. 우선 [15.0.3.7 호환성 수정](validation/NATIVE-RUNTIME-15.0.3.7.md)을 이어간다. 친구0.2.4.0 설치 후 Game2026.10.06과Dalamud15.0.3.7의 NativeDllMismatch로 세 기능이 차단됐다.0.2.5.0은 새 배포 파일의 정적 대조 후 정확한 조합만 추가했다. 사용자는 추가 로그보다 해결 진행을 원한다. 같은 진단 재요청/추측 가드 해제 금지.
 
 - 확인 DLL `.cache/release-validation/0.2.5.0/DuckbillFisher.dll`, 패키지 `artifacts/share/0.2.5.0/`. 기존/새 참조 Debug와 기존 참조 Release 경고0/오류0·한영557키·패키지 검사 통과. 사용자 ‘잘 됨’으로 도감/수집·타이머 대표 확인 완료, 확인한 ZIP 그대로 게시한다. 실제 친구15.0.3.7 업데이트 후 결과는 별도 확인 대기/테스트 없음. 정규·현재 로드 파일 직접 교체/기존 Release 덮어쓰기 없음.
+- 구현d5c5899/확인638b77d·v0.2.5.0 태그 및 Release415761624를 게시했다. ZIP/체크섬/아이콘 익명200·해시 동일 확인 후 기존 저장소 JSON을0.2.5.0으로 반영했다. JSON 최종 익명 확인을 마친 뒤 친구는 같은 저장소에서 업데이트하면 된다. 친구15.0.3.7의 실제 결과는 확인 대기로 남긴다.
 
 - 최종 게시 준비물: `artifacts/share/0.2.4.0-final/` ZIP/체크섬/후보 JSON. 설명 가독성만 LF/글머리표로 수정하고 Packager 대상만 재실행했다. 기존 확인 ZIP/추출본은 보존, 최종 ZIP과 Description만 다르고 나머지5파일/다른 필드는 동일하다. 빌드/한영555키/내장 자료 검사 유지, 한영 검사 재통과, 정규 Debug 교체/테스트 없음.
 - source eb8c3ce/v0.2.4.0 태그/Release415750305·설치 JSON d0c2c50 정상 게시 완료. [공유 URL](https://raw.githubusercontent.com/PlatyDuckbill/DuckbillFisher/main/repo/pluginmaster.json)은 익명 HTTP200/1항목/API15/0.2.4.0/설명15줄/manifest 일치, 설치·업데이트·아이콘200/ZIP·원본 이미지 해시 일치다. 이번 CI 실행0건(`[skip ci]`)/테스트 없음. gh 없이 credential manager 인증을 메모리에서만 사용했다. tmp_note.md/자격 증명/빌드 산출물 스테이징 금지.
