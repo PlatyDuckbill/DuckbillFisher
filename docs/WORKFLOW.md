@@ -20,7 +20,7 @@
 
 1. 같은 Windows 소스 폴더를 열고 `git status`와 STATUS의 다음 한 작업을 확인한다. 필요하면 작은 기능 브랜치를 만든다. 기존 수정은 보존한다.
 2. AI와 작은 변경을 구현하고 사람이 범위·동작·설계 이유를 검토한다. 대상 API는 현재 KR 설치를 기준으로 확인한다.
-3. 먼저 별도 출력 경로로 Plugin을 빌드한다. 사용자에게 언로드 완료를 확인받은 뒤 아래 명령으로 정규 DLL을 빌드한다. 테스트는 사용자가 요청한 경우에만 실행한다.
+3. 먼저 별도 출력 경로로 Plugin을 빌드한 뒤 아래 명령으로 정규 DLL을 빌드한다. 2026-10-17 사용자의 상시 지시로 언로드는 기본 상태이며 매번 확인을 요청하지 않는다. 빌드 후 등록할 주 DLL의 절대 경로를 안내한다. 파일이 잠겨 실패하면 원인을 알리며 강제 종료나 잠금 우회는 하지 않는다. 테스트는 사용자가 요청한 경우에만 실행한다.
 
 ```powershell
 dotnet build src/DuckbillFisher.Plugin/DuckbillFisher.Plugin.csproj --no-restore -c Debug -p:DalamudLibPath=C:/Users/hyogu/AppData/Roaming/XIVLauncherKR/addon/Hooks/dev/
