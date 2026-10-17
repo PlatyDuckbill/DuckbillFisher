@@ -28,7 +28,7 @@
   <data name="English" xml:space="preserve"><value>English</value></data>
   <data name="TabGuide" xml:space="preserve"><value>Fish log diagnostics</value></data>
   <data name="TabFishing" xml:space="preserve"><value>Fishing observations</value></data>
-  <data name="CommandHelp" xml:space="preserve"><value>Open DuckbillFisher. Use /duckbillfisher compact for compact view, or /duckbillfisher timer for the casting timer.</value></data>
+  <data name="CommandHelp" xml:space="preserve"><value>Open DuckbillFisher. Use /duckbillfisher compact for the quick list, or /duckbillfisher timer for the casting timer.</value></data>
   <data name="CommandConflict" xml:space="preserve"><value>Command already registered: {0}</value></data>
   <data name="GuideIntro" xml:space="preserve"><value>Open the in-game Fish Guide and click a fish below to read its caught bit. This is a diagnostic sample, not an automatic collection filter.</value></data>
   <data name="LoginState" xml:space="preserve"><value>Logged in: {0} | Player data loaded: {1}</value></data>
@@ -427,10 +427,10 @@ In fish log only: {5}</value></data>
   <data name="RowStartsIn" xml:space="preserve"><value>Starts {0}</value></data>
   <data name="RowCountdown" xml:space="preserve"><value>{0:00}:{1:00}:{2:00}</value></data>
   <data name="DetailWindowTitle" xml:space="preserve"><value>Fish details</value></data>
-  <data name="CompactWindowTitle" xml:space="preserve"><value>Fishing windows</value></data>
-  <data name="CompactOptions" xml:space="preserve"><value>Compact view options</value></data>
+  <data name="CompactWindowTitle" xml:space="preserve"><value>Quick list</value></data>
+  <data name="CompactOptions" xml:space="preserve"><value>Quick list options</value></data>
   <data name="OpenMainWindow" xml:space="preserve"><value>Open main window</value></data>
-  <data name="OpenCompactWindow" xml:space="preserve"><value>Open compact view</value></data>
+  <data name="OpenCompactWindow" xml:space="preserve"><value>Open quick list</value></data>
   <data name="CompactHorizon" xml:space="preserve"><value>Upcoming minutes</value></data>
   <data name="CompactScope" xml:space="preserve"><value>Uses the main catalog filters. Lists open windows, then upcoming windows within 1–180 minutes. Search is separate. Always available, unknown and ocean fish are excluded.</value></data>
   <data name="CompactOpen" xml:space="preserve"><value>Open now · {0}</value></data>

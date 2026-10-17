@@ -28,6 +28,8 @@ internal sealed class MainWindow : Window
     private int lastSession = -1;
     private int selectedMarker;
     private bool selectSettings;
+    private MainPage selectedPage;
+    private enum MainPage { Catalog, Alerts, History, Settings, Guide, Fishing }
 
     public MainWindow(FishingActivityProbe observer, FishGuideDiagnostics fishGuide, FishListPanel fishList,
         SpawnAlertsPanel spawnAlerts, FishPreferences preferences, Action languageChanged,
@@ -68,63 +70,74 @@ internal sealed class MainWindow : Window
         }
         fishList.DeveloperMode = settings.DeveloperMode;
         spawnAlerts.DeveloperMode = settings.DeveloperMode;
-        DrawShortcuts();
-        if (ImGui.BeginTabBar("DiagnosticsTabs"))
+        DrawNavigation(settings.DeveloperMode);
+        ImGui.PushID(selectedPage.ToString());
+        switch (selectedPage)
         {
-            if (ImGui.BeginTabItem(UiText.Label(T.TabCatalog, "CatalogTab")))
-            {
-                fishList.Draw();
-                ImGui.EndTabItem();
-            }
-            if (ImGui.BeginTabItem(UiText.Label(T.TabAlerts, "SpawnAlertsTab")))
-            {
-                spawnAlerts.Draw();
-                ImGui.EndTabItem();
-            }
-            if (ImGui.BeginTabItem(UiText.Label(T.TabHistory, "FishingHistoryTab")))
-            {
-                fishingHistory.Draw(settings.DeveloperMode, ShowTimer);
-                ImGui.EndTabItem();
-            }
-            if (ImGui.BeginTabItem(UiText.Label(T.TabSettings, "SettingsTab"),
-                selectSettings ? ImGuiTabItemFlags.SetSelected : ImGuiTabItemFlags.None))
-            {
+            case MainPage.Catalog: fishList.Draw(); break;
+            case MainPage.Alerts: spawnAlerts.Draw(); break;
+            case MainPage.History: fishingHistory.Draw(settings.DeveloperMode, ShowTimer); break;
+            case MainPage.Settings:
                 if (ImGui.BeginChild("SettingsContent")) DrawSettings(settings);
                 ImGui.EndChild();
-                ImGui.EndTabItem();
-            }
-            selectSettings = false;
-            if (settings.DeveloperMode && ImGui.BeginTabItem(UiText.Label(T.TabGuide, "GuideTab")))
-            {
+                break;
+            case MainPage.Guide:
                 if (ImGui.BeginChild("GuideDiagnosticsContent")) DrawFishGuide();
                 ImGui.EndChild();
-                ImGui.EndTabItem();
-            }
-            if (settings.DeveloperMode && ImGui.BeginTabItem(UiText.Label(T.TabFishing, "FishingTab")))
-            {
+                break;
+            case MainPage.Fishing:
                 if (ImGui.BeginChild("FishingDiagnosticsContent")) DrawFishingObservation();
                 ImGui.EndChild();
-                ImGui.EndTabItem();
-            }
-            ImGui.EndTabBar();
+                break;
         }
+        ImGui.PopID();
     }
 
-    private void DrawShortcuts()
+    private void DrawNavigation(bool developerMode)
     {
+        if (!developerMode && selectedPage is MainPage.Guide or MainPage.Fishing) selectedPage = MainPage.Catalog;
         var compact = UiText.Get(T.CompactWindowTitle);
         var timer = UiText.Get(T.CastingTimerTitle);
         var padding = ImGui.GetStyle().FramePadding;
         var iconWidth = ImGui.GetFrameHeight();
         var compactWidth = iconWidth + ImGui.CalcTextSize(compact).X + padding.X * 2;
         var timerWidth = iconWidth + ImGui.CalcTextSize(timer).X + padding.X * 2;
+        var spacing = ImGui.GetStyle().ItemSpacing.X;
         var available = ImGui.GetContentRegionAvail().X;
-        ImGui.SetCursorPosX(ImGui.GetCursorPosX() + Math.Max(0, available - compactWidth - timerWidth - ImGui.GetStyle().ItemSpacing.X));
+        // The public tab bar uses its container width. Reserve the shortcut area in a header-only child.
+        var tabWidth = Math.Max(1, available - compactWidth - timerWidth - spacing * 2);
+        if (ImGui.BeginChild("MainNavigationTabs", new Vector2(tabWidth, ImGui.GetFrameHeightWithSpacing()), false,
+            ImGuiWindowFlags.NoScrollbar | ImGuiWindowFlags.NoScrollWithMouse))
+        {
+            if (ImGui.BeginTabBar("DiagnosticsTabs", ImGuiTabBarFlags.FittingPolicyScroll))
+            {
+                NavigationTab(MainPage.Catalog, T.TabCatalog, "CatalogTab");
+                NavigationTab(MainPage.Alerts, T.TabAlerts, "SpawnAlertsTab");
+                NavigationTab(MainPage.History, T.TabHistory, "FishingHistoryTab");
+                NavigationTab(MainPage.Settings, T.TabSettings, "SettingsTab", selectSettings);
+                if (developerMode)
+                {
+                    NavigationTab(MainPage.Guide, T.TabGuide, "GuideTab");
+                    NavigationTab(MainPage.Fishing, T.TabFishing, "FishingTab");
+                }
+                ImGui.EndTabBar();
+                selectSettings = false;
+            }
+        }
+        ImGui.EndChild();
+        ImGui.SameLine(0, spacing);
         if (Shortcut(FontAwesomeIcon.List, compact, "OpenCompactWindow", compactWidth)) ShowCompact?.Invoke();
         UiWidgets.Tooltip(UiText.Get(T.OpenCompactWindow));
         ImGui.SameLine();
         if (Shortcut(FontAwesomeIcon.Stopwatch, timer, "OpenTimer", timerWidth)) ShowTimer?.Invoke();
         UiWidgets.Tooltip(timer);
+    }
+
+    private void NavigationTab(MainPage page, T label, string id, bool select = false)
+    {
+        if (!ImGui.BeginTabItem(UiText.Label(label, id), select ? ImGuiTabItemFlags.SetSelected : ImGuiTabItemFlags.None)) return;
+        selectedPage = page;
+        ImGui.EndTabItem();
     }
 
     private static bool Shortcut(FontAwesomeIcon icon, string label, string id, float width)
