@@ -470,4 +470,6 @@ internal enum TextKey
     PresetDelete,
     PresetDeleteQuestion,
     Cancel,
+    CastingProbeIntro,
+    CastingProbeCounters,
 }

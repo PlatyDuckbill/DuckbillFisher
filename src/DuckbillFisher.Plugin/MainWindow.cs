@@ -11,7 +11,7 @@ internal sealed class MainWindow : Window
 {
     private static readonly T[] Markers = [T.MarkCast, T.MarkWait, T.MarkBite, T.MarkHook, T.MarkRetrieve, T.MarkEnd, T.MarkMooch, T.MarkMove, T.MarkLogout];
     private static readonly string[] LanguageNames = [UiText.Get(T.Korean), UiText.Get(T.English)];
-    private readonly FishingConditionObserver observer;
+    private readonly FishingActivityProbe observer;
     private readonly FishGuideDiagnostics fishGuide;
     private readonly FishListPanel fishList;
     private readonly SpawnAlertsPanel spawnAlerts;
@@ -27,7 +27,7 @@ internal sealed class MainWindow : Window
     private int selectedMarker;
     private bool selectSettings;
 
-    public MainWindow(FishingConditionObserver observer, FishGuideDiagnostics fishGuide, FishListPanel fishList,
+    public MainWindow(FishingActivityProbe observer, FishGuideDiagnostics fishGuide, FishListPanel fishList,
         SpawnAlertsPanel spawnAlerts, FishPreferences preferences, Action languageChanged) : base("DuckbillFisher###DuckbillFisher.Main")
     {
         this.observer = observer;
@@ -203,8 +203,9 @@ internal sealed class MainWindow : Window
     {
         ImGui.TextUnformatted(UiText.Get(T.FishingTitle));
         ImGui.Separator();
-        ImGui.TextWrapped(UiText.Get(T.FishingIntro));
-        var view = observer.View;
+        ImGui.TextWrapped(UiText.Get(T.CastingProbeIntro));
+        var probe = observer.View;
+        var view = probe.Observation;
         ImGui.BeginDisabled(view.IsRecording);
         if (ImGui.Button(UiText.Label(T.StartObservation, "StartObservation")))
             observer.Start();
@@ -218,8 +219,11 @@ internal sealed class MainWindow : Window
         if (ImGui.Button(UiText.Label(T.CopyObservation, "CopyObservation")))
             ImGui.SetClipboardText(observer.CreateReport());
 
-        // A button may have changed the cached snapshot in this frame.
-        view = observer.View;
+        // Start/stop are Framework requests; manual markers can update the snapshot immediately.
+        probe = observer.View;
+        view = probe.Observation;
+        ImGui.TextWrapped(UiText.Get(T.CastingProbeCounters, probe.ValidContracts, probe.TotalContracts,
+            probe.Logs, probe.QueueDropped, probe.Native?.Availability.ToString() ?? "NotSampled"));
         ImGui.TextUnformatted(UiText.Get(T.ObservationCounts, new UiMessage(view.IsRecording ? T.Recording : T.Stopped), view.Entries.Count, view.DroppedCount));
         ImGui.TextWrapped(UiText.Get(T.ObservationHint));
         ImGui.BeginDisabled(!view.IsRecording);

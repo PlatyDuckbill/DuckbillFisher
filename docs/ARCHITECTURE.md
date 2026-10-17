@@ -33,7 +33,7 @@ Plugin의 `AssemblyName`은 `DuckbillFisher`다. 주 DLL은 `DuckbillFisher.dll`
 
 인터페이스는 실제 테스트와 어댑터 경계에 필요한 것만 만든다. 공개 API 유무는 ENV-03에서 확인하며 `CastStarted` 같은 개념적 이벤트 이름을 실제 Dalamud API로 오인하지 않는다.
 
-MVP-02/F07·F13은 [캐스팅/히스토리 요구사항과 KR 조사](CASTING-TIMER-HISTORY.md)에 기록했다. 화면/보관 정책은 합의 전이며 기존 플래그 관찰기를 어획 감지로 해석하지 않는다. 공개 LogMessage와 검증한 읽기 전용 KR 상태 어댑터를 분리하고 Core에는 복사한 사실/단조 시각을 전달하는 방안을 검토한다. 새 네이티브 경로의 실기 확인 전에는 성공/실패/정확한 낚시터를 확정하지 않는다.
+MVP-02/F07·F13의 [화면/보관 합의와 KR 조사](CASTING-TIMER-HISTORY.md)를 따른다. 0.2.0.0 첫 단계의 FishingActivityProbe는 개발자 도구에서 명시적으로 시작한 관찰만 담당한다. NativeFishingActivityReader는 기존 정확한 KR/DLL 가드를 공유해 Framework에서 값만 복사하고, FishingLogContracts는 검수한 25개 KR 로그 macro 해시로 이벤트를 제한한다. 공개 로그·플래그·네이티브 상태를 같은 단조 시간축에 기록하지만 성공/실패/정확한 낚시터를 아직 확정하지 않는다. 기존 수집/알림 서비스와 격리한다. [수명/실기 대기](validation/MVP-02-CASTING-PROBE.md).
 
 0.1.33.0의 FishGuideOpenService는 연동 안내의 명시적 클릭을 Framework에서 한 번 처리하고 검증한 KR Agent API로 낚시 탭을 연다. 세션/캐릭터/요청 만료·DLL 가드·구독 해제를 적용하며 도감 준비 판정은 기존 관찰기만 담당한다. [게임 접근 근거](validation/MVP-01-GUIDE-OPEN.md).
 

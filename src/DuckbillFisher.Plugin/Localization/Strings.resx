@@ -477,4 +477,6 @@ In fish log only: {5}</value></data>
   <data name="PresetDelete" xml:space="preserve"><value>Delete</value></data>
   <data name="PresetDeleteQuestion" xml:space="preserve"><value>Delete the preset “{0}”?</value></data>
   <data name="Cancel" xml:space="preserve"><value>Cancel</value></data>
+  <data name="CastingProbeIntro" xml:space="preserve"><value>KR casting observation: records raw fishing phases, equipped bait, and selected game log events. Start before fishing and stop after folding the rod. No automatic cast or catch result is established yet. Recording stops on logout, travel, a long observation gap, or disabling developer tools.</value></data>
+  <data name="CastingProbeCounters" xml:space="preserve"><value>Log contracts {0}/{1} · Events {2} · Queue drops {3} · Last read state: {4}</value></data>
 </root>

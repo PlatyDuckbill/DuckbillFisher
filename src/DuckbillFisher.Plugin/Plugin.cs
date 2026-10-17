@@ -14,7 +14,7 @@ public sealed class Plugin : IDalamudPlugin
     private readonly CommandInfo commandInfo;
     private readonly WindowSystem windows = new("DuckbillFisher");
     private readonly MainWindow mainWindow;
-    private readonly FishingConditionObserver fishingObserver;
+    private readonly FishingActivityProbe fishingObserver;
     private readonly FishGuideDiagnostics fishGuide;
     private readonly FishCatalog fishCatalog;
     private readonly FishingMapService fishingMap;
@@ -42,12 +42,13 @@ public sealed class Plugin : IDalamudPlugin
         if (!commandManager.AddHandler(Command, commandInfo))
             throw new InvalidOperationException(UiText.Get(TextKey.CommandConflict, Command));
 
-        fishingObserver = new FishingConditionObserver(conditions);
         fishCatalog = new FishCatalog(dataManager, framework);
         var collectionReader = new NativeFishCollectionReader(framework);
         fishGuide = new FishGuideDiagnostics(clientState, playerState, fishCatalog, gameGui, framework, collectionReader);
         fishingMap = new FishingMapService(gameGui, clientState, framework);
         fishPreferences = new FishPreferences(pluginInterface, clientState, playerState, framework, log);
+        fishingObserver = new FishingActivityProbe(conditions, clientState, playerState, framework, chat,
+            dataManager, fishPreferences, new NativeFishingActivityReader(framework, collectionReader));
         guideOpener = new FishGuideOpenService(gameGui, clientState, playerState, framework, fishPreferences, fishCatalog, collectionReader);
         fishCollection = new FishCollectionObserver(fishPreferences, fishCatalog, collectionReader, dataManager, gameGui, chat, framework, log);
         itemLinks = new FishingItemLinkService(chat, framework, fishPreferences);

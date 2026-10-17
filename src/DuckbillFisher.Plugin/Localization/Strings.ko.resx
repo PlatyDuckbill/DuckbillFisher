@@ -477,4 +477,6 @@
   <data name="PresetDelete" xml:space="preserve"><value>삭제</value></data>
   <data name="PresetDeleteQuestion" xml:space="preserve"><value>‘{0}’ 프리셋을 삭제할까요?</value></data>
   <data name="Cancel" xml:space="preserve"><value>취소</value></data>
+  <data name="CastingProbeIntro" xml:space="preserve"><value>KR 캐스팅 관찰: 낚시 상태·장착 미끼·일부 게임 로그의 원시값을 기록합니다. 낚시 전에 시작하고 낚싯대를 완전히 접은 뒤 중지하세요. 아직 캐스팅·어획 결과를 자동 확정하지 않습니다. 로그아웃·지역 전환·긴 관찰 공백·개발자 도구 해제 시 기록을 중지합니다.</value></data>
+  <data name="CastingProbeCounters" xml:space="preserve"><value>로그 계약 {0}/{1} · 이벤트 {2} · 큐 누락 {3} · 마지막 읽기 상태: {4}</value></data>
 </root>
