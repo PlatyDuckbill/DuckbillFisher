@@ -35,7 +35,7 @@ internal sealed class MainWindow : Window
         this.spawnAlerts = spawnAlerts;
         this.languageChanged = languageChanged;
         this.preferences = preferences;
-        spawnAlerts.ShowSettings = () => selectSettings = true;
+        spawnAlerts.ShowSettings = OpenSettings;
         UiText.SetLanguage(preferences.View.Language);
         markerLabels = Markers.Select(key => UiText.Get(key)).ToArray();
         languageChanged();
@@ -43,6 +43,12 @@ internal sealed class MainWindow : Window
         SizeCondition = ImGuiCond.FirstUseEver;
         SizeConstraints = new WindowSizeConstraints { MinimumSize = new Vector2(700, 450), MaximumSize = new Vector2(float.MaxValue) };
         Flags = ImGuiWindowFlags.NoScrollbar | ImGuiWindowFlags.NoScrollWithMouse;
+    }
+
+    public void OpenSettings()
+    {
+        selectSettings = true;
+        IsOpen = true;
     }
 
     public override void Draw()

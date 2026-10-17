@@ -67,6 +67,7 @@ public sealed class Plugin : IDalamudPlugin
         windows.AddWindow(detailWindow);
         pluginInterface.UiBuilder.Draw += windows.Draw;
         pluginInterface.UiBuilder.OpenMainUi += OpenMainUi;
+        pluginInterface.UiBuilder.OpenConfigUi += mainWindow.OpenSettings;
     }
 
     private void OnCommand(string command, string arguments)
@@ -85,6 +86,7 @@ public sealed class Plugin : IDalamudPlugin
         disposed = true;
         pluginInterface.UiBuilder.Draw -= windows.Draw;
         pluginInterface.UiBuilder.OpenMainUi -= OpenMainUi;
+        pluginInterface.UiBuilder.OpenConfigUi -= mainWindow.OpenSettings;
         commandManager.RemoveHandler(Command);
         compactObserver.Dispose();
         spawnAlerts.Dispose();

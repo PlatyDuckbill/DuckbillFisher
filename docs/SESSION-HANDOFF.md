@@ -1,6 +1,6 @@
 # 세션 인수인계
 
-갱신: 2026-10-17 · 0.1.29.0 정규 반영 · 배치 조정 인게임 확인 대기
+갱신: 2026-10-17 · 0.1.30.0 설정 콜백 수정 별도 빌드 · 정규 반영 대기
 
 ## 재개 순서
 
@@ -30,6 +30,8 @@
 - 수정본 schema v10: v1~v9 허용, 기존 일반 필터/예정 분 보존, 과거 간략 FavoritesOnly 무시. preferences/v8에 CompactFilters=SharedCatalog 표시. 수집/알림/자동 해제 선택은 그대로다.
 - `FishDetailPanel` 공통 상세, `UiWidgets` 아이콘/배너, `CompactFishObserver` Framework 1초 필터/수명 관리. Draw에서 전체 검색/장기 예측/파일 읽기 없음.
 - 0.1.29.0은 목록 직접 핀/이름·수집 및 위치·시간 정렬/직감 배지, 상세 Patch 우측/작은 물고기의 눈/옆 조건/시간 한 줄을 적용했다. 새 언로드 확인 후 정규 빌드·한영 448키 통과. 다음은 [배치/상호작용 확인](validation/MVP-01-UI-ALIGNMENT.md)이다.
+
+- 0.1.30.0 OpenConfigUi 누락 경고 수정 별도 빌드/448키 검사 통과. 새 언로드 확인 후 정규 빌드가 필요하다. MainWindow.OpenSettings를 로드/해제 시 구독/해제하고 실제 설정 탭으로 이동한다. [확인 순서](validation/CONFIG-UI-CALLBACK.md).
 
 ## 일반 구현 빌드
 
