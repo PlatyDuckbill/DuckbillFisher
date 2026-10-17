@@ -1,6 +1,6 @@
 # 0.1.36.0 전체 보기·사용자 필터 프리셋
 
-갱신: 2026-10-17 · 별도 빌드 완료 · 정규 반영/인게임 확인 대기
+갱신: 2026-10-17 · 정규 반영 완료 · 인게임 확인 대기
 
 ## 사용자 동작
 
@@ -29,5 +29,5 @@
 
 - SESSION-HANDOFF의 dotnet build에 `-p:OutputPath=C:/Users/hyogu/Downloads/DuckbillFisher/.cache/ui-refine-build/` 추가 → 경고 0/오류 0.
 - `pwsh -NoLogo -NoProfile -File scripts/check-localization.ps1` → 한영 468키/형식 인자 일치. `git diff --check` 통과. 테스트 추가/실행 없음.
-- 정규 DLL은 0.1.35.0 유지. 새 언로드 확인 후 정규 0.1.36.0 빌드가 필요하다. tmp_note.md 접근 없음. 푸시/릴리스 없음.
+- 사용자 새 언로드 완료 확인 후 정규 dotnet build → 경고 0/오류 0. 한영 468키 검사 재실행 통과. 정규 DuckbillFisher.dll 1,051,648바이트/0.1.36.0, Core 39,936바이트/1.0.0.0, ko 리소스 46,080바이트/0.1.36.0. Manifest InternalName DuckbillFisher/AssemblyVersion 0.1.36.0/API15 확인. tmp_note.md 접근 없음. 푸시/릴리스 없음.
 - 인게임 확인 대기: 전체 보기의 검색/지역 등 제한 해제와 정렬 유지, 기본값 복원 구분, 이름 저장/불러오기/삭제 취소·확정/재로드 유지·중복/20개 상한, 한영·좁은 폭 팝업, 기존 저장 기록 유지, 예약 문구 제거와 다른 알림 상태 보존, 31종의 기술 안내 제거.
