@@ -1,68 +1,59 @@
 # 세션 인수인계
 
-갱신: 2026-10-17 · 정규0.2.8.0 보관 생미끼 대표 확인 완료 / 배포 생략
+갱신: 2026-10-18 · 정규0.2.9.0 데이터 보완 완료 / 인게임 확인 대기 / 공개0.2.6.0 유지
 
 ## 재개 순서
 
-1. AGENTS.md/STATUS.md와 `git status --short`부터 확인한다.
-2. UI 작업은 [합의된 구조](UI-UX-REDESIGN.md), [분석·구현·확인 순서](validation/MVP-01-UI-UX-REDESIGN.md)를 읽는다.
-3. 큰 디자인 변경은 선택지/차이를 질문하고 답변 후 구현한다. 기존 세 화면+별도 타이머/팝업/메인 히스토리 탭 추가는 사용자 합의 완료다.
-4. 사용자 `tmp_note.md`는 읽기·수정·스테이징하지 않는다. 전체 로그/과거 이력은 기본 요청하지 않는다.
-5. [보관 생미끼0.2.8.0](validation/MVP-02-SWIMBAIT.md)을 이어간다. 실제 첫 칸4874/Flags32/Phase1→결과 소모 표본을 받아 시전 시작의 선택 칸 Item을 저장하도록 수정했다. 별도/정규 빌드·한영558키 검사와 사용자 정상 적용 응답의 대표 확인을 통과했다. 다른 칸·복수 보관 조합의 전수 확인으로 확대하지 않으며 같은 원시 로그는 재요청하지 않는다. 복수 어획 수량은 사용자 요청으로 후속으로 미루고 미확인 조건 자료 보완을 다음 우선 후보로 정리했다. 현재 원본 전체 반영과 게임 전체 어종 상세 완성은 구분한다. 기본 언로드 상태로 진행하고 주 DLL 절대 경로를 안내한다.
-6. 현재 공개0.2.6.0은 친구의 일반 업데이트 후 도감·수집·타이머까지 대표 확인 완료다. 태그6fc2fc1/Release415773597/설치 JSON7179f43, 공개 URL·ZIP/아이콘 해시·API15 확인. [dal4kr 근거/결과](validation/NATIVE-RUNTIME-DAL4KR.md). 같은 파일/로그를 재요청하거나 런타임 가드를 풀지 않는다.
+1. AGENTS.md/STATUS.md와 `git status --short`를 확인한다. 사용자 `tmp_note.md`는 읽기·수정·스테이징하지 않는다.
+2. 다음 한 작업은 [0.2.9.0 대표 확인](validation/DATA-COMPLETION-2026-10-18.md)이다. 데이터 작업을 처음부터 재조사하거나 이전 확인 로그를 다시 요청하지 않는다.
+3. [잔여 보고서](reports/fishing-data-2026-10-17/remaining.md)에 일반 핵심11종·선택 메타데이터355종·먼바다259종·작살115건의 전체 이름/ID/이유가 있다. 일반 상세1258/1258과 모든 필드 완성은 구분한다.
+4. 사용자 상시 지시로 언로드는 기본 상태다. 별도→정규 빌드 후 주 DLL 절대 경로를 제공하고 다시 언로드를 묻지 않는다. 실제 파일 잠금 실패 시 원인만 보고한다.
+5. 공개0.2.6.0은 친구 업데이트/도감/수집/타이머 대표 확인 완료. 이번0.2.7~0.2.9 배포는 생략하며 공개 JSON/ZIP/태그/릴리스/push를 임의 갱신하지 않는다.
+6. 큰 UI 구조 변경은 [합의](UI-UX-REDESIGN.md)와 AGENTS에 따라 사용자에게 질의한다. 현재 작업은 데이터·Patch·출처 표시만 보완했다.
 
-- 후보 DLL: `.cache/swimbait-build/DuckbillFisher.dll`(0.2.8.0), 정규 DLL은 아래 경로에 반영했다. 공개 JSON/릴리스/ZIP 갱신 없음. 이전0.2.7.0 기록 안정성은 사용자 대표 확인 통과, 이번 배포는 생략한다. 새 배포 시 최저 지원 참조 Release/패키지/인게임 확인을 별도로 진행한다.
+## 환경과 산출물
 
-## 환경과 DLL
+- 작업: `C:\Users\hyogu\Downloads\DuckbillFisher`.
+- 게임: `C:\Program Files (x86)\FINAL FANTASY XIV - KOREA\game`, KR2026.10.06.0000.0000.
+- 현재 참조: `C:\Users\hyogu\AppData\Roaming\XIVLauncherKR\addon\Hooks\dev`, wasdcxz15.0.3.7/API15.
+- 최저 지원 참조: `.cache/compat-15.0.3.6/full/` 고정본. 런타임은 정확한 wasdcxz/dal4kr 조합 가드 유지.
+- SDK10.0.402 / Dalamud.NET.Sdk15.0.0 / x64/net10.0-windows. 의존성 버전은 변경하지 않았다.
+- 정규 주 DLL: `C:\Users\hyogu\Downloads\DuckbillFisher\src\DuckbillFisher.Plugin\bin\Debug\DuckbillFisher.dll`.
+- 후보 `.cache/data-completion-build/`, 최저 참조 `.cache/data-completion-oldrefs/`, 정규 빌드 모두 경고0/오류0. 한영559키/형식 인자 통과, Plugin/ko/manifest0.2.9.0·Core1.0.0.0·API15.
+- 정규와 후보의 Plugin/Core/ko/manifest 해시 일치. 실제 인게임 로드/표시는 아직 확인하지 않았다. 전체 테스트·패키지 준비·원격 게시 없음.
 
-- 작업 폴더: `C:\Users\hyogu\Downloads\DuckbillFisher`.
-- 게임: `C:\Program Files (x86)\FINAL FANTASY XIV - KOREA\game`, KR 빌드 2026.10.06.0000.0000.
-- 현재 로컬 참조: `C:\Users\hyogu\AppData\Roaming\XIVLauncherKR\addon\Hooks\dev`, wasdcxz Dalamud15.0.3.7/API15. Release 최저 참조15.0.3.6은 `.cache/compat-15.0.3.6/full/`에 고정 원본으로 복구했다.
-- 개발 DLL: `C:\Users\hyogu\Downloads\DuckbillFisher\src\DuckbillFisher.Plugin\bin\Debug\DuckbillFisher.dll`.
-- 현재 정규0.2.8.0: 별도/정규 빌드 경고·오류0, 한영558키/형식 인자, Plugin0.2.8.0/Core1.0.0.0/ko0.2.8.0/manifest API15 확인. 보관 생미끼 어종 기록 대표 확인 통과/테스트 미실행. 공개0.2.6.0 유지.
-- 이전 언로드 확인으로 정규 반영 후 ‘확인 완료’로 대표 확인을 받았다. ‘간이 목록’은 사용자 선택 명칭이다. 이번 배포에서는 Debug 파일을 교체하지 않고 ZIP 추출 Release를 확인받았으며 설명만 수정해 원격 게시했다. 현재 추출본 개발 등록이 있을 수 있으므로 배포 설치 전에 언로드/등록 비활성화가 필요하다.
-- 0.2.3.0은 생미끼 실제 Item/명시적 실패/어획 없는 행의 빈 아이콘/메인 우측 바로가기를 포함한다. Native 추가 접근 없이 본인 로그·현재 시전·단계·시간을 대조한다. timer/v3, 한영555키. 같은 표본을 반복 요청하지 않는다.
-- 과거 UI의 대표 확인/미확인 구분은 STATUS와 각 validation을 따른다. 이번 원격 push는 로컬에 보존했던 낚시 기록/UI 변경 이력도 포함한다. 과거 각 버전을 따로 릴리스한 것은 아니다.
+## 이번 데이터 구현
 
-## 이번 UI 구조와 정책
+- `fishing.kr.v2.json` / `kr-regular-2026-10-17`: 기존903종 +353종 Teamcraft 정적 자료 +2종 부분 어획 사실 =1258종.
+- 빈 낚아채기80·입질4·예측 위치31종 보완, 중복 제외466종 변경. 알려진 조건/미끼/직감·메타데이터와 예측 공식은 보존했다.
+- 시간·날씨 확인1256종. 이크에바지 가위/요에콰 먹물머리는 금속 스피너·입질 강도·KR 위치만 확인하고 낚아채기/시간·날씨 완전성은Unknown 유지.
+- 직감 지속 시간9종은 채택한 원본에 필드가 없어 남겼다. 다른 공개 자료의 값은 아직 검증하지 않았으며 출현 시간 길이로 대체하지 않는다.
+- 물고기의 눈 지원 정보는 기존bool 유지/새355종null, UI 미표시. `patchVersion`은3.55b 접미사 보존, 기존 숫자patch 유지.
+- 원본/보완 source revision·파일 해시·개별 사실 URL/작성자/확인일·MIT 고지를 manifest/notices에 기록했다. 런타임 외부 조회 없음.
+- [재현 절차](../data/README.md): 기존 기본 원본→`.cache/fishing-all.json`→`--complete`→검토/제품 복사→`--classifications`. 완성된 제품을 보완 단계의baseline으로 넣지 않는다.
+- 보완 manifest는 `data/fishing-supplement-source.json`, 개발 입력은 `.cache/data-completion/`. 도구는 해시/빌드/KR참조/시간/날씨/생미끼 순환을 검사한다. 전체 다운로드 원문은 커밋하지 않는다.
+- 등급 재생성1258종 대조/실패0, 터주335(왕36) 양성 집합 유지. 기존 작살203건 동일/미확인115건. 지도 연결 불일치0. [실행 근거](validation/DATA-COMPLETION-2026-10-18.md).
 
-- 메인: 어종 목록/즐겨찾기 관리/설정. 목록/즐겨찾기의 클릭은 오른쪽 상세 패널을 갱신한다.
-- 간략: 메인 버튼 또는 `/duckbillfisher compact`로 열기. 현재 출현 종료순→예정 시작순/기본 30분 이내·1~180분 설정. 0.1.28.0은 메인 필터를 공유하고 독립 즐겨찾기 체크를 제거했다.
-- 독립 상세: 간략 창 클릭 시 하나를 재사용한다. 메인을 열지 않으며 세 창은 각각 닫을 수 있다.
-- 최신 사용자 합의: 타이머는 현재 묶음만/완전 종료 때 비움, 낚아채기 관찰에서 경과 정지. 낚시터 ‘어종 보기’는 전체↔수집 숨김, 마지막 위치 조회는 ‘최근 낚시터’ 명시. 메인 ‘낚시 기록’은 요약→같은 탭 상세/목록 복귀·묶음별/종료 전체 확인 삭제. 캐릭터별100묶음×최근2000회/schema2 묶음별 파일, 진행 중 보호/총 횟수 유지/schema1 원본 보존 가져오기다. 이전1000회 정책을 대체한다. 기존 일반 필터/수집/알림은 유지한다.
-- 0.1.28.0 사용자 결정: 간략과 메인은 일반 필터 전체 공유, 검색어/예정 분만 별도. CatalogFilter 공통 판정이며 알림 대상은 독립이다. 상시/먼바다/예측 미확인은 간략에서 제외한다.
-- 개발자 도구는 설정에서 켠다. 진단 표시만 제어하고 수집/예측/알림 서비스는 그대로 작동한다. 끌 때 진단용 두 필터를 해제한다.
-- 수집 상태는 메뉴 하나에서 수동 지정하고 수동일 때만 복귀 버튼 표시. 자동 접미사 없음/수동 접미사 유지. Unknown은 미수집이 아니다.
-- 현재 소스 schema v11: v1~v10 허용, 일반 필터/예정 분/즐겨찾기/수동/알림 설정 보존. preferences/v9에 프리셋 개수/오류 코드 추가. 간략은 SharedCatalog를 유지한다.
-- `FishDetailPanel` 공통 상세, `UiWidgets` 아이콘/배너, `CompactFishObserver` Framework 1초 필터/수명 관리. Draw에서 전체 검색/장기 예측/파일 읽기 없음.
-- 0.1.29.0은 목록 직접 핀/이름·수집 및 위치·시간 정렬/직감 배지, 상세 Patch 우측/작은 물고기의 눈/옆 조건/시간 한 줄을 적용했다. 새 언로드 확인 후 정규 빌드·한영 448키 통과. 다음은 [배치/상호작용 확인](validation/MVP-01-UI-ALIGNMENT.md)이다.
+## 일반 빌드
 
-- 0.1.31.0은 물고기의 눈 표시 제거/등급·별·수집 선택 한 줄/명시적 수동 지정/직감 배지 종횡비·배경 정리/글자 없는 지도 아이콘/낚시터 연결 누락 안내를 포함한다. 데이터/예측/수집/알림 정책은 그대로다. [변경과 다음 확인](validation/MVP-01-UI-REFINEMENT.md).
-- 0.1.30.0 OpenConfigUi 누락 경고 수정도 정규 0.1.31.0에 포함했다. MainWindow.OpenSettings를 로드/해제 시 구독/해제하고 실제 설정 탭으로 이동한다. [확인 순서](validation/CONFIG-UI-CALLBACK.md).
-- 0.1.32.0은 상세 조작 줄을 이름 바로 아래/아이콘 오른쪽으로 이동, 작은 예측 없음 표시/원인 툴팁, 테마 지도 아이콘, 간략 한 줄 도구 모음으로 수정했다. 별도/정규 빌드 경고·오류 0/한영 451키 검사 통과. 다음은 정규 DLL 재로드 후 사용자 대표 확인이다. [근거/확인 순서](validation/MVP-01-UI-HEADER-POLISH.md).
-- 이후 실제 화면에 사용자 ‘좋다’로 시각적 대표 확인을 받았다. [추가 UI 제안](UI-UX-SCREENSHOT-REVIEW.md) 1~7번도 승인 후 정규 0.1.34.0에 반영했다. [구현/다음 확인](validation/MVP-01-UI-SCREENSHOT-POLISH.md).
-- 0.1.33.0 안내의 ‘어류도감 열기’도 정규 0.1.34.0에 포함했다. Framework에서 한 번 처리하며 정확한 KR 가드/캐릭터/2초 만료/주소 확인 뒤 낚시 탭을 연다. 준비 완료는 기존 관찰기가 판단한다. [근거/확인 순서](validation/MVP-01-GUIDE-OPEN.md).
-- 0.1.35.0 별도/정규 빌드 경고·오류 0/한영 456키 통과. 좁은 목록도 조건 4줄/… 툴팁, 전승록 상세 한정, 터주 이상 신규/복원 기본값, 아이콘 세로 중앙, 한 줄 전환 28→23배와 실측 배분, 7일 예측 없음 목록 한 줄을 반영했다. 기존 저장 등급/스키마/수집/알림/예측 계산은 유지한다. 다음은 정규 DLL 재로드 후 사용자 대표 확인이다. [기록/확인 순서](validation/MVP-01-RESPONSIVE-ROWS.md).
-- 0.1.36.0 별도/정규 빌드·한영 468키 통과. 전체 보기(검색·일반 필터 해제/정렬 유지), 최대 20개 이름 프리셋/확인 삭제, 예약 상태 문구 제거, 낚시터 연결 기술 문구 제거를 포함한다. 31종은 원본 조사 후에도 미확인을 유지한다. 새 언로드 확인 후 정규 반영했으며 다음은 사용자 대표 확인이다. [근거/확인](validation/MVP-01-FILTER-PRESETS.md).
-
-## 일반 구현 빌드
-
-테스트는 명시 요청 때만 추가/실행한다. `scripts/build.ps1`은 테스트를 실행하므로 사용하지 않는다.
+테스트는 명시 요청 때만 추가/실행한다. 테스트를 실행하는 `scripts/build.ps1`은 사용하지 않는다.
 
 ```powershell
 dotnet build src/DuckbillFisher.Plugin/DuckbillFisher.Plugin.csproj --no-restore -c Debug -p:DalamudLibPath=C:/Users/hyogu/AppData/Roaming/XIVLauncherKR/addon/Hooks/dev/
 pwsh -NoLogo -NoProfile -File scripts/check-localization.ps1
 ```
 
-- 별도 출력은 `-p:OutputPath=C:/Users/hyogu/Downloads/DuckbillFisher/.cache/ui-refine-build/` 추가.
-- PowerShell 5.1 파일 읽기는 `-Encoding UTF8`. 이번 환경에서 pwsh/정규 빌드/git 쓰기 모두 실행됐다.
-- 실제 주 DLL·Core·ko 리소스 DLL·manifest 확인 후 파일을 명시해 스테이징/커밋한다. 빌드 결과/캐시/사용자 파일 제외.
+- 별도 출력은 `-p:OutputPath=C:/Users/hyogu/Downloads/DuckbillFisher/.cache/data-completion-build/` 추가. 같은 프로젝트의 참조별 빌드는 순서대로 수행한다.
+- PowerShell 파일 읽기는 `-Encoding UTF8`. JSON은 파싱 후 필요한 필드만 출력하며 대용량 원문/전체 로그를 대화에 붙이지 않는다.
+- 명시한 파일만 스테이징하고 커밋한다. 캐시/산출물/SDK/사용자 파일은 제외한다. 새 배포는 Release 최저 참조/패키지/인게임 확인을 별도로 진행한다.
 
-## 유지할 경계와 보류
+## 유지할 정책과 확인 범위
 
-- 자동 수집은 True/검증된 등록 이벤트, 자동 미수집은 전체 도감 1517종 대조 뒤만 사용한다. 수동 우선, 캐릭터 세션 격리 유지. [근거](validation/MVP-04-GUIDE-SNAPSHOT.md).
-- 새 등록 자동 즐겨찾기 해제 기본 켜짐. 도감 조회/수동 지정/반복 어획은 해제 트리거가 아니다. 로컬 채팅/SE/아이템·지도 링크, 예약/중복 방지 유지.
-- Teamcraft/바다구렁이 차이는 사용자 요청으로 미해결 후속 조사다. 재조사/로그 요청/예측 공식 임의 수정 금지. Toast는 제거 상태 유지.
-- 다른 캐릭터 격리는 사용 가능한 캐릭터가 없어 실기 보류. 입질 초 수 통계/작살 UI/외부 좌표 차이 확인은 후속이다.
-- 정적 수치/검증된 과거 범위는 STATUS를 따른다. UI 언어와 게임 데이터 언어는 다르며 글로벌 빌드 지원으로 표현하지 않는다.
-- 데이터 재생성은 data/README.md와 고정 원본 해시를 따른다. SDK/네이티브 오프셋/데이터 갱신은 별도 작업이다.
+- Core는 게임 독립, 네이티브는 Plugin 경계/정확한 KR가드/Framework 수명 유지. 읽기 실패를 미수집으로 바꾸지 않는다.
+- 수집은 수동 우선, 도감1517종 전체 대조 후 자동 미수집 확정. 재접속 초기화/재조회는 확인, 다른 캐릭터는 사용할 수 없어 실기 보류.
+- 메인/간이 일반 필터 공유·검색/예정 분 별도, 프리셋20개와 저장 정책 유지. 새 등록 자동 즐겨찾기 해제는 기본 켜짐/도감 조회·수동 지정은 트리거 아님. 알림 로컬22채널/SE, Toast 제거.
+- 타이머/기록은 낚아채기에서 경과 정지, 완전 접기 후 현재 기록 비움. 캐릭터별100묶음×최근2000회/schema2, 저장 재시도/순번/요청 세대 보호 유지.
+- 0.2.7.0 저장/복원/최신순/삭제와0.2.8.0 첫 칸 보관 생미끼 Item 기록은 사용자 대표 확인 완료. [저장](validation/MVP-02-HISTORY-STABILITY.md), [생미끼](validation/MVP-02-SWIMBAIT.md). 모든 장애/칸/조합의 확인으로 확대하지 않는다.
+- 복수 어획·수량은 사용자 요청으로 후속. Teamcraft/바다구렁이 불일치와 입질 초 수 통계는 보류하며 재조사/로그 요청/공식 변경하지 않는다.
+- 공개0.2.6.0 태그6fc2fc1/Release415773597/설치 JSON7179f43. [정확한 런타임/게시](validation/NATIVE-RUNTIME-DAL4KR.md), [설치 안내](DISTRIBUTION.md).
+- 과거 버전별 실제 확인은 [정리 전 STATUS](history/STATUS-before-data-completion-2026-10-18.md), [정리 전 HANDOFF](history/HANDOFF-before-data-completion-2026-10-18.md)와 각 validation에 보존했다.

@@ -32,3 +32,47 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
+
+FFXIV Teamcraft
+https://github.com/ffxiv-teamcraft/ffxiv-teamcraft
+Revision: 8925c7b73a99e8ba4fb2aa10719a3b3f48109ea7
+
+Derived material: libs/data/src/lib/json/fishing-sources.json,
+fish-parameter.json, item-patch.json, patch-names.json and items.json.
+Changes: added 353 KR-matched ordinary fish rules, filled missing hookset/tug
+and compatible locations in the existing tracker rules, validated bait chains
+against KR items and fishing spots, preserved unresolved fields as unknown.
+No hosted statistics API or bite-time data is used. No external implementation
+code, icons, descriptions, or complete localization dictionaries are bundled.
+
+MIT License
+
+Copyright (c) 2017 Flavien Normand
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+
+Reviewed public catch observations (two partial records)
+Observer: Slay Tanic (Brynhildr), checked 2026-10-17
+https://na.finalfantasyxiv.com/lodestone/playguide/db/item/12a7666ee04/
+https://eu.finalfantasyxiv.com/lodestone/playguide/db/item/4712953a751/
+Only individual bait/tug facts are recorded for Items 52014 and 52015,
+with their KR client location references. No comment text, images, bite seconds,
+or third-party implementation is copied. These observations do not establish
+complete time/weather conditions or a hookset. They are not represented as
+MIT-licensed Teamcraft records.

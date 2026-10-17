@@ -19,7 +19,7 @@ internal sealed class FishDetailPanel(FishPreferences preferences, ITextureProvi
             return;
         }
         ImGui.PushID((int)fish.FishParameterId);
-        var patch = fish.Details is { } patchDetails ? UiText.Get(T.PatchLabel, patchDetails.Rule.Patch) : "";
+        var patch = fish.Details is { } patchDetails ? PatchText(patchDetails.Rule) : "";
         if (ImGui.BeginTable("DetailTitle", 2, ImGuiTableFlags.SizingFixedFit))
         {
             ImGui.TableSetupColumn("Icon", ImGuiTableColumnFlags.WidthFixed, ImGui.GetFontSize() * 3);
@@ -144,9 +144,18 @@ internal sealed class FishDetailPanel(FishPreferences preferences, ITextureProvi
         ImGui.TextWrapped(UiText.Get(T.OceanScope));
     }
 
+    private static string PatchText(FishingRule rule)
+    {
+        var version = rule.PatchVersion.Length > 0 ? rule.PatchVersion : rule.Patch > 0
+            ? rule.Patch.ToString("0.0#", System.Globalization.CultureInfo.InvariantCulture) : "";
+        return version.Length > 0 ? UiText.Get(T.PatchLabel, version) : "";
+    }
+
     public static void DrawSources()
     {
         ImGui.TextWrapped(UiText.Get(T.DataSourceInfo, FishingData.Dataset.DataVersion, FishingData.Dataset.SourceRevision[..8]));
+        foreach (var source in FishingData.Dataset.SupplementalSources)
+            ImGui.TextWrapped(UiText.Get(T.DataSupplementSourceInfo, source.Name, source.Revision[..Math.Min(8, source.Revision.Length)]));
         ImGui.TextWrapped(UiText.Get(T.SourceCoverageInfo, FishingData.Dataset.Fish.Length, FishingData.Dataset.Spearfishing.Length, FishingData.SpearUnknown));
         if (ImGui.Button(UiText.Label(T.CopyDataLicense, "CopyDataLicense"))) ImGui.SetClipboardText(FishingData.Notices);
     }

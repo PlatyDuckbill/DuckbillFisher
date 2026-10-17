@@ -64,7 +64,7 @@ internal static class FishClassificationImport
                 marker = grade == "Legendary" ? "터주왕" : "터주", note.SpecialConditions });
         }
         Require(entries.Count > 0 && legendary > 0 && compared == rules.Count, "Incomplete classification audit");
-        var output = new { schemaVersion = 1, gameBuild = build, dataVersion = "kr-grades-2026-10-16",
+        var output = new { schemaVersion = 1, gameBuild = build, dataVersion = conditions.RootElement.GetProperty("dataVersion").GetString() + "-grades",
             source = "Installed KR Item.Description category labels, corroborated by FishingNoteInfo and pinned condition data",
             conditionDataSha256 = Convert.ToHexString(SHA256.HashData(Encoding.UTF8.GetBytes(
                 Encoding.UTF8.GetString(inputBytes).Replace("\r\n", "\n")))),

@@ -1,0 +1,35 @@
+{
+  "repository": "https://github.com/ffxiv-teamcraft/ffxiv-teamcraft",
+  "revision": "8925c7b73a99e8ba4fb2aa10719a3b3f48109ea7",
+  "license": "MIT, Copyright (c) 2017 Flavien Normand",
+  "gameBuild": "2026.10.06.0000.0000",
+  "dataVersion": "kr-regular-2026-10-17",
+  "baselineSha256": "27811E206378FC768B086D44BCA21A25CB2D94FD31E24EC1D0303C94D04CAA1C",
+  "files": {
+    "fishing-sources.json": "701438120D5DB489985972A833777F7B31DCF7CA2E76A756136DD1677B957B74",
+    "fish-parameter.json": "60FBEF30F29948A68C24401796B697CB38577AE0794E9C80260EDE72C737E454",
+    "item-patch.json": "EEE628788F48EEDD9857239E9FD9605356DA3CDDAB96D6AFE9880D196F89D9DA",
+    "patch-names.json": "87FEAEF8B6E28B302402E8ACFFD748ADE9FDABBFD49E763AE8FEC0D64151F5D6",
+    "items.json": "369768AC85FC2982543CB02B6ABD56B5DE4FB580D6E709F721BCAECF7C412ECB"
+  },
+  "reviewedFacts": [
+    {
+      "itemId": 52014,
+      "baitItemId": 28634,
+      "tug": "light",
+      "url": "https://na.finalfantasyxiv.com/lodestone/playguide/db/item/12a7666ee04/",
+      "observer": "Slay Tanic (Brynhildr)",
+      "checkedOn": "2026-10-17",
+      "scope": "Individual published catch observation: bait and tug only. No comment text or bite seconds copied. Time/weather completeness and hookset remain unknown."
+    },
+    {
+      "itemId": 52015,
+      "baitItemId": 28634,
+      "tug": "medium",
+      "url": "https://eu.finalfantasyxiv.com/lodestone/playguide/db/item/4712953a751/",
+      "observer": "Slay Tanic (Brynhildr)",
+      "checkedOn": "2026-10-17",
+      "scope": "Individual published catch observation: bait and tug only. No comment text or bite seconds copied. Time/weather completeness and hookset remain unknown."
+    }
+  ]
+}

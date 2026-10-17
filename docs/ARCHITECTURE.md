@@ -108,6 +108,8 @@ MVP-02/F07·F13의 [화면/보관 합의와 KR 조사](CASTING-TIMER-HISTORY.md)
 
 검수는 중복/미존재 ID, 생미끼 연쇄 순환, 잘못된 시간 구간, 잘못된 min/max, 누락 출처를 검사한다. 기존 커뮤니티 자료는 라이선스와 재배포 범위를 확인한 뒤 개발 시점에 정제하여 내장한다.
 
+0.2.9.0의 조건 schema2는 `supplementalSources`와 부분 확인의 `reviewedObservations`로 추가 근거를 구분한다. 기존 알려진 필드는 보존하고 빈 필드/누락 어종만 고정 파일·KR 참조 대조로 보완한다. `fishEyesSupported`의 null은 미확인, `patchVersion`은 3.55b 같은 접미사를 보존하는 표시 값이다. 추가 자료에서 조건 전체를 확인하지 못하면 `conditionsKnown=false`로 예측/알림 대상에서 제외하며 수집 상태와 혼동하지 않는다. 재현과 필드별 잔여 목록은 [데이터 문서](../data/README.md)에 있다.
+
 ## 의미 있는 테스트
 
 - ET 자정·날씨 경계 직전/정각/직후, 현재+직전 날씨 교집합, 시간대 변경과 독립성.

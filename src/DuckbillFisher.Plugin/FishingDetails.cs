@@ -36,7 +36,9 @@ internal sealed class FishingDataset
     public string SourceRevision { get; init; } = "";
     public FishingRule[] Fish { get; init; } = [];
     public SpearfishingRule[] Spearfishing { get; init; } = [];
+    public FishingSupplementSource[] SupplementalSources { get; init; } = [];
 }
+internal sealed record FishingSupplementSource(string Name, string Repository, string Revision);
 
 internal static class FishingData
 {

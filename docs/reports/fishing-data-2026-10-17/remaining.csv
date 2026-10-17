@@ -1,0 +1,12 @@
+﻿FishParameter,Item,Name,Fields,Reasons
+1276,41301,"성 파스릭의 석두","직감 지속 시간","SourcesOmitIntuitionDuration"
+1454,46195,"대왕큰뱀머리고기","직감 지속 시간","SourcesOmitIntuitionDuration"
+1459,49797,"정강이 메기","직감 지속 시간","SourcesOmitIntuitionDuration"
+1463,49801,"희망잉어","직감 지속 시간","SourcesOmitIntuitionDuration"
+1470,52005,"심혈 망령","직감 지속 시간","SourcesOmitIntuitionDuration"
+1514,52014,"이크에바지 가위","낚아채기;시간·날씨 조건 완전성","SourceHooksetNotEstablished;ReviewedCatchOnly_NoCompleteConditionsOrHookset"
+1515,52015,"요에콰 먹물머리","낚아채기;시간·날씨 조건 완전성","SourceHooksetNotEstablished;ReviewedCatchOnly_NoCompleteConditionsOrHookset"
+1518,52008,"제파 보폴","직감 지속 시간","SourcesOmitIntuitionDuration"
+1519,52009,"채광 하트가오리","직감 지속 시간","SourcesOmitIntuitionDuration"
+1521,52297,"번개구체","직감 지속 시간","SourcesOmitIntuitionDuration"
+1522,52011,"세 날 범고래","직감 지속 시간","SourcesOmitIntuitionDuration"

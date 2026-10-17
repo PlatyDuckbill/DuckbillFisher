@@ -453,7 +453,8 @@
   <data name="WindowOtherDay" xml:space="preserve"><value>{0:MM/dd HH:mm}</value></data>
   <data name="WindowSameDayRange" xml:space="preserve"><value>{0} – {1:HH:mm}</value></data>
   <data name="WindowCrossDayRange" xml:space="preserve"><value>{0} → {1}</value></data>
-  <data name="PatchLabel" xml:space="preserve"><value>Patch {0:0.0#}</value></data>
+  <data name="PatchLabel" xml:space="preserve"><value>Patch {0}</value></data>
+  <data name="DataSupplementSourceInfo" xml:space="preserve"><value>추가 자료: {0} · 원본 {1}.</value></data>
   <data name="StepBite" xml:space="preserve"><value>입질 {0}</value></data>
   <data name="StepConditionsUnknown" xml:space="preserve"><value>낚아채기 정보 미확인</value></data>
   <data name="WindowInline" xml:space="preserve"><value>{0}  |  {1}</value></data>

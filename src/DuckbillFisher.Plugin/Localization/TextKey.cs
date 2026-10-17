@@ -560,4 +560,5 @@ internal enum TextKey
     NativeRuntimeUnsupported,
     NativeFeaturesBlocked,
     HistoryWriteRetry,
+    DataSupplementSourceInfo,
 }

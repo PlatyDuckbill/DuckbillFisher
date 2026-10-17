@@ -2,7 +2,7 @@
   <PropertyGroup>
     <AssemblyName>DuckbillFisher</AssemblyName>
     <RootNamespace>DuckbillFisher.Plugin</RootNamespace>
-    <Version>0.2.8.0</Version>
+    <Version>0.2.9.0</Version>
     <NeutralLanguage>en</NeutralLanguage>
     <Author>PlatyDuckbill</Author>
     <Name>DuckbillFisher</Name>

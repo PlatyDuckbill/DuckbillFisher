@@ -19,12 +19,13 @@ public sealed record FishingRule
     public FishRequirement[] Predators { get; init; } = [];
     public double? IntuitionSeconds { get; init; }
     public bool FolkloreRequired { get; init; }
-    public bool FishEyesSupported { get; init; }
+    public bool? FishEyesSupported { get; init; }
     public bool ConditionsKnown { get; init; } = true;
     public bool SnaggingRequired { get; init; }
     public string Lure { get; init; } = "";
     public bool BigFish { get; init; }
     public double Patch { get; init; }
+    public string PatchVersion { get; init; } = "";
 }
 
 /// <summary>Source spearfishing facts kept separate from rod fishing and character log IDs.</summary>

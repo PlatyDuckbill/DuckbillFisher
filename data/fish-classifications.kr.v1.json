@@ -1,9 +1,9 @@
 {
   "schemaVersion": 1,
   "gameBuild": "2026.10.06.0000.0000",
-  "dataVersion": "kr-grades-2026-10-16",
+  "dataVersion": "kr-regular-2026-10-17-grades",
   "source": "Installed KR Item.Description category labels, corroborated by FishingNoteInfo and pinned condition data",
-  "conditionDataSha256": "27811E206378FC768B086D44BCA21A25CB2D94FD31E24EC1D0303C94D04CAA1C",
+  "conditionDataSha256": "172BF562969B0F8D17199F0DA12085291E6D0C34DB38910EB7A235A10F8307A0",
   "descriptionSha256": "1E5F7F918B8F95AEDB2D8B83BE16AB53083CAB71E746C8BA54EC76071CA1B539",
   "entries": [
     {

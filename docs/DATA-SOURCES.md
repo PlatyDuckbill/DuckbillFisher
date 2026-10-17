@@ -1,6 +1,6 @@
 # 낚시 상세 데이터의 출처와 조회 계획
 
-갱신: 2026-10-16. 같은 고정 Fish Tracker의 초기 10→2.x 140종 확인을 거쳐 0.1.12.0에서 전체 원본을 일반 903종/작살 별도 203건으로 도입했다(인게임 연결 수/사용자 대표 화면 확인 통과). 작살 미확인 115건을 원본 YAML에서 복구하며 모든 원본 조건이 확정됐다고 해석하지 않는다. Teamcraft 입질 통계와 런타임 외부 HTTP는 도입하지 않는다. 가공/재현은 [데이터 문서](../data/README.md), 이번 범위는 [전체 도입 기록](validation/MVP-01-ALL-SOURCE-DATA.md)을 따른다.
+갱신: 2026-10-18. 0.2.9.0은 고정 Fish Tracker 903종에 Teamcraft 정적 자료 353종과 개별 어획 사실 2종을 보완해 KR 일반 도감 1,258종 모두 상세에 연결했다. 시간·날씨 확인 1,256종/부분 확인 2종이며 직감 지속 시간 등 핵심 잔여는 11종이다. 작살 203건/미확인 115건은 보존했다. 빌드·자료 대조와 인게임 확인 대기를 구분한다. [재현](../data/README.md), [이번 근거](validation/DATA-COMPLETION-2026-10-18.md), [잔여 전체 목록](reports/fishing-data-2026-10-17/remaining.md). 입질 통계 API와 런타임 HTTP는 도입하지 않는다.
 
 ## 제공할 정보와 단계
 
@@ -51,7 +51,16 @@
 4. 초기 10종 이후 2.x 140종의 한섭 ID·낚시터·미끼·조건을 변환 도구로 대조했다. 다른 확장팩도 미지원 조건·누락 상태를 먼저 분류하고 확대한다.
 5. 검수한 스냅샷을 내장/캐시하고 시간/날씨는 Core에서 계산한다. 게임 입력 자동화와 원격 백엔드는 추가하지 않는다.
 
-최초 조사는 저장소 원문과 공식 문서의 읽기 전용 확인이었다. 이후 0.1.5.0에서 10종의 부분집합과 C# 날씨 계산을 도입하고 원본/변경/라이선스를 루트 THIRD-PARTY-NOTICES.txt에 기록해 DLL에 내장했다. 전체 다운로드 원문은 추적 제외 `.cache/fishing-sources/`에만 보관한다. Teamcraft 데이터·외부 이미지는 도입하지 않았다.
+최초 조사는 저장소 원문과 공식 문서의 읽기 전용 확인이었다. 이후 0.1.5.0에서 10종의 부분집합과 C# 날씨 계산을 도입하고 원본/변경/라이선스를 루트 THIRD-PARTY-NOTICES.txt에 기록해 DLL에 내장했다. 전체 다운로드 원문은 추적 제외 `.cache/`에만 보관한다. 0.2.9.0은 아래 정적 자료만 추가했으며 외부 이미지·호스팅 통계 API는 사용하지 않는다.
+
+## 0.2.9.0 일반 낚시 보완
+
+- 같은 Teamcraft 고정 revision의 [정적 JSON](https://github.com/ffxiv-teamcraft/ffxiv-teamcraft/tree/8925c7b73a99e8ba4fb2aa10719a3b3f48109ea7/libs/data/src/lib/json) 5개를 입력으로 사용했다. `fishing-sources.json`은 장소·미끼·낚아채기·입질·시간/날씨·선행 어획, `fish-parameter.json`은 ID 대조, `item-patch.json`/`patch-names.json`은 접미사를 포함한 도입 패치, `items.json`은 감사용 영문 이름만 제공한다. 전체 이름 사전은 배포하지 않는다.
+- [Hookset](https://github.com/ffxiv-teamcraft/ffxiv-teamcraft/blob/8925c7b73a99e8ba4fb2aa10719a3b3f48109ea7/libs/types/src/lib/data/hookset.ts)의 0/1/2=NORMAL/POWERFUL/PRECISION, [Tug](https://github.com/ffxiv-teamcraft/ffxiv-teamcraft/blob/8925c7b73a99e8ba4fb2aa10719a3b3f48109ea7/libs/types/src/lib/data/tug.ts)의 0/1/2=MEDIUM/BIG/LIGHT를 별도로 변환한다. spawn/duration은 ET 시간 단위이며 생미끼 경로는 같은 낚시터에서만 연결한다. 조건 누락과 제한 없음의 의미는 고정 소스 모델/추출기를 확인하고 KR 양성 제한 플래그와 함께 대조했다.
+- 추가 353종과 기존 낚아채기 80종·입질 4종·위치 31종을 보완했다. 기존 비어 있지 않은 조건은 덮어쓰지 않았다. 위치 보완은 기존 시간/날씨/선행 어획 조건과 정확히 일치하는 후보만 채택했다.
+- 정적 원본에 없는 이크에바지 가위(Item52014)와 요에콰 먹물머리(Item52015)는 공식 Lodestone의 [첫 어종](https://na.finalfantasyxiv.com/lodestone/playguide/db/item/12a7666ee04/), [둘째 어종](https://eu.finalfantasyxiv.com/lodestone/playguide/db/item/4712953a751/)에 게시된 Slay Tanic의 개별 어획 사실에서 금속 스피너/입질 강도만 기록했다. KR 위치는 클라이언트에서 대조했다. 댓글 문장·이미지·입질 초 수를 복제하지 않으며 그 사실만으로 시간/날씨 완전성이나 낚아채기를 확정하지 않는다. manifest의 URL/확인일/관찰자/범위와 별도 고지를 유지한다.
+- 채택한 두 정적 원본에 없는 직감 지속 시간 9종과 위 부분 확인 2종은 미확인이다. 다른 공개 자료가 전혀 없다는 뜻은 아니며 검증하지 않은 값을 추측해 채우지 않았다. 추가 355종의 물고기의 눈 지원 여부는 null로 구분하고 현재 UI 미표시 정책을 유지한다.
+- 기존 작살 데이터와 예측 계산·수집·필터·알림 정책은 변경하지 않았다. 먼바다 259종과 작살 미확인 115건은 자료의 부재와 전용 표시/연동 후속을 구분해 이름/ID/이유 CSV를 제공한다.
 
 ## 0.1.15.0 등급 분류 근거
 
