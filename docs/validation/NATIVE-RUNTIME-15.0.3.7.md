@@ -61,4 +61,5 @@
 - 구현 `d5c5899`와 대표 확인 기록 `638b77d`를 기존 origin/main에 정상 push하고 소스 `638b77d6238213b1129a74468a44024a6b34c47a`에 v0.2.5.0 태그를 생성·push했다. 기존0.2.4.0은 덮어쓰지 않았다.
 - [GitHub Release0.2.5.0](https://github.com/PlatyDuckbill/DuckbillFisher/releases/tag/v0.2.5.0), ID415761624, 공개 시각2026-10-17T11:19:46Z. 확인한 ZIP322,416바이트/체크섬을 draft에 업로드하고 size/digest 대조 후 공개했다.
 - 로그인 없는 정식 URL의 ZIP/체크섬 HTTP200, ZIP SHA2565105b7b50292cb018032a2b3f6984b1672e94ad1093c05440bd401bd52ee0b4d 동일, 태그 아이콘 HTTP200/원본 해시 동일을 확인했다.
-- 이 확인 뒤에만 기존 repo/pluginmaster.json을0.2.5.0 설치/업데이트 URL로 갱신한다. 공개 JSON 최종 접근 확인과 실제 친구 PC의 업데이트·세 기능 확인은 구분한다. 새로운 빌드·게임 파일 교체·테스트 실행은 하지 않았다.
+- 이 확인 뒤에만 기존 repo/pluginmaster.json을0.2.5.0 설치/업데이트 URL로 갱신했다. 공개 JSON 최종 접근 확인과 실제 친구 PC의 업데이트·세 기능 확인은 구분한다. 새로운 빌드·게임 파일 교체·테스트 실행은 하지 않았다.
+- 저장소 변경은 `b2d2cab`으로 정상 push했다. 첫 공유 URL 검사에서는 GitHub raw의 캐시가0.2.4.0을 반환해 최종 버전 검사가 실패했다. 원본 커밋 URL/refs/heads/main/Contents API는0.2.5.0과 일치했고 이후11:24:11Z에 같은 공유 URL도0.2.5.0/API15/HTTP200을 확인했다. ZIP manifest/설명/아이콘 일치와 설치/업데이트/아이콘200, 게시 CI 실행0건도 확인했다. 결과는 `.cache/release-remote-check/0.2.5.0/publication.json`에 보관했다. 주소 변경/기존 릴리스 덮어쓰기 없음.
