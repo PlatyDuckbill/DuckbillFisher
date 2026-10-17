@@ -464,4 +464,5 @@ In fish log only: {5}</value></data>
   <data name="GuideOpenUnavailable" xml:space="preserve"><value>The guide cannot be opened directly in this environment. Open the Fish Guide from the game menu.</value></data>
   <data name="GuideOpenDataWaiting" xml:space="preserve"><value>The fish list is loading. Please try again shortly.</value></data>
   <data name="DetailWeatherTransition" xml:space="preserve"><value>Weather</value></data>
+  <data name="RowForecastNotFound" xml:space="preserve"><value>No forecast in 7d</value></data>
 </root>

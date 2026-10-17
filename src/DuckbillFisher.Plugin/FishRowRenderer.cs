@@ -18,9 +18,9 @@ internal sealed class FishRowRenderer(ITextureProvider textures, FishingMapServi
     private readonly Dictionary<uint, (FishGuideRow Row, FishRowSummary Summary)> summaries = [];
     private readonly Dictionary<uint, (RowToken[] Bait, RowToken[] Conditions)> tokens = [];
     private CultureInfo? culture;
-    private static bool IsWide(float width) => width >= ImGui.GetFontSize() * 28;
-    public static float GetHeight(float width, bool compact = false) =>
-        ImGui.GetTextLineHeightWithSpacing() * (IsWide(width) || compact ? 3 : 4) + 8;
+    private static bool IsWide(float width) => width >= ImGui.GetFontSize() * 23;
+    private static int LineCount(float width) => IsWide(width) ? 3 : 4;
+    public static float GetHeight(float width) => ImGui.GetTextLineHeightWithSpacing() * LineCount(width) + 8;
 
     public bool Draw(FishGuideRow fish, float height, bool selected, string state, string place,
         FishingWindow? forecast, DateTimeOffset now, bool usesOtherRegion = false, bool favorite = false, bool compact = false,
@@ -52,17 +52,19 @@ internal sealed class FishRowRenderer(ITextureProvider textures, FishingMapServi
         }
         var next = ImGui.GetCursorPos();
         var iconSize = line * (wide || compact ? 2 : 3);
-        ImGui.SetCursorPos(start + new Vector2(4, 4));
+        var informationHeight = line * LineCount(width) - ImGui.GetStyle().ItemSpacing.Y;
+        var iconY = 4 + Math.Max(0, (informationHeight - iconSize) / 2);
+        ImGui.SetCursorPos(start + new Vector2(4, iconY));
         UiWidgets.GameIcon(textures, fish.IconId, iconSize, fish.DisplayName);
         if (fish.Details is { Predators.Length: > 0 } intuition)
         {
             var badge = MathF.Round(ImGui.GetTextLineHeightWithSpacing() * 1.15f);
-            ImGui.SetCursorPos(start + new Vector2(4 + iconSize - badge, 4));
+            ImGui.SetCursorPos(start + new Vector2(4 + iconSize - badge, iconY));
             UiWidgets.GameIcon(textures, intuition.Intuition?.IconId ?? 0, badge, UiText.Get(T.IntuitionRequired));
         }
         if (favorite)
         {
-            ImGui.SetCursorPos(start + new Vector2(4, iconSize + 7));
+            ImGui.SetCursorPos(start + new Vector2(6, iconY + iconSize - ImGui.GetTextLineHeight()));
             ImGui.PushStyleColor(ImGuiCol.Text, new Vector4(1, 0.8f, 0.32f, 1));
             UiWidgets.Icon(FontAwesomeIcon.Star);
             ImGui.PopStyleColor();
@@ -82,7 +84,7 @@ internal sealed class FishRowRenderer(ITextureProvider textures, FishingMapServi
 
         // Location is clipped first; the timer keeps its own width on the same line.
         var time = fish.IsOceanFishing ? UiText.Get(T.RowOceanWindow)
-            : forecast is not null ? CompactWindow(forecast, now) : UiText.Get(T.ForecastUnknown);
+            : forecast is not null ? CompactWindow(forecast, now) : UiText.Get(T.ForecastUnavailable);
         var timerWidth = Math.Min(ImGui.CalcTextSize(time).X, textWidth * 0.53f);
         var pinSize = MathF.Round(ImGui.GetTextLineHeightWithSpacing() - 1);
         var pinWidth = UiWidgets.MapPinWidth(pinSize);
@@ -108,16 +110,13 @@ internal sealed class FishRowRenderer(ITextureProvider textures, FishingMapServi
             tokens[fish.FishParameterId] = BuildTokens(fish);
         }
         var icons = tokens[fish.FishParameterId];
-        var baitWidth = wide ? Math.Min(TokenWidth(icons.Bait), textWidth * 0.55f) : textWidth;
+        var baitWidth = wide ? BaitWidth(icons.Bait, icons.Conditions, cached.Summary, textWidth) : textWidth;
         ImGui.SetCursorPos(start + new Vector2(textX, 4 + line * 2));
         DrawTokens(icons.Bait, baitWidth, cached.Summary.Bait);
-        if (!compact || wide)
-        {
-            ImGui.SetCursorPos(start + new Vector2(textX + (wide ? baitWidth + 6 : 0), 4 + line * (wide ? 2 : 3)));
-            DrawTokens(icons.Conditions, wide ? Math.Max(1, textWidth - baitWidth - 6) : textWidth,
-                usesOtherRegion ? UiText.Get(T.RegionForecastElsewhere, cached.Summary.Conditions) : cached.Summary.Conditions,
-                forceMore: usesOtherRegion);
-        }
+        ImGui.SetCursorPos(start + new Vector2(textX + (wide ? baitWidth + 6 : 0), 4 + line * (wide ? 2 : 3)));
+        DrawTokens(icons.Conditions, wide ? Math.Max(1, textWidth - baitWidth - 6) : textWidth,
+            usesOtherRegion ? UiText.Get(T.RegionForecastElsewhere, cached.Summary.Conditions) : cached.Summary.Conditions,
+            forceMore: usesOtherRegion);
         ImGui.SetCursorPos(next);
         ImGui.PopID();
         // A map click is its own action and must not also open/select the detail view.
@@ -141,6 +140,16 @@ internal sealed class FishRowRenderer(ITextureProvider textures, FishingMapServi
             }
             if (options.Length > 1) bait.Add(new(0, ")", UiText.Get(T.ConditionAny)));
         }
+        if (details.Hookset is { } hook)
+            bait.Add(new(hook.IconId, "", UiText.Get(T.HooksetLabel, hook.Name)));
+        else
+        {
+            var hookName = UiText.Get(details.Rule.Hookset switch
+                { "Precision" => T.HooksetPrecision, "Powerful" => T.HooksetPowerful, _ => T.ConditionUnknown });
+            bait.Add(new(0, hookName, UiText.Get(T.HooksetLabel, hookName)));
+        }
+        var tug = details.Rule.Tug switch { "light" => "!", "medium" => "!!", "heavy" => "!!!", _ => null };
+        if (tug is not null) bait.Add(new(0, tug, UiText.Get(T.StepBite, tug)));
         var conditions = new List<RowToken>();
         if (!details.Rule.ConditionsKnown)
             conditions.Add(new(0, UiText.Get(T.ConditionUnknown), details.ConditionWarning.Display));
@@ -155,12 +164,8 @@ internal sealed class FishRowRenderer(ITextureProvider textures, FishingMapServi
             if (details.PreviousWeather.Length > 0 && details.Weather.Length == 0)
                 conditions.Add(new(0, UiText.Get(T.NoWeatherRestriction), UiText.Get(T.NoWeatherRestriction)));
         }
-        if (details.Hookset is { } hook)
-            conditions.Add(new(hook.IconId, "", UiText.Get(T.HooksetLabel, hook.Name)));
         if (details.Rule.ConditionsKnown && (details.Rule.StartHour != 0 || details.Rule.EndHour != 24))
             conditions.Add(new(0, UiText.Get(T.RowEtRange, EtClock(details.Rule.StartHour), EtClock(details.Rule.EndHour)), UiText.Get(T.DetailTime)));
-        if (details.Rule.FolkloreRequired)
-            conditions.Add(new(details.Folklore?.IconId ?? 0, details.Folklore is null ? UiText.Get(T.RowFolklore) : "", UiText.Get(T.RowFolklore)));
         if (details.Rule.SnaggingRequired)
             conditions.Add(new(details.Snagging?.IconId ?? 0, details.Snagging is null ? UiText.Get(T.SnaggingRequired) : "",
                 UiText.Get(T.RequiredSkill, details.Snagging?.Name ?? UiText.Get(T.SnaggingRequired))));
@@ -180,30 +185,43 @@ internal sealed class FishRowRenderer(ITextureProvider textures, FishingMapServi
     }
 
     private static float TokenWidth(RowToken[] content) => content.Sum(token =>
-        (token.Text.Length == 0 ? ImGui.GetTextLineHeight() : ImGui.CalcTextSize(token.Text).X) + 3);
+        token.Text.Length == 0 ? ImGui.GetTextLineHeight() : ImGui.CalcTextSize(token.Text).X) + Math.Max(0, content.Length - 1) * 3;
+
+    private static float BaitWidth(RowToken[] bait, RowToken[] conditions, FishRowSummary summary, float width)
+    {
+        var baitNatural = bait.Length == 0 ? ImGui.CalcTextSize(summary.Bait).X : TokenWidth(bait);
+        var conditionNatural = conditions.Length == 0 ? ImGui.CalcTextSize(summary.Conditions).X : TokenWidth(conditions);
+        var available = Math.Max(1, width - 6);
+        if (baitNatural + conditionNatural <= available) return baitNatural;
+        var minimum = Math.Min(baitNatural, ImGui.GetTextLineHeight() * 2);
+        var maximum = Math.Max(minimum, available - Math.Min(conditionNatural, ImGui.GetFontSize() * 7));
+        return Math.Clamp(available * baitNatural / Math.Max(1, baitNatural + conditionNatural), minimum, maximum);
+    }
 
     private void DrawTokens(RowToken[] content, float width, string fullText, bool forceMore = false)
     {
-        if (content.Length == 0) { LineText(fullText, width, true); return; }
-        var start = ImGui.GetCursorPosX();
-        var size = ImGui.GetTextLineHeight();
-        var more = forceMore || TokenWidth(content) > width;
-        var available = more ? Math.Max(0, width - size - 3) : width;
-        var drawn = 0;
+        var start = ImGui.GetCursorPos();
+        var markerWidth = ImGui.CalcTextSize("…").X;
+        var natural = content.Length == 0 ? ImGui.CalcTextSize(fullText).X : TokenWidth(content);
+        var more = forceMore || natural > width;
+        var available = more ? Math.Max(0, width - markerWidth - 3) : width;
+        var used = 0f;
+        if (content.Length == 0) LineText(fullText, Math.Max(1, available), true);
         for (var i = 0; i < content.Length; i++)
         {
             var token = content[i];
-            var needed = token.Text.Length == 0 ? size : ImGui.CalcTextSize(token.Text).X;
-            if (ImGui.GetCursorPosX() - start + needed > available) break;
-            if (token.Text.Length == 0) UiWidgets.GameIcon(textures, token.Icon, size, token.Hint);
+            var needed = token.Text.Length == 0 ? ImGui.GetTextLineHeight() : ImGui.CalcTextSize(token.Text).X;
+            var nextWidth = used + (i > 0 ? 3 : 0) + needed;
+            if (nextWidth > available) break;
+            if (i > 0) ImGui.SameLine(0, 3);
+            if (token.Text.Length == 0) UiWidgets.GameIcon(textures, token.Icon, ImGui.GetTextLineHeight(), token.Hint);
             else { ImGui.TextUnformatted(token.Text); UiWidgets.Tooltip(token.Hint); }
-            drawn++;
-            if (i + 1 < content.Length) ImGui.SameLine(0, 3);
+            used = nextWidth;
         }
         if (more)
         {
-            if (drawn == content.Length) ImGui.SameLine(0, 3);
-            UiWidgets.Icon(FontAwesomeIcon.InfoCircle);
+            ImGui.SetCursorPos(start + new Vector2(Math.Min(available + 3, Math.Max(0, width - markerWidth)), 0));
+            LineText("…", markerWidth, false);
             UiWidgets.Tooltip(fullText);
         }
     }
@@ -213,7 +231,14 @@ internal sealed class FishRowRenderer(ITextureProvider textures, FishingMapServi
     public static string CompactWindow(FishingWindow window, DateTimeOffset now)
     {
         var target = window.Kind == FishingWindowKind.Open ? window.End : window.Start;
-        if (target is null || window.Kind is not (FishingWindowKind.Open or FishingWindowKind.Upcoming)) return FormatWindow(window, now);
+        if (target is null || window.Kind is not (FishingWindowKind.Open or FishingWindowKind.Upcoming))
+            return UiText.Get(window.Kind switch
+            {
+                FishingWindowKind.Always => T.ForecastAlways,
+                FishingWindowKind.Open => T.WindowOpen,
+                FishingWindowKind.NotFound => T.RowForecastNotFound,
+                _ => T.ForecastUnavailable,
+            });
         var time = target > now ? target.Value - now : TimeSpan.Zero;
         return UiText.Get(window.Kind == FishingWindowKind.Open ? T.RowEndsIn : T.RowStartsIn,
             UiText.Get(T.RowCountdown, Math.Floor(time.TotalHours), time.Minutes, time.Seconds));
@@ -222,10 +247,12 @@ internal sealed class FishRowRenderer(ITextureProvider textures, FishingMapServi
     private static void LineText(string text, float width, bool disabled)
     {
         var position = ImGui.GetCursorScreenPos();
-        ImGui.PushClipRect(position, position + new Vector2(width, ImGui.GetTextLineHeight()), true);
-        if (disabled) ImGui.TextDisabled(text);
-        else ImGui.TextUnformatted(text);
+        width = Math.Max(1, width);
+        var size = new Vector2(width, ImGui.GetTextLineHeight());
+        ImGui.PushClipRect(position, position + size, true);
+        ImGui.GetWindowDrawList().AddText(position, ImGui.GetColorU32(disabled ? ImGuiCol.TextDisabled : ImGuiCol.Text), text);
         ImGui.PopClipRect();
+        ImGui.Dummy(size);
         if (ImGui.IsItemHovered() && ImGui.CalcTextSize(text).X > width)
         {
             ImGui.BeginTooltip();

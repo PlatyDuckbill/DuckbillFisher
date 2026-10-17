@@ -457,4 +457,5 @@ internal enum TextKey
     GuideOpenUnavailable,
     GuideOpenDataWaiting,
     DetailWeatherTransition,
+    RowForecastNotFound,
 }

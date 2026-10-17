@@ -9,7 +9,7 @@ public sealed record CatalogSettings
 {
     public CatalogSort Sort { get; init; } = CatalogSort.RemainingTime;
     public CollectionVisibility Collection { get; init; } = CollectionVisibility.HideCaught;
-    public FishGradeVisibility Grade { get; init; } = FishGradeVisibility.All;
+    public FishGradeVisibility Grade { get; init; } = FishGradeVisibility.BigIncludingLegendary;
     public bool InLogOnly { get; init; } = true;
     public bool IncludeOceanFish { get; init; }
     public bool TimeRestrictedOnly { get; init; } = true;

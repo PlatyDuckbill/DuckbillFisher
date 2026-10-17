@@ -33,16 +33,20 @@ internal sealed record FishRowSummary(string Bait, string Conditions)
                     string.Join(" / ", details.Weather.Select(weather => weather.Name))));
         }
         if (details.Predators.Length > 0) parts.Add(UiText.Get(T.RowIntuition));
-        if (rule.FolkloreRequired) parts.Add(UiText.Get(T.RowFolklore));
         if (rule.SnaggingRequired)
             parts.Add(UiText.Get(T.RequiredSkill, details.Snagging?.Name ?? UiText.Get(T.SnaggingRequired)));
         if (rule.Lure.Length > 0)
             parts.Add(UiText.Get(T.RequiredSkill, details.Lure?.Name ??
                 UiText.Get(rule.Lure == "Modest" ? T.LureModest : T.LureAmbitious)));
-        parts.Add(UiText.Get(T.HooksetLabel, details.Hookset?.Name ?? UiText.Get(rule.Hookset switch
-            { "Precision" => T.HooksetPrecision, "Powerful" => T.HooksetPowerful, _ => T.ConditionUnknown })));
-
-        return new(path.Length == 0 ? UiText.Get(T.RowBaitUnknown) : UiText.Get(T.RowBaitPath, path), string.Join("\n", parts));
+        var bait = new List<string>
+        {
+            path.Length == 0 ? UiText.Get(T.RowBaitUnknown) : UiText.Get(T.RowBaitPath, path),
+            UiText.Get(T.HooksetLabel, details.Hookset?.Name ?? UiText.Get(rule.Hookset switch
+                { "Precision" => T.HooksetPrecision, "Powerful" => T.HooksetPowerful, _ => T.ConditionUnknown })),
+        };
+        var tug = rule.Tug switch { "light" => "!", "medium" => "!!", "heavy" => "!!!", _ => null };
+        if (tug is not null) bait.Add(UiText.Get(T.StepBite, tug));
+        return new(string.Join("\n", bait), string.Join("\n", parts));
     }
 
     private static string EtClock(double hour) => $"{(int)hour:00}:{(int)Math.Round(hour % 1 * 60):00}";

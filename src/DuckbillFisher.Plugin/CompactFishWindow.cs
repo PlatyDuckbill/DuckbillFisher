@@ -90,7 +90,7 @@ internal sealed class CompactFishWindow : Window
         var clipper = ImGui.ImGuiListClipper();
         try
         {
-            var height = FishRowRenderer.GetHeight(ImGui.GetContentRegionAvail().X, compact: true);
+            var height = FishRowRenderer.GetHeight(ImGui.GetContentRegionAvail().X);
             clipper.Begin(entries.Length, height + ImGui.GetStyle().ItemSpacing.Y);
             while (clipper.Step())
                 for (var i = clipper.DisplayStart; i < clipper.DisplayEnd; i++)
