@@ -92,7 +92,7 @@ internal sealed class BaitUiProbe : IDisposable
         }
     }
 
-    private static string Header(int session) => "DuckbillFisher bait-ui/v6\n" +
+    private static string Header(int session) => "DuckbillFisher bait-ui/v7\n" +
         $"Plugin={typeof(BaitUiProbe).Assembly.GetName().Version}; ProbeBuild={typeof(BaitUiProbe).Module.ModuleVersionId.ToString()[..8]}; Session={session}\n";
 
     public void Request(int session)
@@ -197,6 +197,8 @@ internal sealed class BaitUiProbe : IDisposable
                 var binding = baitReader.Read(request.Target, diagnostics: true);
                 var state = request.Target == 0 && binding.State == BaitUiState.BindingUnavailable ? "ObservedOnly" : binding.State.ToString();
                 output.AppendLine(FormattableString.Invariant($"BindingState={state}; TargetItem={request.Target}; Matches={binding.Matches}; Node={binding.MatchedNode}; Rect={binding.Position.X:0.##},{binding.Position.Y:0.##},{binding.Size.X:0.##},{binding.Size.Y:0.##}; TooltipBindings={binding.Bindings}"));
+                if (binding.Page is { } page)
+                    output.AppendLine(FormattableString.Invariant($"Pages={page.State}; Check={page.Check}; Entries={page.Entries}; Current={page.Current}; Target={page.Target}; Total={page.Total}; Compared={page.Compared}; Theme={page.Theme}; AccentSource={page.AccentSource}; Marker={page.MarkerVisible}; PageRect={page.Position.X:0.##},{page.Position.Y:0.##},{page.Size.X:0.##},{page.Size.Y:0.##}"));
                 output.AppendLine("ReadOnly=True; NoSelectionOrHighlightInference=True");
                 Finish("Captured", output.ToString());
                 return;

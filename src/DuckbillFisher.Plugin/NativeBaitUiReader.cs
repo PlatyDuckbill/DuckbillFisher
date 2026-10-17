@@ -10,7 +10,7 @@ namespace DuckbillFisher.Plugin;
 
 internal enum BaitUiState { Unavailable, NotOpen, UnsupportedShape, BindingUnavailable, NotOnPage, NotVisible, InvalidGeometry, Found }
 internal sealed record BaitUiReading(BaitUiState State, Vector2 Position = default, Vector2 Size = default,
-    string Bindings = "", int Matches = 0, uint MatchedNode = 0);
+    string Bindings = "", int Matches = 0, uint MatchedNode = 0, BaitPageReading? Page = null);
 
 /// <summary>Borrowed KR UI pointers stay inside one Framework callback. No native function calls or writes.</summary>
 internal sealed class NativeBaitUiReader(IGameGui gui, IFramework framework, Func<bool> compatible, IDataManager data)
@@ -50,6 +50,7 @@ internal sealed class NativeBaitUiReader(IGameGui gui, IFramework framework, Fun
         var bindings = diagnostics ? new List<string>(25) : null;
         var matches = 0;
         var visibleBaits = 0;
+        var visibleItems = new Dictionary<int, uint>(25);
         AtkResNode* matched = null;
         var grids = 0;
         for (var i = 0; i < nodes.NodeListCount; i++)
@@ -89,34 +90,47 @@ internal sealed class NativeBaitUiReader(IGameGui gui, IFramework framework, Fun
                 if (item != 0 && item != id) ambiguous = true;
                 item = id;
             }
-            if (!ambiguous && item != 0 && Visible(node)) visibleBaits++;
-            if (!ambiguous && item == target && target != 0) { matched = node; matches++; }
+            if (!ambiguous && item != 0 && Visible(node))
+            {
+                visibleBaits++;
+                visibleItems[(int)node->NodeId - 17] = item;
+                if (item == target && target != 0) { matched = node; matches++; }
+            }
         }
         var report = bindings is null ? "" : $"MapCount={tooltips.LongCount}; Entries=" + string.Join(',', bindings.Take(100));
         if (grids != 25) return new(BaitUiState.UnsupportedShape, Bindings: report);
+        var theme = stage->AtkUIColorHolder == null ? -1 : stage->AtkUIColorHolder->ActiveColorThemeType;
+        var page = NativeBaitPageReader.Read(addon, target, visibleItems, IsBait, theme);
         if (matches == 0 && target != 0 && visibleBaits > 0)
-            return new(BaitUiState.NotOnPage, Bindings: report);
-        if (matches != 1 || matched == null) return new(BaitUiState.BindingUnavailable, Bindings: report, Matches: matches);
+            return new(BaitUiState.NotOnPage, Bindings: report, Page: page);
+        if (matches != 1 || matched == null) return new(BaitUiState.BindingUnavailable, Bindings: report, Matches: matches, Page: page);
         if (!Visible(addon->RootNode))
-            return new(BaitUiState.NotVisible, Bindings: report, Matches: matches, MatchedNode: matched->NodeId);
+            return new(BaitUiState.NotVisible, Bindings: report, Matches: matches, MatchedNode: matched->NodeId, Page: page);
         if (!Visible(matched))
-            return new(BaitUiState.NotOnPage, Bindings: report, Matches: matches, MatchedNode: matched->NodeId);
-        var position = new Vector2(matched->ScreenX, matched->ScreenY);
-        var scale = matched->Transform;
-        var size = new Vector2(matched->Width * scale.M11, matched->Height * scale.M22);
-        var root = addon->RootNode;
+            return new(BaitUiState.NotOnPage, Bindings: report, Matches: matches, MatchedNode: matched->NodeId, Page: page);
+        if (!TryBounds(matched, addon->RootNode, out var position, out var size))
+            return new(BaitUiState.InvalidGeometry, position, size, report, matches, matched->NodeId, page);
+        return new(BaitUiState.Found, position, size, report, matches, matched->NodeId, page);
+    }
+
+    internal static unsafe bool TryBounds(AtkResNode* node, AtkResNode* root, out Vector2 position, out Vector2 size, float minimum = 12)
+    {
+        position = new(node->ScreenX, node->ScreenY);
+        var scale = node->Transform;
+        size = new(node->Width * scale.M11, node->Height * scale.M22);
         var rootEnd = new Vector2(root->ScreenX + root->Width * root->Transform.M11,
             root->ScreenY + root->Height * root->Transform.M22);
         if (!float.IsFinite(position.X) || !float.IsFinite(position.Y) ||
-            !float.IsFinite(size.X) || !float.IsFinite(size.Y) || size.X is < 12 or > 180 || size.Y is < 12 or > 180 ||
+            !float.IsFinite(size.X) || !float.IsFinite(size.Y) || size.X < minimum || size.Y < minimum || size.X > 180 || size.Y > 180 ||
+            !float.IsFinite(rootEnd.X) || !float.IsFinite(rootEnd.Y) ||
             Math.Abs(scale.M12) > 0.01f || Math.Abs(scale.M21) > 0.01f ||
             position.X < root->ScreenX || position.Y < root->ScreenY ||
             position.X + size.X > rootEnd.X + 1 || position.Y + size.Y > rootEnd.Y + 1)
-            return new(BaitUiState.InvalidGeometry, position, size, report, matches, matched->NodeId);
-        return new(BaitUiState.Found, position, size, report, matches, matched->NodeId);
+            return false;
+        return true;
     }
 
-    private static unsafe bool Visible(AtkResNode* node)
+    internal static unsafe bool Visible(AtkResNode* node)
     {
         for (var depth = 0; depth < 24; depth++)
         {

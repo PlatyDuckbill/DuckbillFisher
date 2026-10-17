@@ -11,7 +11,7 @@ namespace DuckbillFisher.Plugin;
 
 internal enum BaitFindState { Idle, Waiting, WaitingForPage, Highlighted, BindingUnavailable, Unavailable, Cancelled, Expired, Closed, Selected }
 internal sealed record BaitFindView(int Session, uint Item, string Name, BaitFindState State, long SampledAt = 0,
-    Vector2 Position = default, Vector2 Size = default);
+    Vector2 Position = default, Vector2 Size = default, BaitPageReading? Page = null);
 
 /// <summary>One explicit request, no persistence, no selection calls, and no pointer retained across callbacks.</summary>
 internal sealed class BaitFinder : IDisposable
@@ -56,7 +56,7 @@ internal sealed class BaitFinder : IDisposable
     }
 
     public void Cancel() { lock (gate) { Finish(BaitFindState.Cancelled); } }
-    private void Finish(BaitFindState state) { active = false; view = view with { State = state, SampledAt = 0 }; }
+    private void Finish(BaitFindState state) { active = false; view = view with { State = state, SampledAt = 0, Page = null }; }
     private void Expire()
     {
         if (view.Session != preferences.View.Session || !preferences.View.HasCharacter)
@@ -84,7 +84,7 @@ internal sealed class BaitFinder : IDisposable
             if (result.State == BaitUiState.NotOpen)
             {
                 if (wasOpen) Finish(BaitFindState.Closed);
-                else view = view with { State = BaitFindState.Waiting, SampledAt = 0 };
+                else view = view with { State = BaitFindState.Waiting, SampledAt = 0, Page = null };
                 return;
             }
             wasOpen = true;
@@ -97,20 +97,38 @@ internal sealed class BaitFinder : IDisposable
                     BaitUiState.NotVisible or BaitUiState.InvalidGeometry => BaitFindState.Unavailable,
                     _ => BaitFindState.BindingUnavailable,
                 },
-                SampledAt = Stopwatch.GetTimestamp(), Position = result.Position, Size = result.Size };
+                SampledAt = Stopwatch.GetTimestamp(), Position = result.Position, Size = result.Size, Page = result.Page };
         }
     }
 
     public void DrawOverlay()
     {
         var current = View;
-        if (current.State != BaitFindState.Highlighted || Stopwatch.GetElapsedTime(current.SampledAt).TotalSeconds > 0.15) return;
+        if (current.State is not (BaitFindState.Highlighted or BaitFindState.WaitingForPage) ||
+            Stopwatch.GetElapsedTime(current.SampledAt).TotalSeconds > 0.15) return;
         var viewport = ImGui.GetMainViewport();
-        var start = viewport.Pos + current.Position;
-        if (start.X < viewport.Pos.X || start.Y < viewport.Pos.Y ||
-            start.X + current.Size.X > viewport.Pos.X + viewport.Size.X || start.Y + current.Size.Y > viewport.Pos.Y + viewport.Size.Y) return;
+        bool OnScreen(Vector2 position, Vector2 size) => position.X >= 0 && position.Y >= 0 &&
+            position.X + size.X <= viewport.Size.X && position.Y + size.Y <= viewport.Size.Y;
         var draw = ImGui.GetForegroundDrawList(viewport);
-        draw.AddRect(start, start + current.Size, ImGui.GetColorU32(new Vector4(1, 0.83f, 0.25f, 1)), 5, ImDrawFlags.None, 3);
+        var accent = current.Page is { Accent.W: > 0 } palette ? palette.Accent : Vector4.One;
+        var contrast = accent.X * 0.2126f + accent.Y * 0.7152f + accent.Z * 0.0722f > 0.5f
+            ? new Vector4(0, 0, 0, 1) : Vector4.One;
+        var color = ImGui.GetColorU32(accent);
+        var edge = ImGui.GetColorU32(contrast);
+        if (current.State == BaitFindState.Highlighted && OnScreen(current.Position, current.Size))
+        {
+            var start = viewport.Pos + current.Position;
+            var scale = Math.Clamp(current.Size.Y / 48, 0.5f, 3);
+            draw.AddRect(start, start + current.Size, edge, 4 * scale, ImDrawFlags.None, 4 * scale);
+            draw.AddRect(start, start + current.Size, color, 4 * scale, ImDrawFlags.None, 2 * scale);
+        }
+        if (current.Page is { State: BaitPageState.Ready, MarkerVisible: true } page && OnScreen(page.Position, page.Size))
+        {
+            var scale = Math.Clamp(page.Size.Y / 24, 0.5f, 3);
+            var center = viewport.Pos + page.Position + new Vector2(page.Size.X - 4 * scale, 4 * scale);
+            draw.AddCircleFilled(center, 3.5f * scale, edge);
+            draw.AddCircleFilled(center, 2.3f * scale, color);
+        }
     }
 
     public void DrawButton(FishingItemView item, int session)
@@ -125,7 +143,9 @@ internal sealed class BaitFinder : IDisposable
     {
         var current = View;
         if (current.State == BaitFindState.Idle || scope is not null && !scope.Any(item => item.Id == current.Item)) return;
-        var message = UiText.Get(current.State switch
+        var message = current.State == BaitFindState.WaitingForPage && current.Page is { State: BaitPageState.Ready, Target: > 0 } destination
+            ? UiText.Get(T.BaitFindGoToPage, current.Name, destination.Target)
+            : UiText.Get(current.State switch
         {
             BaitFindState.Waiting => T.BaitFindWaiting, BaitFindState.Highlighted => T.BaitFindHighlighted,
             BaitFindState.WaitingForPage => T.BaitFindPageWaiting,

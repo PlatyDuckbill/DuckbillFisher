@@ -615,4 +615,5 @@ Main inventory only. An unknown quantity is not zero.</value></data>
   <data name="BaitFindCancelled" xml:space="preserve"><value>{0}: finding cancelled.</value></data>
   <data name="BaitFindUnavailable" xml:space="preserve"><value>{0}: bait highlighting is unavailable in the current UI or runtime. Other features remain available.</value></data>
   <data name="BaitFindPageWaiting" xml:space="preserve"><value>Show the bait selection page containing {0}.</value></data>
+  <data name="BaitFindGoToPage" xml:space="preserve"><value>{0}: go to page {1}.</value></data>
 </root>
