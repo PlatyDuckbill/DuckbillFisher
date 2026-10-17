@@ -90,7 +90,7 @@ internal sealed class BaitUiProbe : IDisposable
         }
     }
 
-    private static string Header(int session) => "DuckbillFisher bait-ui/v4\n" +
+    private static string Header(int session) => "DuckbillFisher bait-ui/v5\n" +
         $"Plugin={typeof(BaitUiProbe).Assembly.GetName().Version}; ProbeBuild={typeof(BaitUiProbe).Module.ModuleVersionId.ToString()[..8]}; Session={session}\n";
 
     public void Request(int session)

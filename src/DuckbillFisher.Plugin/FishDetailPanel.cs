@@ -76,9 +76,16 @@ internal sealed class FishDetailPanel(FishPreferences preferences, ITextureProvi
         if (maps.Result is { } mapResult && mapResult.Key != T.MapOpened) ImGui.TextWrapped(mapResult.Display);
         if (!fish.IsOceanFishing)
         {
-            UiWidgets.Heading(T.DetailConditions);
-            if (fish.Details is { } details) conditions.Draw(details, personal, catalog.RelatedDetails);
-            else ImGui.TextWrapped(UiText.Get(T.CatalogDetailsMissing));
+            if (fish.Details is { } details)
+            {
+                conditions.DrawHeading(details, personal, catalog.RelatedDetails);
+                conditions.Draw(details, personal, catalog.RelatedDetails);
+            }
+            else
+            {
+                UiWidgets.Heading(T.DetailConditions);
+                ImGui.TextWrapped(UiText.Get(T.CatalogDetailsMissing));
+            }
         }
         ImGui.PopID();
     }

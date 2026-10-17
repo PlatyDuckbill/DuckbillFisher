@@ -58,10 +58,11 @@ internal sealed class NativeBaitUiReader(IGameGui gui, IFramework framework, Fun
                 if (!tooltips.TryGetValue(key, out var value, false)) continue;
                 var info = (AtkTooltipManager.AtkTooltipInfo*)value;
                 if (info == null || info->ParentId != addon->Id) continue;
-                if (info->Type != AtkTooltipType.Item)
+                // KR Bait registers Text | Item (3), not Item alone (2).
+                if ((info->Type & AtkTooltipType.Item) == 0)
                 { bindings?.Add($"{node->NodeId}/{child->NodeId}:type={(byte)info->Type}"); continue; }
                 var args = info->AtkTooltipArgs.ItemArgs;
-                bindings?.Add($"{node->NodeId}/{child->NodeId}:kind={(byte)args.Kind}:id={args.ItemId}");
+                bindings?.Add($"{node->NodeId}/{child->NodeId}:type={(byte)info->Type}:kind={(byte)args.Kind}:id={args.ItemId}");
                 // InventoryItem stores a container at the same union offset. Never interpret it as an item ID.
                 if (args.Kind is not (DetailKind.Item or DetailKind.ItemId) || args.ItemId <= 0) continue;
                 var id = (uint)args.ItemId;

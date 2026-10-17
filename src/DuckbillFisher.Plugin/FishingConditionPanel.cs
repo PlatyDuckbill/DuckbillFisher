@@ -10,12 +10,55 @@ namespace DuckbillFisher.Plugin;
 /// <summary>Aligned conditions using cached references; links only enqueue explicit user clicks.</summary>
 internal sealed class FishingConditionPanel(ITextureProvider textures, FishingItemLinkService itemLinks, BaitStockObserver baitStock, BaitFinder baitFinder)
 {
+    public void DrawHeading(FishingDetailView details, FishPreferencesView personal,
+        IReadOnlyDictionary<uint, FishingDetailView> related)
+    {
+        ImGui.Spacing();
+        ImGui.Separator();
+        var firstBaits = details.BaitSteps.FirstOrDefault();
+        if (firstBaits is not { Length: > 0 } || firstBaits.Any(item => related.ContainsKey(item.Id)))
+        {
+            ImGui.TextUnformatted(UiText.Get(T.DetailConditions));
+            ImGui.Spacing();
+            return;
+        }
+        if (ImGui.BeginTable("ConditionsHeading", 2, ImGuiTableFlags.SizingFixedFit))
+        {
+            ImGui.TableSetupColumn("Title", ImGuiTableColumnFlags.WidthStretch);
+            ImGui.TableSetupColumn("Find", ImGuiTableColumnFlags.WidthFixed,
+                ImGui.CalcTextSize(UiText.Get(T.BaitFind)).X + ImGui.GetStyle().FramePadding.X * 2);
+            ImGui.TableNextColumn();
+            ImGui.TextUnformatted(UiText.Get(T.DetailConditions));
+            ImGui.TableNextColumn();
+            if (firstBaits.Length == 1) baitFinder.DrawButton(firstBaits[0], personal.Session);
+            else
+            {
+                if (ImGui.SmallButton(UiText.Label(T.BaitFind, "FindBaitChoice"))) ImGui.OpenPopup("FindBaitAlternatives");
+                UiWidgets.Tooltip(UiText.Get(T.BaitFindHint));
+                if (ImGui.BeginPopup("FindBaitAlternatives"))
+                {
+                    foreach (var item in firstBaits)
+                    {
+                        ImGui.PushID((int)item.Id);
+                        ImGui.BeginDisabled(!baitFinder.CanRequest(item.Id, personal.Session));
+                        if (ImGui.Selectable($"{item.Name}###FindBaitAlternative")) baitFinder.Request(item, personal.Session);
+                        ImGui.EndDisabled();
+                        ImGui.PopID();
+                    }
+                    ImGui.EndPopup();
+                }
+            }
+            ImGui.EndTable();
+        }
+        ImGui.Spacing();
+    }
+
     public void Draw(FishingDetailView details, FishPreferencesView personal,
         IReadOnlyDictionary<uint, FishingDetailView> related)
     {
         var rule = details.Rule;
         DrawBaitPath(details, personal, related);
-        baitFinder.DrawStatus();
+        baitFinder.DrawStatus(details.BaitSteps.FirstOrDefault() ?? []);
         ImGui.Spacing();
         if (ImGui.BeginTable("Conditions", 2, ImGuiTableFlags.SizingFixedFit))
         {
@@ -109,9 +152,8 @@ internal sealed class FishingConditionPanel(ITextureProvider textures, FishingIt
                     name = count is { } quantity ? UiText.Get(T.BaitNameStock, name, quantity) : UiText.Get(T.BaitNameUnknown, name);
                 }
                 var separator = alternative > 0 ? "/" : "→";
-                var findWidth = step == 0 && detail is null ? ImGui.CalcTextSize(UiText.Get(T.BaitFind)).X + ImGui.GetStyle().FramePadding.X * 2 + 8 : 0;
                 var separatorWidth = first ? 0 : ImGui.CalcTextSize(separator).X + 8;
-                var preferred = findWidth + IconSize + 8 + Math.Min(ImGui.CalcTextSize(name).X, ImGui.GetFontSize() * 12)
+                var preferred = IconSize + 8 + Math.Min(ImGui.CalcTextSize(name).X, ImGui.GetFontSize() * 12)
                     + (detail is null ? step > 0 ? ImGui.GetTextLineHeight() + 6 : 0 : IconSize + ImGui.GetFontSize() * 4);
                 if (detail is { Rule.ConditionsKnown: true } && (detail.Rule.StartHour != 0 || detail.Rule.EndHour != 24))
                     preferred += ImGui.CalcTextSize(UiText.Get(T.TimeConditionLabel, EtClock(detail.Rule.StartHour), EtClock(detail.Rule.EndHour))).X + 6;
@@ -123,15 +165,8 @@ internal sealed class FishingConditionPanel(ITextureProvider textures, FishingIt
                     ImGui.SameLine(0, 8);
                 }
                 StepItem(item, name, $"Bait{step}/{item.Id}", personal, detail, step > 0,
-                    Math.Max(1, Math.Min(preferred - findWidth, right - ImGui.GetCursorPosX() - findWidth)));
+                    Math.Max(1, Math.Min(preferred, right - ImGui.GetCursorPosX())));
                 if (step == 0 && detail is null) UiWidgets.Tooltip(UiText.Get(T.BaitStockTooltip, name));
-                if (findWidth > 0)
-                {
-                    ImGui.PushID($"Find{item.Id}");
-                    UiWidgets.FlowNext(findWidth, right, 8);
-                    baitFinder.DrawButton(item, personal.Session);
-                    ImGui.PopID();
-                }
                 first = false;
             }
     }

@@ -115,18 +115,27 @@ internal sealed class BaitFinder : IDisposable
         UiWidgets.Tooltip(UiText.Get(T.BaitFindHint));
     }
 
-    public void DrawStatus()
+    public void DrawStatus(IReadOnlyList<FishingItemView>? scope = null)
     {
         var current = View;
-        if (current.State == BaitFindState.Idle) return;
-        ImGui.TextWrapped(UiText.Get(current.State switch
+        if (current.State == BaitFindState.Idle || scope is not null && !scope.Any(item => item.Id == current.Item)) return;
+        var message = UiText.Get(current.State switch
         {
             BaitFindState.Waiting => T.BaitFindWaiting, BaitFindState.Highlighted => T.BaitFindHighlighted,
             BaitFindState.BindingUnavailable => T.BaitFindBindingUnavailable, BaitFindState.Selected => T.BaitFindSelected,
             BaitFindState.Expired => T.BaitFindExpired, BaitFindState.Closed => T.BaitFindClosed,
             BaitFindState.Cancelled => T.BaitFindCancelled, _ => T.BaitFindUnavailable,
-        }, current.Name));
-        if (Active && ImGui.SmallButton(UiText.Label(T.BaitFindCancel, "CancelFindBait"))) Cancel();
+        }, current.Name);
+        if (!Active) { ImGui.TextWrapped(message); return; }
+        if (!ImGui.BeginTable("BaitFindStatus", 2, ImGuiTableFlags.SizingFixedFit)) return;
+        ImGui.TableSetupColumn("Status", ImGuiTableColumnFlags.WidthStretch);
+        ImGui.TableSetupColumn("Cancel", ImGuiTableColumnFlags.WidthFixed,
+            ImGui.CalcTextSize(UiText.Get(T.BaitFindCancel)).X + ImGui.GetStyle().FramePadding.X * 2);
+        ImGui.TableNextColumn();
+        ImGui.TextWrapped(message);
+        ImGui.TableNextColumn();
+        if (ImGui.SmallButton(UiText.Label(T.BaitFindCancel, "CancelFindBait"))) Cancel();
+        ImGui.EndTable();
     }
 
     public void Dispose()
