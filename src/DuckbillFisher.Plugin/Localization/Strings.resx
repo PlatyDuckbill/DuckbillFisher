@@ -28,7 +28,7 @@
   <data name="English" xml:space="preserve"><value>English</value></data>
   <data name="TabGuide" xml:space="preserve"><value>Fish log diagnostics</value></data>
   <data name="TabFishing" xml:space="preserve"><value>Fishing observations</value></data>
-  <data name="CommandHelp" xml:space="preserve"><value>Open DuckbillFisher. Use /duckbillfisher compact for the compact window.</value></data>
+  <data name="CommandHelp" xml:space="preserve"><value>Open DuckbillFisher. Use /duckbillfisher compact for compact view, or /duckbillfisher timer for the casting timer.</value></data>
   <data name="CommandConflict" xml:space="preserve"><value>Command already registered: {0}</value></data>
   <data name="GuideIntro" xml:space="preserve"><value>Open the in-game Fish Guide and click a fish below to read its caught bit. This is a diagnostic sample, not an automatic collection filter.</value></data>
   <data name="LoginState" xml:space="preserve"><value>Logged in: {0} | Player data loaded: {1}</value></data>
@@ -479,4 +479,60 @@ In fish log only: {5}</value></data>
   <data name="Cancel" xml:space="preserve"><value>Cancel</value></data>
   <data name="CastingProbeIntro" xml:space="preserve"><value>KR casting observation: records raw fishing phases, equipped bait, and selected game log events. Start before fishing and stop after folding the rod. No automatic cast or catch result is established yet. Recording stops on logout, travel, a long observation gap, or disabling developer tools.</value></data>
   <data name="CastingProbeCounters" xml:space="preserve"><value>Log contracts {0}/{1} · Events {2} · Queue drops {3} · Last read state: {4}</value></data>
+  <data name="CastingTimerTitle" xml:space="preserve"><value>Casting timer</value></data>
+  <data name="TabHistory" xml:space="preserve"><value>Fishing history</value></data>
+  <data name="CopyTimerReport" xml:space="preserve"><value>Copy timer summary</value></data>
+  <data name="HistoryItemUnknown" xml:space="preserve"><value>Item #{0}</value></data>
+  <data name="HistorySession" xml:space="preserve"><value>Fishing session · {0}</value></data>
+  <data name="HistoryStartUnknown" xml:space="preserve"><value>Start time unknown</value></data>
+  <data name="HistorySeconds" xml:space="preserve"><value>{0:0.0}s</value></data>
+  <data name="HistoryTiming" xml:space="preserve"><value>{0} · {1} · ET {2}</value></data>
+  <data name="HistoryFishOutcome" xml:space="preserve"><value>{0} · {1}</value></data>
+  <data name="HistoryFishQuantityOutcome" xml:space="preserve"><value>{0} ×{1} · {2}</value></data>
+  <data name="HistoryReason" xml:space="preserve"><value>End reason: {0}</value></data>
+  <data name="HistoryBiteTime" xml:space="preserve"><value>Cast → bite: {0:0.0}s</value></data>
+  <data name="HistoryHookTime" xml:space="preserve"><value>Cast → hook: {0:0.0}s</value></data>
+  <data name="HistoryPending" xml:space="preserve"><value>In progress</value></data>
+  <data name="HistoryCaught" xml:space="preserve"><value>Caught</value></data>
+  <data name="HistoryFailed" xml:space="preserve"><value>Failed</value></data>
+  <data name="HistoryCancelled" xml:space="preserve"><value>Retrieved</value></data>
+  <data name="HistoryInterrupted" xml:space="preserve"><value>Interrupted</value></data>
+  <data name="HistoryUnknown" xml:space="preserve"><value>Result unknown</value></data>
+  <data name="HistoryRodFolded" xml:space="preserve"><value>Rod folded</value></data>
+  <data name="HistoryLogout" xml:space="preserve"><value>Logout or character change</value></data>
+  <data name="HistoryTravel" xml:space="preserve"><value>Area transition</value></data>
+  <data name="HistoryReload" xml:space="preserve"><value>Plugin reload or unload</value></data>
+  <data name="HistoryGap" xml:space="preserve"><value>Observation gap</value></data>
+  <data name="HistoryUnavailable" xml:space="preserve"><value>Observation unavailable</value></data>
+  <data name="HistoryMoochUnknown" xml:space="preserve"><value>Mooch bait unknown</value></data>
+  <data name="HistorySwimbaitUnknown" xml:space="preserve"><value>Selected swimbait unknown</value></data>
+  <data name="HistoryStorageError" xml:space="preserve"><value>History could not be saved or restored. Existing files are preserved; new records remain in memory.</value></data>
+  <data name="HistoryLoading" xml:space="preserve"><value>Loading fishing history…</value></data>
+  <data name="HistoryEmpty" xml:space="preserve"><value>No recorded casts yet.</value></data>
+  <data name="HistoryRecent" xml:space="preserve"><value>Recent casts · {0}</value></data>
+  <data name="HistoryCapacity" xml:space="preserve"><value>{0}/{1} casts · newest first</value></data>
+  <data name="TimerSpotPending" xml:space="preserve"><value>Fishing spot appears after casting</value></data>
+  <data name="TimerSpotFish" xml:space="preserve"><value>Fish at this fishing spot</value></data>
+  <data name="TimerEquippedBait" xml:space="preserve"><value>Equipped bait · {0}</value></data>
+  <data name="TimerCastLine" xml:space="preserve"><value>{0} · {1}</value></data>
+  <data name="TimerCastEt" xml:space="preserve"><value>Cast at ET {0}</value></data>
+  <data name="TimerSessionLine" xml:space="preserve"><value>Session {0} · {1}</value></data>
+  <data name="TimerStartUnknownHint" xml:space="preserve"><value>Times start from observed transitions. A cast or session already underway at load has no known start time.</value></data>
+  <data name="TimerLoginRequired" xml:space="preserve"><value>Log in to observe fishing</value></data>
+  <data name="TimerOceanUnsupported" xml:space="preserve"><value>Ocean fishing recording is not supported yet</value></data>
+  <data name="TimerUnavailable" xml:space="preserve"><value>Fishing observation unavailable</value></data>
+  <data name="TimerCasting" xml:space="preserve"><value>Casting</value></data>
+  <data name="TimerWaiting" xml:space="preserve"><value>Waiting for a bite</value></data>
+  <data name="TimerBite" xml:space="preserve"><value>Bite</value></data>
+  <data name="TimerHook" xml:space="preserve"><value>Reeling in</value></data>
+  <data name="TimerReturning" xml:space="preserve"><value>Retrieving the rod</value></data>
+  <data name="TimerStopping" xml:space="preserve"><value>Ending the session</value></data>
+  <data name="TimerRodReady" xml:space="preserve"><value>Ready to cast</value></data>
+  <data name="TimerIdle" xml:space="preserve"><value>Not fishing</value></data>
+  <data name="TimerObserving" xml:space="preserve"><value>Observing</value></data>
+  <data name="TimerHideCaught" xml:space="preserve"><value>Hide caught</value></data>
+  <data name="TimerAllFish" xml:space="preserve"><value>All collection states</value></data>
+  <data name="TimerFishCount" xml:space="preserve"><value>{0} fish</value></data>
+  <data name="TimerNoFish" xml:space="preserve"><value>No fish match this collection filter.</value></data>
+  <data name="HistoryCastAt" xml:space="preserve"><value>Cast at: {0}</value></data>
 </root>

@@ -35,6 +35,8 @@ Plugin의 `AssemblyName`은 `DuckbillFisher`다. 주 DLL은 `DuckbillFisher.dll`
 
 MVP-02/F07·F13의 [화면/보관 합의와 KR 조사](CASTING-TIMER-HISTORY.md)를 따른다. 0.2.0.0 첫 단계의 FishingActivityProbe는 개발자 도구에서 명시적으로 시작한 관찰만 담당한다. NativeFishingActivityReader는 기존 정확한 KR/DLL 가드를 공유해 Framework에서 값만 복사하고, FishingLogContracts는 검수한 25개 KR 로그 macro 해시로 이벤트를 제한한다. 공개 로그·플래그·네이티브 상태를 같은 단조 시간축에 기록하지만 성공/실패/정확한 낚시터를 아직 확정하지 않는다. 기존 수집/알림 서비스와 격리한다. [수명/실기 대기](validation/MVP-02-CASTING-PROBE.md).
 
+0.2.1.0은 위 KR 실제 표본을 근거로 FishingTracker → Core FishingAttempts에 확인한 전이를 전달한다. 별도 FishingHistoryStore가 단일 작업자로 캐릭터별 파일을 읽고 최신 snapshot을 저장한다. CastingTimerWindow/FishingHistoryPanel은 같은 관리 기록을 표시하고 낚시터 팝업은 FishRowRenderer를 재사용한다. 실제 미검증 결과는 Unknown으로 두며 타이머 관찰을 기존 도감/알림 판정에 주입하지 않는다. [저장·수명·성능 경계](validation/MVP-02-TIMER-HISTORY.md).
+
 0.1.33.0의 FishGuideOpenService는 연동 안내의 명시적 클릭을 Framework에서 한 번 처리하고 검증한 KR Agent API로 낚시 탭을 연다. 세션/캐릭터/요청 만료·DLL 가드·구독 해제를 적용하며 도감 준비 판정은 기존 관찰기만 담당한다. [게임 접근 근거](validation/MVP-01-GUIDE-OPEN.md).
 
 사용자 문구는 상태/게임 접근과 분리한다. 상태와 이력은 번역 문자열 대신 UiMessage의 키/인자를 보관하고 UI/진단 출력에서 각각 표현한다. 추가 언어와 패키징은 [다국어 지침](LOCALIZATION.md)을 따른다.

@@ -28,7 +28,7 @@
   <data name="English" xml:space="preserve"><value>English</value></data>
   <data name="TabGuide" xml:space="preserve"><value>수첩 연동 확인</value></data>
   <data name="TabFishing" xml:space="preserve"><value>낚시 상태 관찰</value></data>
-  <data name="CommandHelp" xml:space="preserve"><value>DuckbillFisher를 엽니다. /duckbillfisher compact 로 간략 화면을 엽니다.</value></data>
+  <data name="CommandHelp" xml:space="preserve"><value>DuckbillFisher를 엽니다. /duckbillfisher compact 로 간략 화면, /duckbillfisher timer 로 캐스팅 타이머를 엽니다.</value></data>
   <data name="CommandConflict" xml:space="preserve"><value>이미 등록된 명령입니다: {0}</value></data>
   <data name="GuideIntro" xml:space="preserve"><value>게임의 어류도감을 연 상태에서 아래 어종 이름을 클릭하면 실제 수집 비트를 조회합니다. 검증용 표본이며 자동 필터에는 반영하지 않습니다.</value></data>
   <data name="LoginState" xml:space="preserve"><value>로그인: {0} | 캐릭터 준비: {1}</value></data>
@@ -479,4 +479,60 @@
   <data name="Cancel" xml:space="preserve"><value>취소</value></data>
   <data name="CastingProbeIntro" xml:space="preserve"><value>KR 캐스팅 관찰: 낚시 상태·장착 미끼·일부 게임 로그의 원시값을 기록합니다. 낚시 전에 시작하고 낚싯대를 완전히 접은 뒤 중지하세요. 아직 캐스팅·어획 결과를 자동 확정하지 않습니다. 로그아웃·지역 전환·긴 관찰 공백·개발자 도구 해제 시 기록을 중지합니다.</value></data>
   <data name="CastingProbeCounters" xml:space="preserve"><value>로그 계약 {0}/{1} · 이벤트 {2} · 큐 누락 {3} · 마지막 읽기 상태: {4}</value></data>
+  <data name="CastingTimerTitle" xml:space="preserve"><value>캐스팅 타이머</value></data>
+  <data name="TabHistory" xml:space="preserve"><value>낚시 히스토리</value></data>
+  <data name="CopyTimerReport" xml:space="preserve"><value>타이머 진단 복사</value></data>
+  <data name="HistoryItemUnknown" xml:space="preserve"><value>아이템 #{0}</value></data>
+  <data name="HistorySession" xml:space="preserve"><value>연속 낚시 · {0}</value></data>
+  <data name="HistoryStartUnknown" xml:space="preserve"><value>시작 시각 미확인</value></data>
+  <data name="HistorySeconds" xml:space="preserve"><value>{0:0.0}초</value></data>
+  <data name="HistoryTiming" xml:space="preserve"><value>{0} · {1} · ET {2}</value></data>
+  <data name="HistoryFishOutcome" xml:space="preserve"><value>{0} · {1}</value></data>
+  <data name="HistoryFishQuantityOutcome" xml:space="preserve"><value>{0} ×{1} · {2}</value></data>
+  <data name="HistoryReason" xml:space="preserve"><value>종료 사유: {0}</value></data>
+  <data name="HistoryBiteTime" xml:space="preserve"><value>시전 → 입질: {0:0.0}초</value></data>
+  <data name="HistoryHookTime" xml:space="preserve"><value>시전 → 낚아채기: {0:0.0}초</value></data>
+  <data name="HistoryPending" xml:space="preserve"><value>진행 중</value></data>
+  <data name="HistoryCaught" xml:space="preserve"><value>성공</value></data>
+  <data name="HistoryFailed" xml:space="preserve"><value>실패</value></data>
+  <data name="HistoryCancelled" xml:space="preserve"><value>직접 회수</value></data>
+  <data name="HistoryInterrupted" xml:space="preserve"><value>중단</value></data>
+  <data name="HistoryUnknown" xml:space="preserve"><value>결과 미확인</value></data>
+  <data name="HistoryRodFolded" xml:space="preserve"><value>낚싯대 완전 종료</value></data>
+  <data name="HistoryLogout" xml:space="preserve"><value>로그아웃·캐릭터 변경</value></data>
+  <data name="HistoryTravel" xml:space="preserve"><value>지역 전환</value></data>
+  <data name="HistoryReload" xml:space="preserve"><value>플러그인 재로드·언로드</value></data>
+  <data name="HistoryGap" xml:space="preserve"><value>관찰 공백</value></data>
+  <data name="HistoryUnavailable" xml:space="preserve"><value>관찰 불가</value></data>
+  <data name="HistoryMoochUnknown" xml:space="preserve"><value>생미끼 어종 미확인</value></data>
+  <data name="HistorySwimbaitUnknown" xml:space="preserve"><value>보관 생미끼 어종 미확인</value></data>
+  <data name="HistoryStorageError" xml:space="preserve"><value>기록을 저장하거나 복원하지 못했습니다. 기존 파일은 보존하며 새 기록은 메모리에 유지합니다.</value></data>
+  <data name="HistoryLoading" xml:space="preserve"><value>낚시 기록을 불러오는 중…</value></data>
+  <data name="HistoryEmpty" xml:space="preserve"><value>아직 기록된 캐스팅이 없습니다.</value></data>
+  <data name="HistoryRecent" xml:space="preserve"><value>최근 낚시 · {0}회</value></data>
+  <data name="HistoryCapacity" xml:space="preserve"><value>{0}/{1}회 · 최신순</value></data>
+  <data name="TimerSpotPending" xml:space="preserve"><value>낚시터는 시전 후 표시</value></data>
+  <data name="TimerSpotFish" xml:space="preserve"><value>이 낚시터의 어종 보기</value></data>
+  <data name="TimerEquippedBait" xml:space="preserve"><value>장착 미끼 · {0}</value></data>
+  <data name="TimerCastLine" xml:space="preserve"><value>{0} · {1}</value></data>
+  <data name="TimerCastEt" xml:space="preserve"><value>던진 시각 ET {0}</value></data>
+  <data name="TimerSessionLine" xml:space="preserve"><value>낚시 시작 {0} · {1}</value></data>
+  <data name="TimerStartUnknownHint" xml:space="preserve"><value>관찰한 전이를 기준으로 시간을 표시합니다. 로드 전에 시작된 시전·연속 낚시의 시작 시각은 미확인입니다.</value></data>
+  <data name="TimerLoginRequired" xml:space="preserve"><value>접속 후 낚시를 관찰합니다</value></data>
+  <data name="TimerOceanUnsupported" xml:space="preserve"><value>먼바다 낚시 기록은 아직 지원하지 않습니다</value></data>
+  <data name="TimerUnavailable" xml:space="preserve"><value>낚시 관찰 불가</value></data>
+  <data name="TimerCasting" xml:space="preserve"><value>던지는 중</value></data>
+  <data name="TimerWaiting" xml:space="preserve"><value>입질 대기</value></data>
+  <data name="TimerBite" xml:space="preserve"><value>입질</value></data>
+  <data name="TimerHook" xml:space="preserve"><value>낚아올리는 중</value></data>
+  <data name="TimerReturning" xml:space="preserve"><value>낚싯대 회수 중</value></data>
+  <data name="TimerStopping" xml:space="preserve"><value>낚시 종료 중</value></data>
+  <data name="TimerRodReady" xml:space="preserve"><value>시전 준비</value></data>
+  <data name="TimerIdle" xml:space="preserve"><value>낚시 대기</value></data>
+  <data name="TimerObserving" xml:space="preserve"><value>관찰 중</value></data>
+  <data name="TimerHideCaught" xml:space="preserve"><value>수집한 어종 숨기기</value></data>
+  <data name="TimerAllFish" xml:space="preserve"><value>전체</value></data>
+  <data name="TimerFishCount" xml:space="preserve"><value>{0}종</value></data>
+  <data name="TimerNoFish" xml:space="preserve"><value>현재 수집 조건에 해당하는 어종이 없습니다.</value></data>
+  <data name="HistoryCastAt" xml:space="preserve"><value>시전 시각: {0}</value></data>
 </root>

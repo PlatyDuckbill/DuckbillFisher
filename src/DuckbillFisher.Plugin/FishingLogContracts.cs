@@ -1,11 +1,12 @@
 using System.Security.Cryptography;
 using System.Text;
+using Dalamud.Game.Chat;
 using Dalamud.Plugin.Services;
 using Lumina.Excel.Sheets;
 
 namespace DuckbillFisher.Plugin;
 
-/// <summary>KR LogMessage macro fingerprints, inspected from build 2026.10.06.0000.0000. Diagnostic allowlist only.</summary>
+/// <summary>KR LogMessage macro fingerprints, inspected from build 2026.10.06.0000.0000.</summary>
 internal static class FishingLogContracts
 {
     private static readonly (uint Id, string Sha256)[] Entries =
@@ -38,6 +39,15 @@ internal static class FishingLogContracts
     ];
 
     public static int Count => Entries.Length;
+
+    public static FishingLogActor Actor(ILogMessage message, string localName, ushort homeWorld)
+    {
+        if (message.SourceEntity is not { } source) return FishingLogActor.NoSource;
+        var name = source.Name.ExtractText();
+        if (!source.IsPlayer || localName.Length == 0 || homeWorld == 0 || name.Length == 0 || source.HomeWorldId == 0)
+            return FishingLogActor.Unknown;
+        return source.HomeWorldId == homeWorld && name == localName ? FishingLogActor.Local : FishingLogActor.Other;
+    }
 
     public static void Validate(IDataManager data, HashSet<uint> valid)
     {

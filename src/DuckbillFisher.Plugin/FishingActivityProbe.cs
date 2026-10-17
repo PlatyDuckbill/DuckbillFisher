@@ -111,16 +111,7 @@ internal sealed class FishingActivityProbe : IDisposable
                 player.ContentId != character || conditions[ConditionFlag.BetweenAreas] ||
                 conditions[ConditionFlag.BetweenAreas51]) { rejected++; return; }
             if (message.ParameterCount is < 0 or > 8) { rejected++; return; }
-            var actor = FishingLogActor.NoSource;
-            if (message.SourceEntity is { } source)
-            {
-                var sourceName = source.Name.ExtractText();
-                actor = source.IsPlayer && localName.Length > 0 && homeWorld != 0 &&
-                    sourceName.Length > 0 && source.HomeWorldId != 0
-                    ? source.HomeWorldId == homeWorld && sourceName == localName
-                        ? FishingLogActor.Local : FishingLogActor.Other
-                    : FishingLogActor.Unknown;
-            }
+            var actor = FishingLogContracts.Actor(message, localName, homeWorld);
             // Preserve positional numeric slots; never retain borrowed strings, names or wrappers.
             var numbers = new uint?[message.ParameterCount];
             for (var i = 0; i < numbers.Length; i++)

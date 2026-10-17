@@ -17,7 +17,10 @@ internal sealed class MainWindow : Window
     private readonly SpawnAlertsPanel spawnAlerts;
     private readonly Action languageChanged;
     private readonly FishPreferences preferences;
+    private readonly FishingTracker fishingTracker;
+    private readonly FishingHistoryPanel fishingHistory;
     public Action? ShowCompact { get; set; }
+    public Action? ShowTimer { get; set; }
     private string[] markerLabels = Markers.Select(key => UiText.Get(key)).ToArray();
     private IReadOnlyList<FishGuideRow>? lastRows;
     private FishGuideRow[] matches = [];
@@ -28,7 +31,8 @@ internal sealed class MainWindow : Window
     private bool selectSettings;
 
     public MainWindow(FishingActivityProbe observer, FishGuideDiagnostics fishGuide, FishListPanel fishList,
-        SpawnAlertsPanel spawnAlerts, FishPreferences preferences, Action languageChanged) : base("DuckbillFisher###DuckbillFisher.Main")
+        SpawnAlertsPanel spawnAlerts, FishPreferences preferences, Action languageChanged,
+        FishingTracker fishingTracker, FishingHistoryPanel fishingHistory) : base("DuckbillFisher###DuckbillFisher.Main")
     {
         this.observer = observer;
         this.fishGuide = fishGuide;
@@ -36,6 +40,8 @@ internal sealed class MainWindow : Window
         this.spawnAlerts = spawnAlerts;
         this.languageChanged = languageChanged;
         this.preferences = preferences;
+        this.fishingTracker = fishingTracker;
+        this.fishingHistory = fishingHistory;
         spawnAlerts.ShowSettings = OpenSettings;
         UiText.SetLanguage(preferences.View.Language);
         markerLabels = Markers.Select(key => UiText.Get(key)).ToArray();
@@ -70,6 +76,10 @@ internal sealed class MainWindow : Window
             if (ImGui.TabItemButton($"{FontAwesomeIcon.CompressAlt.ToIconString()}###OpenCompactWindow", ImGuiTabItemFlags.Trailing)) ShowCompact?.Invoke();
             ImGui.PopFont();
             UiWidgets.Tooltip(UiText.Get(T.OpenCompactWindow));
+            ImGui.PushFont(UiBuilder.IconFont);
+            if (ImGui.TabItemButton($"{FontAwesomeIcon.Stopwatch.ToIconString()}###OpenTimer", ImGuiTabItemFlags.Trailing)) ShowTimer?.Invoke();
+            ImGui.PopFont();
+            UiWidgets.Tooltip(UiText.Get(T.CastingTimerTitle));
             if (ImGui.BeginTabItem(UiText.Label(T.TabCatalog, "CatalogTab")))
             {
                 fishList.Draw();
@@ -78,6 +88,20 @@ internal sealed class MainWindow : Window
             if (ImGui.BeginTabItem(UiText.Label(T.TabAlerts, "SpawnAlertsTab")))
             {
                 spawnAlerts.Draw();
+                ImGui.EndTabItem();
+            }
+            if (ImGui.BeginTabItem(UiText.Label(T.TabHistory, "FishingHistoryTab")))
+            {
+                var activity = fishingTracker.View;
+                if (ImGui.Button(UiText.Label(T.CastingTimerTitle, "OpenCastingTimer"))) ShowTimer?.Invoke();
+                ImGui.SameLine();
+                ImGui.TextDisabled(UiText.Get(T.HistoryCapacity, activity.Records.Count, DuckbillFisher.Core.FishingAttempts.Capacity));
+                if (settings.DeveloperMode)
+                {
+                    ImGui.SameLine();
+                    if (ImGui.Button(UiText.Label(T.CopyTimerReport, "CopyTimerReport"))) ImGui.SetClipboardText(fishingTracker.CreateReport());
+                }
+                fishingHistory.Draw(activity, DuckbillFisher.Core.FishingAttempts.Capacity, "MainFishingHistory");
                 ImGui.EndTabItem();
             }
             if (ImGui.BeginTabItem(UiText.Label(T.TabSettings, "SettingsTab"),
