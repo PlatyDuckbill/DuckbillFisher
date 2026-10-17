@@ -1,5 +1,6 @@
 using System.Numerics;
 using Dalamud.Bindings.ImGui;
+using Dalamud.Interface;
 using Dalamud.Interface.Windowing;
 using DuckbillFisher.Plugin.Localization;
 using T = DuckbillFisher.Plugin.Localization.TextKey;
@@ -41,6 +42,7 @@ internal sealed class MainWindow : Window
         languageChanged();
         Size = new Vector2(980, 680);
         SizeCondition = ImGuiCond.FirstUseEver;
+        BgAlpha = UiWidgets.BackgroundAlpha;
         SizeConstraints = new WindowSizeConstraints { MinimumSize = new Vector2(700, 450), MaximumSize = new Vector2(float.MaxValue) };
         Flags = ImGuiWindowFlags.NoScrollbar | ImGuiWindowFlags.NoScrollWithMouse;
     }
@@ -62,10 +64,12 @@ internal sealed class MainWindow : Window
         }
         fishList.DeveloperMode = settings.DeveloperMode;
         spawnAlerts.DeveloperMode = settings.DeveloperMode;
-        if (ImGui.SmallButton(UiText.Label(T.OpenCompactWindow, "OpenCompactWindow"))) ShowCompact?.Invoke();
-        UiWidgets.Tooltip(UiText.Get(T.CompactScope));
         if (ImGui.BeginTabBar("DiagnosticsTabs"))
         {
+            ImGui.PushFont(UiBuilder.IconFont);
+            if (ImGui.TabItemButton($"{FontAwesomeIcon.CompressAlt.ToIconString()}###OpenCompactWindow", ImGuiTabItemFlags.Trailing)) ShowCompact?.Invoke();
+            ImGui.PopFont();
+            UiWidgets.Tooltip(UiText.Get(T.OpenCompactWindow));
             if (ImGui.BeginTabItem(UiText.Label(T.TabCatalog, "CatalogTab")))
             {
                 fishList.Draw();

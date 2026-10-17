@@ -11,6 +11,14 @@ namespace DuckbillFisher.Plugin;
 /// <summary>Presentation helpers only: borrowed textures, scaled controls, and contextual help.</summary>
 internal static class UiWidgets
 {
+    public const float BackgroundAlpha = 0.94f;
+
+    public static void FlowNext(float width, float right, float spacing = 8)
+    {
+        ImGui.SameLine(0, spacing);
+        if (ImGui.GetCursorPosX() + width > right) ImGui.NewLine();
+    }
+
     public static void Tooltip(string text)
     {
         if (!ImGui.IsItemHovered(ImGuiHoveredFlags.AllowWhenDisabled)) return;

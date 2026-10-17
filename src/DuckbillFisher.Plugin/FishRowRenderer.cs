@@ -13,11 +13,12 @@ namespace DuckbillFisher.Plugin;
 /// <summary>Shared catalog/favorite row presentation. Uses cached managed data and borrowed textures only.</summary>
 internal sealed class FishRowRenderer(ITextureProvider textures, FishingMapService maps)
 {
-    private static readonly Vector4 OpenBackground = new(0.10f, 0.48f, 0.30f, 0.28f);
+    private static readonly Vector4 OpenBackground = new(0.10f, 0.48f, 0.30f, 0.14f);
+    private static readonly Vector4 OpenAccent = new(0.55f, 0.88f, 0.68f, 1);
     private readonly Dictionary<uint, (FishGuideRow Row, FishRowSummary Summary)> summaries = [];
     private readonly Dictionary<uint, (RowToken[] Bait, RowToken[] Conditions)> tokens = [];
     private CultureInfo? culture;
-    private static bool IsWide(float width) => width >= ImGui.GetFontSize() * 36;
+    private static bool IsWide(float width) => width >= ImGui.GetFontSize() * 28;
     public static float GetHeight(float width, bool compact = false) =>
         ImGui.GetTextLineHeightWithSpacing() * (IsWide(width) || compact ? 3 : 4) + 8;
 
@@ -36,13 +37,19 @@ internal sealed class FishRowRenderer(ITextureProvider textures, FishingMapServi
         var width = ImGui.GetContentRegionAvail().X;
         var wide = IsWide(width);
         var line = ImGui.GetTextLineHeightWithSpacing();
-        if (!fish.IsOceanFishing && forecast is { Kind: FishingWindowKind.Open } &&
-            (forecast.Start is null || forecast.Start <= now) && (forecast.End is null || now < forecast.End))
+        var open = !fish.IsOceanFishing && forecast is { Kind: FishingWindowKind.Open } &&
+            (forecast.Start is null || forecast.Start <= now) && (forecast.End is null || now < forecast.End);
+        if (open)
         {
             var screen = ImGui.GetCursorScreenPos();
             ImGui.GetWindowDrawList().AddRectFilled(screen, screen + new Vector2(width, height), ImGui.GetColorU32(OpenBackground));
         }
         var clicked = ImGui.Selectable("###FishRow", selected, ImGuiSelectableFlags.AllowItemOverlap, new Vector2(width, height));
+        if (open)
+        {
+            var screen = ImGui.GetItemRectMin();
+            ImGui.GetWindowDrawList().AddRectFilled(screen, screen + new Vector2(2, height), ImGui.GetColorU32(OpenAccent));
+        }
         var next = ImGui.GetCursorPos();
         var iconSize = line * (wide || compact ? 2 : 3);
         ImGui.SetCursorPos(start + new Vector2(4, 4));
@@ -89,7 +96,9 @@ internal sealed class FishRowRenderer(ITextureProvider textures, FishingMapServi
         ImGui.SetCursorPos(start + new Vector2(textX + pinWidth + 5, 4 + line));
         LineText(place, Math.Max(1, textWidth - timerWidth - pinWidth - 16), true);
         ImGui.SetCursorPos(start + new Vector2(textX + textWidth - timerWidth, 4 + line));
+        if (open) ImGui.PushStyleColor(ImGuiCol.Text, OpenAccent);
         LineText(time, timerWidth, false);
+        if (open) ImGui.PopStyleColor();
         UiWidgets.Tooltip(usesOtherRegion ? UiText.Get(T.RegionForecastElsewhere, time)
             : forecast is null ? time : FormatWindow(forecast, now));
 
@@ -99,14 +108,15 @@ internal sealed class FishRowRenderer(ITextureProvider textures, FishingMapServi
             tokens[fish.FishParameterId] = BuildTokens(fish);
         }
         var icons = tokens[fish.FishParameterId];
-        var baitWidth = wide ? textWidth * 0.5f : textWidth;
+        var baitWidth = wide ? Math.Min(TokenWidth(icons.Bait), textWidth * 0.55f) : textWidth;
         ImGui.SetCursorPos(start + new Vector2(textX, 4 + line * 2));
         DrawTokens(icons.Bait, baitWidth, cached.Summary.Bait);
         if (!compact || wide)
         {
             ImGui.SetCursorPos(start + new Vector2(textX + (wide ? baitWidth + 6 : 0), 4 + line * (wide ? 2 : 3)));
             DrawTokens(icons.Conditions, wide ? Math.Max(1, textWidth - baitWidth - 6) : textWidth,
-                usesOtherRegion ? UiText.Get(T.RegionForecastElsewhere, cached.Summary.Conditions) : cached.Summary.Conditions);
+                usesOtherRegion ? UiText.Get(T.RegionForecastElsewhere, cached.Summary.Conditions) : cached.Summary.Conditions,
+                forceMore: usesOtherRegion);
         }
         ImGui.SetCursorPos(next);
         ImGui.PopID();
@@ -149,6 +159,14 @@ internal sealed class FishRowRenderer(ITextureProvider textures, FishingMapServi
             conditions.Add(new(hook.IconId, "", UiText.Get(T.HooksetLabel, hook.Name)));
         if (details.Rule.ConditionsKnown && (details.Rule.StartHour != 0 || details.Rule.EndHour != 24))
             conditions.Add(new(0, UiText.Get(T.RowEtRange, EtClock(details.Rule.StartHour), EtClock(details.Rule.EndHour)), UiText.Get(T.DetailTime)));
+        if (details.Rule.FolkloreRequired)
+            conditions.Add(new(details.Folklore?.IconId ?? 0, details.Folklore is null ? UiText.Get(T.RowFolklore) : "", UiText.Get(T.RowFolklore)));
+        if (details.Rule.SnaggingRequired)
+            conditions.Add(new(details.Snagging?.IconId ?? 0, details.Snagging is null ? UiText.Get(T.SnaggingRequired) : "",
+                UiText.Get(T.RequiredSkill, details.Snagging?.Name ?? UiText.Get(T.SnaggingRequired))));
+        if (details.Rule.Lure.Length > 0)
+            conditions.Add(new(details.Lure?.IconId ?? 0, details.Lure is null ? UiText.Get(T.ConditionUnknown) : "",
+                UiText.Get(T.RequiredSkill, details.Lure?.Name ?? UiText.Get(T.ConditionUnknown))));
         return (bait.ToArray(), conditions.ToArray());
 
         void AddWeather(FishingConditionIcon[] options, T label)
@@ -161,22 +179,33 @@ internal sealed class FishRowRenderer(ITextureProvider textures, FishingMapServi
         }
     }
 
-    private void DrawTokens(RowToken[] content, float width, string fullText)
+    private static float TokenWidth(RowToken[] content) => content.Sum(token =>
+        (token.Text.Length == 0 ? ImGui.GetTextLineHeight() : ImGui.CalcTextSize(token.Text).X) + 3);
+
+    private void DrawTokens(RowToken[] content, float width, string fullText, bool forceMore = false)
     {
         if (content.Length == 0) { LineText(fullText, width, true); return; }
         var start = ImGui.GetCursorPosX();
         var size = ImGui.GetTextLineHeight();
+        var more = forceMore || TokenWidth(content) > width;
+        var available = more ? Math.Max(0, width - size - 3) : width;
+        var drawn = 0;
         for (var i = 0; i < content.Length; i++)
         {
             var token = content[i];
             var needed = token.Text.Length == 0 ? size : ImGui.CalcTextSize(token.Text).X;
-            if (ImGui.GetCursorPosX() - start + needed + size > width) break;
+            if (ImGui.GetCursorPosX() - start + needed > available) break;
             if (token.Text.Length == 0) UiWidgets.GameIcon(textures, token.Icon, size, token.Hint);
             else { ImGui.TextUnformatted(token.Text); UiWidgets.Tooltip(token.Hint); }
-            ImGui.SameLine(0, 3);
+            drawn++;
+            if (i + 1 < content.Length) ImGui.SameLine(0, 3);
         }
-        UiWidgets.Icon(FontAwesomeIcon.InfoCircle);
-        UiWidgets.Tooltip(fullText);
+        if (more)
+        {
+            if (drawn == content.Length) ImGui.SameLine(0, 3);
+            UiWidgets.Icon(FontAwesomeIcon.InfoCircle);
+            UiWidgets.Tooltip(fullText);
+        }
     }
 
     private static string EtClock(double hour) => $"{(int)hour:00}:{(int)Math.Round(hour % 1 * 60):00}";

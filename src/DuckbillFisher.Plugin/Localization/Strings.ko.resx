@@ -463,4 +463,5 @@
   <data name="OpenFishGuide" xml:space="preserve"><value>어류도감 열기</value></data>
   <data name="GuideOpenUnavailable" xml:space="preserve"><value>이 환경에서는 도감을 바로 열 수 없습니다. 게임 메뉴에서 어류도감을 열어 주세요.</value></data>
   <data name="GuideOpenDataWaiting" xml:space="preserve"><value>어종 목록을 불러오는 중입니다. 잠시 후 다시 눌러 주세요.</value></data>
+  <data name="DetailWeatherTransition" xml:space="preserve"><value>날씨</value></data>
 </root>

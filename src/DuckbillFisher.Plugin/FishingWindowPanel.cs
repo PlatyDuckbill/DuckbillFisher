@@ -27,7 +27,7 @@ internal static class FishingWindowPanel
             FishingWindowKind.NotFound => UiText.Get(T.ForecastNotFound),
             _ => UiText.Get(T.ForecastUnknown),
         };
-        ImGui.PushStyleColor(ImGuiCol.ChildBg, open ? new Vector4(0.10f, 0.48f, 0.30f, 0.40f) : new Vector4(0.18f, 0.23f, 0.29f, 0.40f));
+        ImGui.PushStyleColor(ImGuiCol.ChildBg, open ? new Vector4(0.10f, 0.40f, 0.25f, 0.32f) : new Vector4(0.18f, 0.23f, 0.29f, 0.40f));
         var width = Math.Max(1, ImGui.GetContentRegionAvail().X - 24);
         var remaining = window is { Kind: FishingWindowKind.Open, End: not null } or { Kind: FishingWindowKind.Upcoming, Start: not null }
             ? FishRowRenderer.CompactWindow(window, now) : "";

@@ -3,6 +3,7 @@ using System.Collections.Frozen;
 using System.Text;
 using System.Numerics;
 using Dalamud.Bindings.ImGui;
+using Dalamud.Interface;
 using Dalamud.Plugin.Services;
 using DuckbillFisher.Core;
 using DuckbillFisher.Plugin.Localization;
@@ -98,24 +99,22 @@ internal sealed class FishListPanel(FishCatalog catalog, ITextureProvider textur
         UiWidgets.GuideBanner(observed, personal, guideOpener);
         ImGui.SetNextItemWidth(-1);
         changed |= ImGui.InputTextWithHint("###CatalogSearch", UiText.Get(T.SearchPlaceholder), ref search, 100);
-        var filtersChanged = false;
-        if (ImGui.BeginTable("CatalogPrimaryControls", 2, ImGuiTableFlags.SizingStretchSame))
-        {
-            ImGui.TableNextColumn();
-            ImGui.TextUnformatted(UiText.Get(T.CatalogSort));
-            ImGui.SetNextItemWidth(-1);
-            string[] sortNames = [UiText.Get(T.CatalogSortName), UiText.Get(T.CatalogSortId), UiText.Get(T.CatalogSortWindow), UiText.Get(T.CatalogSortFavorite)];
-            filtersChanged |= ImGui.Combo("###CatalogSort", ref sort, sortNames, sortNames.Length);
-            if (sort == 2 && ImGui.IsItemHovered()) ImGui.SetTooltip(UiText.Get(T.CatalogSortWindowHint));
-            ImGui.TableNextColumn();
-            ImGui.TextUnformatted(UiText.Get(T.CollectionVisibility));
-            ImGui.SetNextItemWidth(-1);
-            string[] collectionNames = [UiText.Get(T.CollectionAll), UiText.Get(T.CollectionHideCaught),
-                UiText.Get(T.CollectionCaughtOnly), UiText.Get(T.CollectionUnknownOnly)];
-            filtersChanged |= ImGui.Combo("###CatalogCollectionVisibility", ref collectionVisibility, collectionNames, collectionNames.Length);
-            ImGui.EndTable();
-        }
-        if (ImGui.SmallButton(UiText.Label(T.CatalogRestoreDefaults, "RestoreCatalogDefaults")))
+        var toolbarRight = ImGui.GetCursorPosX() + ImGui.GetContentRegionAvail().X;
+        var comboWidth = ImGui.GetFontSize() * 12;
+        string[] sortNames = [UiText.Get(T.CatalogSortName), UiText.Get(T.CatalogSortId), UiText.Get(T.CatalogSortWindow), UiText.Get(T.CatalogSortFavorite)];
+        ImGui.SetNextItemWidth(comboWidth);
+        var filtersChanged = ImGui.Combo("###CatalogSort", ref sort, sortNames, sortNames.Length);
+        UiWidgets.Tooltip(UiText.Get(sort == 2 ? T.CatalogSortWindowHint : T.CatalogSort));
+        UiWidgets.FlowNext(comboWidth, toolbarRight);
+        string[] collectionNames = [UiText.Get(T.CollectionAll), UiText.Get(T.CollectionHideCaught),
+            UiText.Get(T.CollectionCaughtOnly), UiText.Get(T.CollectionUnknownOnly)];
+        ImGui.SetNextItemWidth(comboWidth);
+        filtersChanged |= ImGui.Combo("###CatalogCollectionVisibility", ref collectionVisibility, collectionNames, collectionNames.Length);
+        UiWidgets.Tooltip(UiText.Get(T.CollectionVisibility));
+        UiWidgets.FlowNext(ImGui.GetFontSize() * 7, toolbarRight);
+        filtersChanged |= DrawFilters(view.Geography);
+        UiWidgets.FlowNext(ImGui.GetFrameHeight(), toolbarRight);
+        if (UiWidgets.IconButton(FontAwesomeIcon.Undo, "RestoreCatalogDefaults", UiText.Get(T.CatalogRestoreDefaults)))
         {
             ApplyCatalogSettings(new());
             search = "";
@@ -123,9 +122,6 @@ internal sealed class FishListPanel(FishCatalog catalog, ITextureProvider textur
             detailsOnly = false;
             filtersChanged = true;
         }
-        if (ImGui.IsItemHovered()) ImGui.SetTooltip(UiText.Get(T.CatalogSavedHint));
-        ImGui.SameLine();
-        filtersChanged |= DrawFilters(view.Geography);
         if (currentRegionOnly)
             ImGui.TextWrapped(location.State == FishingRegionState.Ready
                 ? UiText.Get(T.CurrentRegionName, location.Name) : UiText.Get(T.CurrentRegionUnavailable));
@@ -198,7 +194,7 @@ internal sealed class FishListPanel(FishCatalog catalog, ITextureProvider textur
         var active = (inLogOnly ? 1 : 0) + (!includeOceanFish ? 1 : 0) + (timeRestrictedOnly ? 1 : 0) +
             (favoritesOnly ? 1 : 0) + (currentRegionOnly ? 1 : 0) + (gradeVisibility != 0 ? 1 : 0) +
             (geography.Regions.Count > 0 ? 1 : 0) + (geography.Expansions.Count > 0 ? 1 : 0);
-        if (ImGui.SmallButton($"{UiText.Get(T.CatalogFiltersHeading, active)}###CatalogFilters")) ImGui.OpenPopup("CatalogFiltersPopup");
+        if (ImGui.Button($"{UiText.Get(T.CatalogFiltersHeading, active)}###CatalogFilters")) ImGui.OpenPopup("CatalogFiltersPopup");
         if (ImGui.IsItemHovered())
             ImGui.SetTooltip(UiText.Get(T.CatalogFiltersSummary,
                 new UiMessage(timeRestrictedOnly ? T.OptionOn : T.OptionOff), gradeNames[gradeVisibility],

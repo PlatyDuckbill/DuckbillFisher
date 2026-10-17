@@ -14,23 +14,12 @@ internal sealed class FishingConditionPanel(ITextureProvider textures, FishingIt
         IReadOnlyDictionary<uint, FishingDetailView> related)
     {
         var rule = details.Rule;
+        DrawBaitPath(details, personal, related);
+        ImGui.Spacing();
         if (ImGui.BeginTable("Conditions", 2, ImGuiTableFlags.SizingFixedFit))
         {
             ImGui.TableSetupColumn("Label", ImGuiTableColumnFlags.WidthFixed, ImGui.GetFontSize() * 5.5f);
             ImGui.TableSetupColumn("Value", ImGuiTableColumnFlags.WidthStretch);
-            Label(T.DetailBait);
-            if (details.BaitSteps.Length == 0) ImGui.TextUnformatted(UiText.Get(T.ConditionUnknown));
-            for (var step = 0; step < details.BaitSteps.Length; step++)
-            {
-                if (step > 0) ImGui.TextUnformatted("↓");
-                for (var alternative = 0; alternative < details.BaitSteps[step].Length; alternative++)
-                {
-                    if (alternative > 0) ImGui.TextDisabled(UiText.Get(T.ConditionOr));
-                    var item = details.BaitSteps[step][alternative];
-                    related.TryGetValue(item.Id, out var intermediate);
-                    StepItem(item, item.Name, $"Bait{step}/{item.Id}", personal, intermediate, step > 0);
-                }
-            }
             Label(T.DetailHookset);
             UiWidgets.Tooltip(UiText.Get(T.HooksetLabel, details.Hookset?.Name ?? UiText.Get(T.ConditionUnknown)));
             if (details.Hookset is { } hookset)
@@ -46,10 +35,17 @@ internal sealed class FishingConditionPanel(ITextureProvider textures, FishingIt
             if (!rule.ConditionsKnown) UiWidgets.Tooltip(details.ConditionWarning.Display);
             if (rule.ConditionsKnown)
             {
-                Label(T.DetailPreviousWeather);
-                Weather(details.PreviousWeather, T.PreviousWeatherConditionLabel);
-                Label(T.DetailWeather);
-                Weather(details.Weather, T.WeatherConditionLabel);
+                Label(T.DetailWeatherTransition);
+                var right = ImGui.GetCursorPosX() + ImGui.GetContentRegionAvail().X;
+                if (details.PreviousWeather.Length > 0)
+                {
+                    Weather(details.PreviousWeather, T.PreviousWeatherConditionLabel, right);
+                    UiWidgets.FlowNext(IconSize * 2 + 12, right, 6);
+                    ImGui.TextUnformatted("→");
+                    UiWidgets.Tooltip(UiText.Get(T.WeatherTransitionHint));
+                    ImGui.SameLine(0, 6);
+                }
+                Weather(details.Weather, T.WeatherConditionLabel, right);
             }
             if (rule.SnaggingRequired) { Label(T.DetailRequired); Skill(details.Snagging, T.SnaggingRequired); }
             if (rule.Lure.Length > 0) { Label(T.DetailRequired); Skill(details.Lure, rule.Lure == "Modest" ? T.LureModest : T.LureAmbitious); }
@@ -92,54 +88,86 @@ internal sealed class FishingConditionPanel(ITextureProvider textures, FishingIt
         ImGui.PopStyleColor();
     }
 
-    private void StepItem(FishingItemView item, string name, string id, FishPreferencesView personal,
-        FishingDetailView? detail, bool annotateMissing)
+    private void DrawBaitPath(FishingDetailView details, FishPreferencesView personal,
+        IReadOnlyDictionary<uint, FishingDetailView> related)
     {
-        if (detail is null && !annotateMissing) { Item(item, name, id, personal); return; }
-        ImGui.PushID(id);
-        if (ImGui.BeginTable("Ingredient", 2, ImGuiTableFlags.SizingStretchSame))
-        {
-            ImGui.TableNextColumn();
-            Item(item, name, "Item", personal);
-            ImGui.TableNextColumn();
-            if (detail is null)
+        if (details.BaitSteps.Length == 0) { ImGui.TextDisabled(UiText.Get(T.RowBaitUnknown)); return; }
+        var width = ImGui.GetContentRegionAvail().X;
+        var right = ImGui.GetCursorPosX() + width;
+        var first = true;
+        for (var step = 0; step < details.BaitSteps.Length; step++)
+            for (var alternative = 0; alternative < details.BaitSteps[step].Length; alternative++)
             {
-                UiWidgets.Icon(FontAwesomeIcon.InfoCircle);
-                UiWidgets.Tooltip(UiText.Get(T.StepConditionsUnknown));
+                var item = details.BaitSteps[step][alternative];
+                related.TryGetValue(item.Id, out var detail);
+                var separator = alternative > 0 ? "/" : "→";
+                var separatorWidth = first ? 0 : ImGui.CalcTextSize(separator).X + 8;
+                var preferred = IconSize + 8 + Math.Min(ImGui.CalcTextSize(item.Name).X, ImGui.GetFontSize() * 12)
+                    + (detail is null ? step > 0 ? ImGui.GetTextLineHeight() + 6 : 0 : IconSize + ImGui.GetFontSize() * 4);
+                if (detail is { Rule.ConditionsKnown: true } && (detail.Rule.StartHour != 0 || detail.Rule.EndHour != 24))
+                    preferred += ImGui.CalcTextSize(UiText.Get(T.TimeConditionLabel, EtClock(detail.Rule.StartHour), EtClock(detail.Rule.EndHour))).X + 6;
+                if (!first)
+                {
+                    UiWidgets.FlowNext(Math.Min(width, preferred + separatorWidth), right);
+                    ImGui.TextDisabled(separator);
+                    UiWidgets.Tooltip(UiText.Get(alternative > 0 ? T.ConditionAny : T.BaitPathHeading));
+                    ImGui.SameLine(0, 8);
+                }
+                StepItem(item, item.Name, $"Bait{step}/{item.Id}", personal, detail, step > 0,
+                    Math.Max(1, Math.Min(preferred, right - ImGui.GetCursorPosX())));
+                first = false;
             }
-            else StepConditions(detail);
-            ImGui.EndTable();
+    }
+
+    private void StepItem(FishingItemView item, string name, string id, FishPreferencesView personal,
+        FishingDetailView? detail, bool annotateMissing, float? maxWidth = null)
+    {
+        var width = maxWidth ?? ImGui.GetContentRegionAvail().X;
+        var minimumConditions = annotateMissing ? ImGui.GetTextLineHeight() : 0;
+        if (detail is not null)
+        {
+            var tug = detail.Rule.Tug switch { "light" => "!", "medium" => "!!", "heavy" => "!!!", _ => UiText.Get(T.ConditionUnknown) };
+            minimumConditions = (detail.Hookset is null ? 0 : IconSize + 4) + ImGui.CalcTextSize(tug).X;
+            if (!detail.Rule.ConditionsKnown || detail.PreviousWeather.Length > 0 || detail.Weather.Length > 0 ||
+                detail.Rule.SnaggingRequired || detail.Rule.Lure.Length > 0 || detail.Predators.Length > 0 ||
+                detail.Rule.StartHour != 0 || detail.Rule.EndHour != 24)
+                minimumConditions += ImGui.GetTextLineHeight() + 6;
         }
+        var spacing = minimumConditions > 0 ? 14 : 8;
+        var nameWidth = Math.Max(1, Math.Min(ImGui.CalcTextSize(name).X,
+            Math.Min(ImGui.GetFontSize() * 12, width - IconSize - spacing - minimumConditions)));
+        ImGui.PushID(id);
+        ImGui.BeginGroup();
+        Item(item, name, "Item", personal, nameWidth);
+        if (detail is not null)
+        {
+            ImGui.SameLine(0, 6);
+            StepConditions(detail, Math.Max(1, width - IconSize - nameWidth - 14));
+        }
+        else if (annotateMissing)
+        {
+            ImGui.SameLine(0, 6);
+            UiWidgets.Icon(FontAwesomeIcon.InfoCircle);
+            UiWidgets.Tooltip(UiText.Get(T.StepConditionsUnknown));
+        }
+        ImGui.EndGroup();
         ImGui.PopID();
     }
 
-    private void StepConditions(FishingDetailView detail)
+    private void StepConditions(FishingDetailView detail, float width)
     {
-        var start = ImGui.GetCursorPos();
-        var screen = ImGui.GetCursorScreenPos();
-        var width = Math.Max(1, ImGui.GetContentRegionAvail().X);
-        var infoWidth = ImGui.GetTextLineHeight();
         var parts = new List<string>();
         var tug = detail.Rule.Tug switch { "light" => "!", "medium" => "!!", "heavy" => "!!!", _ => UiText.Get(T.ConditionUnknown) };
         parts.Add(UiText.Get(T.StepBite, tug));
-        ImGui.PushClipRect(screen, screen + new Vector2(Math.Max(1, width - infoWidth - 6), IconSize), true);
-        if (detail.Hookset is { } hookset)
-        {
-            UiWidgets.GameIcon(textures, hookset.IconId, IconSize, UiText.Get(T.HooksetLabel, hookset.Name));
-            parts.Add(UiText.Get(T.HooksetLabel, hookset.Name));
-            ImGui.SameLine(0, 4);
-        }
+        if (detail.Hookset is { } hookset) parts.Add(UiText.Get(T.HooksetLabel, hookset.Name));
         else parts.Add(UiText.Get(T.StepConditionsUnknown));
-        ImGui.TextDisabled(tug);
+        string? time = null;
         if (!detail.Rule.ConditionsKnown) parts.Add(detail.ConditionWarning.Display);
         else if (detail.Rule.StartHour != 0 || detail.Rule.EndHour != 24)
         {
-            var time = UiText.Get(T.TimeConditionLabel, EtClock(detail.Rule.StartHour), EtClock(detail.Rule.EndHour));
+            time = UiText.Get(T.TimeConditionLabel, EtClock(detail.Rule.StartHour), EtClock(detail.Rule.EndHour));
             parts.Add(time);
-            ImGui.SameLine(0, 6);
-            ImGui.TextDisabled(time);
         }
-        ImGui.PopClipRect();
         if (detail.PreviousWeather.Length > 0)
             parts.Add(UiText.Get(T.PreviousWeatherConditionLabel, string.Join(" / ", detail.PreviousWeather.Select(weather => weather.Name))));
         if (detail.Weather.Length > 0)
@@ -148,9 +176,31 @@ internal sealed class FishingConditionPanel(ITextureProvider textures, FishingIt
         if (detail.Rule.Lure.Length > 0) parts.Add(UiText.Get(T.RequiredSkill, detail.Lure?.Name ??
             UiText.Get(detail.Rule.Lure == "Modest" ? T.LureModest : T.LureAmbitious)));
         if (detail.Predators.Length > 0) parts.Add(UiText.Get(T.IntuitionRequired));
-        ImGui.SetCursorPos(start + new Vector2(Math.Max(0, width - infoWidth), 0));
-        UiWidgets.Icon(FontAwesomeIcon.InfoCircle);
-        UiWidgets.Tooltip(string.Join("\n", parts));
+        var extra = !detail.Rule.ConditionsKnown || detail.PreviousWeather.Length > 0 || detail.Weather.Length > 0 ||
+            detail.Rule.SnaggingRequired || detail.Rule.Lure.Length > 0 || detail.Predators.Length > 0;
+        var used = (detail.Hookset is null ? 0 : IconSize + 4) + ImGui.CalcTextSize(tug).X;
+        var showTime = time is not null && used + 6 + ImGui.CalcTextSize(time).X +
+            (extra ? ImGui.GetTextLineHeight() + 6 : 0) <= width;
+        var tooltip = string.Join("\n", parts);
+        if (detail.Hookset is { } hook)
+        {
+            UiWidgets.GameIcon(textures, hook.IconId, IconSize, tooltip);
+            ImGui.SameLine(0, 4);
+        }
+        ImGui.TextDisabled(tug);
+        UiWidgets.Tooltip(tooltip);
+        if (showTime)
+        {
+            ImGui.SameLine(0, 6);
+            ImGui.TextDisabled(time!);
+            UiWidgets.Tooltip(tooltip);
+        }
+        if (extra || time is not null && !showTime)
+        {
+            ImGui.SameLine(0, 6);
+            UiWidgets.Icon(FontAwesomeIcon.InfoCircle);
+            UiWidgets.Tooltip(tooltip);
+        }
     }
     private static float IconSize => ImGui.GetTextLineHeightWithSpacing() * 1.35f;
     private static void Label(T key)
@@ -161,16 +211,25 @@ internal sealed class FishingConditionPanel(ITextureProvider textures, FishingIt
         ImGui.TableNextColumn();
     }
 
-    private void Item(FishingItemView item, string name, string id, FishPreferencesView personal)
+    private void Item(FishingItemView item, string name, string id, FishPreferencesView personal, float? nameWidth = null)
     {
         ImGui.PushID(id);
         ImGui.BeginDisabled(!personal.HasCharacter);
         UiWidgets.GameIcon(textures, item.IconId, IconSize, UiText.Get(T.ItemLinkHint, item.Name));
         if (personal.HasCharacter && ImGui.IsItemClicked()) itemLinks.Request(item, personal.Session);
         ImGui.SameLine();
-        ImGui.TextWrapped(name);
+        if (nameWidth is { } fixedWidth)
+        {
+            var position = ImGui.GetCursorScreenPos();
+            ImGui.GetWindowDrawList().PushClipRect(position, position + new Vector2(fixedWidth, IconSize), true);
+            ImGui.GetWindowDrawList().AddText(position + new Vector2(0, (IconSize - ImGui.GetTextLineHeight()) / 2),
+                ImGui.GetColorU32(ImGuiCol.Text), name);
+            ImGui.GetWindowDrawList().PopClipRect();
+            ImGui.Dummy(new Vector2(fixedWidth, IconSize));
+        }
+        else ImGui.TextWrapped(name);
         if (personal.HasCharacter && ImGui.IsItemClicked()) itemLinks.Request(item, personal.Session);
-        UiWidgets.Tooltip(UiText.Get(T.ItemLinkHint, item.Name));
+        UiWidgets.Tooltip(UiText.Get(T.ItemLinkHint, name));
         ImGui.EndDisabled();
         ImGui.PopID();
     }
@@ -181,15 +240,20 @@ internal sealed class FishingConditionPanel(ITextureProvider textures, FishingIt
         else UiWidgets.GameIcon(textures, skill.IconId, IconSize, UiText.Get(T.RequiredSkill, skill.Name));
     }
 
-    private void Weather(FishingConditionIcon[] options, T label)
+    private void Weather(FishingConditionIcon[] options, T label, float right)
     {
         if (options.Length == 0) { ImGui.TextUnformatted(UiText.Get(T.NoWeatherRestriction)); return; }
         for (var i = 0; i < options.Length; i++)
         {
-            if (i > 0 && ImGui.GetContentRegionAvail().X > IconSize * 3) ImGui.SameLine();
+            if (i > 0)
+            {
+                UiWidgets.FlowNext(IconSize + ImGui.CalcTextSize("/").X + 6, right, 4);
+                ImGui.TextDisabled("/");
+                UiWidgets.Tooltip(UiText.Get(T.ConditionAny));
+                ImGui.SameLine(0, 4);
+            }
             UiWidgets.GameIcon(textures, options[i].IconId, IconSize, UiText.Get(label, options[i].Name));
         }
-        if (options.Length > 1) ImGui.TextDisabled(UiText.Get(T.ConditionAny));
     }
 
     private static string EtClock(double hour) => $"{(int)hour:00}:{(int)Math.Round(hour % 1 * 60):00}";

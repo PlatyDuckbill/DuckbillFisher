@@ -29,6 +29,7 @@ internal sealed class FishDetailWindow : Window
         this.guideOpener = guideOpener;
         Size = new Vector2(420, 600);
         SizeCondition = ImGuiCond.FirstUseEver;
+        BgAlpha = UiWidgets.BackgroundAlpha;
         SizeConstraints = new WindowSizeConstraints { MinimumSize = new Vector2(320, 300), MaximumSize = new Vector2(float.MaxValue) };
     }
 

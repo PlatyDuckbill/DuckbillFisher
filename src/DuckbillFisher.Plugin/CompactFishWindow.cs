@@ -29,6 +29,7 @@ internal sealed class CompactFishWindow : Window
         rows = new(textures, maps);
         Size = new Vector2(370, 520);
         SizeCondition = ImGuiCond.FirstUseEver;
+        BgAlpha = UiWidgets.BackgroundAlpha;
         SizeConstraints = new WindowSizeConstraints { MinimumSize = new Vector2(300, 260), MaximumSize = new Vector2(float.MaxValue) };
         Flags = ImGuiWindowFlags.NoScrollbar | ImGuiWindowFlags.NoScrollWithMouse;
     }

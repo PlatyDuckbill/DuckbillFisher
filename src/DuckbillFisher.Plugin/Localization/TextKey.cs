@@ -456,4 +456,5 @@ internal enum TextKey
     OpenFishGuide,
     GuideOpenUnavailable,
     GuideOpenDataWaiting,
+    DetailWeatherTransition,
 }

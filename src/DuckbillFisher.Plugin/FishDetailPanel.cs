@@ -106,9 +106,11 @@ internal sealed class FishDetailPanel(FishPreferences preferences, ITextureProvi
         ImGui.TableNextColumn();
         var manual = personal.ManualCaught.ContainsKey(fish.FishParameterId);
         ImGui.BeginDisabled(!personal.CanEdit || !personal.HasCharacter || !fish.IsDisplayable);
-        ImGui.SetNextItemWidth(Math.Max(1,
-            ImGui.GetContentRegionAvail().X - (manual ? ImGui.GetFrameHeightWithSpacing() : 0)));
-        if (ImGui.BeginCombo("###CollectionState", UiText.Get(FishRowRenderer.CollectionKey(personal, observed, fish.FishParameterId))))
+        var state = UiText.Get(FishRowRenderer.CollectionKey(personal, observed, fish.FishParameterId));
+        var desiredWidth = ImGui.CalcTextSize(state).X + ImGui.GetFrameHeight() + ImGui.GetStyle().FramePadding.X * 2;
+        ImGui.SetNextItemWidth(Math.Max(1, Math.Min(desiredWidth,
+            ImGui.GetContentRegionAvail().X - (manual ? ImGui.GetFrameHeightWithSpacing() : 0))));
+        if (ImGui.BeginCombo("###CollectionState", state))
         {
             if (ImGui.Selectable(UiText.Label(T.MarkCaught, "Caught"))) preferences.SetManualCaught(fish.FishParameterId, true, personal.Session);
             if (ImGui.Selectable(UiText.Label(T.MarkUncaught, "Uncaught"))) preferences.SetManualCaught(fish.FishParameterId, false, personal.Session);
