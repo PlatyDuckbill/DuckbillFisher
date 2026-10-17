@@ -1,4 +1,6 @@
+using System.Numerics;
 using Dalamud.Bindings.ImGui;
+using Dalamud.Interface;
 using Dalamud.Plugin.Services;
 using DuckbillFisher.Plugin.Localization;
 using T = DuckbillFisher.Plugin.Localization.TextKey;
@@ -25,9 +27,8 @@ internal sealed class FishingConditionPanel(ITextureProvider textures, FishingIt
                 {
                     if (alternative > 0) ImGui.TextDisabled(UiText.Get(T.ConditionOr));
                     var item = details.BaitSteps[step][alternative];
-                    Item(item, item.Name, $"Bait{step}/{item.Id}", personal);
-                    if (related.TryGetValue(item.Id, out var intermediate)) StepConditions(intermediate);
-                    else if (step > 0) ImGui.TextDisabled(UiText.Get(T.StepConditionsUnknown));
+                    related.TryGetValue(item.Id, out var intermediate);
+                    StepItem(item, item.Name, $"Bait{step}/{item.Id}", personal, intermediate, step > 0);
                 }
             }
             Label(T.DetailHookset);
@@ -60,8 +61,7 @@ internal sealed class FishingConditionPanel(ITextureProvider textures, FishingIt
             if (details.Folklore is { } book) Item(book, book.Name, "Folklore", personal);
             else ImGui.TextWrapped(UiText.Get(T.FolkloreRequired));
         }
-        ImGui.Spacing();
-        ImGui.TextDisabled(UiText.Get(T.PatchLabel, rule.Patch));
+
     }
 
     public void DrawIntuition(FishingDetailView details, FishPreferencesView personal,
@@ -80,8 +80,9 @@ internal sealed class FishingConditionPanel(ITextureProvider textures, FishingIt
             for (var index = 0; index < details.Predators.Length; index++)
             {
                 var item = details.Predators[index];
-                Item(item, UiText.Get(T.PredatorLabel, item.Name, details.Rule.Predators[index].Count), $"Predator{index}", personal);
-                if (related.TryGetValue(item.Id, out var prey)) StepConditions(prey);
+                related.TryGetValue(item.Id, out var prey);
+                StepItem(item, UiText.Get(T.PredatorLabel, item.Name, details.Rule.Predators[index].Count),
+                    $"Predator{index}", personal, prey, true);
             }
             ImGui.TextWrapped(details.Rule.IntuitionSeconds is { } seconds
                 ? UiText.Get(T.IntuitionDuration, seconds) : UiText.Get(T.IntuitionDurationUnknown));
@@ -90,25 +91,65 @@ internal sealed class FishingConditionPanel(ITextureProvider textures, FishingIt
         ImGui.PopStyleColor();
     }
 
+    private void StepItem(FishingItemView item, string name, string id, FishPreferencesView personal,
+        FishingDetailView? detail, bool annotateMissing)
+    {
+        if (detail is null && !annotateMissing) { Item(item, name, id, personal); return; }
+        ImGui.PushID(id);
+        if (ImGui.BeginTable("Ingredient", 2, ImGuiTableFlags.SizingStretchSame))
+        {
+            ImGui.TableNextColumn();
+            Item(item, name, "Item", personal);
+            ImGui.TableNextColumn();
+            if (detail is null)
+            {
+                UiWidgets.Icon(FontAwesomeIcon.InfoCircle);
+                UiWidgets.Tooltip(UiText.Get(T.StepConditionsUnknown));
+            }
+            else StepConditions(detail);
+            ImGui.EndTable();
+        }
+        ImGui.PopID();
+    }
+
     private void StepConditions(FishingDetailView detail)
     {
+        var start = ImGui.GetCursorPos();
+        var screen = ImGui.GetCursorScreenPos();
+        var width = Math.Max(1, ImGui.GetContentRegionAvail().X);
+        var infoWidth = ImGui.GetTextLineHeight();
+        var parts = new List<string>();
+        var tug = detail.Rule.Tug switch { "light" => "!", "medium" => "!!", "heavy" => "!!!", _ => UiText.Get(T.ConditionUnknown) };
+        parts.Add(UiText.Get(T.StepBite, tug));
+        ImGui.PushClipRect(screen, screen + new Vector2(Math.Max(1, width - infoWidth - 6), IconSize), true);
         if (detail.Hookset is { } hookset)
         {
             UiWidgets.GameIcon(textures, hookset.IconId, IconSize, UiText.Get(T.HooksetLabel, hookset.Name));
-            ImGui.SameLine();
+            parts.Add(UiText.Get(T.HooksetLabel, hookset.Name));
+            ImGui.SameLine(0, 4);
         }
-        ImGui.TextDisabled(UiText.Get(T.StepBite, detail.Rule.Tug switch
-            { "light" => "!", "medium" => "!!", "heavy" => "!!!", _ => UiText.Get(T.ConditionUnknown) }));
-        if (!detail.Rule.ConditionsKnown) ImGui.TextWrapped(UiText.Get(T.ConditionsPartial));
+        else parts.Add(UiText.Get(T.StepConditionsUnknown));
+        ImGui.TextDisabled(tug);
+        if (!detail.Rule.ConditionsKnown) parts.Add(UiText.Get(T.ConditionsPartial));
         else if (detail.Rule.StartHour != 0 || detail.Rule.EndHour != 24)
-            ImGui.TextDisabled(UiText.Get(T.TimeConditionLabel, EtClock(detail.Rule.StartHour), EtClock(detail.Rule.EndHour)));
+        {
+            var time = UiText.Get(T.TimeConditionLabel, EtClock(detail.Rule.StartHour), EtClock(detail.Rule.EndHour));
+            parts.Add(time);
+            ImGui.SameLine(0, 6);
+            ImGui.TextDisabled(time);
+        }
+        ImGui.PopClipRect();
         if (detail.PreviousWeather.Length > 0)
-            ImGui.TextWrapped(UiText.Get(T.PreviousWeatherConditionLabel, string.Join(" / ", detail.PreviousWeather.Select(weather => weather.Name))));
+            parts.Add(UiText.Get(T.PreviousWeatherConditionLabel, string.Join(" / ", detail.PreviousWeather.Select(weather => weather.Name))));
         if (detail.Weather.Length > 0)
-            ImGui.TextWrapped(UiText.Get(T.WeatherConditionLabel, string.Join(" / ", detail.Weather.Select(weather => weather.Name))));
-        if (detail.Rule.SnaggingRequired) Skill(detail.Snagging, T.SnaggingRequired);
-        if (detail.Rule.Lure.Length > 0) Skill(detail.Lure, detail.Rule.Lure == "Modest" ? T.LureModest : T.LureAmbitious);
-        if (detail.Predators.Length > 0) ImGui.TextDisabled(UiText.Get(T.IntuitionRequired));
+            parts.Add(UiText.Get(T.WeatherConditionLabel, string.Join(" / ", detail.Weather.Select(weather => weather.Name))));
+        if (detail.Rule.SnaggingRequired) parts.Add(UiText.Get(T.RequiredSkill, detail.Snagging?.Name ?? UiText.Get(T.SnaggingRequired)));
+        if (detail.Rule.Lure.Length > 0) parts.Add(UiText.Get(T.RequiredSkill, detail.Lure?.Name ??
+            UiText.Get(detail.Rule.Lure == "Modest" ? T.LureModest : T.LureAmbitious)));
+        if (detail.Predators.Length > 0) parts.Add(UiText.Get(T.IntuitionRequired));
+        ImGui.SetCursorPos(start + new Vector2(Math.Max(0, width - infoWidth), 0));
+        UiWidgets.Icon(FontAwesomeIcon.InfoCircle);
+        UiWidgets.Tooltip(string.Join("\n", parts));
     }
     private static float IconSize => ImGui.GetTextLineHeightWithSpacing() * 1.35f;
     private static void Label(T key)

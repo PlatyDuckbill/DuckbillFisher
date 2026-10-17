@@ -8,9 +8,9 @@ using T = DuckbillFisher.Plugin.Localization.TextKey;
 namespace DuckbillFisher.Plugin;
 
 internal sealed class SpawnAlertsPanel(FishPreferences preferences, SpawnAlerts alerts, SpawnAlertOutput output,
-    FishCollectionObserver collection, ITextureProvider textures, FishCatalog catalog, FishDetailPanel detailPanel)
+    FishCollectionObserver collection, ITextureProvider textures, FishCatalog catalog, FishDetailPanel detailPanel, FishingMapService maps)
 {
-    private readonly FishRowRenderer rows = new(textures);
+    private readonly FishRowRenderer rows = new(textures, maps);
     private uint? selectedId;
     private int lastSession = -1;
     private IReadOnlyList<FavoriteAlertView>? lastFavorites;
@@ -188,7 +188,8 @@ internal sealed class SpawnAlertsPanel(FishPreferences preferences, SpawnAlerts 
                         var state = UiText.Get(FishRowRenderer.CollectionKey(settings, observed, fish.FishId));
                         var place = row.Ocean is { } ocean ? UiText.Get(T.OceanArea, ocean.Area) : row.Spots.FirstOrDefault()?.Name
                             ?? UiText.Get(row.IsDisplayable ? T.CatalogRowInfo : T.CatalogUnresolvedRow, row.FishParameterId);
-                        if (rows.Draw(row, baseHeight, selectedId == fish.FishId, state, place, fish.Window, now))
+                        if (rows.Draw(row, baseHeight, selectedId == fish.FishId, state, place, fish.Window, now,
+                            spot: row.Spots.FirstOrDefault(), canOpenMap: settings.HasCharacter))
                         {
                             resetDetailScroll |= selectedId != fish.FishId;
                             selectedId = fish.FishId;

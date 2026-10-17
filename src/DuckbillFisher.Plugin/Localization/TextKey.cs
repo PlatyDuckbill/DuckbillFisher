@@ -449,4 +449,5 @@ internal enum TextKey
     PatchLabel,
     StepBite,
     StepConditionsUnknown,
+    WindowInline,
 }

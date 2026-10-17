@@ -1,6 +1,6 @@
 # 세션 인수인계
 
-갱신: 2026-10-17 · 0.1.28.0 정규 반영 · 인게임 확인 대기
+갱신: 2026-10-17 · 0.1.29.0 정규 반영 · 배치 조정 인게임 확인 대기
 
 ## 재개 순서
 
@@ -15,9 +15,9 @@
 - 게임: `C:\Program Files (x86)\FINAL FANTASY XIV - KOREA\game`, KR 빌드 2026.10.06.0000.0000.
 - 참조: `C:\Users\hyogu\AppData\Roaming\XIVLauncherKR\addon\Hooks\dev`, Dalamud 15.0.3.6/API15.
 - 개발 DLL: `C:\Users\hyogu\Downloads\DuckbillFisher\src\DuckbillFisher.Plugin\bin\Debug\DuckbillFisher.dll`.
-- 현재 정규 0.1.28.0: 별도/정규 빌드 경고·오류 0, 한영 447키/형식 인자, Plugin/Core/ko/manifest 버전 확인. 테스트 미실행.
+- 현재 정규 0.1.29.0: 별도/정규 빌드 경고·오류 0, 한영 448키/형식 인자, Plugin/Core/ko/manifest 버전 확인. 테스트 미실행.
 - 이번 작업 시작 때 언로드 완료/정규 교체 승인 받음 → 별도 빌드/검사 → 정규 반영 완료. 이후 새 기능 교체는 해당 작업의 로드 상태/승인을 따른다.
-- 0.1.26.0 사용자 `다 잘됨` 대표 확인 유지. 0.1.27.0 사용 피드백을 반영했으며 0.1.28.0 결과는 아직 없다. 커밋은 로컬 보존이며 푸시/릴리스하지 않았다.
+- 0.1.26.0 사용자 `다 잘됨` 대표 확인 유지. 0.1.27.0 사용 피드백을 반영했으며 0.1.28.0 사용 피드백을 반영했고 0.1.29.0 결과는 아직 없다. 커밋은 로컬 보존이며 푸시/릴리스하지 않았다.
 
 ## 이번 UI 구조와 정책
 
@@ -29,7 +29,7 @@
 - 수집 상태는 메뉴 하나에서 수동 지정하고 수동일 때만 복귀 버튼 표시. 자동 접미사 없음/수동 접미사 유지. Unknown은 미수집이 아니다.
 - 수정본 schema v10: v1~v9 허용, 기존 일반 필터/예정 분 보존, 과거 간략 FavoritesOnly 무시. preferences/v8에 CompactFilters=SharedCatalog 표시. 수집/알림/자동 해제 선택은 그대로다.
 - `FishDetailPanel` 공통 상세, `UiWidgets` 아이콘/배너, `CompactFishObserver` Framework 1초 필터/수명 관리. Draw에서 전체 검색/장기 예측/파일 읽기 없음.
-- 0.1.28.0은 메인 토글/폭별 배치/예정 이동/직감 아이콘·강조/날짜·미끼 단계/중복 별·한국어 용어 정리를 포함한다. 별도 빌드/한영 447키 검사 통과. 사용자 새 언로드 완료 확인 후 정규 0.1.28.0 빌드/버전 확인을 마쳤다. 다음은 대표 인게임 확인이다. [변경/확인 순서](validation/MVP-01-UI-FEEDBACK.md).
+- 0.1.29.0은 목록 직접 핀/이름·수집 및 위치·시간 정렬/직감 배지, 상세 Patch 우측/작은 물고기의 눈/옆 조건/시간 한 줄을 적용했다. 새 언로드 확인 후 정규 빌드·한영 448키 통과. 다음은 [배치/상호작용 확인](validation/MVP-01-UI-ALIGNMENT.md)이다.
 
 ## 일반 구현 빌드
 
@@ -40,7 +40,7 @@ dotnet build src/DuckbillFisher.Plugin/DuckbillFisher.Plugin.csproj --no-restore
 pwsh -NoLogo -NoProfile -File scripts/check-localization.ps1
 ```
 
-- 별도 출력은 `-p:OutputPath=C:/Users/hyogu/Downloads/DuckbillFisher/.cache/ui-feedback-build/` 추가.
+- 별도 출력은 `-p:OutputPath=C:/Users/hyogu/Downloads/DuckbillFisher/.cache/ui-alignment-build/` 추가.
 - PowerShell 5.1 파일 읽기는 `-Encoding UTF8`. 이번 환경에서 pwsh/정규 빌드/git 쓰기 모두 실행됐다.
 - 실제 주 DLL·Core·ko 리소스 DLL·manifest 확인 후 파일을 명시해 스테이징/커밋한다. 빌드 결과/캐시/사용자 파일 제외.
 

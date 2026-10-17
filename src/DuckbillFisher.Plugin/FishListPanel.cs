@@ -12,7 +12,7 @@ namespace DuckbillFisher.Plugin;
 
 /// <summary>Displays cached static rows, session-local collection observations, and manual overrides.</summary>
 internal sealed class FishListPanel(FishCatalog catalog, ITextureProvider textures, FishDetailPanel detailPanel,
-    FishPreferences preferences, FishCollectionObserver collection, FishingRegionObserver region)
+    FishPreferences preferences, FishCollectionObserver collection, FishingRegionObserver region, FishingMapService maps)
 {
     private static readonly StringComparer NameComparer = StringComparer.Create(CultureInfo.GetCultureInfo("ko-KR"), true);
     private static readonly CollectionVisibility[] CollectionChoices =
@@ -41,7 +41,7 @@ internal sealed class FishListPanel(FishCatalog catalog, ITextureProvider textur
     private int lastCollectionRevision;
     private bool favoritesOnly;
     private int collectionVisibility;
-    private readonly FishRowRenderer rows = new(textures);
+    private readonly FishRowRenderer rows = new(textures, maps);
     private bool currentRegionOnly;
     private FishingRegionView? lastRegion;
     private bool timeRestrictedOnly;
@@ -324,7 +324,8 @@ internal sealed class FishListPanel(FishCatalog catalog, ITextureProvider textur
         var state = collection.Display;
         var usesOtherRegion = locationScoped && rowSpot is not null && fish.Details?.Spot is { } recommended &&
             recommended.TerritoryId != rowSpot.TerritoryId;
-        if (rows.Draw(fish, height, selectedId == fish.FishParameterId, state, place, forecast, now, usesOtherRegion, personal.Favorites.Contains(fish.FishParameterId)))
+        if (rows.Draw(fish, height, selectedId == fish.FishParameterId, state, place, forecast, now, usesOtherRegion,
+            personal.Favorites.Contains(fish.FishParameterId), spot: rowSpot, canOpenMap: personal.HasCharacter))
         {
             resetDetailScroll |= selectedId != fish.FishParameterId;
             selectedId = fish.FishParameterId;

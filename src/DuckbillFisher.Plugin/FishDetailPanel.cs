@@ -19,10 +19,12 @@ internal sealed class FishDetailPanel(FishPreferences preferences, ITextureProvi
             return;
         }
         ImGui.PushID((int)fish.FishParameterId);
-        if (ImGui.BeginTable("DetailTitle", 2, ImGuiTableFlags.SizingFixedFit))
+        var patch = fish.Details is { } patchDetails ? UiText.Get(T.PatchLabel, patchDetails.Rule.Patch) : "";
+        if (ImGui.BeginTable("DetailTitle", patch.Length > 0 ? 3 : 2, ImGuiTableFlags.SizingFixedFit))
         {
             ImGui.TableSetupColumn("Icon", ImGuiTableColumnFlags.WidthFixed, ImGui.GetFontSize() * 3);
             ImGui.TableSetupColumn("Name", ImGuiTableColumnFlags.WidthStretch);
+            if (patch.Length > 0) ImGui.TableSetupColumn("Patch", ImGuiTableColumnFlags.WidthFixed, ImGui.CalcTextSize(patch).X);
             ImGui.TableNextColumn();
             UiWidgets.GameIcon(textures, fish.IconId, ImGui.GetFontSize() * 3, fish.DisplayName);
             ImGui.TableNextColumn();
@@ -30,20 +32,15 @@ internal sealed class FishDetailPanel(FishPreferences preferences, ITextureProvi
             if (fish.IsOceanFishing) ImGui.TextDisabled(UiText.Get(T.OceanLabel));
             else if (fish.Grade is FishGrade.Big or FishGrade.Legendary)
                 ImGui.TextDisabled(UiText.Get(fish.Grade == FishGrade.Legendary ? T.GradeLegendaryLabel : T.GradeBigLabel));
+            if (patch.Length > 0)
+            {
+                ImGui.TableNextColumn();
+                ImGui.SetCursorPosX(ImGui.GetCursorPosX() + Math.Max(0, ImGui.GetContentRegionAvail().X - ImGui.CalcTextSize(patch).X));
+                ImGui.TextDisabled(patch);
+            }
             ImGui.EndTable();
         }
         DrawActions(fish, personal, observed);
-        if (fish.Details is { } headerDetails)
-        {
-            if (headerDetails.FishEyes is { } eyes)
-            {
-                UiWidgets.GameIcon(textures, eyes.IconId, ImGui.GetTextLineHeightWithSpacing() * 1.4f,
-                    UiText.Get(headerDetails.Rule.FishEyesSupported ? T.FishEyesAvailable : T.FishEyesUnavailable, eyes.Name));
-                ImGui.SameLine();
-            }
-            ImGui.TextWrapped(UiText.Get(headerDetails.Rule.FishEyesSupported ? T.FishEyesAvailable : T.FishEyesUnavailable,
-                headerDetails.FishEyes?.Name ?? UiText.Get(T.ConditionUnknown)));
-        }
         if (!personal.HasCharacter) ImGui.TextWrapped(UiText.Get(T.ManualPlayerRequired));
         if (personal.Error is { } error) ImGui.TextWrapped(error.Display);
 
@@ -90,6 +87,17 @@ internal sealed class FishDetailPanel(FishPreferences preferences, ITextureProvi
             preferences.SetFavorite(fish.FishParameterId, !favorite);
         ImGui.EndDisabled();
         ImGui.SameLine();
+        if (fish.Details is { } detail)
+        {
+            ImGui.BeginDisabled(!detail.Rule.FishEyesSupported);
+            UiWidgets.GameIcon(textures, detail.FishEyes?.IconId ?? 0, ImGui.GetFrameHeight(),
+                UiText.Get(detail.Rule.FishEyesSupported ? T.FishEyesAvailable : T.FishEyesUnavailable,
+                    detail.FishEyes?.Name ?? UiText.Get(T.ConditionUnknown)));
+            ImGui.EndDisabled();
+            if (!detail.Rule.FishEyesSupported)
+                ImGui.GetWindowDrawList().AddLine(ImGui.GetItemRectMin(), ImGui.GetItemRectMax(), ImGui.GetColorU32(ImGuiCol.Text), 1.5f);
+            ImGui.SameLine();
+        }
         var manual = personal.ManualCaught.ContainsKey(fish.FishParameterId);
         ImGui.BeginDisabled(!personal.CanEdit || !personal.HasCharacter || !fish.IsDisplayable);
         ImGui.SetNextItemWidth(Math.Max(ImGui.GetFontSize() * 5,

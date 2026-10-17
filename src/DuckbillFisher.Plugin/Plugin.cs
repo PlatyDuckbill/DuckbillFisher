@@ -55,10 +55,10 @@ public sealed class Plugin : IDalamudPlugin
         var detailPanel = new FishDetailPanel(fishPreferences, textureProvider, fishingMap, new FishingConditionPanel(textureProvider, itemLinks));
         detailWindow = new FishDetailWindow(fishCatalog, fishPreferences, fishCollection, detailPanel);
         compactObserver = new CompactFishObserver(fishCatalog, fishPreferences, framework, fishCollection, fishingRegion);
-        compactWindow = new CompactFishWindow(compactObserver, fishPreferences, fishCollection, textureProvider, detailWindow.Show);
+        compactWindow = new CompactFishWindow(compactObserver, fishPreferences, fishCollection, textureProvider, detailWindow.Show, fishingMap);
         mainWindow = new MainWindow(fishingObserver, fishGuide, new FishListPanel(fishCatalog, textureProvider, detailPanel,
-                fishPreferences, fishCollection, fishingRegion),
-            new SpawnAlertsPanel(fishPreferences, spawnAlerts, alertOutput, fishCollection, textureProvider, fishCatalog, detailPanel), fishPreferences,
+                fishPreferences, fishCollection, fishingRegion, fishingMap),
+            new SpawnAlertsPanel(fishPreferences, spawnAlerts, alertOutput, fishCollection, textureProvider, fishCatalog, detailPanel, fishingMap), fishPreferences,
             () => commandInfo.HelpMessage = UiText.Get(TextKey.CommandHelp));
         mainWindow.ShowCompact = () => compactWindow.IsOpen = true;
         compactWindow.ShowMain = mainWindow.Toggle;

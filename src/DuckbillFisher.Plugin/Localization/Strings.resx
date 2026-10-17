@@ -456,4 +456,5 @@ In fish log only: {5}</value></data>
   <data name="PatchLabel" xml:space="preserve"><value>Patch {0:0.0#}</value></data>
   <data name="StepBite" xml:space="preserve"><value>Bite {0}</value></data>
   <data name="StepConditionsUnknown" xml:space="preserve"><value>Hookset not confirmed</value></data>
+  <data name="WindowInline" xml:space="preserve"><value>{0}  |  {1}</value></data>
 </root>

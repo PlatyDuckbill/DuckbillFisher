@@ -42,7 +42,7 @@ internal sealed record FishRowSummary(string Bait, string Conditions)
         parts.Add(UiText.Get(T.HooksetLabel, details.Hookset?.Name ?? UiText.Get(rule.Hookset switch
             { "Precision" => T.HooksetPrecision, "Powerful" => T.HooksetPowerful, _ => T.ConditionUnknown })));
 
-        return new(path.Length == 0 ? UiText.Get(T.RowBaitUnknown) : UiText.Get(T.RowBaitPath, path), string.Join(" · ", parts));
+        return new(path.Length == 0 ? UiText.Get(T.RowBaitUnknown) : UiText.Get(T.RowBaitPath, path), string.Join("\n", parts));
     }
 
     private static string EtClock(double hour) => $"{(int)hour:00}:{(int)Math.Round(hour % 1 * 60):00}";

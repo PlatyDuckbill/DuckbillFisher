@@ -26,20 +26,25 @@ internal static class FishingWindowPanel
         var remaining = window is { Kind: FishingWindowKind.Open, End: not null } or { Kind: FishingWindowKind.Upcoming, Start: not null }
             ? FishRowRenderer.CompactWindow(window, now) : "";
         var range = Range(window, now);
+        var line = remaining.Length > 0 && range.Length > 0 ? UiText.Get(T.WindowInline, remaining, range)
+            : remaining.Length > 0 ? remaining : range;
         var height = ImGui.CalcTextSize(text, false, Math.Max(1, width - ImGui.GetFrameHeight())).Y + 16;
-        if (remaining.Length > 0) height += ImGui.CalcTextSize(remaining, false, width).Y + ImGui.GetStyle().ItemSpacing.Y;
-        if (range.Length > 0) height += ImGui.CalcTextSize(range, false, width).Y + ImGui.GetStyle().ItemSpacing.Y;
+        if (line.Length > 0) height += ImGui.GetTextLineHeightWithSpacing();
         if (ImGui.BeginChild("Availability", new Vector2(0, height), true, ImGuiWindowFlags.NoScrollbar | ImGuiWindowFlags.NoScrollWithMouse))
         {
             UiWidgets.Icon(FontAwesomeIcon.Clock);
             ImGui.SameLine();
             ImGui.TextWrapped(text);
-            if (remaining.Length > 0) ImGui.TextWrapped(remaining);
-            if (range.Length > 0)
+            if (line.Length > 0)
             {
-                ImGui.TextWrapped(range);
+                var screen = ImGui.GetCursorScreenPos();
+                ImGui.PushClipRect(screen, screen + new Vector2(width, ImGui.GetTextLineHeight()), true);
+                ImGui.TextUnformatted(line);
+                ImGui.PopClipRect();
                 if (window?.Start is { } start && window.End is { } end)
-                    UiWidgets.Tooltip(UiText.Get(T.WindowLocalRange, start.ToLocalTime(), end.ToLocalTime()));
+                    UiWidgets.Tooltip(UiText.Get(T.WindowInline, remaining,
+                        UiText.Get(T.WindowLocalRange, start.ToLocalTime(), end.ToLocalTime())));
+                else UiWidgets.Tooltip(line);
             }
         }
         ImGui.EndChild();

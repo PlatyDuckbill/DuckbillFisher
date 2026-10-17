@@ -20,13 +20,13 @@ internal sealed class CompactFishWindow : Window
     public Action? ShowMain { get; set; }
 
     public CompactFishWindow(CompactFishObserver observer, FishPreferences preferences, FishCollectionObserver collection,
-        ITextureProvider textures, Action<FishGuideRow> showDetail) : base("DuckbillFisher###DuckbillFisher.Compact")
+        ITextureProvider textures, Action<FishGuideRow> showDetail, FishingMapService maps) : base("DuckbillFisher###DuckbillFisher.Compact")
     {
         this.observer = observer;
         this.preferences = preferences;
         this.collection = collection;
         this.showDetail = showDetail;
-        rows = new(textures);
+        rows = new(textures, maps);
         Size = new Vector2(370, 520);
         SizeCondition = ImGuiCond.FirstUseEver;
         SizeConstraints = new WindowSizeConstraints { MinimumSize = new Vector2(300, 260), MaximumSize = new Vector2(float.MaxValue) };
@@ -97,7 +97,8 @@ internal sealed class CompactFishWindow : Window
                     var state = UiText.Get(FishRowRenderer.CollectionKey(personal, observed, entry.Fish.FishParameterId));
                     var place = entry.Spot?.Name ?? UiText.Get(T.DetailLocationUnknown);
                     if (rows.Draw(entry.Fish, height, false, state, place, entry.Window, now,
-                        usesOtherRegion: entry.UsesOtherRegion, favorite: personal.Favorites.Contains(entry.Fish.FishParameterId), compact: true)) showDetail(entry.Fish);
+                        usesOtherRegion: entry.UsesOtherRegion, favorite: personal.Favorites.Contains(entry.Fish.FishParameterId), compact: true,
+                        spot: entry.Spot, canOpenMap: personal.HasCharacter)) showDetail(entry.Fish);
                 }
         }
         finally { clipper.Destroy(); }

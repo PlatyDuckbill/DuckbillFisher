@@ -28,11 +28,13 @@ internal static class UiWidgets
         ImGui.PopFont();
     }
 
-    public static bool IconButton(FontAwesomeIcon icon, string id, string tooltip, bool active = false)
+    public static bool IconButton(FontAwesomeIcon icon, string id, string tooltip, bool active = false, float size = 0)
     {
         if (active) ImGui.PushStyleColor(ImGuiCol.Text, new Vector4(1, 0.8f, 0.32f, 1));
         ImGui.PushFont(UiBuilder.IconFont);
-        var clicked = ImGui.Button($"{icon.ToIconString()}###{id}", new Vector2(ImGui.GetFrameHeight()));
+        if (size > 0) ImGui.PushStyleVar(ImGuiStyleVar.FramePadding, Vector2.Zero);
+        var clicked = ImGui.Button($"{icon.ToIconString()}###{id}", new Vector2(size > 0 ? size : ImGui.GetFrameHeight()));
+        if (size > 0) ImGui.PopStyleVar();
         ImGui.PopFont();
         if (active) ImGui.PopStyleColor();
         Tooltip(tooltip);
