@@ -581,7 +581,7 @@ In fish log only: {5}</value></data>
   <data name="BaitQuantity" xml:space="preserve"><value>{0} held</value></data>
   <data name="BaitQuantityUnknown" xml:space="preserve"><value>—</value></data>
   <data name="BaitTargetsCount" xml:space="preserve"><value>Used by {0} target fish. Expand to see them.</value></data>
-  <data name="BaitAlternativeGroup" xml:space="preserve"><value>Choose one substitute below · {0} target fish</value></data>
+  <data name="BaitPreparationOverlapHint" xml:space="preserve"><value>The same fish may appear under multiple baits.</value></data>
   <data name="BaitMissingData" xml:space="preserve"><value>Unverified fish: {0}</value></data>
   <data name="BaitMissingDataHint" xml:space="preserve"><value>The first bait for these target fish could not be verified.</value></data>
   <data name="BaitUnresolvedSection" xml:space="preserve"><value>Unverified</value></data>

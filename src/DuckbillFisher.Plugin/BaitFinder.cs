@@ -115,19 +115,27 @@ internal sealed class BaitFinder : IDisposable
             ? new Vector4(0, 0, 0, 1) : Vector4.One;
         var color = ImGui.GetColorU32(accent);
         var edge = ImGui.GetColorU32(contrast);
+        // Slow breathing outside a steady outline keeps the target visible throughout the effect.
+        var seconds = (double)Stopwatch.GetTimestamp() / Stopwatch.Frequency;
+        var pulse = (float)((Math.Sin(seconds * Math.PI * 2 / 2.4) + 1) / 2);
+        var glow = ImGui.GetColorU32(accent with { W = 0.25f + 0.4f * pulse });
         if (current.State == BaitFindState.Highlighted && OnScreen(current.Position, current.Size))
         {
             var start = viewport.Pos + current.Position;
             var scale = Math.Clamp(current.Size.Y / 48, 0.5f, 3);
-            draw.AddRect(start, start + current.Size, edge, 4 * scale, ImDrawFlags.None, 4 * scale);
-            draw.AddRect(start, start + current.Size, color, 4 * scale, ImDrawFlags.None, 2 * scale);
+            var end = start + current.Size;
+            var halo = new Vector2((2 + pulse) * scale);
+            draw.AddRect(start - halo, end + halo, glow, 5 * scale, ImDrawFlags.None, 3 * scale);
+            draw.AddRect(start, end, edge, 4 * scale, ImDrawFlags.None, 7 * scale);
+            draw.AddRect(start, end, color, 4 * scale, ImDrawFlags.None, 4 * scale);
         }
         if (current.Page is { State: BaitPageState.Ready, MarkerVisible: true } page && OnScreen(page.Position, page.Size))
         {
             var scale = Math.Clamp(page.Size.Y / 24, 0.5f, 3);
-            var center = viewport.Pos + page.Position + new Vector2(page.Size.X - 4 * scale, 4 * scale);
-            draw.AddCircleFilled(center, 3.5f * scale, edge);
-            draw.AddCircleFilled(center, 2.3f * scale, color);
+            var center = viewport.Pos + page.Position + new Vector2(page.Size.X - 5 * scale, 5 * scale);
+            draw.AddCircle(center, (6 + pulse) * scale, glow, 0, 2 * scale);
+            draw.AddCircleFilled(center, 5 * scale, edge);
+            draw.AddCircleFilled(center, 3.5f * scale, color);
         }
     }
 

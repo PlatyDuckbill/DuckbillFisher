@@ -574,7 +574,7 @@ internal enum TextKey
     BaitQuantity,
     BaitQuantityUnknown,
     BaitTargetsCount,
-    BaitAlternativeGroup,
+    BaitPreparationOverlapHint,
     BaitMissingData,
     BaitMissingDataHint,
     BaitUnresolvedSection,

@@ -3,8 +3,7 @@ using Dalamud.Plugin.Services;
 namespace DuckbillFisher.Plugin;
 
 internal enum BaitPreparationSource { Favorites, Catalog }
-internal sealed record BaitPreparationAlternative(string Key, FishingItemView[] Items, FishGuideRow[] Targets);
-internal sealed record BaitPreparationEntry(FishingItemView Item, FishGuideRow[] Targets, BaitPreparationAlternative[] Alternatives);
+internal sealed record BaitPreparationEntry(FishingItemView Item, FishGuideRow[] Targets);
 internal sealed record BaitPreparationView(int Session, int TargetCount, BaitPreparationEntry[] Entries, FishGuideRow[] Missing);
 
 /// <summary>Aggregates first baits outside Draw. Favorites and the full main query are independent scopes.</summary>
@@ -75,21 +74,9 @@ internal sealed class BaitPreparation : IDisposable
                 }
             }
             view = new(personal.Session, targets.Length, entries.Values.OrderBy(entry => entry.Item.Name, StringComparer.OrdinalIgnoreCase)
-                .Select(entry => BuildEntry(entry.Item, entry.Targets)).ToArray(), missing.OrderBy(fish => fish.DisplayName,
+                .Select(entry => new BaitPreparationEntry(entry.Item, entry.Targets.ToArray())).ToArray(), missing.OrderBy(fish => fish.DisplayName,
                         StringComparer.OrdinalIgnoreCase).ToArray());
         }
-    }
-
-    private static BaitPreparationEntry BuildEntry(FishingItemView item, List<FishGuideRow> targets)
-    {
-        // Substitutes apply to a particular fish's first-bait choices, not every target of this bait.
-        var alternatives = targets.Where(fish => fish.Details!.BaitSteps[0].Length > 1)
-            .GroupBy(fish => string.Join(',', fish.Details!.BaitSteps[0].Select(choice => choice.Id).Distinct().Order()))
-            .Select(group => new BaitPreparationAlternative(group.Key,
-                group.First().Details!.BaitSteps[0].Where(choice => choice.Id != item.Id).DistinctBy(choice => choice.Id)
-                    .OrderBy(choice => choice.Name, StringComparer.OrdinalIgnoreCase).ToArray(), group.ToArray()))
-            .Where(group => group.Items.Length > 0).ToArray();
-        return new(item, targets.ToArray(), alternatives);
     }
 
     public void Dispose()

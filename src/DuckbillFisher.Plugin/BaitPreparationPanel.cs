@@ -30,6 +30,7 @@ internal sealed class BaitPreparationPanel(BaitPreparation preparation, BaitStoc
         var view = preparation.View;
         if (view.Session != personal.Session) view = new(personal.Session, 0, [], []);
         ImGui.TextDisabled(UiText.Get(T.BaitPreparationCounts, view.TargetCount, view.Entries.Length, view.Missing.Length));
+        ImGui.TextWrapped(UiText.Get(T.BaitPreparationOverlapHint));
         var footer = personal.DeveloperMode ? ImGui.GetTextLineHeightWithSpacing() * 5 : 0;
         var height = Math.Max(ImGui.GetTextLineHeight() * 3, ImGui.GetContentRegionAvail().Y - footer);
         if (ImGui.BeginChild("BaitPreparationItems", new Vector2(0, height)))
@@ -48,24 +49,6 @@ internal sealed class BaitPreparationPanel(BaitPreparation preparation, BaitStoc
                 {
                     foreach (var fish in entry.Targets) ImGui.TextWrapped(fish.DisplayName);
                     ImGui.TreePop();
-                }
-                if (entry.Alternatives.Length > 0)
-                {
-                    ImGui.Indent();
-                    foreach (var group in entry.Alternatives)
-                    {
-                        ImGui.PushID(group.Key);
-                        ImGui.TextDisabled(UiText.Get(T.BaitAlternativeGroup, group.Targets.Length));
-                        if (ImGui.IsItemHovered()) UiWidgets.Tooltip(string.Join('\n', group.Targets.Select(fish => fish.DisplayName)));
-                        foreach (var item in group.Items)
-                        {
-                            ImGui.PushID((int)item.Id);
-                            DrawBait(item, ready ? inventory.Quantity(item.Id) : null, personal);
-                            ImGui.PopID();
-                        }
-                        ImGui.PopID();
-                    }
-                    ImGui.Unindent();
                 }
                 ImGui.PopID();
             }
