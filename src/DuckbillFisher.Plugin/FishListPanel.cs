@@ -14,7 +14,7 @@ namespace DuckbillFisher.Plugin;
 /// <summary>Displays cached static rows, session-local collection observations, and manual overrides.</summary>
 internal sealed class FishListPanel(FishCatalog catalog, ITextureProvider textures, FishDetailPanel detailPanel,
     FishPreferences preferences, FishCollectionObserver collection, FishingRegionObserver region, FishingMapService maps,
-    FishGuideOpenService guideOpener)
+    FishGuideOpenService guideOpener, CatalogQueryState preparationQuery, BaitPreparationPanel preparation)
 {
     private static readonly StringComparer NameComparer = StringComparer.Create(CultureInfo.GetCultureInfo("ko-KR"), true);
     private static readonly CollectionVisibility[] CollectionChoices =
@@ -115,6 +115,8 @@ internal sealed class FishListPanel(FishCatalog catalog, ITextureProvider textur
         UiWidgets.FlowNext(ImGui.GetFontSize() * 7, toolbarRight);
         filtersChanged |= DrawFilters(view.Geography);
         UiWidgets.FlowNext(ImGui.GetFontSize() * 7, toolbarRight);
+        preparation.DrawButton();
+        UiWidgets.FlowNext(ImGui.GetFontSize() * 7, toolbarRight);
         if (presets.Draw(personal, CurrentCatalogSettings()) is { } preset)
         {
             ApplyCatalogSettings(preset);
@@ -169,7 +171,10 @@ internal sealed class FishListPanel(FishCatalog catalog, ITextureProvider textur
 
         // Rebuild only for data or user input changes, never on every frame or scroll step.
         if (changed || refresh || (sort == 2 && lastForecastRevision != view.ForecastRevision))
+        {
+            preparationQuery.Publish(new(CurrentCatalogSettings(), search.Trim(), showUnresolved, detailsOnly));
             UpdateMatches(view, personal, observed, location, changed);
+        }
         if (lastForecastRevision != view.ForecastRevision)
             upcomingIndex = Array.FindIndex(matches, row => view.Windows.GetValueOrDefault(row.FishParameterId)?.Kind == FishingWindowKind.Upcoming);
         lastForecastRevision = view.ForecastRevision;
@@ -299,16 +304,11 @@ internal sealed class FishListPanel(FishCatalog catalog, ITextureProvider textur
     private void UpdateMatches(FishCatalogView view, FishPreferencesView personal, FishCollectionView observed,
         FishingRegionView location, bool reset)
     {
-        var term = search.Trim();
-        var filter = new CatalogFilter(CurrentCatalogSettings());
+        var query = preparationQuery.Current;
+        var filter = new CatalogFilter(query.Settings);
         var scope = view.Rows.Where(row => filter.MatchesScope(row, location)).ToArray();
         unresolvedCount = scope.Count(row => !row.IsDisplayable);
-        var filtered = scope.Where(row => (showUnresolved || row.IsDisplayable) && (!detailsOnly || row.Details is not null) &&
-            filter.Matches(row, personal, observed, location) &&
-            (term.Length == 0 || row.Name.Contains(term, StringComparison.OrdinalIgnoreCase) ||
-             row.Ocean?.Area.Contains(term, StringComparison.OrdinalIgnoreCase) == true ||
-             row.Spots.Any(spot => spot.Name.Contains(term, StringComparison.OrdinalIgnoreCase) || spot.Zone.Contains(term, StringComparison.OrdinalIgnoreCase)) ||
-             row.FishParameterId.ToString(CultureInfo.InvariantCulture) == term));
+        var filtered = scope.Where(row => query.Matches(row, filter, personal, observed, location));
         matches = (sort switch
         {
             0 => filtered.OrderBy(row => row.Name, NameComparer).ThenBy(row => row.FishParameterId),

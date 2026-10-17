@@ -568,4 +568,30 @@
   <data name="TimerCastBait" xml:space="preserve"><value>사용 미끼: {0}</value></data>
   <data name="NativeRuntimeUnsupported" xml:space="preserve"><value>Dalamud {0}은 아직 검증되지 않았습니다. 지원하는 KR 버전: {1}. 수집 연동과 캐스팅 타이머가 중지되었습니다.</value></data>
   <data name="NativeFeaturesBlocked" xml:space="preserve"><value>현재 환경에서는 수집 연동·도감 바로 열기·캐스팅 타이머를 사용할 수 없습니다. 도감을 수동으로 열어도 해결되지 않습니다.&#xA;{0}</value></data>
+  <data name="BaitPreparation" xml:space="preserve"><value>미끼 준비</value></data>
+  <data name="BaitSource" xml:space="preserve"><value>준비 대상</value></data>
+  <data name="BaitSourceFavorites" xml:space="preserve"><value>즐겨찾기</value></data>
+  <data name="BaitSourceCatalog" xml:space="preserve"><value>어종 목록 필터 결과</value></data>
+  <data name="BaitSourceFavoritesHint" xml:space="preserve"><value>메인 목록 필터·알림 설정과 별도로 즐겨찾기 전체를 대상으로 합니다.</value></data>
+  <data name="BaitSourceCatalogHint" xml:space="preserve"><value>검색·수집 등 메인 목록 조건을 통과한 모든 어종입니다. 보이는 행으로 제한하지 않습니다.</value></data>
+  <data name="BaitBagScope" xml:space="preserve"><value>일반 소지품 기준 · 생미끼 연쇄의 첫 미끼</value></data>
+  <data name="BaitMissingOnly" xml:space="preserve"><value>없는 미끼만</value></data>
+  <data name="BaitPreparationCounts" xml:space="preserve"><value>대상 {0}종 · 미끼 {1}종 · 첫 미끼 자료 미확인 {2}종</value></data>
+  <data name="BaitPreparationEmpty" xml:space="preserve"><value>이 대상에 연결된 첫 미끼 자료가 없습니다.</value></data>
+  <data name="BaitQuantity" xml:space="preserve"><value>{0}개</value></data>
+  <data name="BaitQuantityUnknown" xml:space="preserve"><value>—</value></data>
+  <data name="BaitTargetsCount" xml:space="preserve"><value>대상 {0}종에 사용합니다. 펼쳐서 확인하세요.</value></data>
+  <data name="BaitAlternative" xml:space="preserve"><value>대체 후보</value></data>
+  <data name="BaitMissingData" xml:space="preserve"><value>첫 미끼 자료 미확인 어종</value></data>
+  <data name="BaitStockWaiting" xml:space="preserve"><value>현재 캐릭터의 소지품 조회를 기다리고 있습니다.</value></data>
+  <data name="BaitStockUnavailable" xml:space="preserve"><value>소지 수량을 조회할 수 없습니다. —는 0개가 아닙니다.</value></data>
+  <data name="BaitStockUnsupported" xml:space="preserve"><value>이 실행 환경에서는 소지 수량을 조회할 수 없습니다.</value></data>
+  <data name="BaitNameStock" xml:space="preserve"><value>{0} · {1}개</value></data>
+  <data name="BaitNameUnknown" xml:space="preserve"><value>{0} · —</value></data>
+  <data name="BaitStockTooltip" xml:space="preserve"><value>{0}
+일반 소지품 기준입니다. 미조회는 0개가 아닙니다.</value></data>
+  <data name="BaitProbeRequest" xml:space="preserve"><value>열린 미끼 UI 자료 수집</value></data>
+  <data name="BaitProbeCopy" xml:space="preserve"><value>미끼 UI 자료 복사</value></data>
+  <data name="BaitProbeReady" xml:space="preserve"><value>읽기 전용 UI 자료를 복사할 수 있습니다. 미끼를 선택하는 기능은 아닙니다.</value></data>
+  <data name="BaitProbeWaiting" xml:space="preserve"><value>20초 안에 게임의 미끼 선택 UI를 열어 주세요. 보이는 순간 자료를 자동 수집합니다.</value></data>
 </root>

@@ -568,4 +568,30 @@ In fish log only: {5}</value></data>
   <data name="TimerCastBait" xml:space="preserve"><value>Cast bait: {0}</value></data>
   <data name="NativeRuntimeUnsupported" xml:space="preserve"><value>Dalamud {0} has not been validated. Supported KR runtime versions: {1}. Collection sync and the casting timer are disabled.</value></data>
   <data name="NativeFeaturesBlocked" xml:space="preserve"><value>Collection sync, direct guide opening and the casting timer are unavailable in this environment. Opening the guide manually will not resolve this.&#xA;{0}</value></data>
+  <data name="BaitPreparation" xml:space="preserve"><value>Bait preparation</value></data>
+  <data name="BaitSource" xml:space="preserve"><value>Targets</value></data>
+  <data name="BaitSourceFavorites" xml:space="preserve"><value>Favorites</value></data>
+  <data name="BaitSourceCatalog" xml:space="preserve"><value>Main list filter results</value></data>
+  <data name="BaitSourceFavoritesHint" xml:space="preserve"><value>All favorites, independently of main list filters and alert settings.</value></data>
+  <data name="BaitSourceCatalogHint" xml:space="preserve"><value>All main list matches, including search and collection filters, beyond the visible rows.</value></data>
+  <data name="BaitBagScope" xml:space="preserve"><value>Main inventory only. First bait in each known mooch chain.</value></data>
+  <data name="BaitMissingOnly" xml:space="preserve"><value>Not owned only</value></data>
+  <data name="BaitPreparationCounts" xml:space="preserve"><value>{0} targets · {1} baits · {2} targets without a verified first bait</value></data>
+  <data name="BaitPreparationEmpty" xml:space="preserve"><value>No verified bait entries for these targets.</value></data>
+  <data name="BaitQuantity" xml:space="preserve"><value>{0} held</value></data>
+  <data name="BaitQuantityUnknown" xml:space="preserve"><value>—</value></data>
+  <data name="BaitTargetsCount" xml:space="preserve"><value>Used by {0} target fish. Expand to see them.</value></data>
+  <data name="BaitAlternative" xml:space="preserve"><value>Alternative</value></data>
+  <data name="BaitMissingData" xml:space="preserve"><value>Targets without verified first-bait data</value></data>
+  <data name="BaitStockWaiting" xml:space="preserve"><value>Waiting for inventory data for this character.</value></data>
+  <data name="BaitStockUnavailable" xml:space="preserve"><value>Inventory quantities are unavailable; — does not mean zero.</value></data>
+  <data name="BaitStockUnsupported" xml:space="preserve"><value>Inventory quantities are unavailable on this runtime.</value></data>
+  <data name="BaitNameStock" xml:space="preserve"><value>{0} · {1} held</value></data>
+  <data name="BaitNameUnknown" xml:space="preserve"><value>{0} · —</value></data>
+  <data name="BaitStockTooltip" xml:space="preserve"><value>{0}
+Main inventory only. An unknown quantity is not zero.</value></data>
+  <data name="BaitProbeRequest" xml:space="preserve"><value>Sample open bait UI</value></data>
+  <data name="BaitProbeCopy" xml:space="preserve"><value>Copy bait UI sample</value></data>
+  <data name="BaitProbeReady" xml:space="preserve"><value>Read-only UI sample is ready to copy. This does not select a bait.</value></data>
+  <data name="BaitProbeWaiting" xml:space="preserve"><value>Open the game bait selection UI within 20 seconds. The sample is captured automatically when visible.</value></data>
 </root>

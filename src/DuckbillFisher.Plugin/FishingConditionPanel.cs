@@ -8,7 +8,7 @@ using T = DuckbillFisher.Plugin.Localization.TextKey;
 namespace DuckbillFisher.Plugin;
 
 /// <summary>Aligned conditions using cached references; links only enqueue explicit user clicks.</summary>
-internal sealed class FishingConditionPanel(ITextureProvider textures, FishingItemLinkService itemLinks)
+internal sealed class FishingConditionPanel(ITextureProvider textures, FishingItemLinkService itemLinks, BaitStockObserver baitStock)
 {
     public void Draw(FishingDetailView details, FishPreferencesView personal,
         IReadOnlyDictionary<uint, FishingDetailView> related)
@@ -100,9 +100,16 @@ internal sealed class FishingConditionPanel(ITextureProvider textures, FishingIt
             {
                 var item = details.BaitSteps[step][alternative];
                 related.TryGetValue(item.Id, out var detail);
+                var name = item.Name;
+                if (step == 0 && detail is null)
+                {
+                    var inventory = baitStock.View;
+                    var count = inventory.Session == personal.Session && personal.HasCharacter ? inventory.Quantity(item.Id) : null;
+                    name = count is { } quantity ? UiText.Get(T.BaitNameStock, name, quantity) : UiText.Get(T.BaitNameUnknown, name);
+                }
                 var separator = alternative > 0 ? "/" : "→";
                 var separatorWidth = first ? 0 : ImGui.CalcTextSize(separator).X + 8;
-                var preferred = IconSize + 8 + Math.Min(ImGui.CalcTextSize(item.Name).X, ImGui.GetFontSize() * 12)
+                var preferred = IconSize + 8 + Math.Min(ImGui.CalcTextSize(name).X, ImGui.GetFontSize() * 12)
                     + (detail is null ? step > 0 ? ImGui.GetTextLineHeight() + 6 : 0 : IconSize + ImGui.GetFontSize() * 4);
                 if (detail is { Rule.ConditionsKnown: true } && (detail.Rule.StartHour != 0 || detail.Rule.EndHour != 24))
                     preferred += ImGui.CalcTextSize(UiText.Get(T.TimeConditionLabel, EtClock(detail.Rule.StartHour), EtClock(detail.Rule.EndHour))).X + 6;
@@ -113,8 +120,9 @@ internal sealed class FishingConditionPanel(ITextureProvider textures, FishingIt
                     UiWidgets.Tooltip(UiText.Get(alternative > 0 ? T.ConditionAny : T.BaitPathHeading));
                     ImGui.SameLine(0, 8);
                 }
-                StepItem(item, item.Name, $"Bait{step}/{item.Id}", personal, detail, step > 0,
+                StepItem(item, name, $"Bait{step}/{item.Id}", personal, detail, step > 0,
                     Math.Max(1, Math.Min(preferred, right - ImGui.GetCursorPosX())));
+                if (step == 0 && detail is null) UiWidgets.Tooltip(UiText.Get(T.BaitStockTooltip, name));
                 first = false;
             }
     }
