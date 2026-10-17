@@ -1,6 +1,6 @@
 # 0.1.28.0 UI 피드백 반영
 
-갱신: 2026-10-17 · 별도 빌드/리소스 검사 통과 · 정규 교체 및 인게임 확인 대기
+갱신: 2026-10-17 · 별도/정규 빌드·리소스 검사 통과 · 인게임 확인 대기
 
 ## 사용자 결정과 변경
 
@@ -33,7 +33,7 @@
 2. 별도 출력 빌드: `dotnet build src/DuckbillFisher.Plugin/DuckbillFisher.Plugin.csproj --no-restore -c Debug -p:DalamudLibPath=C:/Users/hyogu/AppData/Roaming/XIVLauncherKR/addon/Hooks/dev/ -p:OutputPath=C:/Users/hyogu/Downloads/DuckbillFisher/.cache/ui-feedback-build/` → 최종 경고 0/오류 0.
 3. 리소스 생성 스크립트의 스마트 따옴표 오류로 초기 생성과 빌드가 실패했다. 이스케이프를 수정하고 생성/빌드를 다시 실행하여 통과했다.
 4. `pwsh -NoLogo -NoProfile -File scripts/check-localization.ps1` → 한영 447키/형식 인자 일치.
-5. 정규 DLL 0.1.27.0은 유지 중이다. WORKFLOW에 따라 새 언로드 확인을 요청했으며, 응답 후 정규 빌드/버전 확인을 진행한다.
+5. 사용자 새 언로드 완료 확인 후 정규 경로 dotnet build 실행: 경고 0/오류 0. Plugin 0.1.28.0(1,028,096 bytes), Core 1.0.0.0(39,936 bytes), ko 리소스 0.1.28.0(44,032 bytes), manifest DuckbillFisher/0.1.28.0/API15 확인.
 6. 테스트 추가/실행 없음. 사용자 tmp_note.md 읽기/수정/스테이징 없음. 인게임 결과는 아직 받지 않았다.
 
 ## 인게임 확인 순서
