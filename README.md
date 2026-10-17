@@ -30,9 +30,9 @@ Open with `/duckbillfisher`. The same repository supplies future updates through
 
 ## Supported environment and limits
 
-- Current release: **[0.2.5.0](https://github.com/PlatyDuckbill/DuckbillFisher/releases/tag/v0.2.5.0)**, built for **Dalamud API 15**.
+- Current release: **[0.2.6.0](https://github.com/PlatyDuckbill/DuckbillFisher/releases/tag/v0.2.6.0)**, built for **Dalamud API 15**.
 - Representative game checks use Korean client **2026.10.06.0000.0000** and **XIVLauncherKR Dalamud 15.0.3.6**. Other regional clients are not verified.
-- Version 0.2.5.0 also supports the inspected **KR Dalamud 15.0.3.7** distribution. Its relevant layouts and methods match the earlier inspected runtime; confirmation after updating on the friend's PC is pending.
+- Version 0.2.6.0 supports the inspected **wasdcxz and dal4kr builds of KR Dalamud 15.0.3.7**. These distributions share a version number but have distinct module identities. Relevant native layouts and methods match; local representative checks passed, while confirmation on the friend's dal4kr installation is pending.
 - Native observations require the inspected KR game and DLL versions. A patch can disable these features until compatibility is reviewed.
 - Forecasts describe ordinary time/weather conditions. They do not confirm personal prerequisites or guarantee a catch. Some conditions, ocean fishing, and spearfishing have incomplete coverage.
 - Casting records cover observed rod-fishing events. Unconfirmed results remain unknown; special outcomes and multiple catches need further observation.

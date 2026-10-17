@@ -52,4 +52,4 @@
 - Release는 원래 지원하는15.0.3.6의 고정 KR ZIP에서 참조를 복구해 사용했다. 세 DLL의 해시가 기존 프로필과 같음을 확인했다. 산출물 참조는 Dalamud15.0.3.6/ClientStructs7.57.0.9376/Interop1.0.0.0으로 기존 지원 런타임보다 높은 참조를 요구하지 않는다. Release 빌드 경고0/오류0.
 - `prepare-release.ps1` 통과. `artifacts/share/0.2.6.0/DuckbillFisher-0.2.6.0.zip`은323,019바이트, SHA256 **1E881E03C0EFA7CBE33C2D60C416CD18653EA210E801CD355133334443AC5E7A**.7항목을 `.cache/release-validation/0.2.6.0/`에 추출해 ZIP과 해시 동일, Plugin/ko0.2.6.0/Core1.0.0.0/manifest API15 확인.
 - 정규/현재 로드 DLL, 설치된 런처/프레임워크 파일, 공개0.2.5.0/기존 릴리스는 직접 교체하지 않았다. 사용자가 ‘2.6 로컬에서 확인 완료’로 후보의 도감 연동·타이머/기록 대표 확인을 알렸다. 친구의 실제 dal4kr 환경 확인과 전 기능 확인으로 확대하지 않는다. 제공 파일과 조사 산출물은 캐시에만 있고 Git에 포함하지 않는다.
-- 다음: 기존 플러그인 언로드/비활성화→후보 DLL 로드→도감 연동과 낚시1회 타이머/기록 대표 확인. 검증한 ZIP 게시·저장소 갱신 후 친구는 같은 URL의 Dalamud 업데이트로 확인한다. 친구에게 정상 설치를 위해 개발 DLL 등록을 요구하지 않는다.
+- 사용자 로컬 대표 확인 후 구현6c106e7/확인6fc2fc1에 태그v0.2.6.0과 [Release](https://github.com/PlatyDuckbill/DuckbillFisher/releases/tag/v0.2.6.0)(ID415773597)를 게시했다. 확인한 ZIP을 재빌드하지 않았다. 익명 ZIP·체크섬·태그 아이콘 HTTP200, ZIP/원본 이미지 해시 동일 확인 후 저장소 JSON을 갱신한다. 공개 JSON 최종 확인과 친구의 실제 업데이트 결과는 별도로 기록한다.

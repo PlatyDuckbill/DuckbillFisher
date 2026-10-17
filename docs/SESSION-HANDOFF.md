@@ -1,6 +1,6 @@
 # 세션 인수인계
 
-갱신: 2026-10-17 · 0.2.6.0 로컬 대표 확인 / 게시 준비
+갱신: 2026-10-17 · 0.2.6.0 로컬 대표 확인 / Release 게시·저장소 갱신
 
 ## 재개 순서
 
@@ -10,10 +10,10 @@
 4. 사용자 `tmp_note.md`는 읽기·수정·스테이징하지 않는다. 전체 로그/과거 이력은 기본 요청하지 않는다.
 5. [dal4kr 지원0.2.6.0](validation/NATIVE-RUNTIME-DAL4KR.md)을 이어간다. 사용자 파일은 Downloads/15.0.3.7.zip에 있었고 필요한4개만 `.cache/friend-runtime/`에 추출했다. 친구 모듈은 dal4kr의 고정 공개 배포와 같고8개 네이티브 타입/IL이 기존wasdcxz와 동일하다. 복수 배포 조합을 정확히 대조하는0.2.6.0 구현 완료. 파일/로그 반복 요청이나 단순 버전 허용 금지.
 
-- 새 후보 `.cache/release-validation/0.2.6.0/DuckbillFisher.dll`, ZIP `artifacts/share/0.2.6.0/`. 두 배포 참조 Debug/최저15.0.3.6 참조 Release 모두 경고0/오류0·557키·패키지 검사 통과. 새 인게임 확인 대기/테스트 없음. 확인 뒤 새 릴리스/기존 JSON 업데이트를 진행하고 친구는 정상 Dalamud 업데이트로 확인한다. 현재 공개 버전은0.2.5.0이며 정규/현재 로드 DLL 교체 없음.
+- 새 후보 `.cache/release-validation/0.2.6.0/DuckbillFisher.dll`, ZIP `artifacts/share/0.2.6.0/`. 두 배포 참조 Debug/최저15.0.3.6 참조 Release 모두 경고0/오류0·557키·패키지 검사 통과. 사용자 로컬 대표 확인 완료/테스트 없음. 태그6fc2fc1/v0.2.6.0·Release415773597 게시와 익명 다운로드/해시 검사 통과. 기존 JSON 갱신 후 실제 공유 URL과 친구의 정상 업데이트를 확인한다. 정규/현재 로드 DLL 직접 교체 없음.
 
 - 확인 DLL `.cache/release-validation/0.2.5.0/DuckbillFisher.dll`, 패키지 `artifacts/share/0.2.5.0/`. 기존/새 참조 Debug와 기존 참조 Release 경고0/오류0·한영557키·패키지 검사 통과. 사용자 ‘잘 됨’으로 도감/수집·타이머 대표 확인 완료, 확인한 ZIP 그대로 게시한다. 실제 친구15.0.3.7 업데이트 후 결과는 별도 확인 대기/테스트 없음. 정규·현재 로드 파일 직접 교체/기존 Release 덮어쓰기 없음.
-- 구현d5c5899/확인638b77d·v0.2.5.0 태그/Release415761624·JSON b2d2cab 게시 완료. 같은 공유 URL0.2.5.0/HTTP200·ZIP/아이콘/설명 일치·CI 실행0 확인. 친구의 차단 지속은 실제 dal4kr 파일 대조 후 위0.2.6.0 후보로 대응했다. 새 버전 원격 게시와 친구의 실제 동작 확인은 대기다.
+- 구현d5c5899/확인638b77d·v0.2.5.0 태그/Release415761624·JSON b2d2cab 게시 완료. 같은 공유 URL0.2.5.0/HTTP200·ZIP/아이콘/설명 일치·CI 실행0 확인. 친구의 차단 지속은 실제 dal4kr 파일 대조 후 위0.2.6.0 후보로 대응했다. 0.2.6.0 원격 게시 후 친구의 실제 동작 확인은 대기다.
 
 - 최종 게시 준비물: `artifacts/share/0.2.4.0-final/` ZIP/체크섬/후보 JSON. 설명 가독성만 LF/글머리표로 수정하고 Packager 대상만 재실행했다. 기존 확인 ZIP/추출본은 보존, 최종 ZIP과 Description만 다르고 나머지5파일/다른 필드는 동일하다. 빌드/한영555키/내장 자료 검사 유지, 한영 검사 재통과, 정규 Debug 교체/테스트 없음.
 - source eb8c3ce/v0.2.4.0 태그/Release415750305·설치 JSON d0c2c50 정상 게시 완료. [공유 URL](https://raw.githubusercontent.com/PlatyDuckbill/DuckbillFisher/main/repo/pluginmaster.json)은 익명 HTTP200/1항목/API15/0.2.4.0/설명15줄/manifest 일치, 설치·업데이트·아이콘200/ZIP·원본 이미지 해시 일치다. 이번 CI 실행0건(`[skip ci]`)/테스트 없음. gh 없이 credential manager 인증을 메모리에서만 사용했다. tmp_note.md/자격 증명/빌드 산출물 스테이징 금지.
