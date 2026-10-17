@@ -322,7 +322,7 @@ internal sealed class FishingTracker : IDisposable
         if (pendingMooch is not { } fact) return;
         if (now - fact.At > TimeSpan.FromSeconds(2)) { pendingMooch = null; return; }
         var kind = CastBaitKind(current);
-        if (current.Phase is not (1 or 12) || kind is not (FishingBaitKind.Mooch or FishingBaitKind.Swimbait) ||
+        if (current.Phase is not (1 or 12) || kind != FishingBaitKind.Mooch ||
             history.Active is not { BiteSeconds: null, HookSeconds: null } || history.CastStartedAt is not { } start ||
             Math.Abs((fact.At - start).TotalSeconds) > 2) return;
         if (history.SetCastBait(fact.Value, kind)) moochApplied++;
@@ -333,6 +333,18 @@ internal sealed class FishingTracker : IDisposable
         (sample.BaitFlags.GetValueOrDefault() & 0x20) != 0 ? FishingBaitKind.Swimbait :
         (sample.BaitFlags.GetValueOrDefault() & 0x10) != 0 ? FishingBaitKind.Mooch : FishingBaitKind.Equipped;
 
+    private uint? CastBaitItem(FishingNativeSample sample, FishingBaitKind kind)
+    {
+        if (kind == FishingBaitKind.Equipped) return sample.EquippedBait is > 0 ? sample.EquippedBait : null;
+        if (kind != FishingBaitKind.Swimbait) return null;
+        if ((sample.BaitFlags.GetValueOrDefault() & 0x30) != 0x20) return null;
+        // KR sample: the selected slot survives through CastingOut/Waiting, then clears at the result.
+        // Copy at the observed cast start; never substitute equipped bait or the last caught fish.
+        var item = sample.SelectedSwimbait switch
+        { 0 => sample.Swimbait0, 1 => sample.Swimbait1, 2 => sample.Swimbait2, _ => null };
+        return item is > 0 && fishByItem.ContainsKey(item.Value) ? item : null;
+    }
+
     private void ObservePhase(TimeSpan now, DateTimeOffset utc, FishingNativeSample current)
     {
         var phase = current.Phase;
@@ -340,8 +352,8 @@ internal sealed class FishingTracker : IDisposable
         {
             spot = now - pendingSpotAt <= TimeSpan.FromSeconds(2) ? pendingSpot : spot;
             var kind = CastBaitKind(current);
-            // Equipped bait is never substituted for mooch. A matching local 1121 supplies its item separately.
-            var bait = kind == FishingBaitKind.Equipped && current.EquippedBait is > 0 ? current.EquippedBait : null;
+            var bait = CastBaitItem(current, kind);
+            if (kind == FishingBaitKind.Swimbait) pendingMooch = null;
             history.Start(now, utc, territory, spot?.Id, bait, kind, seenIdle);
             if (history.Trip?.Sequence == 0) history.SetSequence(++lastSequence);
             pendingSpot = null;
