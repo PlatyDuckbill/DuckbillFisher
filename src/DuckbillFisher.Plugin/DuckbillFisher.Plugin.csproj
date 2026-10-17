@@ -6,10 +6,11 @@
     <NeutralLanguage>en</NeutralLanguage>
     <Author>PlatyDuckbill</Author>
     <Name>DuckbillFisher</Name>
-    <Punchline>한국 서버 터주 도우미 — 개발 준비 버전</Punchline>
-    <Description>어종 목록·상세 조건·지도 핀·즐겨찾기·수집 필터·출현 사전 알림과 KR 일반 낚시의 캐스팅 타이머·히스토리를 제공합니다. 검증한 게임 도감 대조 뒤 미수집을 표시하며, 확인되지 않은 낚시 결과는 미확인으로 유지합니다. /duckbillfisher로 화면을 엽니다.</Description>
+    <Punchline>Let Duckbill guide your next catch.</Punchline>
+    <Description>A fishing companion for FFXIV Korea. Browse fish, baits and time/weather conditions, open fishing spots on the map, filter your collection, and get local alerts for favorites. Includes a casting timer and character-specific fishing records. Open with /duckbillfisher. Korean and English UI; game names follow your client. Verified only on the supported Korean client and Dalamud build. Does not automate fishing.</Description>
     <RepoUrl>https://github.com/PlatyDuckbill/DuckbillFisher</RepoUrl>
-    <Tags>fishing;한국어</Tags>
+    <Tags>fishing;fish;collection;Korea;한국어</Tags>
+    <IconUrl>https://raw.githubusercontent.com/PlatyDuckbill/DuckbillFisher/v$(Version)/assets/duckbillfisher-icon.png</IconUrl>
     <DalamudApiLevel>15</DalamudApiLevel>
     <ApplicableVersion>any</ApplicableVersion>
     <IsPackable>false</IsPackable>

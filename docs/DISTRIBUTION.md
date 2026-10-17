@@ -1,56 +1,95 @@
-# 친구에게 URL로 공유하기
+# 커스텀 저장소로 설치·업데이트하기
 
-## 목표와 현재 상태
+## 이번 배포 상태
 
-최소 배포 목표는 커스텀 저장소 URL을 등록한 친구가 DuckbillFisher를 설치하고 같은 경로로 업데이트하는 것이다. 공식 Dalamud 등록은 장기 목표다.
-
-현재 `repo/pluginmaster.json`은 빈 배열이다. 시작 창 빌드와 배포 준비 도구만 있으며, 아직 원격 게시·인게임 검증·친구 설치 테스트를 하지 않았다.
-
-예정 주소(아직 사용할 수 있는 배포 URL이 아님):
+- 첫 배포 후보는 **0.2.4.0 / Dalamud API 15**다. 기존 대표 확인은 Debug DLL 기준이며 배포 ZIP의 Release 실행 확인은 별도로 받는다.
+- 공개 GitHub 저장소와 게시 권한 확인, 영어 소개·512×512 원본 아이콘 연결, Release 빌드·패키지 검사 완료. **Release 인게임 확인 대기이며 GitHub Release와 설치 목록은 아직 게시하지 않았다.**
+- `repo/pluginmaster.json`은 확인 완료 전까지 빈 배열을 유지한다. 아래 URL은 아직 설치 가능한 목록이 아니다.
+- 자세한 산출물·확인 범위는 [첫 배포 기록](validation/RELEASE-0.2.4.0.md)을 따른다.
 
 ```text
 https://raw.githubusercontent.com/PlatyDuckbill/DuckbillFisher/main/repo/pluginmaster.json
 ```
 
-GitHub 저장소/파일이 공개되어 있어야 이 주소를 익명으로 읽을 수 있다. 소스를 비공개로 유지한다면 공개 배포 전용 저장소 또는 별도 정적 호스팅을 사용하고 주소를 바꾼다. 커스텀 저장소는 인증을 지원하지 않으므로 '친구에게 공유'는 접근 제한을 뜻하지 않는다. [공식 커스텀 저장소 규격](https://dalamud.dev/plugin-publishing/custom-repositories/).
+## 배포가 작동하는 구조
 
-## 구성
+| 구성 | 역할 | 관리 위치 |
+|---|---|---|
+| 저장소 JSON | 이름·버전·아이콘·설치/업데이트 주소를 알려 준다 | `repo/pluginmaster.json` |
+| 설치 ZIP | Plugin/Core/한국어 리소스/manifest 등 실행 파일을 담는다 | GitHub Release의 `DuckbillFisher-0.2.4.0.zip` |
+| 아이콘 | 설치 목록의 대표 이미지다 | 버전 태그의 `assets/duckbillfisher-icon.png` |
+| SHA256 | 게시 전후 ZIP이 같은 파일인지 개발자가 확인한다 | ZIP 옆 `.sha256` 파일 |
 
-- `pluginmaster.json`: 이름·버전·API level·ZIP 설치/업데이트 URL을 담은 배열.
-- GitHub Release의 `DuckbillFisher-<version>.zip`: 해당 버전의 실제 DLL과 manifest.
-- 체크섬 파일: 게시 파일 확인용 SHA256. Dalamud가 이를 자동 검증한다고 가정하지 않는다.
-- 설치/업데이트 통신은 Dalamud가 수행한다. DuckbillFisher 런타임에는 외부 네트워크 코드를 추가하지 않는다.
+Dalamud가 JSON을 읽고 ZIP을 내려받아 설치하며 이후 더 높은 버전을 업데이트한다. 친구는 저장소 URL을 한 번 추가하면 된다. 소스 빌드·ZIP 수동 압축 해제·개발 DLL 등록이 필요하지 않다. 플러그인 실행 중 외부 HTTP는 추가하지 않는다.
 
-## 로컬 배포 준비
+공식 저장소 제출·승인은 이번 범위가 아니다. 커스텀 저장소는 인증 없는 HTTP GET으로 접근할 수 있어야 하므로 공유 URL은 공개 주소다. [공식 규격](https://dalamud.dev/plugin-publishing/custom-repositories/).
 
-PowerShell 7에서 실행한다. 먼저 해당 Windows 한섭 환경에서 기능·언로드·재로드를 확인한다.
+## 사용자 설치 절차: 게시 완료 후
+
+1. XIVLauncherKR로 게임을 실행하고 Dalamud 설정을 연다.
+2. 커스텀 플러그인 저장소 항목에 위 JSON URL을 추가·활성화하고 저장한다. 메뉴 이름은 사용하는 Dalamud 언어/버전에 따라 다를 수 있다.
+3. 플러그인 설치 목록을 새로고침하고 **DuckbillFisher**를 검색해 설치한다.
+4. `/duckbillfisher`로 화면을 연다. 수집 연동 안내가 나오면 **어류도감 열기**를 누르고 낚시 탭의 조회를 기다린다.
+5. 이후 업데이트는 Dalamud 플러그인 설치 화면에서 제공한다. 저장소 URL을 다시 추가하지 않는다.
+
+개발자는 배포 설치를 확인하기 전에 기존 개발 플러그인을 언로드하고 개발 DLL 등록을 비활성화한다. 같은 InternalName의 개발·배포 플러그인을 동시에 로드하지 않는다. 설정이나 기록 파일을 삭제할 필요는 없다.
+
+## 개발자 준비: 게시 전까지 로컬 작업
+
+현재 검증 환경은 KR 게임 `2026.10.06.0000.0000`, Dalamud `15.0.3.6/API15`다. 친구의 게임/Dalamud가 다르면 네이티브 기능의 호환성을 먼저 확인한다. UI 언어 선택이 글로벌 클라이언트 지원을 뜻하지 않는다.
+
+버전은 Plugin csproj의 `Version` 한 곳에서 관리한다. 첫 배포는 미게시 버전 `0.2.4.0`을 유지한다. 태그·ZIP 이름·manifest·저장소 JSON이 같은 버전을 가리켜야 한다.
+
+PowerShell 7에서 다음을 실행한다. 테스트를 실행하는 `scripts/build.ps1`은 이번 절차에서 사용하지 않는다.
 
 ```powershell
-pwsh -File scripts/build.ps1 -DalamudPath "실제 Dalamud.dll 폴더" -Configuration Release
+dotnet build src/DuckbillFisher.Plugin/DuckbillFisher.Plugin.csproj --no-restore -c Release -p:DalamudLibPath=C:/Users/hyogu/AppData/Roaming/XIVLauncherKR/addon/Hooks/dev/
+pwsh -NoLogo -NoProfile -File scripts/check-localization.ps1
 
-pwsh -File scripts/prepare-release.ps1 `
+pwsh -NoLogo -NoProfile -File scripts/prepare-release.ps1 `
   -PackagePath src/DuckbillFisher.Plugin/bin/Release/DuckbillFisher/latest.zip `
-  -AssetBaseUrl https://github.com/PlatyDuckbill/DuckbillFisher/releases/download/v0.1.0.0 `
-  -OutputDirectory artifacts/share/0.1.0.0
+  -AssetBaseUrl https://github.com/PlatyDuckbill/DuckbillFisher/releases/download/v0.2.4.0 `
+  -OutputDirectory artifacts/share/0.2.4.0
 ```
 
-버전은 Plugin csproj의 Version에서 관리한다. 예시의 release tag/출력 경로도 실제 버전에 맞춘다. 스크립트는 ZIP의 필수 파일, 허용 목록, API, DLL/manifest 버전 일치를 확인한 후 버전별 ZIP·SHA256·pluginmaster.json을 로컬에 만든다. 기존 결과가 있으면 덮어쓰지 않는다. 업로드하거나 repo/pluginmaster.json을 자동 변경하지 않는다.
+| 생성물 | 용도 |
+|---|---|
+| `artifacts/share/0.2.4.0/DuckbillFisher-0.2.4.0.zip` | 실제 업로드할 ZIP |
+| `DuckbillFisher-0.2.4.0.zip.sha256` | ZIP의 해시 |
+| `pluginmaster.json` | 확인 후 repo에 반영할 후보 |
 
-0.1.3.0부터 한국어 리소스인 `ko/DuckbillFisher.resources.dll`도 필요하다. `scripts/package-files.ps1`가 번역 리소스에서 필요한 DLL 목록을 계산하며 개발 복사와 배포 준비에서 공유한다. 배포 ZIP의 경로 구분자는 정규화해 검사한다. 자세한 문자열/언어 확장 절차는 [다국어 지침](LOCALIZATION.md)을 따른다.
+`prepare-release.ps1`은 필수 파일·허용 목록·API·버전을 확인한 뒤 로컬에 ZIP·체크섬·JSON을 만든다. 원격 게시나 실제 `repo/pluginmaster.json` 변경은 하지 않으며 기존 결과를 덮어쓰지 않는다. 재생성할 때는 새 출력 경로를 쓰고 확인한 ZIP의 해시가 바뀌면 실행 확인도 다시 구분한다.
+
+한국어 위성 리소스 `ko/DuckbillFisher.resources.dll`이 반드시 포함되어야 한다. 요구 파일은 `scripts/package-files.ps1`을 따른다. 아이콘은 사용자가 제공한 원본을 바이트 변경 없이 이동했으며 `IconUrl`로 연결했다. 미리보기 스크린샷이 아니므로 `ImageUrls`에는 중복 등록하지 않았다. 아이콘 1:1·64~512픽셀 기준은 [공식 이미지 안내](https://dalamud.dev/plugin-publishing/submission/)를 참고했다.
+
+## Release ZIP의 실행 확인
+
+개발자가 로컬에서 할 확인이며 친구의 설치 절차가 아니다.
+
+1. 배포 ZIP을 `.cache/release-validation/0.2.4.0/`에 추출하고 빌드 출력과 각 파일 SHA256이 같은지 확인한다.
+2. 기존 개발 플러그인을 언로드한다. 개발 DLL 경로를 추출한 `DuckbillFisher.dll`로 바꿔 로드한다. 기존 Debug 파일은 덮어쓰지 않는다.
+3. 목록·간이 목록·타이머·한영 전환·어류도감 연동을 확인하고 낚시 1회의 기록을 확인한다.
+4. 언로드→재로드 후 설정과 낚시 기록이 유지되는지 확인한다. 확인한 ZIP의 SHA256과 결과를 기록한다.
+
+모든 기능의 전수 확인과 이 최소 패키지 확인은 구분한다. 문제가 있으면 설치 가능한 릴리스·저장소 항목은 게시하지 않는다.
 
 ## 게시 순서
 
-1. 테스트한 커밋, 지원하는 KR 게임/Dalamud 버전, 변경 사항을 기록한다. 코드/도입 자료 라이선스를 정리한다.
-2. GitHub에 해당 버전의 release와 ZIP/체크섬을 게시한다. 태그와 링크가 가리키는 빌드는 검증한 빌드와 같아야 한다.
-3. 로그아웃 상태에서도 ZIP 다운로드가 되는지 확인한다.
-4. 생성한 pluginmaster.json을 repo/pluginmaster.json에 반영하여 게시한다. ZIP 게시보다 앞서 목록을 바꾸지 않는다.
-5. 친구 PC에서 커스텀 저장소 추가 → 설치 → 명령으로 창 열기 → 재시작 확인.
-6. 다음 버전의 AssemblyVersion을 증가시키고 같은 순서로 게시하여 업데이트를 검증한다.
+1. Release 실행 확인과 문서 갱신 후 승인된 파일만 커밋하고 기존 `origin/main`에 정상 push한다. 무관한 사용자 파일이나 자격 증명은 포함하지 않는다.
+2. 확인한 소스 커밋에 `v0.2.4.0` 태그를 만들고 push한다. 이미 존재하는 태그·릴리스는 덮어쓰지 않는다.
+3. GitHub의 **Releases → Draft a new release**에서 해당 태그를 고르고 [영어 릴리스 요약](releases/0.2.4.0.md)과 ZIP·`.sha256`을 첨부한다. 자동으로 딸려 오는 Source code ZIP은 설치 파일이 아니다.
+4. ZIP 업로드를 끝낸 뒤 Release를 공개한다. 이번 배포는 커스텀 저장소 일반 설치 항목이며 Dalamud의 테스트 빌드 옵션을 요구하지 않는다. 초기 배포의 확인 범위와 제한은 릴리스 요약에 명시한다.
+5. 로그인 없는 별도 요청으로 ZIP 다운로드·SHA256, 태그의 아이콘 URL 접근을 확인한다.
+6. 그 다음에만 생성한 `pluginmaster.json`을 `repo/pluginmaster.json`에 반영하고 커밋·push한다.
+7. 공개 JSON의 이름·API·버전·설치/업데이트 URL과 모든 링크를 익명 요청으로 다시 확인한다. 이 시점부터 친구에게 URL을 전달한다.
+8. 실제 Dalamud 저장소 설치 확인은 HTTP 확인과 별도로 기록한다. 첫 업데이트 경로는 더 높은 버전의 다음 배포에서 확인한다.
 
-현재는 사용자에게 유용한 기능을 만든 뒤 첫 친구 배포를 진행한다. 아직 공개용 release나 tag를 생성하지 않았다.
+현재 환경에는 `gh` CLI가 없지만 Git credential manager의 인증으로 GitHub API 게시가 가능하다. 토큰은 메모리에서만 사용하며 출력·파일·Git에 남기지 않는다. 직접 게시할 때는 위 GitHub 웹 절차로 같은 결과를 만들 수 있다.
+
+이번 요청은 테스트 실행을 제외하므로 기존 테스트 CI를 유발하지 않도록 게시용 커밋에 `[skip ci]`를 넣는다. 워크플로우 자체는 변경하지 않는다. [GitHub의 push 생략 지침](https://docs.github.com/en/actions/how-tos/manage-workflow-runs/skip-workflow-runs).
 
 ## 업데이트와 복구
 
-기존 태그의 ZIP을 덮어쓰지 않는다. 문제가 있으면 수정하거나 이전 코드를 복원한 뒤 **더 높은 버전**으로 다시 배포한다. 단순히 목록의 버전을 낮추는 것으로 이미 설치된 버전이 자동 다운그레이드된다고 가정하지 않는다.
+다음 버전은 csproj의 Version을 증가시키고 새 태그·새 ZIP을 만든다. 기존 태그/ZIP을 수정하지 않는다. 새 ZIP 확인·게시·익명 다운로드 확인 후 같은 저장소 JSON URL의 버전과 링크만 갱신한다.
 
-공식 등록 시에는 그 시점의 제출 요구사항과 한섭 지원 가능성을 별도로 확인한다. 최소 공유 목표 때문에 자동화 금지나 오프라인 런타임 원칙을 바꾸지 않는다.
+문제가 있으면 수정하거나 이전 코드를 복원해 **더 높은 버전**으로 다시 배포한다. 목록의 버전을 낮추는 것만으로 설치된 버전이 자동 다운그레이드된다고 가정하지 않는다. 설치 목록·ZIP·아이콘의 현재 주소, 원격 커밋과 확인 범위는 STATUS에 남긴다.
