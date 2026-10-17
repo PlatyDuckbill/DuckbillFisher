@@ -3,7 +3,8 @@ using Dalamud.Plugin.Services;
 namespace DuckbillFisher.Plugin;
 
 internal enum BaitPreparationSource { Favorites, Catalog }
-internal sealed record BaitPreparationEntry(FishingItemView Item, FishGuideRow[] Targets, bool Alternative);
+internal sealed record BaitPreparationAlternative(string Key, FishingItemView[] Items, FishGuideRow[] Targets);
+internal sealed record BaitPreparationEntry(FishingItemView Item, FishGuideRow[] Targets, BaitPreparationAlternative[] Alternatives);
 internal sealed record BaitPreparationView(int Session, int TargetCount, BaitPreparationEntry[] Entries, FishGuideRow[] Missing);
 
 /// <summary>Aggregates first baits outside Draw. Favorites and the full main query are independent scopes.</summary>
@@ -59,7 +60,7 @@ internal sealed class BaitPreparation : IDisposable
                 ? personal.Favorites.Contains(row.FishParameterId)
                 : current.Matches(row, filter, personal, observed, location)).ToArray();
             var fishItems = data.Rows.Where(row => row.ItemType == "Item").Select(row => row.ItemId).ToHashSet();
-            var entries = new Dictionary<uint, (FishingItemView Item, List<FishGuideRow> Targets, bool Alternative)>();
+            var entries = new Dictionary<uint, (FishingItemView Item, List<FishGuideRow> Targets)>();
             var missing = new List<FishGuideRow>();
             foreach (var row in targets)
             {
@@ -68,14 +69,27 @@ internal sealed class BaitPreparation : IDisposable
                 { missing.Add(row); continue; }
                 foreach (var item in first.DistinctBy(item => item.Id))
                 {
-                    if (!entries.TryGetValue(item.Id, out var entry)) entry = (item, [], false);
+                    if (!entries.TryGetValue(item.Id, out var entry)) entry = (item, []);
                     entry.Targets.Add(row);
-                    entries[item.Id] = (entry.Item, entry.Targets, entry.Alternative || first.Length > 1);
+                    entries[item.Id] = entry;
                 }
             }
             view = new(personal.Session, targets.Length, entries.Values.OrderBy(entry => entry.Item.Name, StringComparer.OrdinalIgnoreCase)
-                .Select(entry => new BaitPreparationEntry(entry.Item, entry.Targets.ToArray(), entry.Alternative)).ToArray(), missing.ToArray());
+                .Select(entry => BuildEntry(entry.Item, entry.Targets)).ToArray(), missing.OrderBy(fish => fish.DisplayName,
+                        StringComparer.OrdinalIgnoreCase).ToArray());
         }
+    }
+
+    private static BaitPreparationEntry BuildEntry(FishingItemView item, List<FishGuideRow> targets)
+    {
+        // Substitutes apply to a particular fish's first-bait choices, not every target of this bait.
+        var alternatives = targets.Where(fish => fish.Details!.BaitSteps[0].Length > 1)
+            .GroupBy(fish => string.Join(',', fish.Details!.BaitSteps[0].Select(choice => choice.Id).Distinct().Order()))
+            .Select(group => new BaitPreparationAlternative(group.Key,
+                group.First().Details!.BaitSteps[0].Where(choice => choice.Id != item.Id).DistinctBy(choice => choice.Id)
+                    .OrderBy(choice => choice.Name, StringComparer.OrdinalIgnoreCase).ToArray(), group.ToArray()))
+            .Where(group => group.Items.Length > 0).ToArray();
+        return new(item, targets.ToArray(), alternatives);
     }
 
     public void Dispose()

@@ -576,13 +576,15 @@ In fish log only: {5}</value></data>
   <data name="BaitSourceCatalogHint" xml:space="preserve"><value>All main list matches, including search and collection filters, beyond the visible rows.</value></data>
   <data name="BaitBagScope" xml:space="preserve"><value>Main inventory only. First bait in each known mooch chain.</value></data>
   <data name="BaitMissingOnly" xml:space="preserve"><value>Not owned only</value></data>
-  <data name="BaitPreparationCounts" xml:space="preserve"><value>{0} targets · {1} baits · {2} targets without a verified first bait</value></data>
+  <data name="BaitPreparationCounts" xml:space="preserve"><value>{0} target fish · {1} baits · {2} unverified fish</value></data>
   <data name="BaitPreparationEmpty" xml:space="preserve"><value>No verified bait entries for these targets.</value></data>
   <data name="BaitQuantity" xml:space="preserve"><value>{0} held</value></data>
   <data name="BaitQuantityUnknown" xml:space="preserve"><value>—</value></data>
   <data name="BaitTargetsCount" xml:space="preserve"><value>Used by {0} target fish. Expand to see them.</value></data>
-  <data name="BaitAlternative" xml:space="preserve"><value>Alternative</value></data>
-  <data name="BaitMissingData" xml:space="preserve"><value>Targets without verified first-bait data</value></data>
+  <data name="BaitAlternativeGroup" xml:space="preserve"><value>Choose one substitute below · {0} target fish</value></data>
+  <data name="BaitMissingData" xml:space="preserve"><value>Unverified fish: {0}</value></data>
+  <data name="BaitMissingDataHint" xml:space="preserve"><value>The first bait for these target fish could not be verified.</value></data>
+  <data name="BaitUnresolvedSection" xml:space="preserve"><value>Unverified</value></data>
   <data name="BaitStockWaiting" xml:space="preserve"><value>Waiting for inventory data for this character.</value></data>
   <data name="BaitStockUnavailable" xml:space="preserve"><value>Inventory quantities are unavailable; — does not mean zero.</value></data>
   <data name="BaitStockUnsupported" xml:space="preserve"><value>Inventory quantities are unavailable on this runtime.</value></data>

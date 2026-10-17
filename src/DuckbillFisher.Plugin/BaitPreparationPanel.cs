@@ -34,7 +34,7 @@ internal sealed class BaitPreparationPanel(BaitPreparation preparation, BaitStoc
         var height = Math.Max(ImGui.GetTextLineHeight() * 3, ImGui.GetContentRegionAvail().Y - footer);
         if (ImGui.BeginChild("BaitPreparationItems", new Vector2(0, height)))
         {
-            if (view.Entries.Length == 0) ImGui.TextWrapped(UiText.Get(T.BaitPreparationEmpty));
+            if (view.Entries.Length == 0 && view.Missing.Length == 0) ImGui.TextWrapped(UiText.Get(T.BaitPreparationEmpty));
             foreach (var entry in view.Entries)
             {
                 var count = ready ? inventory.Quantity(entry.Item.Id) : null;
@@ -42,27 +42,39 @@ internal sealed class BaitPreparationPanel(BaitPreparation preparation, BaitStoc
                 ImGui.PushID((int)entry.Item.Id);
                 var open = ImGui.TreeNodeEx("###BaitTargets", ImGuiTreeNodeFlags.None);
                 ImGui.SameLine();
-                UiWidgets.GameIcon(textures, entry.Item.IconId, ImGui.GetFrameHeight(), entry.Item.Name);
-                ImGui.SameLine();
-                ImGui.BeginDisabled(!personal.HasCharacter);
-                if (ImGui.SmallButton($"{entry.Item.Name}###BaitItemLink")) links.Request(entry.Item, personal.Session);
-                ImGui.EndDisabled();
-                ImGui.SameLine();
-                if (count == 0) ImGui.TextColored(new Vector4(1, 0.55f, 0.45f, 1), UiText.Get(T.BaitQuantity, 0));
-                else ImGui.TextUnformatted(count is { } quantity ? UiText.Get(T.BaitQuantity, quantity) : UiText.Get(T.BaitQuantityUnknown));
+                DrawBait(entry.Item, count, personal);
                 UiWidgets.Tooltip(UiText.Get(T.BaitTargetsCount, entry.Targets.Length));
-                if (entry.Alternative) { ImGui.SameLine(); ImGui.TextDisabled(UiText.Get(T.BaitAlternative)); }
                 if (open)
                 {
                     foreach (var fish in entry.Targets) ImGui.TextWrapped(fish.DisplayName);
                     ImGui.TreePop();
                 }
+                if (entry.Alternatives.Length > 0)
+                {
+                    ImGui.Indent();
+                    foreach (var group in entry.Alternatives)
+                    {
+                        ImGui.PushID(group.Key);
+                        ImGui.TextDisabled(UiText.Get(T.BaitAlternativeGroup, group.Targets.Length));
+                        if (ImGui.IsItemHovered()) UiWidgets.Tooltip(string.Join('\n', group.Targets.Select(fish => fish.DisplayName)));
+                        foreach (var item in group.Items)
+                        {
+                            ImGui.PushID((int)item.Id);
+                            DrawBait(item, ready ? inventory.Quantity(item.Id) : null, personal);
+                            ImGui.PopID();
+                        }
+                        ImGui.PopID();
+                    }
+                    ImGui.Unindent();
+                }
                 ImGui.PopID();
             }
-            if (view.Missing.Length > 0 && ImGui.TreeNode(UiText.Label(T.BaitMissingData, "BaitMissingData")))
+            if (view.Missing.Length > 0)
             {
+                UiWidgets.Heading(T.BaitUnresolvedSection);
+                ImGui.TextDisabled(UiText.Get(T.BaitMissingData, view.Missing.Length));
+                UiWidgets.Tooltip(UiText.Get(T.BaitMissingDataHint));
                 foreach (var fish in view.Missing) ImGui.TextWrapped(fish.DisplayName);
-                ImGui.TreePop();
             }
         }
         ImGui.EndChild();
@@ -82,6 +94,18 @@ internal sealed class BaitPreparationPanel(BaitPreparation preparation, BaitStoc
             else ImGui.TextWrapped(probe.StatusMessage.Display);
             UiWidgets.Tooltip(UiText.Get(T.BaitProbeReady));
         }
+    }
+
+    private void DrawBait(FishingItemView item, long? count, FishPreferencesView personal)
+    {
+        UiWidgets.GameIcon(textures, item.IconId, ImGui.GetFrameHeight(), item.Name);
+        ImGui.SameLine();
+        ImGui.BeginDisabled(!personal.HasCharacter);
+        if (ImGui.SmallButton($"{item.Name}###BaitItemLink")) links.Request(item, personal.Session);
+        ImGui.EndDisabled();
+        ImGui.SameLine();
+        if (count == 0) ImGui.TextColored(new Vector4(1, 0.55f, 0.45f, 1), UiText.Get(T.BaitQuantity, 0));
+        else ImGui.TextUnformatted(count is { } quantity ? UiText.Get(T.BaitQuantity, quantity) : UiText.Get(T.BaitQuantityUnknown));
     }
 
     public static T StockReason(BaitStockState state) => state == BaitStockState.Unsupported
