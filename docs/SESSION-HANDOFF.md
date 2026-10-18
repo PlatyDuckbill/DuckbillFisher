@@ -44,7 +44,7 @@
 - Core 공통 자료 검증을 Plugin/도구에서 사용한다. 실제 자료 검사 명령은 [data/README](../data/README.md#필드-의미와-미확인), 결과와 재현은 [데이터 기록](verification/data/DATA-COMPLETION-2026-10-18.md#0320-데이터-안정성-보강)을 따른다. 오류 진단은 catalog/v9의 DataValidation/IntuitionForecast 한 줄부터 확인한다.
 - 30일 검색·직감175초 가정·물고기의 눈 전환은 [예측 기록](verification/forecast/FORECAST.md#0350-직감-기본값과-계산-구역-개선-2026-10-19)을 따른다. summary/v10의 SelectedForecast/ForecastComparison/SelectedConditions/SelectedIntuition은 두 UTC·지원 여부·원본/계산 지속 시간·DurationAssumed를 구분한다. 실제 자료 도우미는 .cache/Inspect-ForecastRefinement.ps1·Compare-ForecastRefinement.ps1이며 테스트 스위트가 아니다.
 - v1 조건 자료는 data/archive로 이동했으며 기존 예측 테스트에서만 참조한다. 제품은 v2 조건과 v1 등급 자료를 내장한다. 테스트는 요청 없이는 실행하지 않는다.
-- 고정0.3.9.0 Release 추출본의 이력5개/접기·닫기/재로드·설정에서 재열기/한영·기존 목록/타이머·설정 복원 대표 확인을 받았다. 실제 저장소 업데이트/설치 화면 Changelog 렌더링/친구 확인은 별도 대기다. 이전 예측/UI/장애/다른 캐릭터 확인 대기도 유지한다. 음원은 alerts/v7의 CustomSoundState/CustomSoundCode, 미끼 페이지는 bait-ui/v7의 Pages부터 요청한다.
+- 다음 실기 확인은 실제 저장소의0.3.9.0 업데이트와 설치 화면 Changelog 표시다. 추출 DLL의 이력5개/접기·닫기/재로드·설정 재열기/한영·기존 목록/타이머·설정 복원은 대표 확인을 받았다. 친구 PC와 이전 예측/UI/장애/다른 캐릭터 확인 대기는 STATUS에 유지한다. 음원은 alerts/v7의 CustomSoundState/CustomSoundCode, 미끼 페이지는 bait-ui/v7의 Pages부터 요청한다.
 - 일반 데이터 잔여 이름/ID/이유는 [보고서](verification/data/reports/fishing-data-2026-10-17/remaining.md), 재생성 순서는 [data/README](../data/README.md)를 따른다. 완성 제품을 보완 단계 baseline으로 다시 넣지 않는다.
 - 입질 통계·복수 어획 보류를 유지한다. 과거 Teamcraft 화면 추적은 중단하고 [현재 웹 표시 대조](verification/forecast/FORECAST.md#현재-웹-표시-대조-2026-10-19)로 전환했다. UTC/CSV는 기록에, 임시 브라우저 관찰 자료는 .cache/forecast-browser-2026-10-19에 있다. 사용자 계정/브라우저와 분리한 익명 세션을 사용했다. 후속은 [ROADMAP](product/ROADMAP.md)을 따른다.
 - 폴더 재구성 전 경로는 Git 699db5b에 보존됐다. UI 원문 12개는 archive/ui/CHANGES.md의 문서별 앵커로 합쳤으며 새 전체 상태 사본은 만들지 않았다. 문서 검사기는 새 폴더/색인 규칙을 검사한다.

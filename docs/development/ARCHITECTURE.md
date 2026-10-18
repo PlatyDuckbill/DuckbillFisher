@@ -19,6 +19,7 @@
 | 공통 표시 | FishRowRenderer, FishDetailPanel, FishingConditionPanel, UiWidgets | 표시·선택 전달, 게임 조회/예측을 가져오지 않음 |
 | 로컬 출력 | SpawnAlerts, SpawnAlertOutput, FishingMapService, FishingItemLinkService, FishGuideOpenService | 채팅/SE와 명시적 클릭 처리, 서버 송신 없음 |
 | 커스텀 WAV | CustomAlertSound, SpawnAlertsPanel | 전용 스레드의 Windows MCI alias/임시 복사본, 관리 요청·세대·상태만 공유 |
+| 업데이트 내역 | ChangelogWindow, FishPreferences | 내장 한영 릴리스 요약·최신5개 표시, 공통 확인 버전을 기존 Framework 설정 큐로 저장. 원격 조회 없음 |
 | 진단 | FishingConditionObserver, FishingActivityProbe, FishGuideDiagnostics, BaitUiProbe | 원시 관찰과 제품 판정 구분, 개발자 도구 |
 
 파일은 src/DuckbillFisher.Core 또는 src/DuckbillFisher.Plugin에 있다. 별도 DI 프레임워크·DB·이벤트 버스를 추가하지 않는다. SDK/버전은 global.json·csproj·lock 파일을 기준으로 한다.
@@ -42,7 +43,8 @@
 
 ## 저장·수집·알림
 
-- FishPreferences schema12: 공통 즐겨찾기/필터/언어/알림 설정·커스텀 WAV 원본 경로, 캐릭터별 수동 수집/알림 중복 방지 기록. schema1~11 변환과 손상/미지원 원본 보존을 유지한다.
+- FishPreferences schema13: 공통 즐겨찾기/필터/언어/알림 설정·커스텀 WAV 원본 경로·업데이트 내역 확인 버전(LastSeenChangelogVersion), 캐릭터별 수동 수집/알림 중복 방지 기록. schema1~12 변환과 손상/미지원 원본 보존을 유지한다. 선택적인 확인 버전만 잘못되면 확인 전으로 정규화하며 다른 설정을 버리지 않는다.
+- 업데이트 내역을 표시한 뒤 사용자가 닫으면 확인 버전을 저장한다. 저장 실패 시 이전 상태를 유지하고 재로드 때 다시 표시할 수 있다. 캐릭터/언어 전환은 확인 버전을 초기화하지 않고, 더 최신 확인값을 이전 DLL로 낮추지 않는다. 내역 저장만으로 CatalogRevision을 올리지 않는다.
 - 전체 Revision과 메모리 전용 CatalogRevision을 구분한다. 목록·타이머 낚시터 필터·미끼 준비는 캐릭터/즐겨찾기/수동 수집/목록 설정/언어 변경에 반응하며 알림 예약 저장만으로 재계산하지 않는다. 같은 즐겨찾기/수동 상태의 불변 집합은 재사용한다.
 - 자동 관찰은 세션 메모리다. 도감 전체 snapshot 대조가 완료되어야 자동 Uncaught를 확정한다. 수동 override가 항상 우선이며 ContentId는 로컬 키로만 쓰고 진단에 넣지 않는다. [대조 계약](../verification/collection/GUIDE-SNAPSHOT.md).
 - 기록 schema 2는 캐릭터별 100묶음×최근 2,000행이다. 총 시전 수/보관 행 수를 구분하고 진행 중 묶음 보호·이전 형식 원본 보존 가져오기를 한다.

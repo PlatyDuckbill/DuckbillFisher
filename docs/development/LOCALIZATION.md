@@ -34,4 +34,4 @@ UiText.Label(TextKey.ReloadFish, "ReloadFish");
 - 번역은 satellite assembly다. 한국어 ko/DuckbillFisher.resources.dll이 출력/ZIP에 있어야 한다. 요구 파일 목록은 scripts/package-files.ps1이 관리한다.
 - manifest의 영어 소개는 런타임 UI와 별개인 csproj 메타데이터다.
 
-초기 리소스/fallback 확인 원문은 정리 전 Git 커밋 b33f4eb의 이 파일에 보존되어 있다. 최신 패키지 확인은 [Release 기록](../verification/releases/RELEASE-0.3.0.0.md)을 따른다. 기존 설계 출처는 [.NET 지역화](https://learn.microsoft.com/en-us/dotnet/core/extensions/localization)와 [ResourceManager](https://learn.microsoft.com/en-us/dotnet/api/system.resources.resourcemanager?view=net-10.0)다.
+초기 리소스/fallback 확인 원문은 정리 전 Git 커밋 b33f4eb의 이 파일에 보존되어 있다. 최신 패키지 확인은 [STATUS](../STATUS.md)에서 연결한 배포 기록을 따른다. 기존 설계 출처는 [.NET 지역화](https://learn.microsoft.com/en-us/dotnet/core/extensions/localization)와 [ResourceManager](https://learn.microsoft.com/en-us/dotnet/api/system.resources.resourcemanager?view=net-10.0)다.
