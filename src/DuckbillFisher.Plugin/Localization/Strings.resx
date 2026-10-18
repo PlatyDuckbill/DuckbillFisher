@@ -644,4 +644,19 @@ Main inventory only. An unknown quantity is not zero.</value></data>
   <data name="BaitFindUnavailable" xml:space="preserve"><value>{0}: bait highlighting is unavailable in the current UI or runtime. Other features remain available.</value></data>
   <data name="BaitFindPageWaiting" xml:space="preserve"><value>Show the bait selection page containing {0}.</value></data>
   <data name="BaitFindGoToPage" xml:space="preserve"><value>{0}: go to page {1}.</value></data>
+  <data name="CustomSound" xml:space="preserve"><value>Custom WAV</value></data>
+  <data name="CustomSoundChoose" xml:space="preserve"><value>Choose WAV file</value></data>
+  <data name="CustomSoundReload" xml:space="preserve"><value>Reload file</value></data>
+  <data name="CustomSoundStop" xml:space="preserve"><value>Stop</value></data>
+  <data name="CustomSoundHint" xml:space="preserve"><value>Local WAV, up to {0} seconds / {1} MB. Uses Windows audio volume. Reload after editing the file.</value></data>
+  <data name="CustomSoundNoFile" xml:space="preserve"><value>Choose a WAV file.</value></data>
+  <data name="CustomSoundReady" xml:space="preserve"><value>WAV ready.</value></data>
+  <data name="CustomSoundLoading" xml:space="preserve"><value>Loading WAV…</value></data>
+  <data name="CustomSoundFileUnavailable" xml:space="preserve"><value>Cannot read the WAV file. Choose it again and reload.</value></data>
+  <data name="CustomSoundInvalid" xml:space="preserve"><value>Choose a valid local WAV file.</value></data>
+  <data name="CustomSoundLimit" xml:space="preserve"><value>This WAV exceeds the duration or file size limit.</value></data>
+  <data name="CustomSoundUnavailable" xml:space="preserve"><value>Windows cannot open or play this WAV. Check the format and audio output, then reload.</value></data>
+  <data name="CustomSoundQueued" xml:space="preserve"><value>Custom WAV queued</value></data>
+  <data name="CustomSoundSkipped" xml:space="preserve"><value>Custom WAV skipped</value></data>
+  <data name="CustomSoundLoginRequired" xml:space="preserve"><value>Log in to load and preview the WAV.</value></data>
 </root>

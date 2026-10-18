@@ -18,6 +18,7 @@
 | 미끼 준비/찾기 | BaitPreparation, BaitStockObserver, BaitFinder, NativeBaitUiReader, NativeBaitPageReader | 첫 미끼/공개 소지품 조회와 네이티브 UI 읽기 분리 |
 | 공통 표시 | FishRowRenderer, FishDetailPanel, FishingConditionPanel, UiWidgets | 표시·선택 전달, 게임 조회/예측을 가져오지 않음 |
 | 로컬 출력 | SpawnAlerts, SpawnAlertOutput, FishingMapService, FishingItemLinkService, FishGuideOpenService | 채팅/SE와 명시적 클릭 처리, 서버 송신 없음 |
+| 커스텀 WAV | CustomAlertSound, SpawnAlertsPanel | 전용 스레드의 Windows MCI alias/임시 복사본, 관리 요청·세대·상태만 공유 |
 | 진단 | FishingConditionObserver, FishingActivityProbe, FishGuideDiagnostics, BaitUiProbe | 원시 관찰과 제품 판정 구분, 개발자 도구 |
 
 파일은 src/DuckbillFisher.Core 또는 src/DuckbillFisher.Plugin에 있다. 별도 DI 프레임워크·DB·이벤트 버스를 추가하지 않는다. SDK/버전은 global.json·csproj·lock 파일을 기준으로 한다.
@@ -41,7 +42,7 @@
 
 ## 저장·수집·알림
 
-- FishPreferences schema 11: 공통 즐겨찾기/필터/언어/알림 설정, 캐릭터별 수동 수집/알림 중복 방지 기록. 기존 스키마 변환과 손상/미지원 원본 보존을 유지한다.
+- FishPreferences schema12: 공통 즐겨찾기/필터/언어/알림 설정·커스텀 WAV 원본 경로, 캐릭터별 수동 수집/알림 중복 방지 기록. schema1~11 변환과 손상/미지원 원본 보존을 유지한다.
 - 전체 Revision과 메모리 전용 CatalogRevision을 구분한다. 목록·타이머 낚시터 필터·미끼 준비는 캐릭터/즐겨찾기/수동 수집/목록 설정/언어 변경에 반응하며 알림 예약 저장만으로 재계산하지 않는다. 같은 즐겨찾기/수동 상태의 불변 집합은 재사용한다.
 - 자동 관찰은 세션 메모리다. 도감 전체 snapshot 대조가 완료되어야 자동 Uncaught를 확정한다. 수동 override가 항상 우선이며 ContentId는 로컬 키로만 쓰고 진단에 넣지 않는다. [대조 계약](../verification/collection/GUIDE-SNAPSHOT.md).
 - 기록 schema 2는 캐릭터별 100묶음×최근 2,000행이다. 총 시전 수/보관 행 수를 구분하고 진행 중 묶음 보호·이전 형식 원본 보존 가져오기를 한다.
@@ -49,6 +50,7 @@
 - 알림은 기존 예측과 최종 수집 판정을 사용한다. 캐릭터별 발송 대상 출현 시작 기록을 저장한 뒤 로컬 출력한다. 로그인/설정 변경/긴 중단/시계 변경은 소급 발송하지 않는다. [예약](../verification/alerts/SPAWN-ALERTS.md), [대상 정책](../verification/alerts/FAVORITE-POLICY.md).
 - 알림 계획과 발송은 Scheduler의 같은 재기준화 판정을 공유한다. 시각/세션/활성 상태가 끊기면 새 후보 계산 전에 미래 계획·재시도·순회 위치를 비운다. 새 계산은 최대8종씩 순환하고, 상시는 예산에서 제외하며 기존 예약의 마감은 매번 확인한다.
 - 알림 즐겨찾기 표시는 매초 상태를 확인하되 구성/카탈로그 행 변경 때만 이름 정렬하고, 값이 같은 항목/목록은 재사용한다. 소지품도 기존 주기로 검증하되 수량/상태/세션이 같으면 snapshot을 유지하며 재사용 집계 버퍼를 외부에 게시하지 않는다.
+- 커스텀 WAV는 Draw/Framework에서 파일을 열거나 재생하지 않는다. 전용 스레드가 세대별 파일 검증/소유 임시 복사본/Windows alias를 관리한다. 요청1개·단조2초 만료·세션 폐기·종료 join을 유지하며, 실패해도 로컬 채팅을 막지 않는다. alerts/v7의 커스텀 접수와 실제 가청 결과를 구분한다. [API/수명/실기 대기](../verification/alerts/CUSTOM-SOUND.md).
 
 ## UI·자료 경계
 

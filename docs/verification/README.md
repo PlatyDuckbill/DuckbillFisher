@@ -43,6 +43,7 @@
 - [열린 창 배경과 바다구렁이 예측 차이 조사](forecast/OPEN-WINDOW-DIAGNOSTICS.md)
 - [MVP-03 즐겨찾기 뷰·아이템 링크·전체 채널·한 줄 기록](alerts/ALERT-CATALOG-VIEW.md)
 - [MVP-03 알림 관리와 즐겨찾기 스크롤 수정](alerts/ALERT-MANAGEMENT.md)
+- [커스텀 WAV 알림 소리: 0.3.8.0](alerts/CUSTOM-SOUND.md)
 - [MVP-03 알림 채널과 시간 표시 간소화](alerts/ALERT-SIMPLIFICATION.md)
 - [MVP-03 즐겨찾기 관리·알림 대상과 목록 기본값](alerts/FAVORITE-POLICY.md)
 - [MVP-03/F05 출현 사전 알림 첫 구현](alerts/SPAWN-ALERTS.md)

@@ -15,7 +15,7 @@ public enum SpawnAlertChannel { System, Say, CrossWorldLinkshell1 }
 // Public for Dalamud's configuration serializer. Content IDs stay in local configuration only.
 public sealed class FishPreferencesConfiguration : IPluginConfiguration
 {
-    public const int CurrentVersion = 11;
+    public const int CurrentVersion = 12;
     public int Version { get; set; } = CurrentVersion;
     public HashSet<uint> Favorites { get; set; } = [];
     public Dictionary<ulong, Dictionary<uint, bool>> Characters { get; set; } = [];
@@ -24,6 +24,7 @@ public sealed class FishPreferencesConfiguration : IPluginConfiguration
     public SpawnAlertChannel SpawnAlertChannel { get; set; }
     public ushort SpawnAlertChannelId { get; set; } = (ushort)XivChatType.SystemMessage;
     public int SpawnAlertSound { get; set; }
+    public string CustomAlertSoundPath { get; set; } = "";
     public SpawnAlertAudience SpawnAlertAudience { get; set; } = SpawnAlertAudience.AllFavorites;
     public bool RemoveFavoriteOnRegistration { get; set; } = true;
     public CatalogSettings Catalog { get; set; } = new();
@@ -46,6 +47,7 @@ internal sealed record FishPreferencesView(int Revision, int Session, bool HasCh
     public int SpawnAlertLeadMinutes { get; init; } = SpawnAlertScheduler.DefaultLeadMinutes;
     public XivChatType SpawnAlertChannel { get; init; } = XivChatType.SystemMessage;
     public int SpawnAlertSound { get; init; }
+    public string CustomAlertSoundPath { get; init; } = "";
     public SpawnAlertAudience SpawnAlertAudience { get; init; } = SpawnAlertAudience.AllFavorites;
     public bool RemoveFavoriteOnRegistration { get; init; } = true;
     public CatalogSettings Catalog { get; init; } = new();
@@ -79,6 +81,7 @@ internal sealed class FishPreferences : IDisposable
     private PresetEdit? pendingPreset;
     private (UiLanguage Language, bool DeveloperMode)? pendingInterface;
     private CompactViewSettings? pendingCompact;
+    private string? pendingCustomSoundPath;
     private FishPreferencesConfiguration configuration = new();
     private FishPreferencesView view = new(0, 0, false, false,
         FrozenSet<uint>.Empty, FrozenDictionary<uint, bool>.Empty, null);
@@ -118,6 +121,7 @@ internal sealed class FishPreferences : IDisposable
                 configuration.Catalog = loaded.Catalog.Copy();
                 // A malformed optional preset must not discard favorites or character records.
                 configuration.CatalogPresets = CatalogPreset.ReadValid(loaded.CatalogPresets);
+                configuration.CustomAlertSoundPath ??= "";
                 configuration.Version = FishPreferencesConfiguration.CurrentVersion;
                 writable = true;
             }
@@ -189,8 +193,14 @@ internal sealed class FishPreferences : IDisposable
         lock (gate)
             if (!disposed && writable)
                 pendingAlerts = (enabled, Math.Clamp(leadMinutes, SpawnAlertScheduler.MinLeadMinutes, SpawnAlertScheduler.MaxLeadMinutes),
-                    ChatChannelChoices.Supports(channel) ? channel : XivChatType.SystemMessage, Math.Clamp(sound, 0, 16),
+                    ChatChannelChoices.Supports(channel) ? channel : XivChatType.SystemMessage, Math.Clamp(sound, 0, CustomAlertSound.Choice),
                     Enum.IsDefined(audience) ? audience : SpawnAlertAudience.AllFavorites, removeOnRegistration);
+    }
+
+    public void SetCustomSoundPath(string path)
+    {
+        lock (gate)
+            if (!disposed && writable && path.Length <= 4096) pendingCustomSoundPath = path;
     }
 
     // Called only after the KR registration contract/item/session checks, never by a guide scan or manual edit.
@@ -278,10 +288,16 @@ internal sealed class FishPreferences : IDisposable
             }
             else if (stateErrorChanged)
                 Publish();
-            if (pending.Count == 0 && pendingAlerts is null && pendingFishAlerts.Count == 0 && pendingCatalog is null && pendingPreset is null && pendingInterface is null && pendingCompact is null)
+            if (pending.Count == 0 && pendingAlerts is null && pendingFishAlerts.Count == 0 && pendingCatalog is null && pendingPreset is null && pendingInterface is null && pendingCompact is null && pendingCustomSoundPath is null)
                 return;
             var candidate = CopyConfiguration();
             var changed = false;
+            if (pendingCustomSoundPath is { } customSoundPath)
+            {
+                changed |= candidate.CustomAlertSoundPath != customSoundPath;
+                candidate.CustomAlertSoundPath = customSoundPath;
+                pendingCustomSoundPath = null;
+            }
             if (pendingPreset is { } presetEdit)
             {
                 pendingPreset = null;
@@ -389,6 +405,7 @@ internal sealed class FishPreferences : IDisposable
             CharacterId = characterId, SpawnAlertsEnabled = configuration.SpawnAlertsEnabled,
             SpawnAlertLeadMinutes = configuration.SpawnAlertLeadMinutes,
             SpawnAlertChannel = (XivChatType)configuration.SpawnAlertChannelId, SpawnAlertSound = configuration.SpawnAlertSound,
+            CustomAlertSoundPath = configuration.CustomAlertSoundPath,
             SpawnAlertAudience = configuration.SpawnAlertAudience, RemoveFavoriteOnRegistration = configuration.RemoveFavoriteOnRegistration,
             Catalog = configuration.Catalog.Copy(),
             CatalogPresets = configuration.CatalogPresets.Select(value => value.Copy()).ToArray(),
@@ -408,6 +425,7 @@ internal sealed class FishPreferences : IDisposable
         SpawnAlertsEnabled = configuration.SpawnAlertsEnabled,
         SpawnAlertLeadMinutes = configuration.SpawnAlertLeadMinutes,
         SpawnAlertChannelId = configuration.SpawnAlertChannelId, SpawnAlertSound = configuration.SpawnAlertSound,
+        CustomAlertSoundPath = configuration.CustomAlertSoundPath,
         SpawnAlertAudience = configuration.SpawnAlertAudience, RemoveFavoriteOnRegistration = configuration.RemoveFavoriteOnRegistration,
         Catalog = configuration.Catalog.Copy(),
         CatalogPresets = configuration.CatalogPresets.Select(value => value.Copy()).ToList(),
@@ -436,7 +454,7 @@ internal sealed class FishPreferences : IDisposable
     }
 
     private static bool IsValid(FishPreferencesConfiguration value) =>
-        value.Version is 1 or 2 or 3 or 4 or 5 or 6 or 7 or 8 or 9 or 10 or FishPreferencesConfiguration.CurrentVersion && value.Favorites is not null &&
+        value.Version is 1 or 2 or 3 or 4 or 5 or 6 or 7 or 8 or 9 or 10 or 11 or FishPreferencesConfiguration.CurrentVersion && value.Favorites is not null &&
         Enum.IsDefined(value.Language) &&
         value.Compact is not null && value.Compact.IsValid() &&
         value.Catalog is not null && value.Catalog.IsValid() &&
@@ -444,7 +462,7 @@ internal sealed class FishPreferences : IDisposable
         value.Characters.All(pair => pair.Key != 0 && pair.Value is not null && !pair.Value.ContainsKey(0)) &&
         value.SpawnAlertLeadMinutes is >= SpawnAlertScheduler.MinLeadMinutes and <= SpawnAlertScheduler.MaxLeadMinutes &&
         (value.Version <= 3 ? Enum.IsDefined(value.SpawnAlertChannel) : ChatChannelChoices.IsKnown((XivChatType)value.SpawnAlertChannelId)) &&
-        value.SpawnAlertSound is >= 0 and <= 16 &&
+        (value.SpawnAlertSound is >= 0 and <= 16 || value.Version >= 12 && value.SpawnAlertSound == CustomAlertSound.Choice) &&
         Enum.IsDefined(value.SpawnAlertAudience) &&
         value.FishAlertLeadMinutes is not null && value.FishAlertLeadMinutes.All(pair => pair.Key != 0 &&
             pair.Value is >= SpawnAlertScheduler.MinLeadMinutes and <= SpawnAlertScheduler.MaxLeadMinutes) &&
@@ -463,6 +481,7 @@ internal sealed class FishPreferences : IDisposable
             pendingPreset = null;
             pendingInterface = null;
             pendingCompact = null;
+            pendingCustomSoundPath = null;
         }
         framework.Update -= OnUpdate;
     }

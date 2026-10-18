@@ -1,5 +1,6 @@
 using Dalamud.Bindings.ImGui;
 using Dalamud.Interface;
+using Dalamud.Interface.ImGuiFileDialog;
 using Dalamud.Plugin.Services;
 using DuckbillFisher.Core;
 using DuckbillFisher.Plugin.Localization;
@@ -9,8 +10,11 @@ namespace DuckbillFisher.Plugin;
 
 internal sealed class SpawnAlertsPanel(FishPreferences preferences, SpawnAlerts alerts, SpawnAlertOutput output,
     FishCollectionObserver collection, ITextureProvider textures, FishCatalog catalog, FishDetailPanel detailPanel, FishingMapService maps,
-    FishGuideOpenService guideOpener)
+    FishGuideOpenService guideOpener) : IDisposable
 {
+    private readonly FileDialogManager soundFiles = new();
+    private int soundDialogSession = -1;
+    private bool disposed;
     private readonly FishRowRenderer rows = new(textures, maps);
     private uint? selectedId;
     private int lastSession = -1;
@@ -24,7 +28,13 @@ internal sealed class SpawnAlertsPanel(FishPreferences preferences, SpawnAlerts 
     public bool DeveloperMode { get; set; }
     public Action? ShowSettings { get; set; }
     public void Draw() => DrawContent();
-    public void DrawSettings() => DrawSettings(preferences.View, preferences.View.SpawnAlertsEnabled);
+    public void DrawSettings()
+    {
+        var settings = preferences.View;
+        if (soundDialogSession != settings.Session) { soundFiles.Reset(); soundDialogSession = settings.Session; }
+        DrawSettings(settings, settings.SpawnAlertsEnabled);
+        soundFiles.Draw();
+    }
 
     private void DrawContent()
     {
@@ -105,7 +115,8 @@ internal sealed class SpawnAlertsPanel(FishPreferences preferences, SpawnAlerts 
             ImGui.TableNextColumn();
             ImGui.TextUnformatted(UiText.Get(T.AlertSound));
             ImGui.SetNextItemWidth(-1);
-            var sounds = Enumerable.Range(0, 17).Select(value => value == 0 ? UiText.Get(T.AlertSoundNone) : UiText.Get(T.AlertSoundNumber, value)).ToArray();
+            var sounds = Enumerable.Range(0, CustomAlertSound.Choice + 1).Select(value => value == 0 ? UiText.Get(T.AlertSoundNone)
+                : value == CustomAlertSound.Choice ? UiText.Get(T.CustomSound) : UiText.Get(T.AlertSoundNumber, value)).ToArray();
             changed |= ImGui.Combo("###SpawnAlertSound", ref sound, sounds, sounds.Length);
             ImGui.TableNextColumn();
             ImGui.Dummy(new System.Numerics.Vector2(0, ImGui.GetTextLineHeight()));
@@ -114,10 +125,41 @@ internal sealed class SpawnAlertsPanel(FishPreferences preferences, SpawnAlerts 
             ImGui.EndDisabled();
             ImGui.EndTable();
         }
+        if (sound == CustomAlertSound.Choice)
+        {
+            if (settings.CustomAlertSoundPath.Length > 0) ImGui.TextWrapped(settings.CustomAlertSoundPath);
+            if (ImGui.Button(UiText.Label(T.CustomSoundChoose, "CustomSoundChoose")))
+            {
+                var expectedSession = settings.Session;
+                soundFiles.OpenFileDialog(UiText.Get(T.CustomSoundChoose), ".wav,.WAV", (bool ok, string path) =>
+                {
+                    if (!disposed && ok && preferences.View.Session == expectedSession) preferences.SetCustomSoundPath(path);
+                });
+            }
+            ImGui.SameLine();
+            if (ImGui.Button(UiText.Label(T.CustomSoundReload, "CustomSoundReload"))) output.ReloadCustomSound();
+            ImGui.SameLine();
+            if (ImGui.Button(UiText.Label(T.CustomSoundStop, "CustomSoundStop"))) output.StopCustomSound();
+            ImGui.PushStyleColor(ImGuiCol.Text, ImGui.GetStyle().Colors[(int)ImGuiCol.TextDisabled]);
+            ImGui.TextWrapped(UiText.Get(T.CustomSoundHint, CustomAlertSound.MaxSeconds, CustomAlertSound.MaxMegabytes));
+            ImGui.PopStyleColor();
+            var status = output.CustomSound.State;
+            ImGui.TextWrapped(UiText.Get(status switch
+            {
+                CustomSoundState.Ready => T.CustomSoundReady,
+                CustomSoundState.Loading => T.CustomSoundLoading,
+                CustomSoundState.NoFile => T.CustomSoundNoFile,
+                CustomSoundState.FileUnavailable => T.CustomSoundFileUnavailable,
+                CustomSoundState.InvalidFile => T.CustomSoundInvalid,
+                CustomSoundState.LimitExceeded => T.CustomSoundLimit,
+                CustomSoundState.AudioUnavailable => T.CustomSoundUnavailable,
+                _ => T.CustomSoundLoginRequired,
+            }));
+        }
         ImGui.EndDisabled();
         if (output.PreviewResult is { } preview)
             ImGui.TextWrapped(preview.Display);
-        if (sound != 0 && !output.SoundAvailable)
+        if (sound is > 0 and < CustomAlertSound.Choice && !output.SoundAvailable)
             ImGui.TextWrapped(UiText.Get(T.AlertSoundUnavailable));
         if (changed)
             preferences.SetSpawnAlerts(enabled, minutes, ChatChannelChoices.All[channel], sound,
@@ -241,7 +283,8 @@ internal sealed class SpawnAlertsPanel(FishPreferences preferences, SpawnAlerts 
             var entry = view.History[i];
             var line = UiText.Get(T.AlertHistoryLine, entry.SentAt.ToLocalTime(), entry.Fish.Name,
                 SpawnAlertOutput.Remaining(entry.Fish.Start - entry.SentAt), ChatChannelChoices.Name(entry.Channel),
-                entry.Sound == 0 ? new UiMessage(T.AlertSoundNone) : new UiMessage(entry.SoundPlayed ? T.AlertSoundNumber : T.AlertSoundSkipped, entry.Sound));
+                entry.Sound == CustomAlertSound.Choice ? new UiMessage(entry.SoundPlayed ? T.CustomSoundQueued : T.CustomSoundSkipped)
+                : entry.Sound == 0 ? new UiMessage(T.AlertSoundNone) : new UiMessage(entry.SoundPlayed ? T.AlertSoundNumber : T.AlertSoundSkipped, entry.Sound));
             ImGui.TextUnformatted(line);
             if (ImGui.IsItemHovered()) ImGui.SetTooltip(line);
         }
@@ -258,4 +301,6 @@ internal sealed class SpawnAlertsPanel(FishPreferences preferences, SpawnAlerts 
         FavoriteAlertState.Armed => T.AlertArmed,
         _ => T.AlertPending,
     };
+
+    public void Dispose() { disposed = true; soundFiles.Reset(); }
 }

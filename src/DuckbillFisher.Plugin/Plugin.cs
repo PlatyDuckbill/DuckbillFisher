@@ -24,6 +24,7 @@ public sealed class Plugin : IDalamudPlugin
     private readonly FishingRegionObserver fishingRegion;
     private readonly SpawnAlerts spawnAlerts;
     private readonly SpawnAlertOutput alertOutput;
+    private readonly SpawnAlertsPanel spawnAlertsPanel;
     private readonly CompactFishObserver compactObserver;
     private readonly CompactFishWindow compactWindow;
     private readonly FishDetailWindow detailWindow;
@@ -93,9 +94,11 @@ public sealed class Plugin : IDalamudPlugin
         timerWindow = new CastingTimerWindow(fishingTracker, fishCatalog, fishPreferences, fishCollection, textureProvider, fishingMap, detailWindow.Show);
         compactObserver = new CompactFishObserver(fishCatalog, fishPreferences, framework, fishCollection, fishingRegion);
         compactWindow = new CompactFishWindow(compactObserver, fishPreferences, fishCollection, textureProvider, detailWindow.Show, fishingMap);
+        spawnAlertsPanel = new SpawnAlertsPanel(fishPreferences, spawnAlerts, alertOutput, fishCollection, textureProvider,
+            fishCatalog, detailPanel, fishingMap, guideOpener);
         mainWindow = new MainWindow(fishingObserver, fishGuide, new FishListPanel(fishCatalog, textureProvider, detailPanel,
                 fishPreferences, fishCollection, fishingRegion, fishingMap, guideOpener, preparationQuery, () => preparationWindow.IsOpen = true),
-            new SpawnAlertsPanel(fishPreferences, spawnAlerts, alertOutput, fishCollection, textureProvider, fishCatalog, detailPanel, fishingMap, guideOpener), fishPreferences,
+            spawnAlertsPanel, fishPreferences,
             () => commandInfo.HelpMessage = UiText.Get(TextKey.CommandHelp),
             new FishingHistoryBrowser(fishingTracker, fishCatalog, new FishingHistoryPanel(fishingTracker, textureProvider, detailWindow.Show)));
         mainWindow.ShowCompact = () => compactWindow.IsOpen = true;
@@ -139,6 +142,7 @@ public sealed class Plugin : IDalamudPlugin
         baitUiProbe.Dispose();
         baitFinder.Dispose();
         spawnAlerts.Dispose();
+        spawnAlertsPanel.Dispose();
         alertOutput.Dispose();
         fishingObserver.Dispose();
         fishingTracker.Dispose();
