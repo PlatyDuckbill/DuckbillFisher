@@ -11,8 +11,8 @@ description: Build and package DuckbillFisher on Windows, or publish a verified 
 
 - [STATUS](../../../docs/STATUS.md): 현재 공개 버전과 실제 확인 범위.
 - [HANDOFF](../../../docs/SESSION-HANDOFF.md#환경과-경로): 현재 PC의 게임/참조/출력 경로.
-- 개발 빌드: [WORKFLOW](../../../docs/WORKFLOW.md#windows-빌드).
-- 패키지/게시: [DISTRIBUTION](../../../docs/DISTRIBUTION.md#개발자-배포-절차).
+- 개발 빌드: [WORKFLOW](../../../docs/development/WORKFLOW.md#windows-빌드).
+- 패키지/게시: [DISTRIBUTION](../../../docs/development/DISTRIBUTION.md#개발자-배포-절차).
 
 버전·경로·명령을 이 스킬에 복사하지 않는다. 이전 대화의 출력 경로가 있더라도 파일과 manifest를 확인한다.
 

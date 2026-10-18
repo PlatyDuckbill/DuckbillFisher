@@ -1,29 +1,29 @@
 # 현재 상태
 
-갱신: 2026-10-18 · 공개 0.3.0.0 · 문서/지침/프로젝트 스킬 정비
+갱신: 2026-10-18 · 공개 0.3.0.0 · 문서 폴더 재구성·UI 기록 통합
 
 ## 현재 배포와 작업
 
-- 공개 버전은 **0.3.0.0 / API15**다. Release 추출본 사용자 대표 확인 후 같은 ZIP을 게시하고 익명 다운로드·해시·설치 JSON을 확인했다. [배포 근거](validation/RELEASE-0.3.0.0.md).
+- 공개 버전은 **0.3.0.0 / API15**다. Release 추출본 사용자 대표 확인 후 같은 ZIP을 게시하고 익명 다운로드·해시·설치 JSON을 확인했다. [배포 근거](verification/releases/RELEASE-0.3.0.0.md).
 - 커스텀 저장소: https://raw.githubusercontent.com/PlatyDuckbill/DuckbillFisher/main/repo/pluginmaster.json
 - 0.2.6.0에서 본인·친구 PC의 설치/업데이트·도감·수집·타이머 대표 확인 완료. **0.3.0.0 실제 저장소 업데이트/친구 새 기능 확인은 별도 대기**다.
-- 이번 작업은 문서 관리 정비다. 현재 정책/과거 이력 분리, 문서·검증 색인, 프로젝트 전용 빌드/배포·KR 조사 스킬, 로컬 문서 검사 추가. 제품 코드·DLL·배포 버전은 변경하지 않았다.
-- 문서 93개/로컬 링크·검증 색인/스킬 2개 구조와 PowerShell 구문·diff를 검사했다. 제품 빌드·테스트·게임 실기는 미실행이다. Python 실행기가 없어 skill-creator의 Python 검증기는 실행하지 못했고 프로젝트 구조 검사로 확인했다.
-- 환경/등록 DLL/참조 경로는 [HANDOFF](SESSION-HANDOFF.md), 작업 절차는 [WORKFLOW](WORKFLOW.md), 전체 탐색은 [문서 지도](README.md)를 따른다.
+- docs 최상위 문서를 17개→3개로 정리했다. product/development/verification/releases/archive로 분류하고 UI 기록 12개를 원문 구역별로 통합했다. 타이머 현재 명세와 초기 조사를 분리하고 지침/스킬/코드 주석의 경로를 갱신했다. 제품 동작·DLL·배포 버전 변경은 없다.
+- 문서 링크/앵커·기능별/과거 색인·최상위 구조·스킬 참조를 검사했다. 기존 검증 59건(통합 12+개별 47)의 본문은 경로/제목 서식 외 동일하며 CSV 4개의 Git blob도 동일하다. 제품 빌드·테스트·게임 실기는 미실행이다.
+- 환경/등록 DLL/참조 경로는 [HANDOFF](SESSION-HANDOFF.md), 작업 절차는 [WORKFLOW](development/WORKFLOW.md), 전체 탐색은 [문서 지도](README.md)를 따른다.
 
 ## 대표 확인과 기능 경계
 
 | 영역 | 확인한 범위 | 근거 |
 |---|---|---|
-| 목록·필터·UI | 검색/정렬/즐겨찾기·수동 상태 저장, 지역/확장팩·등급/시간제 조합, 남은 시간순/출현 중 배경 대표 확인 | [목록/화면 기록](validation/README.md#목록필터화면) |
-| 수집 | 도감 1,517종 전체 대조/불일치 0, 재접속 초기화→도감 재조회 복구, 도감 닫힌 상태 새 등록 반영/자동 숨김 | [수집 판정](validation/MVP-04-GUIDE-SNAPSHOT.md), [등록](validation/MVP-04-COLLECTION.md) |
-| 알림 | 로컬 채팅·선택 SE, 전체/미수집만·개별 시간·신규 등록 자동 해제 정책 | [알림 기록](validation/README.md#예측알림) |
-| 타이머·기록 | 낚아채기 경과 정지·완전 접기 후 현재 기록 비움, 요약/상세/삭제, 저장 복원·최신순·재등장 방지 대표 확인 | [기록 안정성](validation/MVP-02-HISTORY-STABILITY.md) |
-| 미끼 관찰 | 일반 생미끼 Item·명시적 실패·빈 결과 아이콘, 보관 생미끼 첫 칸 Item 기록 대표 확인 | [생미끼/실패](validation/MVP-02-MOOCH-FAILURE.md), [보관 생미끼](validation/MVP-02-SWIMBAIT.md) |
-| 미끼 준비·찾기 | 첫 미끼/수량·독립 준비 화면·미확인 목록·게임 UI 칸/페이지 표식·강조의 Release 대표 확인 | [기능 근거](validation/BAIT-PREPARATION.md), [Release](validation/RELEASE-0.3.0.0.md) |
-| KR 지원 | 정확한 wasdcxz/dal4kr 모듈 조합 가드. 동일 숫자 버전도 배포판별 대조 | [친구 환경](validation/NATIVE-RUNTIME-DAL4KR.md) |
+| 목록·필터·UI | 검색/정렬/즐겨찾기·수동 상태 저장, 지역/확장팩·등급/시간제 조합, 남은 시간순/출현 중 배경 대표 확인 | [UI 확인 요약](verification/catalog/UI.md), [필터 근거](verification/README.md#목록필터화면) |
+| 수집 | 도감 1,517종 전체 대조/불일치 0, 재접속 초기화→도감 재조회 복구, 도감 닫힌 상태 새 등록 반영/자동 숨김 | [수집 판정](verification/collection/GUIDE-SNAPSHOT.md), [등록](verification/collection/COLLECTION.md) |
+| 알림 | 로컬 채팅·선택 SE, 전체/미수집만·개별 시간·신규 등록 자동 해제 정책 | [알림 기록](verification/README.md#예측알림) |
+| 타이머·기록 | 낚아채기 경과 정지·완전 접기 후 현재 기록 비움, 요약/상세/삭제, 저장 복원·최신순·재등장 방지 대표 확인 | [기록 안정성](verification/fishing/HISTORY-STABILITY.md) |
+| 미끼 관찰 | 일반 생미끼 Item·명시적 실패·빈 결과 아이콘, 보관 생미끼 첫 칸 Item 기록 대표 확인 | [생미끼/실패](verification/fishing/MOOCH-FAILURE.md), [보관 생미끼](verification/fishing/SWIMBAIT.md) |
+| 미끼 준비·찾기 | 첫 미끼/수량·독립 준비 화면·미확인 목록·게임 UI 칸/페이지 표식·강조의 Release 대표 확인 | [기능 근거](verification/bait/BAIT-PREPARATION.md), [Release](verification/releases/RELEASE-0.3.0.0.md) |
+| KR 지원 | 정확한 wasdcxz/dal4kr 모듈 조합 가드. 동일 숫자 버전도 배포판별 대조 | [친구 환경](verification/native/NATIVE-RUNTIME-DAL4KR.md) |
 
-확인 범위는 표본이다. 모든 어종/테마/언어·폭/캐릭터/장애 조합의 전수 확인으로 확대하지 않는다. 현재 사용자 동작·기본값·수집/알림/저장 정책은 [PRODUCT](PRODUCT.md)에 있다.
+확인 범위는 표본이다. 모든 어종/테마/언어·폭/캐릭터/장애 조합의 전수 확인으로 확대하지 않는다. 현재 사용자 동작·기본값·수집/알림/저장 정책은 [PRODUCT](product/PRODUCT.md)에 있다.
 
 ## 데이터 현황
 
@@ -32,7 +32,7 @@
 - 핵심 잔여 11종: 직감 지속 시간 9종, 이크에바지 가위/요에콰 먹물머리의 낚아채기·시간/날씨 완전성. 부분 확인 어종은 상시 예측하지 않는다.
 - 추가 355종 물고기의 눈 지원은 근거 없어 null이며 UI 미표시. 먼바다 259종 조건 연동·작살 미확인 115건은 별도 후속이다.
 - 데이터 재생성/기존 알려진 값 보존·내장 해시·KR 지도 연결 대조는 완료했다. 0.2.9.0 데이터 보완의 별도 대표 화면 확인 대기는 유지한다.
-- [검사/한계](validation/DATA-COMPLETION-2026-10-18.md), [전체 잔여 이름·ID·이유](reports/fishing-data-2026-10-17/remaining.md), [재생성](../data/README.md).
+- [검사/한계](verification/data/DATA-COMPLETION-2026-10-18.md), [전체 잔여 이름·ID·이유](verification/data/reports/fishing-data-2026-10-17/remaining.md), [재생성](../data/README.md).
 
 ## 다음 한 작업과 미확인
 
@@ -40,4 +40,4 @@
 2. 다른 캐릭터 격리는 사용할 캐릭터가 없어 실기 보류. 모든 테마·보관 생미끼 다른 칸·신규 등록/작살 전환·좁은 폭/한영·장애/절전/상한은 별도 확인 대상이다.
 3. 데이터 대표 화면과 외부 좌표 차이 4곳도 미확인이다. 정확한 근거가 생기면 잔여 데이터를 보완한다.
 4. 사용자 보류: 복수 어획·수량, Teamcraft/바다구렁이 예측 불일치 재조사, 입질 초 통계. 새 작업 시작으로 재개하지 않는다.
-5. 터주작 후보·먼바다/작살·장기 목표는 [ROADMAP](ROADMAP.md)을 따른다. 이번 문서 정비는 신규 기능 착수나 검증 완료 승인이 아니다.
+5. 터주작 후보·먼바다/작살·장기 목표는 [ROADMAP](product/ROADMAP.md)을 따른다. 이번 문서 정비는 신규 기능 착수나 검증 완료 승인이 아니다.

@@ -76,12 +76,25 @@ foreach ($path in $files) {
         }
     }
 }
-$validationIndex = Join-Path $root 'docs/validation/README.md'
-if (!$contents.ContainsKey($validationIndex)) { $problems.Add('Missing validation index.') }
-else {
-    foreach ($file in Get-ChildItem -LiteralPath (Join-Path $root 'docs/validation') -File -Filter '*.md') {
-        if ($file.Name -eq 'README.md' -or $file.Name -eq 'tmp_note.md') { continue }
-        if (!$contents[$validationIndex].Contains("($($file.Name))")) { $problems.Add("Validation index omits $($file.Name)") }
+foreach ($directory in @('verification', 'archive')) {
+    $indexRoot = Join-Path $root "docs/$directory"
+    $index = Join-Path $indexRoot 'README.md'
+    if (!$contents.ContainsKey($index)) { $problems.Add("Missing $directory index."); continue }
+    foreach ($file in Get-ChildItem -LiteralPath $indexRoot -Recurse -File -Filter '*.md') {
+        if ($file.FullName -eq $index -or $file.Name -eq 'tmp_note.md') { continue }
+        $relative = [IO.Path]::GetRelativePath($indexRoot, $file.FullName).Replace('\', '/')
+        if (!$contents[$index].Contains("($relative)")) { $problems.Add("$directory index omits $relative") }
+    }
+}
+foreach ($file in Get-ChildItem -LiteralPath (Join-Path $root 'docs') -File) {
+    if ($file.Name -eq 'tmp_note.md') { continue }
+    if ($file.Name -notin @('README.md', 'STATUS.md', 'SESSION-HANDOFF.md')) {
+        $problems.Add("docs root contains $($file.Name); choose a product/development/verification/releases/archive folder.")
+    }
+}
+foreach ($directory in Get-ChildItem -LiteralPath (Join-Path $root 'docs') -Directory) {
+    if ($directory.Name -notin @('product', 'development', 'verification', 'releases', 'archive')) {
+        $problems.Add("Unexpected docs folder $($directory.Name); use the documented structure.")
     }
 }
 foreach ($name in @('STATUS.md', 'SESSION-HANDOFF.md')) {
@@ -116,4 +129,4 @@ if ($problems.Count) {
     $problems | ForEach-Object { Write-Output $_ }
     throw "$($problems.Count) documentation issue(s)."
 }
-Write-Output "Documentation: $($files.Count) Markdown files, $links local links, validation index and $skillCount local skill structures checked. No external URLs or product tests executed."
+Write-Output "Documentation: $($files.Count) Markdown files, $links local links, verification/archive indexes, root layout and $skillCount local skill structures checked. No external URLs or product tests executed."

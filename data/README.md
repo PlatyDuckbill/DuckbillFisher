@@ -1,6 +1,6 @@
 # 한섭 낚시 조건 데이터
 
-0.2.9.0은 **`fishing.kr.v2.json` / `kr-regular-2026-10-17`**을 내장한다. 일반 도감 1,258종 모두 상세에 연결했으며 시간·날씨 조건을 확인한 1,256종과 부분 확인 2종을 구분한다. 직감 지속 시간 9종을 포함한 핵심 미확인 11종과 별도 범위의 전체 목록은 [잔여 보고서](../docs/reports/fishing-data-2026-10-17/remaining.md)에 있다. 작살 자료 203건은 보존했다. `fishing.kr.v1.json`은 과거 검증 이력이며 현재 제품은 읽지 않는다. 입질 초 수 통계는 포함하지 않는다.
+0.2.9.0은 **`fishing.kr.v2.json` / `kr-regular-2026-10-17`**을 내장한다. 일반 도감 1,258종 모두 상세에 연결했으며 시간·날씨 조건을 확인한 1,256종과 부분 확인 2종을 구분한다. 직감 지속 시간 9종을 포함한 핵심 미확인 11종과 별도 범위의 전체 목록은 [잔여 보고서](../docs/verification/data/reports/fishing-data-2026-10-17/remaining.md)에 있다. 작살 자료 203건은 보존했다. `fishing.kr.v1.json`은 과거 검증 이력이며 현재 제품은 읽지 않는다. 입질 초 수 통계는 포함하지 않는다.
 
 ## 출처와 경계
 
@@ -61,7 +61,7 @@ dotnet run --project tools/FishingDataImport -p:DalamudLibPath=C:/Users/hyogu/Ap
 - `fishEyesSupported`는 nullable이다. 기존 903종의 bool은 유지하고 추가 자료에 없는 355종은 null로 둔다. 사용자 결정으로 현재 UI에는 표시하지 않는다. 개인 스킬을 기본 예측에 적용하지 않는다.
 - `patchVersion`은 3.55b 같은 접미사를 보존한다. 기존 숫자 `patch`도 유지하며 기존 903종은 숫자 표시를 사용한다. 전승록은 KR GatheringSubCategory.Item으로 연결한다.
 - `snaggingRequired`는 갈고리 낚시, `lure`는 Modest/Ambitious 요구다. 직감 선행 어종/마릿수는 지속 시간 누락과 별개로 안내한다.
-- 먼바다 259종의 기본 해역·일반/환해류 장소·항로 방문 시간은 IKD 시트에서 제공한다. 어종별 미끼·특수 조건은 별도 연동이 남았다. 작살 203건 중 `conditionsKnown=false` 115건과 전용 UI·수집 연동도 후속이다. [전체 ID/이름/이유](../docs/reports/fishing-data-2026-10-17/remaining.md)에 분리했다.
+- 먼바다 259종의 기본 해역·일반/환해류 장소·항로 방문 시간은 IKD 시트에서 제공한다. 어종별 미끼·특수 조건은 별도 연동이 남았다. 작살 203건 중 `conditionsKnown=false` 115건과 전용 UI·수집 연동도 후속이다. [전체 ID/이름/이유](../docs/verification/data/reports/fishing-data-2026-10-17/remaining.md)에 분리했다.
 - 모든 선택 낚시터는 한섭 지도 시트와 대응한다. 외부 좌표와 다른 294/295/296/327번은 한섭 좌표를 쓰며 실기 차이 확인은 대기다.
 
-빌드/자료 검사와 인게임 확인은 구분한다. [이번 실행 근거와 남은 확인](../docs/validation/DATA-COMPLETION-2026-10-18.md)을 따른다.
+빌드/자료 검사와 인게임 확인은 구분한다. [이번 실행 근거와 남은 확인](../docs/verification/data/DATA-COMPLETION-2026-10-18.md)을 따른다.

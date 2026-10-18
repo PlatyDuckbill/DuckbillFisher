@@ -1,0 +1,35 @@
+# 캐스팅 타이머와 낚시 기록
+
+현재 동작과 유지보수 진입점이다. 최초 API 후보·구조·소스 대조는 [초기 조사 원문](../archive/design/CASTING-TIMER-INVESTIGATION.md)에 보존한다. 최초 조사 때의 ‘미확인/아직 미구현’을 현재 구현 상태와 혼동하지 않는다.
+
+## 사용자 동작
+
+- 별도 타이머에서 현재 낚시터·현재 미끼·시전 ET·시전 후 단조 경과·낚시 시작부터의 경과를 본다. 지역 이름만으로 정확한 낚시터를 만들지 않는다.
+- 낚아채기 관찰 시 대표 경과를 멈추고 결과 수신까지의 시간은 별도로 기록한다. 입력 순간을 직접 후킹한 타이머라고 표현하지 않는다.
+- 낚시터 이름 옆 ‘어종 보기’는 기존 목록 행을 재사용한다. 수집 버튼은 전체↔수집 숨김 두 상태이며 메인 일반 필터와 독립이다.
+- 아래 최근 기록에는 현재 낚시의 시전만 쌓인다. 낚싯대를 완전히 접으면 타이머 목록을 비우고 메인 낚시 기록에 남긴다.
+- 메인 기록은 지역·낚시터/날짜·시작/시전·성공 횟수의 요약 목록이다. 클릭하면 같은 탭에서 상세를 보고 목록으로 돌아온다. 묶음/전체 삭제는 확인 후 수행한다.
+
+## 기록과 실패 계약
+
+- 시전 당시 미끼 Item·UTC·ET를 복사한다. 이후 장착 미끼 변경이나 보관 생미끼 소모로 과거 기록을 바꾸지 않는다.
+- 성공·명시적 실패·취소·중단·미확인은 구분한다. 미확인 결과를 실패로 확정하지 않으며 결과 어종이 없으면 미끼 아이콘을 결과 아이콘으로 대신 쓰지 않는다.
+- 캐릭터별 100묶음, 묶음별 최근 2,000시전을 보관한다. 총 횟수와 저장 행 수를 구분하고 진행 중 묶음을 개수 정리에서 보호한다.
+- 저장 schema 2, 묶음별 원자 파일·요약/선택 상세 읽기·이전 형식 원본 보존 가져오기다. 재로드/삭제 재시도/캐릭터 전환에서 오래된 요청이 다른 기록에 적용되지 않게 한다.
+- 수첩 등록 이벤트와 어획 기록은 별개다. 기록 관찰로 수집/즐겨찾기 해제 정책을 변경하지 않는다.
+
+## 코드와 근거
+
+| 책임 | 코드 | 실제 근거 |
+|---|---|---|
+| 시전/묶음 상태 | Core FishingAttempts | [첫 구현](../verification/fishing/TIMER-HISTORY.md) |
+| KR 상태·본인 로그 | FishingTracker, NativeFishingActivityReader, FishingLogContracts | [관찰 표본](../verification/fishing/CASTING-PROBE.md), [생미끼·실패](../verification/fishing/MOOCH-FAILURE.md) |
+| 보관 생미끼 snapshot | FishingTracker | [첫 칸 표본/연결](../verification/fishing/SWIMBAIT.md) |
+| 파일/세대/재시도 | FishingHistoryStore | [관리 계약](../verification/fishing/HISTORY-MANAGEMENT.md), [안정성](../verification/fishing/HISTORY-STABILITY.md) |
+| 화면 | CastingTimerWindow, FishingHistoryBrowser, FishingHistoryPanel | [공통 구조](../development/ARCHITECTURE.md) |
+
+## 확인 범위와 남은 일
+
+- 일반 생미끼·명시적 실패·빈 결과 아이콘, 보관 생미끼 첫 칸, 저장 복원/최신순/삭제 후 재등장 방지의 사용자 대표 확인이 있다. 최신 배포 확인은 [STATUS](../STATUS.md)를 따른다.
+- 모든 보관 칸·다른 캐릭터·장애/절전·보관 상한·언어/폭 조합까지 확인한 것은 아니다.
+- 복수 어획·수량·추가 결과 유형은 사용자 후속 범위다. 필요한 KR 표본을 정하기 전 성공/실패/수량을 추정해 추가하지 않는다.

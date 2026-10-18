@@ -5,12 +5,12 @@ description: Investigate DuckbillFisher KR game APIs, native observations and di
 
 # KR API·네이티브 계약 조사
 
-저장소 루트는 이 파일에서 `../../..`이다. [AGENTS](../../../AGENTS.md)의 게임 경계와 [ARCHITECTURE](../../../docs/ARCHITECTURE.md#호환성과-실패)를 유지한다. 게임 실행/자동 조작이나 가드 완화를 승인하는 스킬이 아니다.
+저장소 루트는 이 파일에서 `../../..`이다. [AGENTS](../../../AGENTS.md)의 게임 경계와 [ARCHITECTURE](../../../docs/development/ARCHITECTURE.md#호환성과-실패)를 유지한다. 게임 실행/자동 조작이나 가드 완화를 승인하는 스킬이 아니다.
 
 ## 먼저 범위 좁히기
 
 1. [STATUS](../../../docs/STATUS.md)에서 확인 범위를, [HANDOFF](../../../docs/SESSION-HANDOFF.md#환경과-경로)에서 현재 참조를 읽는다. 증상/원하는 관찰 한 가지를 정한다.
-2. [검증 색인](../../../docs/validation/README.md)에서 해당 계약만 읽는다. 런타임 차이는 NATIVE-RUNTIME 문서, 미끼는 BAIT-PREPARATION, 시전은 MVP-02 기록을 따른다.
+2. [검증 색인](../../../docs/verification/README.md)에서 해당 계약만 읽는다. 런타임 차이는 NATIVE-RUNTIME 문서, 미끼는 BAIT-PREPARATION, 시전은 verification/fishing의 기능별 기록을 따른다.
 3. 공개 API로 얻을 수 있는지 먼저 확인한다. 실패 시 실제 KR 설치 DLL·고정 소스의 구조/필드/IL과 필요한 게임 실행 표본을 대조한다. 글로벌 최신 소스만으로 접근을 확정하지 않는다.
 
 ## 조사 결과에 필요한 사실

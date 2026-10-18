@@ -32,7 +32,7 @@ try {
     $requiredSdk = (Get-Content global.json -Raw | ConvertFrom-Json).sdk.version
     $actualSdk = & dotnet --version
     if ($LASTEXITCODE -ne 0 -or $actualSdk -ne $requiredSdk) {
-        throw "Install .NET SDK $requiredSdk (see docs/WINDOWS-SETUP.md)."
+        throw "Install .NET SDK $requiredSdk (see docs/development/WINDOWS-SETUP.md)."
     }
     $tests = 'tests/DuckbillFisher.Core.Tests/DuckbillFisher.Core.Tests.csproj'
     Invoke-Dotnet restore $tests --locked-mode

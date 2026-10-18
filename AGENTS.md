@@ -5,8 +5,8 @@
 ## 시작과 문서 탐색
 
 - 먼저 [현재 상태](docs/STATUS.md)와 `git status --short`를 확인한다. 새 세션/PC에서는 [인수인계](docs/SESSION-HANDOFF.md)도 읽는다.
-- 이후 [문서 지도](docs/README.md)에서 이번 작업에 필요한 문서만 읽는다. validation/history 전체를 매번 읽지 않는다.
-- 현재 사실은 STATUS, 확정 동작은 PRODUCT, 구조는 ARCHITECTURE, 후보는 ROADMAP, 실행 절차는 WORKFLOW/DISTRIBUTION을 따른다. 옛 검증 문서의 ‘다음 작업’은 현재 지시가 아니다.
+- 이후 [문서 지도](docs/README.md)에서 이번 작업에 필요한 문서만 읽는다. verification/archive 전체를 매번 읽지 않는다.
+- docs 최상위는 README/STATUS/SESSION-HANDOFF만 둔다. 현재 사실은 STATUS, 확정 동작/후보는 product, 구조/절차는 development, 검증은 verification, 초기 조사/과거 이력은 archive를 따른다. 옛 검증 문서의 ‘다음 작업’은 현재 지시가 아니다.
 - **사용자 파일 `tmp_note.md`는 읽기·수정·스테이징 금지.** 검색·문서 검사도 추적 파일 또는 명시한 경로에 한정한다.
 
 ## 게임 접근 경계
@@ -35,12 +35,12 @@
 - 캐시는 키/인자·상태를 보관하고 표시할 때 번역한다. 언어 변경으로 상태·기록을 초기화하지 않는다. 미지원 언어/누락 번역은 기본 리소스로 돌아간다.
 - ImGui ID는 번역 문구와 분리한 `###고정ID`를 사용한다. 게임 이름은 클라이언트 시트 언어를 따른다. UI 언어 선택은 글로벌 호환성을 뜻하지 않는다.
 - 한국어 UI에서는 `창` 대신 화면/출현 중/출현 예정/채팅 등 해당 의미를 사용한다. 게임 고유 이름과 언어 독립 진단 필드는 예외다.
-- 진단 필드·상태 코드·숫자는 언어와 독립적이어야 한다. 보고서 계약 변경은 형식 버전과 근거를 남긴다. 상세 절차는 [LOCALIZATION](docs/LOCALIZATION.md)을 따른다.
+- 진단 필드·상태 코드·숫자는 언어와 독립적이어야 한다. 보고서 계약 변경은 형식 버전과 근거를 남긴다. 상세 절차는 [LOCALIZATION](docs/development/LOCALIZATION.md)을 따른다.
 
 ## 빌드·실기·배포
 
 - **테스트는 사용자 명시 요청 때만 추가/실행한다.** 일반 구현은 직접 dotnet build와 리소스 검사다. 테스트를 실행하는 scripts/build.ps1·scripts/test-release.ps1은 일반 작업에 사용하지 않는다.
-- 고정 SDK/의존성은 global.json/lock 파일을 따른다. [WORKFLOW](docs/WORKFLOW.md)의 별도→정규 빌드와 [HANDOFF](docs/SESSION-HANDOFF.md)의 실제 경로를 사용한다.
+- 고정 SDK/의존성은 global.json/lock 파일을 따른다. [WORKFLOW](docs/development/WORKFLOW.md)의 별도→정규 빌드와 [HANDOFF](docs/SESSION-HANDOFF.md)의 실제 경로를 사용한다.
 - 사용자 상시 지시로 언로드는 기본 상태다. 재확인 없이 진행하고 로드할 DLL 절대 경로를 안내한다. 실제 파일 잠금 실패는 보고하며 강제 종료/잠금 우회는 하지 않는다.
 - 빌드/자료 검사·인게임 대표 확인·전수 확인·원격 게시를 구분한다. 실기 결과가 없으면 확인 대기이며, 새 작업 시작으로 이전 확인이 완료되지 않는다. 게임 변경에는 재현 단계·기대 결과를 제공한다.
 - 배포 준비는 scripts/prepare-release.ps1을 사용한다. 확인한 ZIP만 Release에 게시하고 익명 다운로드를 확인한 뒤 설치 JSON을 갱신한다. 미검증 ZIP 게시/기존 태그·ZIP 덮어쓰기는 하지 않는다.
@@ -49,7 +49,7 @@
 ## 완료와 유지보수
 
 - STATUS에는 현재 사실·남은 확인·다음 한 작업만, HANDOFF에는 재개 절차·환경만 둔다. 각각 60줄 안팎을 목표로 하고 버전별 근거는 링크한다.
-- 기존 주제 문서를 우선 갱신한다. 매 수정마다 새 문서/전체 상태 사본을 만들지 않는다. 새 문서 기준과 정보 소유권은 [WORKFLOW의 문서 관리](docs/WORKFLOW.md#문서-관리)를 따른다.
+- 기존 주제 문서를 우선 갱신한다. 매 수정마다 새 문서/전체 상태 사본을 만들지 않는다. 새 문서 기준과 정보 소유권은 [WORKFLOW의 문서 관리](docs/development/WORKFLOW.md#문서-관리)를 따른다.
 - 진단은 필요한 필드/짧은 구역부터 요청한다. 전체 로그·대용량 검색 결과를 반복 출력하지 않는다. 문서에는 기술 사실을 쓰고 사용자 숙련도 평가를 남기지 않는다.
 - 완료한 승인 범위는 git diff/status로 검토하고 파일을 명시해 스테이징·커밋한다. 사용자 변경을 되돌리거나 이력을 재작성하지 않는다. 캐시·SDK·산출물·자격 증명은 제외한다.
 - 커밋과 푸시/배포 권한은 구분한다. 테스트 미요청 작업의 커밋은 [skip ci]로 기존 테스트 CI를 유발하지 않게 한다.

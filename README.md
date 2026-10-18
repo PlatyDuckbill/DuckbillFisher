@@ -27,7 +27,7 @@ https://raw.githubusercontent.com/PlatyDuckbill/DuckbillFisher/main/repo/pluginm
 
 Open with `/duckbillfisher`. The same repository supplies future updates through Dalamud. No source build or manual DLL registration is required for normal installation.
 
-[한국어 설치·배포 안내](docs/DISTRIBUTION.md)
+[한국어 설치·배포 안내](docs/development/DISTRIBUTION.md)
 
 ## Supported environment and limits
 
@@ -39,7 +39,7 @@ Open with `/duckbillfisher`. The same repository supplies future updates through
 - Casting records cover observed rod-fishing events. Unconfirmed results remain unknown; special outcomes and multiple catches need further observation.
 - No automatic casting, hooking, movement, bait changes, or server chat messages. Alerts are local. No external HTTP requests run inside the plugin.
 
-See [current verification scope](docs/STATUS.md) and the [remaining roadmap](docs/ROADMAP.md).
+See [current verification scope](docs/STATUS.md) and the [remaining roadmap](docs/product/ROADMAP.md).
 
 ## Data and acknowledgements
 
@@ -47,8 +47,8 @@ Fishing conditions are derived from a pinned revision of [FFX|V Fish Tracker App
 
 ## Development
 
-Start with the [documentation map](docs/README.md). Repository skills live in [.agents/skills](.agents/skills/) and share the maintained build and KR compatibility procedures.
+Start with the [documentation map](docs/README.md). Repository skills live in [.agents/skills](.agents/skills) and share the maintained build and KR compatibility procedures.
 
 Windows, PowerShell 7, .NET SDK **10.0.402**, and the supported KR Dalamud references are used for development. Dependencies are pinned by `global.json` and lock files.
 
-Follow [workflow](docs/WORKFLOW.md) for direct builds and resource checks, [distribution](docs/DISTRIBUTION.md) for packaging and publication, and [session handoff](docs/SESSION-HANDOFF.md) for current machine paths. Tests run only when explicitly requested. Contribution boundaries are in [AGENTS.md](AGENTS.md).
+Follow [workflow](docs/development/WORKFLOW.md) for direct builds and resource checks, [distribution](docs/development/DISTRIBUTION.md) for packaging and publication, and [session handoff](docs/SESSION-HANDOFF.md) for current machine paths. Tests run only when explicitly requested. Contribution boundaries are in [AGENTS.md](AGENTS.md).

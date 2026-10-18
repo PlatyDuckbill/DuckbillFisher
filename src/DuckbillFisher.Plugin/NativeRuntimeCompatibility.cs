@@ -14,7 +14,7 @@ internal sealed record NativeRuntimeCompatibility(string GameVersion, string Dal
     private const string SupportedGameVersion = "2026.10.06.0000.0000";
 
     // Each row is one complete distribution, not independently interchangeable module allowlists.
-    // Sources and layout/IL comparisons: docs/validation/NATIVE-RUNTIME-15.0.3.7.md
+    // Sources and layout/IL comparisons: docs/verification/native/NATIVE-RUNTIME-15.0.3.7.md
     // and NATIVE-RUNTIME-DAL4KR.md. A version number can name more than one KR build.
     private static readonly RuntimeProfile[] Profiles =
     [
