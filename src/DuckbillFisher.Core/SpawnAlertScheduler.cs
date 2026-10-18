@@ -55,13 +55,20 @@ public sealed class SpawnAlertScheduler
         return null;
     }
 
+    // Planning and delivery must discard the same old timeline, before choosing the next window.
+    // Inspecting this does not advance the scheduler's baseline.
+    public bool RequiresRebase(DateTimeOffset now, TimeSpan elapsed, int session, bool enabled)
+    {
+        var delta = elapsed - previousElapsed;
+        return previousUtc is null || session != previousSession || enabled != wasEnabled ||
+            delta <= TimeSpan.Zero || delta > TimeSpan.FromSeconds(10) ||
+            Math.Abs(((now - previousUtc.Value) - delta).TotalSeconds) > 2;
+    }
+
     public SpawnAlertEvaluation Evaluate(DateTimeOffset now, TimeSpan elapsed, int session, bool enabled,
         int leadMinutes, SpawnAlertAudience audience, IReadOnlyList<SpawnAlertCandidate> candidates)
     {
-        var delta = elapsed - previousElapsed;
-        var rebase = previousUtc is null || session != previousSession || enabled != wasEnabled ||
-            delta <= TimeSpan.Zero || delta > TimeSpan.FromSeconds(10) ||
-            Math.Abs(((now - previousUtc.Value) - delta).TotalSeconds) > 2;
+        var rebase = RequiresRebase(now, elapsed, session, enabled);
         var due = new List<SpawnAlert>();
         var next = new Dictionary<uint, (DateTimeOffset Start, int Lead)>();
         if (enabled && leadMinutes is >= MinLeadMinutes and <= MaxLeadMinutes)

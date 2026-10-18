@@ -44,6 +44,7 @@ internal sealed class SpawnAlerts : IDisposable
     private Dictionary<uint, FishGuideRow> rowsById = [];
     private SpawnAlertsView view = new(-1, new(T.AlertsDisabled), 0, 0, 0, 0, 0, []);
     private TimeSpan nextPoll;
+    private int nextPlanIndex;
     private bool disposed;
 
     public SpawnAlerts(FishCatalog catalog, FishPreferences preferences, FishCollectionObserver collection,
@@ -74,6 +75,7 @@ internal sealed class SpawnAlerts : IDisposable
                     log.Error(ex, "Could not update spawn alerts; no pending notifications will be replayed.");
                 plans.Clear();
                 retryAfter.Clear();
+                nextPlanIndex = 0;
                 var settings = preferences.View;
                 scheduler.Evaluate(DateTimeOffset.UtcNow, clock.Elapsed, view.Session, false, settings.SpawnAlertLeadMinutes,
                     settings.SpawnAlertAudience, []);
@@ -91,6 +93,7 @@ internal sealed class SpawnAlerts : IDisposable
         {
             plans.Clear();
             retryAfter.Clear();
+            nextPlanIndex = 0;
             view = new(personal.Session, new(T.AlertsWaitingCharacter), 0, 0, 0, 0, 0, []);
         }
         if (!ReferenceEquals(lastRows, data.Rows))
@@ -99,20 +102,36 @@ internal sealed class SpawnAlerts : IDisposable
             rowsById = data.Rows.ToDictionary(row => row.FishParameterId);
             plans.Clear();
             retryAfter.Clear();
+            nextPlanIndex = 0;
         }
         var status = !personal.SpawnAlertsEnabled ? T.AlertsDisabled : !personal.HasCharacter ? T.AlertsWaitingCharacter :
             !personal.CanEdit || personal.Error is not null ? T.AlertsStorageUnavailable :
             !catalog.ConditionBuildMatches || data.ForecastAt is not { } forecastAt ||
                 (now - forecastAt).TotalSeconds is < 0 or > 5 ? T.AlertsForecastUnavailable : T.AlertsWatching;
         var active = status == T.AlertsWatching;
+        if (scheduler.RequiresRebase(now, elapsed, personal.Session, active))
+        {
+            // A rollback may introduce an earlier future window than the cached plan.
+            // Long interruptions also invalidate retry delays from the previous timeline.
+            plans.Clear();
+            retryAfter.Clear();
+            nextPlanIndex = 0;
+        }
         var candidates = new List<SpawnAlertCandidate>();
         var plansBuilt = 0;
         if (active)
         {
-            foreach (var id in personal.Favorites)
+            var favorites = personal.Favorites.ToArray();
+            var first = favorites.Length == 0 ? 0 : nextPlanIndex % favorites.Length;
+            for (var offset = 0; offset < favorites.Length; offset++)
             {
+                var index = (first + offset) % favorites.Length;
+                var id = favorites[index];
                 if (!rowsById.TryGetValue(id, out var row) || !row.IsDisplayable || row.IsOceanFishing ||
                     row.Details?.Spot is null || !SpawnAlertScheduler.Includes(personal.SpawnAlertAudience, personal.Collection(id, observed)))
+                    continue;
+                var currentWindow = data.NormalWindows.GetValueOrDefault(id);
+                if (currentWindow?.Kind == FishingWindowKind.Always)
                     continue;
                 var lead = personal.AlertLead(id);
                 if (plans.TryGetValue(id, out var old) && old.Lead != lead)
@@ -121,11 +140,13 @@ internal sealed class SpawnAlerts : IDisposable
                 {
                     if (retryAfter.TryGetValue(id, out var retry) && retry.Lead == lead && elapsed < retry.At)
                         continue;
-                    // Spread a large favorite list across updates; existing deadlines are still checked.
+                    // Rotate new work so early retries cannot starve later favorites.
+                    // Still inspect every existing plan for crossed deadlines in this poll.
                     if (plansBuilt >= 8)
                         continue;
                     plansBuilt++;
-                    var window = SpawnAlertScheduler.FindFutureWindow(now, lead, data.NormalWindows.GetValueOrDefault(id),
+                    nextPlanIndex = (index + 1) % favorites.Length;
+                    var window = SpawnAlertScheduler.FindFutureWindow(now, lead, currentWindow,
                         personal.ReservedAlertWindows.GetValueOrDefault(id), at => data.Forecast.Find(at, row.ItemId));
                     if (window is null)
                     {
