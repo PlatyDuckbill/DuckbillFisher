@@ -8,6 +8,28 @@ using Lumina.Data;
 using Lumina.Excel.Sheets;
 
 // Development-only, local files and client sheets. Never evaluates JavaScript or reads a game process.
+if (args.Length > 0 && args[0] == "--validate")
+{
+    if (args.Length != 3) throw new ArgumentException("Usage: --validate <condition-data.json> <grade-data.json>");
+    try
+    {
+        var conditionJson = File.ReadAllText(args[1]);
+        var validated = FishingDatasetReader.ReadConditions(conditionJson);
+        var grades = FishingDatasetReader.ReadGrades(File.ReadAllText(args[2]), validated, FishingDatasetReader.ContentHash(conditionJson));
+        Console.WriteLine($"DataValid: fish={validated.Fish.Length}; partial={validated.Fish.Count(fish => !fish.ConditionsKnown)}; spear={validated.Spearfishing.Length}; grades={grades.Entries.Length}");
+    }
+    catch (FishingDataValidationException ex)
+    {
+        Console.Error.WriteLine($"DataInvalid: code={ex.Issue.Code}; path={ex.Issue.Path}");
+        Environment.ExitCode = 1;
+    }
+    catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
+    {
+        Console.Error.WriteLine($"DataInvalid: code={FishingDataError.ResourceUnavailable}; path=inputs; reason={ex.GetType().Name}");
+        Environment.ExitCode = 1;
+    }
+    return;
+}
 if (args.Length > 0 && args[0] == "--classifications")
 {
     FishClassificationImport.Run(args.Skip(1).ToArray());
@@ -152,7 +174,9 @@ var dataset = new { schemaVersion = 2, source.DataVersion, region = "KR", source
     sourceRepository = source.Repository, sourceRevision = source.Revision, sourceSha256 = source.Sha256, source.YamlSha256,
     sourceFiles = new[] { "private/fishData.yaml", source.File }, fish = rules.OrderBy(rule => rule.FishParameterId).ToArray(),
     spearfishing = spearRules.OrderBy(rule => rule.SpearfishingItemId).ToArray() };
-File.WriteAllText(args[4], JsonSerializer.Serialize(dataset, options) + "\n");
+var outputJson = JsonSerializer.Serialize(dataset, options) + "\n";
+_ = FishingDatasetReader.ReadConditions(outputJson);
+File.WriteAllText(args[4], outputJson);
 File.WriteAllText(args[5], JsonSerializer.Serialize(new { source.GameBuild, source.Revision, regular = rules.Count,
     spear = spearRules.Count, spearMissing = spearRules.Count(rule => !rule.ConditionsKnown), excluded,
     coordinateDifferences = coordinateDifferences.Values, fish = audit }, options) + "\n");

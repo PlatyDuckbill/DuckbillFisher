@@ -7,6 +7,8 @@
   <data name="TabCatalog" xml:space="preserve"><value>Fish list</value></data>
   <data name="CatalogWaiting" xml:space="preserve"><value>Loading the fish list…</value></data>
   <data name="CatalogLoaded" xml:space="preserve"><value>Fish list loaded from the game client.</value></data>
+  <data name="ConditionDataInvalid" xml:space="preserve"><value>Fishing data validation failed; condition details, forecasts and grades are unavailable. The game fish list and manual collection settings remain available. Code: {0}, field: {1}</value></data>
+  <data name="GradeDataInvalid" xml:space="preserve"><value>Fish grade data validation failed; grades are unknown. Condition details and forecasts remain available. Code: {0}, field: {1}</value></data>
   <data name="CatalogInLogOnly" xml:space="preserve"><value>Fish log entries only</value></data>
   <data name="CatalogSort" xml:space="preserve"><value>Sort</value></data>
   <data name="CatalogSortName" xml:space="preserve"><value>Name</value></data>
@@ -146,9 +148,10 @@
   <data name="ForecastOpenNoEnd" xml:space="preserve"><value>Available now</value></data>
   <data name="ForecastUpcoming" xml:space="preserve"><value>Starts in {0} · {1}</value></data>
   <data name="ForecastEnd" xml:space="preserve"><value>Ends: local time {0}</value></data>
-  <data name="ForecastNotFound" xml:space="preserve"><value>No matching window found within the next seven real days.</value></data>
+  <data name="ForecastNotFound" xml:space="preserve"><value>No matching window found within the next {0} real days.</value></data>
   <data name="ForecastUnknown" xml:space="preserve"><value>Availability forecast is not available.</value></data>
-  <data name="ForecastScope" xml:space="preserve"><value>Forecasts cover normal time/weather conditions. Fish Eyes, Intuition, and personal readiness are not included. In-game KR comparison is pending.</value></data>
+  <data name="ForecastScope" xml:space="preserve"><value>The next window is searched within {0} real days from now using normal time/weather conditions. Fish Eyes effects, active Intuition, and personal readiness are not included.</value></data>
+  <data name="ForecastBasis" xml:space="preserve"><value>Window times assume Fish Eyes is not active.</value></data>
   <data name="DurationShort" xml:space="preserve"><value>{0:0}h {1:00}m {2:00}s</value></data>
   <data name="DataSourceLabel" xml:space="preserve"><value>Data source and license</value></data>
   <data name="DataSourceInfo" xml:space="preserve"><value>Carbuncle Plushy / FFX|V Fish Tracker (MIT) · {0} · revision {1}. Names, spots, and maps come from the KR client.</value></data>
@@ -463,7 +466,7 @@ In fish log only: {5}</value></data>
   <data name="GuideOpenUnavailable" xml:space="preserve"><value>The guide cannot be opened directly in this environment. Open the Fish Guide from the game menu.</value></data>
   <data name="GuideOpenDataWaiting" xml:space="preserve"><value>The fish list is loading. Please try again shortly.</value></data>
   <data name="DetailWeatherTransition" xml:space="preserve"><value>Weather</value></data>
-  <data name="RowForecastNotFound" xml:space="preserve"><value>No forecast in 7d</value></data>
+  <data name="RowForecastNotFound" xml:space="preserve"><value>No forecast in {0}d</value></data>
   <data name="CatalogShowAll" xml:space="preserve"><value>Show all fish</value></data>
   <data name="CatalogShowAllHint" xml:space="preserve"><value>Clear the search and all regular filters. Include every collection state, grade, timing, region, ocean fish, and fish outside the log. Keep the sort order and exclude unresolved rows.</value></data>
   <data name="PresetButton" xml:space="preserve"><value>Presets</value></data>

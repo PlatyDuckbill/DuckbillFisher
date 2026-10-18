@@ -10,6 +10,7 @@
 | 수집·지역·등급 판정 | Core CollectionStatus, FishLocationFilter, FishClassification | Unknown/수동 우선·ID 기반 조건 |
 | 알림·기록 상태 | Core SpawnAlertScheduler, FishingAttempts | 시각 입력·중복 방지·시전/묶음 모델 |
 | 게임 시트·내장 자료 | Plugin FishCatalog, FishingDetails, FishClassificationData | Framework에서 읽고 관리 snapshot 게시 |
+| 조건·등급 자료 검증 | Core FishingDatasetReader, Plugin FishingData | 오프라인 도구/런타임 공통 계약·필수값/중복/참조/해시 검사 |
 | 캐릭터 설정·필터 | FishPreferences, CatalogSettings, CatalogPreset, CatalogFilter, CatalogQuery | UI 요청 큐/세션 확인/저장·결과 캐시 |
 | 수집 관찰 | FishCollectionObserver, NativeFishCollectionReader | 도감 전체 대조와 검증된 등록 로그, 수동 상태와 분리 |
 | 시전 관찰 | FishingTracker, NativeFishingActivityReader, FishingLogContracts | 본인 로그·시전 단계·시간 상관관계, 미검증 결과 Unknown |
@@ -26,6 +27,7 @@
 - Framework에서 게임 API/포인터를 해당 수명 안에서 읽고 값만 복사한다. 백그라운드 계산/저장은 관리 값만 받는다. 네이티브 포인터를 프레임 밖에 보관하지 않는다.
 - Draw는 snapshot 표시와 요청 전달만 담당한다. 파일 읽기·전체 시트 검색·장기 예측을 수행하지 않는다. 목록은 보이는 행 위주 렌더링, 입력/자료 revision 변경 때 검색·필터·정렬 갱신이다.
 - 예측/기록 시각은 UTC, 경과/요청 만료는 단조 시계다. ET는 표시/조건 계산을 위한 변환값이다.
+- 출현 검색은 호출 시각부터 실제 30일로 제한한다. 경계의 부분 날씨 구간도 포함하되 범위 끝에서 이어지는 출현은 종료 미확인으로 유지한다. 계산/안내/진단은 SearchDays를 공유하며, 기존 절대 시각 캐시와 NotFound의 분 단위 재검색을 유지한다. 날씨 배열은 OR 조건이라 통상 확률표에 없는 대체 날씨 하나가 다른 유효 대안을 막지 않는다.
 - UI 요청은 적용 직전 캐릭터 세션을 확인한다. 로그아웃/전환/Dispose에서 관찰·요청·선택·알림 예약·구독을 해당 수명에 맞춰 정리한다.
 - 공유 텍스처의 소유권을 가져오거나 borrowed wrap을 Dispose하지 않는다.
 
@@ -51,6 +53,8 @@
 - 상세 패널은 메인과 독립 상세에서 재사용한다. 타이머의 낚시터 목록은 독립 수집 필터와 공통 행을 쓴다. 미끼 준비는 독립 보조 화면이다. [현재 동작](../product/PRODUCT.md#화면과-상호작용).
 - 미끼 찾기는 명시적 요청 1개와 유효 기한을 가진다. 전체 Item 배열과 현재 보이는 칸이 모두 일치할 때만 페이지 표식을 만든다. 게임 UI 쓰기/페이지 이동/미끼 변경 호출은 없다. [수명·KR 근거](../verification/bait/BAIT-PREPARATION.md).
 - 조건 JSON·분류·고지는 DLL 내장 리소스다. conditionsKnown=false는 예측/알림 제외이며 수집 Unknown과 별개다. Item/FishParameter/Territory/Map/Spot ID를 혼동하지 않는다.
+- 조건/등급 DTO와 검증은 Core에 두고 파일/내장 리소스 읽기는 도구/Plugin에서 담당한다. 조건 JSON의 명시적 필수값과 nullable 미확인을 구분한다. 등급은 조건 해시/빌드/버전/양성 목록과 대조한다. 조건 검증 실패는 관련 상세/예측을 중단하고, 등급만 실패하면 등급만 Unknown으로 유지한다. 실패를 빈 정상 자료로 표시하지 않고 타입/코드/경로와 번역된 안내를 제공한다.
+- 예측 조건의 날씨 ID가 지역 확률표에 없거나 확률표가 유효하지 않으면 Unknown이다. 유효 조건을 정해진 기간 탐색한 NotFound와 구분한다.
 - 조건 자료의 원본 revision/해시·라이선스·가공은 [data/README](../../data/README.md), 표시와 번역은 [LOCALIZATION](LOCALIZATION.md)을 따른다.
 
 사용자가 테스트를 요청하면 시간/날씨 경계·중복 알림·상태 전이·캐릭터 격리·저장 실패처럼 실패 비용이 큰 계약에 집중한다. 일반 작업의 빌드/검사와 인게임 확인 절차는 [WORKFLOW](WORKFLOW.md)에 있다.

@@ -67,7 +67,8 @@ internal sealed class FishCatalog : IDisposable
         try
         {
             var directory = Path.GetDirectoryName(Environment.ProcessPath)!;
-            conditionBuildMatches = File.ReadAllText(Path.Combine(directory, "ffxivgame.ver")).Trim() == FishingData.Dataset.GameBuild;
+            conditionBuildMatches = FishingData.Failure is null &&
+                File.ReadAllText(Path.Combine(directory, "ffxivgame.ver")).Trim() == FishingData.Dataset.GameBuild;
         }
         catch (IOException) { conditionBuildMatches = false; }
         catch (UnauthorizedAccessException) { conditionBuildMatches = false; }
@@ -238,7 +239,7 @@ internal sealed class FishCatalog : IDisposable
                         if (FishClassificationData.Dataset.GameBuild == FishingData.Dataset.GameBuild &&
                             FishClassificationData.ByFishId.TryGetValue(fish.RowId, out var entry) && entry.ItemId == item.RowId)
                             grade = entry.Grade;
-                        else if (details is not null)
+                        else if (FishClassificationData.Failure is null && details is not null)
                             grade = details.Rule.BigFish ? FishGrade.Big : FishGrade.Regular;
                         if (details?.Rule is { ConditionsKnown: true } known)
                             timing = known.StartHour != 0 || known.EndHour != 24 || known.WeatherIds.Length > 0 || known.PreviousWeatherIds.Length > 0
@@ -262,7 +263,12 @@ internal sealed class FishCatalog : IDisposable
                 }
                 if (rows.Count == 0)
                     throw new InvalidDataException("FishParameter sheet is empty.");
-                view = new(rows.ToArray(), new(T.CatalogLoaded)) {
+                var dataStatus = FishingData.Failure is { } conditionFailure
+                    ? new UiMessage(T.ConditionDataInvalid, conditionFailure.Code, conditionFailure.Path)
+                    : FishClassificationData.Failure is { } gradeFailure
+                        ? new UiMessage(T.GradeDataInvalid, gradeFailure.Code, gradeFailure.Path)
+                        : new UiMessage(T.CatalogLoaded);
+                view = new(rows.ToArray(), dataStatus) {
                     Spots = spots.ToDictionary(pair => pair.Key, pair => pair.Value.View),
                     Geography = FishingGeography.FromRows(rows),
                     FishByTerritory = rows.Where(row => row.IsDisplayable && !row.IsOceanFishing)
@@ -339,14 +345,15 @@ internal sealed class FishCatalog : IDisposable
         var unresolved = snapshot.Rows.Where(row => !row.IsDisplayable).ToArray();
         var report = new StringBuilder();
         void Append(FormattableString line) => report.AppendLine(FormattableString.Invariant(line));
-        report.AppendLine("DuckbillFisher MVP-01/catalog/v5");
+        report.AppendLine("DuckbillFisher MVP-01/catalog/v6");
         Append($"Plugin: {typeof(Plugin).Assembly.GetName().Version}");
         Append($"Rows: {snapshot.Rows.Count}; displayable: {snapshot.Rows.Count - unresolved.Length}; unresolved: {unresolved.Length}; unresolved in log: {unresolved.Count(row => row.IsInLog)}");
         report.AppendLine($"Status: [{snapshot.Status.Key}] {snapshot.Status.Diagnostic}");
         Append($"Dataset: {FishingData.Dataset.DataVersion}; buildMatch={conditionBuildMatches}; detailRows={snapshot.Rows.Count(row => row.Details is not null)}; rowsWithSpots={snapshot.Rows.Count(row => row.Spots.Count > 0)}");
+        report.AppendLine($"DataValidation: conditions={FishingData.Failure?.Code.ToString() ?? "Valid"}; conditionPath={FishingData.Failure?.Path ?? "none"}; grades={FishClassificationData.Failure?.Code.ToString() ?? "Valid"}; gradePath={FishClassificationData.Failure?.Path ?? "none"}");
         Append($"Coverage: oceanAreas={snapshot.Rows.Count(row => row.Ocean is not null)}; spearStored={FishingData.Dataset.Spearfishing.Length}; spearConditionsUnknown={FishingData.SpearUnknown}");
         Append($"Classification: dataset={FishClassificationData.Dataset.DataVersion}; bigIncludingLegendary={snapshot.Rows.Count(row => row.Grade is FishGrade.Big or FishGrade.Legendary)}; legendary={snapshot.Rows.Count(row => row.Grade == FishGrade.Legendary)}; restricted={snapshot.Rows.Count(row => row.TimeRestriction == FishTimeRestriction.Restricted)}");
-        Append($"ForecastAt: {snapshot.ForecastAt:O}; horizonPeriods={FishingAvailability.SearchPeriods}; normal time/weather only; no personal readiness inference");
+        Append($"ForecastAt: {snapshot.ForecastAt:O}; horizonDays={FishingAvailability.SearchDays}; horizonPeriods={FishingAvailability.SearchPeriods}; fishEyes=false; normal time/weather only; no personal readiness inference");
         report.AppendLine($"Source: {FishingData.Dataset.SourceRepository}/tree/{FishingData.Dataset.SourceRevision}");
         report.AppendLine("Detail samples: up to 20, selected fish first, then ordered by FishParameter ID.");
         foreach (var row in snapshot.Rows.Where(row => row.Details is not null)

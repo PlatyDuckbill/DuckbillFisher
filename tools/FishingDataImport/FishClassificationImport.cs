@@ -2,6 +2,7 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Text.Encodings.Web;
 using System.Text.Json;
+using DuckbillFisher.Core;
 using Lumina;
 using Lumina.Data;
 using Lumina.Excel.Sheets;
@@ -70,7 +71,10 @@ internal static class FishClassificationImport
                 Encoding.UTF8.GetString(inputBytes).Replace("\r\n", "\n")))),
             descriptionSha256 = Convert.ToHexString(SHA256.HashData(Encoding.UTF8.GetBytes(evidence.ToString()))),
             entries };
-        File.WriteAllText(args[2], JsonSerializer.Serialize(output, options) + "\n");
+        var outputJson = JsonSerializer.Serialize(output, options) + "\n";
+        var conditionJson = Encoding.UTF8.GetString(inputBytes);
+        _ = FishingDatasetReader.ReadGrades(outputJson, FishingDatasetReader.ReadConditions(conditionJson), FishingDatasetReader.ContentHash(conditionJson));
+        File.WriteAllText(args[2], outputJson);
         File.WriteAllText(args[3], JsonSerializer.Serialize(new { gameBuild = build, inspected = regular.Length,
             sourceCompared = compared, positiveTimingCompared = timingMatches, bigIncludingLegendary = entries.Count,
             legendary, failures = 0, entries = audit }, options) + "\n");

@@ -230,13 +230,14 @@ internal sealed class FishRowRenderer(ITextureProvider textures, FishingMapServi
 
     public static string CompactWindow(FishingWindow window, DateTimeOffset now)
     {
+        if (window.Kind == FishingWindowKind.NotFound)
+            return UiText.Get(T.RowForecastNotFound, FishingAvailability.SearchDays);
         var target = window.Kind == FishingWindowKind.Open ? window.End : window.Start;
         if (target is null || window.Kind is not (FishingWindowKind.Open or FishingWindowKind.Upcoming))
             return UiText.Get(window.Kind switch
             {
                 FishingWindowKind.Always => T.ForecastAlways,
                 FishingWindowKind.Open => T.WindowOpen,
-                FishingWindowKind.NotFound => T.RowForecastNotFound,
                 _ => T.ForecastUnavailable,
             });
         var time = target > now ? target.Value - now : TimeSpan.Zero;
@@ -286,7 +287,7 @@ internal sealed class FishRowRenderer(ITextureProvider textures, FishingMapServi
             FishingWindowKind.Open => UiText.Get(T.ForecastOpenNoEnd),
             FishingWindowKind.Upcoming when window.Start is { } start => UiText.Get(T.ForecastUpcoming,
                 Remaining(start), start.ToLocalTime().ToString("MM-dd HH:mm", UiText.Culture)),
-            FishingWindowKind.NotFound => UiText.Get(T.ForecastNotFound),
+            FishingWindowKind.NotFound => UiText.Get(T.ForecastNotFound, FishingAvailability.SearchDays),
             _ => UiText.Get(T.ForecastUnknown),
         };
     }

@@ -39,7 +39,9 @@ public sealed record FishingWindow(FishingWindowKind Kind, DateTimeOffset? Start
 /// <summary>Normal time/weather windows only; personal conditions and Fish Eyes are not inferred.</summary>
 public static class FishingAvailability
 {
-    public const int SearchPeriods = 432; // Seven real days, bounded independently of the render loop.
+    public const int SearchDays = 30;
+    // Include both partial weather periods at the edges; Find applies the exact UTC horizon.
+    public const int SearchPeriods = (SearchDays * 86400 + (int)WeatherSeconds - 1) / (int)WeatherSeconds + 1;
     private const long WeatherSeconds = 1400;
     private const long DaySeconds = 4200;
     private const double HourSeconds = 175;
@@ -72,13 +74,15 @@ public static class FishingAvailability
     public static FishingWindow Find(DateTimeOffset now, FishingRule rule, IReadOnlyList<WeatherChance> rates)
     {
         var unix = now.ToUnixTimeMilliseconds() / 1000.0;
-        if (!rule.ConditionsKnown || unix < WeatherSeconds || !double.IsFinite(rule.StartHour) || !double.IsFinite(rule.EndHour)
+        if (!rule.ConditionsKnown || rule.WeatherIds is null || rule.PreviousWeatherIds is null ||
+            unix < WeatherSeconds || !double.IsFinite(rule.StartHour) || !double.IsFinite(rule.EndHour)
             || rule.StartHour < 0 || rule.StartHour >= 24 || rule.EndHour < 0 || rule.EndHour > 24
             || rule.StartHour == rule.EndHour)
             return new(FishingWindowKind.Unknown);
         var hasWeather = rule.WeatherIds.Length > 0 || rule.PreviousWeatherIds.Length > 0;
-        if (hasWeather && (rates.Count == 0 || rates.Any(rate => rate.WeatherId == 0 || rate.Chance <= 0)
-                || rates.Sum(rate => rate.Chance) != 100))
+        if (hasWeather && (rates.Count == 0 || rates.Any(rate => rate.WeatherId == 0 || rate.Chance is <= 0 or > 100)
+                || rates.Sum(rate => (long)rate.Chance) != 100 ||
+                !HasForecastWeather(rule.WeatherIds) || !HasForecastWeather(rule.PreviousWeatherIds)))
             return new(FishingWindowKind.Unknown);
         if (!hasWeather && rule.StartHour == 0 && rule.EndHour == 24)
             return new(FishingWindowKind.Always);
@@ -86,9 +90,12 @@ public static class FishingAvailability
         double? foundStart = null;
         double? foundEnd = null;
         var firstPeriod = (long)unix / WeatherSeconds * WeatherSeconds;
+        var horizon = unix + SearchDays * 86400;
         for (var index = 0; index < SearchPeriods; index++)
         {
             var period = firstPeriod + index * WeatherSeconds;
+            if (period >= horizon) break;
+            var periodEnd = Math.Min(period + WeatherSeconds, horizon);
             var weatherMatches = !hasWeather ||
                 ((rule.WeatherIds.Length == 0 || rule.WeatherIds.Contains(WeatherAt(period, rates))) &&
                  (rule.PreviousWeatherIds.Length == 0 || rule.PreviousWeatherIds.Contains(WeatherAt(period - WeatherSeconds, rates))));
@@ -102,7 +109,7 @@ public static class FishingAvailability
                     if (end <= start)
                         end += DaySeconds;
                     start = Math.Max(start, period);
-                    end = Math.Min(end, period + WeatherSeconds);
+                    end = Math.Min(end, periodEnd);
                     if (end <= start || end <= unix)
                         continue;
                     if (foundEnd is null)
@@ -116,7 +123,7 @@ public static class FishingAvailability
                         return Result(foundStart!.Value, foundEnd.Value);
                 }
             }
-            if (foundEnd is { } finish && finish < period + WeatherSeconds)
+            if (foundEnd is { } finish && finish < periodEnd)
                 return Result(foundStart!.Value, finish);
         }
         // A continuous window reaching the search limit has no confirmed end within that limit.
@@ -126,6 +133,11 @@ public static class FishingAvailability
 
         FishingWindow Result(double start, double end) =>
             new(start <= unix ? FishingWindowKind.Open : FishingWindowKind.Upcoming, FromSeconds(start), FromSeconds(end));
+
+        // Alternatives are OR conditions. A special weather absent from the normal rate table
+        // must not suppress the other supported alternatives (e.g. Raincaller: rain or snow).
+        bool HasForecastWeather(uint[] alternatives) => alternatives.Length == 0 ||
+            alternatives.Any(id => rates.Any(rate => rate.WeatherId == id));
     }
 
     private static DateTimeOffset FromSeconds(double seconds) =>

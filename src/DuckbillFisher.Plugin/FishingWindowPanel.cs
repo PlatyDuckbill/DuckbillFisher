@@ -12,6 +12,8 @@ internal static class FishingWindowPanel
 {
     public static void Draw(FishingWindow? window, DateTimeOffset now, UiMessage? unavailableReason = null)
     {
+        ImGui.TextWrapped(UiText.Get(T.ForecastBasis));
+        UiWidgets.Tooltip(UiText.Get(T.ForecastScope, FishingAvailability.SearchDays));
         if (unavailableReason is { } reason && (window is null || window.Kind == FishingWindowKind.Unknown))
         {
             ImGui.TextDisabled(UiText.Get(T.ForecastUnavailable));
@@ -24,7 +26,7 @@ internal static class FishingWindowPanel
         {
             FishingWindowKind.Upcoming => UiText.Get(T.WindowUpcoming),
             FishingWindowKind.Always => UiText.Get(T.ForecastAlways),
-            FishingWindowKind.NotFound => UiText.Get(T.ForecastNotFound),
+            FishingWindowKind.NotFound => UiText.Get(T.ForecastNotFound, FishingAvailability.SearchDays),
             _ => UiText.Get(T.ForecastUnknown),
         };
         ImGui.PushStyleColor(ImGuiCol.ChildBg, open ? new Vector4(0.10f, 0.40f, 0.25f, 0.32f) : new Vector4(0.18f, 0.23f, 0.29f, 0.40f));

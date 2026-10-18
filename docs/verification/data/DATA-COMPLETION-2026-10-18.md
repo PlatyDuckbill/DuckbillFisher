@@ -2,6 +2,21 @@
 
 조사 2026-10-17 / 완료 2026-10-18. KR `2026.10.06.0000.0000`. 정규 DLL 반영, 인게임 검증 대기, 공개 배포는 사용자 요청으로 생략했다.
 
+## 0.3.2.0 데이터 안정성 보강
+
+2026-10-18 개발 정비. 제공 사실/원본 revision/조건 JSON/등급 JSON은 변경하지 않았다. 기존 잔여 11종과 부분 확인 2종의 미확인은 그대로다.
+
+- 기존 로더는 `conditionsKnown` 누락 시 모델 기본값 true를 적용할 수 있었고 등급의 conditionDataSha256을 읽지 않았다. Core 공통 검증에서 필수 필드/명시적 null·자료형/중복 속성·ID/시간·미끼/선행 어획을 확인한다. 등급은 LF 정규화 조건 해시·게임/자료 버전·어종 ID와 터주 양성 누락을 대조한다. 도구는 출력 저장 전에 같은 검사를 실행한다.
+- 조건 검증 실패는 번역된 오류를 표시하며 조건 상세·예측·알림·등급을 제공하지 않는다. 기본 시트 목록과 수동 상태/설정은 유지한다. 등급만 실패하면 정상 조건/예측을 계속 제공하고 등급을 Unknown으로 둔다. 실패 시 출처 화면에서 빈 revision을 잘라 예외가 발생하지 않도록 했다.
+- 현재/직전 날씨 조건 중 한 그룹의 모든 대안이 지역 확률표에 없으면 NotFound 대신 Unknown을 반환한다. 일부 대안만 없으면 나머지를 사용한다. 실제 자료 대조에서 기우어/폭풍왕의 비(7)·눈(15) OR 조건을 확인해, 눈이 통상 확률표에 없다는 이유로 비 예측까지 차단하지 않도록 했다. 확률 합산은 long으로 계산한다. 30일 검색 확대와 실자료 계산은 [예측 기록](../forecast/FORECAST.md#0320-검색-범위-확대-2026-10-18)에 있다.
+- `--validate`로 실제 제품 자료 검사: fish=1258 / partial=2 / spear=203 / grades=335. 기존 빈 baitPath는 허용하며 미끼의 단계별 표현은 baitSteps를 따른다. 자료 자체를 수정해 검사를 통과시키지 않았다.
+- 고정 baseline/Teamcraft 5개 파일의 manifest 해시를 확인하는 `--complete`를 .cache/data-integrity로 재실행했다. Regular=1258 / Before=903 / After=1258 / Changed=466 / Gaps=11 / OptionalMetadata=355. 새 조건 JSON은 제품 원본과 LF 정규화 후 완전히 동일하다.
+- 설치된 KR 클라이언트에서 `--classifications` 재실행: Inspected=1258 / SourceCompared=1258 / PositiveTimingCompared=131 / BigIncludingLegendary=335 / Legendary=36 / Failed=0. 새 등급 JSON도 원본과 LF 정규화 후 완전히 동일하다. 이는 시트·고정 자료 대조이며 실제 어획 조건의 전수 실기 증명이 아니다.
+- 현재 KR 별도→정규 Debug와 데이터 도구 직접 빌드, 한영609키/형식 인자·문서·내장 리소스/자료 보존 검사를 수행했다. 테스트 추가/실행·장애 주입 테스트·인게임·패키징·게시·push는 수행하지 않았다.
+- 진단은 catalog/v5→v6으로 올리고 `DataValidation` 한 줄에 conditions/conditionPath/grades/gradePath를 추가했다. 정상은 Valid/none, 실패는 FishingDataError 코드/JSON 경로다. 후속 예측 조사에서 summary/v6→v7로 올려 선택 어종의 재현 입력을 추가했다. [형식·근거](../forecast/OPEN-WINDOW-DIAGNOSTICS.md#0320-재조사-2026-10-18).
+
+실기 확인은 개발0.3.2.0 정규 DLL 재로드 → 목록/상세/출처 화면 → 대표 시간·날씨 어종의 예측과 기존 수동 상태 보존 순이다. 정상 자료에서는 오류 안내 없이 기존 정보가 같아야 하며, catalog/v6의 DataValidation은 conditions=Valid/grades=Valid여야 한다. 부분 확인 2종은 계속 예측하지 않아야 한다. 한영 표시와 손상 자료 실패 경로의 실제 게임 동작은 확인 대기다. 기존0.3.1.0 호환성 정비의 대표 확인도 완료로 간주하지 않는다.
+
 ## 범위와 결과
 
 | 항목 | 이전 → 반영 후 |
@@ -15,7 +30,7 @@
 | 선택적 메타데이터 | 추가 355종의 물고기의 눈 지원 여부 null. 현재 UI 미표시 |
 | 별도 범위 | 먼바다 259종의 어종별 조건 연동 / 작살 203건 중 미확인 115건 |
 
-전체 이름·ID·누락 필드·이유는 [보고서와 CSV](reports/fishing-data-2026-10-17/remaining.md)에 제공한다. 수집 상태의 Unknown, 조건 자료 누락, 7일 이내 출현 예측 없음은 서로 다른 상태다.
+전체 이름·ID·누락 필드·이유는 [보고서와 CSV](reports/fishing-data-2026-10-17/remaining.md)에 제공한다. 수집 상태의 Unknown, 조건 자료 누락, 검색 범위 이내 출현 예측 없음은 서로 다른 상태다.
 
 ## 출처·가공 결정
 

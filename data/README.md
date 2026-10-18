@@ -64,10 +64,21 @@ dotnet run --project tools/FishingDataImport -- --classifications "$env:FFXIV_GA
 
 ## 필드 의미와 미확인
 
+조건/등급 JSON은 Core의 `FishingDatasetReader`로 공통 검증한다. 가져오기 도구는 출력 저장 전에, Plugin은 초기화 때 한 번 실행한다. `conditionsKnown`·시간·날씨·미끼·선행 어획 등 필수 필드 누락, 잘못된 null/형식/범위, 중복 속성/ID는 거부하며 기본값으로 보완하지 않는다. `intuitionSeconds`·`fishEyesSupported`의 명시적 null은 미확인으로 보존한다. 기존 빈 `baitPath`는 허용하고, 값이 있으면 `baitSteps`와 연결을 대조한다.
+
+등급 자료는 조건 JSON의 LF 정규화 SHA256·게임 빌드·자료 버전, 겹치는 어종의 Item/FishParameter/터주 판정, 조건 자료의 터주 양성 항목 누락을 검사한다. 파일을 바꿀 때는 조건과 등급을 함께 재생성·검토한다. 해시 일치는 두 파일의 연결을 검증하며 외부 원본의 낚시 사실 자체를 증명하지 않는다.
+
+```powershell
+# 개발 환경 변수 설정 후 실행. 로컬 JSON 검사이며 게임/네트워크 접근은 없다.
+dotnet run --no-restore --project tools/FishingDataImport -- --validate data/fishing.kr.v2.json data/fish-classifications.kr.v1.json
+```
+
+실패하면 `DataInvalid: code=...; path=...`와 종료 코드 1을 반환한다. 조건 자료 검증 실패 시 Plugin은 조건 상세/예측/예측 알림/등급을 제공하지 않고 기본 시트 목록·수동 수집 설정을 유지한다. 등급 자료만 실패하면 등급은 Unknown이며 정상 조건/예측은 유지한다. 현재 언어로 오류를 표시하고 catalog/v6의 `DataValidation`에 언어 독립 코드와 항목 경로를 기록한다. 이 검사는 테스트 실행이나 인게임 확인이 아니다.
+
 - `baitSteps` 바깥 배열은 미끼→생미끼 순서, 내부 배열은 같은 단계 대체 후보다. 추가 자료는 검증된 한 경로를 선택하며 가능한 모든 미끼를 보장하지 않는다.
 - `hookset`/`tug` 빈 문자열, `intuitionSeconds=null`은 해당 필드 미확인이다. 낚아채기를 입질 강도에서 추정하거나 직감 지속 시간을 출현 시간 길이로 대체하지 않는다.
 - 빈 날씨 배열은 확인된 원본에서만 제한 없음이다. `conditionsKnown=false`인 2종은 미끼·입질 강도·위치만 안내하며 상시 예측/알림으로 바꾸지 않는다.
-- `fishEyesSupported`는 nullable이다. 기존 903종의 bool은 유지하고 추가 자료에 없는 355종은 null로 둔다. 사용자 결정으로 현재 UI에는 표시하지 않는다. 개인 스킬을 기본 예측에 적용하지 않는다.
+- `fishEyesSupported`는 nullable이다. 기존 903종의 bool은 유지하고 추가 자료에 없는 355종은 null로 둔다. 지원 여부 자체는 UI에 표시하지 않는다. 목록/상세의 미사용 기준 안내와 별개이며 개인 스킬을 기본 예측에 적용하지 않는다.
 - `patchVersion`은 3.55b 같은 접미사를 보존한다. 기존 숫자 `patch`도 유지하며 기존 903종은 숫자 표시를 사용한다. 전승록은 KR GatheringSubCategory.Item으로 연결한다.
 - `snaggingRequired`는 갈고리 낚시, `lure`는 Modest/Ambitious 요구다. 직감 선행 어종/마릿수는 지속 시간 누락과 별개로 안내한다.
 - 먼바다 259종의 기본 해역·일반/환해류 장소·항로 방문 시간은 IKD 시트에서 제공한다. 어종별 미끼·특수 조건은 별도 연동이 남았다. 작살 203건 중 `conditionsKnown=false` 115건과 전용 UI·수집 연동도 후속이다. [전체 ID/이름/이유](../docs/verification/data/reports/fishing-data-2026-10-17/remaining.md)에 분리했다.

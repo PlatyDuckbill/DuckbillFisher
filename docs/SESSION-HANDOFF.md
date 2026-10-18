@@ -1,6 +1,6 @@
 # 세션 인수인계
 
-갱신: 2026-10-18 · 개발 0.3.1.0 환경/호환성 정비 · 공개 0.3.0.0 유지
+갱신: 2026-10-18 · 개발 0.3.2.0 데이터 안정성·30일 예측 · 공개 0.3.0.0 유지
 
 ## 재개 순서
 
@@ -33,16 +33,17 @@
 
 - 공개 0.3.0.0의 소스 태그 커밋은 7269627, 설치 JSON 게시 커밋은 fc300d5, 게시 확인 기록은 b33f4eb다.
 - 사용자 확인 ZIP: artifacts/share/0.3.0.0/DuckbillFisher-0.3.0.0.zip. 크기/전체 SHA256/익명 다운로드 근거는 [Release 기록](verification/releases/RELEASE-0.3.0.0.md)에 있다.
-- 공개 Release 빌드 출력은 .cache/bait-preparation-release/다. 개발 0.3.1.0 별도 출력은 .cache/maintenance-build/·maintenance-minimum/·maintenance-friend/·maintenance-upstream/·maintenance-import/다. 정규 Debug는 개발 0.3.1.0이며 실기 대기다.
+- 공개 Release 빌드 출력은 .cache/bait-preparation-release/다. 개발0.3.2.0 별도 출력은 .cache/data-integrity-build/·data-integrity-import/, 재생성 자료는 .cache/data-integrity/다. 정규 Debug는 개발0.3.2.0이며 실기 대기다. 이전 참조별 출력은 .cache/maintenance-*에 있다.
 - 확인된 ZIP을 다시 빌드해 바꾸거나 기존 태그/Release를 덮어쓰지 않는다. 제품 수정은 새 버전으로 준비한다.
 - 개발·배포 플러그인의 같은 InternalName을 동시에 로드하지 않는다. 사용자가 현재 등록한 경로를 추측해 설정을 수정하지 않는다.
 - 현재 PC는 gh CLI 없이 Git credential manager+GitHub API로 게시한 이력이 있다. 토큰은 메모리에서만 사용하며 출력/파일/Git에 남기지 않는다. 캐시의 버전별 게시 스크립트를 확인 없이 재실행하지 않는다.
 
 ## 이번 정비와 후속
 
-- 개발 0.3.1.0은 환경 변수/공통 참조 검사/게임별 네이티브 프로필 분리를 적용했다. 최소 KR·현재 KR·친구 KR·고정 upstream 빌드는 실제 게임 확인과 구분한다. [구조](development/ARCHITECTURE.md#호환성과-실패), [검사와 재현](verification/native/NATIVE-RUNTIME-DAL4KR.md#0310-개발-정비-2026-10-18).
+- 개발0.3.2.0은 Core 공통 자료 검증을 Plugin/도구에서 사용한다. 실제 자료 검사 명령은 [data/README](../data/README.md#필드-의미와-미확인), 결과와 재현은 [데이터 기록](verification/data/DATA-COMPLETION-2026-10-18.md#0320-데이터-안정성-보강)을 따른다. 오류 진단은 catalog/v6의 DataValidation 한 줄부터 확인한다.
+- 30일 검색 범위·미사용 안내는 [예측 기록](verification/forecast/FORECAST.md#0320-검색-범위-확대-2026-10-18)을 따른다. summary/v7의 SelectedForecast/SelectedConditions로 선택 어종의 UTC·조건·확률표를 함께 확인할 수 있다. 로컬 실제 자료 계산 스크립트는 .cache/Inspect-Forecasts.ps1이며 테스트 스위트가 아니다.
 - v1 조건 자료는 data/archive로 이동했으며 기존 예측 테스트에서만 참조한다. 제품은 v2 조건과 v1 등급 자료를 내장한다. 테스트는 요청 없이는 실행하지 않는다.
-- 다음 게임 확인은 개발 DLL 재로드 후 도감/수집/타이머 대표 동작이다. 공개 0.3.0.0의 실제 저장소 업데이트/친구 새 기능 확인 대기는 별도로 유지한다. 미끼 페이지 연결 문제는 bait-ui/v7의 Pages 한 줄부터 요청한다.
+- 다음 게임 확인은 개발 DLL 재로드 후 목록/상세의 미사용 안내·장기 출현 날짜·한영 전환·출처와 수동 상태 보존이다. 이전0.3.1.0 도감/수집/타이머와 공개0.3.0.0 실제 업데이트/친구 새 기능 확인도 별도 대기다. 미끼 페이지 문제는 bait-ui/v7의 Pages 한 줄부터 요청한다.
 - 일반 데이터 잔여 이름/ID/이유는 [보고서](verification/data/reports/fishing-data-2026-10-17/remaining.md), 재생성 순서는 [data/README](../data/README.md)를 따른다. 완성 제품을 보완 단계 baseline으로 다시 넣지 않는다.
-- Teamcraft 재조사·입질 통계·복수 어획 보류를 유지한다. 신규 후보는 [ROADMAP](product/ROADMAP.md)에서 사용자와 선택한다.
+- 입질 통계·복수 어획 보류를 유지한다. Teamcraft는 명시 요청으로 재조사했으나 당시 화면 차이의 원인은 미확정이다. [조사 근거와 남은 범위](verification/forecast/OPEN-WINDOW-DIAGNOSTICS.md#0320-재조사-2026-10-18). 신규 후보는 [ROADMAP](product/ROADMAP.md)에서 사용자와 선택한다.
 - 폴더 재구성 전 경로는 Git 699db5b에 보존됐다. UI 원문 12개는 archive/ui/CHANGES.md의 문서별 앵커로 합쳤으며 새 전체 상태 사본은 만들지 않았다. 문서 검사기는 새 폴더/색인 규칙을 검사한다.

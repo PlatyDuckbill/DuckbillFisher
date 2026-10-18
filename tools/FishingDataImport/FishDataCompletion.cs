@@ -41,7 +41,7 @@ internal static class FishDataCompletion
             var parameters = sourceFiles["fish-parameter.json"].RootElement;
             var root = JsonNode.Parse(baselineText)!.AsObject();
             Require(root["gameBuild"]!.GetValue<string>() == build, "Baseline KR build mismatch");
-            var original = root["fish"]!.Deserialize<FishingRule[]>(Json)!;
+            var original = FishingDatasetReader.ReadConditions(baselineText).Fish;
             var rules = original.ToDictionary(r => r.ItemId);
             using var game = new GameData(Path.Combine(args[0], "sqpack"), new LuminaOptions { DefaultExcelLanguage = Language.Korean });
             var items = game.GetExcelSheet<Item>()!;
@@ -168,7 +168,9 @@ internal static class FishDataCompletion
                 repository = manifest.GetProperty("repository").GetString(), revision = manifest.GetProperty("revision").GetString(),
                 license = manifest.GetProperty("license").GetString(), files = manifest.GetProperty("files") } }, Json);
             root["reviewedObservations"] = JsonNode.Parse(manifest.GetProperty("reviewedFacts").GetRawText());
-            File.WriteAllText(args[4], root.ToJsonString(Json) + "\n", new UTF8Encoding(false));
+            var outputJson = root.ToJsonString(Json) + "\n";
+            _ = FishingDatasetReader.ReadConditions(outputJson);
+            File.WriteAllText(args[4], outputJson, new UTF8Encoding(false));
             Directory.CreateDirectory(args[5]);
             var oceans = game.GetExcelSheet<FishParameter>()!.Where(r => r.RowId > 0 && r.IsInLog && r.OceanStars > 0 && r.Item.Is<Item>())
                 .OrderBy(r => r.RowId).Select(r => new Gap(r.RowId, r.Item.RowId, items.GetRow(r.Item.RowId).Name.ExtractText(),

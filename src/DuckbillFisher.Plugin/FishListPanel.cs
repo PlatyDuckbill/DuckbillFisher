@@ -98,6 +98,8 @@ internal sealed class FishListPanel(FishCatalog catalog, ITextureProvider textur
         if (view.Status.Key != T.CatalogLoaded)
             ImGui.TextWrapped(view.Status.Display);
         UiWidgets.GuideBanner(observed, personal, guideOpener);
+        ImGui.TextWrapped(UiText.Get(T.ForecastBasis));
+        UiWidgets.Tooltip(UiText.Get(T.ForecastScope, FishingAvailability.SearchDays));
         ImGui.SetNextItemWidth(-1);
         changed |= ImGui.InputTextWithHint("###CatalogSearch", UiText.Get(T.SearchPlaceholder), ref search, 100);
         var toolbarRight = ImGui.GetCursorPosX() + ImGui.GetContentRegionAvail().X;
@@ -372,7 +374,7 @@ internal sealed class FishListPanel(FishCatalog catalog, ITextureProvider textur
         else
         {
             var view = catalog.View;
-            report.AppendLine("DuckbillFisher summary/v6");
+            report.AppendLine("DuckbillFisher summary/v7");
             Append($"Plugin={typeof(Plugin).Assembly.GetName().Version}; Rows={view.Rows.Count}; Status={view.Status.Key}");
             Append($"Dataset={FishingData.Dataset.DataVersion}; Details={view.Rows.Count(row => row.Details is not null)}/{FishingData.Dataset.Fish.Length}; BuildMatch={catalog.ConditionBuildMatches}");
             Append($"Forecasts={view.Windows.Count}; OceanAreas={view.Rows.Count(row => row.Ocean is not null)}; SpearStored={FishingData.Dataset.Spearfishing.Length}; SpearUnknown={FishingData.SpearUnknown}");
@@ -382,6 +384,11 @@ internal sealed class FishListPanel(FishCatalog catalog, ITextureProvider textur
                 Append($"SelectedFish={selected.FishParameterId}; Item={selected.ItemId}; Ocean={selected.IsOceanFishing}; Collection={personal.Collection(selected.FishParameterId, observed)}; Grade={selected.Grade}; Timing={selected.TimeRestriction}");
                 var forecast = view.Windows.GetValueOrDefault(selected.FishParameterId);
                 Append($"SelectedForecast={forecast?.Kind.ToString() ?? "Unknown"}; ForecastAt={view.ForecastAt:O}; Start={forecast?.Start:O}; End={forecast?.End:O}; CopiedAt={DateTimeOffset.UtcNow:O}");
+                if (selected.Details is { Spot: { } spot } detail)
+                {
+                    var rule = detail.Rule;
+                    Append($"SelectedConditions: Spot={spot.Id}; Territory={spot.TerritoryId}; Map={spot.MapId}; Known={rule.ConditionsKnown}; StartET={rule.StartHour}; EndET={rule.EndHour}; Weather={string.Join(',', rule.WeatherIds)}; PreviousWeather={string.Join(',', rule.PreviousWeatherIds)}; Rates={string.Join(',', spot.WeatherRates.Select(rate => FormattableString.Invariant($"{rate.WeatherId}:{rate.Chance}")))}; HorizonDays={FishingAvailability.SearchDays}; FishEyes=False");
+                }
             }
         }
         report.AppendLine("DuckbillFisher MVP-01/preferences/v9");
