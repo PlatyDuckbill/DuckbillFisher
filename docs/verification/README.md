@@ -39,7 +39,7 @@
 
 ## 예측·알림
 
-- [초기 시간·날씨 예측 계산 대조](forecast/FORECAST.md)
+- [시간·날씨 계산과 현재 웹 표시 대조](forecast/FORECAST.md)
 - [열린 창 배경과 바다구렁이 예측 차이 조사](forecast/OPEN-WINDOW-DIAGNOSTICS.md)
 - [MVP-03 즐겨찾기 뷰·아이템 링크·전체 채널·한 줄 기록](alerts/ALERT-CATALOG-VIEW.md)
 - [MVP-03 알림 관리와 즐겨찾기 스크롤 수정](alerts/ALERT-MANAGEMENT.md)
