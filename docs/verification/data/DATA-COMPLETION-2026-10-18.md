@@ -57,4 +57,4 @@
 2. 황금나비어의 기존 ET09:00~14:00·섬세한 낚아채기, 지도 핀과 한영 UI 전환 유지.
 3. 이크에바지 가위의 금속 스피너·부분 확인, 성 파스릭의 석두의 직감 필요 어획과 지속 시간 미확인 표시. 부분 확인 2종에 상시 예측이 생기지 않아야 한다.
 
-정규 주 DLL: `C:\Users\hyogu\Downloads\DuckbillFisher\src\DuckbillFisher.Plugin\bin\Debug\DuckbillFisher.dll`. 사용자 상시 지시의 기본 언로드 상태로 반영했다. 공개 릴리스/태그/저장소 JSON/ZIP/push는 수행하지 않았으며 공개0.2.6.0을 유지한다.
+정규 주 DLL: `${env:DUCKBILL_ROOT}\src\DuckbillFisher.Plugin\bin\Debug\DuckbillFisher.dll`. 사용자 상시 지시의 기본 언로드 상태로 반영했다. 공개 릴리스/태그/저장소 JSON/ZIP/push는 수행하지 않았으며 공개0.2.6.0을 유지한다.

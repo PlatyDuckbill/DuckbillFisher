@@ -1,6 +1,17 @@
-# 0.2.6.0: 동일 버전의 dal4kr 런타임 지원
+# 동일 버전의 dal4kr 런타임 지원과 호환성 관리
 
 기록일: 2026-10-17. 기존 15.0.3.7 지원의 후속이며 숫자 버전과 배포 조합을 구분한다.
+
+## 0.3.1.0 개발 정비 (2026-10-18)
+
+- NativeRuntimeProfiles로 검증된 조합을 분리하고 각 조합에 게임 빌드를 연결했다. 기존 3개 조합의 9개 MVID/SHA256과 진단 값/형식은 유지한다. NativeRuntimeCompatibility는 로드된 DLL별로 한 번만 파일 해시를 읽어 전체 조합과 비교한다. 새 게임/DLL 허용·오프셋/시그니처 변경은 없다.
+- scripts/enter-dev.ps1은 현재 셸의 DUCKBILL_ROOT/DALAMUD_HOME과 선택적인 FFXIV_GAME_PATH를 설정한다. Plugin/데이터 도구의 공통 참조 검사는 누락 DLL과 Plugin API 세대 불일치를 조기에 보고한다. SDK/API/의존성 고정값은 변경하지 않았다.
+- 현재 wasdcxz15.0.3.7, 최소 KR15.0.3.6, dal4kr15.0.3.7, upstream15.0.3.6의 별도 Debug 빌드 및 현재 KR 정규 Debug 빌드: 경고0/오류0. 데이터 도구도 DALAMUD_HOME만 지정해 경고0/오류0으로 빌드했다.
+- upstream은 build/dalamud-reference.json의 revision/ZIP SHA256을 검증한 컴파일 전용 참조다. DLL은 .cache/upstream-15.0.3.6/refs에만 두었다. 최신 글로벌 클라이언트·게임 데이터·네이티브 구조/실기 지원을 확인한 것은 아니다.
+- 문서 링크/개인 경로 검사, 한영 리소스 검사, PowerShell 구문, git diff 공백 검사와 자료 보존 대조를 수행했다. data/archive의 v1은 원본 Git blob과 동일하며 테스트 입력 경로만 갱신했다. v2 조건/v1 등급/고지·기존 프로필의 MVID/SHA256은 유지했다. 테스트 추가·실행 없음.
+- 개발 DLL은 0.3.1.0이며 공개 0.3.0.0과 구분한다. Release 패키징·게시·push·인게임 확인은 수행하지 않았다.
+
+대표 재현은 정규 Debug DLL을 재로드하고 `/duckbillfisher` → 어류도감 열기 → 수집 상태 반영 → 직접 낚시 1회와 타이머/기록 확인 순이다. 기존 지원 PC에서 호환성 오류 없이 동작하고 수동 수집/설정/기록이 보존되어야 한다. 결과는 대기다. 미등록 게임/DLL은 기존처럼 네이티브 기능을 비활성으로 두고 수동 상태를 유지해야 하며 해당 환경의 실제 동작도 미확인이다.
 
 ## 실제 원인과 파일 확보
 

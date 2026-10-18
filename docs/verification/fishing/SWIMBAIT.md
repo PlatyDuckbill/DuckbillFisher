@@ -31,7 +31,7 @@
 - 별도 `.cache/swimbait-build/` 및 정규 Debug `dotnet build --no-restore -c Debug` 모두 현재 KR 참조로 경고0/오류0. 한영558키/형식 인자 검사 통과. 테스트 추가·실행 없음.
 - 정규 Plugin0.2.8.0/Core1.0.0.0/ko0.2.8.0/manifest API15 확인. 주 DLL1,185,280바이트, SHA256 `05F2B2BFB0F79CF36DAB28A69EDA162F0BD5D9A31CD3B1A63D7595AB1D95D261`.
 - 사용자 상시 지시의 기본 언로드 상태로 정규 빌드했다. 공개 배포/JSON/태그/ZIP 갱신 없음. 공개0.2.6.0 유지. 수정본 인게임 확인 대기다.
-- 로드 경로: `C:\Users\hyogu\Downloads\DuckbillFisher\src\DuckbillFisher.Plugin\bin\Debug\DuckbillFisher.dll`.
+- 로드 경로: `${env:DUCKBILL_ROOT}\src\DuckbillFisher.Plugin\bin\Debug\DuckbillFisher.dll`.
 - 새로 보관한 생미끼로1회 시전해 사용 미끼와 기록 행에 보관한 어종이 표시되는지 확인한다. 결과 후 칸이 비워져도 이름이 유지되고, 완전히 접은 뒤 재로드한 기록에도 유지돼야 한다. 정상일 때 같은 원시 로그는 다시 요청하지 않는다.
 
 ## 사용자 결과

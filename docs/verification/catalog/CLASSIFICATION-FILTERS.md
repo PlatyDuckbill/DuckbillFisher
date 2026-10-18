@@ -20,7 +20,7 @@
 ## 실행한 확인
 
 - `tools/FishingDataImport --classifications` 모드 실행: Inspected=1258, SourceCompared=903, PositiveTimingCompared=131, BigIncludingLegendary=335, Legendary=36, Failed=0. 출력과 제품 복사본 해시 일치 확인. 출력/입력 해시는 LF로 고정했다.
-- 별도 빌드: `dotnet build src/DuckbillFisher.Plugin/DuckbillFisher.Plugin.csproj --no-restore -c Debug -p:DalamudLibPath=C:/Users/hyogu/AppData/Roaming/XIVLauncherKR/addon/Hooks/dev/ -p:OutputPath=C:/Users/hyogu/Downloads/DuckbillFisher/.cache/classification-build/` 성공, 경고·오류 0.
+- 별도 빌드: `dotnet build src/DuckbillFisher.Plugin/DuckbillFisher.Plugin.csproj --no-restore -c Debug "-p:DalamudLibPath=${env:DALAMUD_HOME}/" "-p:OutputPath=${env:DUCKBILL_ROOT}/.cache/classification-build/"` 성공, 경고·오류 0.
 - `pwsh -NoLogo -NoProfile -File scripts/check-localization.ps1`: 한영 230키와 형식 인자 일치 확인.
 - 사용자 ‘언로드완료’ 후 같은 build 명령의 OutputPath 없이 정규 빌드 성공, 경고·오류 0. LF 정규화 반영 후 주 DLL 893952바이트/0.1.15.0, Core 30208바이트/1.0.0.0, ko 26112바이트/0.1.15.0, manifest InternalName DuckbillFisher/0.1.15.0/API 15 확인.
 - 실제 DLL에서 내장 JSON을 읽어 분류 335/터주왕 36/지원 빌드 일치를 확인했다. `git diff --check` 확인. 테스트는 추가/실행하지 않았다. 정량 성능/게임 조합 검증과 구분한다.

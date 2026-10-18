@@ -52,7 +52,7 @@ pwsh -NoLogo -NoProfile -File scripts/build.ps1 `
 - Windows PowerShell 7.6.7 / SDK 10.0.402 / KR Dalamud 15.0.3.6.
 - Core 테스트 15개 통과, 실패/건너뜀 0. 네이티브 읽기를 이 Core 테스트로 검증했다고 표현하지 않는다.
 - Plugin 0.1.2.0 Debug 빌드: 경고 0 / 오류 0, manifest 검사 성공.
-- DLL: `C:\Users\hyogu\Downloads\DuckbillFisher\src\DuckbillFisher.Plugin\bin\Debug\DuckbillFisher.dll`.
+- DLL: `${env:DUCKBILL_ROOT}\src\DuckbillFisher.Plugin\bin\Debug\DuckbillFisher.dll`.
 
 ## 실제 한섭 결과
 

@@ -19,7 +19,7 @@
 
 ## 실행한 확인
 
-- 별도 빌드: `dotnet build src/DuckbillFisher.Plugin/DuckbillFisher.Plugin.csproj --no-restore -c Debug -p:DalamudLibPath=C:/Users/hyogu/AppData/Roaming/XIVLauncherKR/addon/Hooks/dev/ -p:OutputPath=C:/Users/hyogu/Downloads/DuckbillFisher/.cache/current-region-build/` 성공, 경고·오류 0.
+- 별도 빌드: `dotnet build src/DuckbillFisher.Plugin/DuckbillFisher.Plugin.csproj --no-restore -c Debug "-p:DalamudLibPath=${env:DALAMUD_HOME}/" "-p:OutputPath=${env:DUCKBILL_ROOT}/.cache/current-region-build/"` 성공, 경고·오류 0.
 - `pwsh -NoLogo -NoProfile -File scripts/check-localization.ps1`: 한영 221키/형식 인자 일치 확인.
 - 사용자 ‘언로드 완료.’ 확인 후 위 명령의 OutputPath 인자 없이 정규 Debug 빌드 성공, 경고·오류 0. 주 DLL/ko 0.1.14.0, Core 1.0.0.0, manifest InternalName DuckbillFisher/0.1.14.0/API 15 확인.
 - `git diff --check` 확인. 테스트는 추가/실행하지 않았다. 지역 이동·구독 해제/재로드·필터 조합의 실제 게임 동작은 미확인이다.

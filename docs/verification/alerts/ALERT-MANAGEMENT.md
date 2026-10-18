@@ -28,7 +28,7 @@
 
 ## 실행한 검사
 
-- `dotnet build src/DuckbillFisher.Plugin/DuckbillFisher.Plugin.csproj --no-restore -c Debug -p:DalamudLibPath=C:/Users/hyogu/AppData/Roaming/XIVLauncherKR/addon/Hooks/dev/ -p:OutputPath=C:/Users/hyogu/Downloads/DuckbillFisher/.cache/alert-management-build/`: 경고·오류 0.
+- `dotnet build src/DuckbillFisher.Plugin/DuckbillFisher.Plugin.csproj --no-restore -c Debug "-p:DalamudLibPath=${env:DALAMUD_HOME}/" "-p:OutputPath=${env:DUCKBILL_ROOT}/.cache/alert-management-build/"`: 경고·오류 0.
 - `pwsh -NoLogo -NoProfile -File scripts/check-localization.ps1`: 한영 293키/형식 인자 일치. `git diff --check` 통과. 테스트는 요청이 없어 추가/실행하지 않았다.
 - 별도/정규 산출물: 주 DLL 961024바이트/0.1.21.0, Core 39936바이트/1.0.0.0, ko 리소스 33280바이트/0.1.21.0, manifest DuckbillFisher/0.1.21.0/API 15. 교체 전 정규 DLL 937472바이트/0.1.20.0 유지도 확인했다.
 - API 조사 스크립트의 pwsh 접근 실패는 동일 스크립트를 승인 실행해 완료했다. 결과는 설치 DLL 메타데이터 대조이며 실제 효과음 재생 증거가 아니다.

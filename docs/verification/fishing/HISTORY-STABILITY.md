@@ -28,7 +28,7 @@
 
 ## 실행한 검사
 
-- 별도 Debug: `dotnet build src/DuckbillFisher.Plugin/DuckbillFisher.Plugin.csproj --no-restore -c Debug -p:DalamudLibPath=C:/Users/hyogu/AppData/Roaming/XIVLauncherKR/addon/Hooks/dev/ -p:OutputPath=C:/Users/hyogu/Downloads/DuckbillFisher/.cache/history-stability-build/` 경고0/오류0.
+- 별도 Debug: `dotnet build src/DuckbillFisher.Plugin/DuckbillFisher.Plugin.csproj --no-restore -c Debug "-p:DalamudLibPath=${env:DALAMUD_HOME}/" "-p:OutputPath=${env:DUCKBILL_ROOT}/.cache/history-stability-build/"` 경고0/오류0.
 - `pwsh -NoLogo -NoProfile -File scripts/check-localization.ps1`: 한영558키/형식 인자 통과. 테스트 추가·실행 없음.
 - 고정15.0.3.6 참조의 별도 Debug(`.cache/history-stability-oldrefs/`)도 경고0/오류0. 최종 검사는 같은 프로젝트의 중간 파일 경합을 피하도록 두 참조 빌드를 순서대로 실행했다. Plugin0.2.7.0/Core1.0.0.0/ko0.2.7.0/manifest API15 확인.
 - 현재 참조 후보 주 DLL은1,184,768바이트, SHA256 `540F88EA20DA276AE4FE0D7EA3296D2ACD8D7ADB8E44733DC73309CF89293226`이다. 정규 빌드와 실제 로드 결과로 확대하지 않는다.

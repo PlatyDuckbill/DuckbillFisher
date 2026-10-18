@@ -30,7 +30,7 @@
 - 현재 참조 `XIVLauncherKR/addon/Hooks/dev/Dalamud.dll` 15.0.3.6과 동봉 XML을 개발 중 읽기 전용으로 조사했다. 기존 KR 네이티브 게이트는 수정하지 않았다.
 - `IChatGui.Print(string, string, ushort?)` → `PrintTagged` → 로컬 `chatQueue.Enqueue` 경로를 확인했다. 게임 명령/키 입력/서버 채팅 API를 추가하지 않았다.
 - `IDalamudPluginInterface.SavePluginConfig` → `PluginConfigurations.Save`는 `ReliableFileStorage.WriteAllTextAsync(...).GetAwaiter().GetResult()` 완료를 기다리는 것을 설치 DLL IL에서 확인했다. 외부 설정/계정 자료는 읽지 않았다.
-- 별도 빌드: `dotnet build src/DuckbillFisher.Plugin/DuckbillFisher.Plugin.csproj --no-restore -c Debug -p:DalamudLibPath=C:/Users/hyogu/AppData/Roaming/XIVLauncherKR/addon/Hooks/dev/ -p:OutputPath=C:/Users/hyogu/Downloads/DuckbillFisher/.cache/spawn-alert-build/`.
+- 별도 빌드: `dotnet build src/DuckbillFisher.Plugin/DuckbillFisher.Plugin.csproj --no-restore -c Debug "-p:DalamudLibPath=${env:DALAMUD_HOME}/" "-p:OutputPath=${env:DUCKBILL_ROOT}/.cache/spawn-alert-build/"`.
 - 별도 빌드 경고·오류 0. `pwsh -NoLogo -NoProfile -File scripts/check-localization.ps1`: 한영 265키/형식 인자 일치. `git diff --check` 통과. 테스트는 요청이 없어 추가/실행하지 않았다.
 - 별도/정규 산출물 확인: 주 DLL 937472바이트/0.1.20.0, Core 39424바이트/1.0.0.0, ko 리소스 30720바이트/0.1.20.0, manifest DuckbillFisher/0.1.20.0/API 15. 교체 전 정규 DLL 914432바이트/0.1.19.0 유지도 확인했다.
 - 사용자 ‘언로드 완료’ 후 OutputPath 지정 없는 정규 빌드 경고·오류 0, 한영 265키 검사를 재확인했다. 0.1.20.0 로드/실제 알림/설정 유지/중복·복귀 동작은 인게임 검증 대기다.

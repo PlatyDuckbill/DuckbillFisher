@@ -14,7 +14,7 @@
 
 ## 실행한 확인
 
-- 별도 빌드: `dotnet build src/DuckbillFisher.Plugin/DuckbillFisher.Plugin.csproj --no-restore -c Debug -p:DalamudLibPath=C:/Users/hyogu/AppData/Roaming/XIVLauncherKR/addon/Hooks/dev/ -p:OutputPath=C:/Users/hyogu/Downloads/DuckbillFisher/.cache/geography-ui-build/` 성공, 경고·오류 0.
+- 별도 빌드: `dotnet build src/DuckbillFisher.Plugin/DuckbillFisher.Plugin.csproj --no-restore -c Debug "-p:DalamudLibPath=${env:DALAMUD_HOME}/" "-p:OutputPath=${env:DUCKBILL_ROOT}/.cache/geography-ui-build/"` 성공, 경고·오류 0.
 - `pwsh -NoLogo -NoProfile -File scripts/check-localization.ps1`: 한영 244키/형식 인자 검사 통과. 사용하지 않는 이전 지역 항목 리소스는 제거했다.
 - 사용자 ‘언로드 완료’ 후 같은 build 명령에서 OutputPath를 빼고 정규 Debug 빌드 성공, 경고·오류 0. 주 DLL 912896바이트/0.1.17.0, Core 31744바이트/1.0.0.0, ko 27648바이트/0.1.17.0, manifest DuckbillFisher/0.1.17.0/API 15 확인.
 - `git diff --check` 확인. 테스트는 추가/실행하지 않았다. 실제 팝업 위치·스크롤·체크 배치·한영 전환·캐시 갱신과 화면 크기 조합은 인게임 미확인이다.

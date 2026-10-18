@@ -1,6 +1,9 @@
 # 한섭 낚시 조건 데이터
 
-0.2.9.0은 **`fishing.kr.v2.json` / `kr-regular-2026-10-17`**을 내장한다. 일반 도감 1,258종 모두 상세에 연결했으며 시간·날씨 조건을 확인한 1,256종과 부분 확인 2종을 구분한다. 직감 지속 시간 9종을 포함한 핵심 미확인 11종과 별도 범위의 전체 목록은 [잔여 보고서](../docs/verification/data/reports/fishing-data-2026-10-17/remaining.md)에 있다. 작살 자료 203건은 보존했다. `fishing.kr.v1.json`은 과거 검증 이력이며 현재 제품은 읽지 않는다. 입질 초 수 통계는 포함하지 않는다.
+현재 제품은 **`fishing.kr.v2.json` / `kr-regular-2026-10-17`**만 낚시 조건으로 내장한다. 일반 도감 1,258종 모두 상세에 연결했으며 시간·날씨 조건을 확인한 1,256종과 부분 확인 2종을 구분한다. 직감 지속 시간 9종을 포함한 핵심 미확인 11종과 별도 범위의 전체 목록은 [잔여 보고서](../docs/verification/data/reports/fishing-data-2026-10-17/remaining.md)에 있다. 작살 자료 203건은 보존했다. 입질 초 수 통계는 포함하지 않는다.
+
+- [archive/fishing.kr.v1.json](archive/fishing.kr.v1.json)은 기존 예측 테스트의 고정 입력으로 보존한다. 제품 로딩/패키징 대상이 아니며 v2와 병합하지 않는다. 테스트 출력의 파일명은 그대로 유지한다.
+- `fish-classifications.kr.v1.json`은 별도 **등급** 자료이며 현재 제품에서 사용하므로 현 위치에 유지한다. 파일명의 v1/v2는 서로 다른 자료의 형식 버전이다.
 
 ## 출처와 경계
 
@@ -14,6 +17,12 @@
 
 저장소 루트에서 실행한다. `.cache` 출력과 감사 JSON을 검토한 뒤 제품 자료로 복사한다. 1단계 결과는 보완 입력의 고정 기준이므로 완성된 제품 파일로 대체하지 않는다.
 
+먼저 [개발 환경 변수](../docs/development/WINDOWS-SETUP.md#개발-환경-변수)를 설정한다. 데이터 도구는 `DALAMUD_HOME`에서 Lumina를 참조하며 `FFXIV_GAME_PATH`는 실제 game 디렉터리다.
+
+```powershell
+. ./scripts/enter-dev.ps1 -GamePath 'C:/Program Files (x86)/FINAL FANTASY XIV - KOREA/game'
+```
+
 ### 1. 기존 원본 903종과 작살 203건
 
 ```powershell
@@ -22,7 +31,7 @@ $primary = Get-Content data/fishing-source.json -Raw | ConvertFrom-Json
 $baseUrl = "https://raw.githubusercontent.com/icykoneko/ff14-fish-tracker-app/$($primary.revision)"
 Invoke-WebRequest "$baseUrl/js/app/data.js" -OutFile .cache/fishing-sources/data.js
 Invoke-WebRequest "$baseUrl/private/fishData.yaml" -OutFile .cache/fishing-sources/tracker-fishData.yaml
-dotnet run --project tools/FishingDataImport -p:DalamudLibPath=C:/Users/hyogu/AppData/Roaming/XIVLauncherKR/addon/Hooks/dev/ -- data/fishing-source.json .cache/fishing-sources/data.js .cache/fishing-sources/tracker-fishData.yaml "C:/Program Files (x86)/FINAL FANTASY XIV - KOREA/game" .cache/fishing-all.json .cache/fishing-all-audit.json
+dotnet run --project tools/FishingDataImport -- data/fishing-source.json .cache/fishing-sources/data.js .cache/fishing-sources/tracker-fishData.yaml "$env:FFXIV_GAME_PATH" .cache/fishing-all.json .cache/fishing-all-audit.json
 ```
 
 기본 JSON의 LF 정규화 SHA256: `27811E206378FC768B086D44BCA21A25CB2D94FD31E24EC1D0303C94D04CAA1C`.
@@ -36,7 +45,7 @@ $staticUrl = "https://raw.githubusercontent.com/ffxiv-teamcraft/ffxiv-teamcraft/
 foreach ($file in $supplement.files.PSObject.Properties.Name) {
     Invoke-WebRequest "$staticUrl/$file" -OutFile ".cache/data-completion/$file"
 }
-dotnet run --project tools/FishingDataImport -p:DalamudLibPath=C:/Users/hyogu/AppData/Roaming/XIVLauncherKR/addon/Hooks/dev/ -- --complete "C:/Program Files (x86)/FINAL FANTASY XIV - KOREA/game" .cache/fishing-all.json data/fishing-supplement-source.json .cache/data-completion .cache/data-completion/completed.json .cache/data-completion/report
+dotnet run --project tools/FishingDataImport -- --complete "$env:FFXIV_GAME_PATH" .cache/fishing-all.json data/fishing-supplement-source.json .cache/data-completion .cache/data-completion/completed.json .cache/data-completion/report
 ```
 
 결과는 일반 903→1,258종, 변경 466종, 핵심 잔여 11종이다. 새 상세 355종(정적 자료 353종/개별 사실 2종), 기존 낚아채기 80종·입질 강도 4종·예측 위치 31종을 보완했다. 이 수치는 어종 간 중복을 포함한다. 기존 알려진 조건·미끼·예측 공식과 작살 자료는 변경하지 않았다. 변환은 KR 어종/Item/낚시터/미끼/날씨 ID, 시간 범위, 생미끼 순환, 기존 조건과 위치의 일치를 검사한다.
@@ -46,7 +55,7 @@ dotnet run --project tools/FishingDataImport -p:DalamudLibPath=C:/Users/hyogu/Ap
 검토한 `completed.json`을 `data/fishing.kr.v2.json`에 복사한 뒤 실행한다.
 
 ```powershell
-dotnet run --project tools/FishingDataImport -p:DalamudLibPath=C:/Users/hyogu/AppData/Roaming/XIVLauncherKR/addon/Hooks/dev/ -- --classifications "C:/Program Files (x86)/FINAL FANTASY XIV - KOREA/game" data/fishing.kr.v2.json .cache/data-completion/classifications.json .cache/data-completion/classifications-audit.json
+dotnet run --project tools/FishingDataImport -- --classifications "$env:FFXIV_GAME_PATH" data/fishing.kr.v2.json .cache/data-completion/classifications.json .cache/data-completion/classifications-audit.json
 ```
 
 - 출력 `fish-classifications.kr.v1.json`: KR 일반 도감 1,258종의 명시적 터주왕/터주 설명과 FishingNoteInfo.SpecialConditions=2 양성 집합을 개발 중 대조한 ID 자료다. 설명 전문·아이콘을 내보내지 않는다.

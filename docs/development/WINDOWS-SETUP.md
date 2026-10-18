@@ -16,17 +16,38 @@ pwsh -NoProfile -File scripts/inspect-environment.ps1
 
 설치 안내: [.NET](https://dotnet.microsoft.com/en-us/download/dotnet), [Git](https://git-scm.com/install/windows), [PowerShell](https://learn.microsoft.com/en-us/powershell/scripting/install/install-powershell-on-windows). 설치할 버전은 저장소 고정값을 따른다.
 
+## 개발 환경 변수
+
+저장소 루트에서 다음 스크립트를 dot-source한다. 값은 현재 PowerShell과 그 자식 프로세스에만 적용되며 사용자 프로필/레지스트리를 변경하지 않는다. 경로에 공백이 있어도 인자를 따옴표로 감싸 전달한다.
+
+```powershell
+# DALAMUD_HOME이 없으면 APPDATA 아래 KR dev 폴더를 선택한다.
+. ./scripts/enter-dev.ps1
+# 다른 배포판/설치 경로는 명시적으로 선택한다.
+. ./scripts/enter-dev.ps1 -DalamudPath 'D:/references/dalamud' -GamePath 'D:/FFXIV/game'
+```
+
+| 환경 변수 | 용도 |
+|---|---|
+| `DUCKBILL_ROOT` | 스크립트 위치에서 계산한 저장소 절대 경로 |
+| `DALAMUD_HOME` | 직접 dotnet 빌드/복원·개발 스크립트·데이터 도구가 공유하는 참조 폴더 |
+| `FFXIV_GAME_PATH` | 데이터 재생성용 실제 game 폴더. 일반 Plugin 빌드에는 불필요 |
+
+마지막 예시의 경로는 실제 설치에 맞춘다. `.env` 자동 로딩이나 머신 전체 환경 변경은 없다. 문서의 `${env:DUCKBILL_ROOT}`·`${env:DALAMUD_HOME}`은 이 세션 값을 뜻한다. 과거 verification/archive 문서에서도 개인 경로만 이 표기로 치환했으며 당시 배포판·버전·해시·실기 결과는 그대로 보존했다.
+
 ## KR 참조와 복원
 
 환경 스크립트의 후보 중 현재 실행하는 KR Dalamud 경로를 확인한다. 숫자 버전이 같아도 배포판/DLL이 다를 수 있다. 다른 PC의 지원 결과를 그대로 적용하지 않는다.
 
 ```powershell
 # 실제 확인한 Dalamud.dll 폴더로 지정한다.
-$duckbillRefs = 'C:/실제/KR/Dalamud/경로'
-dotnet restore src/DuckbillFisher.Plugin/DuckbillFisher.Plugin.csproj --locked-mode "-p:DalamudLibPath=$duckbillRefs/"
+. ./scripts/enter-dev.ps1 -DalamudPath 'C:/실제/KR/Dalamud/경로'
+dotnet restore src/DuckbillFisher.Plugin/DuckbillFisher.Plugin.csproj --locked-mode
 ```
 
 복원이 끝나면 [WORKFLOW의 직접 빌드](WORKFLOW.md#windows-빌드)를 따른다. 일반 준비에서 테스트를 자동 실행하지 않는다. PowerShell 파일 차단이 있으면 해당 파일을 검토한 후 그 파일만 차단 해제하며 시스템 전체 실행 정책을 바꾸지 않는다.
+
+글로벌/upstream 컴파일도 해당 참조 폴더를 `-DalamudPath`로 지정해 별도 출력으로 빌드한다. 고정 upstream 출처·해시는 `build/dalamud-reference.json`에 있으며 CI도 이를 사용한다. SDK/API 세대 변경은 자동 추종하지 않는다. 현재 KR 조건/분류 자료와 네이티브 계약은 글로벌 실기 검증을 대신하지 않으며, 미등록 게임/DLL 조합의 네이티브 기능은 비활성으로 유지된다.
 
 ## 개발 플러그인 로드
 

@@ -67,7 +67,7 @@
 
 ## 실행 결과와 다음 확인
 
-- 별도 빌드: `dotnet build src/DuckbillFisher.Plugin/DuckbillFisher.Plugin.csproj --no-restore -c Debug -p:DalamudLibPath=C:/Users/hyogu/AppData/Roaming/XIVLauncherKR/addon/Hooks/dev/ -p:OutputPath=C:/Users/hyogu/Downloads/DuckbillFisher/.cache/open-window-build/` 성공, 경고·오류 0.
+- 별도 빌드: `dotnet build src/DuckbillFisher.Plugin/DuckbillFisher.Plugin.csproj --no-restore -c Debug "-p:DalamudLibPath=${env:DALAMUD_HOME}/" "-p:OutputPath=${env:DUCKBILL_ROOT}/.cache/open-window-build/"` 성공, 경고·오류 0.
 - `pwsh -NoLogo -NoProfile -File scripts/check-localization.ps1`: 한영 245키/형식 인자 통과. `git diff --check` 통과. 테스트 추가/실행 없음. 위 소스 실행은 실제 보고 시각의 조사 계산이다.
 - 사용자 ‘언로드 완료’ 후 OutputPath 없이 정규 Debug 빌드 성공, 경고·오류 0. 주 DLL 914432바이트/0.1.19.0, Core 32256바이트/1.0.0.0, ko 리소스 27648바이트/0.1.19.0, manifest DuckbillFisher/0.1.19.0/API 15 확인.
 - 사용자 ‘배경 로드 문제 없음’으로 로드/배경 표시 대표 확인 통과. 선택/호버·상시 비강조·한영/모든 테마·폭 조합의 개별 확인까지 확대하지 않는다. 이번 후속은 문서와 개발 중 웹/설치 리소스 조사이며 빌드/리소스 검사/테스트를 재실행하지 않았다.

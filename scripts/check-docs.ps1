@@ -28,6 +28,9 @@ $problems = [Collections.Generic.List[string]]::new()
 $links = 0
 foreach ($path in $files) {
     $relative = [IO.Path]::GetRelativePath($root, $path).Replace('\', '/')
+    if ($contents[$path] -match '(?i)\b[A-Z]:[\\/]Users[\\/][^\\/\s`"<>]+') {
+        $problems.Add("${relative}: machine-specific user path; use DUCKBILL_ROOT, DALAMUD_HOME or a standard environment variable.")
+    }
     $fence = ''
     $lineNumber = 0
     foreach ($line in ($contents[$path] -split '\r?\n')) {

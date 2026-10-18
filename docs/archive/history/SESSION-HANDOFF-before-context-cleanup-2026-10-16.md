@@ -57,7 +57,7 @@
 
 이 버전들은 이전 확인 값이다. 환경 출력과 현재 설치가 다르면 변경 내용을 기록하고 호환성을 검토한다. 자동으로 최신 SDK/API로 올리지 않는다. Mac의 `.dotnet`, `.cache`, `/private/tmp` 도구 경로를 Windows에 적용하지 않는다.
 
-현재 작업 루트는 `C:\Users\hyogu\Downloads\DuckbillFisher`다. 이 PC에서 SDK 10.0.402와 KR Dalamud 15.0.3.6을 재확인했다. PowerShell 7.6.7은 Microsoft Store 설치이며, 현재 도구의 기본 셸은 Windows PowerShell 5.1이다. 샌드박스 안에서는 `pwsh` 별칭 실행이 실패하고 실제 설치 파일 실행도 접근 거부되지만, 승인된 샌드박스 밖 실행에서는 둘 다 정상 동작한다. 이 도구 환경에서 PowerShell 7 명령은 실행 승인 절차를 거쳐 샌드박스 밖에서 호출한다. PowerShell 재설치나 PATH 변경은 하지 않았다. 이 실행 확인은 Plugin 빌드·Core 테스트·인게임 검증 결과가 아니다.
+현재 작업 루트는 `${env:DUCKBILL_ROOT}`다. 이 PC에서 SDK 10.0.402와 KR Dalamud 15.0.3.6을 재확인했다. PowerShell 7.6.7은 Microsoft Store 설치이며, 현재 도구의 기본 셸은 Windows PowerShell 5.1이다. 샌드박스 안에서는 `pwsh` 별칭 실행이 실패하고 실제 설치 파일 실행도 접근 거부되지만, 승인된 샌드박스 밖 실행에서는 둘 다 정상 동작한다. 이 도구 환경에서 PowerShell 7 명령은 실행 승인 절차를 거쳐 샌드박스 밖에서 호출한다. PowerShell 재설치나 PATH 변경은 하지 않았다. 이 실행 확인은 Plugin 빌드·Core 테스트·인게임 검증 결과가 아니다.
 
 ## Windows로 이번 소스와 이력 가져오기
 

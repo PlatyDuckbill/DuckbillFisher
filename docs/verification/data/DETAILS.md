@@ -44,7 +44,7 @@
 dotnet run --project .cache/detail-audit/detail-audit.csproj
 pwsh -NoLogo -NoProfile -File scripts/check-localization.ps1
 dotnet build src/DuckbillFisher.Plugin/DuckbillFisher.Plugin.csproj --no-restore -c Debug `
-  -p:DalamudLibPath=C:/Users/hyogu/AppData/Roaming/XIVLauncherKR/addon/Hooks/dev/
+  "-p:DalamudLibPath=${env:DALAMUD_HOME}/"
 ```
 
 - 별도 Debug 출력과 사용자 언로드 확인 후 정규 Debug 출력: 경고 0 / 오류 0. 정규 DLL 실제 존재·버전 0.1.5.0·한국어 DLL 존재를 확인했다.

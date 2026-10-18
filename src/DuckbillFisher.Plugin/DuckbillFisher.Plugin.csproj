@@ -2,7 +2,7 @@
   <PropertyGroup>
     <AssemblyName>DuckbillFisher</AssemblyName>
     <RootNamespace>DuckbillFisher.Plugin</RootNamespace>
-    <Version>0.3.0.0</Version>
+    <Version>0.3.1.0</Version>
     <NeutralLanguage>en</NeutralLanguage>
     <Author>PlatyDuckbill</Author>
     <Name>DuckbillFisher</Name>
@@ -17,9 +17,11 @@
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <ItemGroup>
+    <_DuckbillRequiredReference Include="Dalamud;Dalamud.Bindings.ImGui;Dalamud.Bindings.ImPlot;Dalamud.Bindings.ImGuizmo;FFXIVClientStructs;InteropGenerator.Runtime;Newtonsoft.Json;Lumina;Lumina.Excel;Serilog;Microsoft.Extensions.ObjectPool" />
     <ProjectReference Include="../DuckbillFisher.Core/DuckbillFisher.Core.csproj" />
     <EmbeddedResource Include="../../data/fishing.kr.v2.json" LogicalName="DuckbillFisher.FishingData" />
     <EmbeddedResource Include="../../data/fish-classifications.kr.v1.json" LogicalName="DuckbillFisher.FishClassifications" />
     <EmbeddedResource Include="../../THIRD-PARTY-NOTICES.txt" LogicalName="DuckbillFisher.ThirdPartyNotices" />
   </ItemGroup>
+  <Import Project="../../build/DalamudReferences.targets" />
 </Project>

@@ -31,7 +31,8 @@
 
 ## 호환성과 실패
 
-- NativeRuntimeCompatibility가 KR 게임과 **배포판별 세 모듈 조합**의 MVID/SHA256을 판정한다. 같은 숫자 버전의 다른 배포판을 동일시하거나 개별 허용 모듈을 섞지 않는다.
+- NativeRuntimeProfiles는 검증된 **게임 빌드별·배포판별 세 모듈 조합**의 MVID/SHA256을 관리하고 NativeRuntimeCompatibility는 환경 수집과 판정을 담당한다. 각 DLL은 초기화 때 한 번만 해시를 읽어 후보 조합과 비교한다. 같은 숫자 버전의 다른 배포판을 동일시하거나 개별 허용 모듈을 섞지 않는다.
+- 빌드 참조는 `DALAMUD_HOME` 또는 명시한 `DalamudLibPath`로 선택하며 공통 `build/DalamudReferences.targets`가 누락 DLL/API 세대 차이를 검출한다. 컴파일 가능한 SDK/API와 실제 네이티브 지원 계약은 별개다. 새 지역/게임 프로필은 관련 자료·구조·스레드·수명·실기 확인을 마친 뒤 추가하며 현재는 KR 조합만 등록돼 있다.
 - 수집/도감 열기/타이머/SE는 검증된 지원 계약을 재사용한다. 미끼 페이지 연결 실패는 페이지 표식만 생략하며 다른 검증 기능을 막지 않는다.
 - 가드 실패는 실제 사유를 표시하고 네이티브 읽기를 막는다. 정적 자료·수동 상태를 미수집으로 바꾸지 않는다. [런타임 근거](../verification/native/NATIVE-RUNTIME-DAL4KR.md).
 - 단순 Fishing 플래그 관찰기는 어획의 증거가 아니다. FishingTracker는 따로 검증한 본인 로그/단계만 적용한다. Phase 값 하나 또는 Actor=NoSource만으로 성공/실패/본인을 추정하지 않는다.

@@ -13,7 +13,7 @@
 ## 실행한 빌드·패키지 검사
 
 ```powershell
-dotnet build src/DuckbillFisher.Plugin/DuckbillFisher.Plugin.csproj --no-restore -c Release -p:DalamudLibPath=C:/Users/hyogu/AppData/Roaming/XIVLauncherKR/addon/Hooks/dev/
+dotnet build src/DuckbillFisher.Plugin/DuckbillFisher.Plugin.csproj --no-restore -c Release "-p:DalamudLibPath=${env:DALAMUD_HOME}/"
 pwsh -NoLogo -NoProfile -File scripts/check-localization.ps1
 pwsh -NoLogo -NoProfile -File scripts/prepare-release.ps1 -PackagePath src/DuckbillFisher.Plugin/bin/Release/DuckbillFisher/latest.zip -AssetBaseUrl https://github.com/PlatyDuckbill/DuckbillFisher/releases/download/v0.2.4.0 -OutputDirectory artifacts/share/0.2.4.0
 ```

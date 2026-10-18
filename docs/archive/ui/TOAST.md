@@ -7,7 +7,7 @@
 - 사용자 보고는 `팝업 따로 안 뜨는 것 같음`이며 실제 표시 통과로 기록하지 않는다. 사용자가 기능 제거를 요청하여 표시 원인 재조사 없이 제품 범위에서 제외했다. 아래 0.1.24.0 내용은 도입 이력이다.
 - 소스 0.1.25.0에서 IToastGui 주입/출력 호출/설정 체크/문구/발송 기록의 팝업 표시를 제거했다. 로컬 채팅/선택 SE/아이템·지도 링크/예약·영속 중복 방지와 접는 UI는 유지한다. 알림 진단은 Toast 필드를 제거한 `alerts/v6`다.
 - 설정 schema v7은 v1~v6를 받아들이며 삭제한 팝업 속성은 사용하지 않는다. 기존 즐겨찾기/개별 시간/채널/효과음/캐릭터 수동 기록/창 기록을 그대로 복사한다. 실제 저장 복원은 다음 로드에서 확인한다.
-- `dotnet build src/DuckbillFisher.Plugin/DuckbillFisher.Plugin.csproj --no-restore -c Debug -p:DalamudLibPath=C:/Users/hyogu/AppData/Roaming/XIVLauncherKR/addon/Hooks/dev/ -p:OutputPath=C:/Users/hyogu/Downloads/DuckbillFisher/.cache/no-toast-build/`: 경고·오류 0.
+- `dotnet build src/DuckbillFisher.Plugin/DuckbillFisher.Plugin.csproj --no-restore -c Debug "-p:DalamudLibPath=${env:DALAMUD_HOME}/" "-p:OutputPath=${env:DUCKBILL_ROOT}/.cache/no-toast-build/"`: 경고·오류 0.
 - `pwsh -NoLogo -NoProfile -File scripts/check-localization.ps1`: 한영 382키/형식 인자 일치. `git diff --check` 통과. 제품 소스에 Toast 관련 참조가 남지 않은 것을 검색으로 확인했다. 지역 선택용 ImGui 팝업은 별개다. 테스트 추가/실행 없음.
 - 사용자 새 `언로드 완료` 확인 후 위 명령에서 OutputPath 옵션을 제외한 정규 Debug 빌드를 실행했다. 경고·오류 0, 한영 382키/형식 인자 검사 재통과. 테스트 미실행, 인게임 확인 대기다.
 - 별도/정규 산출물 모두 주 DLL 977920바이트/0.1.25.0, Core 39936바이트/1.0.0.0, ko 리소스 38912바이트/0.1.25.0이다. 정규 manifest DuckbillFisher/0.1.25.0/API 15 확인, 정규 DLL 교체 완료.

@@ -42,8 +42,8 @@
 dotnet run --project .cache/collection-audit/collection-audit.csproj
 pwsh -NoLogo -NoProfile -File .cache/inspect-collection-events.ps1
 dotnet build src/DuckbillFisher.Plugin/DuckbillFisher.Plugin.csproj --no-restore -c Debug `
-  -p:DalamudLibPath=C:/Users/hyogu/AppData/Roaming/XIVLauncherKR/addon/Hooks/dev/ `
-  -p:OutputPath=C:/Users/hyogu/Downloads/DuckbillFisher/.cache/mvp04-collection-build/
+  "-p:DalamudLibPath=${env:DALAMUD_HOME}/" `
+  "-p:OutputPath=${env:DUCKBILL_ROOT}/.cache/mvp04-collection-build/"
 pwsh -NoLogo -NoProfile -File scripts/check-localization.ps1
 ```
 

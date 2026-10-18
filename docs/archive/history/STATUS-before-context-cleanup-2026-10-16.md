@@ -13,7 +13,7 @@
 - SDK: Dalamud.NET.Sdk 15.0.0 → .NET 10 / C# 14 / Plugin x64. Core는 net10.0.
 - 컴파일 참조: upstream D15.0.3.6, revision `3e8e6eb456c928401febd1d9452c4b8d4cad0eb5`. URL/SHA256은 build/dalamud-reference.json.
 - 원격 origin: PlatyDuckbill/DuckbillFisher. 원격 게시와 접근 검증은 별도로 진행한다.
-- 현재 Windows 작업 루트는 `C:\Users\hyogu\Downloads\DuckbillFisher`이며 Git 2.56.0.windows.2와 .NET SDK 10.0.402, KR Dalamud 15.0.3.6을 재확인했다. PowerShell 7.6.7은 정상 설치되어 있다. 현재 도구의 샌드박스 안에서는 Store 실행 별칭과 실제 설치 파일 모두 실행이 차단되며, 승인된 샌드박스 밖 실행에서는 두 경로 모두 성공했다. 이후 `pwsh` 명령은 필요한 승인을 거쳐 샌드박스 밖에서 실행한다. 이번 확인에서는 빌드·Core 테스트를 실행하지 않았다.
+- 현재 Windows 작업 루트는 `${env:DUCKBILL_ROOT}`이며 Git 2.56.0.windows.2와 .NET SDK 10.0.402, KR Dalamud 15.0.3.6을 재확인했다. PowerShell 7.6.7은 정상 설치되어 있다. 현재 도구의 샌드박스 안에서는 Store 실행 별칭과 실제 설치 파일 모두 실행이 차단되며, 승인된 샌드박스 밖 실행에서는 두 경로 모두 성공했다. 이후 `pwsh` 명령은 필요한 승인을 거쳐 샌드박스 밖에서 실행한다. 이번 확인에서는 빌드·Core 테스트를 실행하지 않았다.
 
 ## 구현 및 검증
 
@@ -83,7 +83,7 @@
 
 공개 플래그 관찰·수첩 열림·시트 읽기·기준 어종 비트 읽기·재접속 초기화/새 조회를 한섭에서 확인했다. 미확인 조건은 Unknown으로 남기고 정밀 타이머/자동 필터와 별개로 MVP-01 정적 목록부터 진행한다. ENV-03의 다른 캐릭터 전환·정밀 시점·전체 수첩 준비까지 완료한 것은 아니다.
 
-현재 작업 폴더는 `C:\Users\hyogu\Downloads\DuckbillFisher`이며 Git 이력과 최신 관찰 코드를 확인했다. 같은 폴더에서 계속 개발한다. 실제 원격 접근·게시 상태는 별도 미확인이다.
+현재 작업 폴더는 `${env:DUCKBILL_ROOT}`이며 Git 이력과 최신 관찰 코드를 확인했다. 같은 폴더에서 계속 개발한다. 실제 원격 접근·게시 상태는 별도 미확인이다.
 
 1. 0.1.5.0의 초기 10종 연결과 황금나비어 상세/지도 핀, 고정 원본 기준 예측 계산 대조는 통과했다. 같은 로드/지도 확인을 반복 요청하지 않는다. 실제 게임 ET/날씨 동시 대조는 남아 있으며 예측을 완전한 어획 가능 판정으로 표현하지 않는다.
 2. 넵토드래곤 직감 안내·시간순 정렬·영어 전환·자료 없는 어종 지도·실패/기존 수첩 진단은 추가 확인으로 유지한다. 데이터 구조와 출처는 data/README.md, 세부 결과는 docs/verification/data/DETAILS.md를 따른다.

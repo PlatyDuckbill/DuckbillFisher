@@ -11,7 +11,7 @@
 ## 실제 실행한 검사
 
 1. `git status`로 사용자 파일을 제외했고 원격main/새 태그 부재를 조회했다. 인증을 출력/파일에 저장하지 않고 Git credential을 메모리에서 사용해 공개 저장소/Push 권한/비보관 상태를 확인했다. 당시 공개 최신은v0.2.6.0, 원격main은3dbf947이었다.
-2. `dotnet build src/DuckbillFisher.Plugin/DuckbillFisher.Plugin.csproj --no-restore -c Release -p:DalamudLibPath=C:/Users/hyogu/Downloads/DuckbillFisher/.cache/compat-15.0.3.6/full/ -p:OutputPath=C:/Users/hyogu/Downloads/DuckbillFisher/.cache/bait-preparation-release/`: 경고0/오류0.
+2. `dotnet build src/DuckbillFisher.Plugin/DuckbillFisher.Plugin.csproj --no-restore -c Release "-p:DalamudLibPath=${env:DUCKBILL_ROOT}/.cache/compat-15.0.3.6/full/" "-p:OutputPath=${env:DUCKBILL_ROOT}/.cache/bait-preparation-release/"`: 경고0/오류0.
 3. `scripts/check-localization.ps1`: 한영606키/형식 인자 일치. 테스트 추가/실행 없음. `scripts/build.ps1`은 실행하지 않았다.
 4. `scripts/prepare-release.ps1 -PackagePath .cache/bait-preparation-release/DuckbillFisher/latest.zip -AssetBaseUrl https://github.com/PlatyDuckbill/DuckbillFisher/releases/download/v0.3.0.0 -OutputDirectory artifacts/share/0.3.0.0`: 통과. 후보 설치 JSON만 생성했고 공개repo JSON은 수정하지 않았다.
 5. ZIP7개 항목을`.cache/release-validation/0.3.0.0/`에 새로 추출했다. 모든 추출 파일/Release 출력 SHA256이 같았다. Plugin/ko0.3.0.0, Core1.0.0.0/API15, 설명17줄이다. 공급 DLL/SDK는 ZIP에 포함하지 않는다.
@@ -22,7 +22,7 @@
 - ZIP: `artifacts/share/0.3.0.0/DuckbillFisher-0.3.0.0.zip`, **370,524바이트**.
 - SHA256: **4EC80617542A66D55AB5FA649FAAB4DB963DB173BE3E7215DBC3BFB9430C605F**.
 - 체크섬: 같은 폴더의`DuckbillFisher-0.3.0.0.zip.sha256`.
-- 실제 확인 DLL: `C:\Users\hyogu\Downloads\DuckbillFisher\.cache\release-validation\0.3.0.0\DuckbillFisher.dll`.
+- 실제 확인 DLL: `${env:DUCKBILL_ROOT}\.cache\release-validation\0.3.0.0\DuckbillFisher.dll`.
 - 인게임 확인 뒤 같은 ZIP을 게시한다. 실행 파일을 재빌드/변경하면 확인 범위도 다시 구분한다.
 
 ## 남은 확인과 게시 순서

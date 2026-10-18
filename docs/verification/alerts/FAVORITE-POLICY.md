@@ -17,7 +17,7 @@
 
 ## 실행한 검사
 
-- `dotnet build src/DuckbillFisher.Plugin/DuckbillFisher.Plugin.csproj --no-restore -c Debug -p:DalamudLibPath=C:/Users/hyogu/AppData/Roaming/XIVLauncherKR/addon/Hooks/dev/ -p:OutputPath=C:/Users/hyogu/Downloads/DuckbillFisher/.cache/favorite-policy-build/`: 경고·오류 0.
+- `dotnet build src/DuckbillFisher.Plugin/DuckbillFisher.Plugin.csproj --no-restore -c Debug "-p:DalamudLibPath=${env:DALAMUD_HOME}/" "-p:OutputPath=${env:DUCKBILL_ROOT}/.cache/favorite-policy-build/"`: 경고·오류 0.
 - `pwsh -NoLogo -NoProfile -File scripts/check-localization.ps1`: 한영 375키/형식 인자 일치. `git diff --check` 통과. 테스트는 요청이 없어 추가/실행하지 않았다.
 - 사용자 새 언로드 확인 후 위 빌드 명령에서 OutputPath 옵션을 제외한 정규 Debug 빌드 실행: 경고·오류 0. 리소스 검사도 다시 실행하여 한영 375키/형식 인자 일치를 확인했다.
 - 별도/정규 산출물 모두 주 DLL 975360바이트/0.1.23.0, Core 39936바이트/1.0.0.0, ko 리소스 38400바이트/0.1.23.0, manifest DuckbillFisher/0.1.23.0/API 15를 확인했다.

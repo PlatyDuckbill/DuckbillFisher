@@ -28,8 +28,8 @@
 
 ```powershell
 dotnet build src/DuckbillFisher.Plugin/DuckbillFisher.Plugin.csproj --no-restore -c Debug `
-  -p:DalamudLibPath=C:/Users/hyogu/AppData/Roaming/XIVLauncherKR/addon/Hooks/dev/ `
-  -p:OutputPath=C:/Users/hyogu/Downloads/DuckbillFisher/.cache/mvp01-list-build/
+  "-p:DalamudLibPath=${env:DALAMUD_HOME}/" `
+  "-p:OutputPath=${env:DUCKBILL_ROOT}/.cache/mvp01-list-build/"
 pwsh -NoLogo -NoProfile -File scripts/check-localization.ps1
 ```
 

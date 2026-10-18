@@ -1,0 +1,19 @@
+<Project>
+  <!-- Shared by Plugin and the offline data importer. Never fall back to another installation. -->
+  <Target Name="ValidateDuckbillReferences" BeforeTargets="ResolveAssemblyReferences">
+    <Error Condition="'$(DalamudLibPath)' == ''" Text="Set DALAMUD_HOME or -p:DalamudLibPath to the inspected reference directory. See scripts/enter-dev.ps1." />
+    <Error Condition="!Exists('$(DalamudLibPath)/%(_DuckbillRequiredReference.Identity).dll')"
+           Text="Missing reference: $(DalamudLibPath)/%(_DuckbillRequiredReference.Identity).dll. Use one complete reference distribution; do not mix DLLs." />
+  </Target>
+  <Target Name="ValidateDuckbillApi" BeforeTargets="ResolveAssemblyReferences" DependsOnTargets="ValidateDuckbillReferences" Condition="'$(UsingDalamudNETSdk)' == 'true'">
+    <GetAssemblyIdentity AssemblyFiles="$(DalamudLibPath)/Dalamud.dll">
+      <Output TaskParameter="Assemblies" ItemName="_DuckbillDalamudIdentity" />
+    </GetAssemblyIdentity>
+    <PropertyGroup>
+      <_DuckbillReferenceVersion>@(_DuckbillDalamudIdentity->'%(Version)')</_DuckbillReferenceVersion>
+      <_DuckbillReferenceApi>$([System.Version]::Parse('$(_DuckbillReferenceVersion)').Major)</_DuckbillReferenceApi>
+    </PropertyGroup>
+    <Error Condition="'$(_DuckbillReferenceApi)' != '$(DalamudApiLevel)'"
+           Text="Reference API mismatch: Dalamud $(_DuckbillReferenceVersion), project API $(DalamudApiLevel). Review SDK/API compatibility separately before upgrading." />
+  </Target>
+</Project>

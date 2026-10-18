@@ -12,12 +12,13 @@
 
 기본 환경은 FFXIV가 실행되는 Windows PC다. 현재 경로/지원 참조는 [HANDOFF](../SESSION-HANDOFF.md#환경과-경로), 새 PC 도구 설치는 [WINDOWS-SETUP](WINDOWS-SETUP.md)을 따른다.
 
-PowerShell 7, 저장소 루트에서 실행한다. 다음 변수는 **해당 세션에서 먼저 설정**하며 오래된 캐시 경로를 다른 PC에 그대로 쓰지 않는다.
+PowerShell 7, 저장소 루트에서 실행한다. [개발 환경 변수](WINDOWS-SETUP.md#개발-환경-변수)를 **해당 세션에서 먼저 설정**하며 오래된 캐시 경로를 다른 PC에 그대로 쓰지 않는다.
 
 ```powershell
-$duckbillRoot = (Get-Location).Path
+. ./scripts/enter-dev.ps1
+$duckbillRoot = $env:DUCKBILL_ROOT
 $duckbillProject = 'src/DuckbillFisher.Plugin/DuckbillFisher.Plugin.csproj'
-$duckbillRefs = 'C:/Users/hyogu/AppData/Roaming/XIVLauncherKR/addon/Hooks/dev/'
+$duckbillRefs = $env:DALAMUD_HOME
 $duckbillBuild = Join-Path $duckbillRoot '.cache/work-build'
 dotnet build $duckbillProject --no-restore -c Debug "-p:DalamudLibPath=$duckbillRefs" "-p:OutputPath=$duckbillBuild/"
 if ($LASTEXITCODE -ne 0) { throw 'Separate build failed' }
@@ -29,6 +30,7 @@ pwsh -NoLogo -NoProfile -File scripts/check-localization.ps1
 
 - 각 명령의 종료 코드와 경고/오류를 확인한다. 실패하면 다음 빌드·교체·패키징을 중단하고 원인을 해결한다.
 - 신규 체크아웃은 같은 참조로 먼저 dotnet restore --locked-mode를 수행한다. 의존성 변경은 별도 작업이며 lock 파일을 임의 갱신하지 않는다.
+- 참조 선택은 명시한 `-p:DalamudLibPath` → `DALAMUD_HOME` 순이다. Plugin SDK와 데이터 도구 모두 같은 환경 변수를 사용한다. `build/DalamudReferences.targets`가 누락 DLL·Plugin API 세대 불일치를 조기에 보고한다. 참조 디렉터리는 한 배포판의 완전한 묶음으로 준비한다.
 - 언로드는 사용자 상시 지시의 기본 상태다. 반복 확인하지 않는다. 파일 잠금 실패를 우회하거나 게임을 강제 종료하지 않는다.
 - 정규 등록 경로는 저장소 아래 src/DuckbillFisher.Plugin/bin/Debug/DuckbillFisher.dll의 **절대 경로**다. 동시에 다른 개발/배포 경로를 로드하지 않는다.
 - 최소 참조/다른 지원 배포판 빌드는 게임 API 변경이나 배포에서 필요한 범위만 수행한다. 일반 upstream CI 성공은 KR 런타임 확인이 아니다.

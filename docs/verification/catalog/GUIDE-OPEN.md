@@ -23,7 +23,7 @@
 ## 실행한 검사와 남은 확인
 
 - 첫 별도 빌드는 UiMessage 네임스페이스 누락으로 오류 3개가 발생했다. using 추가 후 같은 dotnet build 재실행 → 경고 0/오류 0.
-- 빌드는 SESSION-HANDOFF 명령에 `-p:OutputPath=C:/Users/hyogu/Downloads/DuckbillFisher/.cache/ui-refine-build/`를 추가했다.
+- 빌드는 SESSION-HANDOFF 명령에 `-p:OutputPath=${env:DUCKBILL_ROOT}/.cache/ui-refine-build/`를 추가했다.
 - `pwsh -NoLogo -NoProfile -File scripts/check-localization.ps1` → 한영 454키/형식 인자 일치. 테스트 추가/실행 없음. tmp_note.md 접근 없음.
 - 사용자 언로드 완료 확인과 사진 개선을 함께 빌드하라는 요청에 따라 정규 0.1.34.0에 포함했다. 정규 빌드 경고·오류 0/한영 455키 확인. [통합 빌드 기록](../../archive/ui/CHANGES.md#mvp-01-ui-screenshot-polish). 로컬 커밋만 수행하며 푸시/릴리스 없음.
 

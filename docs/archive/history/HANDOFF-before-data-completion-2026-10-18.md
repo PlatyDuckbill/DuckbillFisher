@@ -15,10 +15,10 @@
 
 ## 환경과 DLL
 
-- 작업 폴더: `C:\Users\hyogu\Downloads\DuckbillFisher`.
+- 작업 폴더: `${env:DUCKBILL_ROOT}`.
 - 게임: `C:\Program Files (x86)\FINAL FANTASY XIV - KOREA\game`, KR 빌드 2026.10.06.0000.0000.
-- 현재 로컬 참조: `C:\Users\hyogu\AppData\Roaming\XIVLauncherKR\addon\Hooks\dev`, wasdcxz Dalamud15.0.3.7/API15. Release 최저 참조15.0.3.6은 `.cache/compat-15.0.3.6/full/`에 고정 원본으로 복구했다.
-- 개발 DLL: `C:\Users\hyogu\Downloads\DuckbillFisher\src\DuckbillFisher.Plugin\bin\Debug\DuckbillFisher.dll`.
+- 현재 로컬 참조: `${env:DALAMUD_HOME}`, wasdcxz Dalamud15.0.3.7/API15. Release 최저 참조15.0.3.6은 `.cache/compat-15.0.3.6/full/`에 고정 원본으로 복구했다.
+- 개발 DLL: `${env:DUCKBILL_ROOT}\src\DuckbillFisher.Plugin\bin\Debug\DuckbillFisher.dll`.
 - 현재 정규0.2.8.0: 별도/정규 빌드 경고·오류0, 한영558키/형식 인자, Plugin0.2.8.0/Core1.0.0.0/ko0.2.8.0/manifest API15 확인. 보관 생미끼 어종 기록 대표 확인 통과/테스트 미실행. 공개0.2.6.0 유지.
 - 이전 언로드 확인으로 정규 반영 후 ‘확인 완료’로 대표 확인을 받았다. ‘간이 목록’은 사용자 선택 명칭이다. 이번 배포에서는 Debug 파일을 교체하지 않고 ZIP 추출 Release를 확인받았으며 설명만 수정해 원격 게시했다. 현재 추출본 개발 등록이 있을 수 있으므로 배포 설치 전에 언로드/등록 비활성화가 필요하다.
 - 0.2.3.0은 생미끼 실제 Item/명시적 실패/어획 없는 행의 빈 아이콘/메인 우측 바로가기를 포함한다. Native 추가 접근 없이 본인 로그·현재 시전·단계·시간을 대조한다. timer/v3, 한영555키. 같은 표본을 반복 요청하지 않는다.
@@ -50,11 +50,11 @@
 테스트는 명시 요청 때만 추가/실행한다. `scripts/build.ps1`은 테스트를 실행하므로 사용하지 않는다.
 
 ```powershell
-dotnet build src/DuckbillFisher.Plugin/DuckbillFisher.Plugin.csproj --no-restore -c Debug -p:DalamudLibPath=C:/Users/hyogu/AppData/Roaming/XIVLauncherKR/addon/Hooks/dev/
+dotnet build src/DuckbillFisher.Plugin/DuckbillFisher.Plugin.csproj --no-restore -c Debug "-p:DalamudLibPath=${env:DALAMUD_HOME}/"
 pwsh -NoLogo -NoProfile -File scripts/check-localization.ps1
 ```
 
-- 별도 출력은 `-p:OutputPath=C:/Users/hyogu/Downloads/DuckbillFisher/.cache/ui-refine-build/` 추가.
+- 별도 출력은 `-p:OutputPath=${env:DUCKBILL_ROOT}/.cache/ui-refine-build/` 추가.
 - PowerShell 5.1 파일 읽기는 `-Encoding UTF8`. 이번 환경에서 pwsh/정규 빌드/git 쓰기 모두 실행됐다.
 - 실제 주 DLL·Core·ko 리소스 DLL·manifest 확인 후 파일을 명시해 스테이징/커밋한다. 빌드 결과/캐시/사용자 파일 제외.
 

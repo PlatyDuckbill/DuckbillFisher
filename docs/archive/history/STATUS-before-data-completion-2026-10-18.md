@@ -4,7 +4,7 @@
 
 ## 환경
 
-- 작업 폴더: `C:\Users\hyogu\Downloads\DuckbillFisher`.
+- 작업 폴더: `${env:DUCKBILL_ROOT}`.
 - KR 게임 빌드 `2026.10.06.0000.0000`, 현재 로컬 Dalamud 15.0.3.7/API 15. Release 참조는 최저 지원15.0.3.6을 사용한다.
 - .NET SDK 10.0.402, Dalamud.NET.Sdk 15.0.0, Plugin x64/net10.0-windows.
 - 개발 DLL: `src\DuckbillFisher.Plugin\bin\Debug\DuckbillFisher.dll`.

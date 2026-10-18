@@ -28,7 +28,7 @@ pwsh -NoLogo -NoProfile -File scripts/build.ps1 `
 - Core 테스트 15개 통과, 실패/건너뜀 0.
 - Debug Plugin 컴파일 경고 0 / 오류 0, manifest 검사 성공.
 - manifest InternalName DuckbillFisher, API 15, AssemblyVersion **0.1.1.0**.
-- 출력: `C:\Users\hyogu\Downloads\DuckbillFisher\src\DuckbillFisher.Plugin\bin\Debug\DuckbillFisher.dll`.
+- 출력: `${env:DUCKBILL_ROOT}\src\DuckbillFisher.Plugin\bin\Debug\DuckbillFisher.dll`.
 - 빌드·테스트 성공은 수첩 인게임 동작의 검증 결과가 아니다. 기존 Core 테스트에 새 UI/어댑터 검증이 포함됐다고 해석하지 않는다. 실제 수첩 읽기·정밀 타이머는 미구현이다.
 
 ## 인게임 재현 순서

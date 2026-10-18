@@ -32,7 +32,7 @@
 - Plugin 로드 시 OpenConfigUi에 MainWindow.OpenSettings를 등록하고 Dispose에서 같은 핸들러를 해제한다.
 - OpenSettings는 메인을 열고 기존 설정 탭을 선택한다. 이미 열려 있어도 닫지 않으며, 즐겨찾기의 설정 버튼도 같은 경로를 사용한다. 빈 콜백으로 경고만 숨기지 않는다.
 - 새 화면/문구/게임 접근/설정 스키마 변경 없음. 기존 탭 고정 ID와 설정값 유지.
-- 별도 빌드: `dotnet build src/DuckbillFisher.Plugin/DuckbillFisher.Plugin.csproj --no-restore -c Debug -p:DalamudLibPath=C:/Users/hyogu/AppData/Roaming/XIVLauncherKR/addon/Hooks/dev/ -p:OutputPath=C:/Users/hyogu/Downloads/DuckbillFisher/.cache/config-ui-build/` → 경고 0/오류 0.
+- 별도 빌드: `dotnet build src/DuckbillFisher.Plugin/DuckbillFisher.Plugin.csproj --no-restore -c Debug "-p:DalamudLibPath=${env:DALAMUD_HOME}/" "-p:OutputPath=${env:DUCKBILL_ROOT}/.cache/config-ui-build/"` → 경고 0/오류 0.
 - `pwsh -NoLogo -NoProfile -File scripts/check-localization.ps1` → 한영 448키/형식 인자 일치. 테스트 추가/실행 없음.
 - 0.1.30.0은 별도 빌드만 수행했고 수정은 0.1.31.0 정규 DLL에 포함했다. 사용자 새 언로드 확인 후 정규 빌드 경고·오류 0. 인게임에서는 경고 해제와 Dalamud 설정 버튼 → 메인 설정 탭, 기존 화면이 열렸을 때도 설정 탭으로 이동하는지 확인한다. [통합 빌드 기록](CHANGES.md#mvp-01-ui-refinement).
 - 사용자 tmp_note.md는 읽기/수정/스테이징하지 않았다. 원격 게시/릴리스 없음.
@@ -64,7 +64,7 @@
 
 - `pwsh -NoLogo -NoProfile -File scripts/check-localization.ps1`: 한영 387키/형식 인자 일치. `git diff --check` 통과.
 - 초기 소스 수정은 사용자 요청으로 빌드하지 않고 커밋했다. 이후 사용자가 새로 `언로드 했음`을 확인하여 별도 빌드와 정규 빌드를 진행했다. 테스트는 요청이 없어 추가/실행하지 않았다.
-- 별도 빌드: `dotnet build src/DuckbillFisher.Plugin/DuckbillFisher.Plugin.csproj --no-restore -c Debug -p:DalamudLibPath=C:/Users/hyogu/AppData/Roaming/XIVLauncherKR/addon/Hooks/dev/ -p:OutputPath=C:/Users/hyogu/Downloads/DuckbillFisher/.cache/toast-ui-build/` 경고·오류 0.
+- 별도 빌드: `dotnet build src/DuckbillFisher.Plugin/DuckbillFisher.Plugin.csproj --no-restore -c Debug "-p:DalamudLibPath=${env:DALAMUD_HOME}/" "-p:OutputPath=${env:DUCKBILL_ROOT}/.cache/toast-ui-build/"` 경고·오류 0.
 - 정규 빌드: 위 명령에서 OutputPath 옵션을 제외하여 실행, 경고·오류 0. 한영 387키/형식 인자 검사도 다시 통과했다.
 - 정규 산출물: 주 DLL 981504바이트/0.1.24.0, Core 39936바이트/1.0.0.0, ko 리소스 39424바이트/0.1.24.0. manifest DuckbillFisher/0.1.24.0/API 15 확인.
 - 실제 창 크기/스크롤/언어 전환/팝업 화면은 미확인이다. 이후 DLL 교체에는 새 언로드 확인이 필요하다.
@@ -171,7 +171,7 @@
 
 ### 실행한 확인
 
-- `dotnet build src/DuckbillFisher.Plugin/DuckbillFisher.Plugin.csproj --no-restore -c Debug -p:DalamudLibPath=C:/Users/hyogu/AppData/Roaming/XIVLauncherKR/addon/Hooks/dev/ -p:OutputPath=C:/Users/hyogu/Downloads/DuckbillFisher/.cache/list-summary-build/`: 성공, 경고·오류 0.
+- `dotnet build src/DuckbillFisher.Plugin/DuckbillFisher.Plugin.csproj --no-restore -c Debug "-p:DalamudLibPath=${env:DALAMUD_HOME}/" "-p:OutputPath=${env:DUCKBILL_ROOT}/.cache/list-summary-build/"`: 성공, 경고·오류 0.
 - `pwsh -NoLogo -NoProfile -File scripts/check-localization.ps1`: 한영 216키와 형식 인자 일치 확인.
 - 사용자 ‘언로드 완료’ 후 같은 build 명령에서 OutputPath 인자 없이 정규 빌드: 성공, 경고·오류 0.
 - 정규 주 DLL 845824바이트/0.1.13.0, Core 29696바이트/1.0.0.0, ko 리소스 24064바이트/0.1.13.0 확인. manifest InternalName/AssemblyVersion/API 확인.
@@ -275,7 +275,7 @@
 
 ### 실행한 검사
 
-- SESSION-HANDOFF의 dotnet build에 `-p:OutputPath=C:/Users/hyogu/Downloads/DuckbillFisher/.cache/ui-refine-build/` 추가 → 경고 0/오류 0.
+- SESSION-HANDOFF의 dotnet build에 `-p:OutputPath=${env:DUCKBILL_ROOT}/.cache/ui-refine-build/` 추가 → 경고 0/오류 0.
 - `pwsh -NoLogo -NoProfile -File scripts/check-localization.ps1` → 한영 456키/형식 인자 일치. `git diff --check` 통과.
 - 코드 확인: 전승록의 표시 분기는 FishingConditionPanel 상세에 유지, 공통 목록/요약에서 제거. 기존 설정 읽기는 저장한 Catalog.Copy를 사용하며 새 기본값으로 교체하지 않는다.
 - 사용자 새 언로드 완료 확인 후 정규 dotnet build → 경고 0/오류 0. 한영 456키 검사 재실행 통과. 정규 DuckbillFisher.dll 1,039,360바이트/0.1.35.0, Core 39,936바이트/1.0.0.0, ko 리소스 45,056바이트/0.1.35.0. Manifest InternalName DuckbillFisher/AssemblyVersion 0.1.35.0/API15 확인.
@@ -328,7 +328,7 @@
 
 ### 실행한 확인
 
-1. 별도 출력: `dotnet build src/DuckbillFisher.Plugin/DuckbillFisher.Plugin.csproj --no-restore -c Debug -p:DalamudLibPath=C:/Users/hyogu/AppData/Roaming/XIVLauncherKR/addon/Hooks/dev/ -p:OutputPath=C:/Users/hyogu/Downloads/DuckbillFisher/.cache/ui-alignment-build/` → 경고 0/오류 0.
+1. 별도 출력: `dotnet build src/DuckbillFisher.Plugin/DuckbillFisher.Plugin.csproj --no-restore -c Debug "-p:DalamudLibPath=${env:DALAMUD_HOME}/" "-p:OutputPath=${env:DUCKBILL_ROOT}/.cache/ui-alignment-build/"` → 경고 0/오류 0.
 2. `pwsh -NoLogo -NoProfile -File scripts/check-localization.ps1` → 한영 448키/형식 인자 일치.
 3. 사용자 새 언로드 완료 확인 후 정규 출력 빌드 → 경고 0/오류 0. Plugin 0.1.29.0(1,029,632 bytes), Core 1.0.0.0(39,936 bytes), ko 리소스 0.1.29.0(44,032 bytes), manifest DuckbillFisher/0.1.29.0/API15 확인.
 4. git diff 범위/공백, 표시 낚시터 전달, 핀 클릭과 선택 구분, 고정 ID/설정 보존과 높이 계산을 코드 검토했다. 테스트는 추가/실행하지 않았다. 인게임 시각/상호작용 결과는 아직 없다.
@@ -390,7 +390,7 @@
 ### 실행한 확인
 
 1. 개발용 `.cache/condition-ui-audit`에서 설치 클라이언트 Status/Action 이름·아이콘·직업 참조를 확인했다. 단위 테스트가 아닌 정적 데이터 조회다.
-2. 별도 출력 빌드: `dotnet build src/DuckbillFisher.Plugin/DuckbillFisher.Plugin.csproj --no-restore -c Debug -p:DalamudLibPath=C:/Users/hyogu/AppData/Roaming/XIVLauncherKR/addon/Hooks/dev/ -p:OutputPath=C:/Users/hyogu/Downloads/DuckbillFisher/.cache/ui-feedback-build/` → 최종 경고 0/오류 0.
+2. 별도 출력 빌드: `dotnet build src/DuckbillFisher.Plugin/DuckbillFisher.Plugin.csproj --no-restore -c Debug "-p:DalamudLibPath=${env:DALAMUD_HOME}/" "-p:OutputPath=${env:DUCKBILL_ROOT}/.cache/ui-feedback-build/"` → 최종 경고 0/오류 0.
 3. 리소스 생성 스크립트의 스마트 따옴표 오류로 초기 생성과 빌드가 실패했다. 이스케이프를 수정하고 생성/빌드를 다시 실행하여 통과했다.
 4. `pwsh -NoLogo -NoProfile -File scripts/check-localization.ps1` → 한영 447키/형식 인자 일치.
 5. 사용자 새 언로드 완료 확인 후 정규 경로 dotnet build 실행: 경고 0/오류 0. Plugin 0.1.28.0(1,028,096 bytes), Core 1.0.0.0(39,936 bytes), ko 리소스 0.1.28.0(44,032 bytes), manifest DuckbillFisher/0.1.28.0/API15 확인.
@@ -433,7 +433,7 @@
 
 ### 실행한 검사
 
-- SESSION-HANDOFF의 dotnet build에 `-p:OutputPath=C:/Users/hyogu/Downloads/DuckbillFisher/.cache/ui-refine-build/` 추가 → 경고 0/오류 0.
+- SESSION-HANDOFF의 dotnet build에 `-p:OutputPath=${env:DUCKBILL_ROOT}/.cache/ui-refine-build/` 추가 → 경고 0/오류 0.
 - `pwsh -NoLogo -NoProfile -File scripts/check-localization.ps1` → 한영 451키/형식 인자 일치.
 - `git diff --check` 통과. 테스트 추가·실행 없음. 사용자 tmp_note.md 읽기/수정/스테이징 없음.
 - WORKFLOW에 따라 이번 수정에 대한 새 언로드 완료 확인을 받고 정규 dotnet build 실행 → 경고 0/오류 0. 정규 DuckbillFisher.dll 1,031,168바이트/0.1.32.0, Core 39,936바이트/1.0.0.0, ko 리소스 44,544바이트/0.1.32.0. Manifest InternalName DuckbillFisher/AssemblyVersion 0.1.32.0/API15 확인. 리소스 검사 재실행 통과. 푸시·릴리스 없음.
@@ -484,7 +484,7 @@
 
 ### 실행한 검사
 
-- 별도 빌드: SESSION-HANDOFF의 dotnet build에 `-p:OutputPath=C:/Users/hyogu/Downloads/DuckbillFisher/.cache/ui-refine-build/` 추가 → 경고 0/오류 0.
+- 별도 빌드: SESSION-HANDOFF의 dotnet build에 `-p:OutputPath=${env:DUCKBILL_ROOT}/.cache/ui-refine-build/` 추가 → 경고 0/오류 0.
 - 사용자 새 언로드 완료 확인 후 정규 dotnet build → 경고 0/오류 0.
 - `pwsh -NoLogo -NoProfile -File scripts/check-localization.ps1` → 한영 450키/형식 인자 일치.
 - 정규 DuckbillFisher.dll 1,031,168바이트/0.1.31.0, Core 39,936바이트/1.0.0.0, ko 리소스 44,544바이트/0.1.31.0. Manifest InternalName DuckbillFisher/AssemblyVersion 0.1.31.0/API15 확인.
@@ -532,7 +532,7 @@
 
 ### 실행한 검사
 
-- SESSION-HANDOFF의 dotnet build + `-p:OutputPath=C:/Users/hyogu/Downloads/DuckbillFisher/.cache/ui-refine-build/` → 경고 0/오류 0.
+- SESSION-HANDOFF의 dotnet build + `-p:OutputPath=${env:DUCKBILL_ROOT}/.cache/ui-refine-build/` → 경고 0/오류 0.
 - 사용자 언로드 확인 후 정규 dotnet build → 경고 0/오류 0.
 - `pwsh -NoLogo -NoProfile -File scripts/check-localization.ps1` → 한영 455키/형식 인자 일치. `git diff --check` 통과. 테스트 추가/실행 없음.
 - 정규 DuckbillFisher.dll 1,037,824바이트/0.1.34.0, Core 39,936바이트/1.0.0.0, ko 리소스 45,056바이트/0.1.34.0. Manifest InternalName DuckbillFisher/AssemblyVersion 0.1.34.0/API15 확인.
@@ -605,7 +605,7 @@
 
 ### 실행한 확인
 
-1. `dotnet build src/DuckbillFisher.Plugin/DuckbillFisher.Plugin.csproj --no-restore -c Debug -p:DalamudLibPath=C:/Users/hyogu/AppData/Roaming/XIVLauncherKR/addon/Hooks/dev/ -p:OutputPath=C:/Users/hyogu/Downloads/DuckbillFisher/.cache/ui-redesign-build/`: 최종 경고 0/오류 0.
+1. `dotnet build src/DuckbillFisher.Plugin/DuckbillFisher.Plugin.csproj --no-restore -c Debug "-p:DalamudLibPath=${env:DALAMUD_HOME}/" "-p:OutputPath=${env:DUCKBILL_ROOT}/.cache/ui-redesign-build/"`: 최종 경고 0/오류 0.
 2. 첫 빌드의 ImGuiSelectableFlags.AllowOverlap 이름 불일치를 설치본의 AllowItemOverlap으로 수정했다. 최종 성공으로 첫 실패를 숨기지 않는다.
 3. `pwsh -NoLogo -NoProfile -File scripts/check-localization.ps1`: 한영 428키/형식 인자 일치.
 4. 사용자가 이번 작업 시작 때 언로드 완료/정규 교체 가능을 명시했다. 그 승인으로 정규 경로 `dotnet build` 실행: 경고 0/오류 0.

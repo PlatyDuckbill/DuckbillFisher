@@ -1,6 +1,6 @@
 # 예측 대조 자료
 
-`forecast-reference.json`은 운영 C# 코드로 생성하지 않은 고정 기대값이다. `fishing.kr.v1.json`은 제품 원본을 테스트 출력에 연결하며 복사본을 따로 관리하지 않는다.
+`forecast-reference.json`은 운영 C# 코드로 생성하지 않은 고정 기대값이다. `fishing.kr.v1.json`은 [보존된 초기 조건 자료](../../../data/archive/fishing.kr.v1.json)를 테스트 출력에 연결하며 복사본을 따로 관리하지 않는다. 현재 제품은 v2만 로드한다. 과거 기대값의 의미를 바꾸지 않도록 테스트 입력은 v1을 유지한다.
 
 ## 근거와 생성
 
@@ -14,7 +14,7 @@
 이번 생성에서는 도구의 V8에서 생성 함수와 고정 원본 함수를 실행했다. 이 PC에는 Node가 없어 Node CLI 자체는 실행하지 않았다. Node가 있는 개발 환경에서는 같은 입력으로 다음처럼 재생성할 수 있다. 캐시의 KR 덤프는 이전 상세 자료 대조 도구의 출력이며 캐릭터 정보를 포함하지 않는다.
 
 ```powershell
-node scripts/forecast-reference.mjs data/fishing.kr.v1.json .cache/kr-detail-audit.json .cache/fishing-sources/weather.js tests/DuckbillFisher.Core.Tests/Fixtures/forecast-reference.json
+node scripts/forecast-reference.mjs data/archive/fishing.kr.v1.json .cache/kr-detail-audit.json .cache/fishing-sources/weather.js tests/DuckbillFisher.Core.Tests/Fixtures/forecast-reference.json
 ```
 
 기대값은 회귀 검증 자료이므로 매 테스트 실행 시 재생성하지 않는다. 데이터 갱신 시 출처 revision·한섭 확률표·차이를 검토하고 갱신한다. .NET 테스트 자체에는 Node나 게임 설치가 필요 없다.

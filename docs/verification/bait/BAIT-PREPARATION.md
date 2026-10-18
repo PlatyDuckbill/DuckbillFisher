@@ -113,7 +113,7 @@
 
 ## 요청한 실제 확인과 다음 단계
 
-정규 주 DLL: `C:\Users\hyogu\Downloads\DuckbillFisher\src\DuckbillFisher.Plugin\bin\Debug\DuckbillFisher.dll`.
+정규 주 DLL: `${env:DUCKBILL_ROOT}\src\DuckbillFisher.Plugin\bin\Debug\DuckbillFisher.dll`.
 
 1. 일반 소지품에 있는 미끼의 실제 수량과 준비 목록/상세 수량을 비교한다. 즐겨찾기 기본/현재 필터 전체 전환, 스크롤 밖 목표 포함·검색/수집 필터·첫 미끼/대체 후보·없는 미끼만을 대표 확인한다.
 2. 사용자 ‘수량 일치’와v3 수집·복사는 대표 확인으로 기록했다. v1의NotOpen을 미끼 UI가 실제로 닫혀 있었다는 증거로 확대하지 않는다. 반복 전체 로그를 요구하지 않는다.

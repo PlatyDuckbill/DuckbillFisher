@@ -36,7 +36,7 @@
 - `scripts/inspect-fish-guide-snapshot.ps1`로 설치 DLL의 AgentFishGuide/FishGuideDataBase/FishGuideListEntry 3개 레이아웃을 대조했다. 게임 메모리는 읽지 않았다. 재현 예:
 
 ```powershell
-pwsh -NoLogo -NoProfile -File scripts/inspect-fish-guide-snapshot.ps1 -DalamudPath C:/Users/hyogu/AppData/Roaming/XIVLauncherKR/addon/Hooks/dev -OutputPath .cache/guide-snapshot-metadata.json
+pwsh -NoLogo -NoProfile -File scripts/inspect-fish-guide-snapshot.ps1 -DalamudPath ${env:DALAMUD_HOME} -OutputPath .cache/guide-snapshot-metadata.json
 ```
 
 - 사용자 언로드 확인 후 정규 Debug 빌드도 경고·오류 0. 실제 주 DLL/manifest의 0.1.9.0, Core DLL과 한국어 리소스 DLL을 확인했다.
