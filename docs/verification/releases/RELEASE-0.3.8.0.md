@@ -41,5 +41,5 @@
 
 ### 설치 화면 변경 내역 보완 (2026-10-19)
 
-- 사용자 요청으로 설치 JSON에0.3.8.0의 `Changelog` 영어 요약만 추가한다. 버전·다운로드 링크·LastUpdate·고정 ZIP·태그는 유지한다. 기존 ZIP 안 manifest에는 Changelog가 없으며 이번 보완은 저장소 항목에만 적용한다.
-- JSON 비교와 문서 검사를 완료한 뒤 게시하고 실제 공유 raw URL의 문구를 조회한다. 설치 화면의 실제 렌더링은 인게임 확인 대기다.
+- 사용자 요청으로 설치 JSON에0.3.8.0의 `Changelog` 영어 요약만 추가했다. 버전·다운로드 링크·LastUpdate·고정 ZIP·태그는 유지했다. 기존 ZIP 안 manifest에는 Changelog가 없으며 이번 보완은 저장소 항목에만 적용한다.
+- JSON 비교로 변경이 Changelog 한 항목뿐임을 확인하고 문서 검사 후 커밋6e034d1로 게시했다.2026-10-18T19:53:35Z에 인증 없는 실제 공유 raw URL(쿼리 없음) HTTP200·0.3.8.0·문구/링크/LastUpdate 일치를 확인했다. `.cache/release-remote-check/0.3.8.0/changelog-check.json`에 결과가 있다. 설치 화면의 실제 렌더링은 인게임 확인 대기다.

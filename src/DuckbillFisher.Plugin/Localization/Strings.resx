@@ -659,4 +659,16 @@ Main inventory only. An unknown quantity is not zero.</value></data>
   <data name="CustomSoundQueued" xml:space="preserve"><value>Custom WAV queued</value></data>
   <data name="CustomSoundSkipped" xml:space="preserve"><value>Custom WAV skipped</value></data>
   <data name="CustomSoundLoginRequired" xml:space="preserve"><value>Log in to load and preview the WAV.</value></data>
+  <data name="ChangelogTitle" xml:space="preserve"><value>What's new</value></data>
+  <data name="ChangelogVersion" xml:space="preserve"><value>DuckbillFisher {0}</value></data>
+  <data name="ChangelogNotes" xml:space="preserve"><value>Release notes are now available in the plugin installer. This summary appears once per version; closing it marks it as read.</value></data>
+  <data name="ChangelogRecent" xml:space="preserve"><value>Recent improvements · 0.3.8.0</value></data>
+  <data name="ChangelogAudio" xml:space="preserve"><value>Custom WAV alerts: choose, preview, reload, and stop a local sound file in Settings.</value></data>
+  <data name="ChangelogForecast" xml:space="preserve"><value>Forecasts up to 30 real days ahead. Use the Fish Eyes button in the filter bar to switch the forecast and sorting basis.</value></data>
+  <data name="ChangelogIntuition" xml:space="preserve"><value>Expand the Intuition calculation in fish details to compare target and prerequisite times. Unknown durations use a marked 175-second assumption.</value></data>
+  <data name="ChangelogDetails" xml:space="preserve"><value>Related mooch fish open in a comparison detail view with back navigation. Countdowns over a day use days:hours:minutes:seconds.</value></data>
+  <data name="ChangelogStability" xml:space="preserve"><value>Improved data validation and alert replanning, and reduced repeated forecast, inventory, and list allocations.</value></data>
+  <data name="ChangelogReopenHint" xml:space="preserve"><value>You can read these notes again in Settings → What's new.</value></data>
+  <data name="ChangelogUnsaved" xml:space="preserve"><value>Read status cannot be saved. These notes may appear again after reloading.</value></data>
+  <data name="ChangelogDismiss" xml:space="preserve"><value>Got it</value></data>
 </root>

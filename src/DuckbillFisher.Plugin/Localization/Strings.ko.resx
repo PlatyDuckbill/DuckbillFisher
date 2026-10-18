@@ -659,4 +659,16 @@
   <data name="CustomSoundQueued" xml:space="preserve"><value>커스텀 WAV 재생 요청됨</value></data>
   <data name="CustomSoundSkipped" xml:space="preserve"><value>커스텀 WAV 생략</value></data>
   <data name="CustomSoundLoginRequired" xml:space="preserve"><value>캐릭터 접속 후 WAV를 불러오고 미리 들을 수 있습니다.</value></data>
+  <data name="ChangelogTitle" xml:space="preserve"><value>업데이트 내역</value></data>
+  <data name="ChangelogVersion" xml:space="preserve"><value>DuckbillFisher {0}</value></data>
+  <data name="ChangelogNotes" xml:space="preserve"><value>설치 화면에서도 변경 내역을 볼 수 있습니다. 이 안내는 버전마다 한 번 표시되며, 닫으면 확인한 것으로 저장합니다.</value></data>
+  <data name="ChangelogRecent" xml:space="preserve"><value>최근 주요 변경 · 0.3.8.0</value></data>
+  <data name="ChangelogAudio" xml:space="preserve"><value>커스텀 WAV 알림: 설정에서 음원을 선택하고 미리 듣기·재불러오기·중지를 할 수 있습니다.</value></data>
+  <data name="ChangelogForecast" xml:space="preserve"><value>실제 30일 뒤까지 출현을 예측합니다. 필터 줄의 물고기의 눈 버튼으로 예측·정렬 기준을 바꿀 수 있습니다.</value></data>
+  <data name="ChangelogIntuition" xml:space="preserve"><value>어종 상세의 직감 계산을 펼치면 대상·선행 어종 시간을 비교할 수 있습니다. 지속 시간 미확인은 175초 가정과 경고를 표시합니다.</value></data>
+  <data name="ChangelogDetails" xml:space="preserve"><value>생미끼 어종은 뒤로 이동이 가능한 비교 상세로 열립니다. 하루 이상 남은 시간은 일:시:분:초로 표시합니다.</value></data>
+  <data name="ChangelogStability" xml:space="preserve"><value>데이터 검사와 알림 재계획을 보강하고, 예측·소지품·목록의 반복 생성을 줄였습니다.</value></data>
+  <data name="ChangelogReopenHint" xml:space="preserve"><value>설정 → 업데이트 내역에서 다시 볼 수 있습니다.</value></data>
+  <data name="ChangelogUnsaved" xml:space="preserve"><value>확인 여부를 저장할 수 없어 재로드하면 다시 표시될 수 있습니다.</value></data>
+  <data name="ChangelogDismiss" xml:space="preserve"><value>확인</value></data>
 </root>

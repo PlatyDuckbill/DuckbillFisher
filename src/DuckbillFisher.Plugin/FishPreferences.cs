@@ -15,7 +15,7 @@ public enum SpawnAlertChannel { System, Say, CrossWorldLinkshell1 }
 // Public for Dalamud's configuration serializer. Content IDs stay in local configuration only.
 public sealed class FishPreferencesConfiguration : IPluginConfiguration
 {
-    public const int CurrentVersion = 12;
+    public const int CurrentVersion = 13;
     public int Version { get; set; } = CurrentVersion;
     public HashSet<uint> Favorites { get; set; } = [];
     public Dictionary<ulong, Dictionary<uint, bool>> Characters { get; set; } = [];
@@ -31,6 +31,7 @@ public sealed class FishPreferencesConfiguration : IPluginConfiguration
     public List<CatalogPreset> CatalogPresets { get; set; } = [];
     public UiLanguage Language { get; set; } = UiLanguage.Korean;
     public bool DeveloperMode { get; set; }
+    public string LastSeenChangelogVersion { get; set; } = "";
     public CompactViewSettings Compact { get; set; } = new();
     public Dictionary<uint, int> FishAlertLeadMinutes { get; set; } = [];
     // Last reserved window start per fish/character. Also suppresses repeats after clock rollback.
@@ -55,6 +56,7 @@ internal sealed record FishPreferencesView(int Revision, int Session, bool HasCh
     public UiMessage? CatalogPresetError { get; init; }
     public UiLanguage Language { get; init; } = UiLanguage.Korean;
     public bool DeveloperMode { get; init; }
+    public string LastSeenChangelogVersion { get; init; } = "";
     public CompactViewSettings Compact { get; init; } = new();
     public IReadOnlyDictionary<uint, int> FishAlertLeadMinutes { get; init; } = FrozenDictionary<uint, int>.Empty;
     public int AlertLead(uint id) => FishAlertLeadMinutes.GetValueOrDefault(id, SpawnAlertLeadMinutes);
@@ -82,6 +84,7 @@ internal sealed class FishPreferences : IDisposable
     private (UiLanguage Language, bool DeveloperMode)? pendingInterface;
     private CompactViewSettings? pendingCompact;
     private string? pendingCustomSoundPath;
+    private Version? pendingChangelogVersion;
     private FishPreferencesConfiguration configuration = new();
     private FishPreferencesView view = new(0, 0, false, false,
         FrozenSet<uint>.Empty, FrozenDictionary<uint, bool>.Empty, null);
@@ -122,6 +125,9 @@ internal sealed class FishPreferences : IDisposable
                 // A malformed optional preset must not discard favorites or character records.
                 configuration.CatalogPresets = CatalogPreset.ReadValid(loaded.CatalogPresets);
                 configuration.CustomAlertSoundPath ??= "";
+                // Optional display state must not invalidate existing settings or character records.
+                if (!System.Version.TryParse(configuration.LastSeenChangelogVersion, out _))
+                    configuration.LastSeenChangelogVersion = "";
                 configuration.Version = FishPreferencesConfiguration.CurrentVersion;
                 writable = true;
             }
@@ -138,6 +144,13 @@ internal sealed class FishPreferences : IDisposable
     }
 
     public FishPreferencesView View { get { lock (gate) return view; } }
+
+    public void MarkChangelogSeen(Version version)
+    {
+        lock (gate)
+            if (!disposed && writable && (pendingChangelogVersion is null || version > pendingChangelogVersion))
+                pendingChangelogVersion = version;
+    }
 
     public void SetInterface(UiLanguage language, bool developerMode)
     {
@@ -288,10 +301,20 @@ internal sealed class FishPreferences : IDisposable
             }
             else if (stateErrorChanged)
                 Publish();
-            if (pending.Count == 0 && pendingAlerts is null && pendingFishAlerts.Count == 0 && pendingCatalog is null && pendingPreset is null && pendingInterface is null && pendingCompact is null && pendingCustomSoundPath is null)
+            if (pending.Count == 0 && pendingAlerts is null && pendingFishAlerts.Count == 0 && pendingCatalog is null && pendingPreset is null && pendingInterface is null && pendingCompact is null && pendingCustomSoundPath is null && pendingChangelogVersion is null)
                 return;
             var candidate = CopyConfiguration();
             var changed = false;
+            if (pendingChangelogVersion is { } changelogVersion)
+            {
+                // Keep a newer acknowledgement when a developer temporarily loads an older DLL.
+                if (!System.Version.TryParse(candidate.LastSeenChangelogVersion, out var seen) || changelogVersion > seen)
+                {
+                    candidate.LastSeenChangelogVersion = changelogVersion.ToString();
+                    changed = true;
+                }
+                pendingChangelogVersion = null;
+            }
             if (pendingCustomSoundPath is { } customSoundPath)
             {
                 changed |= candidate.CustomAlertSoundPath != customSoundPath;
@@ -314,7 +337,7 @@ internal sealed class FishPreferences : IDisposable
                         changed = true;
                     }
                 }
-                else changed = candidate.CatalogPresets.RemoveAll(value => value.Id == presetEdit.Remove) > 0;
+                else changed |= candidate.CatalogPresets.RemoveAll(value => value.Id == presetEdit.Remove) > 0;
             }
             if (pendingCompact is { } compact)
             {
@@ -411,6 +434,7 @@ internal sealed class FishPreferences : IDisposable
             CatalogPresets = configuration.CatalogPresets.Select(value => value.Copy()).ToArray(),
             CatalogPresetError = view.CatalogPresetError,
             Language = configuration.Language, DeveloperMode = configuration.DeveloperMode,
+            LastSeenChangelogVersion = configuration.LastSeenChangelogVersion,
             Compact = configuration.Compact,
             FishAlertLeadMinutes = configuration.FishAlertLeadMinutes.ToFrozenDictionary(),
             ReservedAlertWindows = characterId != 0 && configuration.AlertWindows.TryGetValue(characterId, out var windows)
@@ -430,6 +454,7 @@ internal sealed class FishPreferences : IDisposable
         Catalog = configuration.Catalog.Copy(),
         CatalogPresets = configuration.CatalogPresets.Select(value => value.Copy()).ToList(),
         Language = configuration.Language, DeveloperMode = configuration.DeveloperMode,
+        LastSeenChangelogVersion = configuration.LastSeenChangelogVersion,
         Compact = configuration.Compact,
         FishAlertLeadMinutes = new(configuration.FishAlertLeadMinutes),
         AlertWindows = configuration.AlertWindows.ToDictionary(pair => pair.Key, pair => new Dictionary<uint, long>(pair.Value)),
@@ -454,7 +479,7 @@ internal sealed class FishPreferences : IDisposable
     }
 
     private static bool IsValid(FishPreferencesConfiguration value) =>
-        value.Version is 1 or 2 or 3 or 4 or 5 or 6 or 7 or 8 or 9 or 10 or 11 or FishPreferencesConfiguration.CurrentVersion && value.Favorites is not null &&
+        value.Version is 1 or 2 or 3 or 4 or 5 or 6 or 7 or 8 or 9 or 10 or 11 or 12 or FishPreferencesConfiguration.CurrentVersion && value.Favorites is not null &&
         Enum.IsDefined(value.Language) &&
         value.Compact is not null && value.Compact.IsValid() &&
         value.Catalog is not null && value.Catalog.IsValid() &&
@@ -482,6 +507,7 @@ internal sealed class FishPreferences : IDisposable
             pendingInterface = null;
             pendingCompact = null;
             pendingCustomSoundPath = null;
+            pendingChangelogVersion = null;
         }
         framework.Update -= OnUpdate;
     }

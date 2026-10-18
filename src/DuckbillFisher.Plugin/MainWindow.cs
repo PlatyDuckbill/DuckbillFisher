@@ -20,6 +20,7 @@ internal sealed class MainWindow : Window
     private readonly FishingHistoryBrowser fishingHistory;
     public Action? ShowCompact { get; set; }
     public Action? ShowTimer { get; set; }
+    public Action? ShowChangelog { get; set; }
     private string[] markerLabels = Markers.Select(key => UiText.Get(key)).ToArray();
     private IReadOnlyList<FishGuideRow>? lastRows;
     private FishGuideRow[] matches = [];
@@ -163,6 +164,7 @@ internal sealed class MainWindow : Window
         ImGui.EndDisabled();
         UiWidgets.Tooltip(UiText.Get(T.DeveloperModeHint));
         if (changed) preferences.SetInterface((UiLanguage)language, developer);
+        if (ImGui.Button(UiText.Label(T.ChangelogTitle, "ShowChangelog"))) ShowChangelog?.Invoke();
         if (settings.Error is { } error) ImGui.TextWrapped(error.Display);
         UiWidgets.Heading(T.AlertSettingsHeading);
         spawnAlerts.DrawSettings();

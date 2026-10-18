@@ -103,6 +103,8 @@ public sealed class Plugin : IDalamudPlugin
             new FishingHistoryBrowser(fishingTracker, fishCatalog, new FishingHistoryPanel(fishingTracker, textureProvider, detailWindow.Show)));
         mainWindow.ShowCompact = () => compactWindow.IsOpen = true;
         mainWindow.ShowTimer = timerWindow.Toggle;
+        var changelogWindow = new ChangelogWindow(fishPreferences);
+        mainWindow.ShowChangelog = () => changelogWindow.IsOpen = true;
         compactWindow.ShowMain = mainWindow.Toggle;
         windows.AddWindow(mainWindow);
         windows.AddWindow(compactWindow);
@@ -110,6 +112,7 @@ public sealed class Plugin : IDalamudPlugin
         windows.AddWindow(compareDetailWindow);
         windows.AddWindow(timerWindow);
         windows.AddWindow(preparationWindow);
+        windows.AddWindow(changelogWindow);
         pluginInterface.UiBuilder.Draw += windows.Draw;
         pluginInterface.UiBuilder.Draw += baitFinder.DrawOverlay;
         pluginInterface.UiBuilder.OpenMainUi += OpenMainUi;

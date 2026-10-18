@@ -2,11 +2,12 @@
   <PropertyGroup>
     <AssemblyName>DuckbillFisher</AssemblyName>
     <RootNamespace>DuckbillFisher.Plugin</RootNamespace>
-    <Version>0.3.8.0</Version>
+    <Version>0.3.9.0</Version>
     <NeutralLanguage>en</NeutralLanguage>
     <Author>PlatyDuckbill</Author>
     <Name>DuckbillFisher</Name>
     <Punchline>Let Duckbill guide your next catch.</Punchline>
+    <Changelog>• Added release notes to the plugin installer.&#xA;• Added a localized update summary shown once per version, with a button in Settings to read it again.</Changelog>
     <Description>Let Duckbill guide your next catch.&#xA;A fishing companion for FFXIV Korea.&#xA;&#xA;• Browse fish with collection, region and availability filters.&#xA;• Check baits, mooch chains and time/weather conditions.&#xA;• Prepare baits for favorites or filtered fish, with inventory counts.&#xA;• Find owned baits with page markers and in-game UI highlights.&#xA;• Open fishing spots directly on the map.&#xA;• Get local alerts for favorites, with optional sounds.&#xA;• See fish available now or soon in the quick list.&#xA;• Follow casts with a timer and personal fishing records.&#xA;&#xA;Open: /duckbillfisher&#xA;UI: English / Korean. Game names follow your client.&#xA;&#xA;Verified on the supported Korean client and Dalamud build only.&#xA;Does not automate fishing.</Description>
     <RepoUrl>https://github.com/PlatyDuckbill/DuckbillFisher</RepoUrl>
     <Tags>fishing;fish;collection;Korea;한국어</Tags>

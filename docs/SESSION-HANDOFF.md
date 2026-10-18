@@ -1,6 +1,6 @@
 # 세션 인수인계
 
-갱신: 2026-10-19 · 공개0.3.8.0 · 설치 목록 최종 조회 완료
+갱신: 2026-10-19 · 공개0.3.8.0 · 개발0.3.9.0 업데이트 안내 확인 대기
 
 ## 재개 순서
 
@@ -34,7 +34,7 @@
 
 - 공개0.3.8.0 소스 태그 커밋은899f567, 설치 JSON 커밋은c18de68이다. Release ID416649615의 고정 ZIP/체크섬·익명 다운로드/해시/아이콘 확인 뒤 설치 JSON을 게시했고 실제 공유 raw URL의0.3.8.0/API15/링크 조회도 완료했다. [게시 근거](verification/releases/RELEASE-0.3.8.0.md).
 - 현재 확인 ZIP은 artifacts/share/0.3.8.0/DuckbillFisher-0.3.8.0.zip, Release 출력은 .cache/release-build/0.3.8.0/다. SHA256과 API/버전은 위 Release 기록에 있다. 사용자 대표 확인 뒤 같은 ZIP을 게시했으며 재빌드/덮어쓰지 않는다.
-- 개발0.3.8.0 별도 출력은 .cache/custom-sound-build/, 정규 Debug도0.3.8.0이다. 이전 출력은 .cache/bait-preparation-release/·snapshot-reuse-build/·alert-stability-build/·forecast-refinement-build/·fish-eyes-build/·intuition-forecast-build/·data-integrity-build/·data-integrity-import/, 재생성 자료는 .cache/data-integrity/다. 이전 참조별 출력은 .cache/maintenance-*에 있다.
+- 개발0.3.9.0 별도 출력은 .cache/changelog-build/, 정규 Debug도0.3.9.0이다. 업데이트 안내는 schema13의 공통 LastSeenChangelogVersion을 사용한다. 이전 출력은 .cache/custom-sound-build/·bait-preparation-release/·snapshot-reuse-build/·alert-stability-build/·forecast-refinement-build/·fish-eyes-build/·intuition-forecast-build/·data-integrity-build/·data-integrity-import/, 재생성 자료는 .cache/data-integrity/다. 이전 참조별 출력은 .cache/maintenance-*에 있다.
 - 확인된 ZIP을 다시 빌드해 바꾸거나 기존 태그/Release를 덮어쓰지 않는다. 제품 수정은 새 버전으로 준비한다.
 - 개발·배포 플러그인의 같은 InternalName을 동시에 로드하지 않는다. 사용자가 현재 등록한 경로를 추측해 설정을 수정하지 않는다.
 - 현재 PC는 gh CLI 없이 Git credential manager+GitHub API로 게시한 이력이 있다. 토큰은 메모리에서만 사용하며 출력/파일/Git에 남기지 않는다. 캐시의 버전별 게시 스크립트를 확인 없이 재실행하지 않는다.
@@ -44,7 +44,7 @@
 - Core 공통 자료 검증을 Plugin/도구에서 사용한다. 실제 자료 검사 명령은 [data/README](../data/README.md#필드-의미와-미확인), 결과와 재현은 [데이터 기록](verification/data/DATA-COMPLETION-2026-10-18.md#0320-데이터-안정성-보강)을 따른다. 오류 진단은 catalog/v9의 DataValidation/IntuitionForecast 한 줄부터 확인한다.
 - 30일 검색·직감175초 가정·물고기의 눈 전환은 [예측 기록](verification/forecast/FORECAST.md#0350-직감-기본값과-계산-구역-개선-2026-10-19)을 따른다. summary/v10의 SelectedForecast/ForecastComparison/SelectedConditions/SelectedIntuition은 두 UTC·지원 여부·원본/계산 지속 시간·DurationAssumed를 구분한다. 실제 자료 도우미는 .cache/Inspect-ForecastRefinement.ps1·Compare-ForecastRefinement.ps1이며 테스트 스위트가 아니다.
 - v1 조건 자료는 data/archive로 이동했으며 기존 예측 테스트에서만 참조한다. 제품은 v2 조건과 v1 등급 자료를 내장한다. 테스트는 요청 없이는 실행하지 않는다.
-- 다음 게임 확인은 실제 저장소0.3.8.0 업데이트와 친구 PC 대표 확인이다. 이전 직감/물고기의 눈/비교 상세·시간 표시·캐시 경계·한영/좁은 폭·장애/다른 캐릭터 확인 대기는 STATUS와 각 근거에 유지한다. 음원 문제는 alerts/v7의 CustomSoundState/CustomSoundCode만, 미끼 페이지는 bait-ui/v7의 Pages부터 요청한다.
+- 다음 게임 확인은 [0.3.9.0 업데이트 안내](verification/catalog/UI.md#0390-업데이트-안내-2026-10-19)의 표시/닫기/재로드·설정에서 다시 열기다. 공개0.3.8.0 설치 화면 Changelog는6e034d1로 메타데이터만 보완·raw 조회 완료했고 실제 렌더링/저장소 업데이트/친구 확인은 대기다. 이전 직감/물고기의 눈/비교 상세·시간 표시·캐시 경계·한영/좁은 폭·장애/다른 캐릭터 확인 대기는 유지한다. 음원 문제는 alerts/v7의 CustomSoundState/CustomSoundCode만, 미끼 페이지는 bait-ui/v7의 Pages부터 요청한다.
 - 일반 데이터 잔여 이름/ID/이유는 [보고서](verification/data/reports/fishing-data-2026-10-17/remaining.md), 재생성 순서는 [data/README](../data/README.md)를 따른다. 완성 제품을 보완 단계 baseline으로 다시 넣지 않는다.
 - 입질 통계·복수 어획 보류를 유지한다. 과거 Teamcraft 화면 추적은 중단하고 [현재 웹 표시 대조](verification/forecast/FORECAST.md#현재-웹-표시-대조-2026-10-19)로 전환했다. UTC/CSV는 기록에, 임시 브라우저 관찰 자료는 .cache/forecast-browser-2026-10-19에 있다. 사용자 계정/브라우저와 분리한 익명 세션을 사용했다. 후속은 [ROADMAP](product/ROADMAP.md)을 따른다.
 - 폴더 재구성 전 경로는 Git 699db5b에 보존됐다. UI 원문 12개는 archive/ui/CHANGES.md의 문서별 앵커로 합쳤으며 새 전체 상태 사본은 만들지 않았다. 문서 검사기는 새 폴더/색인 규칙을 검사한다.
