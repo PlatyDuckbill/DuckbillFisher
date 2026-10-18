@@ -1,6 +1,6 @@
 # 세션 인수인계
 
-갱신: 2026-10-19 · 0.3.8.0 Release 추출본 확인 대기 · 공개 0.3.0.0 유지
+갱신: 2026-10-19 · 0.3.8.0 Release 추출본 확인 완료·게시 진행 · 공개 설치 목록0.3.0.0
 
 ## 재개 순서
 
@@ -26,7 +26,7 @@
 | SDK/대상 | global.json의 10.0.402, SDK15.0.0, x64/net10.0-windows |
 | 정규 Debug DLL | ${env:DUCKBILL_ROOT}/src/DuckbillFisher.Plugin/bin/Debug/DuckbillFisher.dll |
 | 확인한 Release 추출 DLL | ${env:DUCKBILL_ROOT}/.cache/release-validation/0.3.0.0/DuckbillFisher.dll |
-| 확인 대기 Release 추출 DLL | ${env:DUCKBILL_ROOT}/.cache/release-validation/0.3.8.0/DuckbillFisher.dll |
+| 새 확인 Release 추출 DLL | ${env:DUCKBILL_ROOT}/.cache/release-validation/0.3.8.0/DuckbillFisher.dll |
 
 캐시/참조 DLL은 Git에 없다. 다른 PC에서는 실제 경로와 정확한 지원 배포판을 다시 확인한다. 최소 참조가 없다고 현재 참조를 Release에 조용히 대체하지 않는다. 일반 빌드 명령은 [WORKFLOW](development/WORKFLOW.md#windows-빌드)에 한 곳만 유지한다.
 
@@ -34,7 +34,7 @@
 
 - 공개 0.3.0.0의 소스 태그 커밋은 7269627, 설치 JSON 게시 커밋은 fc300d5, 게시 확인 기록은 b33f4eb다.
 - 사용자 확인 ZIP: artifacts/share/0.3.0.0/DuckbillFisher-0.3.0.0.zip. 크기/전체 SHA256/익명 다운로드 근거는 [Release 기록](verification/releases/RELEASE-0.3.0.0.md)에 있다.
-- 새 고정 ZIP은 artifacts/share/0.3.8.0/DuckbillFisher-0.3.8.0.zip, 출력은 .cache/release-build/0.3.8.0/다. [해시·게시 순서](verification/releases/RELEASE-0.3.8.0.md). 배포 권한은 받았고 추출 DLL 대표 확인만 대기한다. 응답 뒤 이 ZIP을 재빌드하지 않는다.
+- 새 고정 ZIP은 artifacts/share/0.3.8.0/DuckbillFisher-0.3.8.0.zip, 출력은 .cache/release-build/0.3.8.0/다. [해시·게시 순서](verification/releases/RELEASE-0.3.8.0.md). 배포 권한과 추출 DLL 대표 확인을 받았으며 이 ZIP을 재빌드하지 않는다.
 - 공개 Release 빌드 출력은 .cache/bait-preparation-release/다. 개발0.3.8.0 별도 출력은 .cache/custom-sound-build/이며 정규 Debug도0.3.8.0·실기 대기다. 이전 출력은 .cache/snapshot-reuse-build/·alert-stability-build/·forecast-refinement-build/·fish-eyes-build/·intuition-forecast-build/·data-integrity-build/·data-integrity-import/, 재생성 자료는 .cache/data-integrity/다. 이전 참조별 출력은 .cache/maintenance-*에 있다.
 - 확인된 ZIP을 다시 빌드해 바꾸거나 기존 태그/Release를 덮어쓰지 않는다. 제품 수정은 새 버전으로 준비한다.
 - 개발·배포 플러그인의 같은 InternalName을 동시에 로드하지 않는다. 사용자가 현재 등록한 경로를 추측해 설정을 수정하지 않는다.
