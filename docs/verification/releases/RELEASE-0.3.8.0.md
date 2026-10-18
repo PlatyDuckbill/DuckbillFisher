@@ -29,3 +29,10 @@
 - 위 추출 DLL로 WAV 미리 듣기/중지·목록/도감·타이머/기록·설정 복원의 대표 확인을 요청했고 사용자가 ‘Release 추출본도 정상’으로 응답했다. 이 요청 범위의 대표 확인이며 다른 장애/경계/전수 확인으로 확대하지 않는다.
 - 확인 뒤 같은 ZIP을 재빌드 없이 게시한다. 소스/확인 기록 commit·push→새v0.3.8.0 태그→Release/ZIP/체크섬→익명 다운로드/해시/아이콘→후보 설치 JSON commit·push→실제 공유 raw URL 확인 순서다.
 - 다른 캐릭터·친구 PC·전수 데이터·전체 테마·장애/성능 측정과 실제 Dalamud 저장소 업데이트는 별도 대기다. 배포 권한과 고정 패키지 대표 확인을 받았다.
+
+## 실제 게시
+
+- 확인 기록 커밋899f567을main에 정상push하고 같은 커밋에새v0.3.8.0 태그를 게시했다. 기존 태그/Release/ZIP은 덮어쓰지 않았다. 게시 커밋의 [skip ci]로 테스트 CI를 유발하지 않도록 했다.
+- GitHub [Release](https://github.com/PlatyDuckbill/DuckbillFisher/releases/tag/v0.3.8.0), ID416649615, 게시 시각2026-10-18T19:20:50Z에 고정 ZIP/체크섬2개를 게시했다. 업로드 크기와 GitHub digest가 로컬 해시와 일치했다. 인증은 Git credential에서 메모리로만 읽고 파일/로그/Git에 저장하지 않았다.
+- 2026-10-18T19:21:10Z에 인증 없는 ZIP/체크섬/태그 아이콘 다운로드가 모두 HTTP200이었다. ZIP SHA256·체크섬 내용·원본 아이콘 해시가 일치했다. 결과는 `.cache/release-remote-check/0.3.8.0/download-check.json`에 보관한다.
+- 위 확인 뒤에만 후보 JSON을repo/pluginmaster.json에 복사했다. 설치/업데이트가 같은0.3.8.0 ZIP, 아이콘이 같은태그,1항목/API15다. 설치 JSON push와 실제 공유 URL의 최종 조회는 이어 확인한다.
