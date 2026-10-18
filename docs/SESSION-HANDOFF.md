@@ -1,6 +1,6 @@
 # 세션 인수인계
 
-갱신: 2026-10-19 · 공개0.3.8.0 · 0.3.9.0 Release 추출본 확인 완료·게시 진행
+갱신: 2026-10-19 · 공개0.3.9.0 · 설치 목록 최종 조회 진행
 
 ## 재개 순서
 
@@ -25,17 +25,15 @@
 | upstream 컴파일 참조 | .cache/upstream-15.0.3.6/refs/ · build/dalamud-reference.json 고정 해시 |
 | SDK/대상 | global.json의 10.0.402, SDK15.0.0, x64/net10.0-windows |
 | 정규 Debug DLL | ${env:DUCKBILL_ROOT}/src/DuckbillFisher.Plugin/bin/Debug/DuckbillFisher.dll |
-| 이전 Release 추출 DLL | ${env:DUCKBILL_ROOT}/.cache/release-validation/0.3.0.0/DuckbillFisher.dll |
-| 현재 확인 Release 추출 DLL | ${env:DUCKBILL_ROOT}/.cache/release-validation/0.3.8.0/DuckbillFisher.dll |
-| 게시 진행 확인 Release DLL | ${env:DUCKBILL_ROOT}/.cache/release-validation/0.3.9.0/DuckbillFisher.dll |
+| 이전 Release 추출 DLL | ${env:DUCKBILL_ROOT}/.cache/release-validation/0.3.8.0/DuckbillFisher.dll |
+| 현재 확인 Release 추출 DLL | ${env:DUCKBILL_ROOT}/.cache/release-validation/0.3.9.0/DuckbillFisher.dll |
 
 캐시/참조 DLL은 Git에 없다. 다른 PC에서는 실제 경로와 정확한 지원 배포판을 다시 확인한다. 최소 참조가 없다고 현재 참조를 Release에 조용히 대체하지 않는다. 일반 빌드 명령은 [WORKFLOW](development/WORKFLOW.md#windows-빌드)에 한 곳만 유지한다.
 
 ## 배포 산출물과 로컬 상태
 
-- 공개0.3.8.0 소스 태그 커밋은899f567, 설치 JSON 커밋은c18de68이다. Release ID416649615의 고정 ZIP/체크섬·익명 다운로드/해시/아이콘 확인 뒤 설치 JSON을 게시했고 실제 공유 raw URL의0.3.8.0/API15/링크 조회도 완료했다. [게시 근거](verification/releases/RELEASE-0.3.8.0.md).
-- 현재 확인 ZIP은 artifacts/share/0.3.8.0/DuckbillFisher-0.3.8.0.zip, Release 출력은 .cache/release-build/0.3.8.0/다. SHA256과 API/버전은 위 Release 기록에 있다. 사용자 대표 확인 뒤 같은 ZIP을 게시했으며 재빌드/덮어쓰지 않는다.
-- 새 확인 ZIP은 artifacts/share/0.3.9.0/DuckbillFisher-0.3.9.0.zip, 출력은 .cache/release-build/0.3.9.0/다. [고정 해시·검사·사용자 대표 확인](verification/releases/RELEASE-0.3.9.0.md)을 따르며 같은 ZIP으로 게시 진행 중이다. 실제 설치 목록은 아직0.3.8.0이다. 확인 뒤 실행 파일을 다시 빌드하지 않는다.
+- 공개0.3.9.0 소스 태그 커밋은8ada789다. Release ID416680193의 ZIP/체크섬·익명 다운로드/해시/아이콘 확인 후 설치 JSON을 갱신한다. [게시 근거](verification/releases/RELEASE-0.3.9.0.md).
+- 현재 확인 ZIP은 artifacts/share/0.3.9.0/DuckbillFisher-0.3.9.0.zip, Release 출력은 .cache/release-build/0.3.9.0/다. SHA256과 API/버전은 위 Release 기록에 있다. 사용자 대표 확인 뒤 같은 ZIP을 게시했으며 재빌드/덮어쓰지 않는다. 이전0.3.8.0 경로도 보존한다.
 - 개발0.3.9.0 별도 출력은 .cache/changelog-build/, 정규 Debug도0.3.9.0이다. 업데이트 안내는 schema13의 공통 LastSeenChangelogVersion을 사용한다. 이전 출력은 .cache/custom-sound-build/·bait-preparation-release/·snapshot-reuse-build/·alert-stability-build/·forecast-refinement-build/·fish-eyes-build/·intuition-forecast-build/·data-integrity-build/·data-integrity-import/, 재생성 자료는 .cache/data-integrity/다. 이전 참조별 출력은 .cache/maintenance-*에 있다.
 - 확인된 ZIP을 다시 빌드해 바꾸거나 기존 태그/Release를 덮어쓰지 않는다. 제품 수정은 새 버전으로 준비한다.
 - 개발·배포 플러그인의 같은 InternalName을 동시에 로드하지 않는다. 사용자가 현재 등록한 경로를 추측해 설정을 수정하지 않는다.

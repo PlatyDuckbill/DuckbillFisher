@@ -14,6 +14,7 @@ A Dalamud fishing companion for **FFXIV Korea**. Find your next fish, keep track
 - Track favorites with local chat alerts, game sound effects, or a custom local WAV with preview controls.
 - Use the quick list for fish available now or coming up soon.
 - Follow your casts with a timer, bait snapshots, and character-specific fishing records.
+- Read installer release notes and browse the latest five releases in Korean or English from Settings → What's new.
 
 Korean and English interface options are available. Fish, item, and location names come from your game client. Collection status is confirmed against the game fish guide; unread data stays unknown, and manual overrides take priority.
 
@@ -31,7 +32,7 @@ Open with `/duckbillfisher`. The same repository supplies future updates through
 
 ## Supported environment and limits
 
-- Current release: **[0.3.8.0](https://github.com/PlatyDuckbill/DuckbillFisher/releases/tag/v0.3.8.0)**, built for **Dalamud API 15**. Custom WAV sounds, Fish Eyes browsing, Intuition forecasts, and reliability improvements are included. Representative checks of WAV preview/stop, fish browsing/guide, timer/records, and settings restoration passed using the extracted Release package on the developer's KR installation.
+- Current release: **[0.3.9.0](https://github.com/PlatyDuckbill/DuckbillFisher/releases/tag/v0.3.9.0)**, built for **Dalamud API 15**. Adds release history and a once-per-version update screen. Representative checks of history expansion, closing/reloading, reopening from Settings, language switching, existing fish browsing/timer, and settings restoration passed using the extracted Release package on the developer's KR installation.
 - Representative game checks use Korean client **2026.10.06.0000.0000** and **XIVLauncherKR Dalamud 15.0.3.6**. Other regional clients are not verified.
 - Version 0.2.6.0 supports the inspected **wasdcxz and dal4kr builds of KR Dalamud 15.0.3.7**. These distributions share a version number but have distinct module identities. Representative checks of fish-guide opening, collection sync, and the casting timer passed on both the local PC and the friend's dal4kr installation after updating.
 - Native observations require the inspected KR game and DLL versions. A patch can disable these features until compatibility is reviewed.
