@@ -660,9 +660,9 @@ Main inventory only. An unknown quantity is not zero.</value></data>
   <data name="CustomSoundSkipped" xml:space="preserve"><value>Custom WAV skipped</value></data>
   <data name="CustomSoundLoginRequired" xml:space="preserve"><value>Log in to load and preview the WAV.</value></data>
   <data name="ChangelogTitle" xml:space="preserve"><value>What's new</value></data>
-  <data name="ChangelogVersion" xml:space="preserve"><value>DuckbillFisher {0}</value></data>
-  <data name="ChangelogNotes" xml:space="preserve"><value>Release notes are now available in the plugin installer. This summary appears once per version; closing it marks it as read.</value></data>
-  <data name="ChangelogRecent" xml:space="preserve"><value>Recent improvements · 0.3.8.0</value></data>
+  <data name="ChangelogVersion" xml:space="preserve"><value>Installed version · {0}</value></data>
+  <data name="ChangelogPublishedHint" xml:space="preserve"><value>Latest {0} published releases, newest first. Expand a version to read its changes.</value></data>
+  <data name="ChangelogRelease" xml:space="preserve"><value>Version {0}</value></data>
   <data name="ChangelogAudio" xml:space="preserve"><value>Custom WAV alerts: choose, preview, reload, and stop a local sound file in Settings.</value></data>
   <data name="ChangelogForecast" xml:space="preserve"><value>Forecasts up to 30 real days ahead. Use the Fish Eyes button in the filter bar to switch the forecast and sorting basis.</value></data>
   <data name="ChangelogIntuition" xml:space="preserve"><value>Expand the Intuition calculation in fish details to compare target and prerequisite times. Unknown durations use a marked 175-second assumption.</value></data>
@@ -671,4 +671,11 @@ Main inventory only. An unknown quantity is not zero.</value></data>
   <data name="ChangelogReopenHint" xml:space="preserve"><value>You can read these notes again in Settings → What's new.</value></data>
   <data name="ChangelogUnsaved" xml:space="preserve"><value>Read status cannot be saved. These notes may appear again after reloading.</value></data>
   <data name="ChangelogDismiss" xml:space="preserve"><value>Got it</value></data>
+  <data name="ChangelogBaitPreparation" xml:space="preserve"><value>Added bait preparation for favorites or filtered fish, with inventory counts and target fish. Find owned baits using page markers and highlights in the game's bait UI.</value></data>
+  <data name="ChangelogRecordRecovery" xml:space="preserve"><value>Improved fishing-record saves, restoration, ordering, and deletion. Added observation of stored live bait used for a cast.</value></data>
+  <data name="ChangelogDataExpansion" xml:space="preserve"><value>Expanded regular fish details from 903 to 1,258 entries and filled supported missing fields. Incomplete conditions remain marked as unverified.</value></data>
+  <data name="ChangelogDal4kr" xml:space="preserve"><value>Added support for the inspected dal4kr build of KR Dalamud 15.0.3.7. Fixed compatibility blocks affecting collection sync, fish-guide opening, the casting timer, and alert sounds on this distribution.</value></data>
+  <data name="ChangelogKrRuntime" xml:space="preserve"><value>Added support for the inspected KR Dalamud 15.0.3.7 runtime alongside 15.0.3.6, restoring native features blocked after the runtime update.</value></data>
+  <data name="ChangelogCompatibilityHint" xml:space="preserve"><value>Show the compatibility block when native features are unavailable, with a compact runtime/profile/status line in diagnostics.</value></data>
+  <data name="ChangelogFirstRelease" xml:space="preserve"><value>First custom-repository release: fish browsing and filters, bait and condition details, map markers, forecasts, favorite alerts, a quick list, a casting timer, and character-specific fishing records. Korean and English UI.</value></data>
 </root>

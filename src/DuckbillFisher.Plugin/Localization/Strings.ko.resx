@@ -660,9 +660,9 @@
   <data name="CustomSoundSkipped" xml:space="preserve"><value>커스텀 WAV 생략</value></data>
   <data name="CustomSoundLoginRequired" xml:space="preserve"><value>캐릭터 접속 후 WAV를 불러오고 미리 들을 수 있습니다.</value></data>
   <data name="ChangelogTitle" xml:space="preserve"><value>업데이트 내역</value></data>
-  <data name="ChangelogVersion" xml:space="preserve"><value>DuckbillFisher {0}</value></data>
-  <data name="ChangelogNotes" xml:space="preserve"><value>설치 화면에서도 변경 내역을 볼 수 있습니다. 이 안내는 버전마다 한 번 표시되며, 닫으면 확인한 것으로 저장합니다.</value></data>
-  <data name="ChangelogRecent" xml:space="preserve"><value>최근 주요 변경 · 0.3.8.0</value></data>
+  <data name="ChangelogVersion" xml:space="preserve"><value>설치된 버전 · {0}</value></data>
+  <data name="ChangelogPublishedHint" xml:space="preserve"><value>최근 배포된 {0}개 버전입니다. 최신순으로 정리했으며 버전을 펼쳐 변경 내역을 볼 수 있습니다.</value></data>
+  <data name="ChangelogRelease" xml:space="preserve"><value>버전 {0}</value></data>
   <data name="ChangelogAudio" xml:space="preserve"><value>커스텀 WAV 알림: 설정에서 음원을 선택하고 미리 듣기·재불러오기·중지를 할 수 있습니다.</value></data>
   <data name="ChangelogForecast" xml:space="preserve"><value>실제 30일 뒤까지 출현을 예측합니다. 필터 줄의 물고기의 눈 버튼으로 예측·정렬 기준을 바꿀 수 있습니다.</value></data>
   <data name="ChangelogIntuition" xml:space="preserve"><value>어종 상세의 직감 계산을 펼치면 대상·선행 어종 시간을 비교할 수 있습니다. 지속 시간 미확인은 175초 가정과 경고를 표시합니다.</value></data>
@@ -671,4 +671,11 @@
   <data name="ChangelogReopenHint" xml:space="preserve"><value>설정 → 업데이트 내역에서 다시 볼 수 있습니다.</value></data>
   <data name="ChangelogUnsaved" xml:space="preserve"><value>확인 여부를 저장할 수 없어 재로드하면 다시 표시될 수 있습니다.</value></data>
   <data name="ChangelogDismiss" xml:space="preserve"><value>확인</value></data>
+  <data name="ChangelogBaitPreparation" xml:space="preserve"><value>즐겨찾기·필터 결과의 미끼 준비, 소지 수량·대상 어종을 추가했습니다. 게임 미끼 UI에서 페이지 표식과 강조로 소지 미끼를 찾을 수 있습니다.</value></data>
+  <data name="ChangelogRecordRecovery" xml:space="preserve"><value>낚시 기록 저장·복원·정렬·삭제를 보강하고, 시전에 사용한 보관 생미끼 관찰을 추가했습니다.</value></data>
+  <data name="ChangelogDataExpansion" xml:space="preserve"><value>일반 어종 상세를 903종에서 1,258종으로 늘리고 근거가 있는 누락 항목을 보완했습니다. 불완전한 조건은 미확인 표시를 유지합니다.</value></data>
+  <data name="ChangelogDal4kr" xml:space="preserve"><value>검증한 dal4kr 배포판의 KR Dalamud 15.0.3.7을 지원합니다. 해당 배포판에서 수집 연동·도감 열기·캐스팅 타이머·알림 소리가 차단되던 호환성 문제를 수정했습니다.</value></data>
+  <data name="ChangelogKrRuntime" xml:space="preserve"><value>기존 15.0.3.6과 함께 검증한 KR Dalamud 15.0.3.7을 지원하여, 런타임 업데이트 후 차단되던 네이티브 기능을 복구했습니다.</value></data>
+  <data name="ChangelogCompatibilityHint" xml:space="preserve"><value>네이티브 기능을 쓸 수 없을 때 호환성 차단 이유를 표시하고, 진단에 런타임·프로필·상태 요약을 추가했습니다.</value></data>
+  <data name="ChangelogFirstRelease" xml:space="preserve"><value>첫 커스텀 저장소 배포입니다. 어종 목록·필터, 미끼·조건 상세, 지도, 출현 예측, 즐겨찾기 알림, 간이 목록, 캐스팅 타이머와 캐릭터별 낚시 기록을 제공합니다. 한국어·영어 UI를 지원합니다.</value></data>
 </root>

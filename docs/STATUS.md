@@ -6,7 +6,7 @@
 
 - 공개 버전은 **0.3.8.0 / API15**다. 고정 Release 추출본 대표 확인 뒤 같은 ZIP을 게시했다. 익명 ZIP/체크섬/태그 아이콘 HTTP200·해시 일치, 설치 JSON 게시와 실제 공유 URL의 버전/API/링크 조회를 완료했다. [배포 근거](verification/releases/RELEASE-0.3.8.0.md).
 - 커스텀 저장소: https://raw.githubusercontent.com/PlatyDuckbill/DuckbillFisher/main/repo/pluginmaster.json
-- 공개0.3.8.0 설치 목록에 Changelog만 추가·게시했고 실제 공유 raw URL에서 HTTP200/문구 일치를 확인했다. ZIP/태그/버전/다운로드 링크는 유지한다. 개발 **0.3.9.0**은 내장 한영 업데이트 안내·버전별 확인 저장(schema13)·설정에서 다시 열기를 추가했다. 별도→정규 Debug 빌드 경고0/오류0·리소스661키·manifest/문서 검사 완료, 테스트/게임/새 패키징/게시 없음. [동작·확인 순서](verification/catalog/UI.md#0390-업데이트-안내-2026-10-19).
+- 공개0.3.8.0 설치 목록에 Changelog만 추가·게시했고 실제 공유 raw URL에서 HTTP200/문구 일치를 확인했다. ZIP/태그/버전/다운로드 링크는 유지한다. 개발 **0.3.9.0**은 내장 한영 업데이트 안내·버전별 확인 저장(schema13)·설정에서 다시 열기를 추가했다. 공개 릴리스5개만 최신순으로 묶고 최신만 기본 펼침이다. 별도→정규 Debug 빌드 경고0/오류0·리소스668키·manifest/문서 검사 완료, 테스트/게임/새 패키징/게시 없음. [동작·확인 순서](verification/catalog/UI.md#0390-업데이트-안내-2026-10-19).
 - 0.2.6.0에서 본인·친구 PC의 설치/업데이트·도감·수집·타이머 대표 확인 완료. **0.3.8.0 실제 저장소 업데이트/친구 새 기능 확인은 별도 대기**다. 이전 공개0.3.0.0의 확인 대기를 자동 통과로 바꾸지 않는다.
 - **0.3.8.0** 개발 커스텀 WAV 확인 뒤 고정 Release ZIP 추출본의 WAV/목록/도감/타이머·기록/설정 복원 대표 확인도 받았다. 최소 참조 빌드·한영649키·패키지/내장 데이터/추출 해시 검사 완료. ZIP400,131바이트를 재빌드하지 않고 게시했다. [고정 ZIP·확인·순서](verification/releases/RELEASE-0.3.8.0.md).
 - 커스텀 WAV는 파일 선택/미리 듣기/재불러오기/중지, 전용 스레드의 임시 복사본/Windows alias이며 실패해도 채팅을 유지한다. schema12·alerts/v7, 기존 SE/기본값 보존. [대표 확인과 장애 미확인](verification/alerts/CUSTOM-SOUND.md).

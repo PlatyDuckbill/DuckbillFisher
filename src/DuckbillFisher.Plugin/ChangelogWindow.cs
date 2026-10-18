@@ -11,6 +11,32 @@ namespace DuckbillFisher.Plugin;
 internal sealed class ChangelogWindow : Window
 {
     private static readonly Version CurrentVersion = typeof(Plugin).Assembly.GetName().Version!;
+    // Published releases only, newest first. Update from docs/releases during release preparation.
+    private static readonly ReleaseNotes[] PublishedReleases =
+    [
+        new(new(0, 3, 8, 0),
+        [
+            (FontAwesomeIcon.Music, T.ChangelogAudio),
+            (FontAwesomeIcon.Clock, T.ChangelogForecast),
+            (FontAwesomeIcon.Fish, T.ChangelogIntuition),
+            (FontAwesomeIcon.Search, T.ChangelogDetails),
+            (FontAwesomeIcon.Wrench, T.ChangelogStability),
+        ]),
+        new(new(0, 3, 0, 0),
+        [
+            (FontAwesomeIcon.Fish, T.ChangelogBaitPreparation),
+            (FontAwesomeIcon.History, T.ChangelogRecordRecovery),
+            (FontAwesomeIcon.Search, T.ChangelogDataExpansion),
+        ]),
+        new(new(0, 2, 6, 0), [(FontAwesomeIcon.Wrench, T.ChangelogDal4kr)]),
+        new(new(0, 2, 5, 0),
+        [
+            (FontAwesomeIcon.Wrench, T.ChangelogKrRuntime),
+            (FontAwesomeIcon.Search, T.ChangelogCompatibilityHint),
+        ]),
+        new(new(0, 2, 4, 0), [(FontAwesomeIcon.Fish, T.ChangelogFirstRelease)]),
+    ];
+    private readonly ReleaseNotes[] releases = PublishedReleases.Where(release => release.Version <= CurrentVersion).Take(5).ToArray();
     private readonly FishPreferences preferences;
     private bool contentShown;
 
@@ -50,13 +76,16 @@ internal sealed class ChangelogWindow : Window
             contentShown = true;
             ImGui.TextColored(new Vector4(1, 0.8f, 0.32f, 1), UiText.Get(T.ChangelogVersion, CurrentVersion));
             ImGui.Separator();
-            Entry(FontAwesomeIcon.Newspaper, T.ChangelogNotes);
-            UiWidgets.Heading(T.ChangelogRecent);
-            Entry(FontAwesomeIcon.Music, T.ChangelogAudio);
-            Entry(FontAwesomeIcon.Clock, T.ChangelogForecast);
-            Entry(FontAwesomeIcon.Fish, T.ChangelogIntuition);
-            Entry(FontAwesomeIcon.Search, T.ChangelogDetails);
-            Entry(FontAwesomeIcon.Wrench, T.ChangelogStability);
+            ImGui.TextWrapped(UiText.Get(T.ChangelogPublishedHint, releases.Length));
+            ImGui.Spacing();
+            for (var i = 0; i < releases.Length; i++)
+            {
+                var release = releases[i];
+                var label = $"{UiText.Get(T.ChangelogRelease, release.Version)}###ReleaseNotes.{release.Version}";
+                if (!ImGui.CollapsingHeader(label, i == 0 ? ImGuiTreeNodeFlags.DefaultOpen : ImGuiTreeNodeFlags.None)) continue;
+                ImGui.Spacing();
+                foreach (var (icon, text) in release.Entries) Entry(icon, text);
+            }
             ImGui.Spacing();
             ImGui.TextWrapped(UiText.Get(T.ChangelogReopenHint));
             if (!preferences.View.CanEdit || preferences.View.Error?.Key == T.PreferencesSaveFailed)
@@ -77,4 +106,6 @@ internal sealed class ChangelogWindow : Window
         ImGui.EndGroup();
         ImGui.Spacing();
     }
+
+    private sealed record ReleaseNotes(Version Version, (FontAwesomeIcon Icon, T Text)[] Entries);
 }

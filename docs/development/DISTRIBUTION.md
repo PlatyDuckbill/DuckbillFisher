@@ -87,7 +87,7 @@ GitHub 웹 또는 현재 사용 가능한 인증 도구로 게시한다. 토큰�
 
 - 설치 화면은 커스텀 저장소 항목의 `Changelog` 문자열을 사용한다. GitHub Release 본문을 자동 조회하지 않는다. csproj의 `<Changelog>`에 영어 요약을 넣으면 SDK manifest와 prepare-release.ps1의 후보 설치 JSON에 보존된다. 매 버전 요약·DLL/manifest·후보 JSON의 일치를 확인한다.
 - 이미 공개한 버전의 안내만 보완할 때는 설치 JSON의 `Changelog`만 추가할 수 있다. 버전/다운로드 링크/LastUpdate와 고정 ZIP·태그를 바꾸지 않으며 실제 공유 raw URL에서 새 문구를 확인한다. ZIP 안 manifest와 설치 JSON의 이 차이는 배포 기록에 남긴다.
-- 플러그인 자체 업데이트 안내는 내장 한영 리소스를 사용한다. 버전을 올릴 때 ChangelogWindow의 항목과 Changelog 계열 TextKey/리소스도 함께 검토한다. 원격 Release 조회는 하지 않는다. 확인 버전은 공통 설정에 저장하고 설정에서 다시 열 수 있다.
+- 플러그인 자체 업데이트 안내는 내장 한영 리소스와 ChangelogWindow.PublishedReleases를 사용한다. 최근 공개 릴리스5개를 최신순으로 표시하며 개발 버전은 제외한다. 새 Release 후보를 준비할 때 docs/releases의 공개 요약에 맞춰 해당 버전을 맨 앞에 추가하고 한영 TextKey/리소스를 함께 갱신한 뒤 그 후보 ZIP을 확인받아 게시한다. 실패한 후보/중간 개발 버전을 배포 이력으로 남기지 않는다. 원격 Release 조회는 하지 않는다. 확인 버전은 공통 설정에 저장하고 설정에서 다시 열 수 있다.
 - 규격 확인: 2026-10-19 [manifest Changelog](https://dalamud.dev/plugin-development/plugin-metadata/#changelogs), [커스텀 저장소 항목](https://dalamud.dev/plugin-publishing/custom-repositories/#store-entry-keys).
 
 ### 업데이트 확인과 복구
