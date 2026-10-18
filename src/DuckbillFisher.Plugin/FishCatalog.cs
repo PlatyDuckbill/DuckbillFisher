@@ -378,7 +378,7 @@ internal sealed class FishCatalog : IDisposable
         var unresolved = snapshot.Rows.Where(row => !row.IsDisplayable).ToArray();
         var report = new StringBuilder();
         void Append(FormattableString line) => report.AppendLine(FormattableString.Invariant(line));
-        report.AppendLine("DuckbillFisher MVP-01/catalog/v8");
+        report.AppendLine("DuckbillFisher MVP-01/catalog/v9");
         Append($"Plugin: {typeof(Plugin).Assembly.GetName().Version}");
         Append($"Rows: {snapshot.Rows.Count}; displayable: {snapshot.Rows.Count - unresolved.Length}; unresolved: {unresolved.Length}; unresolved in log: {unresolved.Count(row => row.IsInLog)}");
         report.AppendLine($"Status: [{snapshot.Status.Key}] {snapshot.Status.Diagnostic}");
@@ -387,7 +387,7 @@ internal sealed class FishCatalog : IDisposable
         Append($"Coverage: oceanAreas={snapshot.Rows.Count(row => row.Ocean is not null)}; spearStored={FishingData.Dataset.Spearfishing.Length}; spearConditionsUnknown={FishingData.SpearUnknown}");
         Append($"Classification: dataset={FishClassificationData.Dataset.DataVersion}; bigIncludingLegendary={snapshot.Rows.Count(row => row.Grade is FishGrade.Big or FishGrade.Legendary)}; legendary={snapshot.Rows.Count(row => row.Grade == FishGrade.Legendary)}; restricted={snapshot.Rows.Count(row => row.TimeRestriction == FishTimeRestriction.Restricted)}");
         Append($"ForecastAt: {snapshot.ForecastAt:O}; horizonDays={FishingAvailability.SearchDays}; horizonPeriods={FishingAvailability.SearchPeriods}; fishEyes={snapshot.FishEyesEnabled}; normalWindows={snapshot.NormalWindows.Count}; fishEyesWindows={snapshot.FishEyesWindows.Count}; alertsFishEyes=false; intuitionPrerequisites=true; no personal readiness inference");
-        Append($"IntuitionForecast: total={snapshot.Windows.Count(pair => pair.Value.Basis == FishingForecastBasis.Intuition)}; issues={string.Join(',', snapshot.Windows.Where(pair => pair.Value.Issue != FishingForecastIssue.None).Select(pair => $"{pair.Key}:{pair.Value.Issue}"))}");
+        Append($"IntuitionForecast: total={snapshot.Windows.Count(pair => pair.Value.Basis == FishingForecastBasis.Intuition)}; assumedDurations={snapshot.Windows.Count(pair => pair.Value.Breakdown?.DurationAssumed == true)}; defaultDurationSeconds={FishingForecast.DefaultIntuitionSeconds}; issues={string.Join(',', snapshot.Windows.Where(pair => pair.Value.Issue != FishingForecastIssue.None).Select(pair => $"{pair.Key}:{pair.Value.Issue}"))}");
         report.AppendLine($"Source: {FishingData.Dataset.SourceRepository}/tree/{FishingData.Dataset.SourceRevision}");
         report.AppendLine("Detail samples: up to 20, selected fish first, then ordered by FishParameter ID.");
         foreach (var row in snapshot.Rows.Where(row => row.Details is not null)

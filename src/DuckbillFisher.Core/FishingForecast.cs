@@ -8,6 +8,8 @@ public sealed record FishingForecastInput(FishingRule Rule, IReadOnlyList<Weathe
 /// Predicts preparation opportunities, never a character's catches or active buff.</summary>
 public sealed class FishingForecast
 {
+    // Same missing-value assumption as Fish Tracker; never written back as a verified data fact.
+    public const double DefaultIntuitionSeconds = 175;
     private readonly FrozenDictionary<uint, FishingForecastInput> inputs;
 
     public FishingForecast(IEnumerable<FishingForecastInput> inputs) =>
@@ -33,6 +35,7 @@ public sealed class FishingForecast
         input = ForMode(input, fishEyes);
         var rule = input.Rule;
         if (rule.Predators.Length == 0) return FishingAvailability.Find(now, rule, input.WeatherRates);
+        var duration = rule.IntuitionSeconds ?? DefaultIntuitionSeconds;
         var issue = Prerequisites(rule, fishEyes, out var predators);
         Dictionary<uint, double>? preparationStarts = null;
         FishingWindow result;
@@ -41,7 +44,7 @@ public sealed class FishingForecast
         // No duration is needed when every prerequisite is available at all times.
         else if (predators.All(predator => FishingAvailability.IsAlways(predator.Rule)))
             result = FishingAvailability.Find(now, rule, input.WeatherRates);
-        else if (rule.IntuitionSeconds is not { } duration || !double.IsFinite(duration) || duration <= 0)
+        else if (!double.IsFinite(duration) || duration <= 0)
             result = new(FishingWindowKind.Unknown) { Issue = FishingForecastIssue.IntuitionDurationUnknown };
         else
         {
@@ -60,7 +63,11 @@ public sealed class FishingForecast
                 ? DateTimeOffset.FromUnixTimeMilliseconds((long)Math.Round(start * 1000)) : targetAt,
                 requirement.ItemId, fishEyes))).ToArray();
         return result with { Basis = FishingForecastBasis.Intuition,
-            Breakdown = new(FishingAvailability.Find(targetAt, rule, input.WeatherRates), prerequisites) };
+            Breakdown = new(FishingAvailability.Find(targetAt, rule, input.WeatherRates), prerequisites)
+            {
+                IntuitionSeconds = duration,
+                DurationAssumed = rule.IntuitionSeconds is null,
+            } };
     }
 
     private FishingWindow OwnWindow(DateTimeOffset at, uint itemId, bool fishEyes)

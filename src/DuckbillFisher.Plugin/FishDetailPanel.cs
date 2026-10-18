@@ -70,10 +70,11 @@ internal sealed class FishDetailPanel(FishPreferences preferences, ITextureProvi
                 ImGui.PopID();
             }
             else FishingWindowPanel.Draw(window, now, reason);
-            if (fish.Details is { Predators.Length: > 0 } intuition)
+            if (fish.Details is { Predators.Length: > 0 })
             {
-                ImGui.TextWrapped(FishingWindowPanel.IntuitionNotice(window));
-                FishingWindowPanel.DrawBreakdown(window, intuition, now, catalog.FishEyesEnabled);
+                if (window?.Issue is not (null or FishingForecastIssue.None))
+                    ImGui.TextWrapped(FishingWindowPanel.IntuitionNotice(window));
+                FishingWindowPanel.DrawBreakdown(window, fish, textures, now, catalog.FishEyesEnabled);
             }
         }
 

@@ -1,6 +1,7 @@
 using System.Numerics;
 using Dalamud.Bindings.ImGui;
 using Dalamud.Interface;
+using Dalamud.Plugin.Services;
 using DuckbillFisher.Core;
 using DuckbillFisher.Plugin.Localization;
 using T = DuckbillFisher.Plugin.Localization.TextKey;
@@ -71,25 +72,63 @@ internal static class FishingWindowPanel
     public static bool Different(FishingWindow? normal, FishingWindow? fishEyes) =>
         normal?.Kind != fishEyes?.Kind || normal?.Start != fishEyes?.Start || normal?.End != fishEyes?.End || normal?.Issue != fishEyes?.Issue;
 
-    public static void DrawBreakdown(FishingWindow? window, FishingDetailView details, DateTimeOffset now, bool fishEyes)
+    public static void DrawBreakdown(FishingWindow? window, FishGuideRow fish, ITextureProvider textures, DateTimeOffset now, bool fishEyes)
     {
-        if (window?.Breakdown is not { } breakdown) return;
-        UiWidgets.Heading(T.ForecastCalculation);
+        if (window?.Breakdown is not { } breakdown || fish.Details is not { } details) return;
+        if (!ImGui.CollapsingHeader(UiText.Label(T.ForecastCalculation, "IntuitionCalculation"))) return;
         ImGui.TextDisabled(UiText.Get(fishEyes ? T.ForecastWithFishEyes : T.ForecastNormal));
-        ImGui.TextWrapped(UiText.Get(T.ForecastTargetRange, Describe(breakdown.Target, now)));
-        foreach (var prerequisite in breakdown.Prerequisites)
+        if (ImGui.BeginTable("IntuitionCalculationRows", 2,
+            ImGuiTableFlags.SizingStretchProp | ImGuiTableFlags.RowBg | ImGuiTableFlags.BordersInnerH))
         {
-            var item = details.Predators.FirstOrDefault(item => item.Id == prerequisite.ItemId);
-            ImGui.PushID((int)prerequisite.ItemId);
-            ImGui.TextWrapped(UiText.Get(T.ForecastPrerequisiteRange, item?.Name ?? prerequisite.ItemId.ToString(), prerequisite.Count,
-                Describe(prerequisite.Window, now)));
-            ImGui.PopID();
+            ImGui.TableSetupColumn(UiText.Get(T.ForecastFishColumn), ImGuiTableColumnFlags.WidthStretch, 1);
+            ImGui.TableSetupColumn(UiText.Get(T.ForecastTimeColumn), ImGuiTableColumnFlags.WidthStretch, 1.35f);
+            ImGui.TableHeadersRow();
+            FishRow(fish.IconId, fish.DisplayName, T.ForecastTargetRole, breakdown.Target);
+            foreach (var prerequisite in breakdown.Prerequisites)
+            {
+                var item = details.Predators.FirstOrDefault(item => item.Id == prerequisite.ItemId);
+                FishRow(item?.IconId ?? 0, UiText.Get(T.PredatorLabel, item?.Name ?? prerequisite.ItemId.ToString(), prerequisite.Count),
+                    T.ForecastPrerequisiteRole, prerequisite.Window);
+            }
+            ImGui.TableNextRow();
+            ImGui.TableNextColumn();
+            var accent = window.Kind == FishingWindowKind.Open ? new Vector4(0.55f, 0.88f, 0.68f, 1)
+                : new Vector4(0.62f, 0.82f, 1, 1);
+            ImGui.PushStyleColor(ImGuiCol.Text, accent);
+            UiWidgets.Icon(FontAwesomeIcon.Clock);
+            ImGui.SameLine();
+            ImGui.TextWrapped(UiText.Get(T.ForecastFinalRole));
+            ImGui.TableNextColumn();
+            ImGui.TextWrapped(FishRowRenderer.CompactWindow(window, now));
+            ImGui.PopStyleColor();
+            DrawRange(window, now);
+            ImGui.EndTable();
         }
-        ImGui.TextWrapped(details.Rule.IntuitionSeconds is { } seconds ? UiText.Get(T.IntuitionDuration, seconds) : UiText.Get(T.IntuitionDurationUnknown));
-        ImGui.TextWrapped(UiText.Get(T.ForecastFinalRange, FishRowRenderer.FormatWindow(window, now)));
-        DrawRange(window, now);
+        UiWidgets.Icon(FontAwesomeIcon.HourglassHalf);
+        ImGui.SameLine();
+        ImGui.TextWrapped(UiText.Get(T.ForecastDurationUsed, breakdown.IntuitionSeconds));
+        ImGui.PushStyleColor(ImGuiCol.Text, new Vector4(0.65f, 0.69f, 0.74f, 1));
         ImGui.TextWrapped(UiText.Get(window.Start is null && window.Kind != FishingWindowKind.Always
             ? T.ForecastCalculationPendingHint : T.ForecastCalculationHint));
+        ImGui.PopStyleColor();
+
+        void FishRow(uint icon, string name, T role, FishingWindow availability)
+        {
+            ImGui.TableNextRow();
+            ImGui.TableNextColumn();
+            ImGui.BeginGroup();
+            UiWidgets.GameIcon(textures, icon, ImGui.GetTextLineHeightWithSpacing() * 1.65f, name);
+            ImGui.SameLine();
+            ImGui.BeginGroup();
+            ImGui.PushStyleColor(ImGuiCol.Text, new Vector4(0.65f, 0.69f, 0.74f, 1));
+            ImGui.TextWrapped(UiText.Get(role));
+            ImGui.PopStyleColor();
+            ImGui.TextWrapped(name);
+            ImGui.EndGroup();
+            ImGui.EndGroup();
+            ImGui.TableNextColumn();
+            ImGui.TextWrapped(Describe(availability, now));
+        }
     }
 
     private static void DrawRange(FishingWindow window, DateTimeOffset now)

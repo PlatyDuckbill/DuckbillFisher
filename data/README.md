@@ -66,6 +66,8 @@ dotnet run --project tools/FishingDataImport -- --classifications "$env:FFXIV_GA
 
 조건/등급 JSON은 Core의 `FishingDatasetReader`로 공통 검증한다. 가져오기 도구는 출력 저장 전에, Plugin은 초기화 때 한 번 실행한다. `conditionsKnown`·시간·날씨·미끼·선행 어획 등 필수 필드 누락, 잘못된 null/형식/범위, 중복 속성/ID는 거부하며 기본값으로 보완하지 않는다. `intuitionSeconds`·`fishEyesSupported`의 명시적 null은 미확인으로 보존한다. 기존 빈 `baitPath`는 허용하고, 값이 있으면 `baitSteps`와 연결을 대조한다.
 
+제품0.3.5.0부터 사용자 요청에 따라 직감 지속 시간 null은 예측 계산에서만175초를 가정한다. 데이터 파일의 null은 유지하고 계산값/가정 여부를 별도 보관해 상세에 표시한다. 데이터 검증·미확인 집계나 물고기의 눈 지원 값을 채우는 동작은 아니다.
+
 등급 자료는 조건 JSON의 LF 정규화 SHA256·게임 빌드·자료 버전, 겹치는 어종의 Item/FishParameter/터주 판정, 조건 자료의 터주 양성 항목 누락을 검사한다. 파일을 바꿀 때는 조건과 등급을 함께 재생성·검토한다. 해시 일치는 두 파일의 연결을 검증하며 외부 원본의 낚시 사실 자체를 증명하지 않는다.
 
 ```powershell

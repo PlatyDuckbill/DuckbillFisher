@@ -3,6 +3,7 @@ using Dalamud.Bindings.ImGui;
 using Dalamud.Interface;
 using Dalamud.Plugin.Services;
 using DuckbillFisher.Plugin.Localization;
+using DuckbillFisher.Core;
 using T = DuckbillFisher.Plugin.Localization.TextKey;
 
 namespace DuckbillFisher.Plugin;
@@ -125,8 +126,16 @@ internal sealed class FishingConditionPanel(ITextureProvider textures, FishingIt
                 StepItem(item, UiText.Get(T.PredatorLabel, item.Name, details.Rule.Predators[index].Count),
                     $"Predator{index}", personal, prey, true, openDetail: openDetail);
             }
-            ImGui.TextWrapped(details.Rule.IntuitionSeconds is { } seconds
-                ? UiText.Get(T.IntuitionDuration, seconds) : UiText.Get(T.IntuitionDurationUnknown));
+            if (details.Rule.IntuitionSeconds is { } seconds)
+                ImGui.TextWrapped(UiText.Get(T.IntuitionDuration, seconds));
+            else
+            {
+                ImGui.PushStyleColor(ImGuiCol.Text, new Vector4(1, 0.78f, 0.36f, 1));
+                UiWidgets.Icon(FontAwesomeIcon.ExclamationTriangle);
+                ImGui.SameLine();
+                ImGui.TextWrapped(UiText.Get(T.ForecastDurationAssumed, FishingForecast.DefaultIntuitionSeconds));
+                ImGui.PopStyleColor();
+            }
             ImGui.EndTable();
         }
         ImGui.PopStyleColor();

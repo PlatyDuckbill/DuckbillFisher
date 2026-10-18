@@ -10,8 +10,8 @@ Changes: selected KR-matched IDs and conditions with the development importer,
 preserved missing-data markers and alternative baits, excluded four records
 without a matching KR log row, omitted bite-time statistics;
 weather target arithmetic and ordered prerequisite intervals expressed in C#;
-bounded UTC search, explicit missing-duration/prerequisite handling without the
-upstream guessed duration, shared catalog/alert forecasts, Fish Eyes mode using
+bounded UTC search, explicit missing-prerequisite handling and a marked 175-second
+assumption for missing duration, shared catalog/alert forecasts, Fish Eyes mode using
 confirmed support flags, and prerequisite calculation details added.
 Displayed game names, icons, maps, and weather
 rates are read from the installed client and are not copied from this project.

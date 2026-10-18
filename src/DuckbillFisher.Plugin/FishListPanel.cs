@@ -386,7 +386,7 @@ internal sealed class FishListPanel(FishCatalog catalog, ITextureProvider textur
         else
         {
             var view = catalog.View;
-            report.AppendLine("DuckbillFisher summary/v9");
+            report.AppendLine("DuckbillFisher summary/v10");
             Append($"Plugin={typeof(Plugin).Assembly.GetName().Version}; Rows={view.Rows.Count}; Status={view.Status.Key}");
             Append($"Dataset={FishingData.Dataset.DataVersion}; Details={view.Rows.Count(row => row.Details is not null)}/{FishingData.Dataset.Fish.Length}; BuildMatch={catalog.ConditionBuildMatches}");
             Append($"Forecasts={view.Windows.Count}; OceanAreas={view.Rows.Count(row => row.Ocean is not null)}; SpearStored={FishingData.Dataset.Spearfishing.Length}; SpearUnknown={FishingData.SpearUnknown}");
@@ -403,7 +403,7 @@ internal sealed class FishListPanel(FishCatalog catalog, ITextureProvider textur
                 {
                     var rule = detail.Rule;
                     Append($"SelectedConditions: Spot={spot.Id}; Territory={spot.TerritoryId}; Map={spot.MapId}; Known={rule.ConditionsKnown}; StartET={rule.StartHour}; EndET={rule.EndHour}; Weather={string.Join(',', rule.WeatherIds)}; PreviousWeather={string.Join(',', rule.PreviousWeatherIds)}; Rates={string.Join(',', spot.WeatherRates.Select(rate => FormattableString.Invariant($"{rate.WeatherId}:{rate.Chance}")))}; HorizonDays={FishingAvailability.SearchDays}; FishEyesSupported={rule.FishEyesSupported}");
-                    Append($"SelectedIntuition: DurationSeconds={rule.IntuitionSeconds}; Predators={string.Join(',', rule.Predators.Select(predator => FormattableString.Invariant($"{predator.ItemId}:{predator.Count}")))}");
+                    Append($"SelectedIntuition: DurationSeconds={rule.IntuitionSeconds}; EffectiveDurationSeconds={forecast?.Breakdown?.IntuitionSeconds}; DurationAssumed={forecast?.Breakdown?.DurationAssumed}; Predators={string.Join(',', rule.Predators.Select(predator => FormattableString.Invariant($"{predator.ItemId}:{predator.Count}")))}");
                 }
             }
         }

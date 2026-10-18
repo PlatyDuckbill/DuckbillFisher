@@ -37,7 +37,11 @@ public enum FishingWindowKind { Unknown, Always, Open, Upcoming, NotFound }
 public enum FishingForecastBasis { TimeWeather, Intuition }
 public enum FishingForecastIssue { None, PrerequisiteUnavailable, IntuitionDurationUnknown, NestedPrerequisiteUnsupported, FishEyesSupportUnknown }
 public sealed record FishingPrerequisiteForecast(uint ItemId, int Count, FishingWindow Window);
-public sealed record FishingForecastBreakdown(FishingWindow Target, IReadOnlyList<FishingPrerequisiteForecast> Prerequisites);
+public sealed record FishingForecastBreakdown(FishingWindow Target, IReadOnlyList<FishingPrerequisiteForecast> Prerequisites)
+{
+    public double IntuitionSeconds { get; init; }
+    public bool DurationAssumed { get; init; }
+}
 public sealed record FishingWindow(FishingWindowKind Kind, DateTimeOffset? Start = null, DateTimeOffset? End = null)
 {
     public FishingForecastBasis Basis { get; init; }

@@ -151,9 +151,9 @@
   <data name="ForecastNotFound" xml:space="preserve"><value>No matching window found within the next {0} real days.</value></data>
   <data name="ForecastUnknown" xml:space="preserve"><value>Availability forecast is not available.</value></data>
   <data name="ForecastScope" xml:space="preserve"><value>The next window is searched within {0} real days from now using the selected time/weather basis and Intuition prerequisites. Actual active Intuition and personal readiness are not checked.</value></data>
-  <data name="ForecastIntuition" xml:space="preserve"><value>This forecast accounts for prerequisite fish time/weather and Intuition duration where needed. Actual prerequisite catches and active Intuition are not checked.</value></data>
-  <data name="ForecastIntuitionDurationUnknown" xml:space="preserve"><value>Intuition duration is unknown, so a forecast accounting for restricted prerequisite windows is unavailable. Actual prerequisite catches and active Intuition are not checked.</value></data>
-  <data name="ForecastIntuitionPrerequisiteUnknown" xml:space="preserve"><value>Intuition prerequisites are unknown or unsupported, so this forecast is unavailable. Actual prerequisite catches and active Intuition are not checked.</value></data>
+  <data name="ForecastIntuition" xml:space="preserve"><value>Includes prerequisite fish windows and Intuition duration.</value></data>
+  <data name="ForecastIntuitionDurationUnknown" xml:space="preserve"><value>The Intuition duration value is invalid, so a forecast is unavailable.</value></data>
+  <data name="ForecastIntuitionPrerequisiteUnknown" xml:space="preserve"><value>Intuition prerequisites are unknown or unsupported, so a forecast is unavailable.</value></data>
   <data name="RowIntuitionForecast" xml:space="preserve"><value>Intuition · {0}</value></data>
   <data name="FishEyesToggleOn" xml:space="preserve"><value>Fish Eyes ON: forecasts and remaining-time sorting assume its use. Weather and Intuition conditions still apply. This does not use the skill; alerts use normal forecasts.</value></data>
   <data name="FishEyesToggleOff" xml:space="preserve"><value>Fish Eyes OFF: click to remove time restrictions for confirmed supported fish and sort by remaining time. Weather and Intuition conditions still apply; alerts use normal forecasts.</value></data>
@@ -164,9 +164,16 @@
   <data name="ForecastTargetRange" xml:space="preserve"><value>Target time/weather: {0}</value></data>
   <data name="ForecastPrerequisiteRange" xml:space="preserve"><value>Prerequisite {0} × {1}: {2}</value></data>
   <data name="ForecastFinalRange" xml:space="preserve"><value>Calculated result: {0}</value></data>
-  <data name="ForecastCalculationHint" xml:space="preserve"><value>These ranges contributed to the final forecast. Sequential prerequisite availability and Intuition duration are considered. Actual catch progress, active Intuition, and preparation time are not checked.</value></data>
-  <data name="ForecastCalculationPendingHint" xml:space="preserve"><value>The final window could not be determined. The times above are each fish's current or next individual window; a shared preparation opportunity has not been confirmed.</value></data>
-  <data name="DurationDays" xml:space="preserve"><value>{0:0}d {1:0}h {2:0}m {3:0}s</value></data>
+  <data name="ForecastCalculationHint" xml:space="preserve"><value>Predicted from time and weather; your current Intuition buff is not included.</value></data>
+  <data name="ForecastCalculationPendingHint" xml:space="preserve"><value>No shared preparation window was found. These are individual fish windows.</value></data>
+  <data name="ForecastFishColumn" xml:space="preserve"><value>Fish / condition</value></data>
+  <data name="ForecastTimeColumn" xml:space="preserve"><value>Availability</value></data>
+  <data name="ForecastTargetRole" xml:space="preserve"><value>Target conditions</value></data>
+  <data name="ForecastPrerequisiteRole" xml:space="preserve"><value>Intuition prerequisite</value></data>
+  <data name="ForecastFinalRole" xml:space="preserve"><value>Final availability</value></data>
+  <data name="ForecastDurationUsed" xml:space="preserve"><value>Duration used: {0}s</value></data>
+  <data name="ForecastDurationAssumed" xml:space="preserve"><value>Intuition duration unknown · assuming {0}s</value></data>
+  <data name="DurationDays" xml:space="preserve"><value>{0:00}:{1:00}:{2:00}:{3:00}</value></data>
   <data name="OpenRelatedDetailHint" xml:space="preserve"><value>Open {0} details in the comparison view.</value></data>
   <data name="CompareDetailWindowTitle" xml:space="preserve"><value>Fish comparison details</value></data>
   <data name="RelatedDetailBack" xml:space="preserve"><value>Back</value></data>
