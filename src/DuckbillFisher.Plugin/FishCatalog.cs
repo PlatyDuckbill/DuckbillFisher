@@ -123,15 +123,15 @@ internal sealed class FishCatalog : IDisposable
             {
                 var normal = UpdateWindows(view.NormalWindows, false);
                 var fishEyes = UpdateWindows(view.FishEyesWindows, true);
-                var changed = Changed(normal, view.NormalWindows) || Changed(fishEyes, view.FishEyesWindows);
+                var changed = !ReferenceEquals(normal, view.NormalWindows) || !ReferenceEquals(fishEyes, view.FishEyesWindows);
                 view = view with { NormalWindows = normal, FishEyesWindows = fishEyes,
                     ForecastRevision = view.ForecastRevision + (changed ? 1 : 0), ForecastAt = now };
                 lastForecast = now;
                 nextForecast = now.AddSeconds(1);
 
-                Dictionary<uint, FishingWindow> UpdateWindows(IReadOnlyDictionary<uint, FishingWindow> previousWindows, bool useFishEyes)
+                IReadOnlyDictionary<uint, FishingWindow> UpdateWindows(IReadOnlyDictionary<uint, FishingWindow> previousWindows, bool useFishEyes)
                 {
-                    var windows = new Dictionary<uint, FishingWindow>();
+                    Dictionary<uint, FishingWindow>? windows = null;
                     foreach (var row in view.Rows.Where(row => row.Details is { Spot: not null }))
                     {
                         previousWindows.TryGetValue(row.FishParameterId, out var previous);
@@ -147,12 +147,15 @@ internal sealed class FishCatalog : IDisposable
                             FishingWindowKind.NotFound when lastForecast.ToUnixTimeSeconds() / 60 == now.ToUnixTimeSeconds() / 60 => previous,
                             _ => null,
                         } : null;
-                        windows[row.FishParameterId] = window ?? view.Forecast.Find(now, row.ItemId, useFishEyes);
+                        window ??= view.Forecast.Find(now, row.ItemId, useFishEyes);
+                        if (previous == window) continue;
+                        // Published maps remain immutable. Copy once, only when a value changes.
+                        // A catalog reload starts with empty maps, so their keys cannot outlive rows.
+                        windows ??= new(previousWindows);
+                        windows[row.FishParameterId] = window;
                     }
-                    return windows;
+                    return windows ?? previousWindows;
                 }
-                static bool Changed(IReadOnlyDictionary<uint, FishingWindow> next, IReadOnlyDictionary<uint, FishingWindow> previous) =>
-                    next.Count != previous.Count || next.Any(pair => !previous.TryGetValue(pair.Key, out var old) || old != pair.Value);
             }
         }
     }

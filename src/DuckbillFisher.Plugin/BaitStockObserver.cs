@@ -24,6 +24,7 @@ internal sealed class BaitStockObserver : IDisposable
     private readonly IFramework framework;
     private readonly FishPreferences preferences;
     private readonly Func<bool> compatible;
+    private readonly Dictionary<uint, long> totals = [];
     private BaitStockView view = new(-1, BaitStockState.Waiting, FrozenDictionary<uint, long>.Empty);
     private long sampledAt;
     private long sessionReadyAt;
@@ -43,8 +44,11 @@ internal sealed class BaitStockObserver : IDisposable
     private void Publish(int currentSession, BaitStockState state, IReadOnlyDictionary<uint, long>? counts = null)
     {
         var previous = View;
-        if (counts is null && previous.Session == currentSession && previous.State == state && previous.Counts.Count == 0) return;
-        Volatile.Write(ref view, new(currentSession, state, counts ?? FrozenDictionary<uint, long>.Empty));
+        if (previous.Session == currentSession && previous.State == state &&
+            (counts is null ? previous.Counts.Count == 0 : counts.Count == previous.Counts.Count &&
+                counts.All(pair => previous.Counts.TryGetValue(pair.Key, out var value) && value == pair.Value))) return;
+        // The sampling buffer is reused; only immutable copies may escape to readers.
+        Volatile.Write(ref view, new(currentSession, state, counts?.ToFrozenDictionary() ?? FrozenDictionary<uint, long>.Empty));
     }
 
     private void Update(IFramework _)
@@ -69,7 +73,7 @@ internal sealed class BaitStockObserver : IDisposable
         if (Stopwatch.GetElapsedTime(sessionReadyAt).TotalSeconds < 1 ||
             (sampledAt != 0 && Stopwatch.GetElapsedTime(sampledAt).TotalMilliseconds < 500)) return;
         sampledAt = Stopwatch.GetTimestamp();
-        var totals = new Dictionary<uint, long>();
+        totals.Clear();
         foreach (var bag in Bags)
         {
             var slots = inventory.GetInventoryItems(bag);
@@ -90,7 +94,7 @@ internal sealed class BaitStockObserver : IDisposable
         if (!client.IsLoggedIn || !player.IsLoaded || player.ContentId != personal.CharacterId ||
             preferences.View.Session != session)
         { Publish(session, BaitStockState.Waiting); return; }
-        Publish(session, BaitStockState.Ready, totals.ToFrozenDictionary());
+        Publish(session, BaitStockState.Ready, totals);
     }
 
     public void Dispose()

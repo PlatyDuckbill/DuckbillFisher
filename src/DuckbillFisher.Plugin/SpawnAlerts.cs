@@ -209,8 +209,27 @@ internal sealed class SpawnAlerts : IDisposable
         return new(id, row.ItemId, row.Name, row.Details!.Spot!, start, lead);
     }
 
-    private FavoriteAlertView[] FavoriteRows(FishPreferencesView personal, FishCollectionView observed, FishCatalogView data) =>
-        personal.Favorites.Select(id =>
+    private IReadOnlyList<FavoriteAlertView> FavoriteRows(FishPreferencesView personal, FishCollectionView observed, FishCatalogView data)
+    {
+        // Names/order change only with membership or catalog rows. Reuse both the sorted
+        // snapshot and each unchanged entry so the UI does not rebuild its search each second.
+        if (view.Favorites.Count != personal.Favorites.Count || view.Favorites.Any(fish =>
+            !personal.Favorites.Contains(fish.FishId) || !ReferenceEquals(fish.Row, rowsById.GetValueOrDefault(fish.FishId))))
+            return personal.Favorites.Select(id => MakeRow(id, null))
+                .OrderBy(fish => fish.Name, StringComparer.Ordinal).ThenBy(fish => fish.FishId).ToArray();
+
+        FavoriteAlertView[]? changed = null;
+        for (var index = 0; index < view.Favorites.Count; index++)
+        {
+            var previous = view.Favorites[index];
+            var next = MakeRow(previous.FishId, previous);
+            if (ReferenceEquals(previous, next)) continue;
+            changed ??= view.Favorites.ToArray();
+            changed[index] = next;
+        }
+        return changed ?? view.Favorites;
+
+        FavoriteAlertView MakeRow(uint id, FavoriteAlertView? previous)
         {
             rowsById.TryGetValue(id, out var row);
             plans.TryGetValue(id, out var plan);
@@ -223,11 +242,18 @@ internal sealed class SpawnAlerts : IDisposable
                 data.NormalWindows.GetValueOrDefault(id)?.Kind == FishingWindowKind.Always ? FavoriteAlertState.Always :
                 !personal.SpawnAlertsEnabled ? FavoriteAlertState.Disabled :
                 plan is null ? FavoriteAlertState.Pending : FavoriteAlertState.Armed;
-            return new FavoriteAlertView(id, row?.Name, personal.AlertLead(id), state, plan?.Window.Start)
+            var lead = personal.AlertLead(id);
+            var start = plan?.Window.Start;
+            var window = data.NormalWindows.GetValueOrDefault(id);
+            if (previous is not null && previous.LeadMinutes == lead && previous.State == state &&
+                previous.Start == start && ReferenceEquals(previous.Window, window))
+                return previous;
+            return new FavoriteAlertView(id, row?.Name, lead, state, start)
             {
-                Row = row, Window = data.NormalWindows.GetValueOrDefault(id),
+                Row = row, Window = window,
             };
-        }).OrderBy(fish => fish.Name, StringComparer.Ordinal).ThenBy(fish => fish.FishId).ToArray();
+        }
+    }
 
     public string CreateReport()
     {

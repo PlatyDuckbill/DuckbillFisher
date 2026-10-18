@@ -78,7 +78,7 @@ internal sealed class FishListPanel(FishCatalog catalog, ITextureProvider textur
         var diagnosticsCleared = !DeveloperMode && (showUnresolved || detailsOnly);
         if (!DeveloperMode) { showUnresolved = false; detailsOnly = false; }
         var changed = diagnosticsCleared || restored || !ReferenceEquals(lastRows, view.Rows) || lastPreferenceSession != personal.Session;
-        var refresh = changed || lastPreferenceRevision != personal.Revision || lastCollectionRevision != observed.Revision;
+        var refresh = changed || lastPreferenceRevision != personal.CatalogRevision || lastCollectionRevision != observed.Revision;
         changed |= currentRegionOnly && lastRegion != location;
         lastRegion = location;
         lastCollectionRevision = observed.Revision;
@@ -88,7 +88,7 @@ internal sealed class FishListPanel(FishCatalog catalog, ITextureProvider textur
             selectedFish = null;
         }
         lastPreferenceSession = personal.Session;
-        lastPreferenceRevision = personal.Revision;
+        lastPreferenceRevision = personal.CatalogRevision;
         if (refresh)
         {
 

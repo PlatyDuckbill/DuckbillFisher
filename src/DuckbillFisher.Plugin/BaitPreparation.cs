@@ -20,6 +20,7 @@ internal sealed class BaitPreparation : IDisposable
     private BaitPreparationView view = new(-1, 0, [], []);
     private CatalogQuery? lastQuery;
     private IReadOnlyList<FishGuideRow>? lastRows;
+    private IReadOnlySet<uint> fishItems = new HashSet<uint>();
     private FishingRegionView? lastRegion;
     private int lastPreference = -1, lastCollection = -1, lastSession = -1;
     private BaitPreparationSource lastSource;
@@ -49,16 +50,17 @@ internal sealed class BaitPreparation : IDisposable
             var observed = collection.View;
             var location = region.View;
             var current = query.Current;
-            if (lastSession == personal.Session && lastPreference == personal.Revision && lastCollection == observed.Revision &&
+            if (lastSession == personal.Session && lastPreference == personal.CatalogRevision && lastCollection == observed.Revision &&
                 ReferenceEquals(lastRows, data.Rows) && lastRegion == location && lastQuery == current && lastSource == source) return;
-            lastSession = personal.Session; lastPreference = personal.Revision; lastCollection = observed.Revision;
+            if (!ReferenceEquals(lastRows, data.Rows))
+                fishItems = data.Rows.Where(row => row.ItemType == "Item").Select(row => row.ItemId).ToHashSet();
+            lastSession = personal.Session; lastPreference = personal.CatalogRevision; lastCollection = observed.Revision;
             lastRows = data.Rows; lastRegion = location; lastQuery = current; lastSource = source;
             if (!personal.HasCharacter) { view = new(personal.Session, 0, [], []); return; }
             var filter = new CatalogFilter(current.Settings);
             var targets = data.Rows.Where(row => source == BaitPreparationSource.Favorites
                 ? personal.Favorites.Contains(row.FishParameterId)
                 : current.Matches(row, filter, personal, observed, location)).ToArray();
-            var fishItems = data.Rows.Where(row => row.ItemType == "Item").Select(row => row.ItemId).ToHashSet();
             var entries = new Dictionary<uint, (FishingItemView Item, List<FishGuideRow> Targets)>();
             var missing = new List<FishGuideRow>();
             foreach (var row in targets)

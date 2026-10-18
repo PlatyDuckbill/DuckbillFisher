@@ -39,6 +39,8 @@ public sealed class FishPreferencesConfiguration : IPluginConfiguration
 internal sealed record FishPreferencesView(int Revision, int Session, bool HasCharacter, bool CanEdit,
     IReadOnlySet<uint> Favorites, IReadOnlyDictionary<uint, bool> ManualCaught, UiMessage? Error)
 {
+    // Only inputs to catalog/collection filtering; alert reservations do not invalidate them.
+    public int CatalogRevision { get; init; }
     internal ulong CharacterId { get; init; }
     public bool SpawnAlertsEnabled { get; init; }
     public int SpawnAlertLeadMinutes { get; init; } = SpawnAlertScheduler.DefaultLeadMinutes;
@@ -371,11 +373,19 @@ internal sealed class FishPreferences : IDisposable
 
     private void Publish()
     {
-        var manual = characterId != 0 && configuration.Characters.TryGetValue(characterId, out var saved)
-            ? saved.ToFrozenDictionary() : FrozenDictionary<uint, bool>.Empty;
+        IReadOnlyDictionary<uint, bool> manual = characterId != 0 && configuration.Characters.TryGetValue(characterId, out var saved)
+            ? saved : FrozenDictionary<uint, bool>.Empty;
+        var favoritesChanged = !view.Favorites.SetEquals(configuration.Favorites);
+        var manualChanged = view.ManualCaught.Count != manual.Count ||
+            manual.Any(pair => !view.ManualCaught.TryGetValue(pair.Key, out var value) || value != pair.Value);
+        var catalogChanged = view.CharacterId != characterId || favoritesChanged || manualChanged ||
+            !view.Catalog.Matches(configuration.Catalog) || view.Language != configuration.Language;
+        var catalogRevision = view.CatalogRevision + (catalogChanged ? 1 : 0);
         view = new(view.Revision + 1, view.Session, characterId != 0, writable,
-            configuration.Favorites.ToFrozenSet(), manual, view.Error)
+            favoritesChanged ? configuration.Favorites.ToFrozenSet() : view.Favorites,
+            manualChanged ? manual.ToFrozenDictionary() : view.ManualCaught, view.Error)
         {
+            CatalogRevision = catalogRevision,
             CharacterId = characterId, SpawnAlertsEnabled = configuration.SpawnAlertsEnabled,
             SpawnAlertLeadMinutes = configuration.SpawnAlertLeadMinutes,
             SpawnAlertChannel = (XivChatType)configuration.SpawnAlertChannelId, SpawnAlertSound = configuration.SpawnAlertSound,

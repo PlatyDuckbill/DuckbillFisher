@@ -255,11 +255,11 @@ internal sealed class FishingTracker : IDisposable
             var selectionChanged = UpdateSelection();
             var observed = collection.View;
             var browsingSpot = spot ?? lastConfirmedSpot;
-            var filtersChanged = indexed || filterSpot != browsingSpot?.Id || filterPreferences != personal.Revision || filterCollection != observed.Revision;
+            var filtersChanged = indexed || filterSpot != browsingSpot?.Id || filterPreferences != personal.CatalogRevision || filterCollection != observed.Revision;
             if (filtersChanged)
             {
                 filterSpot = browsingSpot?.Id;
-                filterPreferences = personal.Revision;
+                filterPreferences = personal.CatalogRevision;
                 filterCollection = observed.Revision;
                 allSpotFish = browsingSpot is not null ? fishBySpot.GetValueOrDefault(browsingSpot.Id, []) : [];
                 remainingSpotFish = allSpotFish.Where(f => personal.Collection(f.FishParameterId, observed) != CollectionStatus.Caught).ToArray();
