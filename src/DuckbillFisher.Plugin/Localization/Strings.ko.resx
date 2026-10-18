@@ -678,4 +678,5 @@
   <data name="ChangelogKrRuntime" xml:space="preserve"><value>기존 15.0.3.6과 함께 검증한 KR Dalamud 15.0.3.7을 지원하여, 런타임 업데이트 후 차단되던 네이티브 기능을 복구했습니다.</value></data>
   <data name="ChangelogCompatibilityHint" xml:space="preserve"><value>네이티브 기능을 쓸 수 없을 때 호환성 차단 이유를 표시하고, 진단에 런타임·프로필·상태 요약을 추가했습니다.</value></data>
   <data name="ChangelogFirstRelease" xml:space="preserve"><value>첫 커스텀 저장소 배포입니다. 어종 목록·필터, 미끼·조건 상세, 지도, 출현 예측, 즐겨찾기 알림, 간이 목록, 캐스팅 타이머와 캐릭터별 낚시 기록을 제공합니다. 한국어·영어 UI를 지원합니다.</value></data>
+  <data name="ChangelogUpdateNotes" xml:space="preserve"><value>설치 화면의 변경 내역과 한국어·영어로 보는 최근 5개 릴리스 이력을 추가했습니다. 이 안내는 닫으면 버전별로 한 번만 표시되며 설정 → 업데이트 내역에서 다시 열 수 있습니다.</value></data>
 </root>

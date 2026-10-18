@@ -670,4 +670,5 @@ internal enum TextKey
     ChangelogKrRuntime,
     ChangelogCompatibilityHint,
     ChangelogFirstRelease,
+    ChangelogUpdateNotes,
 }

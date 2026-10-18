@@ -11,9 +11,11 @@ namespace DuckbillFisher.Plugin;
 internal sealed class ChangelogWindow : Window
 {
     private static readonly Version CurrentVersion = typeof(Plugin).Assembly.GetName().Version!;
-    // Published releases only, newest first. Update from docs/releases during release preparation.
+    // Public release history plus the release candidate being prepared, newest first.
+    // Keep the confirmed candidate unchanged when it is published.
     private static readonly ReleaseNotes[] PublishedReleases =
     [
+        new(new(0, 3, 9, 0), [(FontAwesomeIcon.Newspaper, T.ChangelogUpdateNotes)]),
         new(new(0, 3, 8, 0),
         [
             (FontAwesomeIcon.Music, T.ChangelogAudio),
