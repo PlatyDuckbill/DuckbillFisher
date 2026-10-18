@@ -1,6 +1,6 @@
 # 세션 인수인계
 
-갱신: 2026-10-19 · 공개0.3.9.0 · 설치 목록 최종 조회 진행
+갱신: 2026-10-19 · 공개0.3.9.0 · 설치 목록 최종 조회 완료
 
 ## 재개 순서
 
@@ -32,7 +32,7 @@
 
 ## 배포 산출물과 로컬 상태
 
-- 공개0.3.9.0 소스 태그 커밋은8ada789다. Release ID416680193의 ZIP/체크섬·익명 다운로드/해시/아이콘 확인 후 설치 JSON을 갱신한다. [게시 근거](verification/releases/RELEASE-0.3.9.0.md).
+- 공개0.3.9.0 소스 태그 커밋은8ada789, 설치 JSON 커밋은b68dd4d다. Release ID416680193의 ZIP/체크섬·익명 다운로드/해시/아이콘 확인 후 설치 JSON을 게시했고 실제 공유 raw URL의0.3.9.0/API15/Changelog/링크 조회도 완료했다. [게시 근거](verification/releases/RELEASE-0.3.9.0.md).
 - 현재 확인 ZIP은 artifacts/share/0.3.9.0/DuckbillFisher-0.3.9.0.zip, Release 출력은 .cache/release-build/0.3.9.0/다. SHA256과 API/버전은 위 Release 기록에 있다. 사용자 대표 확인 뒤 같은 ZIP을 게시했으며 재빌드/덮어쓰지 않는다. 이전0.3.8.0 경로도 보존한다.
 - 개발0.3.9.0 별도 출력은 .cache/changelog-build/, 정규 Debug도0.3.9.0이다. 업데이트 안내는 schema13의 공통 LastSeenChangelogVersion을 사용한다. 이전 출력은 .cache/custom-sound-build/·bait-preparation-release/·snapshot-reuse-build/·alert-stability-build/·forecast-refinement-build/·fish-eyes-build/·intuition-forecast-build/·data-integrity-build/·data-integrity-import/, 재생성 자료는 .cache/data-integrity/다. 이전 참조별 출력은 .cache/maintenance-*에 있다.
 - 확인된 ZIP을 다시 빌드해 바꾸거나 기존 태그/Release를 덮어쓰지 않는다. 제품 수정은 새 버전으로 준비한다.
