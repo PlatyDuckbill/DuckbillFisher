@@ -38,3 +38,8 @@
 - 위 확인 뒤에만 후보 JSON을repo/pluginmaster.json에 복사하고 커밋c18de68b17eff67520a9fd0b270deb95f98b13e2로 정상push했다. 설치/업데이트가 같은0.3.8.0 ZIP, 아이콘이 같은태그,1항목/API15다.
 - 2026-10-18T19:23:54Z에 인증 없는 실제 [공유 raw URL](https://raw.githubusercontent.com/PlatyDuckbill/DuckbillFisher/main/repo/pluginmaster.json)을 쿼리 추가 없이 조회했다. HTTP200·DuckbillFisher1항목·0.3.8.0/API15·설치/업데이트/아이콘 URL·설명을 로컬 설치 JSON 및 확인한 manifest와 대조했다. 결과는 `.cache/release-remote-check/0.3.8.0/public-index-check.json`에 보관한다.
 - 원격 게시와 HTTP/해시 확인은 완료했다. 실제 Dalamud 저장소 업데이트와 친구 PC 대표 확인은 별도 대기이며, 추출 DLL 대표 확인을 전수·장애 확인으로 확대하지 않는다. 이번 작업에 테스트를 추가하거나 실행하지 않았다.
+
+### 설치 화면 변경 내역 보완 (2026-10-19)
+
+- 사용자 요청으로 설치 JSON에0.3.8.0의 `Changelog` 영어 요약만 추가한다. 버전·다운로드 링크·LastUpdate·고정 ZIP·태그는 유지한다. 기존 ZIP 안 manifest에는 Changelog가 없으며 이번 보완은 저장소 항목에만 적용한다.
+- JSON 비교와 문서 검사를 완료한 뒤 게시하고 실제 공유 raw URL의 문구를 조회한다. 설치 화면의 실제 렌더링은 인게임 확인 대기다.

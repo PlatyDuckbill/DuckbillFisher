@@ -4,6 +4,7 @@
     "Name": "DuckbillFisher",
     "InternalName": "DuckbillFisher",
     "AssemblyVersion": "0.3.8.0",
+    "Changelog": "• Added custom WAV alert sounds with file selection, preview, reload, and stop controls.\n• Added Fish Eyes browsing and sorting, forecasts up to 30 real days ahead, and expandable Intuition calculations.\n• Added related-fish comparison details and days:hours:minutes:seconds countdowns.\n• Improved data validation, alert scheduling, and reuse of unchanged forecasts, inventory counts, and lists.",
     "Description": "Let Duckbill guide your next catch.\nA fishing companion for FFXIV Korea.\n\n• Browse fish with collection, region and availability filters.\n• Check baits, mooch chains and time/weather conditions.\n• Prepare baits for favorites or filtered fish, with inventory counts.\n• Find owned baits with page markers and in-game UI highlights.\n• Open fishing spots directly on the map.\n• Get local alerts for favorites, with optional sounds.\n• See fish available now or soon in the quick list.\n• Follow casts with a timer and personal fishing records.\n\nOpen: /duckbillfisher\nUI: English / Korean. Game names follow your client.\n\nVerified on the supported Korean client and Dalamud build only.\nDoes not automate fishing.",
     "ApplicableVersion": "any",
     "RepoUrl": "https://github.com/PlatyDuckbill/DuckbillFisher",
