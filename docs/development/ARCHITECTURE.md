@@ -55,6 +55,8 @@
 - 조건 JSON·분류·고지는 DLL 내장 리소스다. conditionsKnown=false는 예측/알림 제외이며 수집 Unknown과 별개다. Item/FishParameter/Territory/Map/Spot ID를 혼동하지 않는다.
 - 조건/등급 DTO와 검증은 Core에 두고 파일/내장 리소스 읽기는 도구/Plugin에서 담당한다. 조건 JSON의 명시적 필수값과 nullable 미확인을 구분한다. 등급은 조건 해시/빌드/버전/양성 목록과 대조한다. 조건 검증 실패는 관련 상세/예측을 중단하고, 등급만 실패하면 등급만 Unknown으로 유지한다. 실패를 빈 정상 자료로 표시하지 않고 타입/코드/경로와 번역된 안내를 제공한다.
 - 예측 조건의 날씨 ID가 지역 확률표에 없거나 확률표가 유효하지 않으면 Unknown이다. 유효 조건을 정해진 기간 탐색한 NotFound와 구분한다.
+- FishingAvailability는 기본 시간/날씨 구간을 계산하고 FishingForecast는 전체 일반 어종의 관리 값 인덱스에서 직감 선행 조건을 적용한다. 출처 순서의 선행 구간 교집합·인접 연결·직감 지속 시간 연장을 사용한다. 선행 자료 누락/유효성 실패·미지원 중첩·필요한 지속 시간 누락은 타입 코드로 Unknown을 반환한다. 모든 선행 어종이 상시이면 지속 시간 없이 기본 구간을 사용한다. 현재 자료에는 중첩 직감이 없다.
+- FishCatalog가 로드 시 예측 입력을 만들고 Framework.Update에서 UTC 구간을 캐시한다. 목록·상세·시간제 분류·알림의 후속 출현 검색은 같은 FishingForecast를 사용한다. Draw에서 예측하지 않는다. FishingWindow의 Basis/Issue는 언어 독립 값이며 표시할 때 번역한다. 진단 catalog/v7·summary/v8은 직감 적용 여부/실패 이유를 추가한 형식이다. [적용·검사 근거](../verification/forecast/FORECAST.md#0330-전체-일반-어종의-직감-예측-2026-10-19).
 - 조건 자료의 원본 revision/해시·라이선스·가공은 [data/README](../../data/README.md), 표시와 번역은 [LOCALIZATION](LOCALIZATION.md)을 따른다.
 
 사용자가 테스트를 요청하면 시간/날씨 경계·중복 알림·상태 전이·캐릭터 격리·저장 실패처럼 실패 비용이 큰 계약에 집중한다. 일반 작업의 빌드/검사와 인게임 확인 절차는 [WORKFLOW](WORKFLOW.md)에 있다.

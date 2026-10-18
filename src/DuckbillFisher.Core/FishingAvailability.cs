@@ -34,7 +34,23 @@ public sealed record SpearfishingRule(uint ItemId, uint SpearfishingItemId, uint
 
 public readonly record struct WeatherChance(uint WeatherId, int Chance);
 public enum FishingWindowKind { Unknown, Always, Open, Upcoming, NotFound }
-public sealed record FishingWindow(FishingWindowKind Kind, DateTimeOffset? Start = null, DateTimeOffset? End = null);
+public enum FishingForecastBasis { TimeWeather, Intuition }
+public enum FishingForecastIssue { None, PrerequisiteUnavailable, IntuitionDurationUnknown, NestedPrerequisiteUnsupported }
+public sealed record FishingWindow(FishingWindowKind Kind, DateTimeOffset? Start = null, DateTimeOffset? End = null)
+{
+    public FishingForecastBasis Basis { get; init; }
+    public FishingForecastIssue Issue { get; init; }
+}
+
+internal readonly record struct AvailabilityRange(double Start, double End)
+{
+    public AvailabilityRange? Intersect(AvailabilityRange other)
+    {
+        var start = Math.Max(Start, other.Start);
+        var end = Math.Min(End, other.End);
+        return end > start ? new(start, end) : null;
+    }
+}
 
 /// <summary>Normal time/weather windows only; personal conditions and Fish Eyes are not inferred.</summary>
 public static class FishingAvailability
@@ -42,9 +58,9 @@ public static class FishingAvailability
     public const int SearchDays = 30;
     // Include both partial weather periods at the edges; Find applies the exact UTC horizon.
     public const int SearchPeriods = (SearchDays * 86400 + (int)WeatherSeconds - 1) / (int)WeatherSeconds + 1;
-    private const long WeatherSeconds = 1400;
-    private const long DaySeconds = 4200;
-    private const double HourSeconds = 175;
+    internal const long WeatherSeconds = 1400;
+    internal const long DaySeconds = 4200;
+    internal const double HourSeconds = 175;
 
     // Adapted from Carbuncle Plushy weather.js at the revision recorded in THIRD-PARTY-NOTICES.
     public static int ForecastTarget(long unixSeconds)
@@ -71,20 +87,42 @@ public static class FishingAvailability
         return 0;
     }
 
-    public static FishingWindow Find(DateTimeOffset now, FishingRule rule, IReadOnlyList<WeatherChance> rates)
+    public static FishingWindow Find(DateTimeOffset now, FishingRule rule, IReadOnlyList<WeatherChance> rates) =>
+        Find(now, rule, rates, null);
+
+    internal static bool IsAlways(FishingRule rule) => rule.StartHour == 0 && rule.EndHour == 24 &&
+        rule.WeatherIds.Length == 0 && rule.PreviousWeatherIds.Length == 0;
+
+    internal static bool IsValid(FishingRule rule, IReadOnlyList<WeatherChance> rates)
     {
-        var unix = now.ToUnixTimeMilliseconds() / 1000.0;
         if (!rule.ConditionsKnown || rule.WeatherIds is null || rule.PreviousWeatherIds is null ||
-            unix < WeatherSeconds || !double.IsFinite(rule.StartHour) || !double.IsFinite(rule.EndHour)
+            !double.IsFinite(rule.StartHour) || !double.IsFinite(rule.EndHour)
             || rule.StartHour < 0 || rule.StartHour >= 24 || rule.EndHour < 0 || rule.EndHour > 24
             || rule.StartHour == rule.EndHour)
-            return new(FishingWindowKind.Unknown);
+            return false;
         var hasWeather = rule.WeatherIds.Length > 0 || rule.PreviousWeatherIds.Length > 0;
         if (hasWeather && (rates.Count == 0 || rates.Any(rate => rate.WeatherId == 0 || rate.Chance is <= 0 or > 100)
                 || rates.Sum(rate => (long)rate.Chance) != 100 ||
                 !HasForecastWeather(rule.WeatherIds) || !HasForecastWeather(rule.PreviousWeatherIds)))
+            return false;
+        return true;
+
+        // Alternatives are OR conditions; absent special weather must not suppress supported alternatives.
+        bool HasForecastWeather(uint[] alternatives) => alternatives.Length == 0 ||
+            alternatives.Any(id => rates.Any(rate => rate.WeatherId == id));
+    }
+
+    internal static bool WeatherMatches(long period, FishingRule rule, IReadOnlyList<WeatherChance> rates) =>
+        (rule.WeatherIds.Length == 0 || rule.WeatherIds.Contains(WeatherAt(period, rates))) &&
+        (rule.PreviousWeatherIds.Length == 0 || rule.PreviousWeatherIds.Contains(WeatherAt(period - WeatherSeconds, rates)));
+
+    internal static FishingWindow Find(DateTimeOffset now, FishingRule rule, IReadOnlyList<WeatherChance> rates,
+        Func<AvailabilityRange, AvailabilityRange?>? constrain)
+    {
+        var unix = now.ToUnixTimeMilliseconds() / 1000.0;
+        if (unix < WeatherSeconds || !IsValid(rule, rates))
             return new(FishingWindowKind.Unknown);
-        if (!hasWeather && rule.StartHour == 0 && rule.EndHour == 24)
+        if (constrain is null && IsAlways(rule))
             return new(FishingWindowKind.Always);
 
         double? foundStart = null;
@@ -96,9 +134,7 @@ public static class FishingAvailability
             var period = firstPeriod + index * WeatherSeconds;
             if (period >= horizon) break;
             var periodEnd = Math.Min(period + WeatherSeconds, horizon);
-            var weatherMatches = !hasWeather ||
-                ((rule.WeatherIds.Length == 0 || rule.WeatherIds.Contains(WeatherAt(period, rates))) &&
-                 (rule.PreviousWeatherIds.Length == 0 || rule.PreviousWeatherIds.Contains(WeatherAt(period - WeatherSeconds, rates))));
+            var weatherMatches = WeatherMatches(period, rule, rates);
             if (weatherMatches)
             {
                 var day = period / DaySeconds * DaySeconds;
@@ -112,6 +148,13 @@ public static class FishingAvailability
                     end = Math.Min(end, periodEnd);
                     if (end <= start || end <= unix)
                         continue;
+                    if (constrain is not null)
+                    {
+                        if (constrain(new(start, end)) is not { } accepted || accepted.End <= unix)
+                            continue;
+                        start = accepted.Start;
+                        end = accepted.End;
+                    }
                     if (foundEnd is null)
                     {
                         foundStart = start;
@@ -134,10 +177,6 @@ public static class FishingAvailability
         FishingWindow Result(double start, double end) =>
             new(start <= unix ? FishingWindowKind.Open : FishingWindowKind.Upcoming, FromSeconds(start), FromSeconds(end));
 
-        // Alternatives are OR conditions. A special weather absent from the normal rate table
-        // must not suppress the other supported alternatives (e.g. Raincaller: rain or snow).
-        bool HasForecastWeather(uint[] alternatives) => alternatives.Length == 0 ||
-            alternatives.Any(id => rates.Any(rate => rate.WeatherId == id));
     }
 
     private static DateTimeOffset FromSeconds(double seconds) =>

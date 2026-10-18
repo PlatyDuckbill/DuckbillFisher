@@ -27,7 +27,12 @@ public sealed class SpawnAlertScheduler
     };
 
     public static FishingWindow? FindFutureWindow(DateTimeOffset now, int leadMinutes, FishingWindow? first,
-        FishingRule rule, IReadOnlyList<WeatherChance> rates, long reservedStartUnixMilliseconds)
+        FishingRule rule, IReadOnlyList<WeatherChance> rates, long reservedStartUnixMilliseconds) =>
+        FindFutureWindow(now, leadMinutes, first, reservedStartUnixMilliseconds,
+            at => FishingAvailability.Find(at, rule, rates));
+
+    public static FishingWindow? FindFutureWindow(DateTimeOffset now, int leadMinutes, FishingWindow? first,
+        long reservedStartUnixMilliseconds, Func<DateTimeOffset, FishingWindow> find)
     {
         if (leadMinutes is < MinLeadMinutes or > MaxLeadMinutes)
             return null;
@@ -42,7 +47,7 @@ public sealed class SpawnAlertScheduler
                 return window with { Kind = FishingWindowKind.Upcoming };
             if (window.End is not { } end || end <= now && index > 0)
                 return null;
-            var following = FishingAvailability.Find(end, rule, rates);
+            var following = find(end);
             if (following.Start <= window.Start || following.End <= end)
                 return null;
             window = following;

@@ -10,10 +10,11 @@ namespace DuckbillFisher.Plugin;
 /// <summary>Availability presentation only. UTC forecasts and personal readiness are not changed here.</summary>
 internal static class FishingWindowPanel
 {
-    public static void Draw(FishingWindow? window, DateTimeOffset now, UiMessage? unavailableReason = null)
+    public static void Draw(FishingWindow? window, DateTimeOffset now, UiMessage? unavailableReason = null, bool intuitionRequired = false)
     {
         ImGui.TextWrapped(UiText.Get(T.ForecastBasis));
         UiWidgets.Tooltip(UiText.Get(T.ForecastScope, FishingAvailability.SearchDays));
+        if (intuitionRequired) ImGui.TextWrapped(IntuitionNotice(window));
         if (unavailableReason is { } reason && (window is null || window.Kind == FishingWindowKind.Unknown))
         {
             ImGui.TextDisabled(UiText.Get(T.ForecastUnavailable));
@@ -58,6 +59,13 @@ internal static class FishingWindowPanel
         ImGui.EndChild();
         ImGui.PopStyleColor();
     }
+
+    public static string IntuitionNotice(FishingWindow? window) => UiText.Get(window?.Issue switch
+    {
+        FishingForecastIssue.IntuitionDurationUnknown => T.ForecastIntuitionDurationUnknown,
+        FishingForecastIssue.PrerequisiteUnavailable or FishingForecastIssue.NestedPrerequisiteUnsupported => T.ForecastIntuitionPrerequisiteUnknown,
+        _ => T.ForecastIntuition,
+    });
 
     private static string Range(FishingWindow? window, DateTimeOffset now)
     {

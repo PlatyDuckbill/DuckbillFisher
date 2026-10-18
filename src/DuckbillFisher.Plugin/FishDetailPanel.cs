@@ -53,7 +53,8 @@ internal sealed class FishDetailPanel(FishPreferences preferences, ITextureProvi
         {
             catalog.Windows.TryGetValue(fish.FishParameterId, out var window);
             FishingWindowPanel.Draw(window, DateTimeOffset.UtcNow,
-                fish.Details is { Rule.ConditionsKnown: false } partial ? partial.ConditionWarning : null);
+                fish.Details is { Rule.ConditionsKnown: false } partial ? partial.ConditionWarning : null,
+                intuitionRequired: fish.Details is { Predators.Length: > 0 });
         }
 
         if (fish.Details is { Predators.Length: > 0 } intuitionDetails) conditions.DrawIntuition(intuitionDetails, personal, catalog.RelatedDetails);

@@ -126,7 +126,7 @@ internal sealed class SpawnAlerts : IDisposable
                         continue;
                     plansBuilt++;
                     var window = SpawnAlertScheduler.FindFutureWindow(now, lead, data.Windows.GetValueOrDefault(id),
-                        row.Details.Rule, row.Details.Spot.WeatherRates, personal.ReservedAlertWindows.GetValueOrDefault(id));
+                        personal.ReservedAlertWindows.GetValueOrDefault(id), at => data.Forecast.Find(at, row.ItemId));
                     if (window is null)
                     {
                         retryAfter[id] = (lead, elapsed + TimeSpan.FromMinutes(1));

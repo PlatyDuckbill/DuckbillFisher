@@ -41,6 +41,7 @@ internal sealed record FishCatalogView(IReadOnlyList<FishGuideRow> Rows, UiMessa
     public IReadOnlyDictionary<uint, IReadOnlySet<uint>> FishByTerritory { get; init; } = FrozenDictionary<uint, IReadOnlySet<uint>>.Empty;
     public IReadOnlyDictionary<uint, FishingDetailView> RelatedDetails { get; init; } = new Dictionary<uint, FishingDetailView>();
     public IReadOnlyDictionary<uint, FishingWindow> Windows { get; init; } = new Dictionary<uint, FishingWindow>();
+    public FishingForecast Forecast { get; init; } = new([]);
     public int ForecastRevision { get; init; }
     public DateTimeOffset? ForecastAt { get; init; }
 }
@@ -110,7 +111,6 @@ internal sealed class FishCatalog : IDisposable
                 var windows = new Dictionary<uint, FishingWindow>();
                 foreach (var row in view.Rows.Where(row => row.Details is { Spot: not null }))
                 {
-                    var detail = row.Details!;
                     view.Windows.TryGetValue(row.FishParameterId, out var previous);
                     // Keep absolute windows until a boundary. Counts/countdowns are rendered from UTC.
                     // A bounded search with no result is retried each minute, not for every fish each second.
@@ -123,7 +123,7 @@ internal sealed class FishCatalog : IDisposable
                         FishingWindowKind.NotFound when lastForecast.ToUnixTimeSeconds() / 60 == now.ToUnixTimeSeconds() / 60 => previous,
                         _ => null,
                     } : null;
-                    windows[row.FishParameterId] = window ?? FishingAvailability.Find(now, detail.Rule, detail.Spot!.WeatherRates);
+                    windows[row.FishParameterId] = window ?? view.Forecast.Find(now, row.ItemId);
                 }
                 var changed = windows.Count != view.Windows.Count || windows.Any(pair =>
                     !view.Windows.TryGetValue(pair.Key, out var previous) || previous != pair.Value);
@@ -263,12 +263,17 @@ internal sealed class FishCatalog : IDisposable
                 }
                 if (rows.Count == 0)
                     throw new InvalidDataException("FishParameter sheet is empty.");
+                var forecast = new FishingForecast(rows.Where(row => row.Details is { Spot: not null })
+                    .Select(row => new FishingForecastInput(row.Details!.Rule, row.Details.Spot!.WeatherRates)));
+                rows = rows.Select(row => row.Details is { Rule.ConditionsKnown: true, Spot: not null }
+                    ? row with { TimeRestriction = forecast.TimeRestriction(row.ItemId) } : row).ToList();
                 var dataStatus = FishingData.Failure is { } conditionFailure
                     ? new UiMessage(T.ConditionDataInvalid, conditionFailure.Code, conditionFailure.Path)
                     : FishClassificationData.Failure is { } gradeFailure
                         ? new UiMessage(T.GradeDataInvalid, gradeFailure.Code, gradeFailure.Path)
                         : new UiMessage(T.CatalogLoaded);
                 view = new(rows.ToArray(), dataStatus) {
+                    Forecast = forecast,
                     Spots = spots.ToDictionary(pair => pair.Key, pair => pair.Value.View),
                     Geography = FishingGeography.FromRows(rows),
                     FishByTerritory = rows.Where(row => row.IsDisplayable && !row.IsOceanFishing)
@@ -345,7 +350,7 @@ internal sealed class FishCatalog : IDisposable
         var unresolved = snapshot.Rows.Where(row => !row.IsDisplayable).ToArray();
         var report = new StringBuilder();
         void Append(FormattableString line) => report.AppendLine(FormattableString.Invariant(line));
-        report.AppendLine("DuckbillFisher MVP-01/catalog/v6");
+        report.AppendLine("DuckbillFisher MVP-01/catalog/v7");
         Append($"Plugin: {typeof(Plugin).Assembly.GetName().Version}");
         Append($"Rows: {snapshot.Rows.Count}; displayable: {snapshot.Rows.Count - unresolved.Length}; unresolved: {unresolved.Length}; unresolved in log: {unresolved.Count(row => row.IsInLog)}");
         report.AppendLine($"Status: [{snapshot.Status.Key}] {snapshot.Status.Diagnostic}");
@@ -353,7 +358,8 @@ internal sealed class FishCatalog : IDisposable
         report.AppendLine($"DataValidation: conditions={FishingData.Failure?.Code.ToString() ?? "Valid"}; conditionPath={FishingData.Failure?.Path ?? "none"}; grades={FishClassificationData.Failure?.Code.ToString() ?? "Valid"}; gradePath={FishClassificationData.Failure?.Path ?? "none"}");
         Append($"Coverage: oceanAreas={snapshot.Rows.Count(row => row.Ocean is not null)}; spearStored={FishingData.Dataset.Spearfishing.Length}; spearConditionsUnknown={FishingData.SpearUnknown}");
         Append($"Classification: dataset={FishClassificationData.Dataset.DataVersion}; bigIncludingLegendary={snapshot.Rows.Count(row => row.Grade is FishGrade.Big or FishGrade.Legendary)}; legendary={snapshot.Rows.Count(row => row.Grade == FishGrade.Legendary)}; restricted={snapshot.Rows.Count(row => row.TimeRestriction == FishTimeRestriction.Restricted)}");
-        Append($"ForecastAt: {snapshot.ForecastAt:O}; horizonDays={FishingAvailability.SearchDays}; horizonPeriods={FishingAvailability.SearchPeriods}; fishEyes=false; normal time/weather only; no personal readiness inference");
+        Append($"ForecastAt: {snapshot.ForecastAt:O}; horizonDays={FishingAvailability.SearchDays}; horizonPeriods={FishingAvailability.SearchPeriods}; fishEyes=false; intuitionPrerequisites=true; no personal readiness inference");
+        Append($"IntuitionForecast: total={snapshot.Windows.Count(pair => pair.Value.Basis == FishingForecastBasis.Intuition)}; issues={string.Join(',', snapshot.Windows.Where(pair => pair.Value.Issue != FishingForecastIssue.None).Select(pair => $"{pair.Key}:{pair.Value.Issue}"))}");
         report.AppendLine($"Source: {FishingData.Dataset.SourceRepository}/tree/{FishingData.Dataset.SourceRevision}");
         report.AppendLine("Detail samples: up to 20, selected fish first, then ordered by FishParameter ID.");
         foreach (var row in snapshot.Rows.Where(row => row.Details is not null)

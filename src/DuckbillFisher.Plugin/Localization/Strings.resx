@@ -150,7 +150,11 @@
   <data name="ForecastEnd" xml:space="preserve"><value>Ends: local time {0}</value></data>
   <data name="ForecastNotFound" xml:space="preserve"><value>No matching window found within the next {0} real days.</value></data>
   <data name="ForecastUnknown" xml:space="preserve"><value>Availability forecast is not available.</value></data>
-  <data name="ForecastScope" xml:space="preserve"><value>The next window is searched within {0} real days from now using normal time/weather conditions. Fish Eyes effects, active Intuition, and personal readiness are not included.</value></data>
+  <data name="ForecastScope" xml:space="preserve"><value>The next window is searched within {0} real days from now using time, weather, and Intuition prerequisites. Fish Eyes effects, actual active Intuition, and personal readiness are not included.</value></data>
+  <data name="ForecastIntuition" xml:space="preserve"><value>This forecast accounts for prerequisite fish time/weather and Intuition duration where needed. Actual prerequisite catches and active Intuition are not checked.</value></data>
+  <data name="ForecastIntuitionDurationUnknown" xml:space="preserve"><value>Intuition duration is unknown, so a forecast accounting for restricted prerequisite windows is unavailable. Actual prerequisite catches and active Intuition are not checked.</value></data>
+  <data name="ForecastIntuitionPrerequisiteUnknown" xml:space="preserve"><value>Intuition prerequisites are unknown or unsupported, so this forecast is unavailable. Actual prerequisite catches and active Intuition are not checked.</value></data>
+  <data name="RowIntuitionForecast" xml:space="preserve"><value>Intuition · {0}</value></data>
   <data name="ForecastBasis" xml:space="preserve"><value>Window times assume Fish Eyes is not active.</value></data>
   <data name="DurationShort" xml:space="preserve"><value>{0:0}h {1:00}m {2:00}s</value></data>
   <data name="DataSourceLabel" xml:space="preserve"><value>Data source and license</value></data>

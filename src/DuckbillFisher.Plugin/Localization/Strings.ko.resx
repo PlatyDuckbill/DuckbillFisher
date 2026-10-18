@@ -150,7 +150,11 @@
   <data name="ForecastEnd" xml:space="preserve"><value>종료: 현지 시각 {0}</value></data>
   <data name="ForecastNotFound" xml:space="preserve"><value>앞으로 실제 시간 {0}일 범위에서 다음 출현을 찾지 못했습니다.</value></data>
   <data name="ForecastUnknown" xml:space="preserve"><value>출현 시간 예측을 준비하지 못했습니다.</value></data>
-  <data name="ForecastScope" xml:space="preserve"><value>현재부터 실제 시간 {0}일 뒤까지 통상 시간·날씨 조건으로 다음 출현을 찾습니다. 물고기의 눈 효과·직감 발동·개인 준비 상태는 반영하지 않습니다.</value></data>
+  <data name="ForecastScope" xml:space="preserve"><value>현재부터 실제 시간 {0}일 뒤까지 시간·날씨와 직감 선행 조건으로 다음 출현을 찾습니다. 물고기의 눈 효과·실제 직감 발동·개인 준비 상태는 반영하지 않습니다.</value></data>
+  <data name="ForecastIntuition" xml:space="preserve"><value>직감 선행 어종의 시간·날씨와 필요한 직감 지속 시간을 반영한 예측입니다. 실제 선행 어획 수와 직감 발동 여부는 확인하지 않습니다.</value></data>
+  <data name="ForecastIntuitionDurationUnknown" xml:space="preserve"><value>직감 지속 시간이 미확인이라 선행 어종의 제한 시간을 반영한 예측을 제공할 수 없습니다. 실제 선행 어획 수와 직감 발동 여부는 확인하지 않습니다.</value></data>
+  <data name="ForecastIntuitionPrerequisiteUnknown" xml:space="preserve"><value>직감 선행 조건이 미확인 또는 미지원이라 출현 예측을 제공할 수 없습니다. 실제 선행 어획 수와 직감 발동 여부는 확인하지 않습니다.</value></data>
+  <data name="RowIntuitionForecast" xml:space="preserve"><value>직감 · {0}</value></data>
   <data name="ForecastBasis" xml:space="preserve"><value>출현 시간은 물고기의 눈 미사용 기준입니다.</value></data>
   <data name="DurationShort" xml:space="preserve"><value>{0:0}시간 {1:00}분 {2:00}초</value></data>
   <data name="DataSourceLabel" xml:space="preserve"><value>데이터 출처와 라이선스</value></data>

@@ -60,7 +60,7 @@ internal sealed class FishRowRenderer(ITextureProvider textures, FishingMapServi
         {
             var badge = MathF.Round(ImGui.GetTextLineHeightWithSpacing() * 1.15f);
             ImGui.SetCursorPos(start + new Vector2(4 + iconSize - badge, iconY));
-            UiWidgets.GameIcon(textures, intuition.Intuition?.IconId ?? 0, badge, UiText.Get(T.IntuitionRequired));
+            UiWidgets.GameIcon(textures, intuition.Intuition?.IconId ?? 0, badge, FishingWindowPanel.IntuitionNotice(forecast));
         }
         if (favorite)
         {
@@ -85,6 +85,8 @@ internal sealed class FishRowRenderer(ITextureProvider textures, FishingMapServi
         // Location is clipped first; the timer keeps its own width on the same line.
         var time = fish.IsOceanFishing ? UiText.Get(T.RowOceanWindow)
             : forecast is not null ? CompactWindow(forecast, now) : UiText.Get(T.ForecastUnavailable);
+        var intuitionForecast = !fish.IsOceanFishing && fish.Details is { Predators.Length: > 0 };
+        if (intuitionForecast) time = UiText.Get(T.RowIntuitionForecast, time);
         var timerWidth = Math.Min(ImGui.CalcTextSize(time).X, textWidth * 0.53f);
         var pinSize = MathF.Round(ImGui.GetTextLineHeightWithSpacing() - 1);
         var pinWidth = UiWidgets.MapPinWidth(pinSize);
@@ -101,8 +103,16 @@ internal sealed class FishRowRenderer(ITextureProvider textures, FishingMapServi
         if (open) ImGui.PushStyleColor(ImGuiCol.Text, OpenAccent);
         LineText(time, timerWidth, false);
         if (open) ImGui.PopStyleColor();
-        UiWidgets.Tooltip(usesOtherRegion ? UiText.Get(T.RegionForecastElsewhere, time)
-            : forecast is null ? time : FormatWindow(forecast, now));
+        if (ImGui.IsItemHovered())
+        {
+            ImGui.BeginTooltip();
+            ImGui.PushTextWrapPos(ImGui.GetFontSize() * 30);
+            ImGui.TextUnformatted(usesOtherRegion ? UiText.Get(T.RegionForecastElsewhere, time)
+                : forecast is null ? time : FormatWindow(forecast, now));
+            if (intuitionForecast) ImGui.TextUnformatted(FishingWindowPanel.IntuitionNotice(forecast));
+            ImGui.PopTextWrapPos();
+            ImGui.EndTooltip();
+        }
 
         if (!summaries.TryGetValue(fish.FishParameterId, out var cached) || !ReferenceEquals(cached.Row, fish))
         {
