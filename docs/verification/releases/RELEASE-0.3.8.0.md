@@ -1,6 +1,6 @@
 # 0.3.8.0 배포
 
-2026-10-19. 사용자가 커스텀 WAV 대표 확인 뒤 게시를 요청했고 고정 ZIP 추출본에도 ‘Release 추출본도 정상’으로 응답했다. 확인한 ZIP을 재빌드하지 않고 게시한다. 실제 게시 결과와 설치 JSON 확인은 아래에 이어 기록한다.
+2026-10-19. 사용자가 커스텀 WAV 대표 확인 뒤 게시를 요청했고 고정 ZIP 추출본에도 ‘Release 추출본도 정상’으로 응답했다. 확인한 ZIP을 재빌드하지 않고 게시했으며 설치 JSON의 실제 공유 URL 조회까지 완료했다.
 
 ## 범위와 확인
 
@@ -35,4 +35,6 @@
 - 확인 기록 커밋899f567을main에 정상push하고 같은 커밋에새v0.3.8.0 태그를 게시했다. 기존 태그/Release/ZIP은 덮어쓰지 않았다. 게시 커밋의 [skip ci]로 테스트 CI를 유발하지 않도록 했다.
 - GitHub [Release](https://github.com/PlatyDuckbill/DuckbillFisher/releases/tag/v0.3.8.0), ID416649615, 게시 시각2026-10-18T19:20:50Z에 고정 ZIP/체크섬2개를 게시했다. 업로드 크기와 GitHub digest가 로컬 해시와 일치했다. 인증은 Git credential에서 메모리로만 읽고 파일/로그/Git에 저장하지 않았다.
 - 2026-10-18T19:21:10Z에 인증 없는 ZIP/체크섬/태그 아이콘 다운로드가 모두 HTTP200이었다. ZIP SHA256·체크섬 내용·원본 아이콘 해시가 일치했다. 결과는 `.cache/release-remote-check/0.3.8.0/download-check.json`에 보관한다.
-- 위 확인 뒤에만 후보 JSON을repo/pluginmaster.json에 복사했다. 설치/업데이트가 같은0.3.8.0 ZIP, 아이콘이 같은태그,1항목/API15다. 설치 JSON push와 실제 공유 URL의 최종 조회는 이어 확인한다.
+- 위 확인 뒤에만 후보 JSON을repo/pluginmaster.json에 복사하고 커밋c18de68b17eff67520a9fd0b270deb95f98b13e2로 정상push했다. 설치/업데이트가 같은0.3.8.0 ZIP, 아이콘이 같은태그,1항목/API15다.
+- 2026-10-18T19:23:54Z에 인증 없는 실제 [공유 raw URL](https://raw.githubusercontent.com/PlatyDuckbill/DuckbillFisher/main/repo/pluginmaster.json)을 쿼리 추가 없이 조회했다. HTTP200·DuckbillFisher1항목·0.3.8.0/API15·설치/업데이트/아이콘 URL·설명을 로컬 설치 JSON 및 확인한 manifest와 대조했다. 결과는 `.cache/release-remote-check/0.3.8.0/public-index-check.json`에 보관한다.
+- 원격 게시와 HTTP/해시 확인은 완료했다. 실제 Dalamud 저장소 업데이트와 친구 PC 대표 확인은 별도 대기이며, 추출 DLL 대표 확인을 전수·장애 확인으로 확대하지 않는다. 이번 작업에 테스트를 추가하거나 실행하지 않았다.
