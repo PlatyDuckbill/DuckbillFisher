@@ -98,8 +98,6 @@ internal sealed class FishListPanel(FishCatalog catalog, ITextureProvider textur
         if (view.Status.Key != T.CatalogLoaded)
             ImGui.TextWrapped(view.Status.Display);
         UiWidgets.GuideBanner(observed, personal, guideOpener);
-        ImGui.TextWrapped(UiText.Get(T.ForecastBasis));
-        UiWidgets.Tooltip(UiText.Get(T.ForecastScope, FishingAvailability.SearchDays));
         ImGui.SetNextItemWidth(-1);
         changed |= ImGui.InputTextWithHint("###CatalogSearch", UiText.Get(T.SearchPlaceholder), ref search, 100);
         var toolbarRight = ImGui.GetCursorPosX() + ImGui.GetContentRegionAvail().X;
@@ -116,6 +114,15 @@ internal sealed class FishListPanel(FishCatalog catalog, ITextureProvider textur
         UiWidgets.Tooltip(UiText.Get(T.CollectionVisibility));
         UiWidgets.FlowNext(ImGui.GetFontSize() * 7, toolbarRight);
         filtersChanged |= DrawFilters(view.Geography);
+        UiWidgets.FlowNext(ImGui.GetFrameHeight(), toolbarRight);
+        if (UiWidgets.GameIconButton(textures, view.FishEyesSkill?.IconId ?? 0, "CatalogFishEyes",
+            UiText.Get(view.FishEyesEnabled ? T.FishEyesToggleOn : T.FishEyesToggleOff), view.FishEyesEnabled))
+        {
+            catalog.SetFishEyes(!view.FishEyesEnabled);
+            view = catalog.View;
+            sort = 2;
+            filtersChanged = true;
+        }
         UiWidgets.FlowNext(ImGui.GetFontSize() * 7, toolbarRight);
         if (ImGui.Button(UiText.Label(T.BaitPreparation, "BaitPreparation"))) showBaitPreparation();
         UiWidgets.FlowNext(ImGui.GetFontSize() * 7, toolbarRight);
@@ -130,6 +137,8 @@ internal sealed class FishListPanel(FishCatalog catalog, ITextureProvider textur
         UiWidgets.FlowNext(ImGui.GetFrameHeight(), toolbarRight);
         if (UiWidgets.IconButton(FontAwesomeIcon.Undo, "RestoreCatalogDefaults", UiText.Get(T.CatalogRestoreDefaults)))
         {
+            catalog.SetFishEyes(false);
+            view = catalog.View;
             ApplyCatalogSettings(new());
             search = "";
             showUnresolved = false;
@@ -353,7 +362,10 @@ internal sealed class FishListPanel(FishCatalog catalog, ITextureProvider textur
     }
 
     private static (FishingWindowSortGroup Group, DateTimeOffset Time) WindowSortKey(FishCatalogView view, uint id) =>
-        FishingWindowOrdering.Key(view.Windows.GetValueOrDefault(id));
+        view.FishEyesEnabled && view.Windows.GetValueOrDefault(id)?.Kind == FishingWindowKind.Always &&
+            view.NormalWindows.GetValueOrDefault(id)?.Kind != FishingWindowKind.Always
+            ? (FishingWindowSortGroup.Open, DateTimeOffset.MaxValue)
+            : FishingWindowOrdering.Key(view.Windows.GetValueOrDefault(id));
 
     private static IReadOnlySet<uint> RegionFish(FishCatalogView view, FishingRegionView location) =>
         location.State == FishingRegionState.Ready && view.FishByTerritory.TryGetValue(location.TerritoryId, out var fish)
@@ -374,7 +386,7 @@ internal sealed class FishListPanel(FishCatalog catalog, ITextureProvider textur
         else
         {
             var view = catalog.View;
-            report.AppendLine("DuckbillFisher summary/v8");
+            report.AppendLine("DuckbillFisher summary/v9");
             Append($"Plugin={typeof(Plugin).Assembly.GetName().Version}; Rows={view.Rows.Count}; Status={view.Status.Key}");
             Append($"Dataset={FishingData.Dataset.DataVersion}; Details={view.Rows.Count(row => row.Details is not null)}/{FishingData.Dataset.Fish.Length}; BuildMatch={catalog.ConditionBuildMatches}");
             Append($"Forecasts={view.Windows.Count}; OceanAreas={view.Rows.Count(row => row.Ocean is not null)}; SpearStored={FishingData.Dataset.Spearfishing.Length}; SpearUnknown={FishingData.SpearUnknown}");
@@ -383,11 +395,14 @@ internal sealed class FishListPanel(FishCatalog catalog, ITextureProvider textur
             {
                 Append($"SelectedFish={selected.FishParameterId}; Item={selected.ItemId}; Ocean={selected.IsOceanFishing}; Collection={personal.Collection(selected.FishParameterId, observed)}; Grade={selected.Grade}; Timing={selected.TimeRestriction}");
                 var forecast = view.Windows.GetValueOrDefault(selected.FishParameterId);
-                Append($"SelectedForecast={forecast?.Kind.ToString() ?? "Unknown"}; Basis={forecast?.Basis}; Issue={forecast?.Issue}; ForecastAt={view.ForecastAt:O}; Start={forecast?.Start:O}; End={forecast?.End:O}; CopiedAt={DateTimeOffset.UtcNow:O}");
+                Append($"SelectedForecast={forecast?.Kind.ToString() ?? "Unknown"}; Basis={forecast?.Basis}; Issue={forecast?.Issue}; FishEyes={view.FishEyesEnabled}; ForecastAt={view.ForecastAt:O}; Start={forecast?.Start:O}; End={forecast?.End:O}; CopiedAt={DateTimeOffset.UtcNow:O}");
+                var normal = view.NormalWindows.GetValueOrDefault(selected.FishParameterId);
+                var eyes = view.FishEyesWindows.GetValueOrDefault(selected.FishParameterId);
+                Append($"ForecastComparison: Normal={normal?.Kind}; NormalStart={normal?.Start:O}; NormalEnd={normal?.End:O}; FishEyes={eyes?.Kind}; FishEyesStart={eyes?.Start:O}; FishEyesEnd={eyes?.End:O}; Different={FishingWindowPanel.Different(normal, eyes)}");
                 if (selected.Details is { Spot: { } spot } detail)
                 {
                     var rule = detail.Rule;
-                    Append($"SelectedConditions: Spot={spot.Id}; Territory={spot.TerritoryId}; Map={spot.MapId}; Known={rule.ConditionsKnown}; StartET={rule.StartHour}; EndET={rule.EndHour}; Weather={string.Join(',', rule.WeatherIds)}; PreviousWeather={string.Join(',', rule.PreviousWeatherIds)}; Rates={string.Join(',', spot.WeatherRates.Select(rate => FormattableString.Invariant($"{rate.WeatherId}:{rate.Chance}")))}; HorizonDays={FishingAvailability.SearchDays}; FishEyes=False");
+                    Append($"SelectedConditions: Spot={spot.Id}; Territory={spot.TerritoryId}; Map={spot.MapId}; Known={rule.ConditionsKnown}; StartET={rule.StartHour}; EndET={rule.EndHour}; Weather={string.Join(',', rule.WeatherIds)}; PreviousWeather={string.Join(',', rule.PreviousWeatherIds)}; Rates={string.Join(',', spot.WeatherRates.Select(rate => FormattableString.Invariant($"{rate.WeatherId}:{rate.Chance}")))}; HorizonDays={FishingAvailability.SearchDays}; FishEyesSupported={rule.FishEyesSupported}");
                     Append($"SelectedIntuition: DurationSeconds={rule.IntuitionSeconds}; Predators={string.Join(',', rule.Predators.Select(predator => FormattableString.Invariant($"{predator.ItemId}:{predator.Count}")))}");
                 }
             }

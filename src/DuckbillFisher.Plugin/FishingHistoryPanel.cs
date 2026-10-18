@@ -17,6 +17,7 @@ internal static class FishingTimeText
     }
     public static string Elapsed(TimeSpan value)
     {
+        if (value.TotalDays >= 1) return FishRowRenderer.Countdown(value, compact: false);
         var tenths = Math.Max(0, (long)(value.TotalMilliseconds / 100));
         return string.Create(CultureInfo.InvariantCulture, $"{tenths / 600:00}:{tenths % 600 / 10d:00.0}");
     }

@@ -1,6 +1,6 @@
 # 세션 인수인계
 
-갱신: 2026-10-19 · 개발 0.3.3.0 직감 선행 조건 예측 · 공개 0.3.0.0 유지
+갱신: 2026-10-19 · 개발 0.3.4.0 물고기의 눈·직감 상세·비교 탐색 · 공개 0.3.0.0 유지
 
 ## 재개 순서
 
@@ -33,17 +33,17 @@
 
 - 공개 0.3.0.0의 소스 태그 커밋은 7269627, 설치 JSON 게시 커밋은 fc300d5, 게시 확인 기록은 b33f4eb다.
 - 사용자 확인 ZIP: artifacts/share/0.3.0.0/DuckbillFisher-0.3.0.0.zip. 크기/전체 SHA256/익명 다운로드 근거는 [Release 기록](verification/releases/RELEASE-0.3.0.0.md)에 있다.
-- 공개 Release 빌드 출력은 .cache/bait-preparation-release/다. 개발0.3.3.0 별도 출력은 .cache/intuition-forecast-build/이며 정규 Debug도0.3.3.0·실기 대기다. 이전 데이터 출력/참조는 .cache/data-integrity-build/·data-integrity-import/, 재생성 자료는 .cache/data-integrity/다. 이전 참조별 출력은 .cache/maintenance-*에 있다.
+- 공개 Release 빌드 출력은 .cache/bait-preparation-release/다. 개발0.3.4.0 별도 출력은 .cache/fish-eyes-build/이며 정규 Debug도0.3.4.0·실기 대기다. 이전 출력은 .cache/intuition-forecast-build/·data-integrity-build/·data-integrity-import/, 재생성 자료는 .cache/data-integrity/다. 이전 참조별 출력은 .cache/maintenance-*에 있다.
 - 확인된 ZIP을 다시 빌드해 바꾸거나 기존 태그/Release를 덮어쓰지 않는다. 제품 수정은 새 버전으로 준비한다.
 - 개발·배포 플러그인의 같은 InternalName을 동시에 로드하지 않는다. 사용자가 현재 등록한 경로를 추측해 설정을 수정하지 않는다.
 - 현재 PC는 gh CLI 없이 Git credential manager+GitHub API로 게시한 이력이 있다. 토큰은 메모리에서만 사용하며 출력/파일/Git에 남기지 않는다. 캐시의 버전별 게시 스크립트를 확인 없이 재실행하지 않는다.
 
 ## 이번 정비와 후속
 
-- Core 공통 자료 검증을 Plugin/도구에서 사용한다. 실제 자료 검사 명령은 [data/README](../data/README.md#필드-의미와-미확인), 결과와 재현은 [데이터 기록](verification/data/DATA-COMPLETION-2026-10-18.md#0320-데이터-안정성-보강)을 따른다. 오류 진단은 catalog/v7의 DataValidation/IntuitionForecast 한 줄부터 확인한다.
-- 30일 검색·직감 선행 조건·미사용 안내는 [예측 기록](verification/forecast/FORECAST.md#0330-전체-일반-어종의-직감-예측-2026-10-19)을 따른다. summary/v8의 SelectedForecast/SelectedConditions/SelectedIntuition은 선택 어종의 UTC·Basis/Issue·조건·확률표·선행 어획/지속 시간을 제공한다. 실제 자료 도우미는 .cache/Inspect-Forecasts.ps1·Compare-LiveForecasts.ps1이며 테스트 스위트가 아니다.
+- Core 공통 자료 검증을 Plugin/도구에서 사용한다. 실제 자료 검사 명령은 [data/README](../data/README.md#필드-의미와-미확인), 결과와 재현은 [데이터 기록](verification/data/DATA-COMPLETION-2026-10-18.md#0320-데이터-안정성-보강)을 따른다. 오류 진단은 catalog/v8의 DataValidation/IntuitionForecast 한 줄부터 확인한다.
+- 30일 검색·직감·물고기의 눈 전환은 [예측 기록](verification/forecast/FORECAST.md#0340-물고기의-눈과-상세-탐색-2026-10-19)을 따른다. summary/v9의 SelectedForecast/ForecastComparison/SelectedConditions/SelectedIntuition은 선택 모드·두 UTC·지원 여부·Basis/Issue·확률표·선행 어획/지속 시간을 제공한다. 실제 자료 도우미는 .cache/Inspect-FishEyesForecasts.ps1·Compare-LiveForecasts.ps1이며 테스트 스위트가 아니다.
 - v1 조건 자료는 data/archive로 이동했으며 기존 예측 테스트에서만 참조한다. 제품은 v2 조건과 v1 등급 자료를 내장한다. 테스트는 요청 없이는 실행하지 않는다.
-- 다음 게임 확인은 개발 DLL 재로드 후 직감 어종 목록/상세 안내·시간제 분류·미확인 이유·알림 예약과 미사용 안내·장기 출현·한영/좁은 폭·수동 상태 보존이다. 이전0.3.1.0 도감/수집/타이머와 공개0.3.0.0 실제 업데이트/친구 새 기능 확인도 별도 대기다. 미끼 페이지 문제는 bait-ui/v7의 Pages 한 줄부터 요청한다.
+- 다음 게임 확인은 개발 DLL 재로드 후 물고기의 눈 OFF/ON 정렬/상세 비교·직감 근거·생미끼 비교/뒤로·수량 툴팁·일 단위와 알림 일반 기준·한영/좁은 폭·캐릭터 전환/수동 상태다. 이전0.3.1.0 도감/수집/타이머와 공개0.3.0.0 실제 업데이트/친구 새 기능 확인도 별도 대기다. 미끼 페이지 문제는 bait-ui/v7의 Pages 한 줄부터 요청한다.
 - 일반 데이터 잔여 이름/ID/이유는 [보고서](verification/data/reports/fishing-data-2026-10-17/remaining.md), 재생성 순서는 [data/README](../data/README.md)를 따른다. 완성 제품을 보완 단계 baseline으로 다시 넣지 않는다.
 - 입질 통계·복수 어획 보류를 유지한다. 과거 Teamcraft 화면 추적은 중단하고 [현재 웹 표시 대조](verification/forecast/FORECAST.md#현재-웹-표시-대조-2026-10-19)로 전환했다. UTC/CSV는 기록에, 임시 브라우저 관찰 자료는 .cache/forecast-browser-2026-10-19에 있다. 사용자 계정/브라우저와 분리한 익명 세션을 사용했다. 후속은 [ROADMAP](product/ROADMAP.md)을 따른다.
 - 폴더 재구성 전 경로는 Git 699db5b에 보존됐다. UI 원문 12개는 archive/ui/CHANGES.md의 문서별 앵커로 합쳤으며 새 전체 상태 사본은 만들지 않았다. 문서 검사기는 새 폴더/색인 규칙을 검사한다.

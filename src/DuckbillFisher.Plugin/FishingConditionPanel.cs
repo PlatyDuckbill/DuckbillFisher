@@ -54,10 +54,10 @@ internal sealed class FishingConditionPanel(ITextureProvider textures, FishingIt
     }
 
     public void Draw(FishingDetailView details, FishPreferencesView personal,
-        IReadOnlyDictionary<uint, FishingDetailView> related)
+        IReadOnlyDictionary<uint, FishingDetailView> related, Action<uint>? openDetail = null)
     {
         var rule = details.Rule;
-        DrawBaitPath(details, personal, related);
+        DrawBaitPath(details, personal, related, openDetail);
         baitFinder.DrawStatus(details.BaitSteps.FirstOrDefault() ?? []);
         ImGui.Spacing();
         if (ImGui.BeginTable("Conditions", 2, ImGuiTableFlags.SizingFixedFit))
@@ -106,7 +106,7 @@ internal sealed class FishingConditionPanel(ITextureProvider textures, FishingIt
     }
 
     public void DrawIntuition(FishingDetailView details, FishPreferencesView personal,
-        IReadOnlyDictionary<uint, FishingDetailView> related)
+        IReadOnlyDictionary<uint, FishingDetailView> related, Action<uint>? openDetail = null)
     {
         ImGui.Spacing();
         ImGui.PushStyleColor(ImGuiCol.TableRowBg, new System.Numerics.Vector4(0.30f, 0.18f, 0.45f, 0.55f));
@@ -123,7 +123,7 @@ internal sealed class FishingConditionPanel(ITextureProvider textures, FishingIt
                 var item = details.Predators[index];
                 related.TryGetValue(item.Id, out var prey);
                 StepItem(item, UiText.Get(T.PredatorLabel, item.Name, details.Rule.Predators[index].Count),
-                    $"Predator{index}", personal, prey, true);
+                    $"Predator{index}", personal, prey, true, openDetail: openDetail);
             }
             ImGui.TextWrapped(details.Rule.IntuitionSeconds is { } seconds
                 ? UiText.Get(T.IntuitionDuration, seconds) : UiText.Get(T.IntuitionDurationUnknown));
@@ -133,7 +133,7 @@ internal sealed class FishingConditionPanel(ITextureProvider textures, FishingIt
     }
 
     private void DrawBaitPath(FishingDetailView details, FishPreferencesView personal,
-        IReadOnlyDictionary<uint, FishingDetailView> related)
+        IReadOnlyDictionary<uint, FishingDetailView> related, Action<uint>? openDetail)
     {
         if (details.BaitSteps.Length == 0) { ImGui.TextDisabled(UiText.Get(T.RowBaitUnknown)); return; }
         var width = ImGui.GetContentRegionAvail().X;
@@ -165,14 +165,15 @@ internal sealed class FishingConditionPanel(ITextureProvider textures, FishingIt
                     ImGui.SameLine(0, 8);
                 }
                 StepItem(item, name, $"Bait{step}/{item.Id}", personal, detail, step > 0,
-                    Math.Max(1, Math.Min(preferred, right - ImGui.GetCursorPosX())));
-                if (step == 0 && detail is null) UiWidgets.Tooltip(UiText.Get(T.BaitStockTooltip, name));
+                    Math.Max(1, Math.Min(preferred, right - ImGui.GetCursorPosX())),
+                    tooltip: step == 0 && detail is null ? UiText.Get(T.BaitStockTooltip, name) : null,
+                    openDetail: openDetail);
                 first = false;
             }
     }
 
     private void StepItem(FishingItemView item, string name, string id, FishPreferencesView personal,
-        FishingDetailView? detail, bool annotateMissing, float? maxWidth = null)
+        FishingDetailView? detail, bool annotateMissing, float? maxWidth = null, string? tooltip = null, Action<uint>? openDetail = null)
     {
         var width = maxWidth ?? ImGui.GetContentRegionAvail().X;
         var minimumConditions = annotateMissing ? ImGui.GetTextLineHeight() : 0;
@@ -190,7 +191,8 @@ internal sealed class FishingConditionPanel(ITextureProvider textures, FishingIt
             Math.Min(ImGui.GetFontSize() * 12, width - IconSize - spacing - minimumConditions)));
         ImGui.PushID(id);
         ImGui.BeginGroup();
-        Item(item, name, "Item", personal, nameWidth);
+        Item(item, name, "Item", personal, nameWidth, tooltip,
+            detail is not null && openDetail is not null ? () => openDetail(item.Id) : null);
         if (detail is not null)
         {
             ImGui.SameLine(0, 6);
@@ -263,12 +265,15 @@ internal sealed class FishingConditionPanel(ITextureProvider textures, FishingIt
         ImGui.TableNextColumn();
     }
 
-    private void Item(FishingItemView item, string name, string id, FishPreferencesView personal, float? nameWidth = null)
+    private void Item(FishingItemView item, string name, string id, FishPreferencesView personal, float? nameWidth = null,
+        string? tooltip = null, Action? openDetail = null)
     {
         ImGui.PushID(id);
-        ImGui.BeginDisabled(!personal.HasCharacter);
-        UiWidgets.GameIcon(textures, item.IconId, IconSize, UiText.Get(T.ItemLinkHint, item.Name));
-        if (personal.HasCharacter && ImGui.IsItemClicked()) itemLinks.Request(item, personal.Session);
+        var enabled = openDetail is not null || personal.HasCharacter;
+        var hint = tooltip ?? UiText.Get(openDetail is not null ? T.OpenRelatedDetailHint : T.ItemLinkHint, item.Name);
+        ImGui.BeginDisabled(!enabled);
+        UiWidgets.GameIcon(textures, item.IconId, IconSize, hint);
+        if (enabled && ImGui.IsItemClicked()) Click();
         ImGui.SameLine();
         if (nameWidth is { } fixedWidth)
         {
@@ -280,10 +285,15 @@ internal sealed class FishingConditionPanel(ITextureProvider textures, FishingIt
             ImGui.Dummy(new Vector2(fixedWidth, IconSize));
         }
         else ImGui.TextWrapped(name);
-        if (personal.HasCharacter && ImGui.IsItemClicked()) itemLinks.Request(item, personal.Session);
-        UiWidgets.Tooltip(UiText.Get(T.ItemLinkHint, name));
+        if (enabled && ImGui.IsItemClicked()) Click();
+        UiWidgets.Tooltip(hint);
         ImGui.EndDisabled();
         ImGui.PopID();
+        void Click()
+        {
+            if (openDetail is not null) openDetail();
+            else itemLinks.Request(item, personal.Session);
+        }
     }
 
     private void Skill(FishingConditionIcon? skill, T fallback)

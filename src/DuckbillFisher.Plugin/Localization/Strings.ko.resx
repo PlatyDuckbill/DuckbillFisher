@@ -150,12 +150,26 @@
   <data name="ForecastEnd" xml:space="preserve"><value>종료: 현지 시각 {0}</value></data>
   <data name="ForecastNotFound" xml:space="preserve"><value>앞으로 실제 시간 {0}일 범위에서 다음 출현을 찾지 못했습니다.</value></data>
   <data name="ForecastUnknown" xml:space="preserve"><value>출현 시간 예측을 준비하지 못했습니다.</value></data>
-  <data name="ForecastScope" xml:space="preserve"><value>현재부터 실제 시간 {0}일 뒤까지 시간·날씨와 직감 선행 조건으로 다음 출현을 찾습니다. 물고기의 눈 효과·실제 직감 발동·개인 준비 상태는 반영하지 않습니다.</value></data>
+  <data name="ForecastScope" xml:space="preserve"><value>현재부터 실제 시간 {0}일 뒤까지 선택한 기준의 시간·날씨와 직감 선행 조건으로 다음 출현을 찾습니다. 실제 직감 발동·개인 준비 상태는 확인하지 않습니다.</value></data>
   <data name="ForecastIntuition" xml:space="preserve"><value>직감 선행 어종의 시간·날씨와 필요한 직감 지속 시간을 반영한 예측입니다. 실제 선행 어획 수와 직감 발동 여부는 확인하지 않습니다.</value></data>
   <data name="ForecastIntuitionDurationUnknown" xml:space="preserve"><value>직감 지속 시간이 미확인이라 선행 어종의 제한 시간을 반영한 예측을 제공할 수 없습니다. 실제 선행 어획 수와 직감 발동 여부는 확인하지 않습니다.</value></data>
   <data name="ForecastIntuitionPrerequisiteUnknown" xml:space="preserve"><value>직감 선행 조건이 미확인 또는 미지원이라 출현 예측을 제공할 수 없습니다. 실제 선행 어획 수와 직감 발동 여부는 확인하지 않습니다.</value></data>
   <data name="RowIntuitionForecast" xml:space="preserve"><value>직감 · {0}</value></data>
-  <data name="ForecastBasis" xml:space="preserve"><value>출현 시간은 물고기의 눈 미사용 기준입니다.</value></data>
+  <data name="FishEyesToggleOn" xml:space="preserve"><value>물고기의 눈 ON: 사용을 가정해 출현 시간과 남은 시간순 정렬에 반영합니다. 날씨·직감 조건은 유지합니다. 실제 기술을 사용하지 않으며 알림은 일반 기준입니다.</value></data>
+  <data name="FishEyesToggleOff" xml:space="preserve"><value>물고기의 눈 OFF: 누르면 지원이 확인된 어종의 시간 제한을 해제해 예측하고 남은 시간순으로 정렬합니다. 날씨·직감 조건은 유지하며 알림은 일반 기준입니다.</value></data>
+  <data name="ForecastFishEyesUnknown" xml:space="preserve"><value>물고기의 눈 지원 여부가 미확인이라 사용 기준 예측을 제공할 수 없습니다.</value></data>
+  <data name="ForecastNormal" xml:space="preserve"><value>일반 출현</value></data>
+  <data name="ForecastWithFishEyes" xml:space="preserve"><value>물고기의 눈 사용 시</value></data>
+  <data name="ForecastCalculation" xml:space="preserve"><value>직감 출현 시간 계산</value></data>
+  <data name="ForecastTargetRange" xml:space="preserve"><value>대상 자체 시간·날씨: {0}</value></data>
+  <data name="ForecastPrerequisiteRange" xml:space="preserve"><value>선행 {0} × {1}: {2}</value></data>
+  <data name="ForecastFinalRange" xml:space="preserve"><value>최종 계산 결과: {0}</value></data>
+  <data name="ForecastCalculationHint" xml:space="preserve"><value>최종 예측에 사용한 구간입니다. 선행 어종을 순서대로 준비할 수 있는 시간과 직감 지속 시간을 반영하며, 실제 어획 진행·직감 발동·준비 소요 시간은 확인하지 않습니다.</value></data>
+  <data name="ForecastCalculationPendingHint" xml:space="preserve"><value>최종 출현 구간을 확정하지 못했습니다. 위 시간은 각 어종의 현재 또는 다음 자체 출현이며, 함께 직감을 준비할 수 있는 구간이 확인됐다는 뜻은 아닙니다.</value></data>
+  <data name="DurationDays" xml:space="preserve"><value>{0:0}일 {1:0}시간 {2:0}분 {3:0}초</value></data>
+  <data name="OpenRelatedDetailHint" xml:space="preserve"><value>{0} 상세를 비교 화면에서 엽니다.</value></data>
+  <data name="CompareDetailWindowTitle" xml:space="preserve"><value>어종 비교 상세</value></data>
+  <data name="RelatedDetailBack" xml:space="preserve"><value>뒤로</value></data>
   <data name="DurationShort" xml:space="preserve"><value>{0:0}시간 {1:00}분 {2:00}초</value></data>
   <data name="DataSourceLabel" xml:space="preserve"><value>데이터 출처와 라이선스</value></data>
   <data name="DataSourceInfo" xml:space="preserve"><value>Carbuncle Plushy / FFX|V Fish Tracker (MIT) · {0} · 원본 {1}. 한섭 이름·낚시터·지도는 현재 클라이언트에서 읽습니다.</value></data>

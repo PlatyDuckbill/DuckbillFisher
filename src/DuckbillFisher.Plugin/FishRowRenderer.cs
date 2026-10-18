@@ -252,8 +252,12 @@ internal sealed class FishRowRenderer(ITextureProvider textures, FishingMapServi
             });
         var time = target > now ? target.Value - now : TimeSpan.Zero;
         return UiText.Get(window.Kind == FishingWindowKind.Open ? T.RowEndsIn : T.RowStartsIn,
-            UiText.Get(T.RowCountdown, Math.Floor(time.TotalHours), time.Minutes, time.Seconds));
+            Countdown(time));
     }
+
+    public static string Countdown(TimeSpan duration, bool compact = true) => duration.TotalDays >= 1
+        ? UiText.Get(T.DurationDays, Math.Floor(duration.TotalDays), duration.Hours, duration.Minutes, duration.Seconds)
+        : UiText.Get(compact ? T.RowCountdown : T.DurationShort, Math.Floor(duration.TotalHours), duration.Minutes, duration.Seconds);
 
     private static void LineText(string text, float width, bool disabled)
     {
@@ -285,10 +289,11 @@ internal sealed class FishRowRenderer(ITextureProvider textures, FishingMapServi
 
     public static string FormatWindow(FishingWindow window, DateTimeOffset now)
     {
+        if (window.Issue == FishingForecastIssue.FishEyesSupportUnknown) return UiText.Get(T.ForecastFishEyesUnknown);
         string Remaining(DateTimeOffset time)
         {
             var duration = time > now ? time - now : TimeSpan.Zero;
-            return UiText.Get(T.DurationShort, Math.Floor(duration.TotalHours), duration.Minutes, duration.Seconds);
+            return Countdown(duration, compact: false);
         }
         return window.Kind switch
         {

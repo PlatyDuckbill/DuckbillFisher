@@ -125,7 +125,7 @@ internal sealed class SpawnAlerts : IDisposable
                     if (plansBuilt >= 8)
                         continue;
                     plansBuilt++;
-                    var window = SpawnAlertScheduler.FindFutureWindow(now, lead, data.Windows.GetValueOrDefault(id),
+                    var window = SpawnAlertScheduler.FindFutureWindow(now, lead, data.NormalWindows.GetValueOrDefault(id),
                         personal.ReservedAlertWindows.GetValueOrDefault(id), at => data.Forecast.Find(at, row.ItemId));
                     if (window is null)
                     {
@@ -199,12 +199,12 @@ internal sealed class SpawnAlerts : IDisposable
                 uncaughtOnly && collectionStatus == CollectionStatus.Caught ? FavoriteAlertState.Caught :
                 uncaughtOnly && collectionStatus == CollectionStatus.Unknown ? FavoriteAlertState.Unknown :
                 row is not { IsDisplayable: true, IsOceanFishing: false, Details.Spot: not null } ? FavoriteAlertState.Unsupported :
-                data.Windows.GetValueOrDefault(id)?.Kind == FishingWindowKind.Always ? FavoriteAlertState.Always :
+                data.NormalWindows.GetValueOrDefault(id)?.Kind == FishingWindowKind.Always ? FavoriteAlertState.Always :
                 !personal.SpawnAlertsEnabled ? FavoriteAlertState.Disabled :
                 plan is null ? FavoriteAlertState.Pending : FavoriteAlertState.Armed;
             return new FavoriteAlertView(id, row?.Name, personal.AlertLead(id), state, plan?.Window.Start)
             {
-                Row = row, Window = data.Windows.GetValueOrDefault(id),
+                Row = row, Window = data.NormalWindows.GetValueOrDefault(id),
             };
         }).OrderBy(fish => fish.Name, StringComparer.Ordinal).ThenBy(fish => fish.FishId).ToArray();
 

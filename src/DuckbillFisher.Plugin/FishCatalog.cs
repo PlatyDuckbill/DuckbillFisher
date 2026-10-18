@@ -36,11 +36,17 @@ internal sealed record FishGuideRow(uint FishParameterId, uint ItemId, string It
 
 internal sealed record FishCatalogView(IReadOnlyList<FishGuideRow> Rows, UiMessage Status)
 {
+    public IReadOnlyDictionary<uint, FishGuideRow> RowsById { get; init; } = FrozenDictionary<uint, FishGuideRow>.Empty;
+    public IReadOnlyDictionary<uint, FishGuideRow> RelatedRows { get; init; } = FrozenDictionary<uint, FishGuideRow>.Empty;
     public IReadOnlyDictionary<uint, FishingSpotView> Spots { get; init; } = new Dictionary<uint, FishingSpotView>();
     public FishingGeography Geography { get; init; } = new([], []);
     public IReadOnlyDictionary<uint, IReadOnlySet<uint>> FishByTerritory { get; init; } = FrozenDictionary<uint, IReadOnlySet<uint>>.Empty;
     public IReadOnlyDictionary<uint, FishingDetailView> RelatedDetails { get; init; } = new Dictionary<uint, FishingDetailView>();
-    public IReadOnlyDictionary<uint, FishingWindow> Windows { get; init; } = new Dictionary<uint, FishingWindow>();
+    public IReadOnlyDictionary<uint, FishingWindow> NormalWindows { get; init; } = new Dictionary<uint, FishingWindow>();
+    public IReadOnlyDictionary<uint, FishingWindow> FishEyesWindows { get; init; } = new Dictionary<uint, FishingWindow>();
+    public IReadOnlyDictionary<uint, FishingWindow> Windows => FishEyesEnabled ? FishEyesWindows : NormalWindows;
+    public bool FishEyesEnabled { get; init; }
+    public FishingConditionIcon? FishEyesSkill { get; init; }
     public FishingForecast Forecast { get; init; } = new([]);
     public int ForecastRevision { get; init; }
     public DateTimeOffset? ForecastAt { get; init; }
@@ -81,6 +87,13 @@ internal sealed class FishCatalog : IDisposable
     public FishCatalogView View { get { lock (gate) return view; } }
     public bool ConditionBuildMatches => conditionBuildMatches;
 
+    public void SetFishEyes(bool enabled)
+    {
+        lock (gate)
+            if (!disposed && view.FishEyesEnabled != enabled)
+                view = view with { FishEyesEnabled = enabled, ForecastRevision = view.ForecastRevision + 1 };
+    }
+
     public void RequestLoad(bool reload = false)
     {
         lock (gate)
@@ -108,28 +121,38 @@ internal sealed class FishCatalog : IDisposable
             var now = DateTimeOffset.UtcNow;
             if (view.Rows.Count > 0 && (now >= nextForecast || now < lastForecast))
             {
-                var windows = new Dictionary<uint, FishingWindow>();
-                foreach (var row in view.Rows.Where(row => row.Details is { Spot: not null }))
-                {
-                    view.Windows.TryGetValue(row.FishParameterId, out var previous);
-                    // Keep absolute windows until a boundary. Counts/countdowns are rendered from UTC.
-                    // A bounded search with no result is retried each minute, not for every fish each second.
-                    var window = now >= lastForecast && previous is not null ? previous.Kind switch
-                    {
-                        FishingWindowKind.Always => previous,
-                        FishingWindowKind.Upcoming when previous.Start > now => previous,
-                        FishingWindowKind.Upcoming when previous.End > now => previous with { Kind = FishingWindowKind.Open },
-                        FishingWindowKind.Open when previous.End > now => previous,
-                        FishingWindowKind.NotFound when lastForecast.ToUnixTimeSeconds() / 60 == now.ToUnixTimeSeconds() / 60 => previous,
-                        _ => null,
-                    } : null;
-                    windows[row.FishParameterId] = window ?? view.Forecast.Find(now, row.ItemId);
-                }
-                var changed = windows.Count != view.Windows.Count || windows.Any(pair =>
-                    !view.Windows.TryGetValue(pair.Key, out var previous) || previous != pair.Value);
-                view = view with { Windows = windows, ForecastRevision = view.ForecastRevision + (changed ? 1 : 0), ForecastAt = now };
+                var normal = UpdateWindows(view.NormalWindows, false);
+                var fishEyes = UpdateWindows(view.FishEyesWindows, true);
+                var changed = Changed(normal, view.NormalWindows) || Changed(fishEyes, view.FishEyesWindows);
+                view = view with { NormalWindows = normal, FishEyesWindows = fishEyes,
+                    ForecastRevision = view.ForecastRevision + (changed ? 1 : 0), ForecastAt = now };
                 lastForecast = now;
                 nextForecast = now.AddSeconds(1);
+
+                Dictionary<uint, FishingWindow> UpdateWindows(IReadOnlyDictionary<uint, FishingWindow> previousWindows, bool useFishEyes)
+                {
+                    var windows = new Dictionary<uint, FishingWindow>();
+                    foreach (var row in view.Rows.Where(row => row.Details is { Spot: not null }))
+                    {
+                        previousWindows.TryGetValue(row.FishParameterId, out var previous);
+                        // UTC windows survive until a boundary; static data failures survive until reload.
+                        // A bounded search with no result is retried each minute.
+                        var window = now >= lastForecast && previous is not null ? previous.Kind switch
+                        {
+                            FishingWindowKind.Always => previous,
+                            FishingWindowKind.Unknown when previous.Issue != FishingForecastIssue.None || !row.Details!.Rule.ConditionsKnown => previous,
+                            FishingWindowKind.Upcoming when previous.Start > now => previous,
+                            FishingWindowKind.Upcoming when previous.End > now => previous with { Kind = FishingWindowKind.Open },
+                            FishingWindowKind.Open when previous.End > now => previous,
+                            FishingWindowKind.NotFound when lastForecast.ToUnixTimeSeconds() / 60 == now.ToUnixTimeSeconds() / 60 => previous,
+                            _ => null,
+                        } : null;
+                        windows[row.FishParameterId] = window ?? view.Forecast.Find(now, row.ItemId, useFishEyes);
+                    }
+                    return windows;
+                }
+                static bool Changed(IReadOnlyDictionary<uint, FishingWindow> next, IReadOnlyDictionary<uint, FishingWindow> previous) =>
+                    next.Count != previous.Count || next.Any(pair => !previous.TryGetValue(pair.Key, out var old) || old != pair.Value);
             }
         }
     }
@@ -273,7 +296,12 @@ internal sealed class FishCatalog : IDisposable
                         ? new UiMessage(T.GradeDataInvalid, gradeFailure.Code, gradeFailure.Path)
                         : new UiMessage(T.CatalogLoaded);
                 view = new(rows.ToArray(), dataStatus) {
+                    RowsById = rows.ToFrozenDictionary(row => row.FishParameterId),
+                    RelatedRows = rows.Where(row => row.Details is not null).ToFrozenDictionary(row => row.ItemId),
                     Forecast = forecast,
+                    FishEyesEnabled = view.FishEyesEnabled,
+                    FishEyesSkill = actions.GetRowOrDefault(4105) is { IsPlayerAction: true } eyes && eyes.ClassJob.RowId == 18
+                        ? new(4105, eyes.Name.ExtractText(), eyes.Icon) : null,
                     Spots = spots.ToDictionary(pair => pair.Key, pair => pair.Value.View),
                     Geography = FishingGeography.FromRows(rows),
                     FishByTerritory = rows.Where(row => row.IsDisplayable && !row.IsOceanFishing)
@@ -350,7 +378,7 @@ internal sealed class FishCatalog : IDisposable
         var unresolved = snapshot.Rows.Where(row => !row.IsDisplayable).ToArray();
         var report = new StringBuilder();
         void Append(FormattableString line) => report.AppendLine(FormattableString.Invariant(line));
-        report.AppendLine("DuckbillFisher MVP-01/catalog/v7");
+        report.AppendLine("DuckbillFisher MVP-01/catalog/v8");
         Append($"Plugin: {typeof(Plugin).Assembly.GetName().Version}");
         Append($"Rows: {snapshot.Rows.Count}; displayable: {snapshot.Rows.Count - unresolved.Length}; unresolved: {unresolved.Length}; unresolved in log: {unresolved.Count(row => row.IsInLog)}");
         report.AppendLine($"Status: [{snapshot.Status.Key}] {snapshot.Status.Diagnostic}");
@@ -358,7 +386,7 @@ internal sealed class FishCatalog : IDisposable
         report.AppendLine($"DataValidation: conditions={FishingData.Failure?.Code.ToString() ?? "Valid"}; conditionPath={FishingData.Failure?.Path ?? "none"}; grades={FishClassificationData.Failure?.Code.ToString() ?? "Valid"}; gradePath={FishClassificationData.Failure?.Path ?? "none"}");
         Append($"Coverage: oceanAreas={snapshot.Rows.Count(row => row.Ocean is not null)}; spearStored={FishingData.Dataset.Spearfishing.Length}; spearConditionsUnknown={FishingData.SpearUnknown}");
         Append($"Classification: dataset={FishClassificationData.Dataset.DataVersion}; bigIncludingLegendary={snapshot.Rows.Count(row => row.Grade is FishGrade.Big or FishGrade.Legendary)}; legendary={snapshot.Rows.Count(row => row.Grade == FishGrade.Legendary)}; restricted={snapshot.Rows.Count(row => row.TimeRestriction == FishTimeRestriction.Restricted)}");
-        Append($"ForecastAt: {snapshot.ForecastAt:O}; horizonDays={FishingAvailability.SearchDays}; horizonPeriods={FishingAvailability.SearchPeriods}; fishEyes=false; intuitionPrerequisites=true; no personal readiness inference");
+        Append($"ForecastAt: {snapshot.ForecastAt:O}; horizonDays={FishingAvailability.SearchDays}; horizonPeriods={FishingAvailability.SearchPeriods}; fishEyes={snapshot.FishEyesEnabled}; normalWindows={snapshot.NormalWindows.Count}; fishEyesWindows={snapshot.FishEyesWindows.Count}; alertsFishEyes=false; intuitionPrerequisites=true; no personal readiness inference");
         Append($"IntuitionForecast: total={snapshot.Windows.Count(pair => pair.Value.Basis == FishingForecastBasis.Intuition)}; issues={string.Join(',', snapshot.Windows.Where(pair => pair.Value.Issue != FishingForecastIssue.None).Select(pair => $"{pair.Key}:{pair.Value.Issue}"))}");
         report.AppendLine($"Source: {FishingData.Dataset.SourceRepository}/tree/{FishingData.Dataset.SourceRevision}");
         report.AppendLine("Detail samples: up to 20, selected fish first, then ordered by FishParameter ID.");

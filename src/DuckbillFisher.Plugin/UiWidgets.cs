@@ -74,6 +74,22 @@ internal static class UiWidgets
         return available;
     }
 
+    public static bool GameIconButton(ITextureProvider textures, uint iconId, string id, string tooltip, bool active)
+    {
+        if (active) ImGui.PushStyleColor(ImGuiCol.Button, new Vector4(0.18f, 0.48f, 0.62f, 1));
+        var size = ImGui.GetFrameHeight();
+        var clicked = ImGui.Button($"###{id}", new Vector2(size));
+        if (active) ImGui.PopStyleColor();
+        var start = ImGui.GetItemRectMin() + new Vector2(2);
+        if (iconId != 0 && textures.TryGetFromGameIcon(new GameIconLookup(iconId), out var texture) &&
+            texture.TryGetWrap(out var wrap, out _))
+            ImGui.GetWindowDrawList().AddImage(wrap.Handle, start, start + new Vector2(size - 4), Vector2.Zero, Vector2.One,
+                ImGui.GetColorU32(active ? Vector4.One : new Vector4(1, 1, 1, 0.45f)));
+        else ImGui.GetWindowDrawList().AddText(start, ImGui.GetColorU32(ImGuiCol.Text), "?");
+        Tooltip(tooltip);
+        return clicked;
+    }
+
     public static float MapPinWidth(float height) => height + 4;
 
     public static bool MapPinButton(string id, string tooltip, float height)

@@ -66,7 +66,10 @@ internal sealed class CompactFishObserver : IDisposable
             var spot = filter.LocationScoped ? fish.Spots.FirstOrDefault(spot => filter.MatchesSpot(spot, location)) : fish.Spots.FirstOrDefault();
             var usesOtherRegion = filter.LocationScoped && spot is not null && fish.Details?.Spot is { } recommended &&
                 recommended.TerritoryId != spot.TerritoryId;
-            if (window.Kind == FishingWindowKind.Open && (window.Start is null || window.Start <= now) &&
+            if (source.FishEyesEnabled && window.Kind == FishingWindowKind.Always &&
+                source.NormalWindows.GetValueOrDefault(fish.FishParameterId)?.Kind != FishingWindowKind.Always)
+                open.Add(new(fish, window, spot, usesOtherRegion));
+            else if (window.Kind == FishingWindowKind.Open && (window.Start is null || window.Start <= now) &&
                 (window.End is null || now < window.End)) open.Add(new(fish, window, spot, usesOtherRegion));
             else if (window.Kind == FishingWindowKind.Upcoming && window.Start is { } start && now < start && start <= cutoff)
                 upcoming.Add(new(fish, window, spot, usesOtherRegion));

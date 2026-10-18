@@ -27,6 +27,7 @@ public sealed class Plugin : IDalamudPlugin
     private readonly CompactFishObserver compactObserver;
     private readonly CompactFishWindow compactWindow;
     private readonly FishDetailWindow detailWindow;
+    private readonly FishDetailWindow compareDetailWindow;
     private readonly FishGuideOpenService guideOpener;
     private readonly FishingTracker fishingTracker;
     private readonly CastingTimerWindow timerWindow;
@@ -82,6 +83,13 @@ public sealed class Plugin : IDalamudPlugin
         var preparationWindow = new BaitPreparationWindow(preparationPanel);
         var detailPanel = new FishDetailPanel(fishPreferences, textureProvider, fishingMap, new FishingConditionPanel(textureProvider, itemLinks, baitStock, baitFinder));
         detailWindow = new FishDetailWindow(fishCatalog, fishPreferences, fishCollection, detailPanel, guideOpener);
+        compareDetailWindow = new FishDetailWindow(fishCatalog, fishPreferences, fishCollection, detailPanel, guideOpener, comparison: true);
+        detailPanel.OpenRelated = (origin, itemId) =>
+        {
+            if (!fishCatalog.View.RelatedRows.TryGetValue(itemId, out var fish)) return;
+            if (compareDetailWindow.IsOpen && compareDetailWindow.SelectedId == origin) compareDetailWindow.Navigate(fish);
+            else compareDetailWindow.Show(fish);
+        };
         timerWindow = new CastingTimerWindow(fishingTracker, fishCatalog, fishPreferences, fishCollection, textureProvider, fishingMap, detailWindow.Show);
         compactObserver = new CompactFishObserver(fishCatalog, fishPreferences, framework, fishCollection, fishingRegion);
         compactWindow = new CompactFishWindow(compactObserver, fishPreferences, fishCollection, textureProvider, detailWindow.Show, fishingMap);
@@ -96,6 +104,7 @@ public sealed class Plugin : IDalamudPlugin
         windows.AddWindow(mainWindow);
         windows.AddWindow(compactWindow);
         windows.AddWindow(detailWindow);
+        windows.AddWindow(compareDetailWindow);
         windows.AddWindow(timerWindow);
         windows.AddWindow(preparationWindow);
         pluginInterface.UiBuilder.Draw += windows.Draw;

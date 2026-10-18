@@ -11,6 +11,8 @@ namespace DuckbillFisher.Plugin;
 internal sealed class FishDetailPanel(FishPreferences preferences, ITextureProvider textures,
     FishingMapService maps, FishingConditionPanel conditions)
 {
+    public Action<uint, uint>? OpenRelated { get; set; }
+
     public void Draw(FishGuideRow? fish, FishCatalogView catalog, FishPreferencesView personal, FishCollectionView observed)
     {
         if (fish is null)
@@ -51,13 +53,32 @@ internal sealed class FishDetailPanel(FishPreferences preferences, ITextureProvi
         if (fish.IsOceanFishing) DrawOcean(fish.Ocean);
         else
         {
+            var now = DateTimeOffset.UtcNow;
             catalog.Windows.TryGetValue(fish.FishParameterId, out var window);
-            FishingWindowPanel.Draw(window, DateTimeOffset.UtcNow,
-                fish.Details is { Rule.ConditionsKnown: false } partial ? partial.ConditionWarning : null,
-                intuitionRequired: fish.Details is { Predators.Length: > 0 });
+            var reason = fish.Details is { Rule.ConditionsKnown: false } partial ? partial.ConditionWarning : null;
+            catalog.NormalWindows.TryGetValue(fish.FishParameterId, out var normal);
+            catalog.FishEyesWindows.TryGetValue(fish.FishParameterId, out var eyes);
+            if (FishingWindowPanel.Different(normal, eyes))
+            {
+                ImGui.PushID("NormalForecast");
+                ImGui.TextUnformatted(UiText.Get(T.ForecastNormal));
+                FishingWindowPanel.Draw(normal, now, reason);
+                ImGui.PopID();
+                ImGui.PushID("FishEyesForecast");
+                ImGui.TextUnformatted(UiText.Get(T.ForecastWithFishEyes));
+                FishingWindowPanel.Draw(eyes, now, reason);
+                ImGui.PopID();
+            }
+            else FishingWindowPanel.Draw(window, now, reason);
+            if (fish.Details is { Predators.Length: > 0 } intuition)
+            {
+                ImGui.TextWrapped(FishingWindowPanel.IntuitionNotice(window));
+                FishingWindowPanel.DrawBreakdown(window, intuition, now, catalog.FishEyesEnabled);
+            }
         }
 
-        if (fish.Details is { Predators.Length: > 0 } intuitionDetails) conditions.DrawIntuition(intuitionDetails, personal, catalog.RelatedDetails);
+        void Open(uint itemId) => OpenRelated?.Invoke(fish.FishParameterId, itemId);
+        if (fish.Details is { Predators.Length: > 0 } intuitionDetails) conditions.DrawIntuition(intuitionDetails, personal, catalog.RelatedDetails, Open);
 
         UiWidgets.Heading(T.DetailLocations);
         foreach (var spot in fish.Spots)
@@ -80,7 +101,7 @@ internal sealed class FishDetailPanel(FishPreferences preferences, ITextureProvi
             if (fish.Details is { } details)
             {
                 conditions.DrawHeading(details, personal, catalog.RelatedDetails);
-                conditions.Draw(details, personal, catalog.RelatedDetails);
+                conditions.Draw(details, personal, catalog.RelatedDetails, Open);
             }
             else
             {

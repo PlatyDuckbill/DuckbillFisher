@@ -18,33 +18,69 @@ public sealed class FishingForecast
         if (!inputs.TryGetValue(itemId, out var input) || !FishingAvailability.IsValid(input.Rule, input.WeatherRates))
             return FishTimeRestriction.Unknown;
         if (!FishingAvailability.IsAlways(input.Rule)) return FishTimeRestriction.Restricted;
-        var issue = Prerequisites(input.Rule, out var predators);
+        var issue = Prerequisites(input.Rule, false, out var predators);
         if (predators.Any(predator => !FishingAvailability.IsAlways(predator.Rule)))
             return FishTimeRestriction.Restricted;
         return issue == FishingForecastIssue.None ? FishTimeRestriction.Unrestricted : FishTimeRestriction.Unknown;
     }
 
-    public FishingWindow Find(DateTimeOffset now, uint itemId)
+    public FishingWindow Find(DateTimeOffset now, uint itemId, bool fishEyes = false)
     {
         if (!inputs.TryGetValue(itemId, out var input)) return new(FishingWindowKind.Unknown);
+        if (!FishingAvailability.IsValid(input.Rule, input.WeatherRates)) return new(FishingWindowKind.Unknown);
+        if (SupportUnknown(input.Rule, fishEyes))
+            return new(FishingWindowKind.Unknown) { Issue = FishingForecastIssue.FishEyesSupportUnknown };
+        input = ForMode(input, fishEyes);
         var rule = input.Rule;
         if (rule.Predators.Length == 0) return FishingAvailability.Find(now, rule, input.WeatherRates);
-        var issue = Prerequisites(rule, out var predators);
+        var issue = Prerequisites(rule, fishEyes, out var predators);
+        Dictionary<uint, double>? preparationStarts = null;
+        FishingWindow result;
         if (issue != FishingForecastIssue.None)
-            return new(FishingWindowKind.Unknown) { Basis = FishingForecastBasis.Intuition, Issue = issue };
+            result = new(FishingWindowKind.Unknown) { Issue = issue };
         // No duration is needed when every prerequisite is available at all times.
-        if (predators.All(predator => FishingAvailability.IsAlways(predator.Rule)))
-            return FishingAvailability.Find(now, rule, input.WeatherRates) with { Basis = FishingForecastBasis.Intuition };
-        if (rule.IntuitionSeconds is not { } duration || !double.IsFinite(duration) || duration <= 0)
-            return new(FishingWindowKind.Unknown) { Basis = FishingForecastBasis.Intuition, Issue = FishingForecastIssue.IntuitionDurationUnknown };
-        var unix = now.ToUnixTimeMilliseconds() / 1000.0;
-        if (unix < FishingAvailability.WeatherSeconds * 2 + duration)
-            return new(FishingWindowKind.Unknown) { Basis = FishingForecastBasis.Intuition };
-        return FishingAvailability.Find(now, rule, input.WeatherRates,
-            range => Constrain(range, predators, duration, unix)) with { Basis = FishingForecastBasis.Intuition };
+        else if (predators.All(predator => FishingAvailability.IsAlways(predator.Rule)))
+            result = FishingAvailability.Find(now, rule, input.WeatherRates);
+        else if (rule.IntuitionSeconds is not { } duration || !double.IsFinite(duration) || duration <= 0)
+            result = new(FishingWindowKind.Unknown) { Issue = FishingForecastIssue.IntuitionDurationUnknown };
+        else
+        {
+            var unix = now.ToUnixTimeMilliseconds() / 1000.0;
+            result = unix < FishingAvailability.WeatherSeconds * 2 + duration ? new(FishingWindowKind.Unknown)
+                : FishingAvailability.Find(now, rule, input.WeatherRates, range =>
+                {
+                    var constrained = Constrain(range, predators, duration, unix, out var starts);
+                    if (constrained is { } accepted && accepted.End > unix) preparationStarts ??= starts;
+                    return constrained;
+                });
+        }
+        var targetAt = result.Start ?? now;
+        var prerequisites = rule.Predators.Select(requirement => new FishingPrerequisiteForecast(requirement.ItemId, requirement.Count,
+            OwnWindow(preparationStarts?.TryGetValue(requirement.ItemId, out var start) == true
+                ? DateTimeOffset.FromUnixTimeMilliseconds((long)Math.Round(start * 1000)) : targetAt,
+                requirement.ItemId, fishEyes))).ToArray();
+        return result with { Basis = FishingForecastBasis.Intuition,
+            Breakdown = new(FishingAvailability.Find(targetAt, rule, input.WeatherRates), prerequisites) };
     }
 
-    private FishingForecastIssue Prerequisites(FishingRule rule, out FishingForecastInput[] predators)
+    private FishingWindow OwnWindow(DateTimeOffset at, uint itemId, bool fishEyes)
+    {
+        if (!inputs.TryGetValue(itemId, out var input)) return new(FishingWindowKind.Unknown);
+        if (!FishingAvailability.IsValid(input.Rule, input.WeatherRates)) return new(FishingWindowKind.Unknown);
+        if (SupportUnknown(input.Rule, fishEyes))
+            return new(FishingWindowKind.Unknown) { Issue = FishingForecastIssue.FishEyesSupportUnknown };
+        input = ForMode(input, fishEyes);
+        return FishingAvailability.Find(at, input.Rule, input.WeatherRates);
+    }
+
+    private static bool SupportUnknown(FishingRule rule, bool fishEyes) => fishEyes && rule.FishEyesSupported is null &&
+        (rule.StartHour != 0 || rule.EndHour != 24);
+
+    private static FishingForecastInput ForMode(FishingForecastInput input, bool fishEyes) =>
+        fishEyes && input.Rule.FishEyesSupported == true
+            ? input with { Rule = input.Rule with { StartHour = 0, EndHour = 24 } } : input;
+
+    private FishingForecastIssue Prerequisites(FishingRule rule, bool fishEyes, out FishingForecastInput[] predators)
     {
         var result = new List<FishingForecastInput>();
         foreach (var requirement in rule.Predators)
@@ -61,7 +97,12 @@ public sealed class FishingForecast
                 predators = result.ToArray();
                 return FishingForecastIssue.NestedPrerequisiteUnsupported;
             }
-            result.Add(predator);
+            if (SupportUnknown(predator.Rule, fishEyes))
+            {
+                predators = result.ToArray();
+                return FishingForecastIssue.FishEyesSupportUnknown;
+            }
+            result.Add(ForMode(predator, fishEyes));
         }
         predators = result.ToArray();
         return FishingForecastIssue.None;
@@ -71,8 +112,9 @@ public sealed class FishingForecast
     // Preserve source order: prerequisites can be caught sequentially across adjacent periods
     // (Warden of the Seven Hues), rather than requiring every fish to overlap simultaneously.
     private static AvailabilityRange? Constrain(AvailabilityRange target, FishingForecastInput[] predators,
-        double duration, double baseTime)
+        double duration, double baseTime, out Dictionary<uint, double> preparationStarts)
     {
+        preparationStarts = [];
         AvailabilityRange? overall = null;
         AvailabilityRange? accepted = null;
         var anyAlways = false;
@@ -100,6 +142,7 @@ public sealed class FishingForecast
                 if (raw.End <= baseTime || raw.Intersect(new(period, period + FishingAvailability.WeatherSeconds)) is not { } range)
                     continue;
                 valid = true;
+                preparationStarts.TryAdd(predator.Rule.ItemId, range.Start);
                 if (overall is not { } combined || accepted is not { } previous)
                     overall = accepted = range;
                 else if (range.Intersect(previous) is { } reduced)

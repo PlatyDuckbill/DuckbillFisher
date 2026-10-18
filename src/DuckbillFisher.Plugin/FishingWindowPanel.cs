@@ -12,8 +12,8 @@ internal static class FishingWindowPanel
 {
     public static void Draw(FishingWindow? window, DateTimeOffset now, UiMessage? unavailableReason = null, bool intuitionRequired = false)
     {
-        ImGui.TextWrapped(UiText.Get(T.ForecastBasis));
-        UiWidgets.Tooltip(UiText.Get(T.ForecastScope, FishingAvailability.SearchDays));
+        if (window?.Issue == FishingForecastIssue.FishEyesSupportUnknown)
+            ImGui.TextWrapped(UiText.Get(T.ForecastFishEyesUnknown));
         if (intuitionRequired) ImGui.TextWrapped(IntuitionNotice(window));
         if (unavailableReason is { } reason && (window is null || window.Kind == FishingWindowKind.Unknown))
         {
@@ -64,8 +64,45 @@ internal static class FishingWindowPanel
     {
         FishingForecastIssue.IntuitionDurationUnknown => T.ForecastIntuitionDurationUnknown,
         FishingForecastIssue.PrerequisiteUnavailable or FishingForecastIssue.NestedPrerequisiteUnsupported => T.ForecastIntuitionPrerequisiteUnknown,
+        FishingForecastIssue.FishEyesSupportUnknown => T.ForecastFishEyesUnknown,
         _ => T.ForecastIntuition,
     });
+
+    public static bool Different(FishingWindow? normal, FishingWindow? fishEyes) =>
+        normal?.Kind != fishEyes?.Kind || normal?.Start != fishEyes?.Start || normal?.End != fishEyes?.End || normal?.Issue != fishEyes?.Issue;
+
+    public static void DrawBreakdown(FishingWindow? window, FishingDetailView details, DateTimeOffset now, bool fishEyes)
+    {
+        if (window?.Breakdown is not { } breakdown) return;
+        UiWidgets.Heading(T.ForecastCalculation);
+        ImGui.TextDisabled(UiText.Get(fishEyes ? T.ForecastWithFishEyes : T.ForecastNormal));
+        ImGui.TextWrapped(UiText.Get(T.ForecastTargetRange, Describe(breakdown.Target, now)));
+        foreach (var prerequisite in breakdown.Prerequisites)
+        {
+            var item = details.Predators.FirstOrDefault(item => item.Id == prerequisite.ItemId);
+            ImGui.PushID((int)prerequisite.ItemId);
+            ImGui.TextWrapped(UiText.Get(T.ForecastPrerequisiteRange, item?.Name ?? prerequisite.ItemId.ToString(), prerequisite.Count,
+                Describe(prerequisite.Window, now)));
+            ImGui.PopID();
+        }
+        ImGui.TextWrapped(details.Rule.IntuitionSeconds is { } seconds ? UiText.Get(T.IntuitionDuration, seconds) : UiText.Get(T.IntuitionDurationUnknown));
+        ImGui.TextWrapped(UiText.Get(T.ForecastFinalRange, FishRowRenderer.FormatWindow(window, now)));
+        DrawRange(window, now);
+        ImGui.TextWrapped(UiText.Get(window.Start is null && window.Kind != FishingWindowKind.Always
+            ? T.ForecastCalculationPendingHint : T.ForecastCalculationHint));
+    }
+
+    private static void DrawRange(FishingWindow window, DateTimeOffset now)
+    {
+        var range = Range(window, now);
+        if (range.Length > 0) ImGui.TextWrapped(range);
+        if (window.Issue == FishingForecastIssue.FishEyesSupportUnknown) ImGui.TextWrapped(UiText.Get(T.ForecastFishEyesUnknown));
+    }
+
+    private static string Describe(FishingWindow window, DateTimeOffset now) => Range(window, now) is { Length: > 0 } range
+        ? range : window.Issue == FishingForecastIssue.FishEyesSupportUnknown ? UiText.Get(T.ForecastFishEyesUnknown)
+        : FishRowRenderer.FormatWindow(window, now);
+
 
     private static string Range(FishingWindow? window, DateTimeOffset now)
     {

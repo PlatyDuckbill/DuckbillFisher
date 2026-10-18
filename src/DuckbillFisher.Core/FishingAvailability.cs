@@ -35,11 +35,14 @@ public sealed record SpearfishingRule(uint ItemId, uint SpearfishingItemId, uint
 public readonly record struct WeatherChance(uint WeatherId, int Chance);
 public enum FishingWindowKind { Unknown, Always, Open, Upcoming, NotFound }
 public enum FishingForecastBasis { TimeWeather, Intuition }
-public enum FishingForecastIssue { None, PrerequisiteUnavailable, IntuitionDurationUnknown, NestedPrerequisiteUnsupported }
+public enum FishingForecastIssue { None, PrerequisiteUnavailable, IntuitionDurationUnknown, NestedPrerequisiteUnsupported, FishEyesSupportUnknown }
+public sealed record FishingPrerequisiteForecast(uint ItemId, int Count, FishingWindow Window);
+public sealed record FishingForecastBreakdown(FishingWindow Target, IReadOnlyList<FishingPrerequisiteForecast> Prerequisites);
 public sealed record FishingWindow(FishingWindowKind Kind, DateTimeOffset? Start = null, DateTimeOffset? End = null)
 {
     public FishingForecastBasis Basis { get; init; }
     public FishingForecastIssue Issue { get; init; }
+    public FishingForecastBreakdown? Breakdown { get; init; }
 }
 
 internal readonly record struct AvailabilityRange(double Start, double End)
