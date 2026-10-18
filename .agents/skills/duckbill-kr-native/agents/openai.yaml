@@ -1,0 +1,4 @@
+interface:
+  display_name: "DuckbillFisher KR 계약 조사"
+  short_description: "KR API·네이티브 관찰과 배포판별 DLL 호환성 조사"
+  default_prompt: "Use $duckbill-kr-native to investigate the requested DuckbillFisher KR observation or compatibility issue."

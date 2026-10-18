@@ -47,11 +47,8 @@ Fishing conditions are derived from a pinned revision of [FFX|V Fish Tracker App
 
 ## Development
 
+Start with the [documentation map](docs/README.md). Repository skills live in [.agents/skills](.agents/skills/) and share the maintained build and KR compatibility procedures.
+
 Windows, PowerShell 7, .NET SDK **10.0.402**, and the supported KR Dalamud references are used for development. Dependencies are pinned by `global.json` and lock files.
 
-```powershell
-dotnet build src/DuckbillFisher.Plugin/DuckbillFisher.Plugin.csproj --no-restore -c Release -p:DalamudLibPath=C:/Users/hyogu/AppData/Roaming/XIVLauncherKR/addon/Hooks/dev/
-pwsh -NoLogo -NoProfile -File scripts/check-localization.ps1
-```
-
-These commands build and inspect resources without running tests. For packaging and publication, follow [distribution](docs/DISTRIBUTION.md). For contribution boundaries and the working environment, read [AGENTS.md](AGENTS.md), [workflow](docs/WORKFLOW.md), and [session handoff](docs/SESSION-HANDOFF.md).
+Follow [workflow](docs/WORKFLOW.md) for direct builds and resource checks, [distribution](docs/DISTRIBUTION.md) for packaging and publication, and [session handoff](docs/SESSION-HANDOFF.md) for current machine paths. Tests run only when explicitly requested. Contribution boundaries are in [AGENTS.md](AGENTS.md).

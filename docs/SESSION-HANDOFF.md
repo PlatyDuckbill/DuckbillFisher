@@ -1,61 +1,45 @@
 # 세션 인수인계
 
-갱신: 2026-10-18 · 공개0.3.0.0 배포/익명 URL 검증 완료 · 실제 업데이트 확인 후속
+갱신: 2026-10-18 · 문서 정비 · 공개 0.3.0.0 유지
 
 ## 재개 순서
 
-1. AGENTS.md/STATUS.md와 `git status --short`를 확인한다. 사용자 `tmp_note.md`는 읽기·수정·스테이징하지 않는다.
-2. 다음 한 작업은 기존 저장소의0.3.0.0 실제 업데이트/친구 새 기능 대표 확인이다. [Release 추출본 대표 확인과 원격 게시](validation/RELEASE-0.3.0.0.md)는 완료했다. 미끼 페이지 표식은 전체자료/현재25칸 대조 후 표시하며 이동/선택은 사용자가 직접 한다. 모든 테마/캐릭터/친구 새 기능 전수 확인은 별도다. 페이지 연결 실패가 있으면v7의Pages 한 줄만 받는다.
-3. [잔여 보고서](reports/fishing-data-2026-10-17/remaining.md)에 일반 핵심11종·선택 메타데이터355종·먼바다259종·작살115건의 전체 이름/ID/이유가 있다. 일반 상세1258/1258과 모든 필드 완성은 구분한다.
-4. 사용자 상시 지시로 언로드는 기본 상태다. 별도→정규 빌드 후 주 DLL 절대 경로를 제공하고 다시 언로드를 묻지 않는다. 실제 파일 잠금 실패 시 원인만 보고한다.
-5. 공개0.3.0.0/API15 태그7269627/Release416043135/설치JSON fc300d5다. 사용자 확인한ZIP370,524바이트/SHA256 시작4EC80617을 재빌드 없이 게시했다. 실제 공유URL/ZIP/체크섬/아이콘·설치·업데이트HTTP200/해시/manifest 일치까지 확인했다. 저장소 URL은 그대로다. 새 태그/ZIP을 덮어쓰지 않으며 다음 수정은 새 버전으로 배포한다.
-6. 큰 UI 구조 변경은 [합의](UI-UX-REDESIGN.md)와 AGENTS에 따라 사용자에게 질의한다. 현재 독립 준비 화면과 페이지 번호 표식은 사용자가 승인한 범위다.
+1. AGENTS.md, [STATUS](STATUS.md), git status --short를 읽는다. tmp_note.md는 읽기/수정/스테이징하지 않는다.
+2. 이번 사용자 요청과 STATUS의 다음 작업을 맞춘다. 옛 validation/history의 ‘다음 작업’은 자동 실행하지 않는다.
+3. [문서 지도](README.md)에서 필요한 설계/검증만 선택한다. 현재 정책은 PRODUCT/ARCHITECTURE, 명령은 WORKFLOW/DISTRIBUTION을 따른다.
+4. 프로젝트 스킬은 .agents/skills에 Git으로 관리한다. 빌드/패키지/배포는 duckbill-release, KR 계약 조사에는 duckbill-kr-native를 적용한다. 새 세션에서 자동 목록에 없으면 AGENTS의 링크로 직접 읽는다.
+5. 구현 후 명시한 파일만 커밋하고 실제 게임 결과/공개 게시와 구분한다. 사용자 언로드는 기본 상태이며 다시 묻지 않는다. 파일 잠금 실패를 우회하지 않는다.
 
-현재 관심은 터주작이다. 미끼 준비는 독립 보조 화면에서 즐겨찾기 기본/현재 필터 전체를 전환한다. 준비 목록의 찾기는 제거했고 상세 제목의 찾기는 유지한다. 대체 미끼 반복 목록도 제거하고 집계 아래 ‘같은 어종이 여러 미끼에 포함될 수 있습니다.’만 안내한다. 상단 미확인 개수/하단 목록은 유지한다. 찾기 테두리/페이지 표식은 굵게 하고2.4초 주기의 외곽 강조를 더했다. Release 대표 확인을 받았으나 모든 테마 확인은 아니다. 미끼 변경 함수 호출은 없다. 새 강조 실패는 기존 도감/타이머를 막지 않는다. 먼바다 상세는 후속이다.
+## 환경과 경로
 
-## 환경과 산출물
+| 항목 | 현재 PC의 값 |
+|---|---|
+| 작업 폴더 | C:/Users/hyogu/Downloads/DuckbillFisher |
+| 게임 | C:/Program Files (x86)/FINAL FANTASY XIV - KOREA/game |
+| KR 게임 빌드 | 2026.10.06.0000.0000 |
+| 현재 Dalamud 참조 | C:/Users/hyogu/AppData/Roaming/XIVLauncherKR/addon/Hooks/dev/ |
+| 최소 지원 참조 | .cache/compat-15.0.3.6/full/ |
+| 친구 배포판 참조 | .cache/friend-runtime/provider-refs/ |
+| SDK/대상 | global.json의 10.0.402, SDK15.0.0, x64/net10.0-windows |
+| 정규 Debug DLL | C:/Users/hyogu/Downloads/DuckbillFisher/src/DuckbillFisher.Plugin/bin/Debug/DuckbillFisher.dll |
+| 확인한 Release 추출 DLL | C:/Users/hyogu/Downloads/DuckbillFisher/.cache/release-validation/0.3.0.0/DuckbillFisher.dll |
 
-- 작업: `C:\Users\hyogu\Downloads\DuckbillFisher`.
-- 게임: `C:\Program Files (x86)\FINAL FANTASY XIV - KOREA\game`, KR2026.10.06.0000.0000.
-- 현재 참조: `C:\Users\hyogu\AppData\Roaming\XIVLauncherKR\addon\Hooks\dev`, wasdcxz15.0.3.7/API15.
-- 최저 지원 참조: `.cache/compat-15.0.3.6/full/` 고정본. 런타임은 정확한 wasdcxz/dal4kr 조합 가드 유지.
-- SDK10.0.402 / Dalamud.NET.Sdk15.0.0 / x64/net10.0-windows. 의존성 버전은 변경하지 않았다.
-- 정규 주 DLL: `C:\Users\hyogu\Downloads\DuckbillFisher\src\DuckbillFisher.Plugin\bin\Debug\DuckbillFisher.dll`.
-- 후보 `.cache/data-completion-build/`, 최저 참조 `.cache/data-completion-oldrefs/`, 정규 빌드 모두 경고0/오류0. 한영559키/형식 인자 통과, Plugin/ko/manifest0.2.9.0·Core1.0.0.0·API15.
-- 정규0.3.0.0 후보 `.cache/bait-preparation-build/`, 최저 `.cache/bait-preparation-oldrefs/`, 친구 `.cache/bait-preparation-friendrefs/`와 정규 빌드 경고0/오류0·한영606키. Release는`.cache/bait-preparation-release/`, 사용자 확인 DLL은`.cache/release-validation/0.3.0.0/DuckbillFisher.dll`이다. 페이지 추가23종 구조/5getter/5enum 대조와실제 확인 범위는validation을 따른다.
+캐시/참조 DLL은 Git에 없다. 다른 PC에서는 실제 경로와 정확한 지원 배포판을 다시 확인한다. 최소 참조가 없다고 현재 참조를 Release에 조용히 대체하지 않는다. 일반 빌드 명령은 [WORKFLOW](WORKFLOW.md#windows-빌드)에 한 곳만 유지한다.
 
-## 이번 데이터 구현
+## 배포 산출물과 로컬 상태
 
-- `fishing.kr.v2.json` / `kr-regular-2026-10-17`: 기존903종 +353종 Teamcraft 정적 자료 +2종 부분 어획 사실 =1258종.
-- 빈 낚아채기80·입질4·예측 위치31종 보완, 중복 제외466종 변경. 알려진 조건/미끼/직감·메타데이터와 예측 공식은 보존했다.
-- 시간·날씨 확인1256종. 이크에바지 가위/요에콰 먹물머리는 금속 스피너·입질 강도·KR 위치만 확인하고 낚아채기/시간·날씨 완전성은Unknown 유지.
-- 직감 지속 시간9종은 채택한 원본에 필드가 없어 남겼다. 다른 공개 자료의 값은 아직 검증하지 않았으며 출현 시간 길이로 대체하지 않는다.
-- 물고기의 눈 지원 정보는 기존bool 유지/새355종null, UI 미표시. `patchVersion`은3.55b 접미사 보존, 기존 숫자patch 유지.
-- 원본/보완 source revision·파일 해시·개별 사실 URL/작성자/확인일·MIT 고지를 manifest/notices에 기록했다. 런타임 외부 조회 없음.
-- [재현 절차](../data/README.md): 기존 기본 원본→`.cache/fishing-all.json`→`--complete`→검토/제품 복사→`--classifications`. 완성된 제품을 보완 단계의baseline으로 넣지 않는다.
-- 보완 manifest는 `data/fishing-supplement-source.json`, 개발 입력은 `.cache/data-completion/`. 도구는 해시/빌드/KR참조/시간/날씨/생미끼 순환을 검사한다. 전체 다운로드 원문은 커밋하지 않는다.
-- 등급 재생성1258종 대조/실패0, 터주335(왕36) 양성 집합 유지. 기존 작살203건 동일/미확인115건. 지도 연결 불일치0. [실행 근거](validation/DATA-COMPLETION-2026-10-18.md).
+- 공개 0.3.0.0의 소스 태그 커밋은 7269627, 설치 JSON 게시 커밋은 fc300d5, 게시 확인 기록은 b33f4eb다.
+- 사용자 확인 ZIP: artifacts/share/0.3.0.0/DuckbillFisher-0.3.0.0.zip. 크기/전체 SHA256/익명 다운로드 근거는 [Release 기록](validation/RELEASE-0.3.0.0.md)에 있다.
+- Release 빌드 출력은 .cache/bait-preparation-release/, 일반 참조별 출력은 .cache/bait-preparation-build/·bait-preparation-oldrefs/·bait-preparation-friendrefs/였다.
+- 확인된 ZIP을 다시 빌드해 바꾸거나 기존 태그/Release를 덮어쓰지 않는다. 제품 수정은 새 버전으로 준비한다.
+- 개발·배포 플러그인의 같은 InternalName을 동시에 로드하지 않는다. 사용자가 현재 등록한 경로를 추측해 설정을 수정하지 않는다.
+- 현재 PC는 gh CLI 없이 Git credential manager+GitHub API로 게시한 이력이 있다. 토큰은 메모리에서만 사용하며 출력/파일/Git에 남기지 않는다. 캐시의 버전별 게시 스크립트를 확인 없이 재실행하지 않는다.
 
-## 일반 빌드
+## 이번 정비와 후속
 
-테스트는 명시 요청 때만 추가/실행한다. 테스트를 실행하는 `scripts/build.ps1`은 사용하지 않는다.
-
-```powershell
-dotnet build src/DuckbillFisher.Plugin/DuckbillFisher.Plugin.csproj --no-restore -c Debug -p:DalamudLibPath=C:/Users/hyogu/AppData/Roaming/XIVLauncherKR/addon/Hooks/dev/
-pwsh -NoLogo -NoProfile -File scripts/check-localization.ps1
-```
-
-- 별도 출력은 `-p:OutputPath=C:/Users/hyogu/Downloads/DuckbillFisher/.cache/data-completion-build/` 추가. 같은 프로젝트의 참조별 빌드는 순서대로 수행한다.
-- PowerShell 파일 읽기는 `-Encoding UTF8`. JSON은 파싱 후 필요한 필드만 출력하며 대용량 원문/전체 로그를 대화에 붙이지 않는다.
-- 명시한 파일만 스테이징하고 커밋한다. 캐시/산출물/SDK/사용자 파일은 제외한다. 새 배포는 Release 최저 참조/패키지/인게임 확인을 별도로 진행한다.
-
-## 유지할 정책과 확인 범위
-
-- Core는 게임 독립, 네이티브는 Plugin 경계/정확한 KR가드/Framework 수명 유지. 읽기 실패를 미수집으로 바꾸지 않는다.
-- 수집은 수동 우선, 도감1517종 전체 대조 후 자동 미수집 확정. 재접속 초기화/재조회는 확인, 다른 캐릭터는 사용할 수 없어 실기 보류.
-- 메인/간이 일반 필터 공유·검색/예정 분 별도, 프리셋20개와 저장 정책 유지. 새 등록 자동 즐겨찾기 해제는 기본 켜짐/도감 조회·수동 지정은 트리거 아님. 알림 로컬22채널/SE, Toast 제거.
-- 타이머/기록은 낚아채기에서 경과 정지, 완전 접기 후 현재 기록 비움. 캐릭터별100묶음×최근2000회/schema2, 저장 재시도/순번/요청 세대 보호 유지.
-- 0.2.7.0 저장/복원/최신순/삭제와0.2.8.0 첫 칸 보관 생미끼 Item 기록은 사용자 대표 확인 완료. [저장](validation/MVP-02-HISTORY-STABILITY.md), [생미끼](validation/MVP-02-SWIMBAIT.md). 모든 장애/칸/조합의 확인으로 확대하지 않는다.
-- 복수 어획·수량은 사용자 요청으로 후속. Teamcraft/바다구렁이 불일치와 입질 초 수 통계는 보류하며 재조사/로그 요청/공식 변경하지 않는다.
-- 공개0.2.6.0 태그6fc2fc1/Release415773597/설치 JSON7179f43. [정확한 런타임/게시](validation/NATIVE-RUNTIME-DAL4KR.md), [설치 안내](DISTRIBUTION.md).
-- 과거 버전별 실제 확인은 [정리 전 STATUS](history/STATUS-before-data-completion-2026-10-18.md), [정리 전 HANDOFF](history/HANDOFF-before-data-completion-2026-10-18.md)와 각 validation에 보존했다.
+- 핵심 문서를 현재 정책 중심으로 정리하고 문서/검증 색인과 프로젝트 스킬을 추가했다. 제품 코드·DLL 변경은 없다.
+- 문서/스킬 형식 검사는 제품 빌드/테스트나 인게임 확인이 아니다. 과거 확인 범위는 [STATUS](STATUS.md)에 유지한다.
+- 다음 게임 확인은 실제 저장소 업데이트/친구 새 기능이다. 미끼 페이지 연결 문제가 생기면 bait-ui/v7의 Pages 한 줄부터 요청한다.
+- 일반 데이터 잔여 이름/ID/이유는 [보고서](reports/fishing-data-2026-10-17/remaining.md), 재생성 순서는 [data/README](../data/README.md)를 따른다. 완성 제품을 보완 단계 baseline으로 다시 넣지 않는다.
+- Teamcraft 재조사·입질 통계·복수 어획 보류를 유지한다. 신규 후보는 [ROADMAP](ROADMAP.md)에서 사용자와 선택한다.
+- 정리 전 핵심 문서는 b33f4eb2faa50503dd514a76c3a1e2a23d2e2df8의 Git 이력에 있다. 별도 전체 사본을 추가하지 않았다.

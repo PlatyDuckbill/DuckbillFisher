@@ -1,0 +1,4 @@
+interface:
+  display_name: "DuckbillFisher 빌드·배포"
+  short_description: "Windows 빌드와 검증한 Dalamud 커스텀 저장소 배포"
+  default_prompt: "Use $duckbill-release to prepare the requested DuckbillFisher build or verified release."
