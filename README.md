@@ -26,7 +26,7 @@ Add this URL to Dalamud's custom plugin repositories, then install **DuckbillFis
 https://raw.githubusercontent.com/PlatyDuckbill/DuckbillFisher/main/repo/pluginmaster.json
 ```
 
-Open with `/duckbillfisher`. The same repository supplies future updates through Dalamud. No source build or manual DLL registration is required for normal installation.
+Open with `/dbfs` or `/duckbillfisher`. Use `/dbfs cl` for the compact list and `/dbfs ct` for the casting timer; the full `compact` and `timer` arguments also work with either command. The same repository supplies future updates through Dalamud. No source build or manual DLL registration is required for normal installation.
 
 [한국어 설치·배포 안내](docs/development/DISTRIBUTION.md)
 

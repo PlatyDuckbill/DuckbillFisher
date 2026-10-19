@@ -10,7 +10,7 @@ https://raw.githubusercontent.com/PlatyDuckbill/DuckbillFisher/main/repo/pluginm
 
 1. Dalamud 설정의 커스텀 플러그인 저장소에 위 URL을 입력하고 같은 줄 오른쪽 **＋**를 누른다. 추가된 행을 활성화하고 설정을 저장한다. 버튼이 가려지면 폭을 넓힌다.
 2. 플러그인 설치 목록을 새로고침하고 DuckbillFisher를 검색해 설치한다.
-3. /duckbillfisher로 연다. 도감 연동 안내가 있으면 어류도감 열기를 누르고 낚시 탭 조회를 기다린다.
+3. /dbfs 또는 /duckbillfisher로 연다. /dbfs cl은 간이 목록, /dbfs ct는 캐스팅 타이머이며 compact·timer 인자도 두 명령어에서 유지한다. 도감 연동 안내가 있으면 어류도감 열기를 누르고 낚시 탭 조회를 기다린다.
 4. 이후 같은 설치 화면에서 업데이트한다. 저장소 URL을 다시 등록하거나 ZIP을 직접 풀 필요는 없다.
 
 개발자는 설치 확인 시 개발 DLL 등록을 비활성화해 배포 플러그인과 중복 로드하지 않는다. 설정/기록 파일 삭제는 필요 없다. 호환성 차단이면 도감 수동 열기만으로 해결되지 않으므로 짧은 환경 진단부터 확인한다.

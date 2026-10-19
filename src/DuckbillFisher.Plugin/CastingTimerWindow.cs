@@ -12,23 +12,15 @@ namespace DuckbillFisher.Plugin;
 internal sealed class CastingTimerWindow : Window
 {
     private readonly FishingTracker tracker;
-    private readonly FishCatalog catalog;
-    private readonly FishPreferences preferences;
-    private readonly FishCollectionObserver collection;
     private readonly ITextureProvider textures;
-    private readonly Action<FishGuideRow> showDetail;
+    private readonly Action showSpotFish;
     private readonly FishingHistoryPanel history;
-    private readonly FishRowRenderer rows;
-    private bool hideCaught = true;
 
-    public CastingTimerWindow(FishingTracker tracker, FishCatalog catalog, FishPreferences preferences,
-        FishCollectionObserver collection, ITextureProvider textures, FishingMapService maps, Action<FishGuideRow> showDetail)
+    public CastingTimerWindow(FishingTracker tracker, ITextureProvider textures, Action<FishGuideRow> showDetail, Action showSpotFish)
         : base("DuckbillFisher###DuckbillFisher.Timer")
     {
-        this.tracker = tracker; this.catalog = catalog; this.preferences = preferences;
-        this.collection = collection; this.textures = textures; this.showDetail = showDetail;
+        this.tracker = tracker; this.textures = textures; this.showSpotFish = showSpotFish;
         history = new(tracker, textures, showDetail);
-        rows = new(textures, maps);
         Size = new Vector2(440, 560);
         SizeCondition = ImGuiCond.FirstUseEver;
         SizeConstraints = new WindowSizeConstraints { MinimumSize = new Vector2(340, 340), MaximumSize = new Vector2(float.MaxValue) };
@@ -48,9 +40,8 @@ internal sealed class CastingTimerWindow : Window
         UiWidgets.Tooltip(spotLabel);
         ImGui.SameLine();
         ImGui.BeginDisabled(spot is null);
-        if (ImGui.Button(UiText.Label(T.TimerSpotFishButton, "TimerSpotFish"))) ImGui.OpenPopup("TimerSpotFishPopup");
+        if (ImGui.Button(UiText.Label(T.TimerSpotFishButton, "TimerSpotFish"))) showSpotFish();
         ImGui.EndDisabled();
-        DrawFishPopup(view);
 
         var timed = view.Active ?? view.CurrentRecords.FirstOrDefault();
         var usesFishBait = timed?.BaitKind is FishingBaitKind.Mooch or FishingBaitKind.Swimbait;
@@ -88,42 +79,4 @@ internal sealed class CastingTimerWindow : Window
         history.Draw(view, view.CurrentRecords, "TimerHistory");
     }
 
-    private void DrawFishPopup(FishingTrackerView view)
-    {
-        var viewport = ImGui.GetMainViewport().WorkSize;
-        ImGui.SetNextWindowSize(new Vector2(Math.Min(560, viewport.X * .85f), Math.Min(600, viewport.Y * .75f)), ImGuiCond.Appearing);
-        if (!ImGui.BeginPopup("TimerSpotFishPopup", ImGuiWindowFlags.NoScrollbar | ImGuiWindowFlags.NoScrollWithMouse)) return;
-        ImGui.TextUnformatted(view.Spot is { } popupSpot ? view.IsLastSpot ? UiText.Get(T.TimerLastSpot, popupSpot.Name) : popupSpot.Name : UiText.Get(T.TimerSpotPending));
-        if (ImGui.Button(UiText.Label(hideCaught ? T.TimerHideCaught : T.TimerAllFish, "TimerCollectionFilter"))) hideCaught = !hideCaught;
-        var matches = hideCaught ? view.RemainingSpotFish : view.AllSpotFish;
-        ImGui.SameLine();
-        ImGui.TextDisabled(UiText.Get(T.TimerFishCount, matches.Length));
-        if (ImGui.BeginChild("SpotFishRows"))
-        {
-            if (matches.Length == 0) ImGui.TextWrapped(UiText.Get(T.TimerNoFish));
-            var clipper = ImGui.ImGuiListClipper();
-            try
-            {
-                var height = FishRowRenderer.GetHeight(ImGui.GetContentRegionAvail().X);
-                clipper.Begin(matches.Length, height + ImGui.GetStyle().ItemSpacing.Y);
-                var personal = preferences.View;
-                var observed = collection.View;
-                var snapshot = catalog.View;
-                while (clipper.Step())
-                    for (var i = clipper.DisplayStart; i < clipper.DisplayEnd; i++)
-                    {
-                        var fish = matches[i];
-                        var forecast = snapshot.Windows.GetValueOrDefault(fish.FishParameterId);
-                        var otherRegion = fish.Details?.Spot is { } source && source.TerritoryId != view.Spot?.TerritoryId;
-                        if (rows.Draw(fish, height, false, UiText.Get(FishRowRenderer.CollectionKey(personal, observed, fish.FishParameterId)),
-                            view.Spot?.Name ?? "", forecast, DateTimeOffset.UtcNow, otherRegion, personal.Favorites.Contains(fish.FishParameterId),
-                            compact: true, spot: view.Spot, canOpenMap: personal.HasCharacter))
-                        { showDetail(fish); ImGui.CloseCurrentPopup(); }
-                    }
-            }
-            finally { clipper.Destroy(); }
-        }
-        ImGui.EndChild();
-        ImGui.EndPopup();
-    }
 }

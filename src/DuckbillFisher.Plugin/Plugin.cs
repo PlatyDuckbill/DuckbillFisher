@@ -9,6 +9,8 @@ namespace DuckbillFisher.Plugin;
 public sealed class Plugin : IDalamudPlugin
 {
     private const string Command = "/duckbillfisher";
+    private const string ShortCommand = "/dbfs";
+    private readonly bool shortCommandRegistered;
     private readonly IDalamudPluginInterface pluginInterface;
     private readonly ICommandManager commandManager;
     private readonly CommandInfo commandInfo;
@@ -91,7 +93,8 @@ public sealed class Plugin : IDalamudPlugin
             if (compareDetailWindow.IsOpen && compareDetailWindow.SelectedId == origin) compareDetailWindow.Navigate(fish);
             else compareDetailWindow.Show(fish);
         };
-        timerWindow = new CastingTimerWindow(fishingTracker, fishCatalog, fishPreferences, fishCollection, textureProvider, fishingMap, detailWindow.Show);
+        var spotFishWindow = new SpotFishWindow(fishingTracker, fishCatalog, fishPreferences, fishCollection, textureProvider, fishingMap, detailWindow.Show);
+        timerWindow = new CastingTimerWindow(fishingTracker, textureProvider, detailWindow.Show, () => spotFishWindow.IsOpen = true);
         compactObserver = new CompactFishObserver(fishCatalog, fishPreferences, framework, fishCollection, fishingRegion);
         compactWindow = new CompactFishWindow(compactObserver, fishPreferences, fishCollection, textureProvider, detailWindow.Show, fishingMap);
         spawnAlertsPanel = new SpawnAlertsPanel(fishPreferences, spawnAlerts, alertOutput, fishCollection, textureProvider,
@@ -111,18 +114,23 @@ public sealed class Plugin : IDalamudPlugin
         windows.AddWindow(detailWindow);
         windows.AddWindow(compareDetailWindow);
         windows.AddWindow(timerWindow);
+        windows.AddWindow(spotFishWindow);
         windows.AddWindow(preparationWindow);
         windows.AddWindow(changelogWindow);
         pluginInterface.UiBuilder.Draw += windows.Draw;
         pluginInterface.UiBuilder.Draw += baitFinder.DrawOverlay;
         pluginInterface.UiBuilder.OpenMainUi += OpenMainUi;
         pluginInterface.UiBuilder.OpenConfigUi += mainWindow.OpenSettings;
+        shortCommandRegistered = commandManager.AddHandler(ShortCommand, commandInfo);
+        if (!shortCommandRegistered)
+            log.Warning("{CommandConflict}", UiText.Get(TextKey.CommandConflict, ShortCommand));
     }
 
     private void OnCommand(string command, string arguments)
     {
-        if (arguments.Trim().Equals("compact", StringComparison.OrdinalIgnoreCase)) compactWindow.Toggle();
-        else if (arguments.Trim().Equals("timer", StringComparison.OrdinalIgnoreCase)) timerWindow.Toggle();
+        var action = arguments.Trim();
+        if (action.Equals("compact", StringComparison.OrdinalIgnoreCase) || action.Equals("cl", StringComparison.OrdinalIgnoreCase)) compactWindow.Toggle();
+        else if (action.Equals("timer", StringComparison.OrdinalIgnoreCase) || action.Equals("ct", StringComparison.OrdinalIgnoreCase)) timerWindow.Toggle();
         else mainWindow.Toggle();
     }
 
@@ -139,6 +147,7 @@ public sealed class Plugin : IDalamudPlugin
         pluginInterface.UiBuilder.OpenMainUi -= OpenMainUi;
         pluginInterface.UiBuilder.OpenConfigUi -= mainWindow.OpenSettings;
         commandManager.RemoveHandler(Command);
+        if (shortCommandRegistered) commandManager.RemoveHandler(ShortCommand);
         compactObserver.Dispose();
         baitPreparation.Dispose();
         baitStock.Dispose();

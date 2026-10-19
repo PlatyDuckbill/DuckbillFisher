@@ -671,4 +671,6 @@ internal enum TextKey
     ChangelogCompatibilityHint,
     ChangelogFirstRelease,
     ChangelogUpdateNotes,
+    ChangelogShortCommands,
+    ChangelogSpotFish,
 }

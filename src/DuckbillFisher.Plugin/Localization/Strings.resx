@@ -30,7 +30,7 @@
   <data name="English" xml:space="preserve"><value>English</value></data>
   <data name="TabGuide" xml:space="preserve"><value>Fish log diagnostics</value></data>
   <data name="TabFishing" xml:space="preserve"><value>Fishing observations</value></data>
-  <data name="CommandHelp" xml:space="preserve"><value>Open DuckbillFisher. Use /duckbillfisher compact for the quick list, or /duckbillfisher timer for the casting timer.</value></data>
+  <data name="CommandHelp" xml:space="preserve"><value>Toggle DuckbillFisher with /dbfs or /duckbillfisher. Use /dbfs cl for the compact list, or /dbfs ct for the casting timer. compact and timer also work with either command.</value></data>
   <data name="CommandConflict" xml:space="preserve"><value>Command already registered: {0}</value></data>
   <data name="GuideIntro" xml:space="preserve"><value>Open the in-game Fish Guide and click a fish below to read its caught bit. This is a diagnostic sample, not an automatic collection filter.</value></data>
   <data name="LoginState" xml:space="preserve"><value>Logged in: {0} | Player data loaded: {1}</value></data>
@@ -679,4 +679,6 @@ Main inventory only. An unknown quantity is not zero.</value></data>
   <data name="ChangelogCompatibilityHint" xml:space="preserve"><value>Show the compatibility block when native features are unavailable, with a compact runtime/profile/status line in diagnostics.</value></data>
   <data name="ChangelogFirstRelease" xml:space="preserve"><value>First custom-repository release: fish browsing and filters, bait and condition details, map markers, forecasts, favorite alerts, a quick list, a casting timer, and character-specific fishing records. Korean and English UI.</value></data>
   <data name="ChangelogUpdateNotes" xml:space="preserve"><value>Added release notes to the plugin installer and a Korean/English history of the latest five releases. This screen appears once per version after you close it and can be reopened from Settings → What's new.</value></data>
+  <data name="ChangelogShortCommands" xml:space="preserve"><value>Use /dbfs to toggle the main view, /dbfs cl for the compact list, and /dbfs ct for the casting timer. /duckbillfisher and the full compact / timer arguments still work.</value></data>
+  <data name="ChangelogSpotFish" xml:space="preserve"><value>View fish at the current fishing spot in a separate view that stays open while inspecting fish details, clicking elsewhere, or closing the casting timer.</value></data>
 </root>
