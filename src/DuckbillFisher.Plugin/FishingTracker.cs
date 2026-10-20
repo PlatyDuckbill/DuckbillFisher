@@ -94,6 +94,7 @@ internal sealed class FishingTracker : IDisposable
     private uint lastDiscoveryPlace;
     private FishingLogActor lastDiscoveryActor;
     private LogFact? pendingMooch;
+    private (Guid Source, FishingSpotView Spot)? moochSpotContinuation;
     private int moochLogs, moochApplied, failures;
     private uint lastFailureLog;
     private long lastSequence;
@@ -304,6 +305,7 @@ internal sealed class FishingTracker : IDisposable
             { ignored++; continue; }
             if (fact.Id == 1110)
             {
+                moochSpotContinuation = null;
                 pendingSpotAt = fact.At;
                 pendingSpot = byPlace.TryGetValue((territory, fact.Value), out var candidates) && candidates.Length == 1 ? candidates[0] : null;
                 pendingSpotState = fact.Value == FishingLogContracts.UnknownSpotPlaceName ? FishingSpotState.Unknown
@@ -389,13 +391,26 @@ internal sealed class FishingTracker : IDisposable
     private void ApplyMooch(TimeSpan now, FishingNativeSample current)
     {
         if (pendingMooch is not { } fact) return;
-        if (now - fact.At > TimeSpan.FromSeconds(2)) { pendingMooch = null; return; }
+        if (now - fact.At > TimeSpan.FromSeconds(2)) { pendingMooch = null; moochSpotContinuation = null; return; }
         var kind = CastBaitKind(current);
         if (current.Phase is not (1 or 12) || kind != FishingBaitKind.Mooch ||
             history.Active is not { BiteSeconds: null, HookSeconds: null } || history.CastStartedAt is not { } start ||
             Math.Abs((fact.At - start).TotalSeconds) > 2) return;
-        if (history.SetCastBait(fact.Value, kind)) moochApplied++;
+        if (history.SetCastBait(fact.Value, kind))
+        {
+            moochApplied++;
+            // A verified mooch may omit 1110. Keep the known location only when the
+            // stored source catch belongs to this uninterrupted trip and cast link.
+            if (moochSpotContinuation is { } continuation && history.Active?.MoochSourceId == continuation.Source &&
+                continuation.Spot.TerritoryId == territory)
+            {
+                spot = lastConfirmedSpot = continuation.Spot;
+                spotState = FishingSpotState.Known;
+                history.SetSpot(spot.Id);
+            }
+        }
         pendingMooch = null;
+        moochSpotContinuation = null;
     }
 
     private static FishingBaitKind CastBaitKind(FishingNativeSample sample) =>
@@ -419,16 +434,22 @@ internal sealed class FishingTracker : IDisposable
         var phase = current.Phase;
         if (phase == 1 && previousPhase is not null && previousPhase != 1)
         {
+            var kind = CastBaitKind(current);
             var freshSpot = pendingSpotAt != TimeSpan.Zero && now >= pendingSpotAt && now - pendingSpotAt <= TimeSpan.FromSeconds(2);
+            var previousCatch = history.Records.FirstOrDefault();
+            var confirmed = BrowsingSpot;
+            moochSpotContinuation = !freshSpot && history.HasSession && kind == FishingBaitKind.Mooch &&
+                confirmed is not null && previousCatch is { Outcome: FishingOutcome.Caught } &&
+                previousCatch.TerritoryId == territory && previousCatch.SpotId == confirmed.Id
+                ? (previousCatch.Id, confirmed) : null;
             spot = freshSpot ? pendingSpot : null;
             spotState = freshSpot ? pendingSpotState : FishingSpotState.AwaitingIdentification;
-            // A new cast invalidates the previous location even when no identifying log arrives.
+            // Invalidate old locations; only the verified mooch link above may restore one.
             lastConfirmedSpot = spot;
             pendingDiscovery = null;
             lastLocalCatchAt = null;
             lastLocalCatchId = null;
             timerRetainedUntil = null;
-            var kind = CastBaitKind(current);
             var bait = CastBaitItem(current, kind);
             if (kind == FishingBaitKind.Swimbait) pendingMooch = null;
             history.Start(now, utc, territory, spot?.Id, bait, kind, seenIdle);
@@ -443,6 +464,7 @@ internal sealed class FishingTracker : IDisposable
         if (phase == 6) history.Hook(now);
         if (phase == 0)
         {
+            moochSpotContinuation = null;
             EndSession(now, utc, FishingEndReason.RodFolded);
             seenIdle = true;
             spot = null;
@@ -465,6 +487,7 @@ internal sealed class FishingTracker : IDisposable
         Persist();
         pending.Clear();
         pendingMooch = null;
+        moochSpotContinuation = null;
     }
     private void EndSession(TimeSpan now, DateTimeOffset utc, FishingEndReason reason)
     {
@@ -479,7 +502,7 @@ internal sealed class FishingTracker : IDisposable
         previousPhase = null; seenIdle = false; readyAt = null; spot = pendingSpot = lastConfirmedSpot = null;
         spotState = pendingSpotState = FishingSpotState.NotObserved;
         pendingSpotAt = TimeSpan.Zero; pendingDiscovery = null; lastLocalCatchAt = null; lastLocalCatchId = null;
-        pendingMooch = null; territory = 0; pending.Clear();
+        pendingMooch = null; moochSpotContinuation = null; territory = 0; pending.Clear();
         if (!TimerVisible) { allSpotFish = remainingSpotFish = []; filterSpot = null; }
     }
 

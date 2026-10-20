@@ -5,18 +5,18 @@
 ## 범위와 검사
 
 - 기존 검증한 발견/본인 어획 상관 계약으로 이미 종료된 성공 시전과 비어 있는 묶음 위치를 갱신한다. 임의의 다른 과거 미확인 기록은 추정 보정하지 않는다.
-- 기록 목록/상세의 너비 조절, 첫 관측 시전부터 종료까지의 총 시간, 날짜/시작 분리, 실제 어종/미끼 아이콘과 결과 색/결과 경과를 추가했다. 확인된 생미끼와 직전 성공 어획이 일치할 때만 위아래 행을 세로선·화살표로 잇는다. 긴 연결 문구는 행 툴팁에만 둔다.
+- 기록 목록/상세의 너비 조절, 첫 관측 시전부터 종료까지의 총 시간, 날짜/시작 분리, 실제 어종/미끼 아이콘과 결과 색/결과 경과를 추가했다. 확인된 생미끼와 직전 성공 어획이 일치할 때만 위아래 행을 세로선·화살표로 잇는다. 긴 연결 문구는 행 툴팁에만 둔다. 새1110 없는 연속 생미끼의 검증된 연결에서는 직전 성공 어획의 확인된 낚시터를 타이머/목록·새 시전 기록에 이어받는다.
 - 사용자 응답대로 중단 후 지역 이동에도 최근 타이머를5분 유지한다. 새 낚시/로그아웃/캐릭터 전환/재로드/삭제/만료 시 미리 보기를 교체하거나 비운다. 저장 기록을 만료로 삭제하지 않는다. 그래프 톤은 청색·청록·녹색 계열이다. [판정·재현](../fishing/TIMER-HISTORY.md#0410-기록-위치시간최근-타이머-2026-10-20), [영어 요약](../../releases/0.4.1.0.md).
-- 직접 별도 `.cache/history-041-r2-build/`→정규 Debug와 최소 지원 참조 `.cache/compat-15.0.3.6/full/` Release를 빌드했다. 모두 경고0/오류0, 한영748키·형식 인자 검사 통과. 테스트 추가/실행 없음. SDK/lock 파일·네이티브 계약·설정schema15는 유지한다. 기록schema2의 DurationSeconds/MoochSourceId는 기본null의 선택 필드다. 진단timer/v5.
-- `scripts/prepare-release.ps1`의 ZIP 허용 목록/필수 파일/API/버전 검사를 통과했다. 추출7파일 모두 Release 출력과 SHA256 일치, Plugin/한국어 DLL0.4.1.0·API15·csproj/manifest/후보 JSON의 Changelog 일치, 내장 조건/등급/THIRD-PARTY-NOTICES의 원본 해시 일치. 결과 `.cache/release-build/0.4.1.0-r2-validation.json`.
+- 직접 별도 `.cache/history-041-r3-build/`→정규 Debug와 최소 지원 참조 `.cache/compat-15.0.3.6/full/` Release를 빌드했다. 모두 경고0/오류0, 한영748키·형식 인자 검사 통과. 테스트 추가/실행 없음. SDK/lock 파일·네이티브 계약·설정schema15는 유지한다. 기록schema2의 DurationSeconds/MoochSourceId는 기본null의 선택 필드다. 진단timer/v5.
+- `scripts/prepare-release.ps1`의 ZIP 허용 목록/필수 파일/API/버전 검사를 통과했다. 추출7파일 모두 Release 출력과 SHA256 일치, Plugin/한국어 DLL0.4.1.0·API15·csproj/manifest/후보 JSON의 Changelog 일치, 내장 조건/등급/THIRD-PARTY-NOTICES의 원본 해시 일치. 결과 `.cache/release-build/0.4.1.0-r3-validation.json`.
 
 ## 고정 산출물
 
-- ZIP: `artifacts/share/0.4.1.0-r2/DuckbillFisher-0.4.1.0.zip`, **440,809바이트**.
-- ZIP SHA256: **5094C9807B273921E4CD2C1840B1D62FBAE3C4889DEB34A86FCB5189B2EB0786**.
-- 추출 DLL: `${env:DUCKBILL_ROOT}/.cache/release-validation/0.4.1.0-r2/DuckbillFisher.dll`.
-- DLL SHA256: **C2E06C2D16703C80BC9FF49D32602425FD755B767357078D512744BED70F868A**.
-- 생미끼 표현을 고친 r2 후보이며 이전 `0.4.1.0/` 산출물과 검사 결과는 보존했다. 공개 버전은 동일하게0.4.1.0을 준비한다.
+- ZIP: `artifacts/share/0.4.1.0-r3/DuckbillFisher-0.4.1.0.zip`, **441,490바이트**.
+- ZIP SHA256: **79E3BBE6188D38DC5254E9DDEA90C2721979E1D0D1B340F6DCE5B6C1DD20998D**.
+- 추출 DLL: `${env:DUCKBILL_ROOT}/.cache/release-validation/0.4.1.0-r3/DuckbillFisher.dll`.
+- DLL SHA256: **4BF68642EC08A12015A1CF168F37D90AA61C2A6315103487E581BAA10AE0E827**.
+- 생미끼 위치 이어받기를 고친 r3 후보이며 이전 `0.4.1.0/`·`0.4.1.0-r2/` 산출물과 검사 결과는 보존했다. 공개 버전은 동일하게0.4.1.0을 준비한다.
 
 ## 게시 상태와 남은 범위
 
