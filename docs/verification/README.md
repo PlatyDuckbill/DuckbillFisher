@@ -12,6 +12,7 @@
 - [0.3.11.0 배포](releases/RELEASE-0.3.11.0.md)
 - [0.4.0.0 · 수집 현황](releases/RELEASE-0.4.0.0.md)
 - [0.4.1.0 · 낚시 기록/최근 타이머](releases/RELEASE-0.4.1.0.md)
+- [0.5.0.0 · 출현 일정표](releases/RELEASE-0.5.0.0.md)
 - [ENV-03 한섭 수첩 API 조사](native/FISH-API.md)
 - [ENV-03 선택 어종 수집 비트 읽기](native/FISH-NATIVE.md)
 - [ENV-03 수첩 조회의 로그인·캐릭터 경계](native/FISH-SESSION.md)

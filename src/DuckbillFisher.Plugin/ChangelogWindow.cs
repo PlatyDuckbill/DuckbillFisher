@@ -21,7 +21,7 @@ internal sealed class ChangelogWindow : Window
             (FontAwesomeIcon.Clock, T.ChangelogScheduleTimeline),
             (FontAwesomeIcon.CalendarAlt, T.ChangelogScheduleCalendar),
             (FontAwesomeIcon.MapMarkerAlt, T.ChangelogScheduleDetails),
-        ], new DateTimeOffset(2026, 10, 20, 17, 38, 48, TimeSpan.Zero),
+        ], new DateTimeOffset(2026, 10, 20, 19, 1, 36, TimeSpan.Zero),
             T.ChangelogScheduleFeatureTitle, T.ChangelogScheduleFeatureSummary, FeatureIcon: FontAwesomeIcon.CalendarAlt),
         new(new(0, 4, 1, 0),
         [

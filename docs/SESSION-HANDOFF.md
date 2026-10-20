@@ -34,6 +34,8 @@
 
 ## 배포 산출물과 로컬 상태
 
+- 0.5.0.0 고정 Release 후보: 최소 참조 출력 .cache/release-build/0.5.0.0/, ZIP artifacts/share/0.5.0.0/, 고정 추출 DLL .cache/release-validation/0.5.0.0/DuckbillFisher.dll. 한국10-21 04:01:36의 배포 요청 시각을 내장/후보 JSON에 맞췄다. 대표 확인 완료·게시 진행 중이며 [검사/해시](verification/releases/RELEASE-0.5.0.0.md)를 따른다. 확인 뒤 이 ZIP은 재빌드하지 않는다.
+
 - 개발0.5.0.0 r7의 별도 Debug는 .cache/spawn-schedule-r7-build/, 정규 Debug도0.5.0.0이다. 이전 .cache/spawn-schedule-build/는 초기 화면이다. 기본3시간·기본 크기 연결 보기 탭/검색 잔여 폭 사용·물고기의 눈 아이콘·단일 대상 전환 버튼·옵션 제거·콘텐츠별 기간/월 이동·낚시터 표시·달력/목록 높이 조절·막대 클릭은 상세·하단 선택 영역 제거·월 달력/날짜별 목록·설정schema17이며 공개는0.4.1.0 r3 그대로다. [대표 확인](verification/catalog/UI.md#0500-r7-옵션-제거와-단일-대상-전환-2026-10-21)을 따르며 새 Release ZIP/원격 게시는 없다.
 
 - 공개0.4.1.0 r3 별도 Debug는 `.cache/history-041-r3-build/`, 당시 정규 Debug도0.4.1.0이었다. Release `.cache/release-build/0.4.1.0-r3/`, 고정 ZIP `artifacts/share/0.4.1.0-r3/`, 추출은 위 표다. 생미끼 행을 세로선·화살표로 잇고 긴 설명은 툴팁으로 옮겼다. 검증된 연속 생미끼의 위치도 이어받는다. 이전 후보 경로는 보존한다. timer/v5/설정schema15/기록schema2 선택 필드다. 사용자 대표 확인 뒤 같은 ZIP을 게시했다. 소스cc92e89/Release ID418362051·설치 JSON59e9886, 익명 파일 확인 완료·실제 공유 raw URL 일치와 사용자 실제 저장소 업데이트 대표 확인 완료이며 [고정 해시·확인 순서](verification/releases/RELEASE-0.4.1.0.md)를 따른다.0.4 임시 인덱스 커밋은dffe297로 amend/lease 강제 push했고 실제 공유 URL 검사까지 완료했다.
