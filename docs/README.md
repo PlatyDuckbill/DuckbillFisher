@@ -38,6 +38,7 @@ docs/
 | UI 구성·UX 조사 | [UI-UX-REDESIGN](product/UI-UX-REDESIGN.md) | [UI 확인 요약](verification/catalog/UI.md) |
 | 데이터 출처/판정 | [DATA-SOURCES](development/DATA-SOURCES.md), [data/README](../data/README.md) | [보완 검사](verification/data/DATA-COMPLETION-2026-10-18.md), [잔여 목록](verification/data/reports/fishing-data-2026-10-17/remaining.md) |
 | 터주작 아이디어 | [TROPHY-FISHING-PROPOSALS](product/TROPHY-FISHING-PROPOSALS.md) | 후보 기록은 착수 승인과 다름 |
+| 출현 일정표 기획·화면 시안 | [SPAWN-SCHEDULE](product/SPAWN-SCHEDULE.md), [조작 가능한 HTML](product/mockups/spawn-schedule.html) | 가상 자료 기반 검토안. 플러그인 미구현·화면 구조 미합의 |
 | 기존 외부 조사 | [REFERENCES](development/REFERENCES.md) | 조사일 기준. 새 정책/API 작업 때 재확인 |
 
 ## 이력과 스킬
