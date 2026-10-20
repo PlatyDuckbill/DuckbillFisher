@@ -38,7 +38,7 @@ docs/
 | UI 구성·UX 조사 | [UI-UX-REDESIGN](product/UI-UX-REDESIGN.md) | [UI 확인 요약](verification/catalog/UI.md) |
 | 데이터 출처/판정 | [DATA-SOURCES](development/DATA-SOURCES.md), [data/README](../data/README.md) | [보완 검사](verification/data/DATA-COMPLETION-2026-10-18.md), [잔여 목록](verification/data/reports/fishing-data-2026-10-17/remaining.md) |
 | 터주작 아이디어 | [TROPHY-FISHING-PROPOSALS](product/TROPHY-FISHING-PROPOSALS.md) | 후보 기록은 착수 승인과 다름 |
-| 출현 일정표 | [동작·구조](product/SPAWN-SCHEDULE.md), [가상 HTML 시안](product/mockups/spawn-schedule.html) | 개발0.5.0.0 구현·인게임 확인 대기. [확인 순서](verification/catalog/UI.md#0500-출현-일정표-2026-10-20) |
+| 출현 일정표 | [동작·구조](product/SPAWN-SCHEDULE.md), [가상 HTML 시안](product/mockups/spawn-schedule.html) | 개발0.5.0.0 r2 시간축/월 달력·인게임 확인 대기. [확인 순서](verification/catalog/UI.md#0500-r2-시간축-재배치와-월-달력-2026-10-21) |
 | 기존 외부 조사 | [REFERENCES](development/REFERENCES.md) | 조사일 기준. 새 정책/API 작업 때 재확인 |
 
 ## 이력과 스킬

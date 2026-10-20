@@ -132,7 +132,7 @@ public static class FishingAvailability
     // A continuous interval reaching the 30-day limit retains an unknown end.
     internal static IEnumerable<FishingWindow> Enumerate(DateTimeOffset now, DateTimeOffset through,
         FishingRule rule, IReadOnlyList<WeatherChance> rates, Func<AvailabilityRange, AvailabilityRange?>? constrain,
-        CancellationToken cancellationToken)
+        CancellationToken cancellationToken, int searchDays = SearchDays)
     {
         var unix = now.ToUnixTimeMilliseconds() / 1000.0;
         if (unix < WeatherSeconds || !IsValid(rule, rates))
@@ -149,9 +149,10 @@ public static class FishingAvailability
         double? foundStart = null;
         double? foundEnd = null;
         var firstPeriod = (long)unix / WeatherSeconds * WeatherSeconds;
-        var horizon = unix + SearchDays * 86400;
+        var horizon = unix + searchDays * 86400;
         var visibleEnd = Math.Min(through.ToUnixTimeMilliseconds() / 1000.0, horizon);
-        for (var index = 0; index < SearchPeriods; index++)
+        var periods = (searchDays * 86400 + (int)WeatherSeconds - 1) / (int)WeatherSeconds + 1;
+        for (var index = 0; index < periods; index++)
         {
             cancellationToken.ThrowIfCancellationRequested();
             var period = firstPeriod + index * WeatherSeconds;

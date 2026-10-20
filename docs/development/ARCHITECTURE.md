@@ -14,7 +14,7 @@
 | 캐릭터 설정·필터 | FishPreferences, CatalogSettings, CatalogPreset, CatalogFilter, CatalogQuery | UI 요청 큐/세션 확인/저장·결과 캐시 |
 | 수집 관찰 | FishCollectionObserver, NativeFishCollectionReader | 도감 전체 대조와 검증된 등록 로그, 수동 상태와 분리 |
 | 수집 현황 | CollectionProgress, CollectionProgressPanel, CollectionProgressFishWindow | Framework 집계·선택한 확장팩/지역/먼바다 배열만 준비, 행·수집 revision·수동 상태·세션 변경 시 재계산. 목록1개 재사용·보이는 행만 렌더링·범위 교체/닫기 때 캐시 해제. Draw는 snapshot 표시 |
-| 출현 일정표 | Core FishingForecast.Enumerate, Plugin SpawnSchedule, SpawnSchedulePanel | Framework에서 즐겨찾기/현재 메인 쿼리 필터링, 관리 입력만 취소 가능한 작업에서 범위 예측. 완료 snapshot·다음 경계·선택 동시 출현 캐시. Draw는 보이는 행과 요청 전달 |
+| 출현 일정표 | Core FishingForecast.Enumerate/EnumerateCalendar, Plugin SpawnSchedule, SpawnScheduleCalendar, SpawnSchedulePanel | 일반30일/달력32일 분리. Framework 대상 필터링·선택 날짜 회차 캐시, 관리 입력만 취소 가능한 작업에서 계산. 월 데이터는 압축 UTC 구간 배열, UI는 보이는 행/날짜 칸만 표시 |
 | 시전 관찰 | FishingTracker, NativeFishingActivityReader, FishingLogContracts | 본인 로그·시전 단계·시간 상관관계, 미검증 결과 Unknown |
 | 기록 저장 | FishingHistoryStore, FishingHistoryBrowser | 묶음 파일·원자 교체·요약/상세 지연 읽기·삭제/재시도. schema2 선택 필드로 단조 총 시간/검증된 생미끼 연결 ID 저장 |
 | 미끼 준비/찾기 | BaitPreparation, BaitStockObserver, BaitFinder, NativeBaitUiReader, NativeBaitPageReader | 첫 미끼/공개 소지품 조회와 네이티브 UI 읽기 분리 |

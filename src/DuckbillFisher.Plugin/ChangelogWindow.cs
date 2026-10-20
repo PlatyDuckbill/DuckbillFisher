@@ -15,8 +15,14 @@ internal sealed class ChangelogWindow : Window
     // Keep the confirmed candidate unchanged when it is published.
     private static readonly ReleaseNotes[] PublishedReleases =
     [
-        new(new(0, 5, 0, 0), [(FontAwesomeIcon.CalendarAlt, T.ChangelogSpawnSchedule)],
-            new DateTimeOffset(2026, 10, 20, 14, 26, 4, TimeSpan.Zero)),
+        new(new(0, 5, 0, 0),
+        [
+            (FontAwesomeIcon.Filter, T.ChangelogScheduleTargets),
+            (FontAwesomeIcon.Clock, T.ChangelogScheduleTimeline),
+            (FontAwesomeIcon.CalendarAlt, T.ChangelogScheduleCalendar),
+            (FontAwesomeIcon.MapMarkerAlt, T.ChangelogScheduleDetails),
+        ], new DateTimeOffset(2026, 10, 20, 17, 38, 48, TimeSpan.Zero),
+            T.ChangelogScheduleFeatureTitle, T.ChangelogScheduleFeatureSummary, FeatureIcon: FontAwesomeIcon.CalendarAlt),
         new(new(0, 4, 1, 0),
         [
             (FontAwesomeIcon.MapMarkerAlt, T.ChangelogHistoryLocation),
@@ -136,7 +142,7 @@ internal sealed class ChangelogWindow : Window
                 ImGui.Spacing();
                 if (release.FeatureTitle is { } title)
                 {
-                    UiWidgets.Icon(FontAwesomeIcon.ChartBar);
+                    UiWidgets.Icon(release.FeatureIcon);
                     ImGui.SameLine();
                     ImGui.TextColored(new Vector4(0.45f, 0.82f, 1, 1), UiText.Get(title));
                     if (release.FeatureSummary is { } summary) ImGui.TextWrapped(UiText.Get(summary));
@@ -172,5 +178,6 @@ internal sealed class ChangelogWindow : Window
     }
 
     private sealed record ReleaseNotes(Version Version, (FontAwesomeIcon Icon, T Text)[] Entries, DateTimeOffset PublishedAtUtc,
-        T? FeatureTitle = null, T? FeatureSummary = null, (FontAwesomeIcon Icon, T Text)[]? OtherEntries = null);
+        T? FeatureTitle = null, T? FeatureSummary = null, (FontAwesomeIcon Icon, T Text)[]? OtherEntries = null,
+        FontAwesomeIcon FeatureIcon = FontAwesomeIcon.ChartBar);
 }

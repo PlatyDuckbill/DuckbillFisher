@@ -82,9 +82,19 @@ public sealed class FishingForecast
 
     /// <summary>Enumerates a bounded schedule using the same conditions as Find, with one preparation baseline.</summary>
     public IEnumerable<FishingWindow> Enumerate(DateTimeOffset now, DateTimeOffset through, uint itemId,
-        bool fishEyes = false, CancellationToken cancellationToken = default)
+        bool fishEyes = false, CancellationToken cancellationToken = default) =>
+        EnumerateCore(now, through, itemId, fishEyes, cancellationToken, FishingAvailability.SearchDays);
+
+    // A civil month may contain 31 days plus a DST hour. Normal forecasts retain the 30-day contract.
+    public const int CalendarSearchDays = 32;
+    public IEnumerable<FishingWindow> EnumerateCalendar(DateTimeOffset monthStart, DateTimeOffset monthEnd, uint itemId,
+        bool fishEyes = false, CancellationToken cancellationToken = default) =>
+        EnumerateCore(monthStart, monthEnd, itemId, fishEyes, cancellationToken, CalendarSearchDays);
+
+    private IEnumerable<FishingWindow> EnumerateCore(DateTimeOffset now, DateTimeOffset through, uint itemId,
+        bool fishEyes, CancellationToken cancellationToken, int searchDays)
     {
-        if (through <= now || through > now.AddDays(FishingAvailability.SearchDays))
+        if (through <= now || through > now.AddDays(searchDays))
             throw new ArgumentOutOfRangeException(nameof(through));
         cancellationToken.ThrowIfCancellationRequested();
         if (!inputs.TryGetValue(itemId, out var input) || !FishingAvailability.IsValid(input.Rule, input.WeatherRates))
@@ -110,7 +120,7 @@ public sealed class FishingForecast
                 constrain = range => Constrain(range, predators, duration, unix, out _);
             }
         }
-        foreach (var window in FishingAvailability.Enumerate(now, through, rule, input.WeatherRates, constrain, cancellationToken))
+        foreach (var window in FishingAvailability.Enumerate(now, through, rule, input.WeatherRates, constrain, cancellationToken, searchDays))
             yield return window with { Basis = rule.Predators.Length > 0 ? FishingForecastBasis.Intuition : FishingForecastBasis.TimeWeather };
     }
 
