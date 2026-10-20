@@ -259,7 +259,7 @@ internal sealed class FishCatalog : IDisposable
                     }
                     var grade = FishGrade.Unknown;
                     var timing = FishTimeRestriction.Unknown;
-                    if (conditionBuildMatches && fish.RowId > 0 && fish.IsInLog && fish.OceanStars == 0 &&
+                    if (conditionBuildMatches && fish.RowId > 0 && fish.IsInLog &&
                         item.Is<Item>() && resolution == FishRowResolution.Resolved)
                     {
                         if (FishClassificationData.Dataset.GameBuild == FishingData.Dataset.GameBuild &&
@@ -267,10 +267,10 @@ internal sealed class FishCatalog : IDisposable
                             grade = entry.Grade;
                         else if (FishClassificationData.Failure is null && details is not null)
                             grade = details.Rule.BigFish ? FishGrade.Big : FishGrade.Regular;
-                        if (details?.Rule is { ConditionsKnown: true } known)
+                        if (fish.OceanStars == 0 && details?.Rule is { ConditionsKnown: true } known)
                             timing = known.StartHour != 0 || known.EndHour != 24 || known.WeatherIds.Length > 0 || known.PreviousWeatherIds.Length > 0
                                 ? FishTimeRestriction.Restricted : FishTimeRestriction.Unrestricted;
-                        else if (notes.TryGetValue(item.RowId, out var note) && (note.TimeRestriction == 1 || note.WeatherRestriction == 1))
+                        else if (fish.OceanStars == 0 && notes.TryGetValue(item.RowId, out var note) && (note.TimeRestriction == 1 || note.WeatherRestriction == 1))
                             timing = FishTimeRestriction.Restricted;
                         // Raw 0/2 restriction flags do not establish unrestricted conditions.
                     }
@@ -353,8 +353,9 @@ internal sealed class FishCatalog : IDisposable
             if (spot.TerritoryType.RowId == 0 || spot.PlaceNameMain.RowId != 0)
                 continue;
             var territory = spot.TerritoryType.Value;
-            // ExVersion row 0 is ARR, not an absent reference.
-            var expansion = expansions?.GetRowOrDefault(territory.ExVersion.RowId);
+            // ExVersion row 0 is valid; inspected later housing districts need an explicit build-scoped correction.
+            var expansion = expansions?.GetRowOrDefault(FishingGeography.ExpansionId(territory.RowId,
+                territory.ExVersion.RowId, conditionBuildMatches));
             if (territory.Map.RowId == 0)
                 continue;
             var map = territory.Map.Value;

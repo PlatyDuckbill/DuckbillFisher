@@ -720,7 +720,17 @@ Uncaught: {1:N0}
 Unknown: {2:N0}
 Manual settings included: {3:N0}</value></data>
   <data name="CollectionProgressUnknownCount" xml:space="preserve"><value>{0:N0} unknown</value></data>
-  <data name="ChangelogCollectionProgress" xml:space="preserve"><value>Added Collection progress to the main view. Expand expansions into regions to see counts and progress bars, switch between all/big/legendary fish, and check ocean fishing separately.</value></data>
+  <data name="ChangelogCollectionProgress" xml:space="preserve"><value>Added Collection progress with a large regular-fishing summary, responsive progress bars by expansion and region, and a separate ocean section. Switch between all/big/legendary fish and click an area bar to open a persistent fish list with a collection filter.</value></data>
   <data name="ChangelogCompactToggle" xml:space="preserve"><value>The compact-list button in the main view now toggles the list open and closed.</value></data>
   <data name="ChangelogFirstOpen" xml:space="preserve"><value>Unread release notes appear when you first open the main view after an update.</value></data>
+  <data name="CollectionProgressScopeName" xml:space="preserve"><value>{0}</value></data>
+  <data name="CollectionProgressRegionName" xml:space="preserve"><value>{0} / {1}</value></data>
+  <data name="CollectionProgressFishTitle" xml:space="preserve"><value>Collection progress · Fish</value></data>
+  <data name="CollectionProgressListScope" xml:space="preserve"><value>{0} · {1}</value></data>
+  <data name="CollectionProgressListHint" xml:space="preserve"><value>Switch between all fish and hiding caught fish. Unknown fish remain visible. This list stays open until you close it and is reused when you click another area bar.</value></data>
+  <data name="CollectionProgressOceanNoGrades" xml:space="preserve"><value>The current data has no verified big/legendary classifications for ocean fish. Showing all ocean fish.</value></data>
+  <data name="CollectionProgressCompactRatio" xml:space="preserve"><value>{0:N0}/{1:N0}</value></data>
+  <data name="CollectionProgressColorHint" xml:space="preserve"><value>Progress colors: 0% gray; below 25% slate blue; below 50% blue; below 75% teal; below 100% green; complete lime green.</value></data>
+  <data name="CollectionProgressClickHint" xml:space="preserve"><value>Click to view fish in this scope.</value></data>
+  <data name="ChangelogHousingExpansion" xml:space="preserve"><value>Corrected residential-district expansion grouping, including Shirogane under Stormblood.</value></data>
 </root>

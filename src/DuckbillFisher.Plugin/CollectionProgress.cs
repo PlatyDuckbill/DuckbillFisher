@@ -1,5 +1,7 @@
 using Dalamud.Plugin.Services;
 using DuckbillFisher.Core;
+using DuckbillFisher.Plugin.Localization;
+using T = DuckbillFisher.Plugin.Localization.TextKey;
 
 namespace DuckbillFisher.Plugin;
 
@@ -14,7 +16,12 @@ internal sealed record CollectionProgressCategories(CollectionProgressCount All,
 internal sealed record CollectionProgressGroup(uint? Id, string Name, CollectionProgressCategories Counts,
     CollectionProgressGroup[] Regions);
 internal sealed record CollectionProgressView(int Session, CollectionProgressCategories Overall,
-    CollectionProgressCategories Regular, CollectionProgressCount Ocean, CollectionProgressGroup[] Expansions, int UnknownGrades);
+    CollectionProgressCategories Regular, CollectionProgressCategories Ocean, CollectionProgressGroup[] Expansions,
+    int UnknownGrades, bool OceanHasGrades);
+internal enum CollectionProgressArea { Expansion, Region, Ocean }
+internal sealed record CollectionProgressSelection(CollectionProgressArea Area, uint? ExpansionId, uint? RegionId, FishGradeVisibility Grade);
+internal sealed record CollectionProgressFishView(int Session, CollectionProgressSelection? Selection, UiMessage? Name,
+    FishGuideRow[] AllFish, FishGuideRow[] RemainingFish);
 
 /// <summary>Builds unique-fish geography groups and character counts on Framework.Update, never in Draw.</summary>
 internal sealed class CollectionProgress : IDisposable
@@ -26,7 +33,10 @@ internal sealed class CollectionProgress : IDisposable
     private readonly FishCollectionObserver collection;
     private readonly IFramework framework;
     private readonly object gate = new();
-    private CollectionProgressView view = new(-1, EmptyCategories, EmptyCategories, EmptyCount, [], 0);
+    private CollectionProgressView view = new(-1, EmptyCategories, EmptyCategories, EmptyCategories, [], 0, false);
+    private CollectionProgressFishView fishView = new(-1, null, null, [], []);
+    private CollectionProgressSelection? selection;
+    private (int Session, CollectionProgressSelection Selection)? pendingSelection;
     private IReadOnlyList<FishGuideRow>? lastRows;
     private FishGuideRow[] all = [], regular = [], ocean = [];
     private Scope[] expansions = [];
@@ -42,6 +52,23 @@ internal sealed class CollectionProgress : IDisposable
     }
 
     public CollectionProgressView View { get { lock (gate) return view; } }
+    public CollectionProgressFishView FishView { get { lock (gate) return fishView; } }
+
+    public void Select(CollectionProgressSelection target, int session)
+    {
+        lock (gate)
+            if (!disposed) pendingSelection = (session, target);
+    }
+
+    public void ClearSelection()
+    {
+        lock (gate)
+        {
+            pendingSelection = null;
+            selection = null;
+            fishView = new(-1, null, null, [], []);
+        }
+    }
 
     private void Update(IFramework _)
     {
@@ -51,8 +78,22 @@ internal sealed class CollectionProgress : IDisposable
             var data = catalog.View;
             var personal = preferences.View;
             var observed = collection.View;
+            var selectionChanged = false;
+            if (pendingSelection is { } pending)
+            {
+                pendingSelection = null;
+                if (pending.Session == personal.Session && selection != pending.Selection)
+                {
+                    selection = pending.Selection;
+                    selectionChanged = true;
+                }
+            }
             if (ReferenceEquals(lastRows, data.Rows) && lastSession == personal.Session &&
-                ReferenceEquals(lastManual, personal.ManualCaught) && lastCollection == observed.Revision) return;
+                ReferenceEquals(lastManual, personal.ManualCaught) && lastCollection == observed.Revision)
+            {
+                if (selectionChanged) UpdateFishView(personal, observed);
+                return;
+            }
             if (!ReferenceEquals(lastRows, data.Rows))
             {
                 all = data.Rows.Where(row => row.IsDisplayable && row.IsInLog).DistinctBy(row => row.FishParameterId).ToArray();
@@ -88,11 +129,36 @@ internal sealed class CollectionProgress : IDisposable
                 Count(rows.Where(row => row.Grade is FishGrade.Big or FishGrade.Legendary)),
                 Count(rows.Where(row => row.Grade == FishGrade.Legendary)));
             CollectionProgressGroup Group(Scope scope) => new(scope.Id, scope.Name, Categories(scope.Rows), scope.Regions.Select(Group).ToArray());
-            view = new(personal.Session, Categories(all), Categories(regular), Count(ocean), expansions.Select(Group).ToArray(),
-                regular.Count(row => row.Grade == FishGrade.Unknown));
+            view = new(personal.Session, Categories(all), Categories(regular), Categories(ocean), expansions.Select(Group).ToArray(),
+                regular.Count(row => row.Grade == FishGrade.Unknown), ocean.Any(row => row.Grade is FishGrade.Big or FishGrade.Legendary));
+            UpdateFishView(personal, observed);
             lastRows = data.Rows; lastSession = personal.Session;
             lastManual = personal.ManualCaught; lastCollection = observed.Revision;
         }
+    }
+
+    private void UpdateFishView(FishPreferencesView personal, FishCollectionView observed)
+    {
+        var chosen = SelectedScope();
+        var selectedRows = chosen.Rows.Where(row => selection is { } target &&
+            FishClassificationFilter.Matches(row.Grade, row.TimeRestriction, false, target.Grade))
+            .OrderBy(row => row.Name, StringComparer.OrdinalIgnoreCase).ThenBy(row => row.FishParameterId).ToArray();
+        fishView = new(personal.Session, selection, chosen.Name, selectedRows,
+            selectedRows.Where(row => personal.Collection(row.FishParameterId, observed) != CollectionStatus.Caught).ToArray());
+    }
+
+    private (FishGuideRow[] Rows, UiMessage? Name) SelectedScope()
+    {
+        if (selection is not { } target) return ([], null);
+        if (target.Area == CollectionProgressArea.Ocean) return (ocean, new(T.CollectionProgressOcean));
+        var expansion = expansions.FirstOrDefault(group => group.Id == target.ExpansionId);
+        if (expansion is null) return ([], null);
+        var expansionName = string.IsNullOrWhiteSpace(expansion.Name) ? (object)new UiMessage(T.CollectionProgressUnknownArea) : expansion.Name;
+        if (target.Area == CollectionProgressArea.Expansion)
+            return (expansion.Rows, new(T.CollectionProgressScopeName, expansionName));
+        var region = expansion.Regions.FirstOrDefault(group => group.Id == target.RegionId);
+        return region is null ? ([], null) : (region.Rows, new(T.CollectionProgressRegionName, expansionName,
+            string.IsNullOrWhiteSpace(region.Name) ? new UiMessage(T.CollectionProgressUnknownArea) : region.Name));
     }
 
     private static IEnumerable<Membership> Memberships(FishGuideRow row)
@@ -114,7 +180,9 @@ internal sealed class CollectionProgress : IDisposable
             if (disposed) return;
             disposed = true;
             framework.Update -= Update;
-            view = new(-1, EmptyCategories, EmptyCategories, EmptyCount, [], 0);
+            pendingSelection = null;
+            view = new(-1, EmptyCategories, EmptyCategories, EmptyCategories, [], 0, false);
+            fishView = new(-1, null, null, [], []);
         }
     }
 

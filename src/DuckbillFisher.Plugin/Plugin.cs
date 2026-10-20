@@ -101,12 +101,14 @@ public sealed class Plugin : IDalamudPlugin
         spawnAlertsPanel = new SpawnAlertsPanel(fishPreferences, spawnAlerts, alertOutput, fishCollection, textureProvider,
             fishCatalog, detailPanel, fishingMap, guideOpener);
         collectionProgress = new CollectionProgress(fishCatalog, fishPreferences, fishCollection, framework);
+        var collectionFishWindow = new CollectionProgressFishWindow(collectionProgress, fishCatalog, fishPreferences,
+            fishCollection, textureProvider, fishingMap, detailWindow.Show);
         mainWindow = new MainWindow(fishingObserver, fishGuide, new FishListPanel(fishCatalog, textureProvider, detailPanel,
                 fishPreferences, fishCollection, fishingRegion, fishingMap, guideOpener, preparationQuery, () => preparationWindow.IsOpen = true, detailWindow.Show),
             spawnAlertsPanel, fishPreferences,
             () => commandInfo.HelpMessage = UiText.Get(TextKey.CommandHelp),
             new FishingHistoryBrowser(fishingTracker, fishCatalog, new FishingHistoryPanel(fishingTracker, textureProvider, detailWindow.Show)),
-            new CollectionProgressPanel(collectionProgress, fishCatalog, fishPreferences, fishCollection, guideOpener));
+            new CollectionProgressPanel(collectionProgress, fishCatalog, fishPreferences, fishCollection, guideOpener, collectionFishWindow.Show));
         mainWindow.ShowCompact = compactWindow.Toggle;
         mainWindow.ShowTimer = timerWindow.Toggle;
         var changelogWindow = new ChangelogWindow(fishPreferences);
@@ -119,6 +121,7 @@ public sealed class Plugin : IDalamudPlugin
         windows.AddWindow(compareDetailWindow);
         windows.AddWindow(timerWindow);
         windows.AddWindow(spotFishWindow);
+        windows.AddWindow(collectionFishWindow);
         windows.AddWindow(preparationWindow);
         windows.AddWindow(changelogWindow);
         pluginInterface.UiBuilder.Draw += DrawWindows;

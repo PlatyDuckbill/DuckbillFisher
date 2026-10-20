@@ -720,7 +720,17 @@
 미확인: {2:N0}종
 수동 지정 포함: {3:N0}종</value></data>
   <data name="CollectionProgressUnknownCount" xml:space="preserve"><value>미확인 {0:N0}종</value></data>
-  <data name="ChangelogCollectionProgress" xml:space="preserve"><value>메인에 수집 현황을 추가했습니다. 확장팩을 펼쳐 지역별 수집 수와 진행 막대를 보고 전체·터주·터주왕 보기를 바꿀 수 있으며 먼바다는 별도로 집계합니다.</value></data>
+  <data name="ChangelogCollectionProgress" xml:space="preserve"><value>메인 수집 현황에 큰 일반 낚시 합계와 폭에 맞춰 줄어드는 확장팩·지역별 진행 막대를 추가하고 먼바다는 따로 집계합니다. 전체·터주·터주왕 보기를 바꾸거나 지역 막대를 눌러 수집 필터가 있는 어종 목록을 열 수 있습니다. 목록은 직접 닫기 전까지 유지됩니다.</value></data>
   <data name="ChangelogCompactToggle" xml:space="preserve"><value>메인의 간이 목록 버튼을 다시 누르면 목록을 닫습니다.</value></data>
   <data name="ChangelogFirstOpen" xml:space="preserve"><value>업데이트 후 메인을 처음 열 때 미확인 업데이트 내역을 표시합니다.</value></data>
+  <data name="CollectionProgressScopeName" xml:space="preserve"><value>{0}</value></data>
+  <data name="CollectionProgressRegionName" xml:space="preserve"><value>{0} / {1}</value></data>
+  <data name="CollectionProgressFishTitle" xml:space="preserve"><value>수집 현황 · 어종 목록</value></data>
+  <data name="CollectionProgressListScope" xml:space="preserve"><value>{0} · {1}</value></data>
+  <data name="CollectionProgressListHint" xml:space="preserve"><value>전체 보기와 수집한 어종 숨기기를 전환합니다. 미확인 어종은 숨기지 않습니다. 목록은 직접 닫기 전까지 유지되며 다른 지역 막대를 누르면 같은 화면의 대상을 바꿉니다.</value></data>
+  <data name="CollectionProgressOceanNoGrades" xml:space="preserve"><value>현재 자료에는 먼바다 어종의 확인된 터주·터주왕 분류가 없어 전체 어종을 표시합니다.</value></data>
+  <data name="CollectionProgressCompactRatio" xml:space="preserve"><value>{0:N0}/{1:N0}</value></data>
+  <data name="CollectionProgressColorHint" xml:space="preserve"><value>진행률 색상: 0% 회색 · 25% 미만 남청색 · 50% 미만 파란색 · 75% 미만 청록색 · 100% 미만 녹색 · 완료 연두색.</value></data>
+  <data name="CollectionProgressClickHint" xml:space="preserve"><value>클릭하면 이 범위의 어종을 볼 수 있습니다.</value></data>
+  <data name="ChangelogHousingExpansion" xml:space="preserve"><value>시로가네가 홍련에 속하도록 거주구의 확장팩 분류를 보정했습니다.</value></data>
 </root>

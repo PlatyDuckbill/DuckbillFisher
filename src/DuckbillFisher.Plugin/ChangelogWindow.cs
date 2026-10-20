@@ -18,6 +18,7 @@ internal sealed class ChangelogWindow : Window
         new(new(0, 3, 12, 0),
         [
             (FontAwesomeIcon.ChartBar, T.ChangelogCollectionProgress),
+            (FontAwesomeIcon.MapMarkerAlt, T.ChangelogHousingExpansion),
             (FontAwesomeIcon.List, T.ChangelogCompactToggle),
             (FontAwesomeIcon.Newspaper, T.ChangelogFirstOpen),
         ], new DateTimeOffset(2026, 10, 20, 8, 9, 35, TimeSpan.Zero)),

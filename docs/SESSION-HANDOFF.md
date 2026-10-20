@@ -1,6 +1,6 @@
 # 세션 인수인계
 
-갱신: 2026-10-20 · 공개0.3.11.0 · 후보0.3.12.0 실기 대기
+갱신: 2026-10-20 · 공개0.3.11.0 · 후보0.3.12.0 r2 실기 대기
 
 ## 재개 순서
 
@@ -27,13 +27,13 @@
 | 정규 Debug DLL | ${env:DUCKBILL_ROOT}/src/DuckbillFisher.Plugin/bin/Debug/DuckbillFisher.dll |
 | 이전 Release 추출 DLL | ${env:DUCKBILL_ROOT}/.cache/release-validation/0.3.10.0/DuckbillFisher.dll |
 | 현재 게시 Release 추출 DLL | ${env:DUCKBILL_ROOT}/.cache/release-validation/0.3.11.0/DuckbillFisher.dll |
-| 실기 대기 후보 Release 추출 DLL | ${env:DUCKBILL_ROOT}/.cache/release-validation/0.3.12.0/DuckbillFisher.dll |
+| 실기 대기 후보 Release 추출 DLL | ${env:DUCKBILL_ROOT}/.cache/release-validation/0.3.12.0-r2/DuckbillFisher.dll |
 
 캐시/참조 DLL은 Git에 없다. 다른 PC에서는 실제 경로와 정확한 지원 배포판을 다시 확인한다. 최소 참조가 없다고 현재 참조를 Release에 조용히 대체하지 않는다. 일반 빌드 명령은 [WORKFLOW](development/WORKFLOW.md#windows-빌드)에 한 곳만 유지한다.
 
 ## 배포 산출물과 로컬 상태
 
-- 후보0.3.12.0의 별도 Debug는 `.cache/collection-progress-build/`, 정규 Debug도0.3.12.0이다. Release 출력 `.cache/release-build/0.3.12.0/`, 고정 ZIP `artifacts/share/0.3.12.0/`, 추출 DLL은 위 표를 따른다. 실기/원격 게시 전이며 [고정 해시·확인 순서](verification/releases/RELEASE-0.3.12.0.md)를 먼저 본다. 확인 후 실행 파일 재빌드는 새 후보다. 공통 설정schema15/LastSeenChangelogVersion은 유지한다.
+- 후보0.3.12.0 r2의 별도 Debug는 `.cache/collection-progress-r2-build/`, 정규 Debug도0.3.12.0이다. Release 출력 `.cache/release-build/0.3.12.0-r2/`, 고정 ZIP `artifacts/share/0.3.12.0-r2/`, 추출 DLL은 위 표를 따른다. 실기/원격 게시 전이며 [고정 해시·확인 순서](verification/releases/RELEASE-0.3.12.0.md)를 먼저 본다. 확인 후 실행 파일 재빌드는 새 후보다. 공통 설정schema15/LastSeenChangelogVersion은 유지한다.
 - 공개0.3.11.0의 소스 태그는c2a115d, 설치 JSON은8c72e1a, Release ID418137946이다. 익명 파일/아이콘 검사와 실제 공유 URL의0.3.11.0/API15/Changelog/링크 조회를 완료했다. [게시 근거](verification/releases/RELEASE-0.3.11.0.md).
 
 - 이전 개발0.3.11.0 사용자 확인 Debug 출력은 `.cache/spot-context-build/`, 당시 정규 Debug DLL은0.3.11.0이었다. 설정schema15/타이머 진단timer/v4다. [미지의 낚시터](verification/fishing/TIMER-HISTORY.md#03110-미지의-낚시터와-이전-위치-분리-2026-10-20), [목록/상세](verification/catalog/UI.md#03110-목록상세-조작-개선-2026-10-20), [배율](verification/catalog/UI.md#03110-ui-배율-2026-10-20)에서 확인 순서를 본다. 최종 Release는 `.cache/release-build/0.3.11.0/`, ZIP은 `artifacts/share/0.3.11.0/`, 추출은 `.cache/release-validation/0.3.11.0/`다. 당시 정규 Debug는af95a7e 기능 확인본이며 추가 Debug/테스트 없이 최종 Release를 게시했다. 상세는 [배포 기록](verification/releases/RELEASE-0.3.11.0.md)을 따른다. 이전 출력은 보존한다.
