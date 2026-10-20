@@ -697,4 +697,30 @@
   <data name="ChangelogSpotToggle" xml:space="preserve"><value>‘어종 보기’를 다시 누르면 낚시터 어종 목록을 닫습니다.</value></data>
   <data name="ChangelogPublishedAt" xml:space="preserve"><value>배포: {0:yyyy년 M월 d일 H시} (한국 시간)</value></data>
   <data name="ChangelogReleaseTimeUnknown" xml:space="preserve"><value>배포 시각 미기록</value></data>
+  <data name="TabCollectionProgress" xml:space="preserve"><value>수집 현황</value></data>
+  <data name="CollectionProgressWaiting" xml:space="preserve"><value>현재 캐릭터의 수집 현황을 준비하고 있습니다.</value></data>
+  <data name="CollectionProgressHint" xml:space="preserve"><value>메인 목록 필터와 관계없이 어류도감 대상 전체를 집계합니다. 확장팩을 펼치면 지역별 현황을 볼 수 있습니다. 여러 지역에 서식하는 어종은 각 지역에 한 번씩, 확장팩별·전체 합계에는 한 번만 셉니다. 수동 수집 상태가 우선하며 미확인은 미수집과 구분합니다.</value></data>
+  <data name="CollectionProgressOverall" xml:space="preserve"><value>어류도감 전체: {0:N0} / {1:N0}종 수집 · 미확인 {2:N0}종</value></data>
+  <data name="CollectionProgressRegular" xml:space="preserve"><value>일반 낚시</value></data>
+  <data name="CollectionProgressAll" xml:space="preserve"><value>전체 어종</value></data>
+  <data name="CollectionProgressBig" xml:space="preserve"><value>터주(왕 포함)</value></data>
+  <data name="CollectionProgressLegendary" xml:space="preserve"><value>터주왕</value></data>
+  <data name="CollectionProgressScope" xml:space="preserve"><value>보기</value></data>
+  <data name="CollectionProgressUnknownGrade" xml:space="preserve"><value>등급 미확인 {0:N0}종은 전체 어종에 포함하고 터주·터주왕 수치에서는 제외합니다.</value></data>
+  <data name="CollectionProgressArea" xml:space="preserve"><value>확장팩 / 지역</value></data>
+  <data name="CollectionProgressRegularTotal" xml:space="preserve"><value>일반 낚시 합계</value></data>
+  <data name="CollectionProgressUnknownArea" xml:space="preserve"><value>위치 미확인</value></data>
+  <data name="CollectionProgressOcean" xml:space="preserve"><value>먼바다 낚시</value></data>
+  <data name="CollectionProgressOceanHint" xml:space="preserve"><value>먼바다 어종은 터주·터주왕 보기와 관계없이 별도로 집계합니다.</value></data>
+  <data name="CollectionProgressNoTargets" xml:space="preserve"><value>대상 없음</value></data>
+  <data name="CollectionProgressComplete" xml:space="preserve"><value>{0:N0} / {1:N0} · 완료</value></data>
+  <data name="CollectionProgressRatio" xml:space="preserve"><value>{0:N0} / {1:N0} · {2:F1}%</value></data>
+  <data name="CollectionProgressBreakdown" xml:space="preserve"><value>수집됨: {0:N0}종
+미수집: {1:N0}종
+미확인: {2:N0}종
+수동 지정 포함: {3:N0}종</value></data>
+  <data name="CollectionProgressUnknownCount" xml:space="preserve"><value>미확인 {0:N0}종</value></data>
+  <data name="ChangelogCollectionProgress" xml:space="preserve"><value>메인에 수집 현황을 추가했습니다. 확장팩을 펼쳐 지역별 수집 수와 진행 막대를 보고 전체·터주·터주왕 보기를 바꿀 수 있으며 먼바다는 별도로 집계합니다.</value></data>
+  <data name="ChangelogCompactToggle" xml:space="preserve"><value>메인의 간이 목록 버튼을 다시 누르면 목록을 닫습니다.</value></data>
+  <data name="ChangelogFirstOpen" xml:space="preserve"><value>업데이트 후 메인을 처음 열 때 미확인 업데이트 내역을 표시합니다.</value></data>
 </root>

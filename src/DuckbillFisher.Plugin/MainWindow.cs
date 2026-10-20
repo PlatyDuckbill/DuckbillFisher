@@ -18,9 +18,11 @@ internal sealed class MainWindow : Window
     private readonly Action languageChanged;
     private readonly FishPreferences preferences;
     private readonly FishingHistoryBrowser fishingHistory;
+    private readonly CollectionProgressPanel collectionProgress;
     public Action? ShowCompact { get; set; }
     public Action? ShowTimer { get; set; }
     public Action? ShowChangelog { get; set; }
+    public Action? ShowUnreadChangelog { get; set; }
     private string[] markerLabels = Markers.Select(key => UiText.Get(key)).ToArray();
     private IReadOnlyList<FishGuideRow>? lastRows;
     private FishGuideRow[] matches = [];
@@ -30,11 +32,11 @@ internal sealed class MainWindow : Window
     private int selectedMarker;
     private bool selectSettings;
     private MainPage selectedPage;
-    private enum MainPage { Catalog, Alerts, History, Settings, Guide, Fishing }
+    private enum MainPage { Catalog, Collection, Alerts, History, Settings, Guide, Fishing }
 
     public MainWindow(FishingActivityProbe observer, FishGuideDiagnostics fishGuide, FishListPanel fishList,
         SpawnAlertsPanel spawnAlerts, FishPreferences preferences, Action languageChanged,
-        FishingHistoryBrowser fishingHistory) : base("DuckbillFisher###DuckbillFisher.Main")
+        FishingHistoryBrowser fishingHistory, CollectionProgressPanel collectionProgress) : base("DuckbillFisher###DuckbillFisher.Main")
     {
         this.observer = observer;
         this.fishGuide = fishGuide;
@@ -43,6 +45,7 @@ internal sealed class MainWindow : Window
         this.languageChanged = languageChanged;
         this.preferences = preferences;
         this.fishingHistory = fishingHistory;
+        this.collectionProgress = collectionProgress;
         spawnAlerts.ShowSettings = OpenSettings;
         UiText.SetLanguage(preferences.View.Language);
         markerLabels = Markers.Select(key => UiText.Get(key)).ToArray();
@@ -60,6 +63,8 @@ internal sealed class MainWindow : Window
         IsOpen = true;
     }
 
+    public override void OnOpen() => ShowUnreadChangelog?.Invoke();
+
     public override void Draw()
     {
         var settings = preferences.View;
@@ -76,6 +81,7 @@ internal sealed class MainWindow : Window
         switch (selectedPage)
         {
             case MainPage.Catalog: fishList.Draw(); break;
+            case MainPage.Collection: collectionProgress.Draw(); break;
             case MainPage.Alerts: spawnAlerts.Draw(); break;
             case MainPage.History: fishingHistory.Draw(settings.DeveloperMode, ShowTimer); break;
             case MainPage.Settings:
@@ -113,6 +119,7 @@ internal sealed class MainWindow : Window
             if (ImGui.BeginTabBar("DiagnosticsTabs", ImGuiTabBarFlags.FittingPolicyScroll))
             {
                 NavigationTab(MainPage.Catalog, T.TabCatalog, "CatalogTab");
+                NavigationTab(MainPage.Collection, T.TabCollectionProgress, "CollectionProgressTab");
                 NavigationTab(MainPage.Alerts, T.TabAlerts, "SpawnAlertsTab");
                 NavigationTab(MainPage.History, T.TabHistory, "FishingHistoryTab");
                 NavigationTab(MainPage.Settings, T.TabSettings, "SettingsTab", selectSettings);

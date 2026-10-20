@@ -38,6 +38,7 @@ public sealed class Plugin : IDalamudPlugin
     private readonly BaitPreparation baitPreparation;
     private readonly BaitUiProbe baitUiProbe;
     private readonly BaitFinder baitFinder;
+    private readonly CollectionProgress collectionProgress;
     private bool disposed;
 
     public Plugin(IDalamudPluginInterface pluginInterface, ICommandManager commandManager, ICondition conditions,
@@ -99,15 +100,18 @@ public sealed class Plugin : IDalamudPlugin
         compactWindow = new CompactFishWindow(compactObserver, fishPreferences, fishCollection, textureProvider, detailWindow.Show, fishingMap);
         spawnAlertsPanel = new SpawnAlertsPanel(fishPreferences, spawnAlerts, alertOutput, fishCollection, textureProvider,
             fishCatalog, detailPanel, fishingMap, guideOpener);
+        collectionProgress = new CollectionProgress(fishCatalog, fishPreferences, fishCollection, framework);
         mainWindow = new MainWindow(fishingObserver, fishGuide, new FishListPanel(fishCatalog, textureProvider, detailPanel,
                 fishPreferences, fishCollection, fishingRegion, fishingMap, guideOpener, preparationQuery, () => preparationWindow.IsOpen = true, detailWindow.Show),
             spawnAlertsPanel, fishPreferences,
             () => commandInfo.HelpMessage = UiText.Get(TextKey.CommandHelp),
-            new FishingHistoryBrowser(fishingTracker, fishCatalog, new FishingHistoryPanel(fishingTracker, textureProvider, detailWindow.Show)));
-        mainWindow.ShowCompact = () => compactWindow.IsOpen = true;
+            new FishingHistoryBrowser(fishingTracker, fishCatalog, new FishingHistoryPanel(fishingTracker, textureProvider, detailWindow.Show)),
+            new CollectionProgressPanel(collectionProgress, fishCatalog, fishPreferences, fishCollection, guideOpener));
+        mainWindow.ShowCompact = compactWindow.Toggle;
         mainWindow.ShowTimer = timerWindow.Toggle;
         var changelogWindow = new ChangelogWindow(fishPreferences);
         mainWindow.ShowChangelog = () => changelogWindow.IsOpen = true;
+        mainWindow.ShowUnreadChangelog = changelogWindow.ShowIfUnread;
         compactWindow.ShowMain = mainWindow.Toggle;
         windows.AddWindow(mainWindow);
         windows.AddWindow(compactWindow);
@@ -151,6 +155,7 @@ public sealed class Plugin : IDalamudPlugin
         commandManager.RemoveHandler(Command);
         if (shortCommandRegistered) commandManager.RemoveHandler(ShortCommand);
         compactObserver.Dispose();
+        collectionProgress.Dispose();
         baitPreparation.Dispose();
         baitStock.Dispose();
         baitUiProbe.Dispose();

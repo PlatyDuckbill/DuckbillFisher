@@ -10,6 +10,7 @@
 - [0.3.9.0 배포](releases/RELEASE-0.3.9.0.md)
 - [0.3.10.0 배포](releases/RELEASE-0.3.10.0.md)
 - [0.3.11.0 배포](releases/RELEASE-0.3.11.0.md)
+- [0.3.12.0 후보 · 수집 현황/토글/업데이트 안내](releases/RELEASE-0.3.12.0.md)
 - [ENV-03 한섭 수첩 API 조사](native/FISH-API.md)
 - [ENV-03 선택 어종 수집 비트 읽기](native/FISH-NATIVE.md)
 - [ENV-03 수첩 조회의 로그인·캐릭터 경계](native/FISH-SESSION.md)

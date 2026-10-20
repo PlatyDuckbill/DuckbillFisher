@@ -88,7 +88,7 @@ GitHub 웹 또는 현재 사용 가능한 인증 도구로 게시한다. 토큰�
 - 설치 화면은 커스텀 저장소 항목의 `Changelog` 문자열을 사용한다. GitHub Release 본문을 자동 조회하지 않는다. csproj의 `<Changelog>`에 영어 요약을 넣으면 SDK manifest와 prepare-release.ps1의 후보 설치 JSON에 보존된다. 매 버전 요약·DLL/manifest·후보 JSON의 일치를 확인한다.
 - 이미 공개한 버전의 안내만 보완할 때는 설치 JSON의 `Changelog`만 추가할 수 있다. 버전/다운로드 링크/LastUpdate와 고정 ZIP·태그를 바꾸지 않으며 실제 공유 raw URL에서 새 문구를 확인한다. ZIP 안 manifest와 설치 JSON의 이 차이는 배포 기록에 남긴다.
 - 플러그인 자체 업데이트 안내는 내장 한영 리소스와 ChangelogWindow.PublishedReleases를 사용한다. 최근 공개 릴리스 최대10개를 최신순으로 표시하며 개발 버전은 제외한다. 새 Release 후보를 준비할 때 docs/releases의 공개 요약에 맞춰 해당 버전을 맨 앞에 추가하고 한영 TextKey/리소스를 함께 갱신한 뒤 그 후보 ZIP을 확인받아 게시한다. 실패한 후보/중간 개발 버전을 배포 이력으로 남기지 않는다. 원격 Release 조회는 하지 않는다. 확인 버전은 공통 설정에 저장하고 설정에서 다시 열 수 있다.
-- 한 항목에는 한 기능을 넣어 기능별로 줄을 나눈다. 이미 공개한 버전의 `published_at`은 GitHub Release의 실제 UTC 시각을 확인해 내장 이력의 PublishedAtUtc에 기록한다. 표시는 한국 시간(+09:00)의 일·시 단위까지이며 분·초를 보여주지 않는다. 게시 전 후보/시각 미기록은 null로 두며 날짜를 추측하지 않는다. 이후 개발 버전에서 공개한 이력의 실제 시각을 보완할 수 있지만 확인한 ZIP을 날짜 보완만으로 재빌드/덮어쓰지 않는다. 이 조회는 개발 중 자료 확인이며 런타임 HTTP를 추가하지 않는다.
+- 한 항목에는 한 기능을 넣어 기능별로 줄을 나눈다. 2026-10-20 사용자 지시에 따라 새 후보는 배포 요청 무렵의 UTC를 PublishedAtUtc에 필수로 기록한 뒤 빌드한다. 이는 요청 시점의 근사 배포 시각이며 GitHub 공개 시각이라고 단정하지 않는다. 공개한 과거 버전은 배포 기록의 실제 UTC로 보완할 수 있다. 표시는 한국 시간(+09:00)의 일·시 단위까지이며 분·초를 보여주지 않는다. 확인한 ZIP을 날짜 보완만으로 재빌드/덮어쓰지 않으며 런타임 HTTP를 추가하지 않는다.
 - 규격 확인: 2026-10-19 [manifest Changelog](https://dalamud.dev/plugin-development/plugin-metadata/#changelogs), [커스텀 저장소 항목](https://dalamud.dev/plugin-publishing/custom-repositories/#store-entry-keys).
 
 ### 업데이트 확인과 복구

@@ -697,4 +697,30 @@ Main inventory only. An unknown quantity is not zero.</value></data>
   <data name="ChangelogSpotToggle" xml:space="preserve"><value>Click View fish again to close the fishing-spot list.</value></data>
   <data name="ChangelogPublishedAt" xml:space="preserve"><value>Released: {0:MMM d, yyyy h tt} KST</value></data>
   <data name="ChangelogReleaseTimeUnknown" xml:space="preserve"><value>Release time not recorded</value></data>
+  <data name="TabCollectionProgress" xml:space="preserve"><value>Collection progress</value></data>
+  <data name="CollectionProgressWaiting" xml:space="preserve"><value>Preparing collection progress for the current character.</value></data>
+  <data name="CollectionProgressHint" xml:space="preserve"><value>All fish in the fishing log, independent of catalog filters. Expand an expansion to see its regions. Fish found in multiple regions count once in each region; expansion and overall totals count each fish once. Manual collection settings take priority. Unknown does not mean uncaught.</value></data>
+  <data name="CollectionProgressOverall" xml:space="preserve"><value>Fishing log total: {0:N0} / {1:N0} caught · {2:N0} unknown</value></data>
+  <data name="CollectionProgressRegular" xml:space="preserve"><value>Regular fishing</value></data>
+  <data name="CollectionProgressAll" xml:space="preserve"><value>All fish</value></data>
+  <data name="CollectionProgressBig" xml:space="preserve"><value>Big + legendary fish</value></data>
+  <data name="CollectionProgressLegendary" xml:space="preserve"><value>Legendary fish</value></data>
+  <data name="CollectionProgressScope" xml:space="preserve"><value>Show</value></data>
+  <data name="CollectionProgressUnknownGrade" xml:space="preserve"><value>{0:N0} fish have an unknown grade. They remain in All fish and are excluded from big/legendary counts.</value></data>
+  <data name="CollectionProgressArea" xml:space="preserve"><value>Expansion / region</value></data>
+  <data name="CollectionProgressRegularTotal" xml:space="preserve"><value>Regular fishing total</value></data>
+  <data name="CollectionProgressUnknownArea" xml:space="preserve"><value>Location unknown</value></data>
+  <data name="CollectionProgressOcean" xml:space="preserve"><value>Ocean fishing</value></data>
+  <data name="CollectionProgressOceanHint" xml:space="preserve"><value>Ocean fish are counted separately, without a big/legendary filter.</value></data>
+  <data name="CollectionProgressNoTargets" xml:space="preserve"><value>No fish</value></data>
+  <data name="CollectionProgressComplete" xml:space="preserve"><value>{0:N0} / {1:N0} · Complete</value></data>
+  <data name="CollectionProgressRatio" xml:space="preserve"><value>{0:N0} / {1:N0} · {2:F1}%</value></data>
+  <data name="CollectionProgressBreakdown" xml:space="preserve"><value>Caught: {0:N0}
+Uncaught: {1:N0}
+Unknown: {2:N0}
+Manual settings included: {3:N0}</value></data>
+  <data name="CollectionProgressUnknownCount" xml:space="preserve"><value>{0:N0} unknown</value></data>
+  <data name="ChangelogCollectionProgress" xml:space="preserve"><value>Added Collection progress to the main view. Expand expansions into regions to see counts and progress bars, switch between all/big/legendary fish, and check ocean fishing separately.</value></data>
+  <data name="ChangelogCompactToggle" xml:space="preserve"><value>The compact-list button in the main view now toggles the list open and closed.</value></data>
+  <data name="ChangelogFirstOpen" xml:space="preserve"><value>Unread release notes appear when you first open the main view after an update.</value></data>
 </root>

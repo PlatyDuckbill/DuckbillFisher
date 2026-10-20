@@ -15,6 +15,12 @@ internal sealed class ChangelogWindow : Window
     // Keep the confirmed candidate unchanged when it is published.
     private static readonly ReleaseNotes[] PublishedReleases =
     [
+        new(new(0, 3, 12, 0),
+        [
+            (FontAwesomeIcon.ChartBar, T.ChangelogCollectionProgress),
+            (FontAwesomeIcon.List, T.ChangelogCompactToggle),
+            (FontAwesomeIcon.Newspaper, T.ChangelogFirstOpen),
+        ], new DateTimeOffset(2026, 10, 20, 8, 9, 35, TimeSpan.Zero)),
         new(new(0, 3, 11, 0),
         [
             (FontAwesomeIcon.SearchPlus, T.ChangelogUiScale),
@@ -23,7 +29,7 @@ internal sealed class ChangelogWindow : Window
             (FontAwesomeIcon.Fish, T.ChangelogCollectionBadges),
             (FontAwesomeIcon.MapMarkerAlt, T.ChangelogUnknownSpot),
             (FontAwesomeIcon.List, T.ChangelogSpotToggle),
-        ]),
+        ], new DateTimeOffset(2026, 10, 20, 7, 59, 10, TimeSpan.Zero)),
         new(new(0, 3, 10, 0),
         [
             (FontAwesomeIcon.Terminal, T.ChangelogShortCommands),
@@ -55,12 +61,12 @@ internal sealed class ChangelogWindow : Window
     private readonly ReleaseNotes[] releases = PublishedReleases.Where(release => release.Version <= CurrentVersion).Take(10).ToArray();
     private readonly FishPreferences preferences;
     private bool contentShown;
+    private bool acknowledged;
 
     public ChangelogWindow(FishPreferences preferences) : base("DuckbillFisher###DuckbillFisher.Changelog")
     {
         this.preferences = preferences;
-        var seen = preferences.View.LastSeenChangelogVersion;
-        IsOpen = !Version.TryParse(seen, out var version) || version < CurrentVersion;
+        IsOpen = false;
         Size = new Vector2(560, 540);
         SizeCondition = ImGuiCond.FirstUseEver;
         SizeConstraints = new WindowSizeConstraints
@@ -69,6 +75,12 @@ internal sealed class ChangelogWindow : Window
         };
         BgAlpha = UiWidgets.BackgroundAlpha;
         Flags = ImGuiWindowFlags.NoScrollbar | ImGuiWindowFlags.NoScrollWithMouse;
+    }
+
+    public void ShowIfUnread()
+    {
+        var seen = preferences.View.LastSeenChangelogVersion;
+        if (!acknowledged && (!Version.TryParse(seen, out var version) || version < CurrentVersion)) IsOpen = true;
     }
 
     public override void PreDraw()
@@ -82,7 +94,11 @@ internal sealed class ChangelogWindow : Window
     public override void OnClose()
     {
         // Hidden/collapsed windows and unloading alone do not acknowledge unread notes.
-        if (contentShown) preferences.MarkChangelogSeen(CurrentVersion);
+        if (contentShown)
+        {
+            acknowledged = true;
+            preferences.MarkChangelogSeen(CurrentVersion);
+        }
     }
 
     public override void Draw()
@@ -99,9 +115,7 @@ internal sealed class ChangelogWindow : Window
                 var release = releases[i];
                 var label = $"{UiText.Get(T.ChangelogRelease, release.Version)}###ReleaseNotes.{release.Version}";
                 if (!ImGui.CollapsingHeader(label, i == 0 ? ImGuiTreeNodeFlags.DefaultOpen : ImGuiTreeNodeFlags.None)) continue;
-                ImGui.TextDisabled(release.PublishedAtUtc is { } published
-                    ? UiText.Get(T.ChangelogPublishedAt, published.ToOffset(TimeSpan.FromHours(9)))
-                    : UiText.Get(T.ChangelogReleaseTimeUnknown));
+                ImGui.TextDisabled(UiText.Get(T.ChangelogPublishedAt, release.PublishedAtUtc.ToOffset(TimeSpan.FromHours(9))));
                 ImGui.Spacing();
                 foreach (var (icon, text) in release.Entries) Entry(icon, text);
             }
@@ -126,5 +140,5 @@ internal sealed class ChangelogWindow : Window
         ImGui.Spacing();
     }
 
-    private sealed record ReleaseNotes(Version Version, (FontAwesomeIcon Icon, T Text)[] Entries, DateTimeOffset? PublishedAtUtc = null);
+    private sealed record ReleaseNotes(Version Version, (FontAwesomeIcon Icon, T Text)[] Entries, DateTimeOffset PublishedAtUtc);
 }
