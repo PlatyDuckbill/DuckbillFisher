@@ -678,7 +678,7 @@ Main inventory only. An unknown quantity is not zero.</value></data>
   <data name="ChangelogKrRuntime" xml:space="preserve"><value>Added support for the inspected KR Dalamud 15.0.3.7 runtime alongside 15.0.3.6, restoring native features blocked after the runtime update.</value></data>
   <data name="ChangelogCompatibilityHint" xml:space="preserve"><value>Show the compatibility block when native features are unavailable, with a compact runtime/profile/status line in diagnostics.</value></data>
   <data name="ChangelogFirstRelease" xml:space="preserve"><value>First custom-repository release: fish browsing and filters, bait and condition details, map markers, forecasts, favorite alerts, a quick list, a casting timer, and character-specific fishing records. Korean and English UI.</value></data>
-  <data name="ChangelogUpdateNotes" xml:space="preserve"><value>Added release notes to the plugin installer and a Korean/English history of the latest five releases. This screen appears once per version after you close it and can be reopened from Settings → What's new.</value></data>
+  <data name="ChangelogUpdateNotes" xml:space="preserve"><value>Added release notes to the plugin installer and a Korean/English release history. This screen appears once per version after you close it and can be reopened from Settings → What's new.</value></data>
   <data name="ChangelogShortCommands" xml:space="preserve"><value>Use /dbfs to toggle the main view, /dbfs cl for the compact list, and /dbfs ct for the casting timer. /duckbillfisher and the full compact / timer arguments still work.</value></data>
   <data name="ChangelogSpotFish" xml:space="preserve"><value>View fish at the current fishing spot in a separate view that stays open while inspecting fish details, clicking elsewhere, or closing the casting timer.</value></data>
   <data name="UiScale" xml:space="preserve"><value>UI scale</value></data>
@@ -695,8 +695,6 @@ Main inventory only. An unknown quantity is not zero.</value></data>
   <data name="ChangelogCollectionBadges" xml:space="preserve"><value>Fishing-spot lists highlight collection status with green caught, red uncaught, and gray unknown badges.</value></data>
   <data name="ChangelogUnknownSpot" xml:space="preserve"><value>New casts clear the previous fishing spot. Undiscovered spots are labeled, and the name and fish list update when discovery and your catch are confirmed.</value></data>
   <data name="ChangelogSpotToggle" xml:space="preserve"><value>Click View fish again to close the fishing-spot list.</value></data>
-  <data name="ChangelogFavoriteRemoval" xml:space="preserve"><value>Simplified the setting label to “Unfavorite on first guide registration.”</value></data>
   <data name="ChangelogPublishedAt" xml:space="preserve"><value>Released: {0:MMM d, yyyy h tt} KST</value></data>
   <data name="ChangelogReleaseTimeUnknown" xml:space="preserve"><value>Release time not recorded</value></data>
-  <data name="ChangelogNoteLayout" xml:space="preserve"><value>Release notes show each feature separately and recorded publication dates to the hour in Korean time.</value></data>
 </root>

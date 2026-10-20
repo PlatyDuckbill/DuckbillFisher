@@ -687,8 +687,6 @@ internal enum TextKey
     ChangelogCollectionBadges,
     ChangelogUnknownSpot,
     ChangelogSpotToggle,
-    ChangelogFavoriteRemoval,
     ChangelogPublishedAt,
     ChangelogReleaseTimeUnknown,
-    ChangelogNoteLayout,
 }

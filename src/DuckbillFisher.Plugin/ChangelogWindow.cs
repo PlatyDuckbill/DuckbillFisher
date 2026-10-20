@@ -23,8 +23,6 @@ internal sealed class ChangelogWindow : Window
             (FontAwesomeIcon.Fish, T.ChangelogCollectionBadges),
             (FontAwesomeIcon.MapMarkerAlt, T.ChangelogUnknownSpot),
             (FontAwesomeIcon.List, T.ChangelogSpotToggle),
-            (FontAwesomeIcon.Star, T.ChangelogFavoriteRemoval),
-            (FontAwesomeIcon.Newspaper, T.ChangelogNoteLayout),
         ]),
         new(new(0, 3, 10, 0),
         [
@@ -54,7 +52,7 @@ internal sealed class ChangelogWindow : Window
         ], new DateTimeOffset(2026, 10, 17, 11, 19, 46, TimeSpan.Zero)),
         new(new(0, 2, 4, 0), [(FontAwesomeIcon.Fish, T.ChangelogFirstRelease)], new DateTimeOffset(2026, 10, 17, 10, 52, 8, TimeSpan.Zero)),
     ];
-    private readonly ReleaseNotes[] releases = PublishedReleases.Where(release => release.Version <= CurrentVersion).Take(5).ToArray();
+    private readonly ReleaseNotes[] releases = PublishedReleases.Where(release => release.Version <= CurrentVersion).Take(10).ToArray();
     private readonly FishPreferences preferences;
     private bool contentShown;
 

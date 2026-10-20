@@ -678,7 +678,7 @@
   <data name="ChangelogKrRuntime" xml:space="preserve"><value>기존 15.0.3.6과 함께 검증한 KR Dalamud 15.0.3.7을 지원하여, 런타임 업데이트 후 차단되던 네이티브 기능을 복구했습니다.</value></data>
   <data name="ChangelogCompatibilityHint" xml:space="preserve"><value>네이티브 기능을 쓸 수 없을 때 호환성 차단 이유를 표시하고, 진단에 런타임·프로필·상태 요약을 추가했습니다.</value></data>
   <data name="ChangelogFirstRelease" xml:space="preserve"><value>첫 커스텀 저장소 배포입니다. 어종 목록·필터, 미끼·조건 상세, 지도, 출현 예측, 즐겨찾기 알림, 간이 목록, 캐스팅 타이머와 캐릭터별 낚시 기록을 제공합니다. 한국어·영어 UI를 지원합니다.</value></data>
-  <data name="ChangelogUpdateNotes" xml:space="preserve"><value>설치 화면의 변경 내역과 한국어·영어로 보는 최근 5개 릴리스 이력을 추가했습니다. 이 안내는 닫으면 버전별로 한 번만 표시되며 설정 → 업데이트 내역에서 다시 열 수 있습니다.</value></data>
+  <data name="ChangelogUpdateNotes" xml:space="preserve"><value>설치 화면의 변경 내역과 한국어·영어로 보는 릴리스 이력을 추가했습니다. 이 안내는 닫으면 버전별로 한 번만 표시되며 설정 → 업데이트 내역에서 다시 열 수 있습니다.</value></data>
   <data name="ChangelogShortCommands" xml:space="preserve"><value>/dbfs로 메인, /dbfs cl로 간이 목록, /dbfs ct로 캐스팅 타이머를 열고 닫을 수 있습니다. 기존 /duckbillfisher와 compact·timer 인자도 유지합니다.</value></data>
   <data name="ChangelogSpotFish" xml:space="preserve"><value>현재 낚시터의 어종 보기를 독립 화면으로 바꿨습니다. 어종 상세를 보거나 다른 곳을 클릭하거나 타이머를 닫아도 어종 목록이 유지됩니다.</value></data>
   <data name="UiScale" xml:space="preserve"><value>UI 배율</value></data>
@@ -695,8 +695,6 @@
   <data name="ChangelogCollectionBadges" xml:space="preserve"><value>낚시터 목록의 수집 상태를 배경이 있는 배지로 강조합니다. 수집됨은 녹색, 미수집은 붉은색, 미확인은 회색입니다.</value></data>
   <data name="ChangelogUnknownSpot" xml:space="preserve"><value>새 시전에는 이전 낚시터를 지우고 미지의 낚시터를 구분합니다. 발견 정보와 본인 어획이 확인되면 새 이름과 어종 목록으로 갱신합니다.</value></data>
   <data name="ChangelogSpotToggle" xml:space="preserve"><value>‘어종 보기’를 다시 누르면 낚시터 어종 목록을 닫습니다.</value></data>
-  <data name="ChangelogFavoriteRemoval" xml:space="preserve"><value>설정 문구를 ‘첫 도감 등록 시 즐겨찾기 해제’로 간결하게 바꿨습니다.</value></data>
   <data name="ChangelogPublishedAt" xml:space="preserve"><value>배포: {0:yyyy년 M월 d일 H시} (한국 시간)</value></data>
   <data name="ChangelogReleaseTimeUnknown" xml:space="preserve"><value>배포 시각 미기록</value></data>
-  <data name="ChangelogNoteLayout" xml:space="preserve"><value>업데이트 내역을 기능별로 줄을 나눠 표시하고, 확인된 배포 날짜를 한국 시간의 시 단위까지 표시합니다.</value></data>
 </root>
