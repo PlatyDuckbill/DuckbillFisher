@@ -24,7 +24,7 @@ internal sealed class FishRowRenderer(ITextureProvider textures, FishingMapServi
 
     public bool Draw(FishGuideRow fish, float height, bool selected, string state, string place,
         FishingWindow? forecast, DateTimeOffset now, bool usesOtherRegion = false, bool favorite = false, bool compact = false,
-        FishingSpotView? spot = null, bool canOpenMap = false)
+        FishingSpotView? spot = null, bool canOpenMap = false, CollectionStatus? collectionStatus = null)
     {
         if (culture != UiText.Culture)
         {
@@ -80,7 +80,15 @@ internal sealed class FishRowRenderer(ITextureProvider textures, FishingMapServi
         ImGui.SetCursorPos(start + new Vector2(textX, 4));
         LineText(name, Math.Max(1, textWidth - stateWidth - 10), false);
         ImGui.SetCursorPos(start + new Vector2(textX + textWidth - stateWidth, 4));
-        LineText(state, stateWidth, true);
+        var collectionColor = collectionStatus switch
+        {
+            CollectionStatus.Caught => new Vector4(0.50f, 0.85f, 0.65f, 1),
+            CollectionStatus.Uncaught => new Vector4(1, 0.57f, 0.52f, 1),
+            _ => (Vector4?)null,
+        };
+        if (collectionColor is { } color) ImGui.PushStyleColor(ImGuiCol.Text, color);
+        LineText(state, stateWidth, collectionColor is null);
+        if (collectionColor is not null) ImGui.PopStyleColor();
 
         // Location is clipped first; the timer keeps its own width on the same line.
         var time = fish.IsOceanFishing ? UiText.Get(T.RowOceanWindow)

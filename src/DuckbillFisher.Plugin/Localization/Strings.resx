@@ -420,8 +420,8 @@ In fish log only: {5}</value></data>
   <data name="ChatGmLinkshell8" xml:space="preserve"><value>GM linkshell 8</value></data>
   <data name="ChatGmNoviceNetwork" xml:space="preserve"><value>GM Novice Network</value></data>
   <data name="AlertUncaughtOnly" xml:space="preserve"><value>Alert for uncaught fish only</value></data>
-  <data name="AlertAutoRemove" xml:space="preserve"><value>Remove favorite on new Fish Guide registration</value></data>
-  <data name="AlertAutoRemoveHint" xml:space="preserve"><value>Enabled by default; turning it off is saved. Independent of enabling alerts. A confirmed new-fish registration removes it from shared favorites. Opening the guide, changing manual collection status and catching an already registered fish do not trigger removal. Custom alert times and delivery history are preserved.</value></data>
+  <data name="AlertAutoRemove" xml:space="preserve"><value>Unfavorite on first guide registration</value></data>
+  <data name="AlertAutoRemoveHint" xml:space="preserve"><value>Removes a fish from favorites when its first Fish Guide registration is confirmed. Enabled by default and works even when alerts are off. Opening the guide, manual collection changes, and repeat catches do not remove favorites. Custom alert times and delivery history are kept.</value></data>
   <data name="AlertRemoveFavorite" xml:space="preserve"><value>Remove favorite</value></data>
   <data name="TabSettings" xml:space="preserve"><value>Settings</value></data>
   <data name="InterfaceSettings" xml:space="preserve"><value>Interface</value></data>
@@ -460,7 +460,7 @@ In fish log only: {5}</value></data>
   <data name="OpenMainWindow" xml:space="preserve"><value>Open main window</value></data>
   <data name="OpenCompactWindow" xml:space="preserve"><value>Open quick list</value></data>
   <data name="CompactHorizon" xml:space="preserve"><value>Upcoming minutes</value></data>
-  <data name="CompactScope" xml:space="preserve"><value>Uses the main catalog filters. Lists open windows, then upcoming windows within 1–180 minutes. Search is separate. Always available, unknown and ocean fish are excluded.</value></data>
+  <data name="CompactScope" xml:space="preserve"><value>Shares the main catalog filters except favorites. Use the star here to show favorites only; it does not change the main view. Lists open windows, then upcoming windows within 1–180 minutes. Always available, unknown and ocean fish are excluded.</value></data>
   <data name="CompactOpen" xml:space="preserve"><value>Open now · {0}</value></data>
   <data name="CompactUpcoming" xml:space="preserve"><value>Upcoming · {0}</value></data>
   <data name="CompactEmpty" xml:space="preserve"><value>No matching fish open or starting within {0} minutes. Adjust the main filters or extend this window&apos;s range.</value></data>
@@ -685,4 +685,8 @@ Main inventory only. An unknown quantity is not zero.</value></data>
   <data name="UiScaleHint" xml:space="preserve"><value>Scales DuckbillFisher text, icons, controls, and spacing relative to the Dalamud UI scale. Applies to all plugin views and is saved across reloads. Resize views as needed.</value></data>
   <data name="UiScaleReset" xml:space="preserve"><value>Reset UI scale to 100%</value></data>
   <data name="ChangelogUiScale" xml:space="preserve"><value>Adjust the plugin UI scale from 80% to 200% in Settings, or reset it to 100%. Text, icons, controls, and spacing scale together across all DuckbillFisher views, and the setting is preserved across reloads.</value></data>
+  <data name="CompactFavoritesHint" xml:space="preserve"><value>Toggle favorites only in the compact list. Other filters follow the main catalog.</value></data>
+  <data name="TimerSpotUnavailableHint" xml:space="preserve"><value>Available once a cast identifies the fishing spot. At an undiscovered spot, discover it and cast again. If observation is unavailable, the spot cannot be identified.</value></data>
+  <data name="OpenIndependentDetail" xml:space="preserve"><value>Open in separate view</value></data>
+  <data name="ChangelogCatalogOptions" xml:space="preserve"><value>Added an independent favorites-only toggle to the compact list and a button to open main-view fish details separately. Fishing-spot lists now color collection labels, and View fish explains why it is unavailable. Simplified the automatic unfavorite label.</value></data>
 </root>

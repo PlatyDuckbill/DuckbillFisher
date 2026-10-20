@@ -15,7 +15,11 @@ internal sealed class ChangelogWindow : Window
     // Keep the confirmed candidate unchanged when it is published.
     private static readonly ReleaseNotes[] PublishedReleases =
     [
-        new(new(0, 3, 11, 0), [(FontAwesomeIcon.SearchPlus, T.ChangelogUiScale)]),
+        new(new(0, 3, 11, 0),
+        [
+            (FontAwesomeIcon.SearchPlus, T.ChangelogUiScale),
+            (FontAwesomeIcon.Star, T.ChangelogCatalogOptions),
+        ]),
         new(new(0, 3, 10, 0),
         [
             (FontAwesomeIcon.Terminal, T.ChangelogShortCommands),

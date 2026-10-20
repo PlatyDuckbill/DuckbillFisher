@@ -52,7 +52,7 @@ internal sealed class CompactFishObserver : IDisposable
         nextUpdate = clock.Elapsed + TimeSpan.FromSeconds(1);
         var source = catalog.View;
         var personal = preferences.View;
-        var filter = new CatalogFilter(personal.Catalog);
+        var filter = new CatalogFilter(personal.Catalog with { FavoritesOnly = personal.Compact.FavoritesOnly });
         var observed = collection.View;
         var location = region.View;
         var now = DateTimeOffset.UtcNow;

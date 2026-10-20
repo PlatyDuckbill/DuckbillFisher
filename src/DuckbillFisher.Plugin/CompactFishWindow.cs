@@ -50,7 +50,15 @@ internal sealed class CompactFishWindow : Window
         var right = ImGui.GetCursorPosX() + ImGui.GetContentRegionAvail().X;
         ImGui.SameLine();
         ImGui.SetCursorPosX(Math.Max(ImGui.GetCursorPosX(),
-            right - ImGui.GetFrameHeight() * 2 - ImGui.GetStyle().ItemSpacing.X));
+            right - ImGui.GetFrameHeight() * 3 - ImGui.GetStyle().ItemSpacing.X * 2));
+        ImGui.BeginDisabled(!personal.CanEdit);
+        if (UiWidgets.IconButton(FontAwesomeIcon.Star, "CompactFavoritesOnly", UiText.Get(T.CompactFavoritesHint), personal.Compact.FavoritesOnly))
+        {
+            preferences.SetCompact(personal.Compact with { FavoritesOnly = !personal.Compact.FavoritesOnly });
+            jumpTop = true;
+        }
+        ImGui.EndDisabled();
+        ImGui.SameLine();
         if (UiWidgets.IconButton(FontAwesomeIcon.List, "OpenMain", UiText.Get(T.ToggleMainWindow))) ShowMain?.Invoke();
         ImGui.SameLine();
         if (UiWidgets.IconButton(FontAwesomeIcon.Cog, "CompactOptions", UiText.Get(T.CompactOptions))) ImGui.OpenPopup("CompactOptions");
@@ -59,10 +67,16 @@ internal sealed class CompactFishWindow : Window
         if (ImGui.BeginPopup("CompactOptions"))
         {
             var minutes = personal.Compact.UpcomingMinutes;
+            var favoritesOnly = personal.Compact.FavoritesOnly;
             ImGui.BeginDisabled(!personal.CanEdit);
+            var changed = ImGui.Checkbox(UiText.Label(T.CatalogFavoritesOnly, "CompactFavoritesOnlyOption"), ref favoritesOnly);
             ImGui.SetNextItemWidth(ImGui.GetFontSize() * 8);
-            if (ImGui.InputInt(UiText.Label(T.CompactHorizon, "CompactHorizon"), ref minutes))
-                preferences.SetCompact(personal.Compact with { UpcomingMinutes = Math.Clamp(minutes, 1, 180) });
+            changed |= ImGui.InputInt(UiText.Label(T.CompactHorizon, "CompactHorizon"), ref minutes);
+            if (changed)
+            {
+                preferences.SetCompact(personal.Compact with { UpcomingMinutes = Math.Clamp(minutes, 1, 180), FavoritesOnly = favoritesOnly });
+                jumpTop |= favoritesOnly != personal.Compact.FavoritesOnly;
+            }
             ImGui.EndDisabled();
             ImGui.TextWrapped(UiText.Get(T.CompactScope));
             ImGui.EndPopup();

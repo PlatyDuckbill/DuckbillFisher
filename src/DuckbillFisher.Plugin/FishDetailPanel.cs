@@ -13,7 +13,8 @@ internal sealed class FishDetailPanel(FishPreferences preferences, ITextureProvi
 {
     public Action<uint, uint>? OpenRelated { get; set; }
 
-    public void Draw(FishGuideRow? fish, FishCatalogView catalog, FishPreferencesView personal, FishCollectionView observed)
+    public void Draw(FishGuideRow? fish, FishCatalogView catalog, FishPreferencesView personal, FishCollectionView observed,
+        Action<FishGuideRow>? showDetail = null)
     {
         if (fish is null)
         {
@@ -44,6 +45,8 @@ internal sealed class FishDetailPanel(FishPreferences preferences, ITextureProvi
                 ImGui.EndTable();
             }
             DrawActions(fish, personal, observed);
+            if (showDetail is not null && ImGui.SmallButton(UiText.Label(T.OpenIndependentDetail, "OpenIndependentDetail")))
+                showDetail(fish);
             ImGui.EndTable();
         }
         if (!personal.HasCharacter) ImGui.TextWrapped(UiText.Get(T.ManualPlayerRequired));

@@ -420,8 +420,8 @@
   <data name="ChatGmLinkshell8" xml:space="preserve"><value>GM 링크셸 8</value></data>
   <data name="ChatGmNoviceNetwork" xml:space="preserve"><value>GM 초보자 채널</value></data>
   <data name="AlertUncaughtOnly" xml:space="preserve"><value>미수집 어종만 알림</value></data>
-  <data name="AlertAutoRemove" xml:space="preserve"><value>새 어종 도감 등록 시 즐겨찾기 자동 해제</value></data>
-  <data name="AlertAutoRemoveHint" xml:space="preserve"><value>기본은 켜짐이며 끄면 그 선택을 저장합니다. 알림 켜기와 별도로 작동합니다. 새 어종 등록이 확인되면 공통 즐겨찾기에서 해제합니다. 도감 열기·수동 수집 지정·이미 등록한 어종 다시 잡기는 해제 조건이 아닙니다. 개별 시간과 발송 기록은 보존합니다.</value></data>
+  <data name="AlertAutoRemove" xml:space="preserve"><value>첫 도감 등록 시 즐겨찾기 해제</value></data>
+  <data name="AlertAutoRemoveHint" xml:space="preserve"><value>어종이 도감에 처음 등록되면 즐겨찾기에서 자동으로 뺍니다. 기본은 켜짐이며 알림을 꺼도 작동합니다. 도감 열기·수동 수집 변경·이미 등록한 어종 다시 잡기는 해당하지 않습니다. 개별 알림 시간과 발송 기록은 유지합니다.</value></data>
   <data name="AlertRemoveFavorite" xml:space="preserve"><value>즐겨찾기 삭제</value></data>
   <data name="TabSettings" xml:space="preserve"><value>설정</value></data>
   <data name="InterfaceSettings" xml:space="preserve"><value>화면 설정</value></data>
@@ -460,7 +460,7 @@
   <data name="OpenMainWindow" xml:space="preserve"><value>메인 화면 열기</value></data>
   <data name="OpenCompactWindow" xml:space="preserve"><value>간이 목록 열기</value></data>
   <data name="CompactHorizon" xml:space="preserve"><value>출현 예정 범위 (분)</value></data>
-  <data name="CompactScope" xml:space="preserve"><value>메인 목록 필터를 공유합니다. 현재 출현 중 → 1~180분 이내 출현 예정 순서이며 검색은 별도입니다. 상시·예측 미확인·먼바다 어종은 제외합니다.</value></data>
+  <data name="CompactScope" xml:space="preserve"><value>즐겨찾기를 제외한 메인 목록 필터를 공유합니다. 이 화면의 별 버튼으로 즐겨찾기만 볼 수 있으며 메인 설정은 바꾸지 않습니다. 현재 출현 중 → 1~180분 이내 출현 예정 순서이며 상시·예측 미확인·먼바다 어종은 제외합니다.</value></data>
   <data name="CompactOpen" xml:space="preserve"><value>현재 출현 중 · {0}</value></data>
   <data name="CompactUpcoming" xml:space="preserve"><value>출현 예정 · {0}</value></data>
   <data name="CompactEmpty" xml:space="preserve"><value>현재 또는 {0}분 이내 출현하는 해당 어종이 없습니다. 메인 필터를 조정하거나 예정 범위를 늘려 보세요.</value></data>
@@ -685,4 +685,8 @@
   <data name="UiScaleHint" xml:space="preserve"><value>Dalamud UI 배율을 기준으로 DuckbillFisher의 글자·아이콘·버튼·간격을 조절합니다. 모든 플러그인 화면에 적용하며 재로드 후에도 유지합니다. 필요하면 화면 크기를 조절하세요.</value></data>
   <data name="UiScaleReset" xml:space="preserve"><value>UI 배율 100%로 복원</value></data>
   <data name="ChangelogUiScale" xml:space="preserve"><value>설정에서 플러그인 UI 배율을 80~200%로 조절하거나 100%로 복원할 수 있습니다. 모든 DuckbillFisher 화면의 글자·아이콘·버튼·간격을 함께 조절하며 재로드 후에도 유지합니다.</value></data>
+  <data name="CompactFavoritesHint" xml:space="preserve"><value>간이 목록에서 즐겨찾기만 보기 전환. 나머지 필터는 메인 목록을 따릅니다.</value></data>
+  <data name="TimerSpotUnavailableHint" xml:space="preserve"><value>시전 후 낚시터가 확인되면 사용할 수 있습니다. 미지의 낚시터라면 발견 후 다시 시전해 주세요. 관찰할 수 없는 상태에서는 낚시터를 확인할 수 없습니다.</value></data>
+  <data name="OpenIndependentDetail" xml:space="preserve"><value>별도 화면으로 보기</value></data>
+  <data name="ChangelogCatalogOptions" xml:space="preserve"><value>간이 목록에 독립적인 즐겨찾기만 보기를 추가하고, 메인 어종 상세를 별도 화면으로 여는 버튼을 추가했습니다. 낚시터 목록에는 수집 상태 색상을, 비활성 어종 보기에는 안내를 더했습니다. 즐겨찾기 자동 해제 문구도 간결하게 바꿨습니다.</value></data>
 </root>

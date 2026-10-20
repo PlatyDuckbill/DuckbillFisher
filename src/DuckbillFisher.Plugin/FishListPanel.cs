@@ -14,7 +14,7 @@ namespace DuckbillFisher.Plugin;
 /// <summary>Displays cached static rows, session-local collection observations, and manual overrides.</summary>
 internal sealed class FishListPanel(FishCatalog catalog, ITextureProvider textures, FishDetailPanel detailPanel,
     FishPreferences preferences, FishCollectionObserver collection, FishingRegionObserver region, FishingMapService maps,
-    FishGuideOpenService guideOpener, CatalogQueryState preparationQuery, Action showBaitPreparation)
+    FishGuideOpenService guideOpener, CatalogQueryState preparationQuery, Action showBaitPreparation, Action<FishGuideRow> showDetail)
 {
     private static readonly StringComparer NameComparer = StringComparer.Create(CultureInfo.GetCultureInfo("ko-KR"), true);
     private static readonly CollectionVisibility[] CollectionChoices =
@@ -374,7 +374,7 @@ internal sealed class FishListPanel(FishCatalog catalog, ITextureProvider textur
     private void DrawDetails(FishCatalogView view, FishPreferencesView personal, FishCollectionView observed)
     {
         if (resetDetailScroll) { ImGui.SetScrollY(0); resetDetailScroll = false; }
-        detailPanel.Draw(selectedFish, view, personal, observed);
+        detailPanel.Draw(selectedFish, view, personal, observed, showDetail);
     }
 
     private string CreateReport(FishPreferencesView personal, FishCollectionView observed, bool full = false)

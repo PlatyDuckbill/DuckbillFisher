@@ -15,7 +15,7 @@ public enum SpawnAlertChannel { System, Say, CrossWorldLinkshell1 }
 // Public for Dalamud's configuration serializer. Content IDs stay in local configuration only.
 public sealed class FishPreferencesConfiguration : IPluginConfiguration
 {
-    public const int CurrentVersion = 14;
+    public const int CurrentVersion = 15;
     public int Version { get; set; } = CurrentVersion;
     public HashSet<uint> Favorites { get; set; } = [];
     public Dictionary<ulong, Dictionary<uint, bool>> Characters { get; set; } = [];
@@ -125,6 +125,9 @@ internal sealed class FishPreferences : IDisposable
                 if (loaded.Version < 8)
                     configuration.RemoveFavoriteOnRegistration = true;
                 configuration.Catalog = loaded.Catalog.Copy();
+                // Preserve the previously shared favorite filter once, then let the compact view change independently.
+                if (loaded.Version < 15)
+                    configuration.Compact = loaded.Compact with { FavoritesOnly = loaded.Catalog.FavoritesOnly };
                 // A malformed optional preset must not discard favorites or character records.
                 configuration.CatalogPresets = CatalogPreset.ReadValid(loaded.CatalogPresets);
                 configuration.CustomAlertSoundPath ??= "";
@@ -498,7 +501,7 @@ internal sealed class FishPreferences : IDisposable
     }
 
     private static bool IsValid(FishPreferencesConfiguration value) =>
-        value.Version is 1 or 2 or 3 or 4 or 5 or 6 or 7 or 8 or 9 or 10 or 11 or 12 or 13 or FishPreferencesConfiguration.CurrentVersion && value.Favorites is not null &&
+        value.Version is 1 or 2 or 3 or 4 or 5 or 6 or 7 or 8 or 9 or 10 or 11 or 12 or 13 or 14 or FishPreferencesConfiguration.CurrentVersion && value.Favorites is not null &&
         Enum.IsDefined(value.Language) &&
         value.Compact is not null && value.Compact.IsValid() &&
         value.Catalog is not null && value.Catalog.IsValid() &&

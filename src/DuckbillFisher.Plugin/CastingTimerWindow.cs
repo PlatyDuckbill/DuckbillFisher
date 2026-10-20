@@ -42,6 +42,7 @@ internal sealed class CastingTimerWindow : Window
         ImGui.BeginDisabled(spot is null);
         if (ImGui.Button(UiText.Label(T.TimerSpotFishButton, "TimerSpotFish"))) showSpotFish();
         ImGui.EndDisabled();
+        if (spot is null) UiWidgets.Tooltip(UiText.Get(T.TimerSpotUnavailableHint));
 
         var timed = view.Active ?? view.CurrentRecords.FirstOrDefault();
         var usesFishBait = timed?.BaitKind is FishingBaitKind.Mooch or FishingBaitKind.Swimbait;

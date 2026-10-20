@@ -1,6 +1,6 @@
 # 세션 인수인계
 
-갱신: 2026-10-20 · 공개0.3.10.0 · 개발0.3.11.0 UI 배율
+갱신: 2026-10-20 · 공개0.3.10.0 · 개발0.3.11.0 UI 개선
 
 ## 재개 순서
 
@@ -32,7 +32,7 @@
 
 ## 배포 산출물과 로컬 상태
 
-- 개발0.3.11.0 UI 배율 별도 출력은 `.cache/ui-scale-build/`, 정규 Debug DLL도0.3.11.0이다. 설정schema14이며 게임 확인은 [UI 기록](verification/catalog/UI.md#03110-ui-배율-2026-10-20)을 따른다. 패키징/게시 전이다.
+- 개발0.3.11.0 최신 별도 출력은 `.cache/catalog-options-build/`, 정규 Debug DLL도0.3.11.0이다. 설정schema15이며 게임 확인은 [목록/상세](verification/catalog/UI.md#03110-목록상세-조작-개선-2026-10-20)와 [배율](verification/catalog/UI.md#03110-ui-배율-2026-10-20)을 따른다. 이전 배율 출력은 `.cache/ui-scale-build/`에 남아 있다. 패키징/게시 전이다.
 - 공개0.3.10.0 소스 태그 커밋은77d5442, 설치 JSON 커밋은d21c9b5다. Release ID417042910의 ZIP/체크섬·익명 다운로드/해시/아이콘 확인 뒤 설치 JSON을 게시했고 실제 공유 raw URL의0.3.10.0/API15/Changelog/링크 조회도 완료했다. [게시 근거](verification/releases/RELEASE-0.3.10.0.md).
 - 고정 ZIP은 `artifacts/share/0.3.10.0/DuckbillFisher-0.3.10.0.zip`, Release 출력은 `.cache/release-build/0.3.10.0/`, 추출본은 위 표다. 검사 결과 `.cache/release-build/0.3.10.0-validation.json`과 `.cache/release-remote-check/0.3.10.0/`에 있다. 사용자 대표 확인 뒤 같은 ZIP을 게시했으며 재빌드/덮어쓰지 않는다. 이전0.3.9.0/0.3.8.0 산출물도 보존한다.
 - 개발0.3.10.0 별도 출력은 `.cache/short-commands-build/`, 정규 Debug도0.3.10.0이다. 업데이트 안내는 schema13의 공통 LastSeenChangelogVersion을 사용한다. 이전 출력은 `.cache/changelog-build/`·custom-sound-build/·bait-preparation-release/·snapshot-reuse-build/·alert-stability-build/·forecast-refinement-build/·fish-eyes-build/·intuition-forecast-build/·data-integrity-build/·data-integrity-import/, 재생성 자료는 `.cache/data-integrity/`다. 이전 참조별 출력은 `.cache/maintenance-*`에 있다.

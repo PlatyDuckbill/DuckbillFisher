@@ -677,4 +677,8 @@ internal enum TextKey
     UiScaleHint,
     UiScaleReset,
     ChangelogUiScale,
+    CompactFavoritesHint,
+    TimerSpotUnavailableHint,
+    OpenIndependentDetail,
+    ChangelogCatalogOptions,
 }

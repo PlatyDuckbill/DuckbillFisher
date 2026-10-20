@@ -61,7 +61,8 @@ internal sealed class SpotFishWindow : Window
                         var otherRegion = fish.Details?.Spot is { } source && source.TerritoryId != view.Spot?.TerritoryId;
                         if (rows.Draw(fish, height, false, UiText.Get(FishRowRenderer.CollectionKey(personal, observed, fish.FishParameterId)),
                             view.Spot?.Name ?? "", forecast, now, otherRegion, personal.Favorites.Contains(fish.FishParameterId),
-                            compact: true, spot: view.Spot, canOpenMap: personal.HasCharacter))
+                            compact: true, spot: view.Spot, canOpenMap: personal.HasCharacter,
+                            collectionStatus: personal.Collection(fish.FishParameterId, observed)))
                             showDetail(fish);
                     }
             }
