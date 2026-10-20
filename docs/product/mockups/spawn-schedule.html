@@ -25,13 +25,13 @@ input[type=checkbox]{accent-color:var(--blue)}
 .title{padding:7px 12px;background:#29313d;font-weight:bold}
 .nav{padding:7px 10px;border-bottom:1px solid var(--line);display:flex;gap:18px;white-space:nowrap;font-size:12px;color:var(--muted);overflow-x:auto;flex-shrink:0}
 .nav b{color:#f2cf95}
-.toolbar{padding:12px;display:grid;grid-template-columns:224px 172px minmax(140px,1fr) auto 70px;gap:10px;align-items:center;border-bottom:1px solid var(--line)}
-.viewtabs{display:grid;grid-template-columns:1fr 1fr;height:40px;background:#12171f;border:1px solid #526172;border-radius:5px;overflow:hidden}
-.viewtabs button{height:38px;border:0;border-radius:0;border-bottom:3px solid transparent;background:transparent;padding:0 12px;font-weight:bold;font-size:15px;display:flex;justify-content:center;align-items:center;gap:7px}
-.viewtabs button+button{border-left:1px solid #526172}
-.viewtabs button:hover{background:#2f3c4d}
-.viewtabs button.active{background:#354f69;border-bottom-color:#8dcaff;color:#fff}
-.tab-icon{font-size:18px;line-height:1}
+.toolbar{padding:12px;display:grid;grid-template-columns:268px 172px minmax(140px,1fr) auto 70px;gap:10px;align-items:center;border-bottom:1px solid var(--line)}
+.viewtabs{display:grid;grid-template-columns:1fr 1fr;height:40px;background:#263a50;border:1px solid #89acd0;border-radius:5px;overflow:hidden;box-shadow:0 0 0 2px #79b8ed14}
+.viewtabs button{height:38px;border:0;border-radius:0;border-bottom:3px solid transparent;background:#263a50;padding:0 15px;font-weight:800;font-size:16px;color:#dce9f6;letter-spacing:0.025em;display:flex;justify-content:center;align-items:center;gap:9px}
+.viewtabs button+button{border-left:1px solid #7895b3}
+.viewtabs button:hover{background:#3a5773}
+.viewtabs button.active{background:#32658e;border-bottom-color:#b8e1ff;color:#fff}
+.tab-icon{display:inline-flex;align-items:center;color:#a7c8e8;line-height:1}.tab-icon svg{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round}.viewtabs button.active .tab-icon{color:#fff}
 .toolbar select,.toolbar input[type=search]{height:32px;width:100%;min-width:0}
 .hide-label{font-size:12px;display:inline-flex;gap:5px;align-items:center;white-space:nowrap}
 .options{position:relative;align-self:center}
@@ -92,7 +92,7 @@ input[type=checkbox]{accent-color:var(--blue)}
 .empty{color:var(--muted);padding:12px}
 dialog{background:var(--surface);color:var(--text);border:1px solid #718096;border-radius:7px;padding:20px;max-width:390px}
 dialog::backdrop{background:#0009}
-@container(max-width:820px){
+@container(max-width:880px){
 .toolbar{grid-template-columns:170px minmax(0,1fr) auto 70px;gap:8px}
 .viewtabs{grid-column:1/3;width:100%}
 .hide-label{grid-column:3;grid-row:1}
@@ -133,8 +133,8 @@ dialog::backdrop{background:#0009}
 <nav class="nav"><span>어종 목록</span><span>수집 현황</span><b>출현 일정표</b><span>즐겨찾기 관리</span><span>낚시 기록</span><span>설정</span></nav>
 <div class="toolbar">
 <div class="viewtabs" role="tablist" aria-label="일정 보기">
-<button id="timelineMode" class="active" role="tab" aria-controls="timeline" aria-selected="true" title="시간대별 출현 일정"><span class="tab-icon" aria-hidden="true">▤</span>시간축</button>
-<button id="monthMode" role="tab" aria-controls="calendar" aria-selected="false" title="날짜별 출현 일정"><span class="tab-icon" aria-hidden="true">▦</span>월 달력</button>
+<button id="timelineMode" class="active" role="tab" aria-controls="timeline" aria-selected="true" title="시간대별 출현 일정"><span class="tab-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M4 3v17h17M8 7h9M8 12h5M12 17h8"/><path d="M8 5v4M13 10v4M18 15v4"/></svg></span>시간축</button>
+<button id="monthMode" role="tab" aria-controls="calendar" aria-selected="false" title="날짜별 출현 일정"><span class="tab-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M7 3v4M17 3v4M3 10h18M7 14h2M14 14h2M7 18h2M14 18h2"/></svg></span>월 달력</button>
 </div>
 <select id="source" aria-label="표시 대상"><option value="all">현재 필터 어종</option><option value="favorites">즐겨찾기</option></select>
 <input id="search" type="search" placeholder="어종·낚시터 검색…" aria-label="어종·낚시터 검색">
