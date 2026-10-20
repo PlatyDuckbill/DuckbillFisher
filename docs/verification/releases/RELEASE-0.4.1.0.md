@@ -25,4 +25,4 @@
 - 익명 ZIP/체크섬/태그 아이콘 HTTP200·원본 SHA256 일치를2026-10-20T12:16:09Z 확인했다. `.cache/release-remote-check/0.4.1.0/publish-state.json`과 `download-check.json`에 결과를 보관했다.
 - 설치 JSON은 익명 파일 확인 후59e9886a9063066bdf05914e15712201a8cef10a로 커밋·push했다. API15/버전/Changelog/다운로드·아이콘 URL을 후보에 맞췄고 LastUpdate만 이번 배포 요청 무렵2026-10-20T12:14:34Z(1792498474)로 기록했다. 실제 공유 raw URL(쿼리 없음)에서2026-10-20T12:17:43Z HTTP200·버전0.4.1.0/API15·이름/설명/Changelog/설치·업데이트·아이콘 URL/LastUpdate의 로컬 일치를 확인했다. 결과는 `.cache/release-remote-check/0.4.1.0/public-index-check.json`과 `public-pluginmaster.json`에 있다.
 - 별도 선행 작업으로 사용자의 임시101faff를 요청대로dffe297로 amend하고 원격101faff를 조건으로 `--force-with-lease` push했다.0.4.0 설치 JSON의 Changelog/LastUpdate를 고정 후보와 일치시켰으며, 실제 공유 URL에서2026-10-20T11:50:53Z HTTP200/메타데이터 일치를 확인했다.0.4.0 소스 태그64c71c0/Release 자산은 바꾸지 않았다.
-- 실제 저장소 업데이트/친구 PC·다른 캐릭터·모든 테마/배율/폭·5분 경계/절전·저장 장애/상한 검사는 미확인이다.
+- 원격 게시/공유 설치 목록 확인 완료 안내 뒤 사용자에게 추가로 ‘확인 완료’ 응답을 받았다. 이번0.4.1.0의 실제 Dalamud 저장소 업데이트 대표 확인으로 기록한다. 친구 PC·다른 캐릭터·모든 테마/배율/폭·5분 경계/절전·저장 장애/상한 검사는 별도 미확인이다.
