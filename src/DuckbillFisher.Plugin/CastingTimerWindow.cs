@@ -32,6 +32,13 @@ internal sealed class CastingTimerWindow : Window
     public override void Draw()
     {
         var view = tracker.View;
+        var retained = !view.HasSession && view.CurrentTrip is not null && view.TimerRetainedUntil is not null;
+        if (retained && view.TimerRetainedUntil is { } expires)
+        {
+            ImGui.TextColored(new Vector4(.60f, .76f, .84f, 1), UiText.Get(T.TimerRetained,
+                FishRowRenderer.Countdown(expires > tracker.Now ? expires - tracker.Now : TimeSpan.Zero, compact: false)));
+            UiWidgets.Tooltip(UiText.Get(T.TimerRetentionHint));
+        }
         var spot = view.Spot;
         var spotLabel = UiWidgets.SpotLabel(view);
         var buttonSize = ImGui.CalcTextSize(UiText.Get(T.TimerSpotFishButton)).X + ImGui.GetStyle().FramePadding.X * 2;
@@ -45,7 +52,7 @@ internal sealed class CastingTimerWindow : Window
 
         var timed = view.Active ?? view.CurrentRecords.FirstOrDefault();
         var usesFishBait = timed?.BaitKind is FishingBaitKind.Mooch or FishingBaitKind.Swimbait;
-        var bait = usesFishBait ? timed?.BaitItemId : view.Native?.EquippedBait;
+        var bait = usesFishBait || retained ? timed?.BaitItemId : view.Native?.EquippedBait;
         if (bait is { } id && view.Items.TryGetValue(id, out var item))
         {
             UiWidgets.GameIcon(textures, item.IconId, ImGui.GetTextLineHeightWithSpacing(), item.Name);
@@ -54,7 +61,13 @@ internal sealed class CastingTimerWindow : Window
         var baitLabel = bait is > 0 ? FishingTimeText.Item(view, bait) : usesFishBait
             ? UiText.Get(timed?.BaitKind == FishingBaitKind.Swimbait ? T.HistorySwimbaitUnknown : T.HistoryMoochUnknown)
             : UiText.Get(T.ConditionUnknown);
-        ImGui.TextUnformatted(UiText.Get(usesFishBait ? T.TimerCastBait : T.TimerEquippedBait, baitLabel));
+        ImGui.TextUnformatted(UiText.Get(usesFishBait || retained ? T.TimerCastBait : T.TimerEquippedBait, baitLabel));
+        if (timed?.MoochSourceId is not null)
+        {
+            UiWidgets.Icon(FontAwesomeIcon.Link);
+            ImGui.SameLine();
+            ImGui.TextColored(new Vector4(.42f, .80f, .82f, 1), UiText.Get(T.TimerMoochLink, baitLabel));
+        }
         var phase = view.Native?.Phase;
         var label = view.State switch
         {
@@ -65,15 +78,16 @@ internal sealed class CastingTimerWindow : Window
             _ => phase switch { 1 => T.TimerCasting, 12 => T.TimerWaiting, 5 => T.TimerBite, 6 => T.TimerHook,
                 2 => T.TimerReturning, 3 => T.TimerStopping, 4 => T.TimerRodReady, 0 => T.TimerIdle, _ => T.TimerObserving },
         };
+        if (retained) label = T.TimerRecentCast;
         var elapsed = timed is not null && FishingTimeText.DisplaySeconds(timed, view, tracker.Now) is { } seconds
             ? FishingTimeText.Elapsed(TimeSpan.FromSeconds(seconds)) : "—";
         ImGui.TextUnformatted(UiText.Get(T.TimerCastLine, new UiMessage(label), elapsed));
         var et = timed?.StartedUtc is { } utc ? FishingTimeText.Et(utc) : "—";
         ImGui.TextDisabled(UiText.Get(T.TimerCastEt, et));
-        var sessionTime = view.SessionStartedUtc?.ToLocalTime().ToString("HH:mm:ss", UiText.Culture) ?? "—";
-        var sessionElapsed = view.SessionStartedAt is { } sessionStart ? FishingTimeText.Elapsed(tracker.Now - sessionStart) : "—";
-        ImGui.TextUnformatted(UiText.Get(T.TimerSessionLine, sessionTime, sessionElapsed));
-        UiWidgets.Tooltip(UiText.Get(T.TimerStartUnknownHint));
+        var sessionTime = (view.CurrentTrip?.FirstCastUtc ?? view.SessionStartedUtc)?.ToLocalTime().ToString("HH:mm:ss", UiText.Culture) ?? "—";
+        var sessionElapsed = view.CurrentTrip is { } trip ? FishingTimeText.TripDuration(trip, view, tracker.Now) : "—";
+        ImGui.TextUnformatted(UiText.Get(retained ? T.TimerCompletedSessionLine : T.TimerSessionLine, sessionTime, sessionElapsed));
+        UiWidgets.Tooltip(UiText.Get(T.TripDurationHint));
         ImGui.Separator();
         ImGui.TextUnformatted(UiText.Get(T.TimerCurrentHistory, view.CurrentTrip?.Casts ?? 0));
         history.Draw(view, view.CurrentRecords, "TimerHistory");

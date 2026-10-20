@@ -26,3 +26,4 @@
 - 최종 추출 DLL의 추가 인게임 확인은 생략했다. 관련 [UI 재현 순서](../catalog/UI.md#0400-수집-현황과-메인-진입-2026-10-20), 실제 저장소 업데이트/친구 PC, 모든 지역·어종·테마·한영/폭/배율·다른 캐릭터·저장 장애·색상 가독성/메모리 비용 측정은 남은 범위다.
 
 - 2026-10-20T11:43:54Z ZIP·체크섬·태그 아이콘의 익명 다운로드 HTTP200과 원본 SHA256 일치를 확인했다. 사용자가 임시 커밋101faff에서 설치 목록의 버전/링크를0.4.0.0으로 바꿔 게시했고 같은 시각 실제 공유 raw URL의 일치를 확인했다. 이후 요청대로 임시 커밋을 amend해 Changelog/LastUpdate를 검사한 후보 설치 JSON 값으로 보완한다. 새 소스 패치나 기존 Release 자산 재게시가 아니다. 결과 `.cache/release-remote-check/0.4.0.0/`.
+- 요청한 amend는dffe2972258cb5f22e79ab6072e16ac1d8afb184이며 원격101faff를 lease 조건으로 강제 push했다.2026-10-20T11:50:53Z 쿼리 없는 실제 공유 raw URL이 보완된 Changelog/LastUpdate까지 로컬과 일치함을 확인했다. 결과 `public-index-check.json`.0.4 소스 태그/Release 자산은 그대로다.

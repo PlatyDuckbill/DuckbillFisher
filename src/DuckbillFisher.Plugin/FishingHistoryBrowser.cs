@@ -24,8 +24,11 @@ internal sealed class FishingHistoryBrowser(FishingTracker tracker, FishCatalog 
             ImGui.EndDisabled();
             UiWidgets.Tooltip(UiText.Get(T.TripActiveProtected));
             Diagnostics(developerMode);
-            ImGui.TextUnformatted(Location(view, selected));
-            ImGui.TextDisabled(Summary(selected));
+            ImGui.TextWrapped(Location(view, selected));
+            ImGui.TextColored(new Vector4(.58f, .82f, .92f, 1), UiText.Get(T.TripTotalDuration,
+                FishingTimeText.TripDuration(selected, view, tracker.Now)));
+            UiWidgets.Tooltip(UiText.Get(T.TripDurationHint));
+            ImGui.TextWrapped(Summary(selected));
             if (selected.Casts > selected.Retained)
                 ImGui.TextWrapped(UiText.Get(T.TripTruncated, selected.Retained, selected.Casts));
             rows.Draw(view, view.SelectedRecords, "SelectedTripRows", table: true);
@@ -61,9 +64,11 @@ internal sealed class FishingHistoryBrowser(FishingTracker tracker, FishCatalog 
     }
     private void DrawSummaries(FishingTrackerView view)
     {
-        if (!ImGui.BeginTable("FishingTrips", 5, ImGuiTableFlags.RowBg | ImGuiTableFlags.SizingStretchProp)) return;
+        if (!ImGui.BeginTable("FishingTrips", 6, ImGuiTableFlags.RowBg | ImGuiTableFlags.SizingStretchProp |
+            ImGuiTableFlags.Resizable | ImGuiTableFlags.BordersInnerV)) return;
         ImGui.TableSetupColumn(UiText.Label(T.TripLocationColumn, "TripLocation"), ImGuiTableColumnFlags.WidthStretch, 3);
         ImGui.TableSetupColumn(UiText.Label(T.TripDateColumn, "TripDate"), ImGuiTableColumnFlags.WidthFixed, ImGui.GetFontSize() * 13);
+        ImGui.TableSetupColumn(UiText.Label(T.TripDurationColumn, "TripDuration"), ImGuiTableColumnFlags.WidthFixed, ImGui.GetFontSize() * 8);
         ImGui.TableSetupColumn(UiText.Label(T.TripCastsColumn, "TripCasts"), ImGuiTableColumnFlags.WidthFixed, ImGui.GetFontSize() * 4);
         ImGui.TableSetupColumn(UiText.Label(T.TripCaughtColumn, "TripCaught"), ImGuiTableColumnFlags.WidthFixed, ImGui.GetFontSize() * 4);
         ImGui.TableSetupColumn(UiText.Label(T.TripStatusColumn, "TripStatus"), ImGuiTableColumnFlags.WidthFixed, ImGui.GetFontSize() * 6);
@@ -71,19 +76,34 @@ internal sealed class FishingHistoryBrowser(FishingTracker tracker, FishCatalog 
         foreach (var trip in view.Trips)
         {
             ImGui.PushID(trip.Id.ToString("N"));
-            var height = ImGui.GetFrameHeight() + 6;
+            var height = ImGui.GetTextLineHeightWithSpacing() * 2 + 6;
             ImGui.TableNextRow(ImGuiTableRowFlags.None, height);
             ImGui.TableNextColumn();
-            if (ImGui.Selectable(Location(view, trip) + "###Trip", false, ImGuiSelectableFlags.SpanAllColumns,
+            var origin = ImGui.GetCursorPos();
+            if (ImGui.Selectable("###Trip", false, ImGuiSelectableFlags.SpanAllColumns,
                 new Vector2(0, height - ImGui.GetStyle().CellPadding.Y * 2))) tracker.SelectTrip(view.Session, trip.Id);
             if (ImGui.IsItemHovered())
             {
                 ImGui.BeginTooltip(); ImGui.TextUnformatted(Location(view, trip)); ImGui.TextUnformatted(Summary(trip)); ImGui.EndTooltip();
             }
-            ImGui.TableNextColumn(); ImGui.TextUnformatted(Date(trip));
+            var next = ImGui.GetCursorPos();
+            ImGui.SetCursorPos(origin);
+            var spot = trip.SpotId is { } spotId ? catalog.View.Spots.GetValueOrDefault(spotId)?.Name : null;
+            FishingHistoryPanel.Clipped(spot ?? UiText.Get(T.DetailLocationUnknown), Math.Max(1, ImGui.GetContentRegionAvail().X));
+            ImGui.PushStyleColor(ImGuiCol.Text, ImGui.GetStyle().Colors[(int)ImGuiCol.TextDisabled]);
+            FishingHistoryPanel.Clipped(view.TerritoryNames.GetValueOrDefault(trip.TerritoryId, ""), Math.Max(1, ImGui.GetContentRegionAvail().X));
+            ImGui.PopStyleColor();
+            ImGui.SetCursorPos(next);
+            ImGui.TableNextColumn();
+            var date = (trip.FirstCastUtc ?? trip.StartedUtc)?.ToLocalTime();
+            ImGui.TextUnformatted(date?.ToString("yyyy-MM-dd", UiText.Culture) ?? UiText.Get(T.HistoryStartUnknown));
+            ImGui.TextDisabled(date?.ToString("HH:mm:ss", UiText.Culture) ?? "—");
+            ImGui.TableNextColumn(); ImGui.TextUnformatted(FishingTimeText.TripDuration(trip, view, tracker.Now));
+            UiWidgets.Tooltip(UiText.Get(T.TripDurationHint));
             ImGui.TableNextColumn(); ImGui.TextUnformatted(trip.Casts.ToString(UiText.Culture));
-            ImGui.TableNextColumn(); ImGui.TextUnformatted(trip.Caught.ToString(UiText.Culture));
-            ImGui.TableNextColumn(); ImGui.TextUnformatted(UiText.Get(trip.IsActive ? T.TripInProgress : T.TripEnded));
+            ImGui.TableNextColumn(); ImGui.TextColored(new Vector4(.55f, .84f, .66f, 1), trip.Caught.ToString(UiText.Culture));
+            ImGui.TableNextColumn(); ImGui.TextColored(trip.IsActive ? new Vector4(.58f, .78f, .94f, 1) : new Vector4(.7f, .72f, .76f, 1),
+                UiText.Get(trip.IsActive ? T.TripInProgress : T.TripEnded));
             ImGui.PopID();
         }
         ImGui.EndTable();

@@ -205,10 +205,10 @@ internal sealed class CollectionProgressPanel(CollectionProgress progress, FishC
     private static Vector4 ProgressColor(float fraction) => fraction switch
     {
         <= 0 => new(0.40f, 0.44f, 0.48f, 1),
-        < 0.25f => new(0.68f, 0.27f, 0.32f, 1),
-        < 0.50f => new(0.78f, 0.47f, 0.12f, 1),
-        < 0.75f => new(0.24f, 0.46f, 0.79f, 1),
-        < 1 => new(0.59f, 0.38f, 0.76f, 1),
-        _ => new(0.18f, 0.65f, 0.38f, 1),
+        < 0.25f => new(0.29f, 0.40f, 0.53f, 1),
+        < 0.50f => new(0.28f, 0.48f, 0.64f, 1),
+        < 0.75f => new(0.26f, 0.55f, 0.66f, 1),
+        < 1 => new(0.23f, 0.61f, 0.58f, 1),
+        _ => new(0.25f, 0.66f, 0.43f, 1),
     };
 }

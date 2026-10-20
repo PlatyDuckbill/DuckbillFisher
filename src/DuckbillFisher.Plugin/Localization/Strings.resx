@@ -744,4 +744,21 @@ Manual settings included: {3:N0}</value></data>
   <data name="CollectionProgressRules" xml:space="preserve"><value>Collection rules</value></data>
   <data name="CollectionProgressAreaClickHint" xml:space="preserve"><value>Click an expansion, region, or sea-area bar to view fish.</value></data>
   <data name="CollectionProgressOceanArea" xml:space="preserve"><value>Sea area</value></data>
+  <data name="TripResultElapsedColumn" xml:space="preserve"><value>Result elapsed</value></data>
+  <data name="HistoryMoochLinkedBait" xml:space="preserve"><value>↳ {0} · mooch from previous catch</value></data>
+  <data name="HistoryMoochBait" xml:space="preserve"><value>{0} · mooch</value></data>
+  <data name="HistorySwimbaitBait" xml:space="preserve"><value>{0} · stored live bait</value></data>
+  <data name="TimerMoochLink" xml:space="preserve"><value>Previous catch → {0} used for this mooch cast</value></data>
+  <data name="TripTotalDuration" xml:space="preserve"><value>Total fishing time · {0}</value></data>
+  <data name="TripDurationHint" xml:space="preserve"><value>Time from the first recorded cast until fishing ends, including waits between casts. Active trips use a monotonic clock. Older records use stored start/end times when available.</value></data>
+  <data name="TripDurationColumn" xml:space="preserve"><value>Total time</value></data>
+  <data name="TimerRetained" xml:space="preserve"><value>Recent fishing · clears in {0}</value></data>
+  <data name="TimerRetentionHint" xml:space="preserve"><value>Recent timer contents stay for five minutes after stopping, including across area changes. Starting a new trip replaces them; logout, character change, and reload clear this preview.</value></data>
+  <data name="TimerRecentCast" xml:space="preserve"><value>Recent cast</value></data>
+  <data name="TimerCompletedSessionLine" xml:space="preserve"><value>Recent trip {0} · total {1}</value></data>
+  <data name="ChangelogHistoryLocation" xml:space="preserve"><value>When a new fishing spot is discovered through a verified catch, its location now updates that catch record and the trip summary.</value></data>
+  <data name="ChangelogHistoryPresentation" xml:space="preserve"><value>History columns can be resized. Trip lists and details show total fishing time, with fish/bait icons, clearer outcomes, and separate result timing in details.</value></data>
+  <data name="ChangelogMoochLink" xml:space="preserve"><value>Confirmed mooch casts show a connection to the preceding successful catch in the timer and records.</value></data>
+  <data name="ChangelogTimerRetention" xml:space="preserve"><value>Recent timer contents stay visible for five minutes after stopping, even across area changes. A new trip replaces them.</value></data>
+  <data name="ChangelogProgressPalette" xml:space="preserve"><value>Refined collection-progress colors into a consistent blue, teal, and green palette.</value></data>
 </root>

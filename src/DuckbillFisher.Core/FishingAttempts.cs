@@ -8,13 +8,17 @@ public sealed record FishingAttempt(Guid Id, Guid SessionId, DateTimeOffset? Ses
     uint TerritoryId, uint? SpotId, uint? BaitItemId, FishingBaitKind BaitKind, DateTimeOffset? StartedUtc,
     FishingOutcome Outcome = FishingOutcome.Pending, FishingEndReason EndReason = FishingEndReason.None,
     DateTimeOffset? EndedUtc = null, double? DurationSeconds = null, uint? FishItemId = null, int? Quantity = null,
-    double? BiteSeconds = null, double? HookSeconds = null);
+    double? BiteSeconds = null, double? HookSeconds = null)
+{
+    public Guid? MoochSourceId { get; init; }
+}
 
 public sealed record FishingTripSummary(Guid Id, long Sequence, uint TerritoryId, uint? SpotId,
     DateTimeOffset? StartedUtc, DateTimeOffset? EndedUtc, bool IsActive, int Casts, int Retained,
     int Caught, int Failed, int Cancelled, int Interrupted, int Unknown, FishingEndReason EndReason)
 {
     public DateTimeOffset? FirstCastUtc { get; init; }
+    public double? DurationSeconds { get; init; }
 }
 
 /// <summary>Single-writer cast/session history. Inputs are copied observations and caller-controlled times.</summary>
@@ -30,6 +34,7 @@ public sealed class FishingAttempts
     public FishingAttempt? Active { get; private set; }
     public TimeSpan? CastStartedAt { get; private set; }
     public TimeSpan? SessionStartedAt { get; private set; }
+    public TimeSpan? TripStartedAt { get; private set; }
     public DateTimeOffset? SessionStartedUtc => sessionUtc;
     public bool HasSession => sessionId is not null;
     public FishingTripSummary? Trip { get; private set; }
@@ -54,6 +59,7 @@ public sealed class FishingAttempts
             SessionStartedAt = sessionStartKnown ? now : null;
             Trip = new(sessionId.Value, 0, territory, spot, sessionUtc, null, true, 0, 0, 0, 0, 0, 0, 0, FishingEndReason.None);
             Trip = Trip with { FirstCastUtc = castStartKnown ? utc : null };
+            TripStartedAt = castStartKnown ? now : null;
         }
         CastStartedAt = castStartKnown ? now : null;
         Active = new(Guid.NewGuid(), sessionId.Value, sessionUtc, territory, spot, bait, baitKind,
@@ -66,9 +72,19 @@ public sealed class FishingAttempts
 
     public void SetSpot(uint spot)
     {
-        if (Active is null || Active.SpotId is not null || spot == 0) return;
-        if (Trip is not null && Trip.SpotId is null) Trip = Trip with { SpotId = spot };
-        ReplaceActive(Active with { SpotId = spot });
+        if (Active is { } active) SetSpot(active.Id, active.TerritoryId, spot);
+    }
+
+    public bool SetSpot(Guid attemptId, uint territory, uint spot)
+    {
+        if (spot == 0 || Trip is null || Trip.TerritoryId != territory) return false;
+        var index = records.FindIndex(row => row.Id == attemptId && row.SessionId == Trip.Id && row.TerritoryId == territory);
+        if (index < 0 || records[index].SpotId is not null) return false;
+        records[index] = records[index] with { SpotId = spot };
+        if (Active?.Id == attemptId) Active = records[index];
+        if (Trip.SpotId is null) Trip = Trip with { SpotId = spot };
+        Publish();
+        return true;
     }
 
     public bool SetCastBait(uint item, FishingBaitKind kind)
@@ -76,7 +92,10 @@ public sealed class FishingAttempts
         if (Active is not { BiteSeconds: null, HookSeconds: null } || item == 0 ||
             kind is not (FishingBaitKind.Mooch or FishingBaitKind.Swimbait) ||
             Active.BaitKind is FishingBaitKind.Mooch or FishingBaitKind.Swimbait && Active.BaitItemId is not null) return false;
-        ReplaceActive(Active with { BaitItemId = item, BaitKind = kind });
+        var source = kind == FishingBaitKind.Mooch && records.Count > 1 &&
+            records[1] is { Outcome: FishingOutcome.Caught } previous && previous.SessionId == Active.SessionId && previous.FishItemId == item
+            ? (Guid?)previous.Id : null;
+        ReplaceActive(Active with { BaitItemId = item, BaitKind = kind, MoochSourceId = source });
         return true;
     }
 
@@ -117,7 +136,8 @@ public sealed class FishingAttempts
     {
         End(now, utc, FishingOutcome.Interrupted, reason);
         if (sessionId is null) return;
-        if (Trip is not null) Trip = Trip with { IsActive = false, EndedUtc = utc, EndReason = reason };
+        if (Trip is not null) Trip = Trip with { IsActive = false, EndedUtc = utc, EndReason = reason,
+            DurationSeconds = TripStartedAt is { } start ? Math.Max(0, (now - start).TotalSeconds) : null };
         sessionId = null;
         sessionUtc = null;
         SessionStartedAt = null;

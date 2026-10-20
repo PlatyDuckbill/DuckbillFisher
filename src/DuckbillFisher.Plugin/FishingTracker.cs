@@ -30,6 +30,8 @@ internal sealed record FishingTrackerView(int Revision, int Session, FishingTrac
     public bool IsLastSpot { get; init; }
     public FishingSpotState SpotState { get; init; }
     public bool HistoryWritable { get; init; }
+    public TimeSpan? TripStartedAt { get; init; }
+    public TimeSpan? TimerRetainedUntil { get; init; }
 }
 
 /// <summary>KR contract-guarded public logs and inspected native phases. Collection and notifications remain separate.</summary>
@@ -83,8 +85,12 @@ internal sealed class FishingTracker : IDisposable
     private FishingSpotState pendingSpotState;
     private TimeSpan pendingSpotAt;
     private TimeSpan? lastLocalCatchAt;
+    private Guid? lastLocalCatchId;
+    internal static readonly TimeSpan TimerRetention = TimeSpan.FromMinutes(5);
+    private TimeSpan? timerRetainedUntil;
+    private FishingSpotState retainedSpotState;
     private LogFact? pendingDiscovery;
-    private int discoveryMessages, appliedDiscoveries;
+    private int discoveryMessages, appliedDiscoveries, recordedSpotUpdates;
     private uint lastDiscoveryPlace;
     private FishingLogActor lastDiscoveryActor;
     private LogFact? pendingMooch;
@@ -182,6 +188,7 @@ internal sealed class FishingTracker : IDisposable
                 session = personal.Session;
                 character = personal.HasCharacter ? personal.CharacterId : 0;
                 history = new();
+                timerRetainedUntil = null;
                 savedRevision = -1;
                 loaded = writable = false;
                 native = null;
@@ -193,7 +200,7 @@ internal sealed class FishingTracker : IDisposable
                 requestedDetail = null; requestedDeletes.Clear(); deletedTrips.Clear();
                 casts = catches = retrieves = ignored = 0;
                 moochLogs = moochApplied = failures = 0; lastFailureLog = 0;
-                discoveryMessages = appliedDiscoveries = 0; lastDiscoveryPlace = 0; lastDiscoveryActor = default;
+                discoveryMessages = appliedDiscoveries = recordedSpotUpdates = 0; lastDiscoveryPlace = 0; lastDiscoveryActor = default;
                 ResetLocation();
                 state = character == 0 ? FishingTrackerState.Waiting : FishingTrackerState.Loading;
                 if (character != 0) storage.Load(character);
@@ -266,10 +273,12 @@ internal sealed class FishingTracker : IDisposable
                 }
             }
             lastTick = now;
+            var retentionChanged = timerRetainedUntil is { } expires && now >= expires;
+            if (retentionChanged) timerRetainedUntil = null;
             archiveChanged |= UpdateArchive();
             var selectionChanged = UpdateSelection();
             var observed = collection.View;
-            var browsingSpot = BrowsingSpot;
+            var browsingSpot = DisplayedSpot;
             var filtersChanged = indexed || filterSpot != browsingSpot?.Id || filterPreferences != personal.CatalogRevision || filterCollection != observed.Revision;
             if (filtersChanged)
             {
@@ -283,7 +292,7 @@ internal sealed class FishingTracker : IDisposable
             Persist();
             if (before != history.Revision || previousNative != native || previousState != state ||
                 previousSpot != spot || previousSpotState != spotState || itemsChanged || view.Records != history.Records ||
-                view.Storage != storage.State(character) || view.Ignored != ignored || filtersChanged || archiveChanged || selectionChanged) Publish();
+                view.Storage != storage.State(character) || view.Ignored != ignored || filtersChanged || archiveChanged || selectionChanged || retentionChanged) Publish();
         }
     }
 
@@ -329,6 +338,7 @@ internal sealed class FishingTracker : IDisposable
             else if (fact.Id == 3512 && history.Active is { HookSeconds: not null } && native?.Phase is 2 or 4 &&
                 history.CastStartedAt is { } catchStart && fact.At >= catchStart)
             {
+                lastLocalCatchId = history.Active.Id;
                 history.End(fact.At, fact.Utc, FishingOutcome.Caught, FishingEndReason.CatchLog, fact.Value, 1);
                 lastLocalCatchAt = fact.At;
                 catches++;
@@ -355,6 +365,10 @@ internal sealed class FishingTracker : IDisposable
 
     private FishingSpotView? BrowsingSpot => spotState is FishingSpotState.Known or FishingSpotState.LastKnown
         ? spot ?? lastConfirmedSpot : null;
+    private bool TimerVisible => history.Trip is { } trip && !deletedTrips.Contains(trip.Id) &&
+        (history.HasSession || timerRetainedUntil is { } expires && clock.Elapsed < expires);
+    private FishingSpotView? DisplayedSpot => !TimerVisible ? null : history.HasSession ? BrowsingSpot :
+        history.Trip?.SpotId is { } id ? catalog.View.Spots.GetValueOrDefault(id) : null;
 
     private void ApplySpotDiscovery(TimeSpan now)
     {
@@ -368,6 +382,7 @@ internal sealed class FishingTracker : IDisposable
             fact.Value == FishingLogContracts.UnknownSpotPlaceName) return;
         spot = lastConfirmedSpot = candidates[0];
         spotState = FishingSpotState.Known;
+        if (lastLocalCatchId is { } attempt && history.SetSpot(attempt, territory, spot.Id)) recordedSpotUpdates++;
         appliedDiscoveries++;
     }
 
@@ -411,6 +426,8 @@ internal sealed class FishingTracker : IDisposable
             lastConfirmedSpot = spot;
             pendingDiscovery = null;
             lastLocalCatchAt = null;
+            lastLocalCatchId = null;
+            timerRetainedUntil = null;
             var kind = CastBaitKind(current);
             var bait = CastBaitItem(current, kind);
             if (kind == FishingBaitKind.Swimbait) pendingMooch = null;
@@ -426,7 +443,7 @@ internal sealed class FishingTracker : IDisposable
         if (phase == 6) history.Hook(now);
         if (phase == 0)
         {
-            history.EndSession(now, utc, FishingEndReason.RodFolded);
+            EndSession(now, utc, FishingEndReason.RodFolded);
             seenIdle = true;
             spot = null;
             if (lastConfirmedSpot is not null) spotState = FishingSpotState.LastKnown;
@@ -444,17 +461,26 @@ internal sealed class FishingTracker : IDisposable
 
     private void Interrupt(TimeSpan now, DateTimeOffset utc, FishingEndReason reason)
     {
-        history.EndSession(now, utc, reason);
+        EndSession(now, utc, reason);
         Persist();
         pending.Clear();
         pendingMooch = null;
+    }
+    private void EndSession(TimeSpan now, DateTimeOffset utc, FishingEndReason reason)
+    {
+        var wasActive = history.HasSession;
+        history.EndSession(now, utc, reason);
+        if (!wasActive) return;
+        timerRetainedUntil = now + TimerRetention;
+        retainedSpotState = spotState;
     }
     private void ResetLocation()
     {
         previousPhase = null; seenIdle = false; readyAt = null; spot = pendingSpot = lastConfirmedSpot = null;
         spotState = pendingSpotState = FishingSpotState.NotObserved;
-        pendingSpotAt = TimeSpan.Zero; pendingDiscovery = null; lastLocalCatchAt = null;
-        pendingMooch = null; territory = 0; pending.Clear(); allSpotFish = remainingSpotFish = []; filterSpot = null;
+        pendingSpotAt = TimeSpan.Zero; pendingDiscovery = null; lastLocalCatchAt = null; lastLocalCatchId = null;
+        pendingMooch = null; territory = 0; pending.Clear();
+        if (!TimerVisible) { allSpotFish = remainingSpotFish = []; filterSpot = null; }
     }
 
     private bool UpdateArchive()
@@ -487,6 +513,7 @@ internal sealed class FishingTracker : IDisposable
             var ids = request.Trips.Where(id => trips.Any(t => t.Id == id && !t.IsActive) &&
                 !(history.HasSession && history.Trip?.Id == id)).ToArray();
             foreach (var id in ids) deletedTrips.Add(id);
+            if (history.Trip is { } retained && ids.Contains(retained.Id)) { timerRetainedUntil = null; changed = true; }
             storage.Delete(character, ids);
         }
         if (requestedDetail is { } selection)
@@ -555,23 +582,26 @@ internal sealed class FishingTracker : IDisposable
     }
     private FishingTrackerView Snapshot() => new(revision, session, state, history.Records, history.Active,
         history.CastStartedAt, history.SessionStartedAt, history.SessionStartedUtc, history.HasSession,
-        native, BrowsingSpot, items.ToFrozenDictionary(), character == 0 ? FishingStorageState.Loading : storage.State(character),
+        native, DisplayedSpot, items.ToFrozenDictionary(), character == 0 ? FishingStorageState.Loading : storage.State(character),
         casts, catches, retrieves, ignored, validLogs.Count)
         {
             AllSpotFish = allSpotFish, RemainingSpotFish = remainingSpotFish, Trips = trips,
-            CurrentTrip = history.HasSession ? history.Trip : null,
-            CurrentRecords = history.HasSession ? history.Records : Array.Empty<FishingAttempt>(),
+            CurrentTrip = TimerVisible ? history.Trip : null,
+            CurrentRecords = TimerVisible ? history.Records : Array.Empty<FishingAttempt>(),
             SelectedTrip = selectedSummary, SelectedRecords = selectedRecords,
             DetailLoading = detailLoading, DetailError = detailError, TerritoryNames = territoryNames.ToFrozenDictionary(),
-            IsLastSpot = spotState == FishingSpotState.LastKnown, SpotState = spotState,
+            IsLastSpot = TimerVisible && !history.HasSession || spotState == FishingSpotState.LastKnown,
+            SpotState = !TimerVisible ? FishingSpotState.NotObserved : history.HasSession ? spotState :
+                DisplayedSpot is not null ? FishingSpotState.LastKnown : retainedSpotState,
             HistoryWritable = writable,
+            TripStartedAt = history.TripStartedAt, TimerRetainedUntil = timerRetainedUntil,
         };
     private void Publish() { revision++; view = Snapshot(); }
 
     public string CreateReport()
     {
         lock (gate) return string.Create(CultureInfo.InvariantCulture,
-            $"DuckbillFisher MVP-02/timer/v4\nPlugin={typeof(Plugin).Assembly.GetName().Version}; Session={session}; State={state}; Read={native?.Availability}; Phase={native?.Phase}\nTrips={trips.Count}; CurrentRecords={view.CurrentRecords.Count}; Active={history.Active is not null}; Casts={casts}; Catches={catches}; Retrieves={retrieves}; Ignored={ignored}; Contracts={validLogs.Count}/{FishingLogContracts.Count}\nSpot={spot?.Id}; PendingSpot={pendingSpot?.Id}; Equipped={native?.EquippedBait}; Storage={view.Storage}; PersistEnabled={writable}\nTimerEnd=HookObservation; TripLimit={FishingAttempts.TripCapacity}; CastLimit={FishingAttempts.Capacity}\nMoochLogs={moochLogs}; MoochApplied={moochApplied}; Failures={failures}; LastFailureLog={lastFailureLog}\nActualMoochBait=LocalLog1121AndCastFlags; UnvalidatedResults=Unknown; OutcomeDoesNotSetCollection=True\nSpotState={spotState}; DiscoveryMessages={discoveryMessages}; AppliedDiscoveries={appliedDiscoveries}; LastDiscoveryPlace={lastDiscoveryPlace}; LastDiscoveryActor={lastDiscoveryActor}");
+            $"DuckbillFisher MVP-02/timer/v5\nPlugin={typeof(Plugin).Assembly.GetName().Version}; Session={session}; State={state}; Read={native?.Availability}; Phase={native?.Phase}\nTrips={trips.Count}; CurrentRecords={view.CurrentRecords.Count}; Active={history.Active is not null}; Casts={casts}; Catches={catches}; Retrieves={retrieves}; Ignored={ignored}; Contracts={validLogs.Count}/{FishingLogContracts.Count}\nSpot={spot?.Id}; PendingSpot={pendingSpot?.Id}; Equipped={native?.EquippedBait}; Storage={view.Storage}; PersistEnabled={writable}\nTimerEnd=HookObservation; TripLimit={FishingAttempts.TripCapacity}; CastLimit={FishingAttempts.Capacity}\nMoochLogs={moochLogs}; MoochApplied={moochApplied}; Failures={failures}; LastFailureLog={lastFailureLog}\nActualMoochBait=LocalLog1121AndCastFlags; UnvalidatedResults=Unknown; OutcomeDoesNotSetCollection=True\nSpotState={spotState}; DiscoveryMessages={discoveryMessages}; AppliedDiscoveries={appliedDiscoveries}; LastDiscoveryPlace={lastDiscoveryPlace}; LastDiscoveryActor={lastDiscoveryActor}; RecordedSpotUpdates={recordedSpotUpdates}\nTimerRetentionSeconds=300; RetainedUntilSeconds={timerRetainedUntil?.TotalSeconds}; TripDuration=FirstObservedCastToEndMonotonic; MoochLink=VerifiedBaitAndPreviousCatch");
     }
 
     public void Dispose()

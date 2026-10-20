@@ -15,7 +15,7 @@
 | 수집 관찰 | FishCollectionObserver, NativeFishCollectionReader | 도감 전체 대조와 검증된 등록 로그, 수동 상태와 분리 |
 | 수집 현황 | CollectionProgress, CollectionProgressPanel, CollectionProgressFishWindow | Framework 집계·선택한 확장팩/지역/먼바다 배열만 준비, 행·수집 revision·수동 상태·세션 변경 시 재계산. 목록1개 재사용·보이는 행만 렌더링·범위 교체/닫기 때 캐시 해제. Draw는 snapshot 표시 |
 | 시전 관찰 | FishingTracker, NativeFishingActivityReader, FishingLogContracts | 본인 로그·시전 단계·시간 상관관계, 미검증 결과 Unknown |
-| 기록 저장 | FishingHistoryStore, FishingHistoryBrowser | 묶음 파일·원자 교체·요약/상세 지연 읽기·삭제/재시도 |
+| 기록 저장 | FishingHistoryStore, FishingHistoryBrowser | 묶음 파일·원자 교체·요약/상세 지연 읽기·삭제/재시도. schema2 선택 필드로 단조 총 시간/검증된 생미끼 연결 ID 저장 |
 | 미끼 준비/찾기 | BaitPreparation, BaitStockObserver, BaitFinder, NativeBaitUiReader, NativeBaitPageReader | 첫 미끼/공개 소지품 조회와 네이티브 UI 읽기 분리 |
 | 공통 표시 | FishRowRenderer, FishDetailPanel, FishingConditionPanel, UiWidgets | 표시·선택 전달, 게임 조회/예측을 가져오지 않음 |
 | UI 배율 | UiScale, MainWindow, FishPreferences | WindowSystem 그리기에만 글자/스타일 배율 적용 후 finally로 원복. 게임 미끼 UI overlay는 범위 밖 |

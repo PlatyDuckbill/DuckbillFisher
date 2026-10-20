@@ -443,7 +443,7 @@ internal sealed class FishingHistoryStore(string configDirectory, IPluginLog log
     private static bool Valid(FishingTripSummary? s) => s is not null && s.Id != Guid.Empty && s.Sequence > 0 &&
         s.TerritoryId > 0 && s.Retained is >= 0 and <= FishingAttempts.Capacity && s.Casts >= s.Retained &&
         s.Caught >= 0 && s.Failed >= 0 && s.Cancelled >= 0 && s.Interrupted >= 0 && s.Unknown >= 0 &&
-        (long)s.Caught + s.Failed + s.Cancelled + s.Interrupted + s.Unknown <= s.Casts && Enum.IsDefined(s.EndReason);
+        (long)s.Caught + s.Failed + s.Cancelled + s.Interrupted + s.Unknown <= s.Casts && Enum.IsDefined(s.EndReason) && Duration(s.DurationSeconds);
     private static bool ValidCounts(FishingTripSummary summary, FishingAttempt[] records)
     {
         var pending = records.Count(r => r.Outcome == FishingOutcome.Pending);
@@ -460,7 +460,8 @@ internal sealed class FishingHistoryStore(string configDirectory, IPluginLog log
         Enum.IsDefined(row.EndReason) && Enum.IsDefined(row.BaitKind) &&
         Duration(row.DurationSeconds) && Duration(row.BiteSeconds) && Duration(row.HookSeconds) &&
         (row.Quantity is null or > 0) && (row.BaitItemId is null or > 0) && (row.SpotId is null or > 0) &&
-        (row.FishItemId is null or > 0) && (row.Outcome != FishingOutcome.Caught || row.FishItemId is > 0 && row.Quantity is > 0);
+        (row.FishItemId is null or > 0) && (row.MoochSourceId is null || row.MoochSourceId != Guid.Empty && row.MoochSourceId != row.Id && row.BaitKind == FishingBaitKind.Mooch) &&
+        (row.Outcome != FishingOutcome.Caught || row.FishItemId is > 0 && row.Quantity is > 0);
     private static bool Duration(double? value) => value is null || double.IsFinite(value.Value) && value >= 0;
     private static bool FileError(Exception e) => e is IOException or UnauthorizedAccessException or JsonException or
         NotSupportedException or KeyNotFoundException or InvalidOperationException or FormatException or OverflowException or System.Security.SecurityException;

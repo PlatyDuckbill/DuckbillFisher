@@ -744,4 +744,21 @@
   <data name="CollectionProgressRules" xml:space="preserve"><value>수집 규칙</value></data>
   <data name="CollectionProgressAreaClickHint" xml:space="preserve"><value>확장팩·지역·해역별 막대를 눌러 어종 보기</value></data>
   <data name="CollectionProgressOceanArea" xml:space="preserve"><value>해역</value></data>
+  <data name="TripResultElapsedColumn" xml:space="preserve"><value>결과 경과</value></data>
+  <data name="HistoryMoochLinkedBait" xml:space="preserve"><value>↳ {0} · 직전 어획에서 생미끼</value></data>
+  <data name="HistoryMoochBait" xml:space="preserve"><value>{0} · 생미끼</value></data>
+  <data name="HistorySwimbaitBait" xml:space="preserve"><value>{0} · 보관 생미끼</value></data>
+  <data name="TimerMoochLink" xml:space="preserve"><value>직전 어획 → {0} 생미끼 시전으로 연결</value></data>
+  <data name="TripTotalDuration" xml:space="preserve"><value>총 낚시 시간 · {0}</value></data>
+  <data name="TripDurationHint" xml:space="preserve"><value>첫 기록 시전부터 낚시 종료까지의 시간으로 시전 사이 대기를 포함합니다. 진행 중에는 단조 시계를 사용하고, 이전 기록은 시작·종료 시각이 있을 때 해당 차이를 표시합니다.</value></data>
+  <data name="TripDurationColumn" xml:space="preserve"><value>총 낚시 시간</value></data>
+  <data name="TimerRetained" xml:space="preserve"><value>최근 낚시 · {0} 후 비움</value></data>
+  <data name="TimerRetentionHint" xml:space="preserve"><value>낚시를 중단한 뒤 지역을 이동해도 타이머 내용을 5분간 유지합니다. 새 낚시를 시작하면 교체하고, 로그아웃·캐릭터 전환·재로드 시 이 임시 표시는 비웁니다.</value></data>
+  <data name="TimerRecentCast" xml:space="preserve"><value>최근 시전</value></data>
+  <data name="TimerCompletedSessionLine" xml:space="preserve"><value>최근 낚시 {0} · 총 {1}</value></data>
+  <data name="ChangelogHistoryLocation" xml:space="preserve"><value>미지의 낚시터를 검증된 본인 어획과 함께 발견하면 해당 어획 기록과 낚시 묶음의 위치도 갱신합니다.</value></data>
+  <data name="ChangelogHistoryPresentation" xml:space="preserve"><value>기록의 열 너비를 조절할 수 있습니다. 목록·상세의 총 낚시 시간, 미끼·어종 아이콘과 결과 구분을 보강하고 상세에 결과 수신까지의 경과를 나눠 표시합니다.</value></data>
+  <data name="ChangelogMoochLink" xml:space="preserve"><value>사용 미끼와 직전 성공 어획이 일치하는 생미끼 시전은 타이머와 기록에서 연결 표시로 구분합니다.</value></data>
+  <data name="ChangelogTimerRetention" xml:space="preserve"><value>낚시를 중단한 뒤 지역을 이동해도 타이머 내용을 5분간 유지합니다. 새 낚시를 시작하면 새 내용으로 교체합니다.</value></data>
+  <data name="ChangelogProgressPalette" xml:space="preserve"><value>수집 현황 그래프 색상을 청색·청록·녹색 계열로 통일해 톤을 정돈했습니다.</value></data>
 </root>
