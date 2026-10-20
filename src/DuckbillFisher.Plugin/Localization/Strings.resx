@@ -699,7 +699,7 @@ Main inventory only. An unknown quantity is not zero.</value></data>
   <data name="ChangelogReleaseTimeUnknown" xml:space="preserve"><value>Release time not recorded</value></data>
   <data name="TabCollectionProgress" xml:space="preserve"><value>Collection progress</value></data>
   <data name="CollectionProgressWaiting" xml:space="preserve"><value>Preparing collection progress for the current character.</value></data>
-  <data name="CollectionProgressHint" xml:space="preserve"><value>All fish in the fishing log, independent of catalog filters. Expand an expansion to see its regions. Fish found in multiple regions count once in each region; expansion and overall totals count each fish once. Manual collection settings take priority. Unknown does not mean uncaught.</value></data>
+  <data name="CollectionProgressHint" xml:space="preserve"><value>All fish in the fishing log, independent of catalog filters. Fish found in multiple regions count once in each region; expansion and overall totals count each fish once. Manual collection settings take priority. Unknown does not mean uncaught.</value></data>
   <data name="CollectionProgressOverall" xml:space="preserve"><value>Fishing log total: {0:N0} / {1:N0} caught · {2:N0} unknown</value></data>
   <data name="CollectionProgressRegular" xml:space="preserve"><value>Regular fishing</value></data>
   <data name="CollectionProgressAll" xml:space="preserve"><value>All fish</value></data>
@@ -720,7 +720,7 @@ Uncaught: {1:N0}
 Unknown: {2:N0}
 Manual settings included: {3:N0}</value></data>
   <data name="CollectionProgressUnknownCount" xml:space="preserve"><value>{0:N0} unknown</value></data>
-  <data name="ChangelogCollectionProgress" xml:space="preserve"><value>Added Collection progress with a large regular-fishing summary, responsive progress bars by expansion and region, and a separate ocean section. Switch between all/big/legendary fish and click an area bar to open a persistent fish list with a collection filter.</value></data>
+  <data name="ChangelogCollectionProgress" xml:space="preserve"><value>Open Collection progress in the main view to see a large regular-fishing summary and ocean-fishing progress by sea area.</value></data>
   <data name="ChangelogCompactToggle" xml:space="preserve"><value>The compact-list button in the main view now toggles the list open and closed.</value></data>
   <data name="ChangelogFirstOpen" xml:space="preserve"><value>Unread release notes appear when you first open the main view after an update.</value></data>
   <data name="CollectionProgressScopeName" xml:space="preserve"><value>{0}</value></data>
@@ -733,4 +733,15 @@ Manual settings included: {3:N0}</value></data>
   <data name="CollectionProgressColorHint" xml:space="preserve"><value>Progress colors: 0% gray; below 25% slate blue; below 50% blue; below 75% teal; below 100% green; complete lime green.</value></data>
   <data name="CollectionProgressClickHint" xml:space="preserve"><value>Click to view fish in this scope.</value></data>
   <data name="ChangelogHousingExpansion" xml:space="preserve"><value>Corrected residential-district expansion grouping, including Shirogane under Stormblood.</value></data>
+  <data name="ChangelogProgressFilters" xml:space="preserve"><value>Expand expansions into regions and switch between all fish, big fish including legendary fish, and legendary fish.</value></data>
+  <data name="ChangelogProgressBars" xml:space="preserve"><value>Progress bars adapt to the view width. Hover for full counts, percentages, and unknown states.</value></data>
+  <data name="ChangelogProgressList" xml:space="preserve"><value>Click an expansion, region, or sea-area bar to open a fish list that stays open until you close it. Clicking another area reuses that list.</value></data>
+  <data name="ChangelogProgressCollection" xml:space="preserve"><value>Switch the list between all fish and hiding caught fish. Manual collection settings take priority, and unknown fish remain visible.</value></data>
+  <data name="ChangelogProgressFeatureTitle" xml:space="preserve"><value>New feature · Collection progress</value></data>
+  <data name="ChangelogProgressFeatureSummary" xml:space="preserve"><value>Your fishing log progress, from the overall picture to each region. Explore the new Collection progress page from the main view.</value></data>
+  <data name="ChangelogNavigationIcons" xml:space="preserve"><value>Added icons to the main navigation tabs.</value></data>
+  <data name="ChangelogOtherImprovements" xml:space="preserve"><value>Other improvements</value></data>
+  <data name="CollectionProgressRules" xml:space="preserve"><value>Collection rules</value></data>
+  <data name="CollectionProgressAreaClickHint" xml:space="preserve"><value>Click an expansion, region, or sea-area bar to view fish.</value></data>
+  <data name="CollectionProgressOceanArea" xml:space="preserve"><value>Sea area</value></data>
 </root>

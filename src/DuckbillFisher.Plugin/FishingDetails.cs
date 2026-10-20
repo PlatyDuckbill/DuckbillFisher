@@ -24,4 +24,7 @@ internal sealed record FishingDetailView(FishingRule Rule, FishingSpotView? Spot
     public UiMessage ConditionWarning => new(Localization.TextKey.ConditionsPartial);
 }
 
-internal sealed record OceanFishingView(string Area, string FishingSpot, string[] RouteNames, byte[] VisitTimes);
+internal sealed record OceanFishingView(string Area, string FishingSpot, string[] RouteNames, byte[] VisitTimes)
+{
+    public uint AreaId { get; init; }
+}

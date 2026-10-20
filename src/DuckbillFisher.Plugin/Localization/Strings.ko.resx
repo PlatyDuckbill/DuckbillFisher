@@ -699,7 +699,7 @@
   <data name="ChangelogReleaseTimeUnknown" xml:space="preserve"><value>배포 시각 미기록</value></data>
   <data name="TabCollectionProgress" xml:space="preserve"><value>수집 현황</value></data>
   <data name="CollectionProgressWaiting" xml:space="preserve"><value>현재 캐릭터의 수집 현황을 준비하고 있습니다.</value></data>
-  <data name="CollectionProgressHint" xml:space="preserve"><value>메인 목록 필터와 관계없이 어류도감 대상 전체를 집계합니다. 확장팩을 펼치면 지역별 현황을 볼 수 있습니다. 여러 지역에 서식하는 어종은 각 지역에 한 번씩, 확장팩별·전체 합계에는 한 번만 셉니다. 수동 수집 상태가 우선하며 미확인은 미수집과 구분합니다.</value></data>
+  <data name="CollectionProgressHint" xml:space="preserve"><value>메인 목록 필터와 관계없이 어류도감 대상 전체를 집계합니다. 여러 지역에 서식하는 어종은 각 지역에 한 번씩, 확장팩별·전체 합계에는 한 번만 셉니다. 수동 수집 상태가 우선하며 미확인은 미수집과 구분합니다.</value></data>
   <data name="CollectionProgressOverall" xml:space="preserve"><value>어류도감 전체: {0:N0} / {1:N0}종 수집 · 미확인 {2:N0}종</value></data>
   <data name="CollectionProgressRegular" xml:space="preserve"><value>일반 낚시</value></data>
   <data name="CollectionProgressAll" xml:space="preserve"><value>전체 어종</value></data>
@@ -720,7 +720,7 @@
 미확인: {2:N0}종
 수동 지정 포함: {3:N0}종</value></data>
   <data name="CollectionProgressUnknownCount" xml:space="preserve"><value>미확인 {0:N0}종</value></data>
-  <data name="ChangelogCollectionProgress" xml:space="preserve"><value>메인 수집 현황에 큰 일반 낚시 합계와 폭에 맞춰 줄어드는 확장팩·지역별 진행 막대를 추가하고 먼바다는 따로 집계합니다. 전체·터주·터주왕 보기를 바꾸거나 지역 막대를 눌러 수집 필터가 있는 어종 목록을 열 수 있습니다. 목록은 직접 닫기 전까지 유지됩니다.</value></data>
+  <data name="ChangelogCollectionProgress" xml:space="preserve"><value>메인에 ‘수집 현황’을 추가했습니다. 큰 일반 낚시 합계로 전체 진행도를 확인하고, 먼바다 낚시는 해역별로 나눠 볼 수 있습니다.</value></data>
   <data name="ChangelogCompactToggle" xml:space="preserve"><value>메인의 간이 목록 버튼을 다시 누르면 목록을 닫습니다.</value></data>
   <data name="ChangelogFirstOpen" xml:space="preserve"><value>업데이트 후 메인을 처음 열 때 미확인 업데이트 내역을 표시합니다.</value></data>
   <data name="CollectionProgressScopeName" xml:space="preserve"><value>{0}</value></data>
@@ -733,4 +733,15 @@
   <data name="CollectionProgressColorHint" xml:space="preserve"><value>진행률 색상: 0% 회색 · 25% 미만 남청색 · 50% 미만 파란색 · 75% 미만 청록색 · 100% 미만 녹색 · 완료 연두색.</value></data>
   <data name="CollectionProgressClickHint" xml:space="preserve"><value>클릭하면 이 범위의 어종을 볼 수 있습니다.</value></data>
   <data name="ChangelogHousingExpansion" xml:space="preserve"><value>시로가네가 홍련에 속하도록 거주구의 확장팩 분류를 보정했습니다.</value></data>
+  <data name="ChangelogProgressFilters" xml:space="preserve"><value>확장팩을 펼쳐 지역별 수집 현황을 비교할 수 있습니다. 전체 어종·터주(왕 포함)·터주왕 보기를 바꿔 원하는 수치에 집중할 수 있습니다.</value></data>
+  <data name="ChangelogProgressBars" xml:space="preserve"><value>진행 막대는 화면 폭에 맞춰 줄어듭니다. 막대에 마우스를 올리면 전체 수집 수·진행률·미확인 상태를 자세히 볼 수 있습니다.</value></data>
+  <data name="ChangelogProgressList" xml:space="preserve"><value>확장팩·지역·해역별 막대를 누르면 해당 어종 목록을 별도 화면으로 엽니다. 목록은 직접 닫기 전까지 유지되며, 다른 지역 막대를 누르면 같은 목록의 대상을 바꿉니다.</value></data>
+  <data name="ChangelogProgressCollection" xml:space="preserve"><value>어종 목록은 전체 보기와 수집한 어종 숨기기를 전환할 수 있습니다. 수동 수집 상태가 우선하며, 미확인 어종은 미수집과 구분하고 숨기지 않습니다.</value></data>
+  <data name="ChangelogProgressFeatureTitle" xml:space="preserve"><value>새 기능 · 수집 현황</value></data>
+  <data name="ChangelogProgressFeatureSummary" xml:space="preserve"><value>어류도감의 전체 진행도부터 지역별 남은 어종까지 한눈에 살펴보세요. 메인의 새 ‘수집 현황’ 페이지에서 시작할 수 있습니다.</value></data>
+  <data name="ChangelogNavigationIcons" xml:space="preserve"><value>어종 목록·수집 현황·즐겨찾기 관리·낚시 기록·설정 탭에 아이콘을 추가했습니다.</value></data>
+  <data name="ChangelogOtherImprovements" xml:space="preserve"><value>기타 개선</value></data>
+  <data name="CollectionProgressRules" xml:space="preserve"><value>수집 규칙</value></data>
+  <data name="CollectionProgressAreaClickHint" xml:space="preserve"><value>확장팩·지역·해역별 막대를 눌러 어종 보기</value></data>
+  <data name="CollectionProgressOceanArea" xml:space="preserve"><value>해역</value></data>
 </root>

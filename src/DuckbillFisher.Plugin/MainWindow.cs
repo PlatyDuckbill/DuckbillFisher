@@ -118,15 +118,15 @@ internal sealed class MainWindow : Window
         {
             if (ImGui.BeginTabBar("DiagnosticsTabs", ImGuiTabBarFlags.FittingPolicyScroll))
             {
-                NavigationTab(MainPage.Catalog, T.TabCatalog, "CatalogTab");
-                NavigationTab(MainPage.Collection, T.TabCollectionProgress, "CollectionProgressTab");
-                NavigationTab(MainPage.Alerts, T.TabAlerts, "SpawnAlertsTab");
-                NavigationTab(MainPage.History, T.TabHistory, "FishingHistoryTab");
-                NavigationTab(MainPage.Settings, T.TabSettings, "SettingsTab", selectSettings);
+                NavigationTab(MainPage.Catalog, T.TabCatalog, "CatalogTab", FontAwesomeIcon.Fish);
+                NavigationTab(MainPage.Collection, T.TabCollectionProgress, "CollectionProgressTab", FontAwesomeIcon.ChartBar);
+                NavigationTab(MainPage.Alerts, T.TabAlerts, "SpawnAlertsTab", FontAwesomeIcon.Star);
+                NavigationTab(MainPage.History, T.TabHistory, "FishingHistoryTab", FontAwesomeIcon.History);
+                NavigationTab(MainPage.Settings, T.TabSettings, "SettingsTab", FontAwesomeIcon.Cog, selectSettings);
                 if (developerMode)
                 {
-                    NavigationTab(MainPage.Guide, T.TabGuide, "GuideTab");
-                    NavigationTab(MainPage.Fishing, T.TabFishing, "FishingTab");
+                    NavigationTab(MainPage.Guide, T.TabGuide, "GuideTab", FontAwesomeIcon.BookOpen);
+                    NavigationTab(MainPage.Fishing, T.TabFishing, "FishingTab", FontAwesomeIcon.Search);
                 }
                 ImGui.EndTabBar();
                 selectSettings = false;
@@ -141,11 +141,30 @@ internal sealed class MainWindow : Window
         UiWidgets.Tooltip(timer);
     }
 
-    private void NavigationTab(MainPage page, T label, string id, bool select = false)
+    private void NavigationTab(MainPage page, T label, string id, FontAwesomeIcon icon, bool select = false)
     {
-        if (!ImGui.BeginTabItem(UiText.Label(label, id), select ? ImGuiTabItemFlags.SetSelected : ImGuiTabItemFlags.None)) return;
-        selectedPage = page;
-        ImGui.EndTabItem();
+        // Reserve icon space using the text font, then draw the glyph with the existing icon font.
+        // The translated label, fixed tab ID, tab selection and native overflow scrolling remain intact.
+        var fontSize = ImGui.GetFontSize();
+        var gap = fontSize + ImGui.GetStyle().ItemInnerSpacing.X;
+        var padding = new string(' ', Math.Max(1, (int)MathF.Ceiling(gap / Math.Max(1, ImGui.CalcTextSize(" ").X))));
+        var active = ImGui.BeginTabItem($"{padding}{UiText.Label(label, id)}", select ? ImGuiTabItemFlags.SetSelected : ImGuiTabItemFlags.None);
+        if (ImGui.IsItemVisible())
+        {
+            var min = ImGui.GetItemRectMin();
+            var max = ImGui.GetItemRectMax();
+            var draw = ImGui.GetWindowDrawList();
+            draw.PushClipRect(min, max, true);
+            draw.AddText(UiBuilder.IconFont, fontSize,
+                min + new Vector2(ImGui.GetStyle().FramePadding.X, Math.Max(0, (max.Y - min.Y - fontSize) / 2)),
+                ImGui.GetColorU32(active ? ImGuiCol.Text : ImGuiCol.TextDisabled), icon.ToIconString());
+            draw.PopClipRect();
+        }
+        if (active)
+        {
+            selectedPage = page;
+            ImGui.EndTabItem();
+        }
     }
 
     private static bool Shortcut(FontAwesomeIcon icon, string label, string id, float width)

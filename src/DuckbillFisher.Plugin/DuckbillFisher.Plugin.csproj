@@ -2,12 +2,12 @@
   <PropertyGroup>
     <AssemblyName>DuckbillFisher</AssemblyName>
     <RootNamespace>DuckbillFisher.Plugin</RootNamespace>
-    <Version>0.3.12.0</Version>
+    <Version>0.4.0.0</Version>
     <NeutralLanguage>en</NeutralLanguage>
     <Author>PlatyDuckbill</Author>
     <Name>DuckbillFisher</Name>
     <Punchline>Let Duckbill guide your next catch.</Punchline>
-    <Changelog>• Added collection progress with a large summary, flexible area bars, progress colors, and persistent fish lists opened from area bars.&#xA;• Corrected residential-district expansion grouping, including Shirogane under Stormblood.&#xA;• The compact-list button in the main view now toggles it open and closed.&#xA;• Unread release notes appear when you first open the main view after an update.</Changelog>
+    <Changelog>New feature: Collection progress&#xA;• Open Collection progress in the main view to see a large regular-fishing summary and ocean-fishing progress by sea area.&#xA;• Expand expansions into regions and switch between all fish, big fish including legendary fish, and legendary fish.&#xA;• Progress bars adapt to the view width. Hover for full counts, percentages, and unknown states.&#xA;• Click an expansion, region, or sea-area bar to open a fish list that stays open until you close it. Clicking another area reuses that list.&#xA;• Switch the list between all fish and hiding caught fish. Manual collection settings take priority, and unknown fish remain visible.&#xA;&#xA;Other improvements&#xA;• The compact-list button in the main view now toggles it open and closed.&#xA;• Added icons to the main navigation tabs.</Changelog>
     <Description>Let Duckbill guide your next catch.&#xA;A fishing companion for FFXIV Korea.&#xA;&#xA;• Browse fish with collection, region and availability filters.&#xA;• Check baits, mooch chains and time/weather conditions.&#xA;• Prepare baits for favorites or filtered fish, with inventory counts.&#xA;• Find owned baits with page markers and in-game UI highlights.&#xA;• Open fishing spots directly on the map.&#xA;• Get local alerts for favorites, with optional sounds.&#xA;• See fish available now or soon in the quick list.&#xA;• Follow casts with a timer and personal fishing records.&#xA;&#xA;Open: /dbfs or /duckbillfisher. /dbfs cl: compact list; /dbfs ct: casting timer.&#xA;UI: English / Korean. Game names follow your client.&#xA;&#xA;Verified on the supported Korean client and Dalamud build only.&#xA;Does not automate fishing.</Description>
     <RepoUrl>https://github.com/PlatyDuckbill/DuckbillFisher</RepoUrl>
     <Tags>fishing;fish;collection;Korea;한국어</Tags>

@@ -25,7 +25,6 @@ internal sealed class CollectionProgressPanel(CollectionProgress progress, FishC
         }
         if (ImGui.BeginChild("CollectionProgressContent"))
         {
-            ImGui.TextWrapped(UiText.Get(T.CollectionProgressHint));
             ImGui.TextUnformatted(UiText.Get(T.CollectionProgressOverall, view.Overall.All.Caught, view.Overall.All.Total,
                 view.Overall.All.Unknown));
             string[] choices = [UiText.Get(T.CollectionProgressAll), UiText.Get(T.CollectionProgressBig), UiText.Get(T.CollectionProgressLegendary)];
@@ -76,33 +75,53 @@ internal sealed class CollectionProgressPanel(CollectionProgress progress, FishC
                 ImGui.EndTable();
             }
             UiWidgets.Heading(T.CollectionProgressOcean);
-            if (view.OceanHasGrades)
+            DrawCount(view.Ocean.All);
+            if (ImGui.BeginTable("OceanAreas", 2, ImGuiTableFlags.SizingStretchProp | ImGuiTableFlags.RowBg | ImGuiTableFlags.BordersInnerH))
             {
-                if (scope == 0 && ImGui.BeginTable("OceanProgress", 3, ImGuiTableFlags.SizingStretchSame))
+                ImGui.TableSetupColumn(UiText.Get(T.CollectionProgressOceanArea), ImGuiTableColumnFlags.WidthStretch, 1.3f);
+                ImGui.TableSetupColumn(UiText.Get(T.CollectionProgressAll), ImGuiTableColumnFlags.WidthStretch, 2);
+                ImGui.TableNextRow(ImGuiTableRowFlags.Headers);
+                ImGui.TableNextColumn(); ImGui.TextWrapped(UiText.Get(T.CollectionProgressOceanArea));
+                ImGui.TableNextColumn(); ImGui.TextWrapped(UiText.Get(T.CollectionProgressAll));
+                foreach (var area in view.OceanAreas)
                 {
-                    ImGui.TableNextColumn(); ImGui.TextWrapped(choices[0]); DrawCount(view.Ocean.All, Ocean(FishGradeVisibility.All));
-                    ImGui.TableNextColumn(); ImGui.TextWrapped(choices[1]); DrawCount(view.Ocean.Big, Ocean(FishGradeVisibility.BigIncludingLegendary));
-                    ImGui.TableNextColumn(); ImGui.TextWrapped(choices[2]); DrawCount(view.Ocean.Legendary, Ocean(FishGradeVisibility.LegendaryOnly));
-                    ImGui.EndTable();
+                    ImGui.PushID(area.Id is { } id ? $"OceanArea.{id}" : "OceanArea.Unknown");
+                    ImGui.TableNextRow();
+                    ImGui.TableNextColumn();
+                    ImGui.TextWrapped(string.IsNullOrWhiteSpace(area.Name) ? UiText.Get(T.CollectionProgressUnknownArea) : area.Name);
+                    ImGui.TableNextColumn();
+                    DrawCount(area.Counts.All, new(CollectionProgressArea.Ocean, null, area.Id, FishGradeVisibility.All));
+                    ImGui.PopID();
                 }
-                else if (scope != 0)
-                    DrawCount(scope == 1 ? view.Ocean.Big : view.Ocean.Legendary, Ocean(SelectedGrade));
+                ImGui.EndTable();
             }
-            else
-            {
-                ImGui.TextWrapped(UiText.Get(T.CollectionProgressOceanNoGrades));
-                DrawCount(view.Ocean.All, Ocean(FishGradeVisibility.All));
-            }
+            ImGui.Spacing();
+            if (ImGui.CollapsingHeader(UiText.Label(T.CollectionProgressRules, "CollectionProgressRules")))
+                ImGui.TextWrapped(UiText.Get(T.CollectionProgressHint));
         }
         ImGui.EndChild();
     }
 
     private FishGradeVisibility SelectedGrade => scope == 1 ? FishGradeVisibility.BigIncludingLegendary : FishGradeVisibility.LegendaryOnly;
-    private static CollectionProgressSelection Ocean(FishGradeVisibility grade) => new(CollectionProgressArea.Ocean, null, null, grade);
 
     private void Summary(CollectionProgressCategories counts, string[] choices)
     {
-        UiWidgets.Heading(T.CollectionProgressRegularTotal);
+        ImGui.Spacing();
+        ImGui.Separator();
+        var hint = UiText.Get(T.CollectionProgressAreaClickHint);
+        var available = ImGui.GetContentRegionAvail().X;
+        var start = ImGui.GetCursorPosX();
+        var hintWidth = ImGui.CalcTextSize(hint).X;
+        var title = UiText.Get(T.CollectionProgressRegularTotal);
+        ImGui.TextUnformatted(title);
+        if (ImGui.CalcTextSize(title).X + hintWidth + ImGui.GetStyle().ItemSpacing.X <= available)
+        {
+            ImGui.SameLine();
+            ImGui.SetCursorPosX(start + available - hintWidth);
+            ImGui.TextDisabled(hint);
+        }
+        else ImGui.TextWrapped(hint);
+        ImGui.Spacing();
         if (scope != 0)
         {
             DrawCount(scope == 1 ? counts.Big : counts.Legendary, large: true);
@@ -176,7 +195,6 @@ internal sealed class CollectionProgressPanel(CollectionProgress progress, FishC
             ImGui.PushTextWrapPos(ImGui.GetFontSize() * 32);
             ImGui.TextUnformatted(label);
             ImGui.TextUnformatted(UiText.Get(T.CollectionProgressBreakdown, count.Caught, count.Uncaught, count.Unknown, count.Manual));
-            ImGui.TextWrapped(UiText.Get(T.CollectionProgressColorHint));
             if (target is not null) ImGui.TextUnformatted(UiText.Get(T.CollectionProgressClickHint));
             ImGui.PopTextWrapPos();
             ImGui.EndTooltip();
@@ -187,10 +205,10 @@ internal sealed class CollectionProgressPanel(CollectionProgress progress, FishC
     private static Vector4 ProgressColor(float fraction) => fraction switch
     {
         <= 0 => new(0.40f, 0.44f, 0.48f, 1),
-        < 0.25f => new(0.32f, 0.43f, 0.63f, 1),
-        < 0.50f => new(0.24f, 0.54f, 0.72f, 1),
-        < 0.75f => new(0.20f, 0.61f, 0.62f, 1),
-        < 1 => new(0.35f, 0.65f, 0.47f, 1),
-        _ => new(0.52f, 0.74f, 0.30f, 1),
+        < 0.25f => new(0.68f, 0.27f, 0.32f, 1),
+        < 0.50f => new(0.78f, 0.47f, 0.12f, 1),
+        < 0.75f => new(0.24f, 0.46f, 0.79f, 1),
+        < 1 => new(0.59f, 0.38f, 0.76f, 1),
+        _ => new(0.18f, 0.65f, 0.38f, 1),
     };
 }

@@ -339,7 +339,8 @@ internal sealed class FishCatalog : IDisposable
                 if (location.RowId != 0 && location.Value is { } fishingSpot)
                     result[location.RowId] = new(spot.PlaceName.Value.Name.ExtractText(), fishingSpot.PlaceName.Value.Name.ExtractText(),
                         visits.Select(visit => visit.Name).Where(name => !string.IsNullOrWhiteSpace(name)).Distinct().ToArray(),
-                        visits.Select(visit => visit.Time).Where(time => time is >= 1 and <= 3).Distinct().Order().ToArray());
+                        visits.Select(visit => visit.Time).Where(time => time is >= 1 and <= 3).Distinct().Order().ToArray())
+                        { AreaId = spot.PlaceName.RowId };
         }
         return result;
     }

@@ -15,13 +15,19 @@ internal sealed class ChangelogWindow : Window
     // Keep the confirmed candidate unchanged when it is published.
     private static readonly ReleaseNotes[] PublishedReleases =
     [
-        new(new(0, 3, 12, 0),
+        new(new(0, 4, 0, 0),
         [
             (FontAwesomeIcon.ChartBar, T.ChangelogCollectionProgress),
-            (FontAwesomeIcon.MapMarkerAlt, T.ChangelogHousingExpansion),
+            (FontAwesomeIcon.Filter, T.ChangelogProgressFilters),
+            (FontAwesomeIcon.ChartBar, T.ChangelogProgressBars),
+            (FontAwesomeIcon.Fish, T.ChangelogProgressList),
+            (FontAwesomeIcon.Check, T.ChangelogProgressCollection),
+        ], new DateTimeOffset(2026, 10, 20, 8, 43, 34, TimeSpan.Zero),
+            T.ChangelogProgressFeatureTitle, T.ChangelogProgressFeatureSummary,
+        [
             (FontAwesomeIcon.List, T.ChangelogCompactToggle),
-            (FontAwesomeIcon.Newspaper, T.ChangelogFirstOpen),
-        ], new DateTimeOffset(2026, 10, 20, 8, 9, 35, TimeSpan.Zero)),
+            (FontAwesomeIcon.Star, T.ChangelogNavigationIcons),
+        ]),
         new(new(0, 3, 11, 0),
         [
             (FontAwesomeIcon.SearchPlus, T.ChangelogUiScale),
@@ -118,7 +124,21 @@ internal sealed class ChangelogWindow : Window
                 if (!ImGui.CollapsingHeader(label, i == 0 ? ImGuiTreeNodeFlags.DefaultOpen : ImGuiTreeNodeFlags.None)) continue;
                 ImGui.TextDisabled(UiText.Get(T.ChangelogPublishedAt, release.PublishedAtUtc.ToOffset(TimeSpan.FromHours(9))));
                 ImGui.Spacing();
+                if (release.FeatureTitle is { } title)
+                {
+                    UiWidgets.Icon(FontAwesomeIcon.ChartBar);
+                    ImGui.SameLine();
+                    ImGui.TextColored(new Vector4(0.45f, 0.82f, 1, 1), UiText.Get(title));
+                    if (release.FeatureSummary is { } summary) ImGui.TextWrapped(UiText.Get(summary));
+                    ImGui.Separator();
+                    ImGui.Spacing();
+                }
                 foreach (var (icon, text) in release.Entries) Entry(icon, text);
+                if (release.OtherEntries is { Length: > 0 } other)
+                {
+                    UiWidgets.Heading(T.ChangelogOtherImprovements);
+                    foreach (var (icon, text) in other) Entry(icon, text);
+                }
             }
             ImGui.Spacing();
             ImGui.TextWrapped(UiText.Get(T.ChangelogReopenHint));
@@ -141,5 +161,6 @@ internal sealed class ChangelogWindow : Window
         ImGui.Spacing();
     }
 
-    private sealed record ReleaseNotes(Version Version, (FontAwesomeIcon Icon, T Text)[] Entries, DateTimeOffset PublishedAtUtc);
+    private sealed record ReleaseNotes(Version Version, (FontAwesomeIcon Icon, T Text)[] Entries, DateTimeOffset PublishedAtUtc,
+        T? FeatureTitle = null, T? FeatureSummary = null, (FontAwesomeIcon Icon, T Text)[]? OtherEntries = null);
 }
