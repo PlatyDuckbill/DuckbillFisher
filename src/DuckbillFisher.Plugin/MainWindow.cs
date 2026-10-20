@@ -164,6 +164,15 @@ internal sealed class MainWindow : Window
         ImGui.EndDisabled();
         UiWidgets.Tooltip(UiText.Get(T.DeveloperModeHint));
         if (changed) preferences.SetInterface((UiLanguage)language, developer);
+        ImGui.BeginDisabled(!settings.CanEdit);
+        var scaleIndex = Array.IndexOf(UiScale.Choices, settings.UiScalePercent);
+        ImGui.SetNextItemWidth(ImGui.GetFontSize() * 8);
+        if (ImGui.Combo(UiText.Label(T.UiScale, "UiScale"), ref scaleIndex, UiScale.Labels, UiScale.Labels.Length))
+            preferences.SetUiScale(UiScale.Choices[scaleIndex]);
+        UiWidgets.Tooltip(UiText.Get(T.UiScaleHint));
+        if (ImGui.Button(UiText.Label(T.UiScaleReset, "ResetUiScale")))
+            preferences.SetUiScale(UiScale.DefaultPercent);
+        ImGui.EndDisabled();
         if (ImGui.Button(UiText.Label(T.ChangelogTitle, "ShowChangelog"))) ShowChangelog?.Invoke();
         if (settings.Error is { } error) ImGui.TextWrapped(error.Display);
         UiWidgets.Heading(T.AlertSettingsHeading);

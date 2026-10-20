@@ -681,4 +681,8 @@
   <data name="ChangelogUpdateNotes" xml:space="preserve"><value>설치 화면의 변경 내역과 한국어·영어로 보는 최근 5개 릴리스 이력을 추가했습니다. 이 안내는 닫으면 버전별로 한 번만 표시되며 설정 → 업데이트 내역에서 다시 열 수 있습니다.</value></data>
   <data name="ChangelogShortCommands" xml:space="preserve"><value>/dbfs로 메인, /dbfs cl로 간이 목록, /dbfs ct로 캐스팅 타이머를 열고 닫을 수 있습니다. 기존 /duckbillfisher와 compact·timer 인자도 유지합니다.</value></data>
   <data name="ChangelogSpotFish" xml:space="preserve"><value>현재 낚시터의 어종 보기를 독립 화면으로 바꿨습니다. 어종 상세를 보거나 다른 곳을 클릭하거나 타이머를 닫아도 어종 목록이 유지됩니다.</value></data>
+  <data name="UiScale" xml:space="preserve"><value>UI 배율</value></data>
+  <data name="UiScaleHint" xml:space="preserve"><value>Dalamud UI 배율을 기준으로 DuckbillFisher의 글자·아이콘·버튼·간격을 조절합니다. 모든 플러그인 화면에 적용하며 재로드 후에도 유지합니다. 필요하면 화면 크기를 조절하세요.</value></data>
+  <data name="UiScaleReset" xml:space="preserve"><value>UI 배율 100%로 복원</value></data>
+  <data name="ChangelogUiScale" xml:space="preserve"><value>설정에서 플러그인 UI 배율을 80~200%로 조절하거나 100%로 복원할 수 있습니다. 모든 DuckbillFisher 화면의 글자·아이콘·버튼·간격을 함께 조절하며 재로드 후에도 유지합니다.</value></data>
 </root>

@@ -681,4 +681,8 @@ Main inventory only. An unknown quantity is not zero.</value></data>
   <data name="ChangelogUpdateNotes" xml:space="preserve"><value>Added release notes to the plugin installer and a Korean/English history of the latest five releases. This screen appears once per version after you close it and can be reopened from Settings → What's new.</value></data>
   <data name="ChangelogShortCommands" xml:space="preserve"><value>Use /dbfs to toggle the main view, /dbfs cl for the compact list, and /dbfs ct for the casting timer. /duckbillfisher and the full compact / timer arguments still work.</value></data>
   <data name="ChangelogSpotFish" xml:space="preserve"><value>View fish at the current fishing spot in a separate view that stays open while inspecting fish details, clicking elsewhere, or closing the casting timer.</value></data>
+  <data name="UiScale" xml:space="preserve"><value>UI scale</value></data>
+  <data name="UiScaleHint" xml:space="preserve"><value>Scales DuckbillFisher text, icons, controls, and spacing relative to the Dalamud UI scale. Applies to all plugin views and is saved across reloads. Resize views as needed.</value></data>
+  <data name="UiScaleReset" xml:space="preserve"><value>Reset UI scale to 100%</value></data>
+  <data name="ChangelogUiScale" xml:space="preserve"><value>Adjust the plugin UI scale from 80% to 200% in Settings, or reset it to 100%. Text, icons, controls, and spacing scale together across all DuckbillFisher views, and the setting is preserved across reloads.</value></data>
 </root>

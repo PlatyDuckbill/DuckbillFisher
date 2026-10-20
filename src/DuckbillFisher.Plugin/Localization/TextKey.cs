@@ -673,4 +673,8 @@ internal enum TextKey
     ChangelogUpdateNotes,
     ChangelogShortCommands,
     ChangelogSpotFish,
+    UiScale,
+    UiScaleHint,
+    UiScaleReset,
+    ChangelogUiScale,
 }

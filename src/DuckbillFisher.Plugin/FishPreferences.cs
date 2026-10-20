@@ -15,7 +15,7 @@ public enum SpawnAlertChannel { System, Say, CrossWorldLinkshell1 }
 // Public for Dalamud's configuration serializer. Content IDs stay in local configuration only.
 public sealed class FishPreferencesConfiguration : IPluginConfiguration
 {
-    public const int CurrentVersion = 13;
+    public const int CurrentVersion = 14;
     public int Version { get; set; } = CurrentVersion;
     public HashSet<uint> Favorites { get; set; } = [];
     public Dictionary<ulong, Dictionary<uint, bool>> Characters { get; set; } = [];
@@ -30,6 +30,7 @@ public sealed class FishPreferencesConfiguration : IPluginConfiguration
     public CatalogSettings Catalog { get; set; } = new();
     public List<CatalogPreset> CatalogPresets { get; set; } = [];
     public UiLanguage Language { get; set; } = UiLanguage.Korean;
+    public int UiScalePercent { get; set; } = UiScale.DefaultPercent;
     public bool DeveloperMode { get; set; }
     public string LastSeenChangelogVersion { get; set; } = "";
     public CompactViewSettings Compact { get; set; } = new();
@@ -55,6 +56,7 @@ internal sealed record FishPreferencesView(int Revision, int Session, bool HasCh
     public IReadOnlyList<CatalogPreset> CatalogPresets { get; init; } = [];
     public UiMessage? CatalogPresetError { get; init; }
     public UiLanguage Language { get; init; } = UiLanguage.Korean;
+    public int UiScalePercent { get; init; } = UiScale.DefaultPercent;
     public bool DeveloperMode { get; init; }
     public string LastSeenChangelogVersion { get; init; } = "";
     public CompactViewSettings Compact { get; init; } = new();
@@ -82,6 +84,7 @@ internal sealed class FishPreferences : IDisposable
     private CatalogSettings? pendingCatalog;
     private PresetEdit? pendingPreset;
     private (UiLanguage Language, bool DeveloperMode)? pendingInterface;
+    private int? pendingUiScale;
     private CompactViewSettings? pendingCompact;
     private string? pendingCustomSoundPath;
     private Version? pendingChangelogVersion;
@@ -125,6 +128,7 @@ internal sealed class FishPreferences : IDisposable
                 // A malformed optional preset must not discard favorites or character records.
                 configuration.CatalogPresets = CatalogPreset.ReadValid(loaded.CatalogPresets);
                 configuration.CustomAlertSoundPath ??= "";
+                configuration.UiScalePercent = UiScale.Normalize(configuration.UiScalePercent);
                 // Optional display state must not invalidate existing settings or character records.
                 if (!System.Version.TryParse(configuration.LastSeenChangelogVersion, out _))
                     configuration.LastSeenChangelogVersion = "";
@@ -157,6 +161,13 @@ internal sealed class FishPreferences : IDisposable
         lock (gate)
             if (!disposed && writable && Enum.IsDefined(language))
                 pendingInterface = (language, developerMode);
+    }
+
+    public void SetUiScale(int percent)
+    {
+        lock (gate)
+            if (!disposed && writable && UiScale.Choices.Contains(percent))
+                pendingUiScale = percent;
     }
 
     public void SetCompact(CompactViewSettings settings)
@@ -301,10 +312,16 @@ internal sealed class FishPreferences : IDisposable
             }
             else if (stateErrorChanged)
                 Publish();
-            if (pending.Count == 0 && pendingAlerts is null && pendingFishAlerts.Count == 0 && pendingCatalog is null && pendingPreset is null && pendingInterface is null && pendingCompact is null && pendingCustomSoundPath is null && pendingChangelogVersion is null)
+            if (pending.Count == 0 && pendingAlerts is null && pendingFishAlerts.Count == 0 && pendingCatalog is null && pendingPreset is null && pendingInterface is null && pendingUiScale is null && pendingCompact is null && pendingCustomSoundPath is null && pendingChangelogVersion is null)
                 return;
             var candidate = CopyConfiguration();
             var changed = false;
+            if (pendingUiScale is { } scalePercent)
+            {
+                changed |= candidate.UiScalePercent != scalePercent;
+                candidate.UiScalePercent = scalePercent;
+                pendingUiScale = null;
+            }
             if (pendingChangelogVersion is { } changelogVersion)
             {
                 // Keep a newer acknowledgement when a developer temporarily loads an older DLL.
@@ -434,6 +451,7 @@ internal sealed class FishPreferences : IDisposable
             CatalogPresets = configuration.CatalogPresets.Select(value => value.Copy()).ToArray(),
             CatalogPresetError = view.CatalogPresetError,
             Language = configuration.Language, DeveloperMode = configuration.DeveloperMode,
+            UiScalePercent = configuration.UiScalePercent,
             LastSeenChangelogVersion = configuration.LastSeenChangelogVersion,
             Compact = configuration.Compact,
             FishAlertLeadMinutes = configuration.FishAlertLeadMinutes.ToFrozenDictionary(),
@@ -454,6 +472,7 @@ internal sealed class FishPreferences : IDisposable
         Catalog = configuration.Catalog.Copy(),
         CatalogPresets = configuration.CatalogPresets.Select(value => value.Copy()).ToList(),
         Language = configuration.Language, DeveloperMode = configuration.DeveloperMode,
+        UiScalePercent = configuration.UiScalePercent,
         LastSeenChangelogVersion = configuration.LastSeenChangelogVersion,
         Compact = configuration.Compact,
         FishAlertLeadMinutes = new(configuration.FishAlertLeadMinutes),
@@ -479,7 +498,7 @@ internal sealed class FishPreferences : IDisposable
     }
 
     private static bool IsValid(FishPreferencesConfiguration value) =>
-        value.Version is 1 or 2 or 3 or 4 or 5 or 6 or 7 or 8 or 9 or 10 or 11 or 12 or FishPreferencesConfiguration.CurrentVersion && value.Favorites is not null &&
+        value.Version is 1 or 2 or 3 or 4 or 5 or 6 or 7 or 8 or 9 or 10 or 11 or 12 or 13 or FishPreferencesConfiguration.CurrentVersion && value.Favorites is not null &&
         Enum.IsDefined(value.Language) &&
         value.Compact is not null && value.Compact.IsValid() &&
         value.Catalog is not null && value.Catalog.IsValid() &&
@@ -505,6 +524,7 @@ internal sealed class FishPreferences : IDisposable
             pendingCatalog = null;
             pendingPreset = null;
             pendingInterface = null;
+            pendingUiScale = null;
             pendingCompact = null;
             pendingCustomSoundPath = null;
             pendingChangelogVersion = null;

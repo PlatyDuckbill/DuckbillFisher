@@ -117,7 +117,7 @@ public sealed class Plugin : IDalamudPlugin
         windows.AddWindow(spotFishWindow);
         windows.AddWindow(preparationWindow);
         windows.AddWindow(changelogWindow);
-        pluginInterface.UiBuilder.Draw += windows.Draw;
+        pluginInterface.UiBuilder.Draw += DrawWindows;
         pluginInterface.UiBuilder.Draw += baitFinder.DrawOverlay;
         pluginInterface.UiBuilder.OpenMainUi += OpenMainUi;
         pluginInterface.UiBuilder.OpenConfigUi += mainWindow.OpenSettings;
@@ -136,13 +136,15 @@ public sealed class Plugin : IDalamudPlugin
 
     private void OpenMainUi() => mainWindow.IsOpen = true;
 
+    private void DrawWindows() => UiScale.Draw(windows, fishPreferences.View.UiScalePercent);
+
     public void Dispose()
     {
         if (disposed)
             return;
 
         disposed = true;
-        pluginInterface.UiBuilder.Draw -= windows.Draw;
+        pluginInterface.UiBuilder.Draw -= DrawWindows;
         pluginInterface.UiBuilder.Draw -= baitFinder.DrawOverlay;
         pluginInterface.UiBuilder.OpenMainUi -= OpenMainUi;
         pluginInterface.UiBuilder.OpenConfigUi -= mainWindow.OpenSettings;
