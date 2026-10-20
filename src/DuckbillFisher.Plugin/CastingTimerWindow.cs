@@ -13,13 +13,13 @@ internal sealed class CastingTimerWindow : Window
 {
     private readonly FishingTracker tracker;
     private readonly ITextureProvider textures;
-    private readonly Action showSpotFish;
+    private readonly Action toggleSpotFish;
     private readonly FishingHistoryPanel history;
 
-    public CastingTimerWindow(FishingTracker tracker, ITextureProvider textures, Action<FishGuideRow> showDetail, Action showSpotFish)
+    public CastingTimerWindow(FishingTracker tracker, ITextureProvider textures, Action<FishGuideRow> showDetail, Action toggleSpotFish)
         : base("DuckbillFisher###DuckbillFisher.Timer")
     {
-        this.tracker = tracker; this.textures = textures; this.showSpotFish = showSpotFish;
+        this.tracker = tracker; this.textures = textures; this.toggleSpotFish = toggleSpotFish;
         history = new(tracker, textures, showDetail);
         Size = new Vector2(440, 560);
         SizeCondition = ImGuiCond.FirstUseEver;
@@ -33,14 +33,13 @@ internal sealed class CastingTimerWindow : Window
     {
         var view = tracker.View;
         var spot = view.Spot;
-        var spotLabel = spot is not null ? view.IsLastSpot ? UiText.Get(T.TimerLastSpot, spot.Name) : spot.Name
-            : UiText.Get(view.HasSession ? T.DetailLocationUnknown : T.TimerSpotPending);
+        var spotLabel = UiWidgets.SpotLabel(view);
         var buttonSize = ImGui.CalcTextSize(UiText.Get(T.TimerSpotFishButton)).X + ImGui.GetStyle().FramePadding.X * 2;
         FishingHistoryPanel.Clipped(spotLabel, Math.Max(1, ImGui.GetContentRegionAvail().X - buttonSize - 10));
         UiWidgets.Tooltip(spotLabel);
         ImGui.SameLine();
         ImGui.BeginDisabled(spot is null);
-        if (ImGui.Button(UiText.Label(T.TimerSpotFishButton, "TimerSpotFish"))) showSpotFish();
+        if (ImGui.Button(UiText.Label(T.TimerSpotFishButton, "TimerSpotFish"))) toggleSpotFish();
         ImGui.EndDisabled();
         if (spot is null) UiWidgets.Tooltip(UiText.Get(T.TimerSpotUnavailableHint));
 

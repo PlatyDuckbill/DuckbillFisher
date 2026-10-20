@@ -36,14 +36,14 @@ internal sealed class SpotFishWindow : Window
     public override void Draw()
     {
         var view = tracker.View;
-        ImGui.TextWrapped(view.Spot is { } spot ? view.IsLastSpot ? UiText.Get(T.TimerLastSpot, spot.Name) : spot.Name : UiText.Get(T.TimerSpotPending));
+        ImGui.TextWrapped(UiWidgets.SpotLabel(view));
         if (ImGui.Button(UiText.Label(hideCaught ? T.TimerHideCaught : T.TimerAllFish, "TimerCollectionFilter"))) hideCaught = !hideCaught;
         var matches = hideCaught ? view.RemainingSpotFish : view.AllSpotFish;
         ImGui.SameLine();
         ImGui.TextDisabled(UiText.Get(T.TimerFishCount, matches.Length));
         if (ImGui.BeginChild("SpotFishRows"))
         {
-            if (matches.Length == 0) ImGui.TextWrapped(UiText.Get(view.Spot is null ? T.TimerSpotPending : T.TimerNoFish));
+            if (matches.Length == 0) ImGui.TextWrapped(view.Spot is null ? UiWidgets.SpotLabel(view) : UiText.Get(T.TimerNoFish));
             var clipper = ImGui.ImGuiListClipper();
             try
             {

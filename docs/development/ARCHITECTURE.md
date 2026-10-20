@@ -41,6 +41,7 @@
 - 수집/도감 열기/타이머/SE는 검증된 지원 계약을 재사용한다. 미끼 페이지 연결 실패는 페이지 표식만 생략하며 다른 검증 기능을 막지 않는다.
 - 가드 실패는 실제 사유를 표시하고 네이티브 읽기를 막는다. 정적 자료·수동 상태를 미수집으로 바꾸지 않는다. [런타임 근거](../verification/native/NATIVE-RUNTIME-DAL4KR.md).
 - 단순 Fishing 플래그 관찰기는 어획의 증거가 아니다. FishingTracker는 따로 검증한 본인 로그/단계만 적용한다. Phase 값 하나 또는 Actor=NoSource만으로 성공/실패/본인을 추정하지 않는다.
+- 낚시터는 NotObserved/AwaitingIdentification/Unknown/Known/LastKnown으로 구분한다. 새 시전에는 이전 위치를 지우며 Unknown은 본인1110의 KR PlaceName950일 때만 확정한다. 발견1115/1130/3513의 NoSource는 후보일 뿐이며 같은 시전의 검증된 Local3512·2초 상관·Phase2/4·유일한 Territory+PlaceName 대응이 모두 필요하다. 새로운 네이티브 읽기/가드 완화는 없으며 [정적 근거·실기 대기](../verification/fishing/TIMER-HISTORY.md#03110-미지의-낚시터와-이전-위치-분리-2026-10-20)를 따른다.
 
 ## 저장·수집·알림
 

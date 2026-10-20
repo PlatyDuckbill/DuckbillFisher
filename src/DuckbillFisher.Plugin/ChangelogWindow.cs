@@ -19,13 +19,19 @@ internal sealed class ChangelogWindow : Window
         [
             (FontAwesomeIcon.SearchPlus, T.ChangelogUiScale),
             (FontAwesomeIcon.Star, T.ChangelogCatalogOptions),
+            (FontAwesomeIcon.ExternalLinkAlt, T.ChangelogSeparateDetail),
+            (FontAwesomeIcon.Fish, T.ChangelogCollectionBadges),
+            (FontAwesomeIcon.MapMarkerAlt, T.ChangelogUnknownSpot),
+            (FontAwesomeIcon.List, T.ChangelogSpotToggle),
+            (FontAwesomeIcon.Star, T.ChangelogFavoriteRemoval),
+            (FontAwesomeIcon.Newspaper, T.ChangelogNoteLayout),
         ]),
         new(new(0, 3, 10, 0),
         [
             (FontAwesomeIcon.Terminal, T.ChangelogShortCommands),
             (FontAwesomeIcon.Fish, T.ChangelogSpotFish),
-        ]),
-        new(new(0, 3, 9, 0), [(FontAwesomeIcon.Newspaper, T.ChangelogUpdateNotes)]),
+        ], new DateTimeOffset(2026, 10, 19, 8, 5, 59, TimeSpan.Zero)),
+        new(new(0, 3, 9, 0), [(FontAwesomeIcon.Newspaper, T.ChangelogUpdateNotes)], new DateTimeOffset(2026, 10, 18, 20, 7, 42, TimeSpan.Zero)),
         new(new(0, 3, 8, 0),
         [
             (FontAwesomeIcon.Music, T.ChangelogAudio),
@@ -33,20 +39,20 @@ internal sealed class ChangelogWindow : Window
             (FontAwesomeIcon.Fish, T.ChangelogIntuition),
             (FontAwesomeIcon.Search, T.ChangelogDetails),
             (FontAwesomeIcon.Wrench, T.ChangelogStability),
-        ]),
+        ], new DateTimeOffset(2026, 10, 18, 19, 20, 50, TimeSpan.Zero)),
         new(new(0, 3, 0, 0),
         [
             (FontAwesomeIcon.Fish, T.ChangelogBaitPreparation),
             (FontAwesomeIcon.History, T.ChangelogRecordRecovery),
             (FontAwesomeIcon.Search, T.ChangelogDataExpansion),
-        ]),
-        new(new(0, 2, 6, 0), [(FontAwesomeIcon.Wrench, T.ChangelogDal4kr)]),
+        ], new DateTimeOffset(2026, 10, 17, 20, 32, 15, TimeSpan.Zero)),
+        new(new(0, 2, 6, 0), [(FontAwesomeIcon.Wrench, T.ChangelogDal4kr)], new DateTimeOffset(2026, 10, 17, 11, 48, 17, TimeSpan.Zero)),
         new(new(0, 2, 5, 0),
         [
             (FontAwesomeIcon.Wrench, T.ChangelogKrRuntime),
             (FontAwesomeIcon.Search, T.ChangelogCompatibilityHint),
-        ]),
-        new(new(0, 2, 4, 0), [(FontAwesomeIcon.Fish, T.ChangelogFirstRelease)]),
+        ], new DateTimeOffset(2026, 10, 17, 11, 19, 46, TimeSpan.Zero)),
+        new(new(0, 2, 4, 0), [(FontAwesomeIcon.Fish, T.ChangelogFirstRelease)], new DateTimeOffset(2026, 10, 17, 10, 52, 8, TimeSpan.Zero)),
     ];
     private readonly ReleaseNotes[] releases = PublishedReleases.Where(release => release.Version <= CurrentVersion).Take(5).ToArray();
     private readonly FishPreferences preferences;
@@ -95,6 +101,9 @@ internal sealed class ChangelogWindow : Window
                 var release = releases[i];
                 var label = $"{UiText.Get(T.ChangelogRelease, release.Version)}###ReleaseNotes.{release.Version}";
                 if (!ImGui.CollapsingHeader(label, i == 0 ? ImGuiTreeNodeFlags.DefaultOpen : ImGuiTreeNodeFlags.None)) continue;
+                ImGui.TextDisabled(release.PublishedAtUtc is { } published
+                    ? UiText.Get(T.ChangelogPublishedAt, published.ToOffset(TimeSpan.FromHours(9)))
+                    : UiText.Get(T.ChangelogReleaseTimeUnknown));
                 ImGui.Spacing();
                 foreach (var (icon, text) in release.Entries) Entry(icon, text);
             }
@@ -119,5 +128,5 @@ internal sealed class ChangelogWindow : Window
         ImGui.Spacing();
     }
 
-    private sealed record ReleaseNotes(Version Version, (FontAwesomeIcon Icon, T Text)[] Entries);
+    private sealed record ReleaseNotes(Version Version, (FontAwesomeIcon Icon, T Text)[] Entries, DateTimeOffset? PublishedAtUtc = null);
 }

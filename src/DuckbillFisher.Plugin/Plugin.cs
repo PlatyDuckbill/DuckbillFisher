@@ -94,7 +94,7 @@ public sealed class Plugin : IDalamudPlugin
             else compareDetailWindow.Show(fish);
         };
         var spotFishWindow = new SpotFishWindow(fishingTracker, fishCatalog, fishPreferences, fishCollection, textureProvider, fishingMap, detailWindow.Show);
-        timerWindow = new CastingTimerWindow(fishingTracker, textureProvider, detailWindow.Show, () => spotFishWindow.IsOpen = true);
+        timerWindow = new CastingTimerWindow(fishingTracker, textureProvider, detailWindow.Show, spotFishWindow.Toggle);
         compactObserver = new CompactFishObserver(fishCatalog, fishPreferences, framework, fishCollection, fishingRegion);
         compactWindow = new CompactFishWindow(compactObserver, fishPreferences, fishCollection, textureProvider, detailWindow.Show, fishingMap);
         spawnAlertsPanel = new SpawnAlertsPanel(fishPreferences, spawnAlerts, alertOutput, fishCollection, textureProvider,

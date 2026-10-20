@@ -76,18 +76,34 @@ internal sealed class FishRowRenderer(ITextureProvider textures, FishingMapServi
             : fish.Grade is FishGrade.Big or FishGrade.Legendary
                 ? UiText.Get(T.RowGradeLabel, new UiMessage(fish.Grade == FishGrade.Legendary ? T.GradeLegendaryLabel : T.GradeBigLabel), fish.DisplayName)
                 : fish.DisplayName;
-        var stateWidth = Math.Min(ImGui.CalcTextSize(state).X, textWidth * 0.45f);
+        var badgePadding = collectionStatus is not null ? ImGui.GetStyle().FramePadding.X : 0;
+        var stateWidth = Math.Min(ImGui.CalcTextSize(state).X + badgePadding * 2, textWidth * 0.45f);
         ImGui.SetCursorPos(start + new Vector2(textX, 4));
         LineText(name, Math.Max(1, textWidth - stateWidth - 10), false);
         ImGui.SetCursorPos(start + new Vector2(textX + textWidth - stateWidth, 4));
         var collectionColor = collectionStatus switch
         {
-            CollectionStatus.Caught => new Vector4(0.50f, 0.85f, 0.65f, 1),
-            CollectionStatus.Uncaught => new Vector4(1, 0.57f, 0.52f, 1),
+            CollectionStatus.Caught => new Vector4(0.85f, 1, 0.90f, 1),
+            CollectionStatus.Uncaught => new Vector4(1, 0.89f, 0.86f, 1),
             _ => (Vector4?)null,
         };
+        if (collectionStatus is not null)
+        {
+            var badgeStart = ImGui.GetCursorScreenPos() - new Vector2(0, 2);
+            var badgeEnd = badgeStart + new Vector2(stateWidth, ImGui.GetTextLineHeight() + 4);
+            var background = collectionStatus switch
+            {
+                CollectionStatus.Caught => new Vector4(0.08f, 0.35f, 0.20f, 0.97f),
+                CollectionStatus.Uncaught => new Vector4(0.48f, 0.12f, 0.10f, 0.97f),
+                _ => new Vector4(0.20f, 0.22f, 0.25f, 0.97f),
+            };
+            var draw = ImGui.GetWindowDrawList();
+            draw.AddRectFilled(badgeStart, badgeEnd, ImGui.GetColorU32(background), 3);
+            draw.AddRect(badgeStart, badgeEnd, ImGui.GetColorU32(collectionColor ?? ImGui.GetStyle().Colors[(int)ImGuiCol.TextDisabled]), 3);
+            ImGui.SetCursorPosX(ImGui.GetCursorPosX() + badgePadding);
+        }
         if (collectionColor is { } color) ImGui.PushStyleColor(ImGuiCol.Text, color);
-        LineText(state, stateWidth, collectionColor is null);
+        LineText(state, Math.Max(1, stateWidth - badgePadding * 2), collectionColor is null);
         if (collectionColor is not null) ImGui.PopStyleColor();
 
         // Location is clipped first; the timer keeps its own width on the same line.

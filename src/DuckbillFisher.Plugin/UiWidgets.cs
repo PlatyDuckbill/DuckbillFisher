@@ -13,6 +13,15 @@ internal static class UiWidgets
 {
     public const float BackgroundAlpha = 0.94f;
 
+    public static string SpotLabel(FishingTrackerView view) => view.Spot is { } spot
+        ? view.IsLastSpot ? UiText.Get(T.TimerLastSpot, spot.Name) : spot.Name
+        : UiText.Get(view.SpotState switch
+        {
+            FishingSpotState.Unknown => T.TimerUnknownSpot,
+            FishingSpotState.AwaitingIdentification => T.TimerSpotIdentifying,
+            _ => T.TimerSpotPending,
+        });
+
     public static void FlowNext(float width, float right, float spacing = 8)
     {
         ImGui.SameLine(0, spacing);

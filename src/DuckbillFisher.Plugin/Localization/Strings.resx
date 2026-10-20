@@ -686,7 +686,17 @@ Main inventory only. An unknown quantity is not zero.</value></data>
   <data name="UiScaleReset" xml:space="preserve"><value>Reset UI scale to 100%</value></data>
   <data name="ChangelogUiScale" xml:space="preserve"><value>Adjust the plugin UI scale from 80% to 200% in Settings, or reset it to 100%. Text, icons, controls, and spacing scale together across all DuckbillFisher views, and the setting is preserved across reloads.</value></data>
   <data name="CompactFavoritesHint" xml:space="preserve"><value>Toggle favorites only in the compact list. Other filters follow the main catalog.</value></data>
-  <data name="TimerSpotUnavailableHint" xml:space="preserve"><value>Available once a cast identifies the fishing spot. At an undiscovered spot, discover it and cast again. If observation is unavailable, the spot cannot be identified.</value></data>
+  <data name="TimerSpotUnavailableHint" xml:space="preserve"><value>Available once the current fishing spot is identified. At an unknown spot, a discovery message matched to your catch updates the list. If identification is still pending, cast again after discovering the spot. A previous spot is not used for a new cast.</value></data>
   <data name="OpenIndependentDetail" xml:space="preserve"><value>Open in separate view</value></data>
-  <data name="ChangelogCatalogOptions" xml:space="preserve"><value>Added an independent favorites-only toggle to the compact list and a button to open main-view fish details separately. Fishing-spot lists now color collection labels, and View fish explains why it is unavailable. Simplified the automatic unfavorite label.</value></data>
+  <data name="ChangelogCatalogOptions" xml:space="preserve"><value>Show favorites only in the compact list with its own star toggle. Other filters follow the main catalog, and the choice is saved across reloads.</value></data>
+  <data name="TimerUnknownSpot" xml:space="preserve"><value>Undiscovered fishing spot</value></data>
+  <data name="TimerSpotIdentifying" xml:space="preserve"><value>Identifying fishing spot…</value></data>
+  <data name="ChangelogSeparateDetail" xml:space="preserve"><value>Open the selected fish in a separate view using the button beside its grade and collection status. The separate view stays on that fish when the main selection changes.</value></data>
+  <data name="ChangelogCollectionBadges" xml:space="preserve"><value>Fishing-spot lists highlight collection status with green caught, red uncaught, and gray unknown badges.</value></data>
+  <data name="ChangelogUnknownSpot" xml:space="preserve"><value>New casts clear the previous fishing spot. Undiscovered spots are labeled, and the name and fish list update when discovery and your catch are confirmed.</value></data>
+  <data name="ChangelogSpotToggle" xml:space="preserve"><value>Click View fish again to close the fishing-spot list.</value></data>
+  <data name="ChangelogFavoriteRemoval" xml:space="preserve"><value>Simplified the setting label to “Unfavorite on first guide registration.”</value></data>
+  <data name="ChangelogPublishedAt" xml:space="preserve"><value>Released: {0:MMM d, yyyy h tt} KST</value></data>
+  <data name="ChangelogReleaseTimeUnknown" xml:space="preserve"><value>Release time not recorded</value></data>
+  <data name="ChangelogNoteLayout" xml:space="preserve"><value>Release notes show each feature separately and recorded publication dates to the hour in Korean time.</value></data>
 </root>

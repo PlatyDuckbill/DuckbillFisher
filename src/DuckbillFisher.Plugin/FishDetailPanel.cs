@@ -44,9 +44,7 @@ internal sealed class FishDetailPanel(FishPreferences preferences, ITextureProvi
                 }
                 ImGui.EndTable();
             }
-            DrawActions(fish, personal, observed);
-            if (showDetail is not null && ImGui.SmallButton(UiText.Label(T.OpenIndependentDetail, "OpenIndependentDetail")))
-                showDetail(fish);
+            DrawActions(fish, personal, observed, showDetail);
             ImGui.EndTable();
         }
         if (!personal.HasCharacter) ImGui.TextWrapped(UiText.Get(T.ManualPlayerRequired));
@@ -116,15 +114,21 @@ internal sealed class FishDetailPanel(FishPreferences preferences, ITextureProvi
         ImGui.PopID();
     }
 
-    private void DrawActions(FishGuideRow fish, FishPreferencesView personal, FishCollectionView observed)
+    private void DrawActions(FishGuideRow fish, FishPreferencesView personal, FishCollectionView observed, Action<FishGuideRow>? showDetail)
     {
         var grade = fish.IsOceanFishing ? UiText.Get(T.OceanLabel)
             : fish.Grade is FishGrade.Big or FishGrade.Legendary
                 ? UiText.Get(fish.Grade == FishGrade.Legendary ? T.GradeLegendaryLabel : T.GradeBigLabel) : "";
-        if (!ImGui.BeginTable("DetailActions", grade.Length > 0 ? 3 : 2, ImGuiTableFlags.SizingFixedFit)) return;
+        var openLabel = UiText.Get(T.OpenIndependentDetail);
+        var openWidth = ImGui.CalcTextSize(openLabel).X + ImGui.GetStyle().FramePadding.X * 2;
+        var state = UiText.Get(FishRowRenderer.CollectionKey(personal, observed, fish.FishParameterId));
+        var iconOnly = ImGui.GetContentRegionAvail().X < openWidth + ImGui.CalcTextSize(grade).X +
+            ImGui.CalcTextSize(state).X + ImGui.GetFrameHeight() * 3 + ImGui.GetStyle().ItemSpacing.X * 4;
+        if (!ImGui.BeginTable("DetailActions", (grade.Length > 0 ? 3 : 2) + (showDetail is null ? 0 : 1), ImGuiTableFlags.SizingFixedFit)) return;
         if (grade.Length > 0) ImGui.TableSetupColumn("Grade", ImGuiTableColumnFlags.WidthFixed, ImGui.CalcTextSize(grade).X + 4);
         ImGui.TableSetupColumn("Favorite", ImGuiTableColumnFlags.WidthFixed, ImGui.GetFrameHeight());
         ImGui.TableSetupColumn("Collection", ImGuiTableColumnFlags.WidthStretch);
+        if (showDetail is not null) ImGui.TableSetupColumn("SeparateDetail", ImGuiTableColumnFlags.WidthFixed, iconOnly ? ImGui.GetFrameHeight() : openWidth);
         if (grade.Length > 0)
         {
             ImGui.TableNextColumn();
@@ -139,7 +143,6 @@ internal sealed class FishDetailPanel(FishPreferences preferences, ITextureProvi
         ImGui.TableNextColumn();
         var manual = personal.ManualCaught.ContainsKey(fish.FishParameterId);
         ImGui.BeginDisabled(!personal.CanEdit || !personal.HasCharacter || !fish.IsDisplayable);
-        var state = UiText.Get(FishRowRenderer.CollectionKey(personal, observed, fish.FishParameterId));
         var desiredWidth = ImGui.CalcTextSize(state).X + ImGui.GetFrameHeight() + ImGui.GetStyle().FramePadding.X * 2;
         ImGui.SetNextItemWidth(Math.Max(1, Math.Min(desiredWidth,
             ImGui.GetContentRegionAvail().X - (manual ? ImGui.GetFrameHeightWithSpacing() : 0))));
@@ -159,6 +162,14 @@ internal sealed class FishDetailPanel(FishPreferences preferences, ITextureProvi
                 preferences.SetManualCaught(fish.FishParameterId, null, personal.Session);
         }
         ImGui.EndDisabled();
+        if (showDetail is not null)
+        {
+            ImGui.TableNextColumn();
+            var clicked = iconOnly
+                ? UiWidgets.IconButton(FontAwesomeIcon.ExternalLinkAlt, "OpenIndependentDetail", openLabel)
+                : ImGui.Button(UiText.Label(T.OpenIndependentDetail, "OpenIndependentDetail"));
+            if (clicked) showDetail(fish);
+        }
         ImGui.EndTable();
     }
     private static void DrawOcean(OceanFishingView? ocean)
