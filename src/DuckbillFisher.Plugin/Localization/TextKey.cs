@@ -831,4 +831,10 @@ internal enum TextKey
     ScheduleAxisHint,
     ScheduleCalendarListVisible,
     ScheduleCalendarResizeHint,
+    ScheduleOptions,
+    ScheduleFishEyes,
+    ScheduleHideList,
+    ScheduleShowList,
+    ScheduleRangeSummary,
+    ScheduleCurrentTime,
 }
