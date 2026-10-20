@@ -827,4 +827,8 @@ internal enum TextKey
     ScheduleTimelineHint,
     ScheduleMonthHint,
     ScheduleTrackTooltip,
+    ScheduleLocation,
+    ScheduleAxisHint,
+    ScheduleCalendarListVisible,
+    ScheduleCalendarResizeHint,
 }

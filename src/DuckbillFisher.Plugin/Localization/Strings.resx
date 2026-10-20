@@ -778,7 +778,7 @@ Manual settings included: {3:N0}</value></data>
   <data name="ScheduleNoCatalog" xml:space="preserve"><value>The current main-list search and filters match no fish. Adjust them on the fish list page.</value></data>
   <data name="ScheduleNoMatches" xml:space="preserve"><value>No fish match this page’s search and collection options.</value></data>
   <data name="ScheduleClearSearch" xml:space="preserve"><value>Clear schedule search</value></data>
-  <data name="ScheduleFishColumn" xml:space="preserve"><value>Fish / region</value></data>
+  <data name="ScheduleFishColumn" xml:space="preserve"><value>Fish / spot · region</value></data>
   <data name="ScheduleReasonColumn" xml:space="preserve"><value>Reason not shown</value></data>
   <data name="ScheduleLegend" xml:space="preserve"><value>Available now · green / Upcoming · blue / Concurrent spawns · hatched</value></data>
   <data name="ScheduleNow" xml:space="preserve"><value>Now {0:HH:mm}</value></data>
@@ -817,7 +817,7 @@ Click to open fish details.</value></data>
   <data name="ChangelogSpawnSchedule" xml:space="preserve"><value>Added the spawn schedule for favorites or current filtered fish. Compare multiple spawns over 1, 3, 6, 12 or 24 hours, highlight concurrent spawns, and see why other fish have no timeline bars.</value></data>
   <data name="ScheduleTimelineMode" xml:space="preserve"><value>Timeline</value></data>
   <data name="ScheduleCalendarMode" xml:space="preserve"><value>Monthly calendar</value></data>
-  <data name="ScheduleCompactRange" xml:space="preserve"><value>{0:MM-dd HH:mm} → {1:MM-dd HH:mm} · {2} fish</value></data>
+  <data name="ScheduleCompactRange" xml:space="preserve"><value>{0:MM-dd HH:mm} → {1:MM-dd HH:mm} · {2} fish · Now {3:HH:mm}</value></data>
   <data name="ScheduleNoTimed" xml:space="preserve"><value>No timed intervals match this range.</value></data>
   <data name="ScheduleSimpleTooltip" xml:space="preserve"><value>{0}
 {1}</value></data>
@@ -843,9 +843,13 @@ Click for the full list of intervals below.</value></data>
   <data name="ChangelogScheduleTimeline" xml:space="preserve"><value>The timeline starts at 3 hours, with 1, 3, 6, 12 and 24-hour views. Compact rows show fish icons and locations; hover over an interval for exact times or click to open fish details.</value></data>
   <data name="ChangelogScheduleCalendar" xml:space="preserve"><value>The month view previews spawn time and fish name on each date. Click a day to browse all its spawn intervals below.</value></data>
   <data name="ChangelogScheduleDetails" xml:space="preserve"><value>Use map pins and fish-details buttons directly from schedule entries. Baits, weather and other conditions stay in fish details.</value></data>
-  <data name="ScheduleTimelineHint" xml:space="preserve"><value>Spawns in the next few hours</value></data>
+  <data name="ScheduleTimelineHint" xml:space="preserve"><value>Spawns along a time axis</value></data>
   <data name="ScheduleMonthHint" xml:space="preserve"><value>Spawns by date</value></data>
   <data name="ScheduleTrackTooltip" xml:space="preserve"><value>{0}
 {1}
 Click for fish details.</value></data>
+  <data name="ScheduleLocation" xml:space="preserve"><value>{0} · {1}</value></data>
+  <data name="ScheduleAxisHint" xml:space="preserve"><value>The vertical line marks the current time ({0:HH:mm:ss}). The axis starts at the preceding half-hour boundary; bars follow actual spawn times. Times use your PC's local time zone.</value></data>
+  <data name="ScheduleCalendarListVisible" xml:space="preserve"><value>Show fish list</value></data>
+  <data name="ScheduleCalendarResizeHint" xml:space="preserve"><value>Drag up or down to resize the calendar and fish list. Turn off Show fish list to view only the calendar.</value></data>
 </root>
