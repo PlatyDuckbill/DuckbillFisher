@@ -124,22 +124,38 @@ public static class FishingAvailability
         (rule.PreviousWeatherIds.Length == 0 || rule.PreviousWeatherIds.Contains(WeatherAt(period - WeatherSeconds, rates)));
 
     internal static FishingWindow Find(DateTimeOffset now, FishingRule rule, IReadOnlyList<WeatherChance> rates,
-        Func<AvailabilityRange, AvailabilityRange?>? constrain)
+        Func<AvailabilityRange, AvailabilityRange?>? constrain) =>
+        Enumerate(now, now.AddDays(SearchDays), rule, rates, constrain, CancellationToken.None).FirstOrDefault()
+            ?? new(FishingWindowKind.NotFound);
+
+    // One scan, fixed preparation baseline, and complete UTC boundaries even past the visible range.
+    // A continuous interval reaching the 30-day limit retains an unknown end.
+    internal static IEnumerable<FishingWindow> Enumerate(DateTimeOffset now, DateTimeOffset through,
+        FishingRule rule, IReadOnlyList<WeatherChance> rates, Func<AvailabilityRange, AvailabilityRange?>? constrain,
+        CancellationToken cancellationToken)
     {
         var unix = now.ToUnixTimeMilliseconds() / 1000.0;
         if (unix < WeatherSeconds || !IsValid(rule, rates))
-            return new(FishingWindowKind.Unknown);
+        {
+            yield return new(FishingWindowKind.Unknown);
+            yield break;
+        }
         if (constrain is null && IsAlways(rule))
-            return new(FishingWindowKind.Always);
+        {
+            yield return new(FishingWindowKind.Always);
+            yield break;
+        }
 
         double? foundStart = null;
         double? foundEnd = null;
         var firstPeriod = (long)unix / WeatherSeconds * WeatherSeconds;
         var horizon = unix + SearchDays * 86400;
+        var visibleEnd = Math.Min(through.ToUnixTimeMilliseconds() / 1000.0, horizon);
         for (var index = 0; index < SearchPeriods; index++)
         {
+            cancellationToken.ThrowIfCancellationRequested();
             var period = firstPeriod + index * WeatherSeconds;
-            if (period >= horizon) break;
+            if (period >= horizon || (period >= visibleEnd && foundEnd is null)) break;
             var periodEnd = Math.Min(period + WeatherSeconds, horizon);
             var weatherMatches = WeatherMatches(period, rule, rates);
             if (weatherMatches)
@@ -170,16 +186,24 @@ public static class FishingAvailability
                     else if (start <= foundEnd)
                         foundEnd = Math.Max(foundEnd.Value, end);
                     else
-                        return Result(foundStart!.Value, foundEnd.Value);
+                    {
+                        yield return Result(foundStart!.Value, foundEnd.Value);
+                        if (start >= visibleEnd) yield break;
+                        foundStart = start;
+                        foundEnd = end;
+                    }
+                    if (foundStart >= visibleEnd) yield break;
                 }
             }
             if (foundEnd is { } finish && finish < periodEnd)
-                return Result(foundStart!.Value, finish);
+            {
+                yield return Result(foundStart!.Value, finish);
+                foundStart = foundEnd = null;
+            }
         }
         // A continuous window reaching the search limit has no confirmed end within that limit.
-        return foundStart is { } begin
-            ? new(begin <= unix ? FishingWindowKind.Open : FishingWindowKind.Upcoming, FromSeconds(begin))
-            : new(FishingWindowKind.NotFound);
+        if (foundStart is { } begin && begin < visibleEnd)
+            yield return new(begin <= unix ? FishingWindowKind.Open : FishingWindowKind.Upcoming, FromSeconds(begin));
 
         FishingWindow Result(double start, double end) =>
             new(start <= unix ? FishingWindowKind.Open : FishingWindowKind.Upcoming, FromSeconds(start), FromSeconds(end));

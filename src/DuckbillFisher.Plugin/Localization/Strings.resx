@@ -761,4 +761,58 @@ Manual settings included: {3:N0}</value></data>
   <data name="ChangelogMoochLink" xml:space="preserve"><value>Confirmed mooch casts show a connection to the preceding successful catch in the timer and records.</value></data>
   <data name="ChangelogTimerRetention" xml:space="preserve"><value>Recent timer contents stay visible for five minutes after stopping, even across area changes. A new trip replaces them.</value></data>
   <data name="ChangelogProgressPalette" xml:space="preserve"><value>Refined collection-progress colors into a consistent blue, teal, and green palette.</value></data>
+  <data name="ScheduleTitle" xml:space="preserve"><value>Spawn schedule</value></data>
+  <data name="ScheduleFavorites" xml:space="preserve"><value>Favorites</value></data>
+  <data name="ScheduleCatalog" xml:space="preserve"><value>Current filtered fish</value></data>
+  <data name="ScheduleHours" xml:space="preserve"><value>{0}h</value></data>
+  <data name="ScheduleSourceHint" xml:space="preserve"><value>Favorites uses every favorite. Current filtered fish uses the main list search and filters. This page adds its own search and hide-caught option.</value></data>
+  <data name="ScheduleHideHint" xml:space="preserve"><value>Hide only fish confirmed caught. Unknown collection states remain visible. This also applies to current filtered fish.</value></data>
+  <data name="ScheduleEmphasize" xml:space="preserve"><value>Highlight concurrent spawns</value></data>
+  <data name="ScheduleConcurrentHint" xml:space="preserve"><value>Highlight time shared with the spawn you are viewing. Only displayed fish are compared.</value></data>
+  <data name="ScheduleFishEyesHint" xml:space="preserve"><value>Shares the main list Fish Eyes mode. This changes schedule exploration, while alerts continue to use normal forecasts.</value></data>
+  <data name="ScheduleRange" xml:space="preserve"><value>Local time · {0:MM-dd HH:mm} → {1:MM-dd HH:mm} · UTC{2}</value></data>
+  <data name="ScheduleCounts" xml:space="preserve"><value>Source {0} · after search/collection {1} · timeline {2}</value></data>
+  <data name="ScheduleComputing" xml:space="preserve"><value>Calculating the spawn schedule…</value></data>
+  <data name="ScheduleFailed" xml:space="preserve"><value>Could not calculate the schedule. Change the period or reopen this page to retry.</value></data>
+  <data name="ScheduleNoFavorites" xml:space="preserve"><value>No favorite fish. Add favorites from the fish list or favorites management.</value></data>
+  <data name="ScheduleNoCatalog" xml:space="preserve"><value>The current main-list search and filters match no fish. Adjust them on the fish list page.</value></data>
+  <data name="ScheduleNoMatches" xml:space="preserve"><value>No fish match this page’s search and collection options.</value></data>
+  <data name="ScheduleClearSearch" xml:space="preserve"><value>Clear schedule search</value></data>
+  <data name="ScheduleFishColumn" xml:space="preserve"><value>Fish / region</value></data>
+  <data name="ScheduleReasonColumn" xml:space="preserve"><value>Reason not shown</value></data>
+  <data name="ScheduleLegend" xml:space="preserve"><value>Available now · green / Upcoming · blue / Concurrent spawns · hatched</value></data>
+  <data name="ScheduleNow" xml:space="preserve"><value>Now {0:HH:mm}</value></data>
+  <data name="ScheduleIntuitionAssumed" xml:space="preserve"><value>Intuition · duration assumed</value></data>
+  <data name="ScheduleIntuition" xml:space="preserve"><value>Intuition</value></data>
+  <data name="ScheduleNameTooltip" xml:space="preserve"><value>{0}
+{1}
+Click to open fish details.</value></data>
+  <data name="ScheduleWindowTooltip" xml:space="preserve"><value>{0}
+{1}
+{2}</value></data>
+  <data name="ScheduleTimeList" xml:space="preserve"><value>Spawn times</value></data>
+  <data name="ScheduleListWindow" xml:space="preserve"><value>{0} · {1}</value></data>
+  <data name="ScheduleSelected" xml:space="preserve"><value>Viewing · {0}
+{1}</value></data>
+  <data name="ScheduleOpenDetail" xml:space="preserve"><value>Fish details</value></data>
+  <data name="ScheduleEnded" xml:space="preserve"><value>This spawn has ended. Select another interval.</value></data>
+  <data name="ScheduleRemaining" xml:space="preserve"><value>{0}</value></data>
+  <data name="ScheduleChoose" xml:space="preserve"><value>Click a spawn interval to view its times and fish available at the same time.</value></data>
+  <data name="ScheduleEt" xml:space="preserve"><value>ET · {0} → {1}</value></data>
+  <data name="ScheduleConcurrent" xml:space="preserve"><value>Fish available at the same time · {0}</value></data>
+  <data name="ScheduleConcurrentRow" xml:space="preserve"><value>{0} · {1:MM-dd HH:mm:ss}–{2:MM-dd HH:mm:ss} · {3}</value></data>
+  <data name="ScheduleNoConcurrent" xml:space="preserve"><value>No other displayed fish spawn at the same time.</value></data>
+  <data name="ScheduleComparisonHint" xml:space="preserve"><value>Compares displayed spawn intervals only. Travel, preparation, actual buffs and catch success are not included. Unknown ends are compared only through the displayed period.</value></data>
+  <data name="ScheduleOtherHeading" xml:space="preserve"><value>Fish without timeline bars · {0}</value></data>
+  <data name="ScheduleNoOther" xml:space="preserve"><value>All fish matching these options are shown on the timeline.</value></data>
+  <data name="ScheduleDetail" xml:space="preserve"><value>Details</value></data>
+  <data name="ScheduleNext" xml:space="preserve"><value>Next spawn · {0:MM-dd HH:mm:ss}</value></data>
+  <data name="ScheduleOutside" xml:space="preserve"><value>No spawn in the next {0} hours.</value></data>
+  <data name="ScheduleAlways" xml:space="preserve"><value>Always available · no time/weather restrictions under this forecast mode.</value></data>
+  <data name="ScheduleOceanUnsupported" xml:space="preserve"><value>Ocean fishing · not supported by this schedule.</value></data>
+  <data name="ScheduleUnsupported" xml:space="preserve"><value>Not supported by the regular fishing schedule.</value></data>
+  <data name="ScheduleIncomplete" xml:space="preserve"><value>Partially calculated · showing at most {0} intervals for this fish.</value></data>
+  <data name="ScheduleWindowRange" xml:space="preserve"><value>{0:MM-dd HH:mm:ss} → {1:MM-dd HH:mm:ss}</value></data>
+  <data name="ScheduleWindowUnknownEnd" xml:space="preserve"><value>{0:MM-dd HH:mm:ss} → end unknown</value></data>
+  <data name="ChangelogSpawnSchedule" xml:space="preserve"><value>Added the spawn schedule for favorites or current filtered fish. Compare multiple spawns over 1, 3, 6, 12 or 24 hours, highlight concurrent spawns, and see why other fish have no timeline bars.</value></data>
 </root>

@@ -48,6 +48,7 @@ internal sealed record FishCatalogView(IReadOnlyList<FishGuideRow> Rows, UiMessa
     public bool FishEyesEnabled { get; init; }
     public FishingConditionIcon? FishEyesSkill { get; init; }
     public FishingForecast Forecast { get; init; } = new([]);
+    public IReadOnlySet<uint> SpearfishingItems { get; init; } = FrozenSet<uint>.Empty;
     public int ForecastRevision { get; init; }
     public DateTimeOffset? ForecastAt { get; init; }
 }
@@ -302,6 +303,7 @@ internal sealed class FishCatalog : IDisposable
                     RowsById = rows.ToFrozenDictionary(row => row.FishParameterId),
                     RelatedRows = rows.Where(row => row.Details is not null).ToFrozenDictionary(row => row.ItemId),
                     Forecast = forecast,
+                    SpearfishingItems = FishingData.Dataset.Spearfishing.Select(rule => rule.ItemId).ToFrozenSet(),
                     FishEyesEnabled = view.FishEyesEnabled,
                     FishEyesSkill = actions.GetRowOrDefault(4105) is { IsPlayerAction: true } eyes && eyes.ClassJob.RowId == 18
                         ? new(4105, eyes.Name.ExtractText(), eyes.Icon) : null,

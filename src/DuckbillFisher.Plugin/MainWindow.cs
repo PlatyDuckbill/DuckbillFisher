@@ -19,6 +19,7 @@ internal sealed class MainWindow : Window
     private readonly FishPreferences preferences;
     private readonly FishingHistoryBrowser fishingHistory;
     private readonly CollectionProgressPanel collectionProgress;
+    private readonly SpawnSchedulePanel schedule;
     public Action? ShowCompact { get; set; }
     public Action? ShowTimer { get; set; }
     public Action? ShowChangelog { get; set; }
@@ -32,11 +33,11 @@ internal sealed class MainWindow : Window
     private int selectedMarker;
     private bool selectSettings;
     private MainPage selectedPage;
-    private enum MainPage { Catalog, Collection, Alerts, History, Settings, Guide, Fishing }
+    private enum MainPage { Catalog, Collection, Schedule, Alerts, History, Settings, Guide, Fishing }
 
     public MainWindow(FishingActivityProbe observer, FishGuideDiagnostics fishGuide, FishListPanel fishList,
         SpawnAlertsPanel spawnAlerts, FishPreferences preferences, Action languageChanged,
-        FishingHistoryBrowser fishingHistory, CollectionProgressPanel collectionProgress) : base("DuckbillFisher###DuckbillFisher.Main")
+        FishingHistoryBrowser fishingHistory, CollectionProgressPanel collectionProgress, SpawnSchedulePanel schedule) : base("DuckbillFisher###DuckbillFisher.Main")
     {
         this.observer = observer;
         this.fishGuide = fishGuide;
@@ -46,6 +47,7 @@ internal sealed class MainWindow : Window
         this.preferences = preferences;
         this.fishingHistory = fishingHistory;
         this.collectionProgress = collectionProgress;
+        this.schedule = schedule;
         spawnAlerts.ShowSettings = OpenSettings;
         UiText.SetLanguage(preferences.View.Language);
         markerLabels = Markers.Select(key => UiText.Get(key)).ToArray();
@@ -64,6 +66,7 @@ internal sealed class MainWindow : Window
     }
 
     public override void OnOpen() => ShowUnreadChangelog?.Invoke();
+    public override void OnClose() => schedule.SetActive(false);
 
     public override void Draw()
     {
@@ -77,11 +80,13 @@ internal sealed class MainWindow : Window
         fishList.DeveloperMode = settings.DeveloperMode;
         spawnAlerts.DeveloperMode = settings.DeveloperMode;
         DrawNavigation(settings.DeveloperMode);
+        schedule.SetActive(selectedPage == MainPage.Schedule);
         ImGui.PushID(selectedPage.ToString());
         switch (selectedPage)
         {
             case MainPage.Catalog: fishList.Draw(); break;
             case MainPage.Collection: collectionProgress.Draw(); break;
+            case MainPage.Schedule: schedule.Draw(); break;
             case MainPage.Alerts: spawnAlerts.Draw(); break;
             case MainPage.History: fishingHistory.Draw(settings.DeveloperMode, ShowTimer); break;
             case MainPage.Settings:
@@ -120,6 +125,7 @@ internal sealed class MainWindow : Window
             {
                 NavigationTab(MainPage.Catalog, T.TabCatalog, "CatalogTab", FontAwesomeIcon.Fish);
                 NavigationTab(MainPage.Collection, T.TabCollectionProgress, "CollectionProgressTab", FontAwesomeIcon.ChartBar);
+                NavigationTab(MainPage.Schedule, T.ScheduleTitle, "SpawnScheduleTab", FontAwesomeIcon.CalendarAlt);
                 NavigationTab(MainPage.Alerts, T.TabAlerts, "SpawnAlertsTab", FontAwesomeIcon.Star);
                 NavigationTab(MainPage.History, T.TabHistory, "FishingHistoryTab", FontAwesomeIcon.History);
                 NavigationTab(MainPage.Settings, T.TabSettings, "SettingsTab", FontAwesomeIcon.Cog, selectSettings);

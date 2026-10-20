@@ -80,6 +80,40 @@ public sealed class FishingForecast
         return FishingAvailability.Find(at, input.Rule, input.WeatherRates);
     }
 
+    /// <summary>Enumerates a bounded schedule using the same conditions as Find, with one preparation baseline.</summary>
+    public IEnumerable<FishingWindow> Enumerate(DateTimeOffset now, DateTimeOffset through, uint itemId,
+        bool fishEyes = false, CancellationToken cancellationToken = default)
+    {
+        if (through <= now || through > now.AddDays(FishingAvailability.SearchDays))
+            throw new ArgumentOutOfRangeException(nameof(through));
+        cancellationToken.ThrowIfCancellationRequested();
+        if (!inputs.TryGetValue(itemId, out var input) || !FishingAvailability.IsValid(input.Rule, input.WeatherRates))
+        { yield return new(FishingWindowKind.Unknown); yield break; }
+        if (SupportUnknown(input.Rule, fishEyes))
+        { yield return new(FishingWindowKind.Unknown) { Issue = FishingForecastIssue.FishEyesSupportUnknown }; yield break; }
+        input = ForMode(input, fishEyes);
+        var rule = input.Rule;
+        Func<AvailabilityRange, AvailabilityRange?>? constrain = null;
+        if (rule.Predators.Length > 0)
+        {
+            var issue = Prerequisites(rule, fishEyes, out var predators);
+            if (issue != FishingForecastIssue.None)
+            { yield return new(FishingWindowKind.Unknown) { Issue = issue }; yield break; }
+            if (!predators.All(predator => FishingAvailability.IsAlways(predator.Rule)))
+            {
+                var duration = rule.IntuitionSeconds ?? DefaultIntuitionSeconds;
+                if (!double.IsFinite(duration) || duration <= 0)
+                { yield return new(FishingWindowKind.Unknown) { Issue = FishingForecastIssue.IntuitionDurationUnknown }; yield break; }
+                var unix = now.ToUnixTimeMilliseconds() / 1000.0;
+                if (unix < FishingAvailability.WeatherSeconds * 2 + duration)
+                { yield return new(FishingWindowKind.Unknown); yield break; }
+                constrain = range => Constrain(range, predators, duration, unix, out _);
+            }
+        }
+        foreach (var window in FishingAvailability.Enumerate(now, through, rule, input.WeatherRates, constrain, cancellationToken))
+            yield return window with { Basis = rule.Predators.Length > 0 ? FishingForecastBasis.Intuition : FishingForecastBasis.TimeWeather };
+    }
+
     private static bool SupportUnknown(FishingRule rule, bool fishEyes) => fishEyes && rule.FishEyesSupported is null &&
         (rule.StartHour != 0 || rule.EndHour != 24);
 
