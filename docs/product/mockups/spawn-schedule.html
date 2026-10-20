@@ -1,41 +1,246 @@
+
 <!doctype html>
-<html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>출현 일정표 · 개편 시안</title>
+<html lang="ko">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>출현 일정표 · 상단 배치 제안</title>
 <style>
-:root{color-scheme:dark;--bg:#11161e;--surface:#1c222b;--line:#374454;--muted:#acb9c8;--blue:#69a8dd;--green:#59bc97}*{box-sizing:border-box}body{background:var(--bg);color:#edf3fa;font:14px/1.4 'Malgun Gothic',sans-serif;margin:20px}button,input,select{font:inherit;color:inherit;background:#2c3745;border:1px solid #49586a;border-radius:3px;padding:4px 9px}button{cursor:pointer}button:hover{background:#3c4e64}button.active{background:#405d7c;border-color:var(--blue)}button:focus-visible,input:focus-visible,summary:focus-visible{outline:2px solid var(--blue);outline-offset:2px}input[type=search]{min-width:140px;flex:1}input[type=checkbox]{accent-color:var(--blue)}.review{max-width:1180px;margin:0 auto 12px;color:var(--muted);font-size:12px}.app{max-width:1180px;height:780px;min-height:480px;resize:vertical;overflow:hidden;margin:auto;background:var(--surface);border:1px solid #536172;display:flex;flex-direction:column}.title{padding:8px 12px;background:#29333e;font-weight:600}.nav{padding:8px 10px;border-bottom:1px solid var(--line);display:flex;gap:18px;white-space:nowrap;font-size:13px;color:var(--muted);overflow-x:auto}.nav b{color:#e2c58b}.tools{padding:10px 12px 8px;display:flex;flex-direction:column;gap:8px}.row{display:flex;flex-wrap:wrap;gap:7px;align-items:center}.row label{display:inline-flex;gap:5px;align-items:center;font-size:12px}.content{min-height:0;flex:1;padding:0 12px 8px;display:flex;flex-direction:column}.range{color:var(--muted);font-size:12px;padding:4px 0 7px}.graph{flex:1;min-height:80px;overflow:auto;border-top:1px solid var(--line);border-bottom:1px solid var(--line)}.ghead,.grow{display:grid;grid-template-columns:235px minmax(0,1fr) 36px;align-items:center}.ghead{height:28px;position:sticky;top:0;z-index:5;background:#2a3440;color:var(--muted);font-size:12px}.grow{height:42px;border-bottom:1px solid #303c4b}.grow:nth-child(odd){background:#232c38}.fish{display:flex;align-items:center;gap:8px;min-width:0;padding:3px 7px}.icon{width:28px;height:28px;flex-shrink:0;display:grid;place-items:center;background:#3e657e;border-radius:3px;font-size:18px}.fishname{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.fish small{display:block;color:var(--muted);font-size:11px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.track,.scale{position:relative;height:100%;margin-right:8px}.track{background-image:linear-gradient(to right,#48576c70 1px,transparent 1px);background-size:var(--step) 100%}.tick{position:absolute;transform:translateX(-50%);top:6px;white-space:nowrap}.tick:first-child{transform:none}.bar{position:absolute;top:12px;height:19px;min-width:3px;border:0;padding:0;background:var(--blue)}.bar.live{background:var(--green)}.now{position:absolute;top:0;bottom:0;width:1px;background:#e4b667;pointer-events:none}.pin{padding:1px 6px;margin:3px;color:#cbdced}.other{padding-top:6px;color:var(--muted);font-size:12px}.other summary{cursor:pointer}.other table{width:100%;border-collapse:collapse}.other td{padding:7px;border-bottom:1px solid var(--line)}.monthnav{display:flex;gap:12px;align-items:center;padding:5px 0 10px}.weekdays{display:grid;grid-template-columns:repeat(7,1fr);text-align:center;font-size:12px;color:var(--muted);height:23px}.monthgrid{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));flex:0 0 55%;min-height:145px;border-top:1px solid var(--line);border-left:1px solid var(--line)}.date{padding:4px 6px;border-radius:0;border:0;border-bottom:1px solid var(--line);border-right:1px solid var(--line);background:transparent;text-align:left;overflow:hidden;display:flex;flex-direction:column;gap:3px;font-size:11px;min-height:0}.date strong{font-size:12px}.date.today strong{color:#f2c475}.date.chosen{background:#344e6b}.date span{display:block;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;min-height:15px}.date .more{color:var(--muted);margin-top:auto}.daytitle{font-size:13px;margin:8px 0}.daylist{flex:1;min-height:50px;overflow:auto}.dayrow{display:grid;grid-template-columns:180px minmax(0,1fr) 35px 58px;align-items:center;height:42px;border-top:1px solid var(--line);font-size:12px}.empty{color:var(--muted);padding:12px}dialog{background:var(--surface);color:#edf3fa;border:1px solid #718096;padding:20px;max-width:390px}dialog::backdrop{background:#0009}[hidden]{display:none!important}@media(max-width:800px){body{margin:8px}.ghead,.grow{grid-template-columns:170px minmax(0,1fr) 32px}.dayrow{grid-template-columns:135px minmax(0,1fr) 30px 50px}.date{padding:3px}.date span{font-size:10px}.nav{gap:10px}.fish{gap:5px}.icon{width:24px;height:24px}}
-.viewbar{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:8px}.viewtabs{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:7px;max-width:100%}.viewtabs button{width:155px;max-width:100%}.viewbar #periods{display:flex;flex-wrap:wrap;gap:5px}.viewbar .monthnav{padding:0;flex-wrap:wrap}.calendar-divider{height:10px;flex-shrink:0;cursor:ns-resize;border-top:1px solid var(--line);margin-top:4px;touch-action:none}.calendar-divider:after{content:"";display:block;width:10%;height:4px;margin:1px auto;background:var(--muted);border-radius:2px}.calendar-only .monthgrid{flex:1}.viewtabs button{text-align:left;padding:7px 12px;border-bottom:3px solid transparent;min-width:0}.viewtabs button.active{border-bottom-color:var(--blue);font-weight:bold}.viewtabs small{display:block;font-size:11px;font-weight:normal;color:var(--muted);margin-top:3px}</style></head><body>
-<p class="review">개편 시안 · 모든 어종·지역·출현 시각은 가상 자료입니다. 🐟 표식은 게임 아이콘의 자리 표시입니다. 실제 게임 연결·예측 계산은 없습니다.</p>
-<main class="app"><div class="title">DuckbillFisher</div><nav class="nav"><span>어종 목록</span><span>수집 현황</span><b>출현 일정표</b><span>즐겨찾기 관리</span><span>낚시 기록</span><span>설정</span></nav>
-<div class="tools"><div class="viewbar"><div class="viewtabs" role="tablist" aria-label="일정 보기"><button id="timelineMode" class="active" role="tab" aria-controls="timeline" aria-selected="true">▤ 시간축<small>시간대별 출현 일정</small></button><button id="monthMode" role="tab" aria-controls="calendar" aria-selected="false">▦ 월 달력<small>날짜별 출현 일정</small></button></div><span id="periods"><button data-h="1">1시간</button> <button data-h="3" class="active">3시간</button> <button data-h="6">6시간</button> <button data-h="12">12시간</button> <button data-h="24">24시간</button></span><div id="monthActions" class="monthnav" hidden><button id="prev" aria-label="이전 달">‹</button><strong id="monthTitle" title="날짜 칸은 어종별 첫 출현을 요약합니다. 날짜를 누르면 모든 가상 회차를 확인합니다."></strong><button id="next" aria-label="다음 달">›</button><button id="today">오늘</button><label><input id="showList" type="checkbox" checked>어종 목록 표시</label></div></div><div class="row"><select id="source" aria-label="표시 대상"><option value="all">현재 필터 어종</option><option value="favorites">즐겨찾기</option></select><input id="search" type="search" placeholder="어종·낚시터 검색…" aria-label="검색"></div><div class="row"><label><input id="hideCaught" type="checkbox" checked>수집한 어종 숨기기</label><label id="emphasisLabel"><input id="emphasize" type="checkbox" checked>동시 출현 강조</label><button id="eyes" aria-pressed="false" title="물고기의 눈 가정 전환 예시">물고기의 눈</button></div></div>
-<section class="content" id="timeline"><div class="range" id="range"></div><div class="graph"><div class="ghead"><span>어종 / 낚시터·지역</span><div class="scale" id="scale"></div><span></span></div><div id="graphRows"></div></div><details class="other"><summary>시간축에 표시하지 않는 어종 · 3종</summary><table><tr><td>가상 어종 X</td><td>상시 출현</td></tr><tr><td>가상 어종 Y</td><td>조건 미확인</td></tr><tr><td>가상 어종 Z</td><td>표시 기간 내 출현 없음</td></tr></table></details></section>
-<section class="content" id="calendar" hidden><div class="weekdays"><span>일</span><span>월</span><span>화</span><span>수</span><span>목</span><span>금</span><span>토</span></div><div class="monthgrid" id="monthGrid"></div><div id="calendarDivider" class="calendar-divider" title="위아래로 드래그하여 높이 조절"></div><div class="daytitle" id="dayTitle"></div><div class="daylist" id="dayList"></div></section></main>
+:root{color-scheme:dark;--bg:#11151b;--surface:#1b2028;--line:#39414c;--muted:#aab3c0;--blue:#79b8ed;--green:#59bc97;--text:#edf3fa}
+*{box-sizing:border-box}
+body{margin:20px;background:var(--bg);color:var(--text);font:14px/1.4 'Malgun Gothic',sans-serif}
+button,input,select,summary{font:inherit;color:inherit}
+button,input,select{background:#2b333e;border:1px solid #485260;border-radius:4px;padding:5px 9px}
+button{cursor:pointer;white-space:nowrap}
+button:hover,summary:hover{background:#38485b}
+button.active{background:#3d5873;border-color:var(--blue)}
+:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
+input[type=checkbox]{accent-color:var(--blue)}
+[hidden]{display:none!important}
+.review{max-width:1180px;margin:0 auto 12px;color:var(--muted);font-size:12px}
+.review p{margin:0 0 8px}
+.preview-tools{display:flex;flex-wrap:wrap;gap:6px;align-items:center}
+.preview-tools button{font-size:12px;padding:3px 9px}
+.preview-tools .size-hint{margin-left:auto;color:#7f8c9c}
+.app{container-type:inline-size;width:1100px;max-width:100%;height:780px;min-height:480px;min-width:320px;resize:both;overflow:hidden;margin:auto;background:var(--surface);border:1px solid #536172;display:flex;flex-direction:column}
+.title{padding:7px 12px;background:#29313d;font-weight:bold}
+.nav{padding:7px 10px;border-bottom:1px solid var(--line);display:flex;gap:18px;white-space:nowrap;font-size:12px;color:var(--muted);overflow-x:auto;flex-shrink:0}
+.nav b{color:#f2cf95}
+.toolbar{padding:12px;display:grid;grid-template-columns:224px 172px minmax(140px,1fr) auto 70px;gap:10px;align-items:center;border-bottom:1px solid var(--line)}
+.viewtabs{display:grid;grid-template-columns:1fr 1fr;height:40px;background:#12171f;border:1px solid #526172;border-radius:5px;overflow:hidden}
+.viewtabs button{height:38px;border:0;border-radius:0;border-bottom:3px solid transparent;background:transparent;padding:0 12px;font-weight:bold;font-size:15px;display:flex;justify-content:center;align-items:center;gap:7px}
+.viewtabs button+button{border-left:1px solid #526172}
+.viewtabs button:hover{background:#2f3c4d}
+.viewtabs button.active{background:#354f69;border-bottom-color:#8dcaff;color:#fff}
+.tab-icon{font-size:18px;line-height:1}
+.toolbar select,.toolbar input[type=search]{height:32px;width:100%;min-width:0}
+.hide-label{font-size:12px;display:inline-flex;gap:5px;align-items:center;white-space:nowrap}
+.options{position:relative;align-self:center}
+.options summary{cursor:pointer;list-style:none;border:1px solid #485260;border-radius:4px;height:32px;display:flex;align-items:center;justify-content:center;background:#2b333e;white-space:nowrap;font-size:12px}
+.options summary::-webkit-details-marker{display:none}
+.option-panel{position:absolute;right:0;top:38px;z-index:30;background:#242d39;border:1px solid #66798e;border-radius:5px;width:235px;box-shadow:0 8px 28px #0009;padding:12px;display:flex;flex-direction:column;gap:12px}
+.option-panel label{display:flex;align-items:center;gap:7px;font-size:13px}
+.option-panel small{color:var(--muted);font-size:11px;line-height:1.5}
+.content{min-height:0;flex:1;padding:0 12px 10px;display:flex;flex-direction:column}
+.content-controls{display:flex;flex-wrap:wrap;align-items:center;gap:10px;padding:10px 0;flex-shrink:0;min-height:46px}
+.periods{display:flex;align-items:center;gap:4px;flex-shrink:0}
+.periods button{font-size:12px;padding:4px 8px}
+.range{display:flex;flex-wrap:wrap;gap:8px 14px;align-items:center;color:var(--muted);font-size:12px;flex:1;min-width:210px}
+.range .current{margin-left:auto;color:#ebc782;white-space:nowrap}
+.monthnav{display:flex;gap:9px;align-items:center;flex-shrink:0}
+.monthnav strong{min-width:112px;text-align:center;font-size:15px}
+.monthnav button{font-size:12px}
+#showList{font-size:12px}
+.graph{flex:1;min-height:80px;overflow:auto;border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+.ghead,.grow{display:grid;grid-template-columns:235px minmax(0,1fr) 36px;align-items:center}
+.ghead{height:28px;position:sticky;top:0;z-index:5;background:#2a3440;color:var(--muted);font-size:12px}
+.ghead>span:first-child{padding-left:7px}
+.grow{height:42px;border-bottom:1px solid #303c4b}
+.grow:nth-child(odd){background:#222a35}
+.fish{display:flex;align-items:center;gap:8px;min-width:0;padding:3px 7px;cursor:pointer}
+.icon{width:28px;height:28px;flex-shrink:0;display:grid;place-items:center;background:#3e657e;border-radius:3px;font-size:18px}
+.fishname{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:13px}
+.fish small{display:block;color:var(--muted);font-size:11px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.track,.scale{position:relative;height:100%;margin-right:8px}
+.track{background-image:linear-gradient(to right,#48576c70 1px,transparent 1px);background-size:var(--step) 100%}
+.tick{position:absolute;transform:translateX(-50%);top:6px;white-space:nowrap}
+.tick:first-child{transform:none}
+.bar{position:absolute;top:12px;height:19px;min-width:3px;border:0;padding:0;background:var(--blue)}
+.bar.live{background:var(--green)}
+.bar:hover{outline:1px solid #fff;outline-offset:2px}
+.bar .overlap{position:absolute;top:0;bottom:0;background:repeating-linear-gradient(115deg,transparent 0 4px,#e8b75ee6 4px 6px);pointer-events:none}
+.now{position:absolute;top:0;bottom:0;width:1px;background:#e4b667;pointer-events:none}
+.pin{padding:1px 6px;margin:3px;color:#cbdced}
+.other{padding-top:6px;color:var(--muted);font-size:12px;max-height:150px;overflow:auto;flex-shrink:0}
+.other summary{cursor:pointer}
+.other table{width:100%;border-collapse:collapse}
+.other td{padding:7px;border-bottom:1px solid var(--line)}
+.weekdays{display:grid;grid-template-columns:repeat(7,1fr);text-align:center;font-size:12px;color:var(--muted);height:24px;flex-shrink:0}
+.monthgrid{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));grid-auto-rows:minmax(0,1fr);flex:0 0 55%;min-height:145px;border-top:1px solid var(--line);border-left:1px solid var(--line);overflow:hidden}
+.date{padding:4px 6px;border-radius:0;border:0;border-bottom:1px solid var(--line);border-right:1px solid var(--line);background:transparent;text-align:left;overflow:hidden;display:flex;flex-direction:column;gap:3px;font-size:11px;min-height:0}
+.date strong{font-size:12px;display:flex;justify-content:space-between}
+.date.today strong{color:#f2c475}
+.date.chosen{background:#344e6b;box-shadow:inset 0 0 0 1px #7db4e5}
+.date span{display:block;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;min-height:15px}
+.date .more{color:var(--muted);font-size:10px;font-weight:normal}
+.calendar-divider{height:12px;flex-shrink:0;cursor:ns-resize;border-top:1px solid var(--line);margin-top:4px;touch-action:none}
+.calendar-divider:after{content:"";display:block;width:10%;height:4px;margin:2px auto;background:var(--muted);border-radius:2px}
+.calendar-divider:hover:after,.calendar-divider.dragging:after{background:var(--blue)}
+.calendar-only .monthgrid{flex:1}
+.daytitle{font-size:13px;padding:4px 0 9px;flex-shrink:0}
+.daylist{flex:1;min-height:50px;overflow:auto}
+.dayrow{display:grid;grid-template-columns:165px minmax(0,1fr) 35px 58px;align-items:center;height:42px;border-top:1px solid var(--line);font-size:12px}
+.empty{color:var(--muted);padding:12px}
+dialog{background:var(--surface);color:var(--text);border:1px solid #718096;border-radius:7px;padding:20px;max-width:390px}
+dialog::backdrop{background:#0009}
+@container(max-width:820px){
+.toolbar{grid-template-columns:170px minmax(0,1fr) auto 70px;gap:8px}
+.viewtabs{grid-column:1/3;width:100%}
+.hide-label{grid-column:3;grid-row:1}
+.options{grid-column:4;grid-row:1}
+#source{grid-column:1;grid-row:2}
+#search{grid-column:2/5;grid-row:2}
+.ghead,.grow{grid-template-columns:195px minmax(0,1fr) 32px}
+.dayrow{grid-template-columns:135px minmax(0,1fr) 30px 50px}
+}
+@container(max-width:540px){
+.toolbar{grid-template-columns:150px minmax(0,1fr)}
+.viewtabs{grid-column:1/3}
+#source{grid-column:1;grid-row:2}
+#search{grid-column:2;grid-row:2}
+.hide-label{grid-column:1;grid-row:3}
+.options{grid-column:2;grid-row:3;justify-self:end;width:70px}
+.ghead,.grow{grid-template-columns:150px minmax(0,1fr) 30px}
+.dayrow{grid-template-columns:112px minmax(0,1fr) 28px 45px}
+.fish{gap:5px;padding-left:3px}
+.icon{width:24px;height:24px}
+.date{padding:3px}
+.date span{font-size:10px}
+.nav{gap:10px}
+.range{font-size:11px;min-width:180px}
+}
+@media(max-width:800px){body{margin:8px}.preview-tools .size-hint{display:none}}
+</style>
+</head>
+<body>
+<div class="review">
+<p>상단 배치 제안 · 높이 40px 보기 탭 + 남는 폭을 채우는 검색창. 어종·지역·시각은 모두 가상 자료이며 실제 플러그인과 연결되지 않습니다.</p>
+<div class="preview-tools" aria-label="미리보기 크기">
+<span>미리보기 폭</span><button data-preview="1100" class="active">넓게 · 1100</button><button data-preview="800">보통 · 800</button><button data-preview="580">좁게 · 580</button>
+<span class="size-hint">우측 하단을 드래그해 크기를 조절할 수도 있습니다.</span>
+</div></div>
+<main class="app" id="app">
+<div class="title">DuckbillFisher</div>
+<nav class="nav"><span>어종 목록</span><span>수집 현황</span><b>출현 일정표</b><span>즐겨찾기 관리</span><span>낚시 기록</span><span>설정</span></nav>
+<div class="toolbar">
+<div class="viewtabs" role="tablist" aria-label="일정 보기">
+<button id="timelineMode" class="active" role="tab" aria-controls="timeline" aria-selected="true" title="시간대별 출현 일정"><span class="tab-icon" aria-hidden="true">▤</span>시간축</button>
+<button id="monthMode" role="tab" aria-controls="calendar" aria-selected="false" title="날짜별 출현 일정"><span class="tab-icon" aria-hidden="true">▦</span>월 달력</button>
+</div>
+<select id="source" aria-label="표시 대상"><option value="all">현재 필터 어종</option><option value="favorites">즐겨찾기</option></select>
+<input id="search" type="search" placeholder="어종·낚시터 검색…" aria-label="어종·낚시터 검색">
+<label class="hide-label"><input id="hideCaught" type="checkbox" checked>수집한 어종 숨기기</label>
+<details class="options" id="options"><summary>옵션 ▾</summary><div class="option-panel">
+<label id="emphasisLabel"><input id="emphasize" type="checkbox" checked>동시 출현 강조</label>
+<label><input id="eyes" type="checkbox">물고기의 눈</label>
+<small>시안용 조작입니다. 실제 출현 조건이나 버프를 계산하지 않습니다.</small>
+</div></details>
+</div>
+<section class="content" id="timeline" role="tabpanel" aria-labelledby="timelineMode">
+<div class="content-controls">
+<div id="periods" class="periods" aria-label="표시 기간"><button data-h="1">1시간</button><button data-h="3" class="active">3시간</button><button data-h="6">6시간</button><button data-h="12">12시간</button><button data-h="24">24시간</button></div>
+<div class="range" id="range"></div></div>
+<div class="graph"><div class="ghead"><span>어종 / 낚시터·지역</span><div class="scale" id="scale"></div><span></span></div><div id="graphRows"></div></div>
+<details class="other"><summary>시간축에 표시하지 않는 어종 · 3종</summary><table><tr><td>가상 어종 X</td><td>상시 출현</td></tr><tr><td>가상 어종 Y</td><td>조건 미확인</td></tr><tr><td>가상 어종 Z</td><td>표시 기간 내 출현 없음</td></tr></table></details>
+</section>
+<section class="content" id="calendar" role="tabpanel" aria-labelledby="monthMode" hidden>
+<div id="monthActions" class="content-controls" hidden>
+<div class="monthnav"><button id="prev" aria-label="이전 달">‹</button><strong id="monthTitle" title="날짜 칸은 어종별 첫 출현 요약입니다. 날짜를 누르면 그날의 모든 가상 회차를 확인합니다."></strong><button id="next" aria-label="다음 달">›</button><button id="today">오늘</button></div>
+<button id="showList" aria-expanded="true" aria-controls="dayList">목록 숨기기</button>
+</div>
+<div class="weekdays"><span>일</span><span>월</span><span>화</span><span>수</span><span>목</span><span>금</span><span>토</span></div>
+<div class="monthgrid" id="monthGrid"></div>
+<div id="calendarDivider" class="calendar-divider" title="위아래로 드래그하여 높이 조절 · 방향키로도 조절할 수 있습니다." role="separator" aria-label="달력과 어종 목록 높이 조절" aria-orientation="horizontal" aria-valuemin="25" aria-valuemax="85" aria-valuenow="55" tabindex="0"></div>
+<div class="daytitle" id="dayTitle"></div><div class="daylist" id="dayList"></div>
+</section>
+</main>
 <dialog id="detail"><h3>어종 상세 / 지도 연결 위치</h3><p>이 시안은 가상 자료입니다. 실제 플러그인에서는 해당 어종 상세나 지도 핀을 엽니다.</p><form method="dialog"><button>닫기</button></form></dialog>
 <script>
 (function(){
-'use strict';var $=function(id){return document.getElementById(id);};var hours=3,mode='timeline',month=new Date(2026,9,1),day=21;
+'use strict';var $=function(id){return document.getElementById(id);};var hours=3,listVisible=true,calendarRatio=0.55,mode=location.hash==='#calendar'?'calendar':'timeline',month=new Date(2026,9,1),day=21;
 var fish=Array.from({length:28},function(_,i){return {id:i,name:'가상 어종 '+String.fromCharCode(65+i%26)+(i>25?'2':''),spot:'예시 낚시터 '+(i%8+1),zone:'예시 지역 '+(i%6+1),caught:i%9===0};});
 function targets(){var q=$('search').value.trim();return fish.filter(function(f){return ($('source').value==='all'||f.id%3===0)&&(!$('hideCaught').checked||!f.caught)&&(!q||(f.name+' '+f.spot+' '+f.zone).includes(q));});}
 function icon(f){return '<div class="fish"><span class="icon" aria-hidden="true">🐟</span><span class="fishname">'+f.name+'<small title="'+f.spot+' · '+f.zone+'">'+f.spot+' · '+f.zone+'</small></span></div>';}
 function clock(minutes){var d=new Date(Date.UTC(2026,9,21,12,30)+minutes*60000);return String(d.getUTCHours()).padStart(2,'0')+':'+String(d.getUTCMinutes()).padStart(2,'0');}
 function pct(t){return (t+30)/(hours*60+30)*100;}
 function intervals(f){var result=[];for(var t=(f.id%5)*8-10;t<hours*60;t+=75+(f.id%4)*10){result.push({start:t,end:t+5+f.id%13});}return result;}
-function renderTimeline(){var items=targets();$('range').textContent='10-21 12:00 → '+clock(hours*60)+' · '+items.length+'종 · 현재 12:30';var step=hours<=3?30:hours<=6?60:hours<=12?120:240;var ticks='';for(var t=-30;t<=hours*60;t+=step){ticks+='<span class="tick" style="left:'+pct(t)+'%">'+clock(t)+'</span>';}$('scale').innerHTML=ticks;$('graphRows').innerHTML=items.map(function(f){return '<div class="grow">'+icon(f)+'<div class="track" style="--step:'+(step/(hours*60+30)*100)+'%">'+intervals(f).map(function(w){return '<button class="bar '+(w.start<=0?'live ':'')+'" data-f="'+f.id+'" data-start="'+w.start+'" data-end="'+w.end+'" style="left:'+pct(w.start)+'%;width:'+((w.end-w.start)/(hours*60+30)*100)+'%" title="'+f.name+' · '+clock(w.start)+' → '+clock(w.end)+'" aria-label="'+f.name+' '+clock(w.start)+'부터 '+clock(w.end)+'"></button>';}).join('')+'<span class="now" style="left:'+pct(0)+'%"></span></div><button class="pin" data-action="map" aria-label="'+f.name+' 지도 핀">⌖</button></div>';}).join('');}
+function renderTimeline(){var items=targets();$('range').innerHTML='<span>10-21 12:00 → '+clock(hours*60)+' · '+items.length+'종</span><span class="current" title="노란 세로선은 현재 시각입니다.">현재 12:30'+($('eyes').checked?' · 물고기의 눈':'')+'</span>';var step=hours===1?15:hours<=3?30:hours<=6?60:hours<=12?120:240;var ticks='';for(var t=-30;t<=hours*60;t+=step){ticks+='<span class="tick" style="left:'+pct(t)+'%">'+clock(t)+'</span>';}$('scale').innerHTML=ticks;$('graphRows').innerHTML=items.map(function(f){return '<div class="grow">'+icon(f)+'<div class="track" style="--step:'+(step/(hours*60+30)*100)+'%">'+intervals(f).map(function(w){return '<button class="bar '+(w.start<=0?'live ':'')+'" data-f="'+f.id+'" data-start="'+w.start+'" data-end="'+w.end+'" style="left:'+pct(w.start)+'%;width:'+((w.end-w.start)/(hours*60+30)*100)+'%" title="'+f.name+' · '+clock(w.start)+' → '+clock(w.end)+'" aria-label="'+f.name+' '+clock(w.start)+'부터 '+clock(w.end)+'"></button>';}).join('')+'<span class="now" style="left:'+pct(0)+'%"></span></div><button class="pin" data-action="map" aria-label="'+f.name+' 지도 핀">⌖</button></div>';}).join('');}
 function dayEntries(n){var list=[];targets().forEach(function(f){if((f.id+n)%4===0)return;var hour=(f.id*3+n)%23;list.push({f:f,time:String(hour).padStart(2,'0')+':'+(f.id%2?'20':'40')});if(f.id%4===0)list.push({f:f,time:String((hour+8)%24).padStart(2,'0')+':10'});});return list.sort(function(a,b){return a.time.localeCompare(b.time);});}
-function renderCalendar(){var y=month.getFullYear(),m=month.getMonth(),count=new Date(y,m+1,0).getDate();if(day>count)day=count;$('monthTitle').textContent=y+'년 '+(m+1)+'월';var html='';for(var empty=0;empty<month.getDay();empty++)html+='<span class="date"></span>';for(var n=1;n<=count;n++){var entries=dayEntries(n),seen=new Set(),unique=entries.filter(function(e){if(seen.has(e.f.id))return false;seen.add(e.f.id);return true;});html+='<button class="date '+(n===day?'chosen ':'')+(y===2026&&m===9&&n===21?'today':'')+'" data-day="'+n+'"><strong>'+n+'</strong>'+unique.slice(0,2).map(function(e){return '<span>'+e.time+' - '+e.f.name+'</span>';}).join('')+(unique.length>2?'<span class="more">+'+(unique.length-2)+'종 더 보기</span>':'')+'</button>';}$('monthGrid').innerHTML=html;var slots=dayEntries(day);$('dayTitle').textContent=y+'-'+String(m+1).padStart(2,'0')+'-'+String(day).padStart(2,'0')+' · '+new Set(slots.map(function(e){return e.f.id;})).size+'종 · '+slots.length+'회';$('dayList').innerHTML=slots.map(function(e){return '<div class="dayrow"><time>'+e.time+' → '+e.time.slice(0,3)+'55</time>'+icon(e.f)+'<button class="pin" data-action="map">⌖</button><button data-action="detail">상세</button></div>';}).join('')||'<p class="empty">표시할 일정이 없습니다.</p>';}
-function render(){$('monthActions').hidden=mode!=='calendar';$('timeline').hidden=mode!=='timeline';$('calendar').hidden=mode!=='calendar';$('periods').hidden=mode!=='timeline';$('emphasisLabel').hidden=mode!=='timeline';$('timelineMode').classList.toggle('active',mode==='timeline');$('monthMode').classList.toggle('active',mode==='calendar');$('timelineMode').setAttribute('aria-selected',mode==='timeline');$('monthMode').setAttribute('aria-selected',mode==='calendar');document.querySelectorAll('[data-h]').forEach(function(b){b.classList.toggle('active',Number(b.dataset.h)===hours);});if(mode==='timeline')renderTimeline();else renderCalendar();}
-document.addEventListener('click',function(e){var b=e.target.closest('button');if(!b)return;if(b.id==='timelineMode')mode='timeline';else if(b.id==='monthMode')mode='calendar';else if(b.dataset.h)hours=Number(b.dataset.h);else if(b.dataset.f){$('detail').showModal();return;}else if(b.dataset.day)day=Number(b.dataset.day);else if(b.id==='prev'){month=new Date(month.getFullYear(),month.getMonth()-1,1);day=1;}else if(b.id==='next'){month=new Date(month.getFullYear(),month.getMonth()+1,1);day=1;}else if(b.id==='today'){month=new Date(2026,9,1);day=21;}else if(b.dataset.action){$('detail').showModal();return;}else if(b.id==='eyes'){b.setAttribute('aria-pressed',b.getAttribute('aria-pressed')!=='true');b.classList.toggle('active');}render();});['source','hideCaught','emphasize'].forEach(function(id){$(id).addEventListener('change',render);});$('search').addEventListener('input',render);
-$('showList').addEventListener('change',function(){
-var hide=!this.checked;
-$('calendar').classList.toggle('calendar-only',hide);
-['calendarDivider','dayTitle','dayList'].forEach(function(id){$(id).hidden=hide;});
+function renderCalendar(){var y=month.getFullYear(),m=month.getMonth(),count=new Date(y,m+1,0).getDate();if(day>count)day=count;$('monthTitle').textContent=y+'년 '+(m+1)+'월';var html='';for(var empty=0;empty<month.getDay();empty++)html+='<span class="date"></span>';for(var n=1;n<=count;n++){var entries=dayEntries(n),seen=new Set(),unique=entries.filter(function(e){if(seen.has(e.f.id))return false;seen.add(e.f.id);return true;});html+='<button class="date '+(n===day?'chosen ':'')+(y===2026&&m===9&&n===21?'today':'')+'" data-day="'+n+'"><strong>'+n+(unique.length>2?'<span class="more">+'+(unique.length-2)+'종</span>':'')+'</strong>'+unique.slice(0,2).map(function(e){return '<span>'+e.time+' - '+e.f.name+'</span>';}).join('')+'</button>';}$('monthGrid').innerHTML=html;var slots=dayEntries(day);$('dayTitle').textContent=y+'-'+String(m+1).padStart(2,'0')+'-'+String(day).padStart(2,'0')+' · '+new Set(slots.map(function(e){return e.f.id;})).size+'종 · '+slots.length+'회';$('dayList').innerHTML=slots.map(function(e){return '<div class="dayrow"><time>'+e.time+' → '+e.time.slice(0,3)+'55</time>'+icon(e.f)+'<button class="pin" data-action="map">⌖</button><button data-action="detail">상세</button></div>';}).join('')||'<p class="empty">표시할 일정이 없습니다.</p>';}
+function render(){$('monthActions').hidden=mode!=='calendar';$('timeline').hidden=mode!=='timeline';$('calendar').hidden=mode!=='calendar';$('periods').hidden=mode!=='timeline';$('emphasisLabel').hidden=mode!=='timeline';$('timelineMode').classList.toggle('active',mode==='timeline');$('monthMode').classList.toggle('active',mode==='calendar');$('timelineMode').setAttribute('aria-selected',mode==='timeline');$('monthMode').setAttribute('aria-selected',mode==='calendar');document.querySelectorAll('[data-h]').forEach(function(b){b.classList.toggle('active',Number(b.dataset.h)===hours);});['timelineMode','monthMode'].forEach(function(id){$(id).tabIndex=$(id).getAttribute('aria-selected')==='true'?0:-1;});if(mode==='timeline')renderTimeline();else {renderCalendar();requestAnimationFrame(layoutCalendar);}}
+document.addEventListener('click',function(e){var b=e.target.closest('button');if(!b)return;if(b.dataset.preview){$('app').style.width=b.dataset.preview+'px';document.querySelectorAll('[data-preview]').forEach(function(x){x.classList.toggle('active',x===b);});return;}if(b.id==='timelineMode')mode='timeline';else if(b.id==='monthMode')mode='calendar';else if(b.dataset.h)hours=Number(b.dataset.h);else if(b.dataset.f){$('detail').showModal();return;}else if(b.dataset.day)day=Number(b.dataset.day);else if(b.id==='prev'){month=new Date(month.getFullYear(),month.getMonth()-1,1);day=1;}else if(b.id==='next'){month=new Date(month.getFullYear(),month.getMonth()+1,1);day=1;}else if(b.id==='today'){month=new Date(2026,9,1);day=21;}else if(b.dataset.action){$('detail').showModal();return;}render();});['source','hideCaught','emphasize'].forEach(function(id){$(id).addEventListener('change',render);});$('search').addEventListener('input',render);
+
+$('eyes').addEventListener('change',render);
+$('showList').addEventListener('click',function(){
+listVisible=!listVisible;
+$('calendar').classList.toggle('calendar-only',!listVisible);
+this.textContent=listVisible?'목록 숨기기':'목록 표시';
+this.setAttribute('aria-expanded',listVisible);
+['calendarDivider','dayTitle','dayList'].forEach(function(id){$(id).hidden=!listVisible;});
+layoutCalendar();
 });
-$('calendarDivider').addEventListener('pointerdown',function(e){e.preventDefault();this.setPointerCapture(e.pointerId);});
-$('calendarDivider').addEventListener('pointermove',function(e){
-if(!this.hasPointerCapture(e.pointerId))return;
-var box=$('calendar').getBoundingClientRect(), max=Math.max(80,box.height-120);
-var height=Math.max(Math.min(150,max),Math.min(max,e.clientY-$('monthGrid').getBoundingClientRect().top));
+function layoutCalendar(){
+if(mode!=='calendar'||!listVisible)return;
+var box=$('calendar').getBoundingClientRect();
+var fixed=$('monthActions').offsetHeight+$('calendar').querySelector('.weekdays').offsetHeight+130;
+var space=Math.max(145,box.height-fixed);
+var height=Math.min(space,Math.max(Math.min(145,space),space*calendarRatio/0.8));
 $('monthGrid').style.flexBasis=height+'px';
+$('calendarDivider').setAttribute('aria-valuenow',Math.round(calendarRatio*100));
+}
+function resizeAt(clientY){
+var grid=$('monthGrid').getBoundingClientRect(),box=$('calendar').getBoundingClientRect();
+var space=Math.max(145,box.bottom-grid.top-130);
+var height=Math.max(Math.min(145,space),Math.min(space,clientY-grid.top));
+calendarRatio=Math.max(0.25,Math.min(0.85,height/space*0.8));
+layoutCalendar();
+}
+$('calendarDivider').addEventListener('pointerdown',function(e){
+e.preventDefault();this.setPointerCapture(e.pointerId);this.classList.add('dragging');
 });
-$('calendarDivider').addEventListener('pointerup',function(e){if(this.hasPointerCapture(e.pointerId))this.releasePointerCapture(e.pointerId);});
+$('calendarDivider').addEventListener('pointermove',function(e){if(this.hasPointerCapture(e.pointerId))resizeAt(e.clientY);});
+function stopDrag(e){this.classList.remove('dragging');if(this.hasPointerCapture(e.pointerId))this.releasePointerCapture(e.pointerId);}
+$('calendarDivider').addEventListener('pointerup',stopDrag);
+$('calendarDivider').addEventListener('pointercancel',stopDrag);
+$('calendarDivider').addEventListener('keydown',function(e){
+if(e.key!=='ArrowUp'&&e.key!=='ArrowDown')return;
+e.preventDefault();calendarRatio=Math.max(0.25,Math.min(0.85,calendarRatio+(e.key==='ArrowDown'?0.04:-0.04)));layoutCalendar();
+});
+new ResizeObserver(layoutCalendar).observe($('app'));
+document.querySelector('.viewtabs').addEventListener('keydown',function(e){
+if(!['ArrowLeft','ArrowRight','Home','End'].includes(e.key))return;
+e.preventDefault();mode=e.key==='Home'?'timeline':e.key==='End'?'calendar':mode==='timeline'?'calendar':'timeline';
+render();$(mode==='timeline'?'timelineMode':'monthMode').focus();
+});
+document.addEventListener('click',function(e){if(!$('options').contains(e.target))$('options').open=false;});
+document.addEventListener('keydown',function(e){if(e.key==='Escape')$('options').open=false;});
+$('graphRows').addEventListener('click',function(e){if(e.target.closest('.fish'))$('detail').showModal();});
+function clearOverlap(){document.querySelectorAll('.overlap').forEach(function(el){el.remove();});}
+$('graphRows').addEventListener('pointerover',function(e){
+var bar=e.target.closest('.bar');if(!bar||!$('emphasize').checked)return;
+clearOverlap();
+var start=Number(bar.dataset.start),end=Number(bar.dataset.end);
+document.querySelectorAll('.bar').forEach(function(other){
+if(other.dataset.f===bar.dataset.f)return;
+var a=Number(other.dataset.start),b=Number(other.dataset.end),left=Math.max(a,start),right=Math.min(b,end);
+if(right<=left)return;
+var stripe=document.createElement('span');stripe.className='overlap';
+stripe.style.left=((left-a)/(b-a)*100)+'%';stripe.style.width=((right-left)/(b-a)*100)+'%';
+other.appendChild(stripe);
+});
+});
+$('graphRows').addEventListener('pointerout',function(e){if(e.target.closest('.bar'))clearOverlap();});
 render();
 })();
-</script></body></html>
+</script>
+</body>
+</html>
