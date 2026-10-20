@@ -71,7 +71,7 @@ internal sealed class SpawnSchedule : IDisposable
     public void SelectDate(DateOnly value)
     { lock (gate) if (!disposed) { calendarDate = value; calendarDateChanged = true; } }
     public void Select(uint fishId, DateTimeOffset start)
-    { lock (gate) if (!disposed) { selected = (fishId, start); selectionChanged = true; } }
+    { lock (gate) if (!disposed && selected != (fishId, start)) { selected = (fishId, start); selectionChanged = true; } }
     public void ClearSelection()
     { lock (gate) { selected = null; selection = null; selectionChanged = false; } }
     public void SetActive(bool value)

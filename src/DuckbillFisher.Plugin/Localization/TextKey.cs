@@ -824,4 +824,7 @@ internal enum TextKey
     ChangelogScheduleTimeline,
     ChangelogScheduleCalendar,
     ChangelogScheduleDetails,
+    ScheduleTimelineHint,
+    ScheduleMonthHint,
+    ScheduleTrackTooltip,
 }

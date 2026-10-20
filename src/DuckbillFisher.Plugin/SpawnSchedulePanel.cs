@@ -22,9 +22,7 @@ internal sealed class SpawnSchedulePanel(SpawnSchedule schedule, FishCatalog cat
     private bool emphasize = true, calendarMode, otherOpen;
     private DateOnly month, selectedDate;
     private DateTimeOffset axisStart, axisEnd;
-    private string? candidatePopup;
-    private uint candidateFish;
-    private FishingWindow[] candidates = [];
+    private (uint FishId, DateTimeOffset Start)? hoveredWindow;
     private float RowHeight => Math.Max(ImGui.GetFontSize() * 2.15f, ImGui.GetFrameHeight()) + ImGui.GetStyle().CellPadding.Y * 2;
 
     public void SetActive(bool value) => schedule.SetActive(value);
@@ -35,7 +33,7 @@ internal sealed class SpawnSchedulePanel(SpawnSchedule schedule, FishCatalog cat
         var personal = preferences.View;
         if (session != personal.Session)
         {
-            session = personal.Session; search = ""; candidatePopup = null; calendarMode = false; otherOpen = false;
+            session = personal.Session; search = ""; calendarMode = false; otherOpen = false;
             selectedDate = DateOnly.FromDateTime(schedule.Now.LocalDateTime);
             month = new(selectedDate.Year, selectedDate.Month, 1);
             schedule.SetSearch(""); schedule.SelectDate(selectedDate);
@@ -48,7 +46,6 @@ internal sealed class SpawnSchedulePanel(SpawnSchedule schedule, FishCatalog cat
         { ImGui.EndChild(); return; }
         var settings = personal.Schedule;
         DrawControls(personal, ref settings);
-        if (calendarMode) DrawMonthNavigation();
         schedule.SetCalendarMonth(calendarMode ? month : null);
         if (personal.Error is { } error) ImGui.TextWrapped(error.Display);
         if (catalog.View.Status.Key != T.CatalogLoaded) ImGui.TextWrapped(catalog.View.Status.Display);
@@ -66,11 +63,8 @@ internal sealed class SpawnSchedulePanel(SpawnSchedule schedule, FishCatalog cat
 
     private void DrawControls(FishPreferencesView personal, ref SpawnScheduleSettings settings)
     {
+        DrawViewTabs();
         var right = ImGui.GetCursorPosX() + ImGui.GetContentRegionAvail().X;
-        if (Toggle(T.ScheduleTimelineMode, "ScheduleTimelineMode", !calendarMode)) calendarMode = false;
-        ImGui.SameLine();
-        if (Toggle(T.ScheduleCalendarMode, "ScheduleCalendarMode", calendarMode)) calendarMode = true;
-        UiWidgets.FlowNext(ImGui.GetFontSize() * 11, right);
         string[] sources = [UiText.Get(T.ScheduleFavorites), UiText.Get(T.ScheduleCatalog)];
         var source = (int)settings.Source;
         var changed = false;
@@ -114,6 +108,49 @@ internal sealed class SpawnSchedulePanel(SpawnSchedule schedule, FishCatalog cat
             catalog.SetFishEyes(!data.FishEyesEnabled);
         if (changed) preferences.SetSchedule(settings);
         ImGui.Separator();
+        if (calendarMode) DrawMonthNavigation();
+    }
+
+    private void DrawViewTabs()
+    {
+        var gap = ImGui.GetStyle().ItemSpacing.X;
+        var width = Math.Max(1, (ImGui.GetContentRegionAvail().X - gap) / 2);
+        var height = ImGui.GetTextLineHeightWithSpacing() * 2 + ImGui.GetStyle().FramePadding.Y * 2 + 3;
+        if (DrawViewTab(T.ScheduleTimelineMode, T.ScheduleTimelineHint, FontAwesomeIcon.ChartBar, "ScheduleTimelineMode", !calendarMode, width, height))
+        { calendarMode = false; schedule.ClearSelection(); }
+        ImGui.SameLine(0, gap);
+        if (DrawViewTab(T.ScheduleCalendarMode, T.ScheduleMonthHint, FontAwesomeIcon.CalendarAlt, "ScheduleCalendarMode", calendarMode, width, height))
+        { calendarMode = true; schedule.ClearSelection(); }
+        ImGui.Spacing();
+    }
+
+    private static bool DrawViewTab(T title, T hint, FontAwesomeIcon icon, string id, bool active, float width, float height)
+    {
+        var origin = ImGui.GetCursorScreenPos();
+        ImGui.PushStyleColor(ImGuiCol.Button, ImGui.GetStyle().Colors[(int)(active ? ImGuiCol.Header : ImGuiCol.FrameBg)]);
+        ImGui.PushStyleColor(ImGuiCol.ButtonHovered, ImGui.GetStyle().Colors[(int)ImGuiCol.HeaderHovered]);
+        ImGui.PushStyleColor(ImGuiCol.ButtonActive, ImGui.GetStyle().Colors[(int)ImGuiCol.HeaderActive]);
+        var clicked = ImGui.Button($"###{id}", new Vector2(width, height));
+        ImGui.PopStyleColor(3);
+        var draw = ImGui.GetWindowDrawList();
+        draw.AddRect(origin, origin + new Vector2(width, height), ImGui.GetColorU32(active ? ImGuiCol.CheckMark : ImGuiCol.Border), 3);
+        if (active) draw.AddRectFilled(origin + new Vector2(0, height - 3), origin + new Vector2(width, height), ImGui.GetColorU32(ImGuiCol.CheckMark));
+        draw.PushClipRect(origin, origin + new Vector2(width, height - 3), true);
+        var padding = ImGui.GetStyle().FramePadding + new Vector2(5, 0);
+        ImGui.PushFont(UiBuilder.IconFont);
+        var iconText = icon.ToIconString();
+        var iconWidth = ImGui.CalcTextSize(iconText).X;
+        draw.AddText(origin + padding, ImGui.GetColorU32(ImGuiCol.Text), iconText);
+        ImGui.PopFont();
+        var titlePos = origin + padding + new Vector2(iconWidth + 7, 0);
+        var label = Fit(UiText.Get(title), width - (titlePos.X - origin.X) - padding.X);
+        draw.AddText(titlePos, ImGui.GetColorU32(ImGuiCol.Text), label);
+        if (active) draw.AddText(titlePos + new Vector2(0.5f, 0), ImGui.GetColorU32(ImGuiCol.Text), label);
+        draw.AddText(origin + padding + new Vector2(0, ImGui.GetTextLineHeightWithSpacing()), ImGui.GetColorU32(ImGuiCol.TextDisabled),
+            Fit(UiText.Get(hint), width - padding.X * 2));
+        draw.PopClipRect();
+        UiWidgets.Tooltip(UiText.Get(hint));
+        return clicked;
     }
 
     private static bool Toggle(T text, string id, bool active) => Toggle(UiText.Get(text), id, active);
@@ -133,7 +170,8 @@ internal sealed class SpawnSchedulePanel(SpawnSchedule schedule, FishCatalog cat
         ImGui.TextDisabled(UiText.Get(T.ScheduleCompactRange, axisStart.ToLocalTime(), axisEnd.ToLocalTime(), view.Timed.Length));
         UiWidgets.Tooltip(UiText.Get(T.ScheduleCounts, view.SourceCount, view.TargetCount, view.Timed.Length));
         var selected = schedule.Selection;
-        var reserve = ImGui.GetFrameHeightWithSpacing() + (selected is null ? 0 : RowHeight + ImGui.GetStyle().ItemSpacing.Y);
+        hoveredWindow = null;
+        var reserve = ImGui.GetFrameHeightWithSpacing();
         if (otherOpen) reserve += Math.Min(ImGui.GetFontSize() * 9, ImGui.GetContentRegionAvail().Y * 0.30f);
         var graphHeight = Math.Max(ImGui.GetFrameHeight() * 2, ImGui.GetContentRegionAvail().Y - reserve);
         if (view.Timed.Length > 0)
@@ -149,7 +187,8 @@ internal sealed class SpawnSchedulePanel(SpawnSchedule schedule, FishCatalog cat
             if (search.Length > 0 && ImGui.SmallButton(UiText.Label(T.ScheduleClearSearch, "ClearScheduleSearch")))
             { search = ""; schedule.SetSearch(""); }
         }
-        if (selected is not null) DrawSelectedStrip(selected);
+        if (emphasize && hoveredWindow is { } hovered) schedule.Select(hovered.FishId, hovered.Start);
+        else schedule.ClearSelection();
         DrawOther(view, settings);
     }
 
@@ -286,26 +325,12 @@ internal sealed class SpawnSchedulePanel(SpawnSchedule schedule, FishCatalog cat
         var nowX = origin.X + Math.Clamp(X(now, width), 0, width);
         draw.AddLine(new Vector2(nowX, origin.Y), new Vector2(nowX, origin.Y + actualHeight), ImGui.GetColorU32(ConcurrentColor));
         draw.PopClipRect();
-        if (hits.Count == 1)
+        if (hits.Count > 0)
         {
-            ImGui.SetTooltip(UiText.Get(T.ScheduleSimpleTooltip, entry.Fish.DisplayName, Range(hits[0])));
-            if (clicked) schedule.Select(entry.Fish.FishParameterId, hits[0].Start!.Value);
-        }
-        else if (hits.Count > 1)
-        {
-            if (clicked)
-            {
-                candidatePopup = "ScheduleCandidates"; candidateFish = entry.Fish.FishParameterId;
-                candidates = hits.ToArray(); ImGui.OpenPopup(candidatePopup);
-            }
-        }
-        if (candidatePopup is not null && candidateFish == entry.Fish.FishParameterId && ImGui.BeginPopup(candidatePopup))
-        {
-            // List the row's real intervals; never let widened hit areas silently choose one.
-            foreach (var window in candidates)
-                if (ImGui.Selectable($"{Range(window)}###Candidate{window.Start?.UtcTicks}"))
-                { schedule.Select(entry.Fish.FishParameterId, window.Start!.Value); candidatePopup = null; }
-            ImGui.EndPopup();
+            ImGui.SetTooltip(UiText.Get(T.ScheduleTrackTooltip, entry.Fish.DisplayName, string.Join(Environment.NewLine, hits.Select(Range))));
+            // Widened hit areas may cover several real intervals. Show all times without choosing an arbitrary one.
+            if (hits.Count == 1) hoveredWindow = (entry.Fish.FishParameterId, hits[0].Start!.Value);
+            if (clicked) showDetail(entry.Fish);
         }
     }
 
@@ -326,29 +351,12 @@ internal sealed class SpawnSchedulePanel(SpawnSchedule schedule, FishCatalog cat
                 ImGui.PushID(i); ImGui.TableNextRow(ImGuiTableRowFlags.None, rowHeight);
                 ImGui.TableNextColumn(); DrawFish(entry, rowHeight);
                 ImGui.TableNextColumn();
-                if (ImGui.Selectable($"{TimeRange(window)}###ScheduleInterval")) schedule.Select(entry.Fish.FishParameterId, window.Start!.Value);
-                UiWidgets.Tooltip(Range(window));
+                if (ImGui.Selectable($"{TimeRange(window)}###ScheduleInterval")) showDetail(entry.Fish);
+                UiWidgets.Tooltip(UiText.Get(T.ScheduleTrackTooltip, entry.Fish.DisplayName, Range(window)));
                 ImGui.TableNextColumn(); DrawPin(entry.Fish); ImGui.PopID();
             }
         }
         finally { clipper.Destroy(); }
-        ImGui.EndTable();
-    }
-
-    private void DrawSelectedStrip(ScheduleSelection selected)
-    {
-        if (!ImGui.BeginTable("ScheduleSelectionStrip", 5, ImGuiTableFlags.SizingFixedFit)) return;
-        ImGui.TableSetupColumn("###Fish", ImGuiTableColumnFlags.WidthStretch);
-        ImGui.TableSetupColumn("###Time", ImGuiTableColumnFlags.WidthFixed, ImGui.GetFontSize() * 13);
-        ImGui.TableSetupColumn("###Map", ImGuiTableColumnFlags.WidthFixed, ImGui.GetFrameHeight() + 6);
-        ImGui.TableSetupColumn("###Details", ImGuiTableColumnFlags.WidthFixed, ImGui.CalcTextSize(UiText.Get(T.ScheduleOpenDetail)).X + 12);
-        ImGui.TableSetupColumn("###Close", ImGuiTableColumnFlags.WidthFixed, ImGui.GetFrameHeight());
-        ImGui.TableNextRow(ImGuiTableRowFlags.None, RowHeight);
-        ImGui.TableNextColumn(); DrawFish(selected.Entry, RowHeight);
-        ImGui.TableNextColumn(); ImGui.TextWrapped(Range(selected.Window)); UiWidgets.Tooltip(Range(selected.Window));
-        ImGui.TableNextColumn(); DrawPin(selected.Entry.Fish);
-        ImGui.TableNextColumn(); if (ImGui.SmallButton(UiText.Label(T.ScheduleOpenDetail, "ScheduleDetail"))) showDetail(selected.Entry.Fish);
-        ImGui.TableNextColumn(); if (UiWidgets.IconButton(FontAwesomeIcon.Times, "ScheduleClear", UiText.Get(T.ScheduleClearSelection))) schedule.ClearSelection();
         ImGui.EndTable();
     }
 
