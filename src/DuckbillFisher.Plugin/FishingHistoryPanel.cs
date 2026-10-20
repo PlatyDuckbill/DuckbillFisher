@@ -62,7 +62,7 @@ internal sealed class FishingHistoryPanel(FishingTracker tracker, ITextureProvid
                 {
                     clipper.Begin(records.Count, height + ImGui.GetStyle().ItemSpacing.Y);
                     while (clipper.Step())
-                        for (var i = clipper.DisplayStart; i < clipper.DisplayEnd; i++) DrawCompact(records[i], view, height);
+                        for (var i = clipper.DisplayStart; i < clipper.DisplayEnd; i++) DrawCompact(records, i, view, height);
                 }
                 finally { clipper.Destroy(); }
             }
@@ -99,11 +99,13 @@ internal sealed class FishingHistoryPanel(FishingTracker tracker, ITextureProvid
                     ImGui.TableNextRow(ImGuiTableRowFlags.None, height);
                     ImGui.TableNextColumn();
                     var origin = ImGui.GetCursorPos();
+                    var screen = ImGui.GetCursorScreenPos();
                     var clicked = ImGui.Selectable("###Attempt", false,
                         ImGuiSelectableFlags.SpanAllColumns | ImGuiSelectableFlags.AllowItemOverlap, new Vector2(0, height - ImGui.GetStyle().CellPadding.Y * 2));
                     var hovered = ImGui.IsItemHovered();
                     var next = ImGui.GetCursorPos();
-                    ImGui.SetCursorPos(origin);
+                    DrawMoochConnection(records, i, screen - new Vector2(0, ImGui.GetStyle().CellPadding.Y), height, 0);
+                    ImGui.SetCursorPos(origin + new Vector2(ConnectionGutter, 0));
                     DrawItemCell(view, row.Outcome == FishingOutcome.Caught ? row.FishItemId : null, Result(row, view), OutcomeColor(row.Outcome));
                     ImGui.SetCursorPos(next);
                     ImGui.TableNextColumn(); DrawItemCell(view, row.BaitItemId, Bait(row, view));
@@ -122,26 +124,24 @@ internal sealed class FishingHistoryPanel(FishingTracker tracker, ITextureProvid
         ImGui.EndTable();
     }
 
-    private void DrawCompact(FishingAttempt row, FishingTrackerView view, float height)
+    private void DrawCompact(IReadOnlyList<FishingAttempt> records, int index, FishingTrackerView view, float height)
     {
+        var row = records[index];
         ImGui.PushID(row.Id.ToString("N"));
         var start = ImGui.GetCursorPos();
+        var screen = ImGui.GetCursorScreenPos();
         var width = ImGui.GetContentRegionAvail().X;
         var clicked = ImGui.Selectable("###Attempt", false, ImGuiSelectableFlags.AllowItemOverlap, new Vector2(width, height));
         var hovered = ImGui.IsItemHovered();
         var next = ImGui.GetCursorPos();
         var line = ImGui.GetTextLineHeightWithSpacing();
-        if (row.MoochSourceId is not null)
-        {
-            var screen = ImGui.GetItemRectMin();
-            ImGui.GetWindowDrawList().AddRectFilled(screen, screen + new Vector2(3, height), ImGui.GetColorU32(new Vector4(.32f, .68f, .72f, .9f)));
-        }
+        DrawMoochConnection(records, index, screen, height, ImGui.GetStyle().ItemSpacing.Y);
         var icon = line * 2;
         var itemId = row.Outcome == FishingOutcome.Caught ? row.FishItemId : null;
         var iconId = itemId is { } value && view.Items.TryGetValue(value, out var item) ? item.IconId : 0;
-        ImGui.SetCursorPos(start + new Vector2(4, 4));
+        ImGui.SetCursorPos(start + new Vector2(ConnectionGutter + 4, 4));
         if (itemId is > 0) UiWidgets.GameIcon(textures, iconId, icon, FishingTimeText.Item(view, itemId));
-        var textX = icon + 12;
+        var textX = ConnectionGutter + icon + 12;
         var textWidth = Math.Max(1, width - textX - 4);
         var time = row.StartedUtc?.ToLocalTime().ToString("HH:mm:ss", UiText.Culture) ?? "—";
         var timeWidth = Math.Min(ImGui.CalcTextSize(time).X, textWidth * .35f);
@@ -166,6 +166,34 @@ internal sealed class FishingHistoryPanel(FishingTracker tracker, ITextureProvid
         OpenResult(clicked, row);
         ImGui.PopID();
     }
+
+    private static float ConnectionGutter => ImGui.GetFontSize() * 1.1f;
+
+    private static void DrawMoochConnection(IReadOnlyList<FishingAttempt> records, int index, Vector2 top, float height, float gap)
+    {
+        // Newest first: the mooch cast sits above its source catch. Read only adjacent
+        // stored IDs, including offscreen neighbours, so clipped chains stay connected.
+        var toOlder = index + 1 < records.Count && records[index].MoochSourceId == records[index + 1].Id;
+        var fromNewer = index > 0 && records[index - 1].MoochSourceId == records[index].Id;
+        if (!toOlder && !fromNewer) return;
+        var scale = ImGui.GetFontSize() / 16;
+        var center = top + new Vector2(ConnectionGutter * .35f, height * .5f);
+        var draw = ImGui.GetWindowDrawList();
+        var color = ImGui.GetColorU32(new Vector4(.38f, .73f, .74f, 1));
+        if (fromNewer)
+        {
+            draw.AddLine(new Vector2(center.X, top.Y - gap * .5f), center, color, 2 * scale);
+            draw.AddCircleFilled(center, 2.5f * scale, color);
+        }
+        if (toOlder)
+        {
+            draw.AddLine(center, new Vector2(center.X, top.Y + height + gap * .5f), color, 2 * scale);
+            var tip = center + new Vector2(7 * scale, 0);
+            draw.AddLine(center, tip, color, 2 * scale);
+            draw.AddLine(tip - new Vector2(3 * scale, 3 * scale), tip, color, 2 * scale);
+            draw.AddLine(tip - new Vector2(3 * scale, -3 * scale), tip, color, 2 * scale);
+        }
+    }
     private string Duration(FishingAttempt row, FishingTrackerView view) =>
         FishingTimeText.DisplaySeconds(row, view, tracker.Now) is { } seconds ? UiText.Get(T.HistorySeconds, seconds) : UiText.Get(T.ConditionUnknown);
     private static string Bait(FishingAttempt row, FishingTrackerView view)
@@ -173,7 +201,7 @@ internal sealed class FishingHistoryPanel(FishingTracker tracker, ITextureProvid
         if (row.BaitItemId is null) return UiText.Get(row.BaitKind switch
         { FishingBaitKind.Mooch => T.HistoryMoochUnknown, FishingBaitKind.Swimbait => T.HistorySwimbaitUnknown, _ => T.ConditionUnknown });
         var name = FishingTimeText.Item(view, row.BaitItemId);
-        return row.MoochSourceId is not null ? UiText.Get(T.HistoryMoochLinkedBait, name) : row.BaitKind switch
+        return row.BaitKind switch
         {
             FishingBaitKind.Mooch => UiText.Get(T.HistoryMoochBait, name),
             FishingBaitKind.Swimbait => UiText.Get(T.HistorySwimbaitBait, name),

@@ -28,13 +28,13 @@
 | 이전 Release 추출 DLL | ${env:DUCKBILL_ROOT}/.cache/release-validation/0.3.10.0/DuckbillFisher.dll |
 | 이전 게시 Release 추출 DLL | ${env:DUCKBILL_ROOT}/.cache/release-validation/0.3.11.0/DuckbillFisher.dll |
 | 현재 게시 Release 추출 DLL | ${env:DUCKBILL_ROOT}/.cache/release-validation/0.4.0.0-r2/DuckbillFisher.dll |
-| 실기 대기 후보 Release 추출 DLL | ${env:DUCKBILL_ROOT}/.cache/release-validation/0.4.1.0/DuckbillFisher.dll |
+| 실기 대기 후보 Release 추출 DLL | ${env:DUCKBILL_ROOT}/.cache/release-validation/0.4.1.0-r2/DuckbillFisher.dll |
 
 캐시/참조 DLL은 Git에 없다. 다른 PC에서는 실제 경로와 정확한 지원 배포판을 다시 확인한다. 최소 참조가 없다고 현재 참조를 Release에 조용히 대체하지 않는다. 일반 빌드 명령은 [WORKFLOW](development/WORKFLOW.md#windows-빌드)에 한 곳만 유지한다.
 
 ## 배포 산출물과 로컬 상태
 
-- 후보0.4.1.0 별도 Debug는 `.cache/history-041-build/`, 정규 Debug도0.4.1.0이다. Release `.cache/release-build/0.4.1.0/`, 고정 ZIP `artifacts/share/0.4.1.0/`, 추출은 위 표다. timer/v5/설정schema15/기록schema2 선택 필드다. 인게임 확인 전이며 [고정 해시·확인 순서](verification/releases/RELEASE-0.4.1.0.md)를 따른다.0.4 임시 인덱스 커밋은dffe297로 amend/lease 강제 push했고 실제 공유 URL 검사까지 완료했다.
+- 후보0.4.1.0 r2 별도 Debug는 `.cache/history-041-r2-build/`, 정규 Debug도0.4.1.0이다. Release `.cache/release-build/0.4.1.0-r2/`, 고정 ZIP `artifacts/share/0.4.1.0-r2/`, 추출은 위 표다. 생미끼 행을 세로선·화살표로 잇고 긴 설명은 툴팁으로 옮겼다. 이전 후보 경로는 보존한다. timer/v5/설정schema15/기록schema2 선택 필드다. 인게임 확인 전이며 [고정 해시·확인 순서](verification/releases/RELEASE-0.4.1.0.md)를 따른다.0.4 임시 인덱스 커밋은dffe297로 amend/lease 강제 push했고 실제 공유 URL 검사까지 완료했다.
 
 - 공개0.4.0.0의 별도 Debug는 `.cache/collection-progress-040-r2-build/`, 당시 정규 Debug는0.4.0.0이었다. Release 출력 `.cache/release-build/0.4.0.0-r2/`, 고정 ZIP `artifacts/share/0.4.0.0-r2/`, 추출 DLL은 위 표를 따른다. 사용자 지시로 최종 추가 실기는 생략했다. 소스64c71c0/Release ID418192088이며 익명 파일 검사 완료, 사용자의 임시 설치 JSON을 보완했다. [고정 해시·확인 순서](verification/releases/RELEASE-0.4.0.0.md)를 먼저 본다. 확인 후 실행 파일 재빌드는 새 후보다. 공통 설정schema15/LastSeenChangelogVersion은 유지한다.
 - 공개0.3.11.0의 소스 태그는c2a115d, 설치 JSON은8c72e1a, Release ID418137946이다. 익명 파일/아이콘 검사와 실제 공유 URL의0.3.11.0/API15/Changelog/링크 조회를 완료했다. [게시 근거](verification/releases/RELEASE-0.3.11.0.md).

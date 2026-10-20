@@ -1,6 +1,5 @@
 using System.Numerics;
 using Dalamud.Bindings.ImGui;
-using Dalamud.Interface;
 using Dalamud.Interface.Windowing;
 using Dalamud.Plugin.Services;
 using DuckbillFisher.Core;
@@ -62,12 +61,6 @@ internal sealed class CastingTimerWindow : Window
             ? UiText.Get(timed?.BaitKind == FishingBaitKind.Swimbait ? T.HistorySwimbaitUnknown : T.HistoryMoochUnknown)
             : UiText.Get(T.ConditionUnknown);
         ImGui.TextUnformatted(UiText.Get(usesFishBait || retained ? T.TimerCastBait : T.TimerEquippedBait, baitLabel));
-        if (timed?.MoochSourceId is not null)
-        {
-            UiWidgets.Icon(FontAwesomeIcon.Link);
-            ImGui.SameLine();
-            ImGui.TextColored(new Vector4(.42f, .80f, .82f, 1), UiText.Get(T.TimerMoochLink, baitLabel));
-        }
         var phase = view.Native?.Phase;
         var label = view.State switch
         {
