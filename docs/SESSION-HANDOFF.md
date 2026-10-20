@@ -1,6 +1,6 @@
 # 세션 인수인계
 
-갱신: 2026-10-20 · 공개0.4.0.0 · 후보0.4.1.0 실기 대기
+갱신: 2026-10-20 · 공개0.4.0.0 · 후보0.4.1.0 대표 확인·게시 진행
 
 ## 재개 순서
 
@@ -28,13 +28,13 @@
 | 이전 Release 추출 DLL | ${env:DUCKBILL_ROOT}/.cache/release-validation/0.3.10.0/DuckbillFisher.dll |
 | 이전 게시 Release 추출 DLL | ${env:DUCKBILL_ROOT}/.cache/release-validation/0.3.11.0/DuckbillFisher.dll |
 | 현재 게시 Release 추출 DLL | ${env:DUCKBILL_ROOT}/.cache/release-validation/0.4.0.0-r2/DuckbillFisher.dll |
-| 실기 대기 후보 Release 추출 DLL | ${env:DUCKBILL_ROOT}/.cache/release-validation/0.4.1.0-r3/DuckbillFisher.dll |
+| 사용자 확인 후보 Release 추출 DLL | ${env:DUCKBILL_ROOT}/.cache/release-validation/0.4.1.0-r3/DuckbillFisher.dll |
 
 캐시/참조 DLL은 Git에 없다. 다른 PC에서는 실제 경로와 정확한 지원 배포판을 다시 확인한다. 최소 참조가 없다고 현재 참조를 Release에 조용히 대체하지 않는다. 일반 빌드 명령은 [WORKFLOW](development/WORKFLOW.md#windows-빌드)에 한 곳만 유지한다.
 
 ## 배포 산출물과 로컬 상태
 
-- 후보0.4.1.0 r3 별도 Debug는 `.cache/history-041-r3-build/`, 정규 Debug도0.4.1.0이다. Release `.cache/release-build/0.4.1.0-r3/`, 고정 ZIP `artifacts/share/0.4.1.0-r3/`, 추출은 위 표다. 생미끼 행을 세로선·화살표로 잇고 긴 설명은 툴팁으로 옮겼다. 검증된 연속 생미끼의 위치도 이어받는다. 이전 후보 경로는 보존한다. timer/v5/설정schema15/기록schema2 선택 필드다. 인게임 확인 전이며 [고정 해시·확인 순서](verification/releases/RELEASE-0.4.1.0.md)를 따른다.0.4 임시 인덱스 커밋은dffe297로 amend/lease 강제 push했고 실제 공유 URL 검사까지 완료했다.
+- 후보0.4.1.0 r3 별도 Debug는 `.cache/history-041-r3-build/`, 정규 Debug도0.4.1.0이다. Release `.cache/release-build/0.4.1.0-r3/`, 고정 ZIP `artifacts/share/0.4.1.0-r3/`, 추출은 위 표다. 생미끼 행을 세로선·화살표로 잇고 긴 설명은 툴팁으로 옮겼다. 검증된 연속 생미끼의 위치도 이어받는다. 이전 후보 경로는 보존한다. timer/v5/설정schema15/기록schema2 선택 필드다. 사용자 대표 확인과 배포 지시를 받았으며 [고정 해시·확인 순서](verification/releases/RELEASE-0.4.1.0.md)를 따른다.0.4 임시 인덱스 커밋은dffe297로 amend/lease 강제 push했고 실제 공유 URL 검사까지 완료했다.
 
 - 공개0.4.0.0의 별도 Debug는 `.cache/collection-progress-040-r2-build/`, 당시 정규 Debug는0.4.0.0이었다. Release 출력 `.cache/release-build/0.4.0.0-r2/`, 고정 ZIP `artifacts/share/0.4.0.0-r2/`, 추출 DLL은 위 표를 따른다. 사용자 지시로 최종 추가 실기는 생략했다. 소스64c71c0/Release ID418192088이며 익명 파일 검사 완료, 사용자의 임시 설치 JSON을 보완했다. [고정 해시·확인 순서](verification/releases/RELEASE-0.4.0.0.md)를 먼저 본다. 확인 후 실행 파일 재빌드는 새 후보다. 공통 설정schema15/LastSeenChangelogVersion은 유지한다.
 - 공개0.3.11.0의 소스 태그는c2a115d, 설치 JSON은8c72e1a, Release ID418137946이다. 익명 파일/아이콘 검사와 실제 공유 URL의0.3.11.0/API15/Changelog/링크 조회를 완료했다. [게시 근거](verification/releases/RELEASE-0.3.11.0.md).
@@ -52,7 +52,7 @@
 - Core 공통 자료 검증을 Plugin/도구에서 사용한다. 실제 자료 검사 명령은 [data/README](../data/README.md#필드-의미와-미확인), 결과와 재현은 [데이터 기록](verification/data/DATA-COMPLETION-2026-10-18.md#0320-데이터-안정성-보강)을 따른다. 오류 진단은 catalog/v9의 DataValidation/IntuitionForecast 한 줄부터 확인한다.
 - 30일 검색·직감175초 가정·물고기의 눈 전환은 [예측 기록](verification/forecast/FORECAST.md#0350-직감-기본값과-계산-구역-개선-2026-10-19)을 따른다. summary/v10의 SelectedForecast/ForecastComparison/SelectedConditions/SelectedIntuition은 두 UTC·지원 여부·원본/계산 지속 시간·DurationAssumed를 구분한다. 실제 자료 도우미는 .cache/Inspect-ForecastRefinement.ps1·Compare-ForecastRefinement.ps1이며 테스트 스위트가 아니다.
 - v1 조건 자료는 data/archive로 이동했으며 기존 예측 테스트에서만 참조한다. 제품은 v2 조건과 v1 등급 자료를 내장한다. 테스트는 요청 없이는 실행하지 않는다.
-- 다음은0.4.1.0 고정 DLL의 위치 기록·시간/아이콘·생미끼 연결·지역 이동 후5분 유지 대표 확인이다.0.4.0 추가 실기 생략 지시를0.4.1에 자동 적용하지 않는다. 이전 실제 저장소 업데이트의 확인 대기는 STATUS와 해당 Release 기록을 따른다. 고정 추출 DLL의 새 명령어·목록 유지·한영/재로드는 대표 확인을 받았다.0.3.9.0 이력 안내와 친구 PC/이전 예측·UI/장애/다른 캐릭터의 확인 범위는 STATUS와 해당 Release 기록을 따른다. 음원은 alerts/v7의 CustomSoundState/CustomSoundCode, 미끼 페이지는 bait-ui/v7의 Pages부터 요청한다.
+- 다음은 사용자 대표 확인을 받은0.4.1.0 r3 고정 ZIP의 공개와 익명 파일 검사·설치 목록 갱신이다.0.4.0 추가 실기 생략 지시를0.4.1에 자동 적용하지 않는다. 이전 실제 저장소 업데이트의 확인 대기는 STATUS와 해당 Release 기록을 따른다. 고정 추출 DLL의 새 명령어·목록 유지·한영/재로드는 대표 확인을 받았다.0.3.9.0 이력 안내와 친구 PC/이전 예측·UI/장애/다른 캐릭터의 확인 범위는 STATUS와 해당 Release 기록을 따른다. 음원은 alerts/v7의 CustomSoundState/CustomSoundCode, 미끼 페이지는 bait-ui/v7의 Pages부터 요청한다.
 - 일반 데이터 잔여 이름/ID/이유는 [보고서](verification/data/reports/fishing-data-2026-10-17/remaining.md), 재생성 순서는 [data/README](../data/README.md)를 따른다. 완성 제품을 보완 단계 baseline으로 다시 넣지 않는다.
 - 입질 통계·복수 어획 보류를 유지한다. 과거 Teamcraft 화면 추적은 중단하고 [현재 웹 표시 대조](verification/forecast/FORECAST.md#현재-웹-표시-대조-2026-10-19)로 전환했다. UTC/CSV는 기록에, 임시 브라우저 관찰 자료는 .cache/forecast-browser-2026-10-19에 있다. 사용자 계정/브라우저와 분리한 익명 세션을 사용했다. 후속은 [ROADMAP](product/ROADMAP.md)을 따른다.
 - 폴더 재구성 전 경로는 Git 699db5b에 보존됐다. UI 원문 12개는 archive/ui/CHANGES.md의 문서별 앵커로 합쳤으며 새 전체 상태 사본은 만들지 않았다. 문서 검사기는 새 폴더/색인 규칙을 검사한다.
