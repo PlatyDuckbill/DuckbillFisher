@@ -839,7 +839,7 @@ Click for the full list of intervals below.</value></data>
   <data name="ScheduleCalendarTime" xml:space="preserve"><value>Time</value></data>
   <data name="ChangelogScheduleFeatureTitle" xml:space="preserve"><value>New feature · Spawn schedule</value></data>
   <data name="ChangelogScheduleFeatureSummary" xml:space="preserve"><value>Plan your next fishing target by time. Open Spawn schedule from the main view and switch between a compact timeline and a monthly calendar.</value></data>
-  <data name="ChangelogScheduleTargets" xml:space="preserve"><value>Switch views with the prominent Timeline and Monthly calendar tabs. Search favorites or filtered fish, hide caught fish, and adjust shared-time highlighting and Fish Eyes from Options.</value></data>
+  <data name="ChangelogScheduleTargets" xml:space="preserve"><value>Switch between Timeline and Monthly calendar. Search favorites or filtered fish, hide caught fish, and toggle Fish Eyes with its toolbar icon. Adjust timeline shared-time highlighting in Options.</value></data>
   <data name="ChangelogScheduleTimeline" xml:space="preserve"><value>The timeline starts at 3 hours, with 1, 3, 6, 12 and 24-hour views. Compact rows show fish icons and locations; hover over an interval for exact times or click to open fish details.</value></data>
   <data name="ChangelogScheduleCalendar" xml:space="preserve"><value>The month view previews spawn time and fish name on each date. Click a day for all its intervals, drag the divider to resize the list, or hide it for a larger calendar.</value></data>
   <data name="ChangelogScheduleDetails" xml:space="preserve"><value>Use map pins and fish-details buttons directly from schedule entries. Baits, weather and other conditions stay in fish details.</value></data>

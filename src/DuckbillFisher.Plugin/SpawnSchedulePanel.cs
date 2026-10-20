@@ -80,12 +80,15 @@ internal sealed class SpawnSchedulePanel(SpawnSchedule schedule, FishCatalog cat
         var minimumSearch = ImGui.GetFontSize() * 140 / 14;
         var hideWidth = HideCaughtWidth();
         var optionsWidth = OptionsWidth();
+        var eyesWidth = ImGui.GetFrameHeight();
+        var filterCount = optionsWidth > 0 ? 3 : 2;
+        var filterWidth = hideWidth + eyesWidth + optionsWidth;
         var tabsWidth = ViewTabsWidth();
-        if (width >= tabsWidth + sourceWidth + minimumSearch + hideWidth + optionsWidth + gap * 4)
+        if (width >= tabsWidth + sourceWidth + minimumSearch + filterWidth + gap * (filterCount + 2))
             DrawToolbarRow(personal, ref settings, tabsWidth, sourceWidth, true, true);
-        else if (width >= sourceWidth + minimumSearch + gap && width >= ImGui.GetFontSize() * 16 + hideWidth + optionsWidth + gap * 2)
+        else if (width >= sourceWidth + minimumSearch + gap && width >= Math.Min(tabsWidth, ImGui.GetFontSize() * 12) + filterWidth + gap * filterCount)
         {
-            DrawToolbarRow(personal, ref settings, width - hideWidth - optionsWidth - gap * 2, 0, false, true);
+            DrawToolbarRow(personal, ref settings, width - filterWidth - gap * filterCount, 0, false, true);
             DrawToolbarRow(personal, ref settings, 0, sourceWidth, true, false);
         }
         else
@@ -100,14 +103,13 @@ internal sealed class SpawnSchedulePanel(SpawnSchedule schedule, FishCatalog cat
 
     private static float HideCaughtWidth() => ImGui.CalcTextSize(UiText.Get(T.CollectionHideCaught)).X +
         ImGui.GetFrameHeight() + ImGui.GetStyle().ItemInnerSpacing.X;
-    private static float OptionsWidth() => ImGui.CalcTextSize(UiText.Get(T.ScheduleOptions)).X +
+    private float OptionsWidth() => calendarMode ? 0 : ImGui.CalcTextSize(UiText.Get(T.ScheduleOptions)).X +
         ImGui.GetStyle().FramePadding.X * 2;
-    // The HTML preview uses a 14px body font; scale its 40px height and 268px width with the active UI font.
     private static float ViewTabsWidth()
     {
         var title = Math.Max(ImGui.CalcTextSize(UiText.Get(T.ScheduleTimelineMode)).X,
-            ImGui.CalcTextSize(UiText.Get(T.ScheduleCalendarMode)).X) * 16 / 14;
-        return Math.Max(ImGui.GetFontSize() * 268 / 14, (title + ImGui.GetFontSize() * 53 / 14) * 2);
+            ImGui.CalcTextSize(UiText.Get(T.ScheduleCalendarMode)).X);
+        return (title + ImGui.GetFontSize() + ImGui.GetStyle().ItemInnerSpacing.X + ImGui.GetStyle().FramePadding.X * 2) * 2;
     }
 
     // Position a complete row explicitly: source/search cannot consume the space reserved for filters.
@@ -118,12 +120,14 @@ internal sealed class SpawnSchedulePanel(SpawnSchedule schedule, FishCatalog cat
         var origin = ImGui.GetCursorPos();
         var available = ImGui.GetContentRegionAvail().X;
         var gap = ImGui.GetStyle().ItemSpacing.X;
-        var height = tabsWidth > 0 ? ImGui.GetFontSize() * 40 / 14 : ImGui.GetFrameHeight();
+        var height = ImGui.GetFrameHeight();
         var hideWidth = HideCaughtWidth();
         var optionsWidth = OptionsWidth();
-        var count = (tabsWidth > 0 ? 1 : 0) + (query ? 2 : 0) + (filters ? 2 : 0);
+        var eyesWidth = ImGui.GetFrameHeight();
+        var filterCount = optionsWidth > 0 ? 3 : 2;
+        var count = (tabsWidth > 0 ? 1 : 0) + (query ? 2 : 0) + (filters ? filterCount : 0);
         var searchWidth = Math.Max(1, available - tabsWidth - (query ? sourceWidth : 0) -
-            (filters ? hideWidth + optionsWidth : 0) - gap * (count - 1));
+            (filters ? hideWidth + eyesWidth + optionsWidth : 0) - gap * (count - 1));
         var x = origin.X;
         ImGui.BeginGroup();
         if (tabsWidth > 0)
@@ -158,13 +162,28 @@ internal sealed class SpawnSchedulePanel(SpawnSchedule schedule, FishCatalog cat
             ImGui.EndDisabled();
             UiWidgets.Tooltip(UiText.Get(T.ScheduleHideHint));
             x += hideWidth + gap;
-            if (tabsWidth == 0 && !query && x + optionsWidth > origin.X + available)
+            PositionFilter(eyesWidth);
+            var data = catalog.View;
+            if (UiWidgets.GameIconButton(textures, data.FishEyesSkill?.IconId ?? 0, "ScheduleFishEyes",
+                UiText.Get(T.ScheduleFishEyesHint), data.FishEyesEnabled))
+                catalog.SetFishEyes(!data.FishEyesEnabled);
+            x += eyesWidth + gap;
+            if (optionsWidth > 0)
             {
-                x = origin.X;
-                y = origin.Y + height + ImGui.GetStyle().ItemSpacing.Y;
-                height += ImGui.GetFrameHeightWithSpacing();
+                PositionFilter(optionsWidth);
+                DrawOptions(optionsWidth);
             }
-            ImGui.SetCursorPos(new(x, y)); DrawOptions(optionsWidth);
+
+            void PositionFilter(float itemWidth)
+            {
+                if (tabsWidth == 0 && !query && x + itemWidth > origin.X + available)
+                {
+                    x = origin.X;
+                    y = origin.Y + height + ImGui.GetStyle().ItemSpacing.Y;
+                    height += ImGui.GetFrameHeightWithSpacing();
+                }
+                ImGui.SetCursorPos(new(x, y));
+            }
         }
         ImGui.EndGroup();
         ImGui.SetCursorPos(new(origin.X, origin.Y + height + ImGui.GetStyle().ItemSpacing.Y));
@@ -175,14 +194,8 @@ internal sealed class SpawnSchedulePanel(SpawnSchedule schedule, FishCatalog cat
         if (ImGui.Button(UiText.Label(T.ScheduleOptions, "ScheduleOptions"), new Vector2(width, ImGui.GetFrameHeight())))
             ImGui.OpenPopup("ScheduleOptionsPopup");
         if (!ImGui.BeginPopup("ScheduleOptionsPopup")) return;
-        if (!calendarMode)
-        {
-            ImGui.Checkbox(UiText.Label(T.ScheduleEmphasize, "ScheduleEmphasize"), ref emphasize);
-            UiWidgets.Tooltip(UiText.Get(T.ScheduleConcurrentHint));
-        }
-        var eyes = catalog.View.FishEyesEnabled;
-        if (ImGui.Checkbox(UiText.Label(T.ScheduleFishEyes, "ScheduleFishEyes"), ref eyes)) catalog.SetFishEyes(eyes);
-        UiWidgets.Tooltip(UiText.Get(T.ScheduleFishEyesHint));
+        ImGui.Checkbox(UiText.Label(T.ScheduleEmphasize, "ScheduleEmphasize"), ref emphasize);
+        UiWidgets.Tooltip(UiText.Get(T.ScheduleConcurrentHint));
         ImGui.EndPopup();
     }
 
@@ -230,23 +243,22 @@ internal sealed class SpawnSchedulePanel(SpawnSchedule schedule, FishCatalog cat
         var clicked = ImGui.Button($"###{id}", new Vector2(width, height));
         ImGui.PopStyleColor(3);
         var draw = ImGui.GetWindowDrawList();
-        if (active) draw.AddRectFilled(origin + new Vector2(0, height - 3 * fontSize / 14),
+        var line = Math.Max(1, fontSize * 0.1f);
+        if (active) draw.AddRectFilled(origin + new Vector2(0, height - line),
             origin + new Vector2(width, height), ImGui.GetColorU32(new Vector4(0.72f, 0.88f, 1, 1)));
-        draw.PushClipRect(origin, origin + new Vector2(width, height - 3 * fontSize / 14), true);
-        var padding = fontSize * 10 / 14;
-        var iconSize = fontSize * 20 / 14;
-        var gap = fontSize * 9 / 14;
-        var label = Fit(UiText.Get(title), width - padding * 2 - iconSize - gap, 16f / 14);
-        var textWidth = ImGui.CalcTextSize(label).X * 16 / 14;
-        var contentWidth = iconSize + gap + textWidth;
-        var x = origin.X + Math.Max(padding, (width - contentWidth) / 2);
+        var padding = ImGui.GetStyle().FramePadding.X;
+        var gap = ImGui.GetStyle().ItemInnerSpacing.X;
+        var label = Fit(UiText.Get(title), width - padding * 2 - fontSize - gap);
+        var textWidth = ImGui.CalcTextSize(label).X;
+        var x = origin.X + Math.Max(padding, (width - fontSize - gap - textWidth) / 2);
         var textColor = ImGui.GetColorU32(active ? Vector4.One : new Vector4(0.86f, 0.91f, 0.96f, 1));
+        draw.PushClipRect(origin, origin + new Vector2(width, height), true);
+        // Use the current native font size and a single pass. Enlarging baked glyphs and overpainting
+        // the title made the previous tabs heavy and could degrade glyph edges.
         ImGui.PushFont(UiBuilder.IconFont);
-        draw.AddText(ImGui.GetFont(), iconSize, new(x, origin.Y + (height - iconSize) / 2), textColor, icon.ToIconString());
+        draw.AddText(new(x, origin.Y + (height - ImGui.GetFontSize()) / 2), textColor, icon.ToIconString());
         ImGui.PopFont();
-        var position = new Vector2(x + iconSize + gap, origin.Y + (height - fontSize * 16 / 14) / 2);
-        draw.AddText(ImGui.GetFont(), fontSize * 16 / 14, position, textColor, label);
-        draw.AddText(ImGui.GetFont(), fontSize * 16 / 14, position + new Vector2(fontSize * 0.4f / 14, 0), textColor, label);
+        draw.AddText(new(x + fontSize + gap, origin.Y + (height - fontSize) / 2), textColor, label);
         draw.PopClipRect();
         UiWidgets.Tooltip(UiText.Get(hint));
         return clicked;
