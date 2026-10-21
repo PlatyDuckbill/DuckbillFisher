@@ -45,7 +45,9 @@ internal sealed class FishListPanel(FishCatalog catalog, ITextureProvider textur
     private int collectionVisibility;
     private readonly FishRowRenderer rows = new(textures, maps);
     private bool currentRegionOnly;
-    private int minimumRemainingMinutes, maximumUpcomingMinutes;
+    private int minimumRemainingMinutes;
+    private int? minimumUpcomingMinutes, maximumUpcomingMinutes;
+    private string minimumUpcomingInput = "", maximumUpcomingInput = "";
     private DateTimeOffset nextWindowFilterUpdate, lastWindowFilterClock;
     private FishingRegionView? lastRegion;
     private bool timeRestrictedOnly;
@@ -147,6 +149,8 @@ internal sealed class FishListPanel(FishCatalog catalog, ITextureProvider textur
             detailsOnly = false;
             filtersChanged = true;
         }
+        if (minimumUpcomingMinutes is { } min && maximumUpcomingMinutes is { } max && min > max)
+            ImGui.TextWrapped(UiText.Get(T.UpcomingRangeInvalid));
         if (currentRegionOnly)
             ImGui.TextWrapped(location.State == FishingRegionState.Ready
                 ? UiText.Get(T.CurrentRegionName, location.Name) : UiText.Get(T.CurrentRegionUnavailable));
@@ -184,7 +188,7 @@ internal sealed class FishListPanel(FishCatalog catalog, ITextureProvider textur
 
         // Rebuild only for data or user input changes, never on every frame or scroll step.
         var filterNow = DateTimeOffset.UtcNow;
-        var timedFilter = minimumRemainingMinutes > 0 || maximumUpcomingMinutes > 0;
+        var timedFilter = minimumRemainingMinutes > 0 || minimumUpcomingMinutes is not null || maximumUpcomingMinutes is not null;
         if (changed || refresh || ((sort == 2 || timedFilter) && lastForecastRevision != view.ForecastRevision) ||
             timedFilter && (filterNow >= nextWindowFilterUpdate || filterNow < lastWindowFilterClock))
         {
@@ -226,7 +230,8 @@ internal sealed class FishListPanel(FishCatalog catalog, ITextureProvider textur
         var active = (inLogOnly ? 1 : 0) + (!includeOceanFish ? 1 : 0) + (timeRestrictedOnly ? 1 : 0) +
             (favoritesOnly ? 1 : 0) + (currentRegionOnly ? 1 : 0) + (gradeVisibility != 0 ? 1 : 0) +
             (geography.Regions.Count > 0 ? 1 : 0) + (geography.Expansions.Count > 0 ? 1 : 0) +
-            (minimumRemainingMinutes > 0 ? 1 : 0) + (maximumUpcomingMinutes > 0 ? 1 : 0);
+            (minimumRemainingMinutes > 0 ? 1 : 0) + (minimumUpcomingMinutes is not null ? 1 : 0) +
+            (maximumUpcomingMinutes is not null ? 1 : 0);
         if (ImGui.Button($"{UiText.Get(T.CatalogFiltersHeading, active)}###CatalogFilters")) ImGui.OpenPopup("CatalogFiltersPopup");
         if (ImGui.IsItemHovered())
             ImGui.SetTooltip(UiText.Get(T.CatalogFiltersSummary,
@@ -253,10 +258,10 @@ internal sealed class FishListPanel(FishCatalog catalog, ITextureProvider textur
         if (ImGui.InputInt(UiText.Label(T.MinimumRemainingMinutes, "CatalogMinimumRemaining"), ref minimumRemainingMinutes))
         { minimumRemainingMinutes = Math.Clamp(minimumRemainingMinutes, 0, CatalogSettings.MaxTimeFilterMinutes); changed = true; }
         UiWidgets.Tooltip(UiText.Get(T.MinimumRemainingHint));
-        ImGui.SetNextItemWidth(ImGui.GetFontSize() * 8);
-        if (ImGui.InputInt(UiText.Label(T.MaximumUpcomingMinutes, "CatalogMaximumUpcoming"), ref maximumUpcomingMinutes))
-        { maximumUpcomingMinutes = Math.Clamp(maximumUpcomingMinutes, 0, CatalogSettings.MaxTimeFilterMinutes); changed = true; }
-        UiWidgets.Tooltip(UiText.Get(T.MaximumUpcomingHint));
+        changed |= DrawUpcomingInput(T.MinimumUpcomingMinutes, T.MinimumUpcomingHint, "CatalogMinimumUpcoming", ref minimumUpcomingInput, ref minimumUpcomingMinutes);
+        changed |= DrawUpcomingInput(T.MaximumUpcomingMinutes, T.MaximumUpcomingHint, "CatalogMaximumUpcoming", ref maximumUpcomingInput, ref maximumUpcomingMinutes);
+        if (!TryUpcomingMinutes(minimumUpcomingInput, out _) || !TryUpcomingMinutes(maximumUpcomingInput, out _))
+            ImGui.TextWrapped(UiText.Get(T.UpcomingInputInvalid, CatalogSettings.MaxTimeFilterMinutes));
         ImGui.SetNextItemWidth(190);
         changed |= ImGui.Combo(UiText.Label(T.GradeFilter, "CatalogGradeFilter"), ref gradeVisibility, gradeNames, gradeNames.Length);
         if (ImGui.IsItemHovered()) ImGui.SetTooltip(UiText.Get(T.GradeFilterHint));
@@ -277,7 +282,7 @@ internal sealed class FishListPanel(FishCatalog catalog, ITextureProvider textur
         Sort = SortChoices[sort], Collection = CollectionChoices[collectionVisibility], Grade = GradeChoices[gradeVisibility],
         InLogOnly = inLogOnly, IncludeOceanFish = includeOceanFish, TimeRestrictedOnly = timeRestrictedOnly,
         FavoritesOnly = favoritesOnly, CurrentRegionOnly = currentRegionOnly,
-        MinimumRemainingMinutes = minimumRemainingMinutes, MaximumUpcomingMinutes = maximumUpcomingMinutes,
+        MinimumRemainingMinutes = minimumRemainingMinutes, MinimumUpcomingMinutes = minimumUpcomingMinutes, MaximumUpcomingMinutes = maximumUpcomingMinutes,
         Regions = geography.Regions.Order().ToArray(), Expansions = geography.Expansions.Order().ToArray(),
     };
 
@@ -292,8 +297,30 @@ internal sealed class FishListPanel(FishCatalog catalog, ITextureProvider textur
         favoritesOnly = settings.FavoritesOnly;
         currentRegionOnly = settings.CurrentRegionOnly;
         minimumRemainingMinutes = settings.MinimumRemainingMinutes;
+        minimumUpcomingMinutes = settings.MinimumUpcomingMinutes;
         maximumUpcomingMinutes = settings.MaximumUpcomingMinutes;
+        minimumUpcomingInput = minimumUpcomingMinutes?.ToString(CultureInfo.InvariantCulture) ?? "";
+        maximumUpcomingInput = maximumUpcomingMinutes?.ToString(CultureInfo.InvariantCulture) ?? "";
         geography.RestoreSelections(settings.Regions, settings.Expansions);
+    }
+
+    private static bool DrawUpcomingInput(T label, T hint, string id, ref string input, ref int? value)
+    {
+        ImGui.SetNextItemWidth(ImGui.GetFontSize() * 8);
+        var edited = ImGui.InputTextWithHint(UiText.Label(label, id), UiText.Get(T.UpcomingNoLimit), ref input, 6, ImGuiInputTextFlags.CharsDecimal);
+        UiWidgets.Tooltip(UiText.Get(hint));
+        if (!edited || !TryUpcomingMinutes(input, out var parsed) || value == parsed) return false;
+        value = parsed;
+        return true;
+    }
+
+    private static bool TryUpcomingMinutes(string input, out int? value)
+    {
+        value = null;
+        if (input.Length == 0) return true;
+        if (!int.TryParse(input, NumberStyles.None, CultureInfo.InvariantCulture, out var number) || number < 0 || number > CatalogSettings.MaxTimeFilterMinutes) return false;
+        value = number;
+        return true;
     }
 
     private void DrawRows(FishCatalogView view, FishPreferencesView personal, FishCollectionView observed, FishingRegionView location)

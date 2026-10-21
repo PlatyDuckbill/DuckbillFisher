@@ -2,8 +2,13 @@
 <root>
   <data name="MinimumRemainingMinutes" xml:space="preserve"><value>Minimum time left (min)</value></data>
   <data name="MinimumRemainingHint" xml:space="preserve"><value>Hide fish currently available when less than this many real minutes remain. Upcoming fish are unaffected. 0 disables this limit. Unknown times and always-available fish remain visible.</value></data>
-  <data name="MaximumUpcomingMinutes" xml:space="preserve"><value>Starting within (min)</value></data>
-  <data name="MaximumUpcomingHint" xml:space="preserve"><value>Show upcoming fish only when they start within this many real minutes. Currently available fish are unaffected. 0 disables this limit. Unknown times and always-available fish remain visible.</value></data>
+  <data name="MinimumUpcomingMinutes" xml:space="preserve"><value>Minimum time until spawn (min)</value></data>
+  <data name="MinimumUpcomingHint" xml:space="preserve"><value>Show upcoming fish with at least this many real minutes until they start. Leave blank for no lower limit. The maximum limit is independent. Currently available fish are unaffected.</value></data>
+  <data name="MaximumUpcomingMinutes" xml:space="preserve"><value>Maximum time until spawn (min)</value></data>
+  <data name="MaximumUpcomingHint" xml:space="preserve"><value>Show upcoming fish with at most this many real minutes until they start. Leave blank for no upper limit; 0 means zero minutes. Both limits include the entered boundary. Unknown times and always-available fish remain visible.</value></data>
+  <data name="UpcomingNoLimit" xml:space="preserve"><value>No limit</value></data>
+  <data name="UpcomingRangeInvalid" xml:space="preserve"><value>The minimum time until spawn exceeds the maximum. No upcoming fish with known start times can match. Adjust either value or clear a bound.</value></data>
+  <data name="UpcomingInputInvalid" xml:space="preserve"><value>Enter a whole number from 0 to {0}, or leave blank for no limit. An invalid entry keeps the last valid value applied.</value></data>
   <data name="TimerPatience" xml:space="preserve"><value>Patience</value></data>
   <data name="TimerIntuition" xml:space="preserve"><value>Intuition</value></data>
   <data name="TimerBuffRemaining" xml:space="preserve"><value>{0} · {1}</value></data>
@@ -470,7 +475,7 @@ In fish log only: {5}</value></data>
   <data name="OpenMainWindow" xml:space="preserve"><value>Open main window</value></data>
   <data name="OpenCompactWindow" xml:space="preserve"><value>Open quick list</value></data>
   <data name="CompactHorizon" xml:space="preserve"><value>Upcoming minutes</value></data>
-  <data name="CompactScope" xml:space="preserve"><value>Shares the main catalog filters except favorites, including minimum time left and starting within. Use the star here to show favorites only; it does not change the main view. Lists open windows, then upcoming windows within 1–180 minutes. The shorter of this horizon and the main starting-within limit applies. Always available, unknown and ocean fish are excluded.</value></data>
+  <data name="CompactScope" xml:space="preserve"><value>Shares the main catalog filters except favorites, including minimum time left and the optional minimum/maximum time until spawn. Use the star here to show favorites only; it does not change the main view. Upcoming fish must also fall within this view's 1–180 minute horizon. A blank main bound adds no limit. Always available, unknown and ocean fish are excluded.</value></data>
   <data name="CompactOpen" xml:space="preserve"><value>Open now · {0}</value></data>
   <data name="CompactUpcoming" xml:space="preserve"><value>Upcoming · {0}</value></data>
   <data name="CompactEmpty" xml:space="preserve"><value>No matching fish open or starting within {0} minutes. Adjust the main filters or extend this window&apos;s range.</value></data>

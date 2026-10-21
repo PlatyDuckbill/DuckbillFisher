@@ -5,14 +5,16 @@ namespace DuckbillFisher.Plugin;
 /// <summary>Only known boundaries exclude fish; thresholds use real minutes and the selected forecast.</summary>
 internal static class CatalogWindowFilter
 {
-    public static bool Enabled(CatalogSettings settings) => settings.MinimumRemainingMinutes > 0 || settings.MaximumUpcomingMinutes > 0;
+    public static bool Enabled(CatalogSettings settings) => settings.MinimumRemainingMinutes > 0 ||
+        settings.MinimumUpcomingMinutes is not null || settings.MaximumUpcomingMinutes is not null;
 
     public static bool Matches(CatalogSettings settings, FishingWindow? window, DateTimeOffset now) => window switch
     {
         { Kind: FishingWindowKind.Open, End: { } end } when settings.MinimumRemainingMinutes > 0 =>
             end - now >= TimeSpan.FromMinutes(settings.MinimumRemainingMinutes),
-        { Kind: FishingWindowKind.Upcoming, Start: { } start } when settings.MaximumUpcomingMinutes > 0 =>
-            start - now <= TimeSpan.FromMinutes(settings.MaximumUpcomingMinutes),
+        { Kind: FishingWindowKind.Upcoming, Start: { } start } =>
+            (settings.MinimumUpcomingMinutes is not { } min || start - now >= TimeSpan.FromMinutes(min)) &&
+            (settings.MaximumUpcomingMinutes is not { } max || start - now <= TimeSpan.FromMinutes(max)),
         _ => true,
     };
 
@@ -22,16 +24,16 @@ internal static class CatalogWindowFilter
         var next = now.AddSeconds(30);
         foreach (var window in windows)
         {
-            var boundary = window switch
+            if (window is { Kind: FishingWindowKind.Open, End: { } end } && settings.MinimumRemainingMinutes > 0)
+                Include(end.AddMinutes(-settings.MinimumRemainingMinutes).AddTicks(1));
+            if (window is { Kind: FishingWindowKind.Upcoming, Start: { } start })
             {
-                { Kind: FishingWindowKind.Open, End: { } end } when settings.MinimumRemainingMinutes > 0 =>
-                    end.AddMinutes(-settings.MinimumRemainingMinutes).AddTicks(1),
-                { Kind: FishingWindowKind.Upcoming, Start: { } start } when settings.MaximumUpcomingMinutes > 0 =>
-                    start.AddMinutes(-settings.MaximumUpcomingMinutes),
-                _ => DateTimeOffset.MaxValue,
-            };
-            if (boundary > now && boundary < next) next = boundary;
+                if (settings.MinimumUpcomingMinutes is { } min) Include(start.AddMinutes(-min).AddTicks(1));
+                if (settings.MaximumUpcomingMinutes is { } max) Include(start.AddMinutes(-max));
+            }
         }
         return next;
+
+        void Include(DateTimeOffset boundary) { if (boundary > now && boundary < next) next = boundary; }
     }
 }

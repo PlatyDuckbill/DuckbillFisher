@@ -61,7 +61,7 @@
 
 ## UI·자료 경계
 
-- 개발 설정schema18은 CatalogSettings의 MinimumRemainingMinutes/MaximumUpcomingMinutes(각0기본/제한 해제)를 공통 필터·프리셋에 추가한다. CatalogWindowFilter는 선택 예측과 UTC 입력만 받아 Open 종료 최소/Upcoming 시작 최대를 독립 적용하고 미확인은 유지한다. 메인·현재 목록 미끼 준비/일정표는 예측 revision·필터 경계를 추적하며 간이 목록은 기존1초 주기를 사용한다. 즐겨찾기 대상/알림/낚시터 독립 목록은 대상 정책을 유지한다.
+- 개발 설정schema19는 CatalogSettings의 MinimumRemainingMinutes(0해제), nullable MinimumUpcomingMinutes/MaximumUpcomingMinutes(null은 해당 경계 해제)를 공통 필터·프리셋에 저장한다. 이전18이하 최대0만 null로 옮기고 양수·기타 상태는 보존한다. UI의 빈 문자열은 null로 즉시 전달하며 숫자0과 구분한다. 경계별 범위는 검증하되 최소>최대는 표시 가능한 사용자 충돌 상태로 보존해 설정 전체를 손상 처리하지 않는다. CatalogWindowFilter는 선택 예측/UTC로 Open 종료 최소·Upcoming 시작 최소/최대를 독립 적용하고 미확인은 유지한다. 메인·현재 목록 미끼 준비/일정표는 양쪽 UTC 경계·예측 revision을 추적하며 간이는 기존1초 주기를 사용한다. 즐겨찾기 대상/알림/낚시터 독립 목록은 대상 정책을 유지한다.
 
 - 메인/간이 목록은 CatalogFilter의 일반 조건을 공유한다. 검색/진단/정렬·간이 예정 범위는 각 화면 정책을 따른다. 알림 대상을 목록 필터로 바꾸지 않는다.
 - 상세 패널은 메인·독립 상세·비교 상세에서 재사용한다. 비교는1개/뒤로32단계를 유지하며 세션 전환 시 이력을 비운다. 생미끼/직감 어종 탐색은 로드 시 만든 Item/FishParameter 인덱스로 연결하고 Draw에서 전체 재검색하지 않는다. 타이머의 낚시터 목록은 독립 수집 필터와 공통 행을 쓴다. 미끼 준비는 독립 보조 화면이다. [현재 동작](../product/PRODUCT.md#화면과-상호작용).
