@@ -1,6 +1,6 @@
 # 세션 인수인계
 
-갱신: 2026-10-22 · 공개0.5.0.0 · 0.5.1.0 고정 Release 대표 확인 완료/게시 진행
+갱신: 2026-10-22 · 공개0.5.1.0 · 원격 게시/실제 공유 raw URL 확인 완료 · 실제 저장소 업데이트 확인 대기
 
 ## 재개 순서
 
@@ -29,14 +29,14 @@
 | 이전 게시 Release 추출 DLL | ${env:DUCKBILL_ROOT}/.cache/release-validation/0.3.11.0/DuckbillFisher.dll |
 | 이전 게시0.4.0 Release 추출 DLL | ${env:DUCKBILL_ROOT}/.cache/release-validation/0.4.0.0-r2/DuckbillFisher.dll |
 | 이전 게시0.4.1 Release 추출 DLL | ${env:DUCKBILL_ROOT}/.cache/release-validation/0.4.1.0-r3/DuckbillFisher.dll |
-| 현재 게시 Release 추출 DLL | ${env:DUCKBILL_ROOT}/.cache/release-validation/0.5.0.0/DuckbillFisher.dll |
-| 대표 확인한0.5.1 Release 추출 DLL | ${env:DUCKBILL_ROOT}/.cache/release-validation/0.5.1.0/DuckbillFisher.dll |
+| 이전 게시0.5.0 Release 추출 DLL | ${env:DUCKBILL_ROOT}/.cache/release-validation/0.5.0.0/DuckbillFisher.dll |
+| 현재 게시0.5.1 Release 추출 DLL | ${env:DUCKBILL_ROOT}/.cache/release-validation/0.5.1.0/DuckbillFisher.dll |
 
 캐시/참조 DLL은 Git에 없다. 다른 PC에서는 실제 경로와 정확한 지원 배포판을 다시 확인한다. 최소 참조가 없다고 현재 참조를 Release에 조용히 대체하지 않는다. 일반 빌드 명령은 [WORKFLOW](development/WORKFLOW.md#windows-빌드)에 한 곳만 유지한다.
 
 ## 배포 산출물과 로컬 상태
 
-- 현재 후보0.5.1.0은 `.cache/remaining-empty-build/` 별도/정규 Debug, 최소 참조 Release `.cache/release-build/0.5.1.0/`, 고정 ZIP `artifacts/share/0.5.1.0/`, 추출은 위 표다. 타이머 인내/직감·최소 잔여/예정 최소·최대 시간 입력을 모두 빈칸으로 해제한다(schema19). 예정은 nullable·잔여는0 저장, 이전18이하 최대0은 빈칸으로 옮긴다. 고정 추출 DLL ‘정상’ 확인을 받아 같은 ZIP을 게시 중이며 재빌드하지 않는다. [고정 해시/검사](verification/releases/RELEASE-0.5.1.0.md). 이전 `.cache/upcoming-range-build/`/`timer-filters-build/`는0.5.0.0 개발 후보다. 상태 API 근거는 `.cache/timer-status-api.json`, 로컬 시트 도우미는 `.cache/timer-status-audit/`다.
+- 현재 공개0.5.1.0은 `.cache/remaining-empty-build/` 별도/정규 Debug, 최소 참조 Release `.cache/release-build/0.5.1.0/`, 고정 ZIP `artifacts/share/0.5.1.0/`, 추출은 위 표다. 타이머 인내/직감·최소 잔여/예정 최소·최대 입력을 빈칸으로 해제한다(schema19). 예정nullable·잔여0 저장, 이전18이하 최대0은 빈칸으로 옮긴다. 고정 DLL ‘정상’ 확인 뒤 같은 ZIP 게시/익명 자산 해시/설치 JSON push·실제 공유 raw URL의0.5.1.0/메타데이터 확인 완료다. ZIP은 재빌드하지 않는다. 소스6e672e8/Release ID419790510·설치 JSONa8d5e89. [고정 해시/검사](verification/releases/RELEASE-0.5.1.0.md). 이전 `.cache/upcoming-range-build/`/`timer-filters-build/`는0.5.0.0 개발 후보다. 상태 API 근거는 `.cache/timer-status-api.json`, 로컬 시트 도우미는 `.cache/timer-status-audit/`다.
 
 - 공개0.5.0.0 고정 Release: 최소 참조 출력 .cache/release-build/0.5.0.0/, ZIP artifacts/share/0.5.0.0/, 고정 추출 DLL .cache/release-validation/0.5.0.0/DuckbillFisher.dll. 한국10-21 04:01:36의 배포 요청 시각을 내장/후보 JSON에 맞췄다. 대표 확인 뒤 같은 ZIP 게시/익명 자산·설치 JSON·실제 공유 raw URL 확인을 완료했으며 [검사/해시](verification/releases/RELEASE-0.5.0.0.md)를 따른다. 이 ZIP은 재빌드하지 않는다. 실제 Dalamud 저장소 업데이트 확인은 STATUS를 따른다.
 
