@@ -1,6 +1,6 @@
 # 세션 인수인계
 
-갱신: 2026-10-22 · 공개0.5.0.0 · 개발 타이머 효과/시간 필터 실기 확인 대기
+갱신: 2026-10-22 · 공개0.5.0.0 · 0.5.1.0 고정 Release 대표 확인 완료/게시 진행
 
 ## 재개 순서
 
@@ -30,12 +30,13 @@
 | 이전 게시0.4.0 Release 추출 DLL | ${env:DUCKBILL_ROOT}/.cache/release-validation/0.4.0.0-r2/DuckbillFisher.dll |
 | 이전 게시0.4.1 Release 추출 DLL | ${env:DUCKBILL_ROOT}/.cache/release-validation/0.4.1.0-r3/DuckbillFisher.dll |
 | 현재 게시 Release 추출 DLL | ${env:DUCKBILL_ROOT}/.cache/release-validation/0.5.0.0/DuckbillFisher.dll |
+| 대표 확인한0.5.1 Release 추출 DLL | ${env:DUCKBILL_ROOT}/.cache/release-validation/0.5.1.0/DuckbillFisher.dll |
 
 캐시/참조 DLL은 Git에 없다. 다른 PC에서는 실제 경로와 정확한 지원 배포판을 다시 확인한다. 최소 참조가 없다고 현재 참조를 Release에 조용히 대체하지 않는다. 일반 빌드 명령은 [WORKFLOW](development/WORKFLOW.md#windows-빌드)에 한 곳만 유지한다.
 
 ## 배포 산출물과 로컬 상태
 
-- 현재 개발 후보는 `.cache/upcoming-range-build/` 별도 Debug와 정규 Debug다. 타이머 인내/직감·최소 잔여/예정 최소·최대 시간 필터, 설정schema19이며 DLL 버전 표기는0.5.0.0을 유지한다. 예정 경계는 nullable로 저장해 빈칸과 숫자0을 구분한다. 이전18이하 최대0은 빈칸으로 옮긴다. 공개 고정 Release와 구분하며 이전 `.cache/timer-filters-build/`는 초기 최대만 제공한 후보다. 상태 API 근거는 `.cache/timer-status-api.json`, 로컬 시트 도우미는 `.cache/timer-status-audit/`다. [타이머](verification/fishing/TIMER-HISTORY.md#타이머-인내직감-남은-시간-2026-10-22)·[범위/빈칸](verification/catalog/UI.md#출현까지-최소최대-범위와-빈칸-2026-10-22)를 따른다.
+- 현재 후보0.5.1.0은 `.cache/remaining-empty-build/` 별도/정규 Debug, 최소 참조 Release `.cache/release-build/0.5.1.0/`, 고정 ZIP `artifacts/share/0.5.1.0/`, 추출은 위 표다. 타이머 인내/직감·최소 잔여/예정 최소·최대 시간 입력을 모두 빈칸으로 해제한다(schema19). 예정은 nullable·잔여는0 저장, 이전18이하 최대0은 빈칸으로 옮긴다. 고정 추출 DLL ‘정상’ 확인을 받아 같은 ZIP을 게시 중이며 재빌드하지 않는다. [고정 해시/검사](verification/releases/RELEASE-0.5.1.0.md). 이전 `.cache/upcoming-range-build/`/`timer-filters-build/`는0.5.0.0 개발 후보다. 상태 API 근거는 `.cache/timer-status-api.json`, 로컬 시트 도우미는 `.cache/timer-status-audit/`다.
 
 - 공개0.5.0.0 고정 Release: 최소 참조 출력 .cache/release-build/0.5.0.0/, ZIP artifacts/share/0.5.0.0/, 고정 추출 DLL .cache/release-validation/0.5.0.0/DuckbillFisher.dll. 한국10-21 04:01:36의 배포 요청 시각을 내장/후보 JSON에 맞췄다. 대표 확인 뒤 같은 ZIP 게시/익명 자산·설치 JSON·실제 공유 raw URL 확인을 완료했으며 [검사/해시](verification/releases/RELEASE-0.5.0.0.md)를 따른다. 이 ZIP은 재빌드하지 않는다. 실제 Dalamud 저장소 업데이트 확인은 STATUS를 따른다.
 

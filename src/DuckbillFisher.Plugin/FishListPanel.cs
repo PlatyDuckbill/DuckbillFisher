@@ -47,7 +47,7 @@ internal sealed class FishListPanel(FishCatalog catalog, ITextureProvider textur
     private bool currentRegionOnly;
     private int minimumRemainingMinutes;
     private int? minimumUpcomingMinutes, maximumUpcomingMinutes;
-    private string minimumUpcomingInput = "", maximumUpcomingInput = "";
+    private string minimumRemainingInput = "", minimumUpcomingInput = "", maximumUpcomingInput = "";
     private DateTimeOffset nextWindowFilterUpdate, lastWindowFilterClock;
     private FishingRegionView? lastRegion;
     private bool timeRestrictedOnly;
@@ -254,13 +254,12 @@ internal sealed class FishListPanel(FishCatalog catalog, ITextureProvider textur
         ImGui.Separator();
         changed |= ImGui.Checkbox(UiText.Label(T.TimeRestrictedOnly, "CatalogTimeRestrictedOnly"), ref timeRestrictedOnly);
         if (ImGui.IsItemHovered()) ImGui.SetTooltip(UiText.Get(T.TimeRestrictedHint));
-        ImGui.SetNextItemWidth(ImGui.GetFontSize() * 8);
-        if (ImGui.InputInt(UiText.Label(T.MinimumRemainingMinutes, "CatalogMinimumRemaining"), ref minimumRemainingMinutes))
-        { minimumRemainingMinutes = Math.Clamp(minimumRemainingMinutes, 0, CatalogSettings.MaxTimeFilterMinutes); changed = true; }
-        UiWidgets.Tooltip(UiText.Get(T.MinimumRemainingHint));
-        changed |= DrawUpcomingInput(T.MinimumUpcomingMinutes, T.MinimumUpcomingHint, "CatalogMinimumUpcoming", ref minimumUpcomingInput, ref minimumUpcomingMinutes);
-        changed |= DrawUpcomingInput(T.MaximumUpcomingMinutes, T.MaximumUpcomingHint, "CatalogMaximumUpcoming", ref maximumUpcomingInput, ref maximumUpcomingMinutes);
-        if (!TryUpcomingMinutes(minimumUpcomingInput, out _) || !TryUpcomingMinutes(maximumUpcomingInput, out _))
+        int? remainingLimit = minimumRemainingMinutes > 0 ? minimumRemainingMinutes : null;
+        if (DrawTimeInput(T.MinimumRemainingMinutes, T.MinimumRemainingHint, "CatalogMinimumRemaining", ref minimumRemainingInput, ref remainingLimit))
+        { minimumRemainingMinutes = remainingLimit ?? 0; changed = true; }
+        changed |= DrawTimeInput(T.MinimumUpcomingMinutes, T.MinimumUpcomingHint, "CatalogMinimumUpcoming", ref minimumUpcomingInput, ref minimumUpcomingMinutes);
+        changed |= DrawTimeInput(T.MaximumUpcomingMinutes, T.MaximumUpcomingHint, "CatalogMaximumUpcoming", ref maximumUpcomingInput, ref maximumUpcomingMinutes);
+        if (!TryTimeMinutes(minimumRemainingInput, out _) || !TryTimeMinutes(minimumUpcomingInput, out _) || !TryTimeMinutes(maximumUpcomingInput, out _))
             ImGui.TextWrapped(UiText.Get(T.UpcomingInputInvalid, CatalogSettings.MaxTimeFilterMinutes));
         ImGui.SetNextItemWidth(190);
         changed |= ImGui.Combo(UiText.Label(T.GradeFilter, "CatalogGradeFilter"), ref gradeVisibility, gradeNames, gradeNames.Length);
@@ -297,6 +296,7 @@ internal sealed class FishListPanel(FishCatalog catalog, ITextureProvider textur
         favoritesOnly = settings.FavoritesOnly;
         currentRegionOnly = settings.CurrentRegionOnly;
         minimumRemainingMinutes = settings.MinimumRemainingMinutes;
+        minimumRemainingInput = minimumRemainingMinutes > 0 ? minimumRemainingMinutes.ToString(CultureInfo.InvariantCulture) : "";
         minimumUpcomingMinutes = settings.MinimumUpcomingMinutes;
         maximumUpcomingMinutes = settings.MaximumUpcomingMinutes;
         minimumUpcomingInput = minimumUpcomingMinutes?.ToString(CultureInfo.InvariantCulture) ?? "";
@@ -304,17 +304,17 @@ internal sealed class FishListPanel(FishCatalog catalog, ITextureProvider textur
         geography.RestoreSelections(settings.Regions, settings.Expansions);
     }
 
-    private static bool DrawUpcomingInput(T label, T hint, string id, ref string input, ref int? value)
+    private static bool DrawTimeInput(T label, T hint, string id, ref string input, ref int? value)
     {
         ImGui.SetNextItemWidth(ImGui.GetFontSize() * 8);
         var edited = ImGui.InputTextWithHint(UiText.Label(label, id), UiText.Get(T.UpcomingNoLimit), ref input, 6, ImGuiInputTextFlags.CharsDecimal);
         UiWidgets.Tooltip(UiText.Get(hint));
-        if (!edited || !TryUpcomingMinutes(input, out var parsed) || value == parsed) return false;
+        if (!edited || !TryTimeMinutes(input, out var parsed) || value == parsed) return false;
         value = parsed;
         return true;
     }
 
-    private static bool TryUpcomingMinutes(string input, out int? value)
+    private static bool TryTimeMinutes(string input, out int? value)
     {
         value = null;
         if (input.Length == 0) return true;

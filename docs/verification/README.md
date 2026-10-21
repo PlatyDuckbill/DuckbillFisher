@@ -4,6 +4,8 @@
 
 ## 배포와 호환성
 
+- [0.5.1.0 타이머 효과·시간 필터 배포](releases/RELEASE-0.5.1.0.md)
+
 - [첫 커스텀 저장소 배포: 0.2.4.0](releases/RELEASE-0.2.4.0.md)
 - [0.3.0.0 배포](releases/RELEASE-0.3.0.0.md)
 - [0.3.8.0 배포](releases/RELEASE-0.3.8.0.md)

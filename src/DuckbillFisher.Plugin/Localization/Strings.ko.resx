@@ -1,7 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <root>
   <data name="MinimumRemainingMinutes" xml:space="preserve"><value>최소 잔여 시간(분)</value></data>
-  <data name="MinimumRemainingHint" xml:space="preserve"><value>출현 중인 어종의 종료까지 실제 시간이 설정한 분보다 짧으면 숨깁니다. 출현 예정 어종에는 적용하지 않습니다. 0분은 제한 해제이며, 시간 미확인·상시 어종은 유지합니다.</value></data>
+  <data name="MinimumRemainingHint" xml:space="preserve"><value>출현 중인 어종의 종료까지 실제 시간이 입력한 분보다 짧으면 숨깁니다. 빈칸 또는 0분이면 제한을 해제합니다. 출현 예정 어종에는 적용하지 않으며, 시간 미확인·상시 어종은 유지합니다.</value></data>
+  <data name="ChangelogFishingBuffTimers" xml:space="preserve"><value>캐스팅 타이머에 인내·어부의 직감 아이콘과 실제 남은 시간을 표시합니다.</value></data>
+  <data name="ChangelogRemainingTimeFilter" xml:space="preserve"><value>최소 잔여 시간을 지정해 곧 종료되는 출현 중 어종을 숨길 수 있습니다.</value></data>
+  <data name="ChangelogUpcomingTimeRange" xml:space="preserve"><value>출현까지 최소·최대 시간을 각각 지정할 수 있습니다. 한쪽만 입력하거나 두 값으로 범위를 정할 수 있습니다.</value></data>
+  <data name="ChangelogEmptyTimeFilters" xml:space="preserve"><value>시간 필터를 비우면 해당 제한을 해제합니다. 설정·프리셋에 저장하며 간이 목록과 현재 목록 대상 미끼 준비·일정표에도 적용합니다.</value></data>
   <data name="MinimumUpcomingMinutes" xml:space="preserve"><value>출현까지 최소 시간(분)</value></data>
   <data name="MinimumUpcomingHint" xml:space="preserve"><value>출현 예정 어종은 시작까지 실제 시간이 입력한 분 이상일 때 표시합니다. 빈칸이면 최소 제한을 해제합니다. 최대 제한과 독립적이며 출현 중인 어종에는 적용하지 않습니다.</value></data>
   <data name="MaximumUpcomingMinutes" xml:space="preserve"><value>출현까지 최대 시간(분)</value></data>

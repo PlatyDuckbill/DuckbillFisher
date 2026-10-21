@@ -1,7 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <root>
   <data name="MinimumRemainingMinutes" xml:space="preserve"><value>Minimum time left (min)</value></data>
-  <data name="MinimumRemainingHint" xml:space="preserve"><value>Hide fish currently available when less than this many real minutes remain. Upcoming fish are unaffected. 0 disables this limit. Unknown times and always-available fish remain visible.</value></data>
+  <data name="MinimumRemainingHint" xml:space="preserve"><value>Hide fish currently available when less than this many real minutes remain. Leave blank or enter 0 for no limit. Upcoming fish are unaffected. Unknown times and always-available fish remain visible.</value></data>
+  <data name="ChangelogFishingBuffTimers" xml:space="preserve"><value>The casting timer shows icons and live remaining time for Patience and Fisher's Intuition.</value></data>
+  <data name="ChangelogRemainingTimeFilter" xml:space="preserve"><value>Set a minimum time left to hide currently available fish that end too soon.</value></data>
+  <data name="ChangelogUpcomingTimeRange" xml:space="preserve"><value>Set independent minimum and maximum times until spawn. Use either bound alone or both together.</value></data>
+  <data name="ChangelogEmptyTimeFilters" xml:space="preserve"><value>Clear any time-filter field to remove that limit. Settings and presets preserve the limits; the compact list and current-list preparation/schedule share them.</value></data>
   <data name="MinimumUpcomingMinutes" xml:space="preserve"><value>Minimum time until spawn (min)</value></data>
   <data name="MinimumUpcomingHint" xml:space="preserve"><value>Show upcoming fish with at least this many real minutes until they start. Leave blank for no lower limit. The maximum limit is independent. Currently available fish are unaffected.</value></data>
   <data name="MaximumUpcomingMinutes" xml:space="preserve"><value>Maximum time until spawn (min)</value></data>
