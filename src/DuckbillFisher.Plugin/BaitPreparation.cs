@@ -25,6 +25,8 @@ internal sealed class BaitPreparation : IDisposable
     private int lastPreference = -1, lastCollection = -1, lastSession = -1;
     private BaitPreparationSource lastSource;
     private bool disposed;
+    private int lastForecast = -1;
+    private DateTimeOffset nextWindowFilterUpdate, lastClock;
 
     public BaitPreparation(FishCatalog catalog, FishPreferences preferences, FishCollectionObserver collection,
         FishingRegionObserver region, CatalogQueryState query, IFramework framework)
@@ -50,8 +52,14 @@ internal sealed class BaitPreparation : IDisposable
             var observed = collection.View;
             var location = region.View;
             var current = query.Current;
+            var now = DateTimeOffset.UtcNow;
+            var timedFilterChanged = source == BaitPreparationSource.Catalog && CatalogWindowFilter.Enabled(current.Settings) &&
+                (lastForecast != data.ForecastRevision || now >= nextWindowFilterUpdate || now < lastClock);
+            lastClock = now;
             if (lastSession == personal.Session && lastPreference == personal.CatalogRevision && lastCollection == observed.Revision &&
-                ReferenceEquals(lastRows, data.Rows) && lastRegion == location && lastQuery == current && lastSource == source) return;
+                ReferenceEquals(lastRows, data.Rows) && lastRegion == location && lastQuery == current && lastSource == source && !timedFilterChanged) return;
+            lastForecast = data.ForecastRevision;
+            nextWindowFilterUpdate = CatalogWindowFilter.NextChange(current.Settings, data.Windows.Values, now);
             if (!ReferenceEquals(lastRows, data.Rows))
                 fishItems = data.Rows.Where(row => row.ItemType == "Item").Select(row => row.ItemId).ToHashSet();
             lastSession = personal.Session; lastPreference = personal.CatalogRevision; lastCollection = observed.Revision;
@@ -60,7 +68,7 @@ internal sealed class BaitPreparation : IDisposable
             var filter = new CatalogFilter(current.Settings);
             var targets = data.Rows.Where(row => source == BaitPreparationSource.Favorites
                 ? personal.Favorites.Contains(row.FishParameterId)
-                : current.Matches(row, filter, personal, observed, location)).ToArray();
+                : current.Matches(row, filter, personal, observed, location, data, now)).ToArray();
             var entries = new Dictionary<uint, (FishingItemView Item, List<FishGuideRow> Targets)>();
             var missing = new List<FishGuideRow>();
             foreach (var row in targets)

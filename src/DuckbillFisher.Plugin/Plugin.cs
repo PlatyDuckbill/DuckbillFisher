@@ -34,6 +34,7 @@ public sealed class Plugin : IDalamudPlugin
     private readonly FishGuideOpenService guideOpener;
     private readonly FishingTracker fishingTracker;
     private readonly CastingTimerWindow timerWindow;
+    private readonly FishingBuffObserver fishingBuffs;
     private readonly BaitStockObserver baitStock;
     private readonly BaitPreparation baitPreparation;
     private readonly BaitUiProbe baitUiProbe;
@@ -44,7 +45,8 @@ public sealed class Plugin : IDalamudPlugin
 
     public Plugin(IDalamudPluginInterface pluginInterface, ICommandManager commandManager, ICondition conditions,
         IClientState clientState, IPlayerState playerState, IDataManager dataManager, IGameGui gameGui, IFramework framework,
-        ITextureProvider textureProvider, IPluginLog log, IChatGui chat, IGameInventory inventory, IAddonLifecycle addonLifecycle)
+        ITextureProvider textureProvider, IPluginLog log, IChatGui chat, IGameInventory inventory, IAddonLifecycle addonLifecycle,
+        IObjectTable objectTable)
     {
         this.pluginInterface = pluginInterface;
         this.commandManager = commandManager;
@@ -96,7 +98,9 @@ public sealed class Plugin : IDalamudPlugin
             else compareDetailWindow.Show(fish);
         };
         var spotFishWindow = new SpotFishWindow(fishingTracker, fishCatalog, fishPreferences, fishCollection, textureProvider, fishingMap, detailWindow.Show);
-        timerWindow = new CastingTimerWindow(fishingTracker, textureProvider, detailWindow.Show, spotFishWindow.Toggle);
+        fishingBuffs = new FishingBuffObserver(objectTable, clientState, playerState, conditions, framework, dataManager,
+            fishPreferences, () => collectionReader.IsCompatible);
+        timerWindow = new CastingTimerWindow(fishingTracker, fishingBuffs, textureProvider, detailWindow.Show, spotFishWindow.Toggle);
         compactObserver = new CompactFishObserver(fishCatalog, fishPreferences, framework, fishCollection, fishingRegion);
         compactWindow = new CompactFishWindow(compactObserver, fishPreferences, fishCollection, textureProvider, detailWindow.Show, fishingMap);
         spawnAlertsPanel = new SpawnAlertsPanel(fishPreferences, spawnAlerts, alertOutput, fishCollection, textureProvider,
@@ -172,6 +176,7 @@ public sealed class Plugin : IDalamudPlugin
         alertOutput.Dispose();
         fishingObserver.Dispose();
         fishingTracker.Dispose();
+        fishingBuffs.Dispose();
         fishGuide.Dispose();
         guideOpener.Dispose();
         fishCatalog.Dispose();

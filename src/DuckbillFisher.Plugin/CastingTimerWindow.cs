@@ -14,11 +14,13 @@ internal sealed class CastingTimerWindow : Window
     private readonly ITextureProvider textures;
     private readonly Action toggleSpotFish;
     private readonly FishingHistoryPanel history;
+    private readonly FishingBuffObserver buffs;
 
-    public CastingTimerWindow(FishingTracker tracker, ITextureProvider textures, Action<FishGuideRow> showDetail, Action toggleSpotFish)
+    public CastingTimerWindow(FishingTracker tracker, FishingBuffObserver buffs, ITextureProvider textures, Action<FishGuideRow> showDetail, Action toggleSpotFish)
         : base("DuckbillFisher###DuckbillFisher.Timer")
     {
         this.tracker = tracker; this.textures = textures; this.toggleSpotFish = toggleSpotFish;
+        this.buffs = buffs;
         history = new(tracker, textures, showDetail);
         Size = new Vector2(440, 560);
         SizeCondition = ImGuiCond.FirstUseEver;
@@ -28,6 +30,8 @@ internal sealed class CastingTimerWindow : Window
     }
 
     public override void PreDraw() => WindowName = $"{UiText.Get(T.CastingTimerTitle)}###DuckbillFisher.Timer";
+    public override void OnOpen() => buffs.SetActive(true);
+    public override void OnClose() => buffs.SetActive(false);
     public override void Draw()
     {
         var view = tracker.View;
@@ -77,6 +81,7 @@ internal sealed class CastingTimerWindow : Window
         ImGui.TextUnformatted(UiText.Get(T.TimerCastLine, new UiMessage(label), elapsed));
         var et = timed?.StartedUtc is { } utc ? FishingTimeText.Et(utc) : "—";
         ImGui.TextDisabled(UiText.Get(T.TimerCastEt, et));
+        DrawBuffs();
         var sessionTime = (view.CurrentTrip?.FirstCastUtc ?? view.SessionStartedUtc)?.ToLocalTime().ToString("HH:mm:ss", UiText.Culture) ?? "—";
         var sessionElapsed = view.CurrentTrip is { } trip ? FishingTimeText.TripDuration(trip, view, tracker.Now) : "—";
         ImGui.TextUnformatted(UiText.Get(retained ? T.TimerCompletedSessionLine : T.TimerSessionLine, sessionTime, sessionElapsed));
@@ -86,4 +91,40 @@ internal sealed class CastingTimerWindow : Window
         history.Draw(view, view.CurrentRecords, "TimerHistory");
     }
 
+    private void DrawBuffs()
+    {
+        var sample = buffs.View;
+        var now = buffs.Now;
+        var right = ImGui.GetCursorPosX() + ImGui.GetContentRegionAvail().X;
+        var intuitionLabel = BuffLabel(T.TimerIntuition, sample.IntuitionEnd);
+        DrawBuff(T.TimerPatience, sample.PatienceIcon, sample.PatienceEnd);
+        UiWidgets.FlowNext(ImGui.GetTextLineHeightWithSpacing() + ImGui.CalcTextSize(intuitionLabel).X + ImGui.GetStyle().ItemSpacing.X, right);
+        DrawBuff(T.TimerIntuition, sample.IntuitionIcon, sample.IntuitionEnd);
+
+        string BuffLabel(T key, TimeSpan? end)
+        {
+            var active = sample.Ready && end > now;
+            var seconds = active ? (long)Math.Ceiling((end!.Value - now).TotalSeconds) : 0;
+            var remaining = !sample.Ready ? UiText.Get(T.ConditionUnknown) : active
+                ? UiText.Get(T.TimerBuffTime, seconds / 60, seconds % 60)
+                : UiText.Get(T.TimerBuffInactive);
+            return UiText.Get(T.TimerBuffRemaining, new UiMessage(key), remaining);
+        }
+
+        void DrawBuff(T key, uint icon, TimeSpan? end)
+        {
+            var active = sample.Ready && end > now;
+            ImGui.BeginGroup();
+            if (icon != 0)
+            {
+                UiWidgets.GameIcon(textures, icon, ImGui.GetTextLineHeightWithSpacing(), UiText.Get(key));
+                ImGui.SameLine();
+            }
+            var text = BuffLabel(key, end);
+            if (active) ImGui.TextColored(new Vector4(.46f, .88f, .70f, 1), text);
+            else ImGui.TextDisabled(text);
+            ImGui.EndGroup();
+            UiWidgets.Tooltip(UiText.Get(T.TimerBuffHint));
+        }
+    }
 }

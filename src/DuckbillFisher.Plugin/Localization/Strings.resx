@@ -1,5 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <root>
+  <data name="MinimumRemainingMinutes" xml:space="preserve"><value>Minimum time left (min)</value></data>
+  <data name="MinimumRemainingHint" xml:space="preserve"><value>Hide fish currently available when less than this many real minutes remain. Upcoming fish are unaffected. 0 disables this limit. Unknown times and always-available fish remain visible.</value></data>
+  <data name="MaximumUpcomingMinutes" xml:space="preserve"><value>Starting within (min)</value></data>
+  <data name="MaximumUpcomingHint" xml:space="preserve"><value>Show upcoming fish only when they start within this many real minutes. Currently available fish are unaffected. 0 disables this limit. Unknown times and always-available fish remain visible.</value></data>
+  <data name="TimerPatience" xml:space="preserve"><value>Patience</value></data>
+  <data name="TimerIntuition" xml:space="preserve"><value>Intuition</value></data>
+  <data name="TimerBuffRemaining" xml:space="preserve"><value>{0} · {1}</value></data>
+  <data name="TimerBuffTime" xml:space="preserve"><value>{0:00}:{1:00}</value></data>
+  <data name="TimerBuffInactive" xml:space="preserve"><value>Inactive</value></data>
+  <data name="TimerBuffHint" xml:space="preserve"><value>Live remaining time of your current fishing buffs. Patience I and II share the large-fish chance status. This is separate from the forecast and recent fishing history. Unavailable or stale observations show Unknown.</value></data>
   <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
   <resheader name="version"><value>2.0</value></resheader>
   <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms</value></resheader>
@@ -460,7 +470,7 @@ In fish log only: {5}</value></data>
   <data name="OpenMainWindow" xml:space="preserve"><value>Open main window</value></data>
   <data name="OpenCompactWindow" xml:space="preserve"><value>Open quick list</value></data>
   <data name="CompactHorizon" xml:space="preserve"><value>Upcoming minutes</value></data>
-  <data name="CompactScope" xml:space="preserve"><value>Shares the main catalog filters except favorites. Use the star here to show favorites only; it does not change the main view. Lists open windows, then upcoming windows within 1–180 minutes. Always available, unknown and ocean fish are excluded.</value></data>
+  <data name="CompactScope" xml:space="preserve"><value>Shares the main catalog filters except favorites, including minimum time left and starting within. Use the star here to show favorites only; it does not change the main view. Lists open windows, then upcoming windows within 1–180 minutes. The shorter of this horizon and the main starting-within limit applies. Always available, unknown and ocean fish are excluded.</value></data>
   <data name="CompactOpen" xml:space="preserve"><value>Open now · {0}</value></data>
   <data name="CompactUpcoming" xml:space="preserve"><value>Upcoming · {0}</value></data>
   <data name="CompactEmpty" xml:space="preserve"><value>No matching fish open or starting within {0} minutes. Adjust the main filters or extend this window&apos;s range.</value></data>

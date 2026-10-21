@@ -2,6 +2,16 @@ namespace DuckbillFisher.Plugin.Localization;
 
 internal enum TextKey
 {
+    MinimumRemainingMinutes,
+    MinimumRemainingHint,
+    MaximumUpcomingMinutes,
+    MaximumUpcomingHint,
+    TimerPatience,
+    TimerIntuition,
+    TimerBuffRemaining,
+    TimerBuffTime,
+    TimerBuffInactive,
+    TimerBuffHint,
     AlertUncaughtOnly,
     AlertAutoRemove,
     AlertAutoRemoveHint,

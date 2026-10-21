@@ -1,5 +1,18 @@
 # MVP-02 캐스팅 타이머·공유 히스토리 첫 구현
 
+## 타이머 인내·직감 남은 시간 (2026-10-22)
+
+- 개발 후보는 기존 타이머 시전 ET 아래에 두 상태 아이콘·이름·남은 분:초를 표시한다. 활성은 청록, 미적용/미확인은 회색이며 좁은 폭에서는 다음 줄로 배치한다. 인내1·2를 남은 시간/Param으로 추측 구분하지 않는다. 현재 효과는 최근 낚시의 과거 표본이 아니다.
+- KR 게임2026.10.06.0000.0000의 로컬 Status 시트에서850=월척 확률 증가/icon216023,568=어부의 직감/icon211101을 확인했다. Action4102/4106과 ActionTransient는 인내/인내2·월척 확률 증가/낚아채기 성공률 감소·60/145초를 설명한다. 표시에는 고정60/145초를 쓰지 않고 현재850의 RemainingTime을 사용한다. 851은 정비이며 인내2로 취급하지 않는다. 실제 기술 사용→상태850/568/게임 표시 동시 대조는 실기 대기다.
+- 공개 `IObjectTable.LocalPlayer.StatusList`의 `StatusId`/`RemainingTime`만 Framework.Update에서200ms마다 읽는다. 로그인·현재 ContentId·어부·이동 중 여부와 기존 검증 KR 조합 가드를 먼저 확인하고, 게임 객체/StatusList는 콜백 안에서만 사용한다. Draw는 복사한 관리 값·단조 만료 시각만 사용한다. NotObserved/Ready/Unavailable을 구분하고 세션 불일치·1초 넘은 표본은 미확인으로 표시한다. 종료/닫기·전환은 표본을 폐기하며 타이머 기록/예측/수집/알림에는 쓰지 않는다.
+- 현재 wasdcxz15.0.3.7, 최소15.0.3.6, dal4kr15.0.3.7의 정확한 MVID/SHA256이 [기존 조합](../native/NATIVE-RUNTIME-DAL4KR.md)과 일치한다. Mono.Cecil로 Status/StatusList/BattleChara 관련 getter·enumerator IL/필드와 ClientStructs.Status 전체 필드를 대조해 동일함을 확인했다. Status 크기16, StatusId0/ushort·Param2/ushort·RemainingTime4/float·SourceObject8이다. 새 직접 포인터/시그니처/오프셋 접근이나 가드 완화는 없다. 상세 결과는 로컬 `.cache/timer-status-api.json`이다.
+- 소스 근거는 설치 ProductVersion의 고정 revision [Dalamud f3eeb5e Status](https://github.com/goatcorp/Dalamud/blob/f3eeb5e18bd982d1ae928cbf6dd0653997d3a916/Dalamud/Game/ClientState/Statuses/Status.cs)·[BattleChara](https://github.com/goatcorp/Dalamud/blob/f3eeb5e18bd982d1ae928cbf6dd0653997d3a916/Dalamud/Game/ClientState/Objects/Types/BattleChara.cs)다. AGPL3 참조이며 구현 코드를 복제하지 않았다. 최소/친구의 고정 revision·원본 라이선스/배포 출처는 기존 네이티브 기록을 유지한다.
+- 별도 `.cache/timer-filters-build/`→정규 Debug 빌드 경고0/오류0, 한영845키·형식 인자 검사 통과. 테스트는 요청 없어 추가/실행하지 않았다. 공개0.5.0.0 ZIP/원격은 변경하지 않았다. 실제 게임/다른 캐릭터/전체 폭·언어 조합은 미확인이다.
+
+대표 확인: 정규 Debug DLL을 로드하고 `/dbfs ct`를 연 뒤 인내·인내2를 각각 수동 사용한다. 아이콘과 남은 시간이 게임의 월척 확률 증가 효과와 맞고 만료 후 미적용으로 바뀌어야 한다. 직감을 직접 획득해568의 남은 시간을 비교한다. 재적용·해제·타이머 닫기/다시 열기·이동·직업 변경·재로드에서 과거 값이 남지 않는지 확인한다. 최근 낚시를 표시 중이어도 효과는 현재 기준이어야 한다. 한영/좁은 폭에서 두 표시가 겹치지 않아야 한다.
+
+## 첫 구현 당시 상태
+
 2026-10-17 · 정규0.2.1.0 반영 완료 · 인게임 확인 대기.
 
 후속: 사용자 사진에서 성공3/중단2행 표시를 확인했고 사용 피드백을 받았다. 저장·재로드 검증으로 확대하지 않는다. 아래는0.2.1.0의 역사적 구현이며 최신 화면/보관 정책은 [0.2.2.0 기록 관리](HISTORY-MANAGEMENT.md)의100묶음×2000회로 대체한다.

@@ -45,6 +45,8 @@ internal sealed class FishListPanel(FishCatalog catalog, ITextureProvider textur
     private int collectionVisibility;
     private readonly FishRowRenderer rows = new(textures, maps);
     private bool currentRegionOnly;
+    private int minimumRemainingMinutes, maximumUpcomingMinutes;
+    private DateTimeOffset nextWindowFilterUpdate, lastWindowFilterClock;
     private FishingRegionView? lastRegion;
     private bool timeRestrictedOnly;
     private int gradeVisibility;
@@ -181,11 +183,15 @@ internal sealed class FishListPanel(FishCatalog catalog, ITextureProvider textur
             ImGui.TextWrapped(error.Display);
 
         // Rebuild only for data or user input changes, never on every frame or scroll step.
-        if (changed || refresh || (sort == 2 && lastForecastRevision != view.ForecastRevision))
+        var filterNow = DateTimeOffset.UtcNow;
+        var timedFilter = minimumRemainingMinutes > 0 || maximumUpcomingMinutes > 0;
+        if (changed || refresh || ((sort == 2 || timedFilter) && lastForecastRevision != view.ForecastRevision) ||
+            timedFilter && (filterNow >= nextWindowFilterUpdate || filterNow < lastWindowFilterClock))
         {
             preparationQuery.Publish(new(CurrentCatalogSettings(), search.Trim(), showUnresolved, detailsOnly));
-            UpdateMatches(view, personal, observed, location, changed);
+            UpdateMatches(view, personal, observed, location, changed, filterNow);
         }
+        lastWindowFilterClock = filterNow;
         if (lastForecastRevision != view.ForecastRevision)
             upcomingIndex = Array.FindIndex(matches, row => view.Windows.GetValueOrDefault(row.FishParameterId)?.Kind == FishingWindowKind.Upcoming);
         lastForecastRevision = view.ForecastRevision;
@@ -219,7 +225,8 @@ internal sealed class FishListPanel(FishCatalog catalog, ITextureProvider textur
         string[] gradeNames = [UiText.Get(T.GradeAll), UiText.Get(T.GradeBigIncludingLegendary), UiText.Get(T.GradeLegendaryOnly)];
         var active = (inLogOnly ? 1 : 0) + (!includeOceanFish ? 1 : 0) + (timeRestrictedOnly ? 1 : 0) +
             (favoritesOnly ? 1 : 0) + (currentRegionOnly ? 1 : 0) + (gradeVisibility != 0 ? 1 : 0) +
-            (geography.Regions.Count > 0 ? 1 : 0) + (geography.Expansions.Count > 0 ? 1 : 0);
+            (geography.Regions.Count > 0 ? 1 : 0) + (geography.Expansions.Count > 0 ? 1 : 0) +
+            (minimumRemainingMinutes > 0 ? 1 : 0) + (maximumUpcomingMinutes > 0 ? 1 : 0);
         if (ImGui.Button($"{UiText.Get(T.CatalogFiltersHeading, active)}###CatalogFilters")) ImGui.OpenPopup("CatalogFiltersPopup");
         if (ImGui.IsItemHovered())
             ImGui.SetTooltip(UiText.Get(T.CatalogFiltersSummary,
@@ -242,6 +249,14 @@ internal sealed class FishListPanel(FishCatalog catalog, ITextureProvider textur
         ImGui.Separator();
         changed |= ImGui.Checkbox(UiText.Label(T.TimeRestrictedOnly, "CatalogTimeRestrictedOnly"), ref timeRestrictedOnly);
         if (ImGui.IsItemHovered()) ImGui.SetTooltip(UiText.Get(T.TimeRestrictedHint));
+        ImGui.SetNextItemWidth(ImGui.GetFontSize() * 8);
+        if (ImGui.InputInt(UiText.Label(T.MinimumRemainingMinutes, "CatalogMinimumRemaining"), ref minimumRemainingMinutes))
+        { minimumRemainingMinutes = Math.Clamp(minimumRemainingMinutes, 0, CatalogSettings.MaxTimeFilterMinutes); changed = true; }
+        UiWidgets.Tooltip(UiText.Get(T.MinimumRemainingHint));
+        ImGui.SetNextItemWidth(ImGui.GetFontSize() * 8);
+        if (ImGui.InputInt(UiText.Label(T.MaximumUpcomingMinutes, "CatalogMaximumUpcoming"), ref maximumUpcomingMinutes))
+        { maximumUpcomingMinutes = Math.Clamp(maximumUpcomingMinutes, 0, CatalogSettings.MaxTimeFilterMinutes); changed = true; }
+        UiWidgets.Tooltip(UiText.Get(T.MaximumUpcomingHint));
         ImGui.SetNextItemWidth(190);
         changed |= ImGui.Combo(UiText.Label(T.GradeFilter, "CatalogGradeFilter"), ref gradeVisibility, gradeNames, gradeNames.Length);
         if (ImGui.IsItemHovered()) ImGui.SetTooltip(UiText.Get(T.GradeFilterHint));
@@ -262,6 +277,7 @@ internal sealed class FishListPanel(FishCatalog catalog, ITextureProvider textur
         Sort = SortChoices[sort], Collection = CollectionChoices[collectionVisibility], Grade = GradeChoices[gradeVisibility],
         InLogOnly = inLogOnly, IncludeOceanFish = includeOceanFish, TimeRestrictedOnly = timeRestrictedOnly,
         FavoritesOnly = favoritesOnly, CurrentRegionOnly = currentRegionOnly,
+        MinimumRemainingMinutes = minimumRemainingMinutes, MaximumUpcomingMinutes = maximumUpcomingMinutes,
         Regions = geography.Regions.Order().ToArray(), Expansions = geography.Expansions.Order().ToArray(),
     };
 
@@ -275,6 +291,8 @@ internal sealed class FishListPanel(FishCatalog catalog, ITextureProvider textur
         timeRestrictedOnly = settings.TimeRestrictedOnly;
         favoritesOnly = settings.FavoritesOnly;
         currentRegionOnly = settings.CurrentRegionOnly;
+        minimumRemainingMinutes = settings.MinimumRemainingMinutes;
+        maximumUpcomingMinutes = settings.MaximumUpcomingMinutes;
         geography.RestoreSelections(settings.Regions, settings.Expansions);
     }
 
@@ -313,13 +331,14 @@ internal sealed class FishListPanel(FishCatalog catalog, ITextureProvider textur
     }
 
     private void UpdateMatches(FishCatalogView view, FishPreferencesView personal, FishCollectionView observed,
-        FishingRegionView location, bool reset)
+        FishingRegionView location, bool reset, DateTimeOffset now)
     {
         var query = preparationQuery.Current;
         var filter = new CatalogFilter(query.Settings);
         var scope = view.Rows.Where(row => filter.MatchesScope(row, location)).ToArray();
         unresolvedCount = scope.Count(row => !row.IsDisplayable);
-        var filtered = scope.Where(row => query.Matches(row, filter, personal, observed, location));
+        var filtered = scope.Where(row => query.Matches(row, filter, personal, observed, location, view, now));
+        nextWindowFilterUpdate = CatalogWindowFilter.NextChange(query.Settings, view.Windows.Values, now);
         matches = (sort switch
         {
             0 => filtered.OrderBy(row => row.Name, NameComparer).ThenBy(row => row.FishParameterId),

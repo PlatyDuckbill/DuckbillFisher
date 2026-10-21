@@ -42,6 +42,8 @@ internal sealed class SpawnSchedule : IDisposable
     private string search = "";
     private DateTimeOffset lastClock;
     private DateTimeOffset nextBoundary = DateTimeOffset.MaxValue;
+    private DateTimeOffset nextWindowFilterUpdate;
+    private int lastWindowFilterForecast = -1;
     private (uint FishId, DateTimeOffset Start)? selected;
     private ScheduleSelection? selection;
     private bool selectionChanged;
@@ -115,11 +117,15 @@ internal sealed class SpawnSchedule : IDisposable
             var clockJump = lastClock != default && (now < lastClock || now - lastClock > TimeSpan.FromSeconds(5));
             lastClock = now;
             var boundary = now >= nextBoundary;
-            if (lastKey != key || clockJump || key.Month is null && work is null && view.State == ScheduleState.Ready &&
+            var timedFilterChanged = settings.Source == SpawnScheduleSource.Catalog && CatalogWindowFilter.Enabled(current.Settings) &&
+                (lastWindowFilterForecast != data.ForecastRevision || now >= nextWindowFilterUpdate);
+            if (lastKey != key || clockJump || timedFilterChanged || key.Month is null && work is null && view.State == ScheduleState.Ready &&
                 (now - view.At >= TimeSpan.FromSeconds(30) || boundary))
             {
                 var inputsChanged = lastKey != key;
                 Cancel(); lastKey = key;
+                lastWindowFilterForecast = data.ForecastRevision;
+                nextWindowFilterUpdate = CatalogWindowFilter.NextChange(current.Settings, data.Windows.Values, now);
                 if (view.Session != personal.Session)
                 { search = ""; key = key with { Search = "" }; lastKey = key; selected = null; }
                 if (inputsChanged) { selection = null; calendarDay = null; }
@@ -127,7 +133,7 @@ internal sealed class SpawnSchedule : IDisposable
                 var filter = new CatalogFilter(current.Settings);
                 var source = data.Rows.Where(row => settings.Source == SpawnScheduleSource.Favorites
                     ? personal.Favorites.Contains(row.FishParameterId)
-                    : current.Matches(row, filter, personal, observed, location)).ToArray();
+                    : current.Matches(row, filter, personal, observed, location, data, now)).ToArray();
                 var targets = source.Where(row => CatalogQuery.MatchesSearch(row, key.Search))
                     .Select(row => (Fish: row, Collection: personal.Collection(row.FishParameterId, observed)))
                     .Where(target => !settings.HideCaught || target.Collection != CollectionStatus.Caught).ToArray();

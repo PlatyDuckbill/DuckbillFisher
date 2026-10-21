@@ -62,7 +62,8 @@ internal sealed class CompactFishObserver : IDisposable
         foreach (var fish in source.Rows)
         {
             if (!fish.IsDisplayable || fish.IsOceanFishing || !filter.Matches(fish, personal, observed, location) ||
-                !source.Windows.TryGetValue(fish.FishParameterId, out var window)) continue;
+                !source.Windows.TryGetValue(fish.FishParameterId, out var window) ||
+                !CatalogWindowFilter.Matches(personal.Catalog, window, now)) continue;
             var spot = filter.LocationScoped ? fish.Spots.FirstOrDefault(spot => filter.MatchesSpot(spot, location)) : fish.Spots.FirstOrDefault();
             var usesOtherRegion = filter.LocationScoped && spot is not null && fish.Details?.Spot is { } recommended &&
                 recommended.TerritoryId != spot.TerritoryId;

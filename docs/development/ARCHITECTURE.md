@@ -16,6 +16,7 @@
 | 수집 현황 | CollectionProgress, CollectionProgressPanel, CollectionProgressFishWindow | Framework 집계·선택한 확장팩/지역/먼바다 배열만 준비, 행·수집 revision·수동 상태·세션 변경 시 재계산. 목록1개 재사용·보이는 행만 렌더링·범위 교체/닫기 때 캐시 해제. Draw는 snapshot 표시 |
 | 출현 일정표 | Core FishingForecast.Enumerate/EnumerateCalendar, Plugin SpawnSchedule, SpawnScheduleCalendar, SpawnSchedulePanel | 일반30일/달력32일 분리. Framework 대상 필터링·선택 날짜 회차 캐시, 관리 입력만 취소 가능한 작업에서 계산. 월 데이터는 압축 UTC 구간 배열, UI는 보이는 행/날짜 칸만 표시 |
 | 시전 관찰 | FishingTracker, NativeFishingActivityReader, FishingLogContracts | 본인 로그·시전 단계·시간 상관관계, 미검증 결과 Unknown |
+| 낚시 효과 | FishingBuffObserver | 타이머가 열렸을 때 Framework에서 공개 LocalPlayer.StatusList의850/568을200ms 주기로 복사. 기존 KR 조합 가드·로그인/캐릭터·어부/이동 확인, 단조 만료·1초 신선도. Draw는 관리 값만 표시 |
 | 기록 저장 | FishingHistoryStore, FishingHistoryBrowser | 묶음 파일·원자 교체·요약/상세 지연 읽기·삭제/재시도. schema2 선택 필드로 단조 총 시간/검증된 생미끼 연결 ID 저장 |
 | 미끼 준비/찾기 | BaitPreparation, BaitStockObserver, BaitFinder, NativeBaitUiReader, NativeBaitPageReader | 첫 미끼/공개 소지품 조회와 네이티브 UI 읽기 분리 |
 | 공통 표시 | FishRowRenderer, FishDetailPanel, FishingConditionPanel, UiWidgets | 표시·선택 전달, 게임 조회/예측을 가져오지 않음 |
@@ -59,6 +60,8 @@
 - 커스텀 WAV는 Draw/Framework에서 파일을 열거나 재생하지 않는다. 전용 스레드가 세대별 파일 검증/소유 임시 복사본/Windows alias를 관리한다. 요청1개·단조2초 만료·세션 폐기·종료 join을 유지하며, 실패해도 로컬 채팅을 막지 않는다. alerts/v7의 커스텀 접수와 실제 가청 결과를 구분한다. [API/수명/실기 대기](../verification/alerts/CUSTOM-SOUND.md).
 
 ## UI·자료 경계
+
+- 개발 설정schema18은 CatalogSettings의 MinimumRemainingMinutes/MaximumUpcomingMinutes(각0기본/제한 해제)를 공통 필터·프리셋에 추가한다. CatalogWindowFilter는 선택 예측과 UTC 입력만 받아 Open 종료 최소/Upcoming 시작 최대를 독립 적용하고 미확인은 유지한다. 메인·현재 목록 미끼 준비/일정표는 예측 revision·필터 경계를 추적하며 간이 목록은 기존1초 주기를 사용한다. 즐겨찾기 대상/알림/낚시터 독립 목록은 대상 정책을 유지한다.
 
 - 메인/간이 목록은 CatalogFilter의 일반 조건을 공유한다. 검색/진단/정렬·간이 예정 범위는 각 화면 정책을 따른다. 알림 대상을 목록 필터로 바꾸지 않는다.
 - 상세 패널은 메인·독립 상세·비교 상세에서 재사용한다. 비교는1개/뒤로32단계를 유지하며 세션 전환 시 이력을 비운다. 생미끼/직감 어종 탐색은 로드 시 만든 Item/FishParameter 인덱스로 연결하고 Draw에서 전체 재검색하지 않는다. 타이머의 낚시터 목록은 독립 수집 필터와 공통 행을 쓴다. 미끼 준비는 독립 보조 화면이다. [현재 동작](../product/PRODUCT.md#화면과-상호작용).

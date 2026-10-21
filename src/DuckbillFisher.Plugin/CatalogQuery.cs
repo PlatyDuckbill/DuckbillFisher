@@ -6,9 +6,10 @@ namespace DuckbillFisher.Plugin;
 internal sealed record CatalogQuery(CatalogSettings Settings, string Search, bool ShowUnresolved, bool DetailsOnly)
 {
     public bool Matches(FishGuideRow row, CatalogFilter filter, FishPreferencesView personal,
-        FishCollectionView collection, FishingRegionView region) =>
+        FishCollectionView collection, FishingRegionView region, FishCatalogView catalog, DateTimeOffset now) =>
         (ShowUnresolved || row.IsDisplayable) && (!DetailsOnly || row.Details is not null) &&
-        filter.Matches(row, personal, collection, region) && MatchesSearch(row, Search);
+        filter.Matches(row, personal, collection, region) && MatchesSearch(row, Search) &&
+        CatalogWindowFilter.Matches(Settings, catalog.Windows.GetValueOrDefault(row.FishParameterId), now);
 
     public static bool MatchesSearch(FishGuideRow row, string term) =>
         term.Length == 0 || row.Name.Contains(term, StringComparison.OrdinalIgnoreCase) ||

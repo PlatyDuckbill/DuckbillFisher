@@ -15,6 +15,9 @@ public sealed record CatalogSettings
     public bool TimeRestrictedOnly { get; init; } = true;
     public bool FavoritesOnly { get; init; }
     public bool CurrentRegionOnly { get; init; }
+    public int MinimumRemainingMinutes { get; init; }
+    public int MaximumUpcomingMinutes { get; init; }
+    public const int MaxTimeFilterMinutes = 43200;
     public uint[] Regions { get; init; } = [];
     public uint[] Expansions { get; init; } = [];
 
@@ -26,7 +29,8 @@ public sealed record CatalogSettings
 
     public bool IsValid() => Enum.IsDefined(Sort) && Enum.IsDefined(Grade) &&
         Collection is CollectionVisibility.All or CollectionVisibility.HideCaught or CollectionVisibility.CaughtOnly or CollectionVisibility.UnknownOnly &&
-        Regions is not null && Regions.All(id => id != 0) && Expansions is not null;
+        Regions is not null && Regions.All(id => id != 0) && Expansions is not null &&
+        MinimumRemainingMinutes is >= 0 and <= MaxTimeFilterMinutes && MaximumUpcomingMinutes is >= 0 and <= MaxTimeFilterMinutes;
 
     public CatalogSettings Copy() => this with
     {
@@ -37,5 +41,6 @@ public sealed record CatalogSettings
     public bool Matches(CatalogSettings other) => Sort == other.Sort && Collection == other.Collection && Grade == other.Grade &&
         InLogOnly == other.InLogOnly && IncludeOceanFish == other.IncludeOceanFish && TimeRestrictedOnly == other.TimeRestrictedOnly &&
         FavoritesOnly == other.FavoritesOnly && CurrentRegionOnly == other.CurrentRegionOnly &&
+        MinimumRemainingMinutes == other.MinimumRemainingMinutes && MaximumUpcomingMinutes == other.MaximumUpcomingMinutes &&
         Regions.SequenceEqual(other.Regions) && Expansions.SequenceEqual(other.Expansions);
 }
