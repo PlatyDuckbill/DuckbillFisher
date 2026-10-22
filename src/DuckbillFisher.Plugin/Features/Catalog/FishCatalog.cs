@@ -241,7 +241,7 @@ internal sealed class FishCatalog : IDisposable
                         FishingConditionIcon? Skill(uint id)
                         {
                             var action = id == 0 ? null : actions.GetRowOrDefault(id);
-                            return action is { IsPlayerAction: true } skill && skill.ClassJob.RowId == 18 &&
+                            return action is { IsPlayerAction: true } skill && skill.ClassJob.RowId == FishingGameIds.FisherJob &&
                                 !string.IsNullOrWhiteSpace(skill.Name.ExtractText()) ? new(id, skill.Name.ExtractText(), skill.Icon) : null;
                         }
                         var hookset = Skill(rule.Hookset switch { "Precision" => 4179u, "Powerful" => 4103u, _ => 0 });
@@ -254,7 +254,7 @@ internal sealed class FishCatalog : IDisposable
                                 Skill(rule.Lure switch { "Modest" => 37595u, "Ambitious" => 37594u, _ => 0 }), folklore)
                             {
                                 // KR Status 568 inspected in the installed client on 2026-10-17.
-                                Intuition = rule.Predators.Length > 0 && statuses?.GetRowOrDefault(568) is { } intuition
+                                Intuition = rule.Predators.Length > 0 && statuses?.GetRowOrDefault(FishingGameIds.IntuitionStatus) is { } intuition
                                     ? new(568, intuition.Name.ExtractText(), intuition.Icon) : null,
                             };
                     }
@@ -305,7 +305,7 @@ internal sealed class FishCatalog : IDisposable
                     Forecast = forecast,
                     SpearfishingItems = FishingData.Dataset.Spearfishing.Select(rule => rule.ItemId).ToFrozenSet(),
                     FishEyesEnabled = view.FishEyesEnabled,
-                    FishEyesSkill = actions.GetRowOrDefault(4105) is { IsPlayerAction: true } eyes && eyes.ClassJob.RowId == 18
+                    FishEyesSkill = actions.GetRowOrDefault(FishingGameIds.FishEyesAction) is { IsPlayerAction: true } eyes && eyes.ClassJob.RowId == FishingGameIds.FisherJob
                         ? new(4105, eyes.Name.ExtractText(), eyes.Icon) : null,
                     Spots = spots.ToDictionary(pair => pair.Key, pair => pair.Value.View),
                     Geography = FishingGeography.FromRows(rows),

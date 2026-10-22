@@ -20,12 +20,15 @@ public sealed class FishingAvailabilityTests
     });
 
     [Fact]
-    public void ReferenceCoversEveryShippedRuleAndMatchesItsSourceRevision()
+    public void ReferenceCoversEveryPinnedSpotAndMatchesItsSourceRevision()
     {
         Assert.Equal(Dataset.SourceRevision, Reference.SourceRevision);
         Assert.Equal(Dataset.GameBuild, Reference.GameBuild);
-        Assert.Equal(Dataset.Fish.Select(rule => rule.FishParameterId).Order(),
+        Assert.Equal(10, Reference.Spots.Length);
+        Assert.Equal(Reference.Spots.Select(spot => spot.FishParameterId).Order(),
             Reference.Cases.Select(sample => sample.FishParameterId).Distinct().Order());
+        Assert.All(Reference.Spots, spot =>
+            Assert.Single(Dataset.Fish, rule => rule.FishParameterId == spot.FishParameterId));
     }
 
     [Theory]
@@ -87,18 +90,19 @@ public sealed class FishingAvailabilityTests
     }
 
     [Fact]
-    public void DistinguishesAlwaysNoMatchAndUnconfirmedEndAtHorizon()
+    public void DistinguishesAlwaysUnsupportedWeatherAndUnconfirmedEndAtHorizon()
     {
         var now = DateTimeOffset.FromUnixTimeSeconds(42001);
         var rule = new FishingRule { StartHour = 0, EndHour = 24 };
         Assert.Equal(new FishingWindow(FishingWindowKind.Always), FishingAvailability.Find(now, rule, []));
-        Assert.Equal(new FishingWindow(FishingWindowKind.NotFound), FishingAvailability.Find(now,
+        Assert.Equal(new FishingWindow(FishingWindowKind.Unknown), FishingAvailability.Find(now,
             rule with { WeatherIds = [2] }, CertainWeather));
         var continuous = FishingAvailability.Find(now, rule with { WeatherIds = [1], PreviousWeatherIds = [1] }, CertainWeather);
         Assert.Equal(FishingWindowKind.Open, continuous.Kind);
         Assert.Equal(DateTimeOffset.FromUnixTimeSeconds(42000), continuous.Start);
         Assert.Null(continuous.End);
     }
+
 
     [Theory]
     [InlineData(-1, 14)]
@@ -131,6 +135,19 @@ public sealed class FishingAvailabilityTests
         Assert.Throws<ArgumentOutOfRangeException>(() => FishingAvailability.ForecastTarget(-1));
         Assert.Equal(FishingWindowKind.Unknown, FishingAvailability.Find(DateTimeOffset.UnixEpoch,
             new FishingRule { StartHour = 0, EndHour = 24 }, []).Kind);
+    }
+
+    [Fact]
+    public void UnsupportedWeatherAlternativeDoesNotMaskSupportedAlternative()
+    {
+        var now = DateTimeOffset.FromUnixTimeSeconds(42000);
+        var rule = new FishingRule { StartHour = 9, EndHour = 14, WeatherIds = [1] };
+        var expected = FishingAvailability.Find(now, rule, CertainWeather);
+        Assert.Equal(expected, FishingAvailability.Find(now, rule with { WeatherIds = [1, 999] }, CertainWeather));
+        Assert.Equal(FishingWindowKind.Unknown,
+            FishingAvailability.Find(now, rule with { WeatherIds = [999] }, CertainWeather).Kind);
+        Assert.Equal(FishingWindowKind.Unknown,
+            FishingAvailability.Find(now, rule with { ConditionsKnown = false }, CertainWeather).Kind);
     }
 
     private static T Read<T>(string name) => JsonSerializer.Deserialize<T>(File.ReadAllText(

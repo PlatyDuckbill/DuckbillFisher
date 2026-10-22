@@ -1,5 +1,4 @@
 using System.Text.Json;
-using Dalamud.Plugin.Services;
 using DuckbillFisher.Core;
 
 namespace DuckbillFisher.Plugin;
@@ -11,7 +10,7 @@ internal sealed record FishingHistoryLoad(ulong Character, Guid TripId, FishingT
     FishingAttempt[] Records, FishingStorageState State);
 
 /// <summary>Single file worker. One atomic file per trip, cached summaries, details loaded on demand.</summary>
-internal sealed class FishingHistoryStore(string configDirectory, IPluginLog log) : IDisposable
+internal sealed class FishingHistoryStore(string configDirectory, Action<int, int, int> warnIncompleteDrain) : IDisposable
 {
     internal static readonly TimeSpan RetryInterval = TimeSpan.FromSeconds(5);
     private const int Schema = 2;
@@ -486,8 +485,7 @@ internal sealed class FishingHistoryStore(string configDirectory, IPluginLog log
         lock (gate)
         {
             if (retryWrites.Count > 0 || retryDeletes.Count > 0)
-                log.Warning("FishingHistoryDrainIncomplete: Writes={Writes}; Deletes={Deletes}; ReadBlocked={ReadBlocked}",
-                    retryWrites.Count, retryDeletes.Count, readErrors.Count);
+                warnIncompleteDrain(retryWrites.Count, retryDeletes.Count, readErrors.Count);
         }
     }
     private sealed record Document(int Version, FishingTripSummary Summary, FishingAttempt[] Records);

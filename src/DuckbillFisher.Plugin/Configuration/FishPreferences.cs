@@ -1,5 +1,4 @@
 using System.Collections.Frozen;
-using Dalamud.Configuration;
 using Dalamud.Game.Text;
 using Dalamud.Plugin;
 using Dalamud.Plugin.Services;
@@ -8,37 +7,6 @@ using DuckbillFisher.Plugin.Localization;
 using T = DuckbillFisher.Plugin.Localization.TextKey;
 
 namespace DuckbillFisher.Plugin;
-
-// Schema <= 3 serialized this three-value enum. Retained only for migration.
-public enum SpawnAlertChannel { System, Say, CrossWorldLinkshell1 }
-
-// Public for Dalamud's configuration serializer. Content IDs stay in local configuration only.
-public sealed class FishPreferencesConfiguration : IPluginConfiguration
-{
-    public const int CurrentVersion = 19;
-    public int Version { get; set; } = CurrentVersion;
-    public HashSet<uint> Favorites { get; set; } = [];
-    public Dictionary<ulong, Dictionary<uint, bool>> Characters { get; set; } = [];
-    public bool SpawnAlertsEnabled { get; set; }
-    public int SpawnAlertLeadMinutes { get; set; } = SpawnAlertScheduler.DefaultLeadMinutes;
-    public SpawnAlertChannel SpawnAlertChannel { get; set; }
-    public ushort SpawnAlertChannelId { get; set; } = (ushort)XivChatType.SystemMessage;
-    public int SpawnAlertSound { get; set; }
-    public string CustomAlertSoundPath { get; set; } = "";
-    public SpawnAlertAudience SpawnAlertAudience { get; set; } = SpawnAlertAudience.AllFavorites;
-    public bool RemoveFavoriteOnRegistration { get; set; } = true;
-    public CatalogSettings Catalog { get; set; } = new();
-    public List<CatalogPreset> CatalogPresets { get; set; } = [];
-    public UiLanguage Language { get; set; } = UiLanguage.Korean;
-    public int UiScalePercent { get; set; } = UiScale.DefaultPercent;
-    public bool DeveloperMode { get; set; }
-    public string LastSeenChangelogVersion { get; set; } = "";
-    public CompactViewSettings Compact { get; set; } = new();
-    public SpawnScheduleSettings Schedule { get; set; } = new();
-    public Dictionary<uint, int> FishAlertLeadMinutes { get; set; } = [];
-    // Last reserved window start per fish/character. Also suppresses repeats after clock rollback.
-    public Dictionary<ulong, Dictionary<uint, long>> AlertWindows { get; set; } = [];
-}
 
 internal sealed record FishPreferencesView(int Revision, int Session, bool HasCharacter, bool CanEdit,
     IReadOnlySet<uint> Favorites, IReadOnlyDictionary<uint, bool> ManualCaught, UiMessage? Error)
@@ -111,7 +79,7 @@ internal sealed class FishPreferences : IDisposable
             var saved = pluginInterface.GetPluginConfig();
             if (saved is null && !pluginInterface.ConfigFile.Exists)
                 writable = true;
-            else if (saved is FishPreferencesConfiguration loaded && IsValid(loaded))
+            else if (saved is FishPreferencesConfiguration loaded && PreferencesValidation.IsValid(loaded))
             {
                 configuration = loaded;
                 if (loaded.Version <= 3)
@@ -127,27 +95,13 @@ internal sealed class FishPreferences : IDisposable
                 // Schema 8 applies the requested enabled default once; later saved opt-outs are retained.
                 if (loaded.Version < 8)
                     configuration.RemoveFavoriteOnRegistration = true;
-                configuration.Catalog = loaded.Catalog.Copy();
-                // Before schema19, zero was the disabled upper bound; new optional bounds use null.
-                if (loaded.Version < 19 && configuration.Catalog.MaximumUpcomingMinutes == 0)
-                    configuration.Catalog = configuration.Catalog with { MaximumUpcomingMinutes = null };
-                // Preserve the previously shared favorite filter once, then let the compact view change independently.
-                if (loaded.Version < 15)
-                    configuration.Compact = loaded.Compact with { FavoritesOnly = loaded.Catalog.FavoritesOnly };
-                // A malformed optional preset must not discard favorites or character records.
-                configuration.CatalogPresets = CatalogPreset.ReadValid(loaded.CatalogPresets);
-                if (loaded.Version < 19)
-                    configuration.CatalogPresets = configuration.CatalogPresets.Select(preset => preset.Settings.MaximumUpcomingMinutes == 0
-                        ? preset with { Settings = preset.Settings with { MaximumUpcomingMinutes = null } } : preset).ToList();
+                configuration.Catalog = PreferencesMigration.Catalog(loaded.Catalog, loaded.Version);
+                configuration.Compact = PreferencesMigration.Compact(loaded.Compact, loaded.Catalog, loaded.Version);
+                configuration.CatalogPresets = PreferencesMigration.Presets(loaded.CatalogPresets, loaded.Version);
                 configuration.CustomAlertSoundPath ??= "";
                 configuration.UiScalePercent = UiScale.Normalize(configuration.UiScalePercent);
-                if (configuration.Schedule is null || !configuration.Schedule.IsValid()) configuration.Schedule = new();
-                // Replace the initial schedule's six-hour default once; retain other deliberate horizons.
-                if (loaded.Version < 17 && configuration.Schedule.Hours == 6)
-                    configuration.Schedule = configuration.Schedule with { Hours = 3 };
-                // Optional display state must not invalidate existing settings or character records.
-                if (!System.Version.TryParse(configuration.LastSeenChangelogVersion, out _))
-                    configuration.LastSeenChangelogVersion = "";
+                configuration.Schedule = PreferencesMigration.Schedule(loaded.Schedule, loaded.Version);
+                configuration.LastSeenChangelogVersion = PreferencesMigration.SeenVersion(loaded.LastSeenChangelogVersion);
                 configuration.Version = FishPreferencesConfiguration.CurrentVersion;
                 writable = true;
             }
@@ -526,22 +480,6 @@ internal sealed class FishPreferences : IDisposable
             return false;
         }
     }
-
-    private static bool IsValid(FishPreferencesConfiguration value) =>
-        value.Version is 1 or 2 or 3 or 4 or 5 or 6 or 7 or 8 or 9 or 10 or 11 or 12 or 13 or 14 or 15 or 16 or 17 or 18 or FishPreferencesConfiguration.CurrentVersion && value.Favorites is not null &&
-        Enum.IsDefined(value.Language) &&
-        value.Compact is not null && value.Compact.IsValid() &&
-        value.Catalog is not null && value.Catalog.IsValid() &&
-        !value.Favorites.Contains(0) && value.Characters is not null &&
-        value.Characters.All(pair => pair.Key != 0 && pair.Value is not null && !pair.Value.ContainsKey(0)) &&
-        value.SpawnAlertLeadMinutes is >= SpawnAlertScheduler.MinLeadMinutes and <= SpawnAlertScheduler.MaxLeadMinutes &&
-        (value.Version <= 3 ? Enum.IsDefined(value.SpawnAlertChannel) : ChatChannelChoices.IsKnown((XivChatType)value.SpawnAlertChannelId)) &&
-        (value.SpawnAlertSound is >= 0 and <= 16 || value.Version >= 12 && value.SpawnAlertSound == CustomAlertSound.Choice) &&
-        Enum.IsDefined(value.SpawnAlertAudience) &&
-        value.FishAlertLeadMinutes is not null && value.FishAlertLeadMinutes.All(pair => pair.Key != 0 &&
-            pair.Value is >= SpawnAlertScheduler.MinLeadMinutes and <= SpawnAlertScheduler.MaxLeadMinutes) &&
-        value.AlertWindows is not null && value.AlertWindows.All(pair => pair.Key != 0 && pair.Value is not null &&
-            pair.Value.All(window => window.Key != 0 && window.Value is > 0 and <= 253402300799999));
 
     public void Dispose()
     {

@@ -67,7 +67,9 @@ public sealed class Plugin : IDalamudPlugin
         guideOpener = new FishGuideOpenService(gameGui, clientState, playerState, framework, fishPreferences, fishCatalog, collectionReader);
         fishCollection = new FishCollectionObserver(fishPreferences, fishCatalog, collectionReader, dataManager, gameGui, chat, framework, log);
         fishingTracker = new FishingTracker(clientState, playerState, conditions, framework, chat, dataManager,
-            fishPreferences, fishCatalog, fishCollection, activityReader, new FishingHistoryStore(pluginInterface.GetPluginConfigDirectory(), log));
+            fishPreferences, fishCatalog, fishCollection, activityReader,
+            new FishingHistoryStore(pluginInterface.GetPluginConfigDirectory(), (writes, deletes, blocked) =>
+                log.Warning("FishingHistoryDrainIncomplete: Writes={Writes}; Deletes={Deletes}; ReadBlocked={ReadBlocked}", writes, deletes, blocked)));
         itemLinks = new FishingItemLinkService(chat, framework, fishPreferences);
         fishingRegion = new FishingRegionObserver(clientState, conditions, dataManager, framework);
         alertOutput = new SpawnAlertOutput(framework, chat, fishPreferences, collectionReader.IsCompatible, log);
@@ -82,7 +84,7 @@ public sealed class Plugin : IDalamudPlugin
                 var personal = fishPreferences.View;
                 if (!personal.HasCharacter || !clientState.IsLoggedIn || !playerState.IsLoaded || playerState.ContentId != personal.CharacterId)
                     return null;
-                var sample = activityReader.Read(personal.CharacterId, playerState.ClassJob.RowId == 18);
+                var sample = activityReader.Read(personal.CharacterId, playerState.ClassJob.RowId == FishingGameIds.FisherJob);
                 return sample.Availability == FishingReadState.Ready ? sample.EquippedBait : null;
             });
         baitUiProbe = new BaitUiProbe(gameGui, framework, addonLifecycle, fishPreferences, () => collectionReader.IsCompatible, baitReader, baitFinder);

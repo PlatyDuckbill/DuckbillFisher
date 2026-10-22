@@ -26,7 +26,19 @@
 | 업데이트 내역 | ChangelogWindow, MainWindow, FishPreferences | 메인 OnOpen에서 미확인 버전 안내, 내장 한영 릴리스 요약·최대 최신10개 표시, 공통 확인 버전을 기존 Framework 설정 큐로 저장. 원격 조회 없음 |
 | 진단 | FishingConditionObserver, FishingActivityProbe, FishGuideDiagnostics, BaitUiProbe | 원시 관찰과 제품 판정 구분, 개발자 도구 |
 
-파일은 src/DuckbillFisher.Core 또는 src/DuckbillFisher.Plugin에 있다. 별도 DI 프레임워크·DB·이벤트 버스를 추가하지 않는다. SDK/버전은 global.json·csproj·lock 파일을 기준으로 한다.
+### 디렉터리와 의존성
+
+- Core는 Alerts/Catalog/Collection/Data/Fishing/Forecast로 나눈다. 게임 API·파일 저장·번역·ImGui를 가져오지 않는다.
+- Plugin의 Features는 Catalog/Collection/Fishing/Bait/SpawnAlerts/SpawnSchedule 단위로 화면과 해당 처리를 가까이 둔다. 공통 표시만 UI, 게임 읽기/실행 어댑터는 Game/Native·Contracts·Services, 개발 관찰은 Diagnostics에 둔다.
+- Configuration의 FishPreferencesConfiguration은 기존 직렬화 타입, PreferencesValidation은 입력 검증, PreferencesMigration은 파일 접근 없는 표시 설정 변환, FishPreferences는 Framework 요청·세션·저장·snapshot 발행을 맡는다.
+- 디렉터리 이동은 namespace/AssemblyName/InternalName과 설정·리소스 이름을 바꾸지 않는다. Localization은 리소스 이름/검사 스크립트의 고정 경로를 유지한다.
+- 별도 DI 프레임워크·DB·이벤트 버스를 추가하지 않는다. Plugin은 Plugin.cs에서 직접 조립한다. SDK/버전은 global.json·csproj·lock 파일과 공통 build/DalamudReferences.targets를 기준으로 하며 의존성 업그레이드는 별도 작업이다.
+
+### 상수의 소유권
+
+- Game/Contracts/FishingGameIds는 이미 사용하던 KR 직업·상태·액션 시트 ID만 관리한다. 이름 부여는 지원 게임/DLL 조합 확대가 아니며 네이티브 오프셋·해시·로그 지문은 각 검증 계약에 남긴다.
+- 예측 기간/직감 가정/기록 상한은 해당 Core 기능, 설정 허용 범위는 해당 설정 타입, 표본 주기/유효기간은 관찰기에 둔다. UI 배율 선택/정규화는 Configuration/UiScaleSettings를 UI/UiScale과 공유한다.
+- 숫자가 같아도 의미가 다르면 합치지 않는다. ET 시간 환산의175초와 미확인 직감 지속 시간 가정175초는 각각 유지한다. 화면 전용 색/간격을 전역 상수로 옮기지 않는다.
 
 ## 스레드·시각·수명
 
@@ -53,7 +65,7 @@
 - 전체 Revision과 메모리 전용 CatalogRevision을 구분한다. 목록·타이머 낚시터 필터·미끼 준비는 캐릭터/즐겨찾기/수동 수집/목록 설정/언어 변경에 반응하며 알림 예약 저장만으로 재계산하지 않는다. 같은 즐겨찾기/수동 상태의 불변 집합은 재사용한다.
 - 자동 관찰은 세션 메모리다. 도감 전체 snapshot 대조가 완료되어야 자동 Uncaught를 확정한다. 수동 override가 항상 우선이며 ContentId는 로컬 키로만 쓰고 진단에 넣지 않는다. [대조 계약](../verification/collection/GUIDE-SNAPSHOT.md).
 - 기록 schema 2는 캐릭터별 100묶음×최근 2,000행이다. 총 시전 수/보관 행 수를 구분하고 진행 중 묶음 보호·이전 형식 원본 보존 가져오기를 한다.
-- Store는 단일 작업자로 실패 snapshot/삭제 재시도·읽기/쓰기 오류·요약/본문 검증·순번·상세 요청 세대를 관리한다. Draw에서 파일을 열지 않는다. [저장 경계](../verification/fishing/HISTORY-STABILITY.md).
+- Store는 단일 작업자로 실패 snapshot/삭제 재시도·읽기/쓰기 오류·요약/본문 검증·순번·상세 요청 세대를 관리한다. Draw에서 파일을 열지 않는다. 종료 미처리 건수의 로그 출력만 Plugin.cs에서 주입해 게임 SDK 없이 실제 저장 코드를 검증한다. [저장 경계](../verification/fishing/HISTORY-STABILITY.md).
 - 알림은 기존 예측과 최종 수집 판정을 사용한다. 캐릭터별 발송 대상 출현 시작 기록을 저장한 뒤 로컬 출력한다. 로그인/설정 변경/긴 중단/시계 변경은 소급 발송하지 않는다. [예약](../verification/alerts/SPAWN-ALERTS.md), [대상 정책](../verification/alerts/FAVORITE-POLICY.md).
 - 알림 계획과 발송은 Scheduler의 같은 재기준화 판정을 공유한다. 시각/세션/활성 상태가 끊기면 새 후보 계산 전에 미래 계획·재시도·순회 위치를 비운다. 새 계산은 최대8종씩 순환하고, 상시는 예산에서 제외하며 기존 예약의 마감은 매번 확인한다.
 - 알림 즐겨찾기 표시는 매초 상태를 확인하되 구성/카탈로그 행 변경 때만 이름 정렬하고, 값이 같은 항목/목록은 재사용한다. 소지품도 기존 주기로 검증하되 수량/상태/세션이 같으면 snapshot을 유지하며 재사용 집계 버퍼를 외부에 게시하지 않는다.
@@ -75,4 +87,4 @@
 - FishingWindow의 Basis/Issue와 직감 Breakdown은 관리 값이다. 대상/선행 어종의 절대 구간·계산 지속 시간·DurationAssumed를 보관하고 표시 시 번역한다. 기본 접힘 표는 이 값만 렌더링한다. 진단 catalog/v9·summary/v10은 원본/계산 지속 시간과 가정 여부를 구분한다. 기존 실패 코드와 물고기의 눈 지원 미확인 코드는 유지한다.
 - 조건 자료의 원본 revision/해시·라이선스·가공은 [data/README](../../data/README.md), 표시와 번역은 [LOCALIZATION](LOCALIZATION.md)을 따른다.
 
-사용자가 테스트를 요청하면 시간/날씨 경계·중복 알림·상태 전이·캐릭터 격리·저장 실패처럼 실패 비용이 큰 계약에 집중한다. 일반 작업의 빌드/검사와 인게임 확인 절차는 [WORKFLOW](WORKFLOW.md)에 있다.
+테스트는 명시 요청 때 실행한다. Core.Tests는 Core 프로젝트를 참조하고, 게임 의존성이 없는 Plugin 정책/저장 파일만 소스 링크로 함께 컴파일한다. 실제 구현을 검사하며 가짜 Dalamud 타입이나 구현 복사본을 만들지 않는다. 네이티브·게임 관찰·렌더링과 Dalamud 설정 직렬화는 별도 빌드/실기로 확인한다. [범위와 결과](../verification/ARCHITECTURE-TESTS.md)·[실행 절차](WORKFLOW.md#요청한-테스트-실행)를 따른다.

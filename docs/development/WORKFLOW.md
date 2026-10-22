@@ -49,6 +49,22 @@ git diff --check
 
 진단은 필요한 상태 필드나 한 줄부터 요청한다. 원시 로그와 사람 설명, 자동 검사와 실기 확인을 구분한다. 전체 로그·주소·캐릭터 식별자·자격 증명은 게시하지 않는다. [검증 템플릿](templates/VALIDATION.md)의 관련 항목만 사용한다.
 
+## 요청한 테스트 실행
+
+테스트 추가/실행은 사용자 명시 요청 범위에서만 한다. 테스트 수를 늘리는 것보다 시간 경계·Unknown·중복 알림·시전 전이·설정 이전·저장 실패/격리의 결과를 고정한다.
+
+~~~powershell
+dotnet restore tests/DuckbillFisher.Core.Tests/DuckbillFisher.Core.Tests.csproj --locked-mode
+if ($LASTEXITCODE -ne 0) { throw 'Locked test restore failed' }
+dotnet test tests/DuckbillFisher.Core.Tests/DuckbillFisher.Core.Tests.csproj --no-restore -c Release --logger "trx;LogFileName=contracts.trx" --results-directory .cache/test-results
+if ($LASTEXITCODE -ne 0) { throw 'Contract tests failed' }
+~~~
+
+- Core.Tests는 기능별 디렉터리로 구분하며 Core와 게임 의존성 없는 Plugin 정책/저장 구현을 검증한다. 소스 링크 대상은 csproj에 명시한다. 게임 설치·Dalamud DLL·Node가 필요 없으며 패키지 버전을 임의로 변경하지 않는다.
+- 고정 기대값은 운영 코드로 자동 재생성하지 않는다. 초기10종 예측 대조와 현재 v2 전체 자료의 형식/참조 검사를 구분한다. 자료/출처 변경은 기대값 검토와 함께 진행한다.
+- 저장 테스트는 테스트별 임시 경로만 사용한다. 백그라운드 작업은 제한 시간 안에 기다리고 Dispose 뒤 임시 자료를 정리하며 실제 사용자 설정·기록에 접근하지 않는다.
+- 현재 [검증 범위와 한계](../verification/ARCHITECTURE-TESTS.md)를 확인한다. 관리 코드 테스트 통과는 네이티브/게임/UI 실기 확인을 대신하지 않는다.
+
 ## 문서 관리
 
 | 문서 | 관리하는 정보 | 넣지 않을 정보 |

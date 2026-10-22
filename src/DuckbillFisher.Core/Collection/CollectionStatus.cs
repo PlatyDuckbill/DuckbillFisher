@@ -29,7 +29,4 @@ public static class CollectionFilter
             false => CollectionStatus.Uncaught,
             null => observed,
         };
-
-    public static bool ShouldNotify(bool isFavorite, CollectionStatus status) =>
-        isFavorite && status == CollectionStatus.Uncaught;
 }

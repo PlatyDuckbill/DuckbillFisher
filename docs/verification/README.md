@@ -4,6 +4,8 @@
 
 ## 배포와 호환성
 
+- [코드 구조·상수·설정 분리와 핵심 동작 테스트](ARCHITECTURE-TESTS.md)
+
 - [0.5.1.0 타이머 효과·시간 필터 배포](releases/RELEASE-0.5.1.0.md)
 
 - [첫 커스텀 저장소 배포: 0.2.4.0](releases/RELEASE-0.2.4.0.md)

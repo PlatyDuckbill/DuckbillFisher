@@ -137,7 +137,7 @@ internal sealed class FishingTracker : IDisposable
             var personal = preferences.View;
             var now = clock.Elapsed;
             if (personal.Session != session || personal.CharacterId != character || !personal.HasCharacter ||
-                !client.IsLoggedIn || !player.IsLoaded || player.ContentId != character || player.ClassJob.RowId != 18 ||
+                !client.IsLoggedIn || !player.IsLoaded || player.ContentId != character || player.ClassJob.RowId != FishingGameIds.FisherJob ||
                 conditions[ConditionFlag.BetweenAreas] || conditions[ConditionFlag.BetweenAreas51] ||
                 now - lastTick > TimeSpan.FromSeconds(5) || state != FishingTrackerState.Ready) return;
             var discovery = IsSpotDiscovery(message.LogMessageId);
@@ -256,7 +256,7 @@ internal sealed class FishingTracker : IDisposable
                 if (territory != 0 && territory != client.TerritoryType)
                 { Interrupt(now, utc, FishingEndReason.Travel); ResetLocation(); }
                 territory = client.TerritoryType;
-                native = reader.Read(character, player.ClassJob.RowId == 18);
+                native = reader.Read(character, player.ClassJob.RowId == FishingGameIds.FisherJob);
                 state = oceanTerritories.Contains(territory) ? FishingTrackerState.OceanUnsupported :
                     native.Availability == FishingReadState.Ready && validLogs.Contains(1110) && validLogs.Contains(1111) &&
                     validLogs.Contains(1116) && validLogs.Contains(3512) && validLogs.Contains(5584) ? FishingTrackerState.Ready : FishingTrackerState.Unavailable;

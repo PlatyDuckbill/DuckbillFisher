@@ -22,6 +22,7 @@ docs/
 | 현재 PC 경로·참조·재개 | [SESSION-HANDOFF](SESSION-HANDOFF.md) |
 | 기능/기본값·수집/필터/알림/기록 계약 | [PRODUCT](product/PRODUCT.md) |
 | 구현 책임·스레드·상태·저장 경계 | [ARCHITECTURE](development/ARCHITECTURE.md) |
+| 기능별 코드 배치·관리 코드 테스트 범위/한계 | [구조와 테스트 검증](verification/ARCHITECTURE-TESTS.md) |
 | 남은 후보와 사용자 보류 | [ROADMAP](product/ROADMAP.md) |
 | 빌드·커밋·문서 관리 규칙 | [WORKFLOW](development/WORKFLOW.md) |
 | 친구 설치·Release 준비/게시/복구 | [DISTRIBUTION](development/DISTRIBUTION.md) |

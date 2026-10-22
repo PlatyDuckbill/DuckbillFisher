@@ -16,6 +16,8 @@ internal sealed record FishingBuffView(int Session, FishingBuffReadState State, 
 /// <summary>Public status API, copied on Framework.Update. No game objects survive the callback.</summary>
 internal sealed class FishingBuffObserver : IDisposable
 {
+    private static readonly TimeSpan PollInterval = TimeSpan.FromMilliseconds(200);
+    private static readonly TimeSpan SampleMaxAge = TimeSpan.FromSeconds(1);
     private readonly IObjectTable objects;
     private readonly IClientState client;
     private readonly IPlayerState player;
@@ -46,7 +48,7 @@ internal sealed class FishingBuffObserver : IDisposable
         {
             var sample = Volatile.Read(ref view);
             var personal = preferences.View;
-            return active && personal.HasCharacter && sample.Session == personal.Session && Now - sample.At <= TimeSpan.FromSeconds(1)
+            return active && personal.HasCharacter && sample.Session == personal.Session && Now - sample.At <= SampleMaxAge
                 ? sample : FishingBuffView.Empty;
         }
     }
@@ -61,32 +63,32 @@ internal sealed class FishingBuffObserver : IDisposable
     {
         if (disposed || !active || Now < nextUpdate) return;
         var now = Now;
-        nextUpdate = now + TimeSpan.FromMilliseconds(200);
+        nextUpdate = now + PollInterval;
         var personal = preferences.View;
         if (!compatible() || !personal.HasCharacter || !client.IsLoggedIn || !player.IsLoaded ||
-            player.ContentId != personal.CharacterId || player.ClassJob.RowId != 18 ||
+            player.ContentId != personal.CharacterId || player.ClassJob.RowId != FishingGameIds.FisherJob ||
             conditions[ConditionFlag.BetweenAreas] || conditions[ConditionFlag.BetweenAreas51])
         { PublishUnavailable(personal.Session, now); return; }
         if (!initialized)
         {
             initialized = true;
             var sheet = data.GetExcelSheet<Status>();
-            patienceIcon = sheet?.GetRowOrDefault(850)?.Icon ?? 0;
-            intuitionIcon = sheet?.GetRowOrDefault(568)?.Icon ?? 0;
+            patienceIcon = sheet?.GetRowOrDefault(FishingGameIds.PatienceStatus)?.Icon ?? 0;
+            intuitionIcon = sheet?.GetRowOrDefault(FishingGameIds.IntuitionStatus)?.Icon ?? 0;
         }
         var local = objects.LocalPlayer;
-        if (local is null || local.ClassJob.RowId != 18 || patienceIcon == 0 || intuitionIcon == 0)
+        if (local is null || local.ClassJob.RowId != FishingGameIds.FisherJob || patienceIcon == 0 || intuitionIcon == 0)
         { PublishUnavailable(personal.Session, now); return; }
         TimeSpan? patience = null, intuition = null;
         var valid = true;
         foreach (var status in local.StatusList)
         {
             var id = status.StatusId;
-            if (id is not (850 or 568)) continue;
+            if (id is not (FishingGameIds.PatienceStatus or FishingGameIds.IntuitionStatus)) continue;
             var seconds = status.RemainingTime;
             if (!float.IsFinite(seconds) || seconds < 0 || seconds > int.MaxValue) { valid = false; break; }
             var end = now + TimeSpan.FromSeconds(seconds);
-            if (id == 850) patience = end;
+            if (id == FishingGameIds.PatienceStatus) patience = end;
             else intuition = end;
         }
         Volatile.Write(ref view, new(personal.Session, valid ? FishingBuffReadState.Ready : FishingBuffReadState.Unavailable,

@@ -14,7 +14,7 @@ A Dalamud fishing companion for **FFXIV Korea**. Find your next fish, keep track
 - Track favorites with local chat alerts, game sound effects, or a custom local WAV with preview controls.
 - Use the quick list for fish available now or coming up soon.
 - Follow your casts with a timer, bait snapshots, and character-specific fishing records.
-- Read installer release notes and browse the latest five releases in Korean or English from Settings → What's new.
+- Read installer release notes and browse the latest ten releases in Korean or English from Settings → What's new.
 
 Korean and English interface options are available. Fish, item, and location names come from your game client. Collection status is confirmed against the game fish guide; unread data stays unknown, and manual overrides take priority.
 
@@ -32,7 +32,7 @@ Open with `/dbfs` or `/duckbillfisher`. Use `/dbfs cl` for the compact list and 
 
 ## Supported environment and limits
 
-- Current release: **[0.3.9.0](https://github.com/PlatyDuckbill/DuckbillFisher/releases/tag/v0.3.9.0)**, built for **Dalamud API 15**. Adds release history and a once-per-version update screen. Representative checks of history expansion, closing/reloading, reopening from Settings, language switching, existing fish browsing/timer, and settings restoration passed using the extracted Release package on the developer's KR installation.
+- Current release: **[0.5.1.0](https://github.com/PlatyDuckbill/DuckbillFisher/releases/tag/v0.5.1.0)**, built for **Dalamud API 15**. Includes a spawn timeline and monthly calendar, Patience/Intuition timer displays, and optional remaining/upcoming time limits. The fixed extracted Release DLL passed representative user checks before publication. The actual custom-repository update remains pending; see the [release record](docs/verification/releases/RELEASE-0.5.1.0.md).
 - Representative game checks use Korean client **2026.10.06.0000.0000** and **XIVLauncherKR Dalamud 15.0.3.6**. Other regional clients are not verified.
 - Version 0.2.6.0 supports the inspected **wasdcxz and dal4kr builds of KR Dalamud 15.0.3.7**. These distributions share a version number but have distinct module identities. Representative checks of fish-guide opening, collection sync, and the casting timer passed on both the local PC and the friend's dal4kr installation after updating.
 - Native observations require the inspected KR game and DLL versions. A patch can disable these features until compatibility is reviewed.
@@ -55,3 +55,5 @@ Windows, PowerShell 7, .NET SDK **10.0.402**, and the supported KR Dalamud refer
 Initialize the current PowerShell session with `. ./scripts/enter-dev.ps1`. It sets the checkout root and `DALAMUD_HOME`; use `-DalamudPath` for a different reference distribution. See [environment setup](docs/development/WINDOWS-SETUP.md#개발-환경-변수). Compilation against pinned upstream references does not establish global-client runtime support.
 
 Follow [workflow](docs/development/WORKFLOW.md) for direct builds and resource checks, [distribution](docs/development/DISTRIBUTION.md) for packaging and publication, and [session handoff](docs/SESSION-HANDOFF.md) for current machine paths. Tests run only when explicitly requested. Contribution boundaries are in [AGENTS.md](AGENTS.md).
+
+Source files are grouped by feature inside Core and Plugin. The managed test suite covers forecasts, alert scheduling, cast state, settings policies, data validation, and local history storage without a game installation. See [architecture](docs/development/ARCHITECTURE.md) and [test scope](docs/verification/ARCHITECTURE-TESTS.md); native observations and in-game UI still require separate checks.

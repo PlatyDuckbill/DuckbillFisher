@@ -6,11 +6,11 @@ namespace DuckbillFisher.Plugin;
 /// <summary>Scopes the plugin multiplier to its own windows, including popups and icon fonts.</summary>
 internal static class UiScale
 {
-    public const int DefaultPercent = 100;
-    public static readonly int[] Choices = [80, 90, 100, 110, 125, 150, 175, 200];
+    public const int DefaultPercent = UiScaleSettings.DefaultPercent;
+    public static readonly int[] Choices = UiScaleSettings.Choices;
     public static readonly string[] Labels = Choices.Select(value => $"{value}%").ToArray();
 
-    public static int Normalize(int percent) => Choices.Contains(percent) ? percent : DefaultPercent;
+    public static int Normalize(int percent) => UiScaleSettings.Normalize(percent);
 
     public static void Draw(WindowSystem windows, int percent)
     {

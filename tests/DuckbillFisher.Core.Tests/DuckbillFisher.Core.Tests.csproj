@@ -5,6 +5,17 @@
     <IsPackable>false</IsPackable>
   </PropertyGroup>
   <ItemGroup>
+    <!-- Compile the actual managed Plugin policies/store; no game SDK, fake services, or copied implementations. -->
+    <Compile Include="../../src/DuckbillFisher.Plugin/Features/Catalog/CatalogSettings.cs" Link="PluginSource/CatalogSettings.cs" />
+    <Compile Include="../../src/DuckbillFisher.Plugin/Features/Catalog/CatalogPreset.cs" Link="PluginSource/CatalogPreset.cs" />
+    <Compile Include="../../src/DuckbillFisher.Plugin/Features/Catalog/CatalogWindowFilter.cs" Link="PluginSource/CatalogWindowFilter.cs" />
+    <Compile Include="../../src/DuckbillFisher.Plugin/Features/Catalog/CompactViewSettings.cs" Link="PluginSource/CompactViewSettings.cs" />
+    <Compile Include="../../src/DuckbillFisher.Plugin/Features/SpawnSchedule/SpawnScheduleSettings.cs" Link="PluginSource/SpawnScheduleSettings.cs" />
+    <Compile Include="../../src/DuckbillFisher.Plugin/Configuration/PreferencesMigration.cs" Link="PluginSource/PreferencesMigration.cs" />
+    <Compile Include="../../src/DuckbillFisher.Plugin/Configuration/UiScaleSettings.cs" Link="PluginSource/UiScaleSettings.cs" />
+    <Compile Include="../../src/DuckbillFisher.Plugin/Features/Fishing/FishingHistoryStore.cs" Link="PluginSource/FishingHistoryStore.cs" />
+  </ItemGroup>
+  <ItemGroup>
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.14.1" />
     <PackageReference Include="xunit" Version="2.9.3" />
     <PackageReference Include="xunit.runner.visualstudio" Version="3.1.5" PrivateAssets="all" />
@@ -12,6 +23,8 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="../../data/archive/fishing.kr.v1.json" Link="Fixtures/fishing.kr.v1.json" CopyToOutputDirectory="PreserveNewest" />
+    <None Include="../../data/fishing.kr.v2.json" Link="Fixtures/fishing.kr.v2.json" CopyToOutputDirectory="PreserveNewest" />
+    <None Include="../../data/fish-classifications.kr.v1.json" Link="Fixtures/fish-classifications.kr.v1.json" CopyToOutputDirectory="PreserveNewest" />
     <None Update="Fixtures/forecast-reference.json" CopyToOutputDirectory="PreserveNewest" />
   </ItemGroup>
 </Project>

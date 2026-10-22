@@ -17,14 +17,11 @@ public sealed class CollectionFilterTests
     }
 
     [Theory]
-    [InlineData(false, CollectionStatus.Unknown, false)]
-    [InlineData(false, CollectionStatus.Uncaught, false)]
-    [InlineData(false, CollectionStatus.Caught, false)]
-    [InlineData(true, CollectionStatus.Unknown, false)]
-    [InlineData(true, CollectionStatus.Uncaught, true)]
-    [InlineData(true, CollectionStatus.Caught, false)]
-    public void OnlyConfirmedUncaughtFavoritesNotify(bool favorite, CollectionStatus status, bool expected)
+    [InlineData(CollectionStatus.Unknown, false)]
+    [InlineData(CollectionStatus.Uncaught, true)]
+    [InlineData(CollectionStatus.Caught, false)]
+    public void UncaughtOnlyRequiresConfirmedCollectionState(CollectionStatus status, bool expected)
     {
-        Assert.Equal(expected, CollectionFilter.ShouldNotify(favorite, status));
+        Assert.Equal(expected, CollectionFilter.Matches(status, CollectionVisibility.UncaughtOnly));
     }
 }
