@@ -123,6 +123,9 @@ internal sealed class FishingTracker : IDisposable
 
     public FishingTrackerView View { get { lock (gate) return view; } }
     public TimeSpan Now => clock.Elapsed;
+    // Live, validated observations only; archive loading never emits these events.
+    public event Action<int>? BiteObserved;
+    public event Action<int, uint>? CatchObserved;
     public FishGuideRow? FishForItem(uint id) { lock (gate) return fishByItem.GetValueOrDefault(id); }
     public void SelectTrip(int expectedSession, Guid? id)
     { lock (gate) if (!disposed) requestedDetail = (expectedSession, id); }
@@ -344,6 +347,7 @@ internal sealed class FishingTracker : IDisposable
                 history.End(fact.At, fact.Utc, FishingOutcome.Caught, FishingEndReason.CatchLog, fact.Value, 1);
                 lastLocalCatchAt = fact.At;
                 catches++;
+                CatchObserved?.Invoke(session, fact.Value);
             }
             else if (fact.Id == 5584 && history.Active is not null)
             { history.End(fact.At, fact.Utc, FishingOutcome.Cancelled, FishingEndReason.ManualRetrieve); retrieves++; }
@@ -460,7 +464,12 @@ internal sealed class FishingTracker : IDisposable
             readyAt = null;
         }
         ApplyMooch(now, current);
-        if (phase == 5) history.Bite(now);
+        if (phase == 5)
+        {
+            var firstBite = history.Active is { BiteSeconds: null } && history.CastStartedAt is not null;
+            history.Bite(now);
+            if (firstBite && history.Active?.BiteSeconds is not null) BiteObserved?.Invoke(session);
+        }
         if (phase == 6) history.Hook(now);
         if (phase == 0)
         {

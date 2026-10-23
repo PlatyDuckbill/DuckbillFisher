@@ -57,6 +57,7 @@ internal sealed class FishCollectionObserver : IDisposable
     private readonly Queue<Registration> pending = new();
     private readonly HashSet<uint> caught = [];
     private readonly HashSet<uint> uncaught = [];
+    private readonly HashSet<uint> registered = [];
     private FishCollectionView view = new(0, 0, FrozenSet<uint>.Empty, new(T.CollectionWaiting));
     private IReadOnlyList<FishGuideRow>? lastRows;
     private FishGuideRow[] eligible = [];
@@ -88,6 +89,8 @@ internal sealed class FishCollectionObserver : IDisposable
 
     public FishCollectionView View { get { lock (gate) return view; } }
     public string RuntimeDiagnostic => reader.RuntimeDiagnostic;
+    // Validated new-registration messages, never guide scans or manual collection edits.
+    public event Action<int, uint>? FishRegistered;
 
     private void OnLogMessage(ILogMessage message)
     {
@@ -115,6 +118,7 @@ internal sealed class FishCollectionObserver : IDisposable
             {
                 caught.Clear();
                 uncaught.Clear();
+                registered.Clear();
                 view = new(view.Revision + 1, personal.Session, FrozenSet<uint>.Empty, new(T.CollectionWaiting));
                 nextScan = TimeSpan.Zero;
                 nextBackup = TimeSpan.Zero;
@@ -212,6 +216,7 @@ internal sealed class FishCollectionObserver : IDisposable
             changed |= uncaught.Remove(fishId);
             trigger = "RegistrationLog";
             view = view with { AppliedRegistrations = view.AppliedRegistrations + 1, LastLogFish = fishId };
+            if (registered.Add(fishId)) FishRegistered?.Invoke(personal.Session, fishId);
             if (registration.RemoveFavorite)
                 preferences.OnFishRegistered(fishId, personal.Session);
         }

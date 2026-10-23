@@ -163,7 +163,7 @@ internal sealed class SpawnAlertOutput : IDisposable
     private unsafe bool NativeSoundReady() => nativeCompatible && framework.IsInFrameworkUpdateThread &&
         UIGlobals.MemberFunctionPointers.PlaySoundEffect != null;
 
-    private bool PlaySound(int effect, int expectedSession)
+    public bool PlaySound(int effect, int expectedSession)
     {
         var personal = preferences.View;
         if (!personal.HasCharacter || personal.Session != expectedSession) return false;

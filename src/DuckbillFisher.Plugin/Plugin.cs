@@ -36,6 +36,8 @@ public sealed class Plugin : IDalamudPlugin
     private readonly CastingTimerWindow timerWindow;
     private readonly FishingBuffObserver fishingBuffs;
     private readonly CastingTimerNotifications timerNotifications;
+    private readonly FishingSoundNotifications fishingSounds;
+    private readonly CastingTimerSettingsWindow timerSettings;
     private readonly BaitStockObserver baitStock;
     private readonly BaitPreparation baitPreparation;
     private readonly BaitUiProbe baitUiProbe;
@@ -75,6 +77,7 @@ public sealed class Plugin : IDalamudPlugin
         fishingRegion = new FishingRegionObserver(clientState, conditions, dataManager, framework);
         alertOutput = new SpawnAlertOutput(framework, chat, fishPreferences, collectionReader.IsCompatible, log);
         timerNotifications = new CastingTimerNotifications(fishingTracker, fishPreferences, alertOutput, framework, log);
+        fishingSounds = new FishingSoundNotifications(fishingTracker, fishCollection, fishCatalog, fishPreferences, alertOutput, framework, log);
         spawnAlerts = new SpawnAlerts(fishCatalog, fishPreferences, fishCollection, framework, alertOutput, log);
         baitStock = new BaitStockObserver(inventory, clientState, playerState, conditions, framework, fishPreferences, () => collectionReader.IsCompatible);
         var preparationQuery = new CatalogQueryState(fishPreferences.View.Catalog);
@@ -105,7 +108,7 @@ public sealed class Plugin : IDalamudPlugin
         fishingBuffs = new FishingBuffObserver(objectTable, clientState, playerState, conditions, framework, dataManager,
             fishPreferences, fishingTracker, () => collectionReader.IsCompatible);
         timerWindow = new CastingTimerWindow(fishingTracker, fishingBuffs, textureProvider, detailWindow.Show, spotFishWindow.Toggle);
-        var timerSettings = new CastingTimerSettingsWindow(fishPreferences, alertOutput);
+        timerSettings = new CastingTimerSettingsWindow(fishPreferences, alertOutput, fishingSounds);
         timerWindow.ShowSettings = () => timerSettings.IsOpen = true;
         compactObserver = new CompactFishObserver(fishCatalog, fishPreferences, framework, fishCollection, fishingRegion);
         compactWindow = new CompactFishWindow(compactObserver, fishPreferences, fishCollection, textureProvider, detailWindow.Show, fishingMap);
@@ -181,6 +184,8 @@ public sealed class Plugin : IDalamudPlugin
         baitFinder.Dispose();
         spawnAlerts.Dispose();
         timerNotifications.Dispose();
+        timerSettings.Dispose();
+        fishingSounds.Dispose();
         spawnAlertsPanel.Dispose();
         alertOutput.Dispose();
         fishingObserver.Dispose();

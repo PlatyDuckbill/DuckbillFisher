@@ -31,6 +31,7 @@ internal sealed record FishPreferencesView(int Revision, int Session, bool HasCh
     public CompactViewSettings Compact { get; init; } = new();
     public SpawnScheduleSettings Schedule { get; init; } = new();
     public CastingTimerSettings Timer { get; init; } = new();
+    public bool SpotFishHideCaught { get; init; } = true;
     public IReadOnlyDictionary<uint, int> FishAlertLeadMinutes { get; init; } = FrozenDictionary<uint, int>.Empty;
     public int AlertLead(uint id) => FishAlertLeadMinutes.GetValueOrDefault(id, SpawnAlertLeadMinutes);
     internal IReadOnlyDictionary<uint, long> ReservedAlertWindows { get; init; } = FrozenDictionary<uint, long>.Empty;
@@ -71,6 +72,7 @@ internal sealed class FishPreferences : IDisposable
     private CompactViewSettings? pendingCompact;
     private SpawnScheduleSettings? pendingSchedule;
     private CastingTimerSettings? pendingTimer;
+    private bool? pendingSpotFishHideCaught;
     private string? pendingCustomSoundPath;
     private Version? pendingChangelogVersion;
     private FishPreferencesConfiguration configuration = new();
@@ -173,6 +175,12 @@ internal sealed class FishPreferences : IDisposable
     {
         lock (gate)
             if (!disposed && writable && settings.IsValid()) pendingTimer = settings.Copy();
+    }
+
+    public void SetSpotFishHideCaught(bool hideCaught)
+    {
+        lock (gate)
+            if (!disposed && writable) pendingSpotFishHideCaught = hideCaught;
     }
 
     public void SetCatalogSettings(CatalogSettings settings)
@@ -337,10 +345,16 @@ internal sealed class FishPreferences : IDisposable
             }
             else if (stateErrorChanged)
                 Publish();
-            if (pending.Count == 0 && pendingAlerts is null && pendingFishAlerts.Count == 0 && pendingCatalog is null && pendingPreset is null && pendingInterface is null && pendingUiScale is null && pendingCompact is null && pendingSchedule is null && pendingTimer is null && pendingCustomSoundPath is null && pendingChangelogVersion is null)
+            if (pending.Count == 0 && pendingAlerts is null && pendingFishAlerts.Count == 0 && pendingCatalog is null && pendingPreset is null && pendingInterface is null && pendingUiScale is null && pendingCompact is null && pendingSchedule is null && pendingTimer is null && pendingSpotFishHideCaught is null && pendingCustomSoundPath is null && pendingChangelogVersion is null)
                 return;
             var candidate = CopyConfiguration();
             var changed = false;
+            if (pendingSpotFishHideCaught is { } hideCaught)
+            {
+                changed |= candidate.SpotFishHideCaught != hideCaught;
+                candidate.SpotFishHideCaught = hideCaught;
+                pendingSpotFishHideCaught = null;
+            }
             if (pendingTimer is { } timer)
             {
                 changed |= !candidate.Timer.Matches(timer);
@@ -499,6 +513,7 @@ internal sealed class FishPreferences : IDisposable
             Compact = configuration.Compact,
             Schedule = configuration.Schedule,
             Timer = configuration.Timer.Copy(),
+            SpotFishHideCaught = configuration.SpotFishHideCaught,
             FishAlertLeadMinutes = configuration.FishAlertLeadMinutes.ToFrozenDictionary(),
             ReservedAlertWindows = characterId != 0 && configuration.AlertWindows.TryGetValue(characterId, out var windows)
                 ? windows.ToFrozenDictionary() : FrozenDictionary<uint, long>.Empty,
@@ -523,6 +538,7 @@ internal sealed class FishPreferences : IDisposable
         Compact = configuration.Compact,
         Schedule = configuration.Schedule,
         Timer = configuration.Timer.Copy(),
+        SpotFishHideCaught = configuration.SpotFishHideCaught,
         FishAlertLeadMinutes = new(configuration.FishAlertLeadMinutes),
         AlertWindows = configuration.AlertWindows.ToDictionary(pair => pair.Key, pair => new Dictionary<uint, long>(pair.Value)),
     };
@@ -560,6 +576,7 @@ internal sealed class FishPreferences : IDisposable
             pendingCompact = null;
             pendingSchedule = null;
             pendingTimer = null;
+            pendingSpotFishHideCaught = null;
             pendingCustomSoundPath = null;
             pendingChangelogVersion = null;
         }

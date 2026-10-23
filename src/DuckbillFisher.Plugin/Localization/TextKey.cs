@@ -886,4 +886,10 @@ internal enum TextKey
     ChangelogCollectionBackup,
     ChangelogTimerShortcuts,
     ChangelogKr15039,
+    FishingSoundsHeading,
+    FishingSoundsHint,
+    FishingSoundBite,
+    FishingSoundBigFish,
+    FishingSoundLegendaryFish,
+    FishingSoundFirstCatchOnly,
 }

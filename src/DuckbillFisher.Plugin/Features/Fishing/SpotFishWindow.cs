@@ -15,7 +15,6 @@ internal sealed class SpotFishWindow : Window
     private readonly FishCollectionObserver collection;
     private readonly Action<FishGuideRow> showDetail;
     private readonly FishRowRenderer rows;
-    private bool hideCaught = true;
 
     public SpotFishWindow(FishingTracker tracker, FishCatalog catalog, FishPreferences preferences,
         FishCollectionObserver collection, ITextureProvider textures, FishingMapService maps, Action<FishGuideRow> showDetail)
@@ -36,8 +35,16 @@ internal sealed class SpotFishWindow : Window
     public override void Draw()
     {
         var view = tracker.View;
+        var personal = preferences.View;
+        var hideCaught = personal.SpotFishHideCaught;
         ImGui.TextWrapped(UiWidgets.SpotLabel(view));
-        if (ImGui.Button(UiText.Label(hideCaught ? T.TimerHideCaught : T.TimerAllFish, "TimerCollectionFilter"))) hideCaught = !hideCaught;
+        ImGui.BeginDisabled(!personal.CanEdit);
+        if (ImGui.Button(UiText.Label(hideCaught ? T.TimerHideCaught : T.TimerAllFish, "TimerCollectionFilter")))
+        {
+            hideCaught = !hideCaught;
+            preferences.SetSpotFishHideCaught(hideCaught);
+        }
+        ImGui.EndDisabled();
         var matches = hideCaught ? view.RemainingSpotFish : view.AllSpotFish;
         ImGui.SameLine();
         ImGui.TextDisabled(UiText.Get(T.TimerFishCount, matches.Length));
@@ -49,7 +56,6 @@ internal sealed class SpotFishWindow : Window
             {
                 var height = FishRowRenderer.GetHeight(ImGui.GetContentRegionAvail().X);
                 clipper.Begin(matches.Length, height + ImGui.GetStyle().ItemSpacing.Y);
-                var personal = preferences.View;
                 var observed = collection.View;
                 var snapshot = catalog.View;
                 var now = DateTimeOffset.UtcNow;

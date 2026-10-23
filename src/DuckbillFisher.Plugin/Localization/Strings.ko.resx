@@ -909,4 +909,10 @@
   <data name="ChangelogCollectionBackup" xml:space="preserve"><value>수집 상태를 캐릭터별로 로컬 저장합니다. 현재 조회가 미확인이면 저장 상태를 사용하며 수동 지정이 우선합니다.</value></data>
   <data name="ChangelogTimerShortcuts" xml:space="preserve"><value>어종 보기의 물고기 아이콘 옆 스톱워치 버튼으로 타이머 설정을 엽니다.</value></data>
   <data name="ChangelogKr15039" xml:space="preserve"><value>기존의 정확한 호환성 검사를 유지하면서 검증한 KR Dalamud 15.0.3.9 모듈 조합을 지원합니다.</value></data>
+  <data name="FishingSoundsHeading" xml:space="preserve"><value>입질·터주·터주왕 효과음</value></data>
+  <data name="FishingSoundsHint" xml:space="preserve"><value>입질은 관찰되는 순간 한 번, 터주·터주왕은 어종이 확인되는 순간 울립니다. 최초 습득은 실제 어류도감 신규 등록으로 판정하며 수동 수집 표시와는 별개입니다. ‘최초 습득 시에만’을 해제하면 확인된 어획마다 울립니다. 타이머를 닫아도 동작하며 채팅 메시지는 출력하지 않습니다.</value></data>
+  <data name="FishingSoundBite" xml:space="preserve"><value>입질</value></data>
+  <data name="FishingSoundBigFish" xml:space="preserve"><value>터주</value></data>
+  <data name="FishingSoundLegendaryFish" xml:space="preserve"><value>터주왕</value></data>
+  <data name="FishingSoundFirstCatchOnly" xml:space="preserve"><value>최초 습득 시에만</value></data>
 </root>

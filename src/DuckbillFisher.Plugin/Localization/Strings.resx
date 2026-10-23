@@ -909,4 +909,10 @@ Last saved: {1:yyyy-MM-dd HH:mm}, {2} fish. Used where current observations are 
   <data name="ChangelogCollectionBackup" xml:space="preserve"><value>Keep collection states in a per-character local backup. Saved states fill unknown current observations; manual choices still take priority.</value></data>
   <data name="ChangelogTimerShortcuts" xml:space="preserve"><value>Open timer settings with the stopwatch shortcut beside the fish-list button and its fish icon.</value></data>
   <data name="ChangelogKr15039" xml:space="preserve"><value>Support the verified KR Dalamud 15.0.3.9 module combination with the existing exact compatibility checks.</value></data>
+  <data name="FishingSoundsHeading" xml:space="preserve"><value>Bite and trophy fish sounds</value></data>
+  <data name="FishingSoundsHint" xml:space="preserve"><value>Bites sound once when observed; big and legendary fish sound when identified. First acquisition uses a new fish guide registration, independently of manual collection marks. Turn off “First acquisition only” to sound on every confirmed catch. These sounds also work with the timer closed and do not print chat messages.</value></data>
+  <data name="FishingSoundBite" xml:space="preserve"><value>Bite</value></data>
+  <data name="FishingSoundBigFish" xml:space="preserve"><value>Big fish</value></data>
+  <data name="FishingSoundLegendaryFish" xml:space="preserve"><value>Legendary fish</value></data>
+  <data name="FishingSoundFirstCatchOnly" xml:space="preserve"><value>First acquisition only</value></data>
 </root>
