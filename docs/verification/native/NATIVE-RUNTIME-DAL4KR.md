@@ -17,8 +17,25 @@
 | 미끼 소지 수량·인내/직감 상태 | BaitStockObserver → IGameInventory, FishingBuffObserver → IObjectTable.LocalPlayer.StatusList | 이미 공개 API를 사용한다. 현재는 공통 KR 호환성 검사에도 연결돼 있으며 이번에는 그대로 유지 |
 
 - 공개 API가 없다는 결과는 위 고정 참조의 멤버/현재 동작 범위에 한정한다. 최신 글로벌 API·다른 KR 배포판·미래 SDK까지 없다고 확대하지 않는다. 대체 API 확보 전 기능을 추측 값/화면 위치/채팅 명령으로 치환하지 않는다.
-- 후속 후보는 **미끼 수량/버프 공개 조회에 공통 네이티브 조합 검사가 필요한 범위**를 별도 검토하는 것이다. 이는 새 공개 API로 전환하는 작업과 다르며, 지원 게임·캐릭터/스레드/수명·실패/세션 계약과 관련 UI/진단을 함께 확인해야 한다. 이번에는 검사 분리나 기능별 자동 허용을 구현하지 않았다.
+- 후속 후보였던 **미끼 수량/버프 공개 조회의 공통 검사 경계**는 아래에서 재검토했다. 당장 분리 구현은 추천하지 않으며, 실제 차단 사례와 별도 지원 기준이 확보됐을 때 재검토할 후보로 둔다. 검사 분리나 기능별 자동 허용을 구현하지 않았다.
 - 이번 변경은 조사/방침 문서만이다. 코드·DLL·SDK/lock·설정/진단 계약은 그대로이며 빌드/테스트/패키지/게시/push를 수행하지 않았다. 문서 링크와 Git 공백 검사를 수행했다.15.0.3.9 및 구조 정비 개발본의 이전 실기 대기는 유지한다.
+
+### 공개 API 검사 분리의 타당성 재검토 (2026-10-23)
+
+- 사용자 요청으로 앞선 우선 추천을 재검토했다. **검토 자체는 타당하지만 즉시 분리 구현을 우선할 근거는 부족하다.** 현재 가드 유지·분리 구현 후순위를 권고한다. 이는 사용자 보류 결정이나 공개 API 사용을 줄이자는 방침이 아니다.
+- 현재 `Plugin.cs`는 `BaitStockObserver`와 `FishingBuffObserver`에 `collectionReader.IsCompatible`을 주입한다. 두 관찰기는 이미 공개 API를 사용하므로 검사 분리만으로 직접 네이티브 접근이 감소하지 않는다. `NativeRuntimeCompatibility.Inspect`는 프로세스/게임 빌드/런타임 버전/세 DLL 조합/검사 실패를 함께 판정한다. 단순히 두 관찰기의 `compatible()` 조건을 삭제하면 DLL 불일치뿐 아니라 미지원 게임 등 다른 실패의 차단도 사라진다.
+- 고정 `.cache/compat-15.0.3.9/full/Dalamud.dll`을 Mono.Cecil로 읽었다. 버전15.0.3.9, MVID `1e8f635a-5365-40f6-b920-830d6a816d43`, SHA256 `7255103B62A1BB3687492B78E8FAF4B91BD969826B39D76602D0A861C92E158D`가 기존 지원 기록과 일치했다. 현재 프로세스에 로드된 모듈을 관찰한 것은 아니다.
+- 위 DLL의 `GameInventoryPluginScoped.GetInventoryItems` → `GameInventoryItem.GetReadOnlySpanOfInventory` IL에서 `InventoryManager.Instance/GetInventoryContainer`와 게임 메모리를 가리키는 `ReadOnlySpan` 생성을 확인했다. `BattleChara.StatusList` → `GetStatusManager`, `StatusList.Length/GetStatusAddress`, `Status.StatusId/RemainingTime`도 내부 포인터/네이티브 필드를 읽는다. 공개 API의 값 검사는 이 읽기 이후에 수행되므로 미지원 조합의 안전성 증명이 될 수 없다.
+- 고정 Dalamud revision `0bbbf4f5dc1106da40bd51e0f5184a12ffd1024c`의 [소지품 구현](https://github.com/goatcorp/Dalamud/blob/0bbbf4f5dc1106da40bd51e0f5184a12ffd1024c/Dalamud/Game/Inventory/GameInventoryItem.cs), [상태 구현](https://github.com/goatcorp/Dalamud/blob/0bbbf4f5dc1106da40bd51e0f5184a12ffd1024c/Dalamud/Game/ClientState/Statuses/Status.cs), [상태 목록](https://github.com/goatcorp/Dalamud/blob/0bbbf4f5dc1106da40bd51e0f5184a12ffd1024c/Dalamud/Game/ClientState/Statuses/StatusList.cs)에서도 해당 접근을 확인했다. AGPL3 소스 참조 조사이며 외부 구현 도입/복제/가공은 없다. 공개 API 내부의 네이티브 접근이 있다는 사실만으로 모든 공개 API에 동일한 해시 검사가 필수라는 결론을 내리지 않는다. 실제 캐릭터 설정 조회 등은 이미 이 가드 밖에 있다. 핵심은 현재 합의한 KR 지원 범위에서 두 기능의 새 허용 기준이 정해져 있지 않다는 점이다.
+
+| 기능 | 분리할 때 가능한 이득과 한계 |
+|---|---|
+| 미끼 수량 | 준비/상세의 수량·없는 미끼 필터는 독립할 여지가 있다. 미끼 찾기/페이지 표식은 `BaitFinder`의 별도 가드와 네이티브 UI 조회가 계속 필요하다. |
+| 인내·직감 남은 시간 | 버프 표본 자체는 시전 추적기 Ready에 의존하지 않고 타이머 화면도 독립적으로 그린다. 별도 지원 기준이 입증되면 표시 유지가 가능하지만 게임/상태 ID·스레드/객체 수명·세션·신선도 계약 확인이 필요하다. |
+| 루어 경과 | 같은 관찰기 안에서도 `FishingTracker.Ready`와 현재 시전 ID를 요구한다. 네이티브 낚시 상태가 차단되면 유효한 루어 경과를 복구할 수 없으므로 버프 표시와 같은 지원 범위로 취급하면 안 된다. |
+
+- 동일한 지원 조합만 유지한 채 검사 코드를 분리하면 현재 사용 동작은 개선되지 않는다. 실제로 기능을 더 유지하려면 기존 가드가 거부하는 환경 일부를 허용해야 하므로 별도 호환성 정책·부분 동작 안내/진단·검증 범위가 필요하다. 이번 검토에서는 그러한 미지원 환경의 정상 동작이나 차단으로 인한 구체적인 불편을 새로 입증하지 않았다. 현재 정상 확인된 공개0.5.3.0에 대한 우선 구현 추천은 철회한다.
+- 재검토 조건은 실제 차단 사례, 확인 가능한 KR 공개 API 계약과 게임 범위, 유지할 기능의 사용 가치다. 구현한다면 독립성이 높은 미끼 수량 한 기능부터 범위를 정한다. 이번 작업은 호출 관계·고정 소스·DLL IL의 정적 확인과 문서 기록이며 제품 코드/지원 조합 변경, 빌드/제품 테스트/게임 실기/배포는 수행하지 않았다. 기존 미확인 범위는 유지한다.
 
 ## 15.0.3.9 대응과 반복 검사 (2026-10-23)
 
