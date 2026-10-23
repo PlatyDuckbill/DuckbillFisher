@@ -884,10 +884,10 @@
 마지막 저장: {1:yyyy-MM-dd HH:mm}, {2}종. 현재 조회가 미확인인 어종에 사용하며 이후 등록은 반영되지 않았을 수 있습니다.</value></data>
   <data name="TimerAlertMessage" xml:space="preserve"><value>시전 후 {0}초가 지났습니다.</value></data>
   <data name="TimerAlertSettings" xml:space="preserve"><value>타이머 설정</value></data>
-  <data name="TimerAlertHint" xml:space="preserve"><value>시전마다 사용 중인 시간에 한 번씩 알립니다. 낚아채기·중단 시 남은 알림을 취소하며 이 화면을 닫아도 동작합니다. 로컬 채팅은 공통 출력 설정을 따르며 효과음은 알림마다 지정합니다. 이미 지난 시간이나 관찰 공백의 알림은 다시 울리지 않습니다.</value></data>
+  <data name="TimerAlertHint" xml:space="preserve"><value>시전 후 설정한 시간이 되면 알림마다 한 번씩 알려줍니다.</value></data>
   <data name="TimerAlertAdd" xml:space="preserve"><value>알림 추가</value></data>
   <data name="TimerAlertRemove" xml:space="preserve"><value>삭제</value></data>
-  <data name="TimerAlertSeconds" xml:space="preserve"><value>시전 후 초</value></data>
+  <data name="TimerAlertSeconds" xml:space="preserve"><value>시전 후 (초)</value></data>
   <data name="TimerAlertEnabled" xml:space="preserve"><value>사용</value></data>
   <data name="TimerAlertLimit" xml:space="preserve"><value>최대 {0}개, 각 1~{1}초까지 설정할 수 있습니다.</value></data>
   <data name="TimerLureElapsed" xml:space="preserve"><value>{0} ({2}중첩): 사용 후 {1}</value></data>
@@ -896,11 +896,11 @@
   <data name="TimerAlertOutputSettings" xml:space="preserve"><value>공통 출력 설정</value></data>
   <data name="TimerAlertEmpty" xml:space="preserve"><value>+ 버튼으로 시전 알림을 추가하세요.</value></data>
   <data name="TimerAlertName" xml:space="preserve"><value>알림 이름 (선택)</value></data>
-  <data name="TimerAlertPresets" xml:space="preserve"><value>타이머 프리셋</value></data>
+  <data name="TimerAlertPresets" xml:space="preserve"><value>캐스팅 알림 프리셋</value></data>
   <data name="TimerAlertSelectPreset" xml:space="preserve"><value>프리셋 선택</value></data>
   <data name="TimerAlertLoadPreset" xml:space="preserve"><value>프리셋 불러오기</value></data>
   <data name="TimerAlertSavePreset" xml:space="preserve"><value>프리셋 저장</value></data>
-  <data name="TimerAlertPresetHint" xml:space="preserve"><value>이름·시간·사용 여부·효과음을 저장합니다. 같은 이름은 덮어쓰며 최대 {0}개까지 보관합니다. 불러오면 현재 알림 목록을 교체하며 이미 지난 알림을 다시 울리지 않습니다.</value></data>
+  <data name="TimerAlertPresetHint" xml:space="preserve"><value>같은 이름으로 저장하면 덮어쓰며, 최대 {0}개까지 보관합니다.</value></data>
   <data name="TimerLureUnknown" xml:space="preserve"><value>루어: 미확인</value></data>
   <data name="TimerLureInactive" xml:space="preserve"><value>루어: 미적용</value></data>
   <data name="ChangelogCastAlerts" xml:space="preserve"><value>시전 후 초 알림을 여러 개 등록하고 이름·시간·기본 효과음을 지정할 수 있습니다.</value></data>
@@ -910,9 +910,26 @@
   <data name="ChangelogTimerShortcuts" xml:space="preserve"><value>어종 보기의 물고기 아이콘 옆 스톱워치 버튼으로 타이머 설정을 엽니다.</value></data>
   <data name="ChangelogKr15039" xml:space="preserve"><value>기존의 정확한 호환성 검사를 유지하면서 검증한 KR Dalamud 15.0.3.9 모듈 조합을 지원합니다.</value></data>
   <data name="FishingSoundsHeading" xml:space="preserve"><value>입질·터주·터주왕 효과음</value></data>
-  <data name="FishingSoundsHint" xml:space="preserve"><value>입질은 관찰되는 순간 한 번, 터주·터주왕은 어종이 확인되는 순간 울립니다. 최초 습득은 실제 어류도감 신규 등록으로 판정하며 수동 수집 표시와는 별개입니다. ‘최초 습득 시에만’을 해제하면 확인된 어획마다 울립니다. 타이머를 닫아도 동작하며 채팅 메시지는 출력하지 않습니다.</value></data>
+  <data name="FishingSoundsHint" xml:space="preserve"><value>효과음마다 없음 / SE 1~16 / 커스텀 WAV를 선택할 수 있습니다.</value></data>
   <data name="FishingSoundBite" xml:space="preserve"><value>입질</value></data>
   <data name="FishingSoundBigFish" xml:space="preserve"><value>터주</value></data>
   <data name="FishingSoundLegendaryFish" xml:space="preserve"><value>터주왕</value></data>
   <data name="FishingSoundFirstCatchOnly" xml:space="preserve"><value>최초 습득 시에만</value></data>
+  <data name="TimerAlertTab" xml:space="preserve"><value>캐스팅 알림</value></data>
+  <data name="TimerAlertOutputHint" xml:space="preserve"><value>공통 출력 설정에서 채팅 표시 채널을 선택합니다. 효과음은 각 탭에서 개별로 지정합니다.</value></data>
+  <data name="TimerAlertDeliveryHint" xml:space="preserve"><value>채팅 표시 채널은 공통 출력 설정에서, 효과음은 알림별로 선택합니다.</value></data>
+  <data name="TimerAlertLifecycleHint" xml:space="preserve"><value>타이머를 닫아도 동작하며, 낚아채기·중단 시 남은 알림을 취소합니다.</value></data>
+  <data name="TimerAlertMissedHint" xml:space="preserve"><value>이미 지난 알림이나 관찰이 끊긴 동안의 알림은 다시 울리지 않습니다.</value></data>
+  <data name="TimerAlertRulesHeading" xml:space="preserve"><value>알림 목록</value></data>
+  <data name="TimerAlertPresetContentsHint" xml:space="preserve"><value>캐스팅 알림의 이름·시간·사용 여부·효과음을 저장합니다.</value></data>
+  <data name="TimerAlertPresetReplaceHint" xml:space="preserve"><value>불러오면 현재 캐스팅 알림 목록을 교체합니다.</value></data>
+  <data name="FishingSoundLifecycleHint" xml:space="preserve"><value>타이머를 닫아도 동작하며, 채팅 메시지는 출력하지 않습니다.</value></data>
+  <data name="FishingSoundBiteHint" xml:space="preserve"><value>입질을 관찰한 순간 한 번 울립니다.</value></data>
+  <data name="FishingSoundBigFishHint" xml:space="preserve"><value>터주 어종을 인식하면 울립니다.</value></data>
+  <data name="FishingSoundLegendaryFishHint" xml:space="preserve"><value>터주왕 어종을 인식하면 울립니다.</value></data>
+  <data name="FishingSoundFirstCatchHint" xml:space="preserve"><value>기본은 켜짐입니다. 실제 어류도감 최초 등록 시에만 울리며, 수동 수집 표시와는 별개입니다. 해제하면 이미 수집한 어종도 확인된 어획마다 울립니다.</value></data>
+  <data name="FishingSoundFile" xml:space="preserve"><value>선택한 파일: {0}</value></data>
+  <data name="FishingSoundWaveHelp" xml:space="preserve"><value>커스텀 WAV 안내</value></data>
+  <data name="FishingSoundWaveLimits" xml:space="preserve"><value>로컬 WAV 파일만 지원하며, 최대 {0}초 / {1}MB입니다.</value></data>
+  <data name="FishingSoundWaveReloadHint" xml:space="preserve"><value>Windows 음량을 따릅니다. 파일을 수정했다면 재불러오기를 누르세요.</value></data>
 </root>

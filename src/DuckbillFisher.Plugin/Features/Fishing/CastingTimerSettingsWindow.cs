@@ -20,6 +20,8 @@ internal sealed class CastingTimerSettingsWindow(FishPreferences preferences, Sp
     private CastingTimerSettings? lastSaved;
     private Guid? selectedPreset;
     private string presetName = "";
+    private SettingsTab selectedTab;
+    private enum SettingsTab { CastAlerts, FishingSounds }
     public Action? ShowOutputSettings { get; set; }
 
     public override void PreDraw()
@@ -29,6 +31,7 @@ internal sealed class CastingTimerSettingsWindow(FishPreferences preferences, Sp
         Size = new Vector2(580, 580);
         SizeCondition = ImGuiCond.FirstUseEver;
         BgAlpha = UiWidgets.BackgroundAlpha;
+        Flags = ImGuiWindowFlags.NoScrollbar | ImGuiWindowFlags.NoScrollWithMouse;
     }
 
     public override void OnClose()
@@ -47,17 +50,83 @@ internal sealed class CastingTimerSettingsWindow(FishPreferences preferences, Sp
             lastSaved = personal.Timer.Copy();
             draft = personal.Timer.Copy();
         }
-        ImGui.TextWrapped(UiText.Get(T.TimerAlertHint));
-        if (ImGui.Button(UiText.Label(T.TimerAlertOutputSettings, "TimerAlertOutputSettings"))) ShowOutputSettings?.Invoke();
-        if (personal.Error is { } error) ImGui.TextWrapped(error.Display);
-        ImGui.BeginDisabled(!personal.CanEdit);
-        var changed = DrawFishingSounds(personal);
-        ImGui.Separator();
-        changed |= DrawPresets();
-        ImGui.Separator();
-        ImGui.TextDisabled(UiText.Get(T.TimerAlertLimit, CastingTimerSettings.MaxAlerts, CastingTimerSettings.MaxSeconds));
+        var changed = ApplySelectedFile(personal);
+        DrawNavigation();
+        // Each tab owns its scrolling; navigation and output settings remain visible.
+        var contentId = selectedTab == SettingsTab.CastAlerts ? "CastAlertContent" : "FishingSoundContent";
+        if (ImGui.BeginChild(contentId))
+        {
+            if (personal.Error is { } error) ImGui.TextWrapped(error.Display);
+            ImGui.BeginDisabled(!personal.CanEdit);
+            changed |= selectedTab == SettingsTab.CastAlerts ? DrawCastAlerts(personal) : DrawFishingSounds(personal);
+            ImGui.EndDisabled();
+        }
+        ImGui.EndChild();
+        if (changed && draft.IsValid()) preferences.SetTimer(draft);
+        soundFiles.Draw();
+    }
+
+    private void DrawNavigation()
+    {
+        var available = ImGui.GetContentRegionAvail().X;
+        var spacing = ImGui.GetStyle().ItemSpacing.X;
+        var fullButtonWidth = ActionWidth(T.TimerAlertOutputSettings);
+        var tabTextWidth = ImGui.CalcTextSize(UiText.Get(T.TimerAlertTab)).X + ImGui.CalcTextSize(UiText.Get(T.FishingSoundsHeading)).X;
+        var tabPadding = 2 * (ImGui.GetFontSize() + ImGui.GetStyle().ItemInnerSpacing.X + ImGui.GetStyle().FramePadding.X * 2);
+        // Keep both tab labels reachable at narrow widths; the cog retains the full tooltip.
+        var iconOnly = available - fullButtonWidth - spacing < tabTextWidth + tabPadding;
+        var buttonWidth = iconOnly ? ImGui.GetFrameHeight() : fullButtonWidth;
+        var tabsWidth = Math.Max(1, available - buttonWidth - spacing);
+        if (ImGui.BeginChild("TimerSettingsNavigation", new Vector2(tabsWidth, ImGui.GetFrameHeightWithSpacing()), false,
+            ImGuiWindowFlags.NoScrollbar | ImGuiWindowFlags.NoScrollWithMouse))
+        {
+            if (ImGui.BeginTabBar("TimerSettingsTabs", ImGuiTabBarFlags.FittingPolicyScroll))
+            {
+                NavigationTab(SettingsTab.CastAlerts, T.TimerAlertTab, "CastAlertsTab", FontAwesomeIcon.Stopwatch);
+                NavigationTab(SettingsTab.FishingSounds, T.FishingSoundsHeading, "FishingSoundsTab", FontAwesomeIcon.VolumeUp);
+                ImGui.EndTabBar();
+            }
+        }
+        ImGui.EndChild();
+        ImGui.SameLine(0, spacing);
+        var openOutput = iconOnly
+            ? UiWidgets.IconButton(FontAwesomeIcon.Cog, "TimerAlertOutputSettings", UiText.Get(T.TimerAlertOutputHint))
+            : ActionButton(FontAwesomeIcon.Cog, T.TimerAlertOutputSettings, "TimerAlertOutputSettings");
+        if (!iconOnly) UiWidgets.Tooltip(UiText.Get(T.TimerAlertOutputHint));
+        if (openOutput) ShowOutputSettings?.Invoke();
+    }
+
+    private void NavigationTab(SettingsTab page, T label, string id, FontAwesomeIcon icon)
+    {
+        var fontSize = ImGui.GetFontSize();
+        var gap = fontSize + ImGui.GetStyle().ItemInnerSpacing.X;
+        var padding = new string(' ', Math.Max(1, (int)MathF.Ceiling(gap / Math.Max(1, ImGui.CalcTextSize(" ").X))));
+        var active = ImGui.BeginTabItem($"{padding}{UiText.Label(label, id)}");
+        if (ImGui.IsItemVisible())
+        {
+            var min = ImGui.GetItemRectMin();
+            var max = ImGui.GetItemRectMax();
+            var draw = ImGui.GetWindowDrawList();
+            draw.PushClipRect(min, max, true);
+            draw.AddText(UiBuilder.IconFont, fontSize,
+                min + new Vector2(ImGui.GetStyle().FramePadding.X, Math.Max(0, (max.Y - min.Y - fontSize) / 2)),
+                ImGui.GetColorU32(active ? ImGuiCol.Text : ImGuiCol.TextDisabled), icon.ToIconString());
+            draw.PopClipRect();
+        }
+        if (active) { selectedTab = page; ImGui.EndTabItem(); }
+    }
+
+    private bool DrawCastAlerts(FishPreferencesView personal)
+    {
+        HintBullet(T.TimerAlertHint);
+        HintBullet(T.TimerAlertDeliveryHint);
+        HintBullet(T.TimerAlertLifecycleHint);
+        HintBullet(T.TimerAlertMissedHint);
+        var changed = DrawPresets();
+        SectionHeading(FontAwesomeIcon.Bell, T.TimerAlertRulesHeading);
+        HintBullet(T.TimerAlertLimit, CastingTimerSettings.MaxAlerts, CastingTimerSettings.MaxSeconds);
         ImGui.BeginDisabled(draft.Alerts.Count >= CastingTimerSettings.MaxAlerts);
-        if (UiWidgets.IconButton(FontAwesomeIcon.Plus, "AddTimerAlert", UiText.Get(T.TimerAlertAdd)))
+        if (ActionButton(FontAwesomeIcon.Plus, T.TimerAlertAdd, "AddTimerAlert"))
         {
             draft.Alerts.Add(new(Guid.NewGuid(), 10));
             changed = true;
@@ -98,13 +167,11 @@ internal sealed class CastingTimerSettingsWindow(FishPreferences preferences, Sp
             draft.Alerts.RemoveAt(index--);
             changed = true;
         }
-        ImGui.EndDisabled();
         if (output.PreviewResult is { } preview) ImGui.TextWrapped(preview.Display);
-        if (changed && draft.IsValid()) preferences.SetTimer(draft);
-        soundFiles.Draw();
+        return changed;
     }
 
-    private bool DrawFishingSounds(FishPreferencesView personal)
+    private bool ApplySelectedFile(FishPreferencesView personal)
     {
         var changed = false;
         if (selectedFile is { } file)
@@ -116,34 +183,61 @@ internal sealed class CastingTimerSettingsWindow(FishPreferences preferences, Sp
                 changed = true;
             }
         }
-        if (!ImGui.CollapsingHeader(UiText.Label(T.FishingSoundsHeading, "FishingSounds"))) return changed;
-        ImGui.TextWrapped(UiText.Get(T.FishingSoundsHint));
+        return changed;
+    }
+
+    private bool DrawFishingSounds(FishPreferencesView personal)
+    {
+        var changed = false;
+        HintBullet(T.FishingSoundsHint);
+        HintBullet(T.FishingSoundLifecycleHint);
         foreach (var kind in Enum.GetValues<FishingSoundKind>())
         {
             ImGui.PushID((int)kind);
             var rule = FishingSoundNotifications.Settings(draft, kind);
-            ImGui.TextUnformatted(UiText.Get(kind switch
+            var title = kind switch
             {
                 FishingSoundKind.Bite => T.FishingSoundBite,
                 FishingSoundKind.BigFish => T.FishingSoundBigFish,
                 _ => T.FishingSoundLegendaryFish,
-            }));
+            };
+            SectionHeading(kind switch
+            {
+                FishingSoundKind.Bite => FontAwesomeIcon.Fish,
+                FishingSoundKind.BigFish => FontAwesomeIcon.Trophy,
+                _ => FontAwesomeIcon.Crown,
+            }, title);
+            HintBullet(kind switch
+            {
+                FishingSoundKind.Bite => T.FishingSoundBiteHint,
+                FishingSoundKind.BigFish => T.FishingSoundBigFishHint,
+                _ => T.FishingSoundLegendaryFishHint,
+            });
             var sound = rule.Sound;
             var names = Enumerable.Range(0, CustomAlertSound.Choice + 1).Select(value => value == 0
                 ? UiText.Get(T.AlertSoundNone) : value == CustomAlertSound.Choice ? UiText.Get(T.CustomSound)
                 : UiText.Get(T.AlertSoundNumber, value)).ToArray();
             ImGui.SetNextItemWidth(ImGui.GetFontSize() * 12);
             changed |= ImGui.Combo(UiText.Label(T.AlertSound, "FishingSoundChoice"), ref sound, names, names.Length);
+            ImGui.SameLine();
             ImGui.BeginDisabled(!personal.HasCharacter || sound == 0);
-            if (ImGui.Button(UiText.Label(T.AlertSoundPreview, "PreviewFishingSound"))) fishingSounds.Preview(kind, personal.Session);
+            if (UiWidgets.IconButton(FontAwesomeIcon.VolumeUp, "PreviewFishingSound", UiText.Get(T.AlertSoundPreview)))
+                fishingSounds.Preview(kind, personal.Session);
             ImGui.EndDisabled();
             var firstOnly = rule.FirstCatchOnly;
             if (kind != FishingSoundKind.Bite)
+            {
                 changed |= ImGui.Checkbox(UiText.Label(T.FishingSoundFirstCatchOnly, "FirstCatchOnly"), ref firstOnly);
+                UiWidgets.Tooltip(UiText.Get(T.FishingSoundFirstCatchHint));
+            }
             if (sound == CustomAlertSound.Choice)
             {
-                if (rule.CustomPath.Length > 0) ImGui.TextWrapped(rule.CustomPath);
-                if (ImGui.Button(UiText.Label(T.CustomSoundChoose, "ChooseFishingSound")))
+                if (rule.CustomPath.Length > 0)
+                {
+                    ImGui.TextWrapped(UiText.Get(T.FishingSoundFile, Path.GetFileName(rule.CustomPath)));
+                    UiWidgets.Tooltip(rule.CustomPath);
+                }
+                if (ActionButton(FontAwesomeIcon.FolderOpen, T.CustomSoundChoose, "ChooseFishingSound"))
                 {
                     var expectedSession = personal.Session;
                     soundFiles.OpenFileDialog(UiText.Get(T.CustomSoundChoose), ".wav,.WAV", (bool ok, string path) =>
@@ -152,9 +246,12 @@ internal sealed class CastingTimerSettingsWindow(FishPreferences preferences, Sp
                             selectedFile = (kind, expectedSession, path);
                     });
                 }
-                if (ImGui.Button(UiText.Label(T.CustomSoundReload, "ReloadFishingSound"))) fishingSounds.Reload(kind, personal.Session);
                 ImGui.SameLine();
-                if (ImGui.Button(UiText.Label(T.CustomSoundStop, "StopFishingSound"))) fishingSounds.Stop(kind, personal.Session);
+                if (UiWidgets.IconButton(FontAwesomeIcon.SyncAlt, "ReloadFishingSound", UiText.Get(T.CustomSoundReload)))
+                    fishingSounds.Reload(kind, personal.Session);
+                ImGui.SameLine();
+                if (UiWidgets.IconButton(FontAwesomeIcon.Stop, "StopFishingSound", UiText.Get(T.CustomSoundStop)))
+                    fishingSounds.Stop(kind, personal.Session);
                 ImGui.TextWrapped(UiText.Get(fishingSounds.CustomSound(kind).State switch
                 {
                     CustomSoundState.Ready => T.CustomSoundReady,
@@ -166,11 +263,15 @@ internal sealed class CastingTimerSettingsWindow(FishPreferences preferences, Sp
                     CustomSoundState.AudioUnavailable => T.CustomSoundUnavailable,
                     _ => T.CustomSoundLoginRequired,
                 }));
-                ImGui.TextWrapped(UiText.Get(T.CustomSoundHint, CustomAlertSound.MaxSeconds, CustomAlertSound.MaxMegabytes));
             }
             ReplaceSound(kind, rule with { Sound = sound, FirstCatchOnly = firstOnly });
-            ImGui.Separator();
             ImGui.PopID();
+        }
+        if (Enum.GetValues<FishingSoundKind>().Any(kind => FishingSoundNotifications.Settings(draft, kind).Sound == CustomAlertSound.Choice))
+        {
+            SectionHeading(FontAwesomeIcon.InfoCircle, T.FishingSoundWaveHelp);
+            HintBullet(T.FishingSoundWaveLimits, CustomAlertSound.MaxSeconds, CustomAlertSound.MaxMegabytes);
+            HintBullet(T.FishingSoundWaveReloadHint);
         }
         if (fishingSounds.PreviewResult is { } preview) ImGui.TextWrapped(preview.Display);
         return changed;
@@ -188,9 +289,10 @@ internal sealed class CastingTimerSettingsWindow(FishPreferences preferences, Sp
     private bool DrawPresets()
     {
         var changed = false;
-        ImGui.TextUnformatted(UiText.Get(T.TimerAlertPresets));
+        SectionHeading(FontAwesomeIcon.Save, T.TimerAlertPresets);
         var selected = draft.Presets.FirstOrDefault(preset => preset.Id == selectedPreset);
-        ImGui.SetNextItemWidth(Math.Max(80, ImGui.GetContentRegionAvail().X - ImGui.GetFrameHeightWithSpacing()));
+        ImGui.SetNextItemWidth(Math.Max(80, ImGui.GetContentRegionAvail().X - ActionWidth(T.TimerAlertLoadPreset) -
+            ImGui.GetFrameHeight() - ImGui.GetStyle().ItemSpacing.X * 2));
         if (ImGui.BeginCombo("###TimerPresets", selected?.Name ?? UiText.Get(T.TimerAlertSelectPreset)))
         {
             foreach (var preset in draft.Presets)
@@ -215,6 +317,14 @@ internal sealed class CastingTimerSettingsWindow(FishPreferences preferences, Sp
         }
         ImGui.SameLine();
         ImGui.BeginDisabled(selected is null);
+        if (ActionButton(FontAwesomeIcon.FolderOpen, T.TimerAlertLoadPreset, "LoadTimerPreset") && selected is not null)
+        {
+            draft = draft with { Alerts = [.. selected.Alerts] };
+            changed = true;
+        }
+        ImGui.EndDisabled();
+        ImGui.SameLine();
+        ImGui.BeginDisabled(selected is null);
         if (UiWidgets.IconButton(FontAwesomeIcon.Minus, "DeleteTimerPreset", UiText.Get(T.PresetDelete)))
         {
             draft.Presets.RemoveAll(preset => preset.Id == selectedPreset);
@@ -222,21 +332,14 @@ internal sealed class CastingTimerSettingsWindow(FishPreferences preferences, Sp
             changed = true;
         }
         ImGui.EndDisabled();
-        selected = draft.Presets.FirstOrDefault(preset => preset.Id == selectedPreset);
-        ImGui.BeginDisabled(selected is null);
-        if (ImGui.Button(UiText.Label(T.TimerAlertLoadPreset, "LoadTimerPreset")) && selected is not null)
-        {
-            draft = draft with { Alerts = [.. selected.Alerts] };
-            changed = true;
-        }
-        ImGui.EndDisabled();
-        ImGui.SetNextItemWidth(-1);
+        ImGui.SetNextItemWidth(Math.Max(80, ImGui.GetContentRegionAvail().X - ActionWidth(T.TimerAlertSavePreset) - ImGui.GetStyle().ItemSpacing.X));
         ImGui.InputTextWithHint("###TimerPresetName", UiText.Get(T.PresetName), ref presetName, CastingTimerSettings.MaxNameLength + 1);
         var name = presetName.Trim();
         var existing = draft.Presets.FindIndex(preset => string.Equals(preset.Name, name, StringComparison.OrdinalIgnoreCase));
+        ImGui.SameLine();
         ImGui.BeginDisabled(!CastingTimerSettings.ValidName(name) || name.Length == 0 ||
             existing < 0 && draft.Presets.Count >= CastingTimerSettings.MaxPresets);
-        if (ImGui.Button(UiText.Label(T.TimerAlertSavePreset, "SaveTimerPreset")))
+        if (ActionButton(FontAwesomeIcon.Save, T.TimerAlertSavePreset, "SaveTimerPreset"))
         {
             var preset = new CastingTimerPreset(existing >= 0 ? draft.Presets[existing].Id : Guid.NewGuid(), name, [.. draft.Alerts]);
             if (existing >= 0) draft.Presets[existing] = preset;
@@ -245,7 +348,47 @@ internal sealed class CastingTimerSettingsWindow(FishPreferences preferences, Sp
             changed = true;
         }
         ImGui.EndDisabled();
-        UiWidgets.Tooltip(UiText.Get(T.TimerAlertPresetHint, CastingTimerSettings.MaxPresets));
+        HintBullet(T.TimerAlertPresetContentsHint);
+        HintBullet(T.TimerAlertPresetReplaceHint);
+        HintBullet(T.TimerAlertPresetHint, CastingTimerSettings.MaxPresets);
         return changed;
+    }
+
+    private static void HintBullet(T key, params object[] args)
+    {
+        ImGui.Bullet();
+        ImGui.SameLine();
+        ImGui.BeginGroup();
+        ImGui.TextWrapped(UiText.Get(key, args));
+        ImGui.EndGroup();
+    }
+
+    private static void SectionHeading(FontAwesomeIcon icon, T key)
+    {
+        ImGui.Spacing();
+        ImGui.Separator();
+        ImGui.Spacing();
+        UiWidgets.Icon(icon);
+        ImGui.SameLine();
+        ImGui.TextUnformatted(UiText.Get(key));
+        ImGui.Spacing();
+    }
+
+    private static float ActionWidth(T key) => ImGui.GetFrameHeight() + ImGui.CalcTextSize(UiText.Get(key)).X +
+        ImGui.GetStyle().FramePadding.X * 2;
+
+    private static bool ActionButton(FontAwesomeIcon icon, T key, string id)
+    {
+        var clicked = ImGui.Button($"###{id}", new Vector2(ActionWidth(key), ImGui.GetFrameHeight()));
+        var min = ImGui.GetItemRectMin();
+        var max = ImGui.GetItemRectMax();
+        var origin = min + ImGui.GetStyle().FramePadding;
+        var draw = ImGui.GetWindowDrawList();
+        var color = ImGui.GetColorU32(ImGuiCol.Text);
+        draw.PushClipRect(min, max, true);
+        draw.AddText(UiBuilder.IconFont, ImGui.GetFontSize(), origin, color, icon.ToIconString());
+        draw.AddText(origin + new Vector2(ImGui.GetFrameHeight(), 0), color, UiText.Get(key));
+        draw.PopClipRect();
+        return clicked;
     }
 }

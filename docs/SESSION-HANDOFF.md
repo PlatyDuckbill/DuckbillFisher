@@ -27,7 +27,7 @@
 | upstream 컴파일 참조 | .cache/upstream-15.0.3.6/refs/ · build/dalamud-reference.json 고정 해시 |
 | SDK/대상 | global.json의10.0.402 · Dalamud SDK15.0.0 · x64/net10.0-windows |
 | 정규 개발 DLL | DUCKBILL_ROOT/src/DuckbillFisher.Plugin/bin/Debug/DuckbillFisher.dll |
-| 이번 별도 Debug | .cache/fishing-sounds-build/DuckbillFisher.dll |
+| 이번 별도 Debug | .cache/timer-settings-layout-build/DuckbillFisher.dll |
 | 현재 게시본 확인 Release | .cache/release-validation/0.5.2.0/DuckbillFisher.dll |
 | 현재 게시본 ZIP | artifacts/share/0.5.2.0/DuckbillFisher-0.5.2.0.zip |
 | 이번 KR 대조 보고서 | .cache/compat-15.0.3.9/metadata.json |

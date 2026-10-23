@@ -884,7 +884,7 @@ Click for fish details.</value></data>
 Last saved: {1:yyyy-MM-dd HH:mm}, {2} fish. Used where current observations are unknown; newer registrations may be missing.</value></data>
   <data name="TimerAlertMessage" xml:space="preserve"><value>Cast elapsed: {0} seconds.</value></data>
   <data name="TimerAlertSettings" xml:space="preserve"><value>Timer settings</value></data>
-  <data name="TimerAlertHint" xml:space="preserve"><value>Each enabled time alerts once per cast until hooking or stopping. Alerts also work with this screen closed. Local chat follows common output settings; each alert has its own sound. Past times and observation gaps are never replayed.</value></data>
+  <data name="TimerAlertHint" xml:space="preserve"><value>Each enabled alert fires once per cast when its configured time is reached.</value></data>
   <data name="TimerAlertAdd" xml:space="preserve"><value>Add alert</value></data>
   <data name="TimerAlertRemove" xml:space="preserve"><value>Remove</value></data>
   <data name="TimerAlertSeconds" xml:space="preserve"><value>Seconds after cast</value></data>
@@ -896,11 +896,11 @@ Last saved: {1:yyyy-MM-dd HH:mm}, {2} fish. Used where current observations are 
   <data name="TimerAlertOutputSettings" xml:space="preserve"><value>Common output settings</value></data>
   <data name="TimerAlertEmpty" xml:space="preserve"><value>Use + to add a cast alert.</value></data>
   <data name="TimerAlertName" xml:space="preserve"><value>Alert name (optional)</value></data>
-  <data name="TimerAlertPresets" xml:space="preserve"><value>Timer presets</value></data>
+  <data name="TimerAlertPresets" xml:space="preserve"><value>Cast alert presets</value></data>
   <data name="TimerAlertSelectPreset" xml:space="preserve"><value>Select preset</value></data>
   <data name="TimerAlertLoadPreset" xml:space="preserve"><value>Load preset</value></data>
   <data name="TimerAlertSavePreset" xml:space="preserve"><value>Save preset</value></data>
-  <data name="TimerAlertPresetHint" xml:space="preserve"><value>Save names, times, enabled states and sounds. An existing name is replaced. Up to {0} presets. Loading replaces the current alert list; passed deadlines are not replayed.</value></data>
+  <data name="TimerAlertPresetHint" xml:space="preserve"><value>Saving with an existing name replaces that preset. Keep up to {0} presets.</value></data>
   <data name="TimerLureUnknown" xml:space="preserve"><value>Lure: unknown</value></data>
   <data name="TimerLureInactive" xml:space="preserve"><value>Lure: inactive</value></data>
   <data name="ChangelogCastAlerts" xml:space="preserve"><value>Add multiple cast-time alerts with names, individual times and built-in sound effects.</value></data>
@@ -910,9 +910,26 @@ Last saved: {1:yyyy-MM-dd HH:mm}, {2} fish. Used where current observations are 
   <data name="ChangelogTimerShortcuts" xml:space="preserve"><value>Open timer settings with the stopwatch shortcut beside the fish-list button and its fish icon.</value></data>
   <data name="ChangelogKr15039" xml:space="preserve"><value>Support the verified KR Dalamud 15.0.3.9 module combination with the existing exact compatibility checks.</value></data>
   <data name="FishingSoundsHeading" xml:space="preserve"><value>Bite and trophy fish sounds</value></data>
-  <data name="FishingSoundsHint" xml:space="preserve"><value>Bites sound once when observed; big and legendary fish sound when identified. First acquisition uses a new fish guide registration, independently of manual collection marks. Turn off “First acquisition only” to sound on every confirmed catch. These sounds also work with the timer closed and do not print chat messages.</value></data>
+  <data name="FishingSoundsHint" xml:space="preserve"><value>Choose none, SE 1–16, or a custom WAV for each sound.</value></data>
   <data name="FishingSoundBite" xml:space="preserve"><value>Bite</value></data>
   <data name="FishingSoundBigFish" xml:space="preserve"><value>Big fish</value></data>
   <data name="FishingSoundLegendaryFish" xml:space="preserve"><value>Legendary fish</value></data>
   <data name="FishingSoundFirstCatchOnly" xml:space="preserve"><value>First acquisition only</value></data>
+  <data name="TimerAlertTab" xml:space="preserve"><value>Cast alerts</value></data>
+  <data name="TimerAlertOutputHint" xml:space="preserve"><value>Choose the local chat channel in common output settings. Configure individual sounds in each tab.</value></data>
+  <data name="TimerAlertDeliveryHint" xml:space="preserve"><value>Choose the local chat channel in common output settings and a sound for each alert.</value></data>
+  <data name="TimerAlertLifecycleHint" xml:space="preserve"><value>Alerts work with the timer closed. Hooking or stopping cancels the remaining alerts.</value></data>
+  <data name="TimerAlertMissedHint" xml:space="preserve"><value>Past alerts and alerts missed during observation gaps are never replayed.</value></data>
+  <data name="TimerAlertRulesHeading" xml:space="preserve"><value>Alert list</value></data>
+  <data name="TimerAlertPresetContentsHint" xml:space="preserve"><value>Presets save cast alert names, times, enabled states, and sounds.</value></data>
+  <data name="TimerAlertPresetReplaceHint" xml:space="preserve"><value>Loading a preset replaces the current cast alert list.</value></data>
+  <data name="FishingSoundLifecycleHint" xml:space="preserve"><value>Sounds work with the timer closed and do not print chat messages.</value></data>
+  <data name="FishingSoundBiteHint" xml:space="preserve"><value>Plays once when a bite is observed.</value></data>
+  <data name="FishingSoundBigFishHint" xml:space="preserve"><value>Plays when a big fish is identified.</value></data>
+  <data name="FishingSoundLegendaryFishHint" xml:space="preserve"><value>Plays when a legendary fish is identified.</value></data>
+  <data name="FishingSoundFirstCatchHint" xml:space="preserve"><value>Enabled by default. Plays only on a first fish guide registration, independently of manual collection marks. Disable to play on every confirmed catch, including fish already collected.</value></data>
+  <data name="FishingSoundFile" xml:space="preserve"><value>Selected file: {0}</value></data>
+  <data name="FishingSoundWaveHelp" xml:space="preserve"><value>Custom WAV help</value></data>
+  <data name="FishingSoundWaveLimits" xml:space="preserve"><value>Local WAV files only, up to {0} seconds / {1} MB.</value></data>
+  <data name="FishingSoundWaveReloadHint" xml:space="preserve"><value>Uses Windows volume. Reload after editing the file.</value></data>
 </root>
