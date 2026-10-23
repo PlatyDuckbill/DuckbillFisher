@@ -8,6 +8,7 @@
 - 이번 개발본은 같은0.5.1.0 버전으로 코드 기능별 배치·상수·설정 변환/검증 분리와 핵심 테스트를 보강했다. **733건 통과**, 별도→정규 Debug 경고0/오류0·한영854키 검사 통과. 인게임 확인·Release 준비·게시·push는 하지 않았다. [변경/범위/재현](verification/ARCHITECTURE-TESTS.md), [개발 DLL 경로](SESSION-HANDOFF.md#환경과-경로).
 - 이번 개발본에 wasdcxz KR15.0.3.9의 정확한 DLL 조합을 추가했다. 고정 배포/실제 설치 일치·기존45개 타입 메타데이터/IL 동일·최소15.0.3.6 별도와 현재15.0.3.9 별도/정규 Debug 경고0/오류0·한영854키 검사 통과. 반복 대조용 개발 스크립트를 추가했으며 **15.0.3.9 인게임 확인은 대기**다. [근거/재현](verification/native/NATIVE-RUNTIME-DAL4KR.md#15039-대응과-반복-검사-2026-10-23).
 - SDK/의존성·자료·설정schema19/기록schema2·진단catalog/v9/summary/v10/timer/v5/alerts/v7/bait-ui/v7은 유지한다. 테스트 추가/실행·Release 준비/게시·push는 하지 않았다.
+- 사용자 합의로 공개 API 우선·네이티브 최소화·정확한 KR 조합 검사/업데이트별 대조 방침을 확정했다. 지원 참조의 핵심 네이티브 기능에 동등한 공개 대체는 찾지 못했으며, 이미 공개 API인 미끼 수량/버프의 검사 경계는 후속 후보로 남겼다. [조사/범위](verification/native/NATIVE-RUNTIME-DAL4KR.md#공개-api-우선-방침과-대체-조사-2026-10-23). 이번 반영은 문서만이며 기존 실기 대기는 유지한다.
 - 공개0.5.0.0 일정표는 고정 추출본 대표 확인·원격 게시/실제 raw URL 대조 완료지만 **실제 Dalamud 저장소 업데이트는 별도 대기**다. [배포](verification/releases/RELEASE-0.5.0.0.md)·[동작](product/SPAWN-SCHEDULE.md).
 - 공개0.4.1.0은 고정 추출본·실제 저장소 업데이트 대표 확인 완료다. [근거](verification/releases/RELEASE-0.4.1.0.md). 그 밖의 버전별 빌드/추출/게시 SHA와 확인 범위는 [검증 색인](verification/README.md#배포와-호환성)을 따른다.
 - 커스텀 저장소: https://raw.githubusercontent.com/PlatyDuckbill/DuckbillFisher/main/repo/pluginmaster.json

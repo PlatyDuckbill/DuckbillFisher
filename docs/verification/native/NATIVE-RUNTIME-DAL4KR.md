@@ -2,6 +2,24 @@
 
 기록일: 2026-10-17. 기존 15.0.3.7 지원의 후속이며 숫자 버전과 배포 조합을 구분한다.
 
+## 공개 API 우선 방침과 대체 조사 (2026-10-23)
+
+- 사용자는 향후 공식 등록을 고려해 **공개 API 우선·네이티브 접근 최소화·현재 정확한 DLL 조합 검사 유지·업데이트별 대조/대응** 방침을 승인했다. 현재 설계는 [ARCHITECTURE](../../development/ARCHITECTURE.md#호환성과-실패)에 반영했다. 자동 계약 검사에 의한 미등록 DLL 허용이나 버전 범위 허용은 이번 승인 범위가 아니다. 공식 제출/정책 확인과 실제 승인은 별도다.
+- 고정 KR15.0.3.6/full 및15.0.3.9/full의 Dalamud.dll을 Mono.Cecil로 읽어 공개 서비스45개의 멤버와 관련 공개 메서드 이름을 조사했다.15.0.3.9의 공개 NativeWrapper6개도 확인했다. 파일은 기존 프로필/위아래 기록의 MVID/SHA256·고정 소스 revision을 따른다. 보고서는 `.cache/compat-15.0.3.9/public-api-audit.json`과 `public-wrapper-audit.json`이다. 디스크 메타데이터와 현재 호출부를 확인했으며 게임/플러그인 실행은 없다. 외부 구현 도입이나 DLL/의존성 갱신도 없다.
+
+| 현재 접근 | 현재 사용 경로 | 조사 결과/처리 |
+|---|---|---|
+| 수집 비트·완료된 도감 전체 목록 | NativeFishCollectionReader → PlayerState.IsFishCaught·AgentFishGuide.Data | IPlayerState에는 수집 판정/완료 목록 API가 없다. 조회 완료와 미수집 확정 계약을 보존하며 유지 |
+| 낚시 단계·장착/시전/보관 생미끼 | NativeFishingActivityReader → PlayerState·EventFramework/FishingEventHandler | 해당 원시 상태를 직접 대체할 공개 서비스 멤버를 찾지 못했다. 기존 본인 로그/시전 전이 판정을 유지 |
+| 명시적 도감 열기 | FishGuideOpenService → IGameGui.GetAgentById + AgentFishGuide.OpenForItemId | 에이전트 조회는 공개 API지만 어류도감 열기 자체는 네이티브 호출이다. 동등한 공개 열기 API를 찾지 못해 유지 |
+| 미끼 칸/페이지 표식·강조 | NativeBaitUiReader/NativeBaitPageReader → Atk UI·tooltip map·AtkValues | 공개 addon 조회만으로 내부 연결을 대체할 수 없다. 조사한 공개 wrapper에도 tooltip/stage/미끼 의미 API를 찾지 못해 유지 |
+| 선택한 SE1~16 재생 | SpawnAlertOutput → UIGlobals.PlayChatSoundEffect | 동등한 공개 선택SE 재생 API를 찾지 못했다. Toast의 소리 옵션·UI 소리 설정은 대체가 아니며 Toast를 다시 도입하지 않음 |
+| 미끼 소지 수량·인내/직감 상태 | BaitStockObserver → IGameInventory, FishingBuffObserver → IObjectTable.LocalPlayer.StatusList | 이미 공개 API를 사용한다. 현재는 공통 KR 호환성 검사에도 연결돼 있으며 이번에는 그대로 유지 |
+
+- 공개 API가 없다는 결과는 위 고정 참조의 멤버/현재 동작 범위에 한정한다. 최신 글로벌 API·다른 KR 배포판·미래 SDK까지 없다고 확대하지 않는다. 대체 API 확보 전 기능을 추측 값/화면 위치/채팅 명령으로 치환하지 않는다.
+- 후속 후보는 **미끼 수량/버프 공개 조회에 공통 네이티브 조합 검사가 필요한 범위**를 별도 검토하는 것이다. 이는 새 공개 API로 전환하는 작업과 다르며, 지원 게임·캐릭터/스레드/수명·실패/세션 계약과 관련 UI/진단을 함께 확인해야 한다. 이번에는 검사 분리나 기능별 자동 허용을 구현하지 않았다.
+- 이번 변경은 조사/방침 문서만이다. 코드·DLL·SDK/lock·설정/진단 계약은 그대로이며 빌드/테스트/패키지/게시/push를 수행하지 않았다. 문서 링크와 Git 공백 검사를 수행했다.15.0.3.9 및 구조 정비 개발본의 이전 실기 대기는 유지한다.
+
 ## 15.0.3.9 대응과 반복 검사 (2026-10-23)
 
 - 실제 설치는 wasdcxz15.0.3.9이며, 디스크의 KR 게임 빌드는 기존 `2026.10.06.0000.0000`이다. 아래 고정 ZIP의 세 DLL SHA256이 설치 DLL과 모두 같았다. 런처/게임 설치 파일은 변경하지 않았다.
@@ -16,7 +34,7 @@
 
 - [compare-native-runtime.ps1](../../../scripts/compare-native-runtime.ps1)을 추가해 고정 wasdcxz15.0.3.7/full과 후보15.0.3.9/full을 Mono.Cecil로 비교했다. 기존8개 루트와 미끼 UI/컨테이너/색상, Dalamud PlayerState/GameGui/ChatGui/로그 전달 경로를 포함한 **45개 루트 타입과 중첩 타입의 메타데이터/이름으로 해석한 IL이 모두 동일**하다. 크기·정렬·필드 오프셋/상수/특성·메서드 시그니처/인자·로컬·예외 처리 구간도 비교한다. 보고서는 `.cache/compat-15.0.3.9/metadata.json`이다. 선정한 타입의 정적 대조이며 모든 전이 의존성/게임 실행의 증명은 아니다.
 - NativeRuntimeProfiles에 위 세 모듈의 **완전한 조합 한 개**를 추가했다. 기존3개 조합과 게임/스레드/수명/실패 처리는 유지했다. 수집·도감 열기·낚시 상태·미끼 UI·SE 구현, SDK/lock/자료/설정/진단 형식·제품 버전0.5.1.0은 변경하지 않았다.
-- 일반 공개 API/정적 기능은 Dalamud 패치 번호마다 막지 않는다. 현재 네이티브 기능은 작은 업데이트에도 DLL 전체 MVID/해시가 바뀌면 공통 가드에서 차단된다. 이번에도 버전 범위 허용/런타임 자가 허용/원격 프로필 갱신은 도입하지 않았다. 공개 API로 대체할 수 있는 접근은 이후 별도 작업에서 검토할 수 있으나, 현재 IPlayerState에는 수집 비트나 낚시 단계의 대체 API가 없다. 개발용 스크립트는 반복 대조만 줄이며 허용 목록/설치 파일을 수정하지 않는다.
+- 정적 목록·예측 등은 공통 네이티브 가드 밖에 있다. 네이티브 기능과 일부 공개 API 관찰(미끼 소지 수량·버프)은 작은 업데이트에도 DLL 전체 MVID/해시가 바뀌면 공통 가드에서 차단된다. 이번에도 버전 범위 허용/런타임 자가 허용/원격 프로필 갱신은 도입하지 않았다. 공개 API 대체 가능성은 위 조사와 구분하며, 개발용 스크립트는 반복 대조만 줄이고 허용 목록/설치 파일을 수정하지 않는다.
 - 최소15.0.3.6 참조 별도 Debug → 현재15.0.3.9 참조 별도 Debug → 현재 참조 정규 Debug가 모두 경고0/오류0이다. 한영854키/형식 인자·문서 링크·Git 공백 검사 통과. 테스트 추가/실행, Release 준비/게시, push는 하지 않았다.
 - **15.0.3.9 인게임 대표 확인은 대기**다. 정규 Debug를 재로드해 진단의 `NativeRuntime=15.0.3.9; NativeProfile=15.0.3.9; NativeStatus=NativeCompatible; MismatchedModules=none`을 확인한다. `/dbfs`에서 도감 열기/수집 반영 → 직접 시전/낚아채기1회와 타이머/기록 → 미끼 준비에서 보유 미끼 찾기/페이지 표식 → 선택SE 미리 듣기 순으로 확인한다. 기존 설정·수동 상태·기록이 보존되고 호환성 차단이 없어야 한다. 구조 정비 개발본의 이전 실기 대기와 공개판 실제 저장소 업데이트 대기는 그대로 남는다. dal4kr의 최신 공개 배포는 조사 시점에도15.0.3.7이며 새로운 dal4kr15.0.3.9를 확인한 것은 아니다.
 
