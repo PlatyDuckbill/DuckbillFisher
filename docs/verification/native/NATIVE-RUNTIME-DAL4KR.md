@@ -2,6 +2,24 @@
 
 기록일: 2026-10-17. 기존 15.0.3.7 지원의 후속이며 숫자 버전과 배포 조합을 구분한다.
 
+## 15.0.3.9 대응과 반복 검사 (2026-10-23)
+
+- 실제 설치는 wasdcxz15.0.3.9이며, 디스크의 KR 게임 빌드는 기존 `2026.10.06.0000.0000`이다. 아래 고정 ZIP의 세 DLL SHA256이 설치 DLL과 모두 같았다. 런처/게임 설치 파일은 변경하지 않았다.
+- 출처는 [wasdcxz/dalamud.assets 고정 revision](https://github.com/wasdcxz/dalamud.assets/tree/4157460b5b57c6196b6ee66b363dabdbf1d67758)과 해당 [VersionInfo](https://raw.githubusercontent.com/wasdcxz/dalamud.assets/4157460b5b57c6196b6ee66b363dabdbf1d67758/VersionInfo_dalamud.json)다. [7.57-15.0.3.9.zip](https://raw.githubusercontent.com/wasdcxz/dalamud.assets/4157460b5b57c6196b6ee66b363dabdbf1d67758/7.57-15.0.3.9.zip)은61,660,629바이트/SHA256 `258B3C61A15369D0F902A166A31085132C948F5921DDB62829B5FD57A9B2D218`이다. `.cache/compat-15.0.3.9/`에서만 추출/분석했다.
+- Dalamud ProductVersion의 소스는 [0bbbf4f5dc1106da40bd51e0f5184a12ffd1024c](https://github.com/goatcorp/Dalamud/tree/0bbbf4f5dc1106da40bd51e0f5184a12ffd1024c)(AGPL3), ClientStructs/Interop은 [479ea936b7ecbf6436c16941ece9c9ee83cba494](https://github.com/aers/FFXIVClientStructs/tree/479ea936b7ecbf6436c16941ece9c9ee83cba494)(MIT)다. 기존 wasdcxz15.0.3.7 소스 대비 각각22/29커밋이며 낚시 접근 대상 소스 변경은 없다. 소스 비교와 실제 KR DLL 비교는 별개로 수행했으며 외부 구현 코드를 제품에 복제하지 않았다.
+
+| 모듈 | AssemblyVersion | MVID | SHA256 |
+|---|---|---|---|
+| Dalamud | 15.0.3.9 | 1e8f635a-5365-40f6-b920-830d6a816d43 | 7255103B62A1BB3687492B78E8FAF4B91BD969826B39D76602D0A861C92E158D |
+| FFXIVClientStructs | 7.57.0.9415 | 93c1ca2b-80f3-43ef-9d58-ab0e99bb8909 | 052AC3B331F6DFC2A72B58D61506A1A696A68EB13416B3C3D514FAFDF5EB4F40 |
+| InteropGenerator.Runtime | 1.0.0.0 | a296f580-78c4-4617-afef-e85be4bdfe55 | 04C4C92CD05506EDFED442EEE9D331734AF7B9E151A572964365B80EF38B9422 |
+
+- [compare-native-runtime.ps1](../../../scripts/compare-native-runtime.ps1)을 추가해 고정 wasdcxz15.0.3.7/full과 후보15.0.3.9/full을 Mono.Cecil로 비교했다. 기존8개 루트와 미끼 UI/컨테이너/색상, Dalamud PlayerState/GameGui/ChatGui/로그 전달 경로를 포함한 **45개 루트 타입과 중첩 타입의 메타데이터/이름으로 해석한 IL이 모두 동일**하다. 크기·정렬·필드 오프셋/상수/특성·메서드 시그니처/인자·로컬·예외 처리 구간도 비교한다. 보고서는 `.cache/compat-15.0.3.9/metadata.json`이다. 선정한 타입의 정적 대조이며 모든 전이 의존성/게임 실행의 증명은 아니다.
+- NativeRuntimeProfiles에 위 세 모듈의 **완전한 조합 한 개**를 추가했다. 기존3개 조합과 게임/스레드/수명/실패 처리는 유지했다. 수집·도감 열기·낚시 상태·미끼 UI·SE 구현, SDK/lock/자료/설정/진단 형식·제품 버전0.5.1.0은 변경하지 않았다.
+- 일반 공개 API/정적 기능은 Dalamud 패치 번호마다 막지 않는다. 현재 네이티브 기능은 작은 업데이트에도 DLL 전체 MVID/해시가 바뀌면 공통 가드에서 차단된다. 이번에도 버전 범위 허용/런타임 자가 허용/원격 프로필 갱신은 도입하지 않았다. 공개 API로 대체할 수 있는 접근은 이후 별도 작업에서 검토할 수 있으나, 현재 IPlayerState에는 수집 비트나 낚시 단계의 대체 API가 없다. 개발용 스크립트는 반복 대조만 줄이며 허용 목록/설치 파일을 수정하지 않는다.
+- 최소15.0.3.6 참조 별도 Debug → 현재15.0.3.9 참조 별도 Debug → 현재 참조 정규 Debug가 모두 경고0/오류0이다. 한영854키/형식 인자·문서 링크·Git 공백 검사 통과. 테스트 추가/실행, Release 준비/게시, push는 하지 않았다.
+- **15.0.3.9 인게임 대표 확인은 대기**다. 정규 Debug를 재로드해 진단의 `NativeRuntime=15.0.3.9; NativeProfile=15.0.3.9; NativeStatus=NativeCompatible; MismatchedModules=none`을 확인한다. `/dbfs`에서 도감 열기/수집 반영 → 직접 시전/낚아채기1회와 타이머/기록 → 미끼 준비에서 보유 미끼 찾기/페이지 표식 → 선택SE 미리 듣기 순으로 확인한다. 기존 설정·수동 상태·기록이 보존되고 호환성 차단이 없어야 한다. 구조 정비 개발본의 이전 실기 대기와 공개판 실제 저장소 업데이트 대기는 그대로 남는다. dal4kr의 최신 공개 배포는 조사 시점에도15.0.3.7이며 새로운 dal4kr15.0.3.9를 확인한 것은 아니다.
+
 ## 0.3.1.0 개발 정비 (2026-10-18)
 
 - NativeRuntimeProfiles로 검증된 조합을 분리하고 각 조합에 게임 빌드를 연결했다. 기존 3개 조합의 9개 MVID/SHA256과 진단 값/형식은 유지한다. NativeRuntimeCompatibility는 로드된 DLL별로 한 번만 파일 해시를 읽어 전체 조합과 비교한다. 새 게임/DLL 허용·오프셋/시그니처 변경은 없다.

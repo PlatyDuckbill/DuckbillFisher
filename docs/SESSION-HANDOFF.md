@@ -1,6 +1,6 @@
 # 세션 인수인계
 
-갱신: 2026-10-22. 현재 사실/확인 대기는 [STATUS](STATUS.md), 버전별 근거는 [검증 색인](verification/README.md)에 둔다.
+갱신: 2026-10-23. 현재 사실/확인 대기는 [STATUS](STATUS.md), 버전별 근거는 [검증 색인](verification/README.md)에 둔다.
 
 ## 재개 순서
 
@@ -21,14 +21,14 @@
 | 작업 폴더 | DUCKBILL_ROOT |
 | 게임 | FFXIV_GAME_PATH · 이 PC 기본 C:/Program Files (x86)/FINAL FANTASY XIV - KOREA/game |
 | KR 게임 빌드 | 2026.10.06.0000.0000 |
-| 현재 KR 참조 | DALAMUD_HOME · 이 PC APPDATA/XIVLauncherKR/addon/Hooks/dev |
+| 현재 KR 참조 | DALAMUD_HOME · 이 PC APPDATA/XIVLauncherKR/addon/Hooks/dev · wasdcxz15.0.3.9 |
 | 최소 지원 참조 | .cache/compat-15.0.3.6/full/ |
 | 친구 배포판 참조 | .cache/friend-runtime/provider-refs/ |
 | upstream 컴파일 참조 | .cache/upstream-15.0.3.6/refs/ · build/dalamud-reference.json 고정 해시 |
 | SDK/대상 | global.json의10.0.402 · Dalamud SDK15.0.0 · x64/net10.0-windows |
 | 정규 개발 DLL | DUCKBILL_ROOT/src/DuckbillFisher.Plugin/bin/Debug/DuckbillFisher.dll |
-| 이번 별도 Debug | .cache/test-protection/build/DuckbillFisher.dll |
-| 이번 테스트 TRX | .cache/test-protection/final/final-protection.trx |
+| 이번 별도 Debug | .cache/compat-15.0.3.9/build/DuckbillFisher.dll |
+| 이번 KR 대조 보고서 | .cache/compat-15.0.3.9/metadata.json |
 | 현재 게시본 추출 DLL | .cache/release-validation/0.5.1.0/DuckbillFisher.dll |
 | 현재 게시본 ZIP | artifacts/share/0.5.1.0/DuckbillFisher-0.5.1.0.zip |
 
@@ -36,7 +36,7 @@
 
 ## 개발본과 게시본 구분
 
-- 이번 개발 DLL의 버전도0.5.1.0이지만 공개 ZIP과 소스가 다르다. 기능별 파일 배치/설정 책임 분리/상수 명명·테스트 보강 후보이며 자동 검증과 남은 실기는 [구조·테스트 기록](verification/ARCHITECTURE-TESTS.md)을 따른다.
+- 이번 개발 DLL의 버전도0.5.1.0이지만 공개 ZIP과 소스가 다르다. 구조 정비 후보에 KR15.0.3.9 조합을 추가했다. [구조·테스트 기록](verification/ARCHITECTURE-TESTS.md)과 [KR 대조/실기 대기](verification/native/NATIVE-RUNTIME-DAL4KR.md#15039-대응과-반복-검사-2026-10-23)를 따른다. 이전 테스트 TRX는 `.cache/test-protection/final/final-protection.trx`이며 이번 작업에서 테스트를 실행하지 않았다.
 - 공개0.5.1.0은 소스6e672e8·Release ID419790510·설치 JSONa8d5e89의 고정 ZIP이다. 사용자 대표 확인/원격 게시/익명 해시·실제 raw URL 확인은 [Release 기록](verification/releases/RELEASE-0.5.1.0.md), 실제 설치 확인은 STATUS를 따른다.
 - 게시본 Release 출력은 .cache/release-build/0.5.1.0/, 당시 별도 Debug는 .cache/remaining-empty-build/다. 위 고정 ZIP을 재빌드해 교체하지 않는다.
 - 이전 버전 추출/빌드/해시 경로는 각 [Release 기록](verification/README.md#배포와-호환성)에 둔다. 새 후보에 과거 대표 확인을 자동 적용하지 않는다.
