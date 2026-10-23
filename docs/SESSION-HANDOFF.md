@@ -40,7 +40,7 @@
 
 ## 개발본과 게시본 구분
 
-- 현재 소스/공개판은0.5.3.0이다. 위 고정 ZIP/추출 DLL의 사용자 대표 정상 확인 뒤 같은 ZIP을 게시했다. 소스6dd27eb·Release421678993·설치 JSONc416117·ZIP/DLL 해시는 [배포 기록](verification/releases/RELEASE-0.5.3.0.md)을 따른다. 익명 자산 검증·실제 공유 raw URL0.5.3.0 일치 완료이며 Dalamud 업데이트는 별도다. 정규/별도 Debug를 게시본 확인에 쓰지 않으며 확인 뒤 실행 파일을 다시 빌드하지 않는다.
+- 현재 소스/공개판은0.5.3.0이다. 위 고정 ZIP/추출 DLL의 사용자 대표 정상 확인 뒤 같은 ZIP을 게시했다. 소스6dd27eb·Release421678993·설치 JSONc416117·ZIP/DLL 해시는 [배포 기록](verification/releases/RELEASE-0.5.3.0.md)을 따른다. 설치/업데이트 확인 범위는 STATUS를 따른다. 정규/별도 Debug를 게시본 확인에 쓰지 않으며 확인 뒤 실행 파일을 다시 빌드하지 않는다.
 - 이전 공개0.5.2.0은 최소 참조 고정 추출본 대표 확인 뒤 같은 ZIP을 게시했다. [소스02061f4/태그·Release421639798·설치 JSON3871a41](verification/releases/RELEASE-0.5.2.0.md), 당시 실제 공유 raw URL0.5.2.0 일치 확인 완료다. 이전판 확인에는 위0.5.2.0 추출 DLL을 사용한다.
 - 이번 정규/별도 Debug는 버전0.5.2.0/schema21로 공개 ZIP과 다르다. [입질·터주·터주왕 효과음/낚시터 필터 저장](verification/fishing/TIMER-HISTORY.md#입질터주터주왕-효과음과-낚시터-필터-저장-2026-10-23)을 추가했으며 새 실기 확인은 대기다. 테스트 추가/실행 없음. 이전 TRX는 `.cache/test-protection/final/final-protection.trx`, 기존 [구조 확인](verification/ARCHITECTURE-TESTS.md)·[KR 실기](verification/native/NATIVE-RUNTIME-DAL4KR.md#15039-대응과-반복-검사-2026-10-23) 대기는 유지한다.
 - 이전 공개0.5.1.0은 소스6e672e8·Release ID419790510·설치 JSONa8d5e89의 고정 ZIP이다. 사용자 대표 확인/원격 게시/익명 해시·실제 raw URL 확인은 [Release 기록](verification/releases/RELEASE-0.5.1.0.md), 실제 설치 확인은 STATUS를 따른다.
