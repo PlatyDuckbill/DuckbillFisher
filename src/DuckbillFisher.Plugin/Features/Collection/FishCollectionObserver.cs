@@ -67,6 +67,9 @@ internal sealed class FishCollectionObserver : IDisposable
     private bool disposed;
     private TimeSpan nextPoll;
     private TimeSpan nextScan;
+    private TimeSpan nextBackup;
+    private int backedUpRevision = -1;
+    private bool backedUpComplete;
 
     public FishCollectionObserver(FishPreferences preferences, FishCatalog catalog, NativeFishCollectionReader reader,
         IDataManager dataManager, IGameGui gameGui, IChatGui chat, IFramework framework, IPluginLog log)
@@ -114,6 +117,9 @@ internal sealed class FishCollectionObserver : IDisposable
                 uncaught.Clear();
                 view = new(view.Revision + 1, personal.Session, FrozenSet<uint>.Empty, new(T.CollectionWaiting));
                 nextScan = TimeSpan.Zero;
+                nextBackup = TimeSpan.Zero;
+                backedUpRevision = -1;
+                backedUpComplete = false;
             }
             if (!personal.HasCharacter)
             {
@@ -126,6 +132,17 @@ internal sealed class FishCollectionObserver : IDisposable
             try
             {
                 Poll(personal);
+                var complete = view.GuideState == FishGuideSnapshotState.Complete;
+                if (clock.Elapsed >= nextBackup && (view.Revision != backedUpRevision || complete && !backedUpComplete))
+                {
+                    if (preferences.SaveCollection(personal.Session, view.Caught, view.Uncaught, complete))
+                    {
+                        nextBackup = TimeSpan.Zero;
+                        backedUpRevision = view.Revision;
+                        backedUpComplete |= complete;
+                    }
+                    else nextBackup = clock.Elapsed + TimeSpan.FromSeconds(5);
+                }
             }
             catch (Exception ex)
             {

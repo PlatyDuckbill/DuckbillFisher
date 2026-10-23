@@ -207,7 +207,7 @@
   <data name="CollectionCaughtOnly" xml:space="preserve"><value>Caught only</value></data>
   <data name="CollectionUnknownOnly" xml:space="preserve"><value>Unknown only</value></data>
   <data name="CollectionVisibility" xml:space="preserve"><value>Collection filter</value></data>
-  <data name="CollectionFilterHint" xml:space="preserve"><value>Open the Fishing tab of the in-game Fish Guide. Uncaught is confirmed only after the complete guide list matches the collection bits; unavailable or incomplete data remains Unknown. New registrations update Caught. Hide caught keeps Unknown visible. Manual records take priority over automatic observations.</value></data>
+  <data name="CollectionFilterHint" xml:space="preserve"><value>Open the Fishing tab in the game Fish Guide to refresh collection. Uncaught requires a complete matched guide snapshot. Verified observations are saved per character and used when current observations are unknown. Manual overrides take priority; unknown fish remain visible when hiding caught fish.</value></data>
   <data name="ManualPlayerRequired" xml:space="preserve"><value>Log in to edit this character's manual collection records.</value></data>
   <data name="PreferencesLoadFailed" xml:space="preserve"><value>Preferences could not be loaded or use an unsupported format. Editing is disabled to preserve the existing file.</value></data>
   <data name="PreferencesSaveFailed" xml:space="preserve"><value>Preferences could not be saved. The previous state is still displayed; please try the change again.</value></data>
@@ -329,8 +329,8 @@
   <data name="CatalogFiltersHeading" xml:space="preserve"><value>Filters · {0}</value></data>
   <data name="CatalogRestoreDefaults" xml:space="preserve"><value>Reset filters / sort</value></data>
   <data name="CatalogSavedHint" xml:space="preserve"><value>List filters, sort, regions and expansions are saved across reloads and shared between characters. Restore defaults also clears the current search and diagnostic checks. Favorites, collection records and alert settings are preserved.</value></data>
-  <data name="CollectionGuideOpenRequired" xml:space="preserve"><value>Collection data has not been confirmed for this session. Please open the Fishing tab of the in-game Fish Guide once. Unconfirmed fish remain Unknown.</value></data>
-  <data name="CollectionGuideRetryRequired" xml:space="preserve"><value>Collection data could not be fully confirmed. Please open the Fishing tab of the in-game Fish Guide and wait briefly. Unconfirmed fish remain Unknown.</value></data>
+  <data name="CollectionGuideOpenRequired" xml:space="preserve"><value>Collection has not been checked in this session. Open the Fishing tab in the game Fish Guide. Until then, saved states are used where available; other fish remain unknown.</value></data>
+  <data name="CollectionGuideRetryRequired" xml:space="preserve"><value>The full guide comparison did not complete. Open the Fishing tab in the game Fish Guide and wait briefly. Current verified observations and saved states remain available; other fish stay unknown.</value></data>
   <data name="CatalogFiltersSummary" xml:space="preserve"><value>Time restrictions only: {0}
 Fish grade: {1}
 Favorites only: {2}
@@ -463,7 +463,7 @@ In fish log only: {5}</value></data>
   <data name="DetailAdditional" xml:space="preserve"><value>More information</value></data>
   <data name="ConditionOr" xml:space="preserve"><value>or</value></data>
   <data name="ConditionAny" xml:space="preserve"><value>Any one of these</value></data>
-  <data name="CollectionControlHint" xml:space="preserve"><value>Change collection status manually. Use Reset to return to the game observation; unknown remains unknown.</value></data>
+  <data name="CollectionControlHint" xml:space="preserve"><value>Change collection status manually. Reset returns to the current game observation, then the saved backup, then unknown.</value></data>
   <data name="ForecastBriefScope" xml:space="preserve"><value>Time and weather only · Check personal requirements</value></data>
   <data name="WindowLocalRange" xml:space="preserve"><value>{0:MM-dd HH:mm} – {1:MM-dd HH:mm} (local)</value></data>
   <data name="SearchPlaceholder" xml:space="preserve"><value>Search fish, fishing spot, or ID…</value></data>
@@ -878,4 +878,29 @@ Click for fish details.</value></data>
   <data name="ScheduleShowList" xml:space="preserve"><value>Show list</value></data>
   <data name="ScheduleRangeSummary" xml:space="preserve"><value>{0:MM-dd HH:mm} → {1:MM-dd HH:mm} · {2} fish</value></data>
   <data name="ScheduleCurrentTime" xml:space="preserve"><value>Now {0:HH:mm}</value></data>
+  <data name="CollectionSavedCaught" xml:space="preserve"><value>Caught (saved)</value></data>
+  <data name="CollectionSavedUncaught" xml:space="preserve"><value>Uncaught (saved)</value></data>
+  <data name="CollectionBackupBanner" xml:space="preserve"><value>{0}
+Last saved: {1:yyyy-MM-dd HH:mm}, {2} fish. Used where current observations are unknown; newer registrations may be missing.</value></data>
+  <data name="TimerAlertMessage" xml:space="preserve"><value>Cast elapsed: {0} seconds.</value></data>
+  <data name="TimerAlertSettings" xml:space="preserve"><value>Timer settings</value></data>
+  <data name="TimerAlertHint" xml:space="preserve"><value>Each enabled time alerts once per cast until hooking or stopping. Alerts also work with this screen closed. Local chat follows common output settings; each alert has its own sound. Past times and observation gaps are never replayed.</value></data>
+  <data name="TimerAlertAdd" xml:space="preserve"><value>Add alert</value></data>
+  <data name="TimerAlertRemove" xml:space="preserve"><value>Remove</value></data>
+  <data name="TimerAlertSeconds" xml:space="preserve"><value>Seconds after cast</value></data>
+  <data name="TimerAlertEnabled" xml:space="preserve"><value>Enabled</value></data>
+  <data name="TimerAlertLimit" xml:space="preserve"><value>Up to {0} alerts, from 1 to {1} seconds each.</value></data>
+  <data name="TimerLureElapsed" xml:space="preserve"><value>{0} ({2}): {1} elapsed</value></data>
+  <data name="TimerLureHint" xml:space="preserve"><value>Time since a new lure stack was observed. Using the skill again restarts this timer. An existing effect when reopening has unknown start time.</value></data>
+  <data name="TimerAlertNamedMessage" xml:space="preserve"><value>{0}: {1} seconds since cast.</value></data>
+  <data name="TimerAlertOutputSettings" xml:space="preserve"><value>Common output settings</value></data>
+  <data name="TimerAlertEmpty" xml:space="preserve"><value>Use + to add a cast alert.</value></data>
+  <data name="TimerAlertName" xml:space="preserve"><value>Alert name (optional)</value></data>
+  <data name="TimerAlertPresets" xml:space="preserve"><value>Timer presets</value></data>
+  <data name="TimerAlertSelectPreset" xml:space="preserve"><value>Select preset</value></data>
+  <data name="TimerAlertLoadPreset" xml:space="preserve"><value>Load preset</value></data>
+  <data name="TimerAlertSavePreset" xml:space="preserve"><value>Save preset</value></data>
+  <data name="TimerAlertPresetHint" xml:space="preserve"><value>Save names, times, enabled states and sounds. An existing name is replaced. Up to {0} presets. Loading replaces the current alert list; passed deadlines are not replayed.</value></data>
+  <data name="TimerLureUnknown" xml:space="preserve"><value>Lure: unknown</value></data>
+  <data name="TimerLureInactive" xml:space="preserve"><value>Lure: inactive</value></data>
 </root>

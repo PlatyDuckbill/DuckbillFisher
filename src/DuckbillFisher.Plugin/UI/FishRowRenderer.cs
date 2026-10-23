@@ -304,6 +304,7 @@ internal sealed class FishRowRenderer(ITextureProvider textures, FishingMapServi
 
     public static T CollectionKey(FishPreferencesView personal, FishCollectionView observed, uint id) =>
         personal.ManualCaught.TryGetValue(id, out var caught) ? caught ? T.CollectionManualCaught : T.CollectionManualUncaught :
+        personal.UsesSavedCollection(id, observed) ? personal.SavedCollection[id] ? T.CollectionSavedCaught : T.CollectionSavedUncaught :
         personal.Collection(id, observed) switch
         {
             CollectionStatus.Caught => T.CollectionAutomaticCaught,

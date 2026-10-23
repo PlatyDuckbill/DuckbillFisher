@@ -41,7 +41,7 @@ internal sealed class CollectionProgress : IDisposable
     private FishGuideRow[] all = [], regular = [], ocean = [];
     private Scope[] expansions = [];
     private Scope[] oceanAreas = [];
-    private IReadOnlyDictionary<uint, bool>? lastManual;
+    private IReadOnlyDictionary<uint, bool>? lastManual, lastSaved;
     private int lastSession = -1, lastCollection = -1;
     private bool disposed;
 
@@ -90,7 +90,7 @@ internal sealed class CollectionProgress : IDisposable
                 }
             }
             if (ReferenceEquals(lastRows, data.Rows) && lastSession == personal.Session &&
-                ReferenceEquals(lastManual, personal.ManualCaught) && lastCollection == observed.Revision)
+                ReferenceEquals(lastManual, personal.ManualCaught) && ReferenceEquals(lastSaved, personal.SavedCollection) && lastCollection == observed.Revision)
             {
                 if (selectionChanged) UpdateFishView(personal, observed);
                 return;
@@ -138,7 +138,7 @@ internal sealed class CollectionProgress : IDisposable
                 oceanAreas.Select(Group).ToArray());
             UpdateFishView(personal, observed);
             lastRows = data.Rows; lastSession = personal.Session;
-            lastManual = personal.ManualCaught; lastCollection = observed.Revision;
+            lastManual = personal.ManualCaught; lastSaved = personal.SavedCollection; lastCollection = observed.Revision;
         }
     }
 

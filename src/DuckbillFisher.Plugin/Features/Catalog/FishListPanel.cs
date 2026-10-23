@@ -453,7 +453,7 @@ internal sealed class FishListPanel(FishCatalog catalog, ITextureProvider textur
                 }
             }
         }
-        report.AppendLine("DuckbillFisher MVP-01/preferences/v9");
+        report.AppendLine("DuckbillFisher MVP-01/preferences/v10");
         Append($"Ready={personal.HasCharacter}; Editable={personal.CanEdit}; Session={personal.Session}; Favorites={personal.Favorites.Count}");
         Append($"ManualCaught={personal.ManualCaught.Count(pair => pair.Value)}; ManualUncaught={personal.ManualCaught.Count(pair => !pair.Value)}");
         Append($"CollectionFilter={CollectionChoices[collectionVisibility]}; FavoritesOnly={favoritesOnly}; Sort={sort}; Displayed={matches.Length}");
@@ -464,16 +464,17 @@ internal sealed class FishListPanel(FishCatalog catalog, ITextureProvider textur
         Append($"CurrentRegionOnly={currentRegionOnly}; Territory={location.TerritoryId}; RegionState={location.State}; RegionFish={RegionFish(catalog.View, location).Count}");
         Append($"TimeRestrictedOnly={timeRestrictedOnly}; GradeFilter={GradeChoices[gradeVisibility]}");
         Append($"Regions={string.Join(',', geography.Regions.Order().Select(id => id.ToString(CultureInfo.InvariantCulture)))}; Expansions={string.Join(',', geography.Expansions.Order().Select(id => id.ToString(CultureInfo.InvariantCulture)))}; RegionOptions={catalog.View.Geography.Regions.Length}; ExpansionOptions={catalog.View.Geography.Expansions.Length}");
-        Append($"CollectionSource=ManualOverrideThenGameObservation; StorageError={personal.Error?.Key.ToString() ?? "none"}");
+        Append($"CollectionSource=ManualOverrideThenGameObservationThenSavedBackup; StorageError={personal.Error?.Key.ToString() ?? "none"}");
         Append($"CatalogPresets={personal.CatalogPresets.Count}; PresetError={personal.CatalogPresetError?.Key.ToString() ?? "none"}");
-        report.AppendLine().AppendLine("DuckbillFisher MVP-04/collection/v3");
+        report.AppendLine().AppendLine("DuckbillFisher MVP-04/collection/v4");
         report.AppendLine(collection.RuntimeDiagnostic);
         Append($"Session={observed.Session}; Caught={observed.Caught.Count}; Eligible={observed.EligibleRows}; GuideVisible={observed.GuideVisible}");
         Append($"Scans={observed.Scans}; RawFalse={observed.RawFalse}; UnknownReads={observed.Unknown}; RegistrationContract={observed.RegistrationContract}");
         Append($"RegistrationMessages={observed.RegistrationMessages}; AppliedRegistrations={observed.AppliedRegistrations}; LastLogItem={observed.LastLogItem}; LastLogFish={observed.LastLogFish}");
         Append($"LastTrigger={observed.LastTrigger}; SampledAtSeconds={observed.SampledAtSeconds?.ToString("F3", CultureInfo.InvariantCulture) ?? "none"}; Status={observed.Status.Key}");
         Append($"Uncaught={observed.Uncaught.Count}; GuideState={observed.GuideState}; GuideEntries={observed.GuideEntries}; Matched={observed.GuideMatched}; Mismatches={observed.GuideMismatches}");
-        report.AppendLine("AutomaticUncaught=MatchedGameGuideSnapshot; ObservationsPersisted=False");
+        report.AppendLine("AutomaticUncaught=MatchedGameGuideSnapshot; ObservationsPersisted=True");
+        Append($"SavedCaught={personal.SavedCollection.Count(pair => pair.Value)}; SavedUncaught={personal.SavedCollection.Count(pair => !pair.Value)}; SavedAtUtc={personal.CollectionSavedUtc:O}; Fallback=OnlyWhenCurrentObservationUnknown");
         return report.ToString();
     }
 

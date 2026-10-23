@@ -2,6 +2,7 @@ using System.Diagnostics;
 using Dalamud.Game.Text;
 using Dalamud.Game.Text.SeStringHandling;
 using Dalamud.Plugin.Services;
+using DuckbillFisher.Core;
 using DuckbillFisher.Plugin.Localization;
 using FFXIVClientStructs.FFXIV.Client.UI;
 using T = DuckbillFisher.Plugin.Localization.TextKey;
@@ -137,6 +138,26 @@ internal sealed class SpawnAlertOutput : IDisposable
         return minutes >= 60
             ? UiText.Get(T.AlertRemainingHours, minutes / 60, minutes % 60)
             : UiText.Get(T.AlertRemainingMinutes, minutes);
+    }
+
+    public void PrintTimer(IReadOnlyList<CastTimerAlert> alerts, FishPreferencesView settings)
+    {
+        if (!framework.IsInFrameworkUpdateThread)
+            throw new InvalidOperationException("Timer output must run on Framework.Update.");
+        var personal = preferences.View;
+        if (!personal.HasCharacter || personal.Session != settings.Session) return;
+        chat.Print(new XivChatEntry
+        {
+            Type = settings.SpawnAlertChannel, Name = "DuckbillFisher", Silent = true,
+            Message = new SeStringBuilder().AddText(string.Join("\n", alerts.Select(alert =>
+                string.IsNullOrWhiteSpace(alert.Name) ? UiText.Get(T.TimerAlertMessage, alert.Seconds) :
+                UiText.Get(T.TimerAlertNamedMessage, alert.Name, alert.Seconds)))).Build(),
+        });
+        foreach (var sound in alerts.Select(alert => alert.Sound).Distinct())
+        {
+            try { PlaySound(sound, settings.Session); }
+            catch (Exception ex) { log.Error(ex, "Could not play the casting timer alert sound; local chat was already queued."); }
+        }
     }
 
     private unsafe bool NativeSoundReady() => nativeCompatible && framework.IsInFrameworkUpdateThread &&

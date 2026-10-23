@@ -30,13 +30,26 @@ internal sealed record FishPreferencesView(int Revision, int Session, bool HasCh
     public string LastSeenChangelogVersion { get; init; } = "";
     public CompactViewSettings Compact { get; init; } = new();
     public SpawnScheduleSettings Schedule { get; init; } = new();
+    public CastingTimerSettings Timer { get; init; } = new();
     public IReadOnlyDictionary<uint, int> FishAlertLeadMinutes { get; init; } = FrozenDictionary<uint, int>.Empty;
     public int AlertLead(uint id) => FishAlertLeadMinutes.GetValueOrDefault(id, SpawnAlertLeadMinutes);
     internal IReadOnlyDictionary<uint, long> ReservedAlertWindows { get; init; } = FrozenDictionary<uint, long>.Empty;
 
-    public CollectionStatus Collection(uint fishId, FishCollectionView observed) => CollectionFilter.Resolve(
-        observed.Session == Session && HasCharacter ? observed.Collection(fishId) : CollectionStatus.Unknown,
-        ManualCaught.TryGetValue(fishId, out var caught) ? caught : null);
+    public IReadOnlyDictionary<uint, bool> SavedCollection { get; init; } = FrozenDictionary<uint, bool>.Empty;
+    public DateTimeOffset? CollectionSavedUtc { get; init; }
+
+    public bool UsesSavedCollection(uint fishId, FishCollectionView observed) => HasCharacter &&
+        !ManualCaught.ContainsKey(fishId) && SavedCollection.ContainsKey(fishId) &&
+        (observed.Session != Session || observed.Collection(fishId) == CollectionStatus.Unknown);
+
+    public CollectionStatus Collection(uint fishId, FishCollectionView observed)
+    {
+        if (!HasCharacter) return CollectionStatus.Unknown;
+        var current = observed.Session == Session ? observed.Collection(fishId) : CollectionStatus.Unknown;
+        if (current == CollectionStatus.Unknown && SavedCollection.TryGetValue(fishId, out var saved))
+            current = saved ? CollectionStatus.Caught : CollectionStatus.Uncaught;
+        return CollectionFilter.Resolve(current, ManualCaught.TryGetValue(fishId, out var manual) ? manual : null);
+    }
 }
 
 /// <summary>Queues UI edits; samples character identity and persists changes on Framework.Update.</summary>
@@ -57,6 +70,7 @@ internal sealed class FishPreferences : IDisposable
     private int? pendingUiScale;
     private CompactViewSettings? pendingCompact;
     private SpawnScheduleSettings? pendingSchedule;
+    private CastingTimerSettings? pendingTimer;
     private string? pendingCustomSoundPath;
     private Version? pendingChangelogVersion;
     private FishPreferencesConfiguration configuration = new();
@@ -102,6 +116,9 @@ internal sealed class FishPreferences : IDisposable
                 configuration.UiScalePercent = UiScale.Normalize(configuration.UiScalePercent);
                 configuration.Schedule = PreferencesMigration.Schedule(loaded.Schedule, loaded.Version);
                 configuration.LastSeenChangelogVersion = PreferencesMigration.SeenVersion(loaded.LastSeenChangelogVersion);
+                configuration.Timer = loaded.Timer is not null && loaded.Timer.IsValid() ? loaded.Timer.Copy() : new();
+                configuration.CollectionBackups = (loaded.CollectionBackups ?? []).Where(pair => pair.Key != 0 && pair.Value is not null && pair.Value.IsValid())
+                    .ToDictionary(pair => pair.Key, pair => pair.Value.Copy());
                 configuration.Version = FishPreferencesConfiguration.CurrentVersion;
                 writable = true;
             }
@@ -150,6 +167,12 @@ internal sealed class FishPreferences : IDisposable
     {
         lock (gate)
             if (!disposed && writable && settings.IsValid()) pendingSchedule = settings;
+    }
+
+    public void SetTimer(CastingTimerSettings settings)
+    {
+        lock (gate)
+            if (!disposed && writable && settings.IsValid()) pendingTimer = settings.Copy();
     }
 
     public void SetCatalogSettings(CatalogSettings settings)
@@ -217,6 +240,32 @@ internal sealed class FishPreferences : IDisposable
             candidate.Favorites.Remove(fishId);
             Save(candidate);
             Publish();
+        }
+    }
+
+    // Framework only. A failed save retains the last durable backup; the observer retries later.
+    public bool SaveCollection(int expectedSession, IReadOnlySet<uint> caught, IReadOnlySet<uint> uncaught, bool complete)
+    {
+        if (!framework.IsInFrameworkUpdateThread)
+            throw new InvalidOperationException("Collection backups must be saved on Framework.Update.");
+        lock (gate)
+        {
+            if (disposed || !writable || characterId == 0 || expectedSession != view.Session) return false;
+            if (!complete && caught.Count == 0) return true;
+            configuration.CollectionBackups.TryGetValue(characterId, out var previous);
+            var states = complete ? new Dictionary<uint, bool>() : previous is null ? [] : new(previous.States);
+            if (complete) foreach (var id in uncaught) states[id] = false;
+            foreach (var id in caught) states[id] = true;
+            if (states.Count == 0) return true;
+            if (!complete && previous is not null && states.Count == previous.States.Count &&
+                states.All(pair => previous.States.TryGetValue(pair.Key, out var old) && old == pair.Value)) return true;
+            var backup = new FishCollectionBackup { UpdatedUtc = DateTimeOffset.UtcNow, States = states };
+            if (!backup.IsValid()) return false;
+            var candidate = CopyConfiguration();
+            candidate.CollectionBackups[characterId] = backup;
+            var success = Save(candidate);
+            Publish();
+            return success;
         }
     }
 
@@ -288,10 +337,16 @@ internal sealed class FishPreferences : IDisposable
             }
             else if (stateErrorChanged)
                 Publish();
-            if (pending.Count == 0 && pendingAlerts is null && pendingFishAlerts.Count == 0 && pendingCatalog is null && pendingPreset is null && pendingInterface is null && pendingUiScale is null && pendingCompact is null && pendingSchedule is null && pendingCustomSoundPath is null && pendingChangelogVersion is null)
+            if (pending.Count == 0 && pendingAlerts is null && pendingFishAlerts.Count == 0 && pendingCatalog is null && pendingPreset is null && pendingInterface is null && pendingUiScale is null && pendingCompact is null && pendingSchedule is null && pendingTimer is null && pendingCustomSoundPath is null && pendingChangelogVersion is null)
                 return;
             var candidate = CopyConfiguration();
             var changed = false;
+            if (pendingTimer is { } timer)
+            {
+                changed |= !candidate.Timer.Matches(timer);
+                candidate.Timer = timer;
+                pendingTimer = null;
+            }
             if (pendingUiScale is { } scalePercent)
             {
                 changed |= candidate.UiScalePercent != scalePercent;
@@ -413,10 +468,14 @@ internal sealed class FishPreferences : IDisposable
     {
         IReadOnlyDictionary<uint, bool> manual = characterId != 0 && configuration.Characters.TryGetValue(characterId, out var saved)
             ? saved : FrozenDictionary<uint, bool>.Empty;
+        var backup = characterId != 0 ? configuration.CollectionBackups.GetValueOrDefault(characterId) : null;
+        var savedStates = backup?.States;
+        var backupChanged = view.SavedCollection.Count != (savedStates?.Count ?? 0) ||
+            savedStates is not null && savedStates.Any(pair => !view.SavedCollection.TryGetValue(pair.Key, out var old) || old != pair.Value);
         var favoritesChanged = !view.Favorites.SetEquals(configuration.Favorites);
         var manualChanged = view.ManualCaught.Count != manual.Count ||
             manual.Any(pair => !view.ManualCaught.TryGetValue(pair.Key, out var value) || value != pair.Value);
-        var catalogChanged = view.CharacterId != characterId || favoritesChanged || manualChanged ||
+        var catalogChanged = view.CharacterId != characterId || favoritesChanged || manualChanged || backupChanged ||
             !view.Catalog.Matches(configuration.Catalog) || view.Language != configuration.Language;
         var catalogRevision = view.CatalogRevision + (catalogChanged ? 1 : 0);
         view = new(view.Revision + 1, view.Session, characterId != 0, writable,
@@ -424,6 +483,8 @@ internal sealed class FishPreferences : IDisposable
             manualChanged ? manual.ToFrozenDictionary() : view.ManualCaught, view.Error)
         {
             CatalogRevision = catalogRevision,
+            SavedCollection = backupChanged ? savedStates?.ToFrozenDictionary() ?? FrozenDictionary<uint, bool>.Empty : view.SavedCollection,
+            CollectionSavedUtc = backup?.UpdatedUtc,
             CharacterId = characterId, SpawnAlertsEnabled = configuration.SpawnAlertsEnabled,
             SpawnAlertLeadMinutes = configuration.SpawnAlertLeadMinutes,
             SpawnAlertChannel = (XivChatType)configuration.SpawnAlertChannelId, SpawnAlertSound = configuration.SpawnAlertSound,
@@ -437,6 +498,7 @@ internal sealed class FishPreferences : IDisposable
             LastSeenChangelogVersion = configuration.LastSeenChangelogVersion,
             Compact = configuration.Compact,
             Schedule = configuration.Schedule,
+            Timer = configuration.Timer.Copy(),
             FishAlertLeadMinutes = configuration.FishAlertLeadMinutes.ToFrozenDictionary(),
             ReservedAlertWindows = characterId != 0 && configuration.AlertWindows.TryGetValue(characterId, out var windows)
                 ? windows.ToFrozenDictionary() : FrozenDictionary<uint, long>.Empty,
@@ -446,6 +508,7 @@ internal sealed class FishPreferences : IDisposable
     private FishPreferencesConfiguration CopyConfiguration() => new()
     {
         Favorites = [.. configuration.Favorites],
+        CollectionBackups = configuration.CollectionBackups.ToDictionary(pair => pair.Key, pair => pair.Value.Copy()),
         Characters = configuration.Characters.ToDictionary(pair => pair.Key, pair => new Dictionary<uint, bool>(pair.Value)),
         SpawnAlertsEnabled = configuration.SpawnAlertsEnabled,
         SpawnAlertLeadMinutes = configuration.SpawnAlertLeadMinutes,
@@ -459,6 +522,7 @@ internal sealed class FishPreferences : IDisposable
         LastSeenChangelogVersion = configuration.LastSeenChangelogVersion,
         Compact = configuration.Compact,
         Schedule = configuration.Schedule,
+        Timer = configuration.Timer.Copy(),
         FishAlertLeadMinutes = new(configuration.FishAlertLeadMinutes),
         AlertWindows = configuration.AlertWindows.ToDictionary(pair => pair.Key, pair => new Dictionary<uint, long>(pair.Value)),
     };
@@ -495,6 +559,7 @@ internal sealed class FishPreferences : IDisposable
             pendingUiScale = null;
             pendingCompact = null;
             pendingSchedule = null;
+            pendingTimer = null;
             pendingCustomSoundPath = null;
             pendingChangelogVersion = null;
         }

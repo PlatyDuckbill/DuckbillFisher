@@ -35,6 +35,7 @@ public sealed class Plugin : IDalamudPlugin
     private readonly FishingTracker fishingTracker;
     private readonly CastingTimerWindow timerWindow;
     private readonly FishingBuffObserver fishingBuffs;
+    private readonly CastingTimerNotifications timerNotifications;
     private readonly BaitStockObserver baitStock;
     private readonly BaitPreparation baitPreparation;
     private readonly BaitUiProbe baitUiProbe;
@@ -73,6 +74,7 @@ public sealed class Plugin : IDalamudPlugin
         itemLinks = new FishingItemLinkService(chat, framework, fishPreferences);
         fishingRegion = new FishingRegionObserver(clientState, conditions, dataManager, framework);
         alertOutput = new SpawnAlertOutput(framework, chat, fishPreferences, collectionReader.IsCompatible, log);
+        timerNotifications = new CastingTimerNotifications(fishingTracker, fishPreferences, alertOutput, framework, log);
         spawnAlerts = new SpawnAlerts(fishCatalog, fishPreferences, fishCollection, framework, alertOutput, log);
         baitStock = new BaitStockObserver(inventory, clientState, playerState, conditions, framework, fishPreferences, () => collectionReader.IsCompatible);
         var preparationQuery = new CatalogQueryState(fishPreferences.View.Catalog);
@@ -101,8 +103,10 @@ public sealed class Plugin : IDalamudPlugin
         };
         var spotFishWindow = new SpotFishWindow(fishingTracker, fishCatalog, fishPreferences, fishCollection, textureProvider, fishingMap, detailWindow.Show);
         fishingBuffs = new FishingBuffObserver(objectTable, clientState, playerState, conditions, framework, dataManager,
-            fishPreferences, () => collectionReader.IsCompatible);
+            fishPreferences, fishingTracker, () => collectionReader.IsCompatible);
         timerWindow = new CastingTimerWindow(fishingTracker, fishingBuffs, textureProvider, detailWindow.Show, spotFishWindow.Toggle);
+        var timerSettings = new CastingTimerSettingsWindow(fishPreferences, alertOutput);
+        timerWindow.ShowSettings = () => timerSettings.IsOpen = true;
         compactObserver = new CompactFishObserver(fishCatalog, fishPreferences, framework, fishCollection, fishingRegion);
         compactWindow = new CompactFishWindow(compactObserver, fishPreferences, fishCollection, textureProvider, detailWindow.Show, fishingMap);
         spawnAlertsPanel = new SpawnAlertsPanel(fishPreferences, spawnAlerts, alertOutput, fishCollection, textureProvider,
@@ -120,6 +124,7 @@ public sealed class Plugin : IDalamudPlugin
             new SpawnSchedulePanel(schedule, fishCatalog, fishPreferences, textureProvider, detailWindow.Show, fishingMap));
         mainWindow.ShowCompact = compactWindow.Toggle;
         mainWindow.ShowTimer = timerWindow.Toggle;
+        timerSettings.ShowOutputSettings = mainWindow.OpenSettings;
         var changelogWindow = new ChangelogWindow(fishPreferences);
         mainWindow.ShowChangelog = () => changelogWindow.IsOpen = true;
         mainWindow.ShowUnreadChangelog = changelogWindow.ShowIfUnread;
@@ -129,6 +134,7 @@ public sealed class Plugin : IDalamudPlugin
         windows.AddWindow(detailWindow);
         windows.AddWindow(compareDetailWindow);
         windows.AddWindow(timerWindow);
+        windows.AddWindow(timerSettings);
         windows.AddWindow(spotFishWindow);
         windows.AddWindow(collectionFishWindow);
         windows.AddWindow(preparationWindow);
@@ -174,6 +180,7 @@ public sealed class Plugin : IDalamudPlugin
         baitUiProbe.Dispose();
         baitFinder.Dispose();
         spawnAlerts.Dispose();
+        timerNotifications.Dispose();
         spawnAlertsPanel.Dispose();
         alertOutput.Dispose();
         fishingObserver.Dispose();

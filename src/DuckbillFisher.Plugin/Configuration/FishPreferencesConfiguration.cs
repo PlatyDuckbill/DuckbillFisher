@@ -15,6 +15,7 @@ public sealed class FishPreferencesConfiguration : IPluginConfiguration
     public int Version { get; set; } = CurrentVersion;
     public HashSet<uint> Favorites { get; set; } = [];
     public Dictionary<ulong, Dictionary<uint, bool>> Characters { get; set; } = [];
+    public Dictionary<ulong, FishCollectionBackup> CollectionBackups { get; set; } = [];
     public bool SpawnAlertsEnabled { get; set; }
     public int SpawnAlertLeadMinutes { get; set; } = SpawnAlertScheduler.DefaultLeadMinutes;
     public SpawnAlertChannel SpawnAlertChannel { get; set; }
@@ -31,6 +32,7 @@ public sealed class FishPreferencesConfiguration : IPluginConfiguration
     public string LastSeenChangelogVersion { get; set; } = "";
     public CompactViewSettings Compact { get; set; } = new();
     public SpawnScheduleSettings Schedule { get; set; } = new();
+    public CastingTimerSettings Timer { get; set; } = new();
     public Dictionary<uint, int> FishAlertLeadMinutes { get; set; } = [];
     // Last reserved window start per fish/character. Also suppresses repeats after clock rollback.
     public Dictionary<ulong, Dictionary<uint, long>> AlertWindows { get; set; } = [];

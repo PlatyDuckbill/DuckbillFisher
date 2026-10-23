@@ -153,6 +153,8 @@ internal static class UiWidgets
         var text = opener.IsSupported
             ? UiText.Get(prompt.Key == T.CollectionGuideOpenRequired ? T.GuideBannerOpen : T.GuideBannerRetry)
             : UiText.Get(T.NativeFeaturesBlocked, opener.CompatibilityReason.Display);
+        if (personal.CollectionSavedUtc is { } savedAt && personal.SavedCollection.Count > 0)
+            text = UiText.Get(T.CollectionBackupBanner, text, savedAt.ToLocalTime(), personal.SavedCollection.Count);
         var width = Math.Max(1, ImGui.GetContentRegionAvail().X - ImGui.GetFrameHeight() - 24);
         var failure = opener.Failure(personal.Session);
         var height = Math.Max(ImGui.GetFrameHeight(), ImGui.CalcTextSize(text, false, width).Y) + 16

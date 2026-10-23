@@ -27,7 +27,7 @@
 | upstream 컴파일 참조 | .cache/upstream-15.0.3.6/refs/ · build/dalamud-reference.json 고정 해시 |
 | SDK/대상 | global.json의10.0.402 · Dalamud SDK15.0.0 · x64/net10.0-windows |
 | 정규 개발 DLL | DUCKBILL_ROOT/src/DuckbillFisher.Plugin/bin/Debug/DuckbillFisher.dll |
-| 이번 별도 Debug | .cache/compat-15.0.3.9/build/DuckbillFisher.dll |
+| 이번 별도 Debug | .cache/casting-alerts-build/DuckbillFisher.dll |
 | 이번 KR 대조 보고서 | .cache/compat-15.0.3.9/metadata.json |
 | 현재 게시본 추출 DLL | .cache/release-validation/0.5.1.0/DuckbillFisher.dll |
 | 현재 게시본 ZIP | artifacts/share/0.5.1.0/DuckbillFisher-0.5.1.0.zip |
@@ -36,7 +36,7 @@
 
 ## 개발본과 게시본 구분
 
-- 이번 개발 DLL의 버전도0.5.1.0이지만 공개 ZIP과 소스가 다르다. 구조 정비 후보에 KR15.0.3.9 조합을 추가했다. [구조·테스트 기록](verification/ARCHITECTURE-TESTS.md)과 [KR 대조/실기 대기](verification/native/NATIVE-RUNTIME-DAL4KR.md#15039-대응과-반복-검사-2026-10-23)를 따른다. 이전 테스트 TRX는 `.cache/test-protection/final/final-protection.trx`이며 이번 작업에서 테스트를 실행하지 않았다.
+- 이번 개발 DLL의 버전도0.5.1.0이지만 공개 ZIP과 소스가 다르다. 구조 정비/KR15.0.3.9 후보에 [복수 시전 알림·루어 경과](verification/fishing/TIMER-HISTORY.md#복수-시전-알림과-루어-경과-개발본-2026-10-23)와 [수집 로컬 백업](verification/collection/GUIDE-SNAPSHOT.md#수집-상태-로컬-백업-개발본-2026-10-23)을 추가했다. 설정schema20이며 이번 작업에서 테스트를 추가/실행하지 않았다. 이전 TRX는 `.cache/test-protection/final/final-protection.trx`, 기존 [구조 확인](verification/ARCHITECTURE-TESTS.md)·[KR 실기](verification/native/NATIVE-RUNTIME-DAL4KR.md#15039-대응과-반복-검사-2026-10-23) 대기는 유지한다.
 - 공개0.5.1.0은 소스6e672e8·Release ID419790510·설치 JSONa8d5e89의 고정 ZIP이다. 사용자 대표 확인/원격 게시/익명 해시·실제 raw URL 확인은 [Release 기록](verification/releases/RELEASE-0.5.1.0.md), 실제 설치 확인은 STATUS를 따른다.
 - 게시본 Release 출력은 .cache/release-build/0.5.1.0/, 당시 별도 Debug는 .cache/remaining-empty-build/다. 위 고정 ZIP을 재빌드해 교체하지 않는다.
 - 이전 버전 추출/빌드/해시 경로는 각 [Release 기록](verification/README.md#배포와-호환성)에 둔다. 새 후보에 과거 대표 확인을 자동 적용하지 않는다.

@@ -16,7 +16,8 @@
 | 수집 현황 | CollectionProgress, CollectionProgressPanel, CollectionProgressFishWindow | Framework 집계·선택한 확장팩/지역/먼바다 배열만 준비, 행·수집 revision·수동 상태·세션 변경 시 재계산. 목록1개 재사용·보이는 행만 렌더링·범위 교체/닫기 때 캐시 해제. Draw는 snapshot 표시 |
 | 출현 일정표 | Core FishingForecast.Enumerate/EnumerateCalendar, Plugin SpawnSchedule, SpawnScheduleCalendar, SpawnSchedulePanel | 일반30일/달력32일 분리. Framework 대상 필터링·선택 날짜 회차 캐시, 관리 입력만 취소 가능한 작업에서 계산. 월 데이터는 압축 UTC 구간 배열, UI는 보이는 행/날짜 칸만 표시 |
 | 시전 관찰 | FishingTracker, NativeFishingActivityReader, FishingLogContracts | 본인 로그·시전 단계·시간 상관관계, 미검증 결과 Unknown |
-| 낚시 효과 | FishingBuffObserver | 타이머가 열렸을 때 Framework에서 공개 LocalPlayer.StatusList의850/568을200ms 주기로 복사. 기존 KR 조합 가드·로그인/캐릭터·어부/이동 확인, 단조 만료·1초 신선도. Draw는 관리 값만 표시 |
+| 시전 알림 | Core CastTimerAlerts, CastingTimerNotifications, CastingTimerSettingsWindow | 단조 시간 교차·시전별 알림ID 중복 방지. Framework에서 기존 추적기만 소비하고 선택SE/로컬 채팅 재사용, 화면 닫힘과 독립 |
+| 낚시 효과 | FishingBuffObserver | 타이머가 열렸을 때 Framework에서 공개 LocalPlayer.StatusList의850/568·루어3972/3973의Param을200ms 주기로 복사. 루어는 같은 시전의 새1~3중첩만 시작 시각을 알 수 있다. 기존 KR 조합 가드·로그인/캐릭터·어부/이동 확인, 단조 만료·1초 신선도. Draw는 관리 값만 표시 |
 | 기록 저장 | FishingHistoryStore, FishingHistoryBrowser | 묶음 파일·원자 교체·요약/상세 지연 읽기·삭제/재시도. schema2 선택 필드로 단조 총 시간/검증된 생미끼 연결 ID 저장 |
 | 미끼 준비/찾기 | BaitPreparation, BaitStockObserver, BaitFinder, NativeBaitUiReader, NativeBaitPageReader | 첫 미끼/공개 소지품 조회와 네이티브 UI 읽기 분리 |
 | 공통 표시 | FishRowRenderer, FishDetailPanel, FishingConditionPanel, UiWidgets | 표시·선택 전달, 게임 조회/예측을 가져오지 않음 |
@@ -61,10 +62,10 @@
 
 ## 저장·수집·알림
 
-- FishPreferences schema19: 공통 즐겨찾기/필터/언어/UI 배율/간이 목록 전용 즐겨찾기 필터/알림 설정·커스텀 WAV 원본 경로·일정표/업데이트 내역 확인 버전(LastSeenChangelogVersion), 캐릭터별 수동 수집/알림 중복 방지 기록. schema1~18 변환과 손상/미지원 원본 보존을 유지한다. 이전 설정은 간이 목록의 즐겨찾기 선택을 당시 메인 필터에서 한 번 이어받는다. 선택적인 확인 버전만 잘못되면 확인 전으로, 배율이 누락/선택 범위 밖이면100%로 정규화하며 다른 설정을 버리지 않는다.
+- FishPreferences schema20: 공통 즐겨찾기/필터/언어/UI 배율/간이 목록 전용 즐겨찾기 필터/알림 설정·커스텀 WAV 원본 경로·일정표/업데이트 내역 확인 버전(LastSeenChangelogVersion)·시전 알림/이름 있는 프리셋, 캐릭터별 수동 수집/자동 관찰 백업(UTC·상태)/알림 중복 방지 기록. schema1~19 변환과 손상/미지원 원본 보존을 유지한다. 이전 설정은 간이 목록의 즐겨찾기 선택을 당시 메인 필터에서 한 번 이어받는다. 선택적인 확인 버전만 잘못되면 확인 전으로, 배율이 누락/선택 범위 밖이면100%로 정규화하며 다른 설정을 버리지 않는다.
 - 업데이트 내역을 표시한 뒤 사용자가 닫으면 확인 버전을 저장한다. 저장 실패 시 이전 상태를 유지하고 재로드 때 다시 표시할 수 있다. 캐릭터/언어 전환은 확인 버전을 초기화하지 않고, 더 최신 확인값을 이전 DLL로 낮추지 않는다. 내역 저장만으로 CatalogRevision을 올리지 않는다.
 - 전체 Revision과 메모리 전용 CatalogRevision을 구분한다. 목록·타이머 낚시터 필터·미끼 준비는 캐릭터/즐겨찾기/수동 수집/목록 설정/언어 변경에 반응하며 알림 예약 저장만으로 재계산하지 않는다. 같은 즐겨찾기/수동 상태의 불변 집합은 재사용한다.
-- 자동 관찰은 세션 메모리다. 도감 전체 snapshot 대조가 완료되어야 자동 Uncaught를 확정한다. 수동 override가 항상 우선이며 ContentId는 로컬 키로만 쓰고 진단에 넣지 않는다. [대조 계약](../verification/collection/GUIDE-SNAPSHOT.md).
+- 현재 자동 관찰은 세션 메모리이며 로컬 백업과 구분한다. 도감 전체 snapshot 대조가 완료되어야 자동 Uncaught를 확정한다. FishCollectionObserver는 변화한 검증 결과를 FishPreferences에 전달해 전체 일치 시 전체 상태, 부분 관찰 시 수집됨만 보완한다. 실패/빈 조회는 기존 백업을 지우지 않는다. 저장 실패는 마지막 성공본을 유지하고5초 후 재시도한다. 판정은 수동→현재 자동 관찰→저장 백업→Unknown이며 백업 변화도 CatalogRevision/수집 집계를 무효화한다. ContentId는 로컬 키로만 쓰고 진단에 넣지 않는다. [대조·저장 계약](../verification/collection/GUIDE-SNAPSHOT.md).
 - 기록 schema 2는 캐릭터별 100묶음×최근 2,000행이다. 총 시전 수/보관 행 수를 구분하고 진행 중 묶음 보호·이전 형식 원본 보존 가져오기를 한다.
 - Store는 단일 작업자로 실패 snapshot/삭제 재시도·읽기/쓰기 오류·요약/본문 검증·순번·상세 요청 세대를 관리한다. Draw에서 파일을 열지 않는다. 종료 미처리 건수의 로그 출력만 Plugin.cs에서 주입해 게임 SDK 없이 실제 저장 코드를 검증한다. [저장 경계](../verification/fishing/HISTORY-STABILITY.md).
 - 알림은 기존 예측과 최종 수집 판정을 사용한다. 캐릭터별 발송 대상 출현 시작 기록을 저장한 뒤 로컬 출력한다. 로그인/설정 변경/긴 중단/시계 변경은 소급 발송하지 않는다. [예약](../verification/alerts/SPAWN-ALERTS.md), [대상 정책](../verification/alerts/FAVORITE-POLICY.md).

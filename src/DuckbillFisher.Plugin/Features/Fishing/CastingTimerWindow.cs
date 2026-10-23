@@ -15,6 +15,7 @@ internal sealed class CastingTimerWindow : Window
     private readonly Action toggleSpotFish;
     private readonly FishingHistoryPanel history;
     private readonly FishingBuffObserver buffs;
+    public Action? ShowSettings { get; set; }
 
     public CastingTimerWindow(FishingTracker tracker, FishingBuffObserver buffs, ITextureProvider textures, Action<FishGuideRow> showDetail, Action toggleSpotFish)
         : base("DuckbillFisher###DuckbillFisher.Timer")
@@ -34,6 +35,7 @@ internal sealed class CastingTimerWindow : Window
     public override void OnClose() => buffs.SetActive(false);
     public override void Draw()
     {
+        if (ImGui.Button(UiText.Label(T.TimerAlertSettings, "OpenTimerSettings"))) ShowSettings?.Invoke();
         var view = tracker.View;
         var retained = !view.HasSession && view.CurrentTrip is not null && view.TimerRetainedUntil is not null;
         if (retained && view.TimerRetainedUntil is { } expires)
@@ -79,6 +81,7 @@ internal sealed class CastingTimerWindow : Window
         var elapsed = timed is not null && FishingTimeText.DisplaySeconds(timed, view, tracker.Now) is { } seconds
             ? FishingTimeText.Elapsed(TimeSpan.FromSeconds(seconds)) : "—";
         ImGui.TextUnformatted(UiText.Get(T.TimerCastLine, new UiMessage(label), elapsed));
+        DrawLure();
         var et = timed?.StartedUtc is { } utc ? FishingTimeText.Et(utc) : "—";
         ImGui.TextDisabled(UiText.Get(T.TimerCastEt, et));
         DrawBuffs();
@@ -89,6 +92,22 @@ internal sealed class CastingTimerWindow : Window
         ImGui.Separator();
         ImGui.TextUnformatted(UiText.Get(T.TimerCurrentHistory, view.CurrentTrip?.Casts ?? 0));
         history.Draw(view, view.CurrentRecords, "TimerHistory");
+    }
+
+    private void DrawLure()
+    {
+        var sample = buffs.View;
+        if (!sample.LureReady)
+            ImGui.TextDisabled(UiText.Get(T.TimerLureUnknown));
+        else if (sample.Lure is { } lure)
+        {
+            UiWidgets.GameIcon(textures, lure.Icon, ImGui.GetTextLineHeightWithSpacing(), lure.Name);
+            ImGui.SameLine();
+            var elapsed = lure.StartedAt is { } start ? FishingTimeText.Elapsed(buffs.Now - start) : UiText.Get(T.ConditionUnknown);
+            ImGui.TextWrapped(UiText.Get(T.TimerLureElapsed, lure.Name, elapsed, lure.Stacks));
+        }
+        else ImGui.TextDisabled(UiText.Get(T.TimerLureInactive));
+        UiWidgets.Tooltip(UiText.Get(T.TimerLureHint));
     }
 
     private void DrawBuffs()

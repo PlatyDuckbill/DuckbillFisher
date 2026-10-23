@@ -69,10 +69,13 @@ $groups = [ordered]@{
         'Dalamud.Plugin.Services.IChatGui', 'Dalamud.Game.Gui.ChatGui',
         'Dalamud.Game.Chat.ILogMessage', 'Dalamud.Game.Chat.LogMessage',
         'Dalamud.Game.Chat.LogMessageParameterList', 'Dalamud.Game.Chat.ILogMessageEntity',
-        'Dalamud.Game.Chat.LogMessageEntity', 'Dalamud.Game.ChatHandlers'
+        'Dalamud.Game.Chat.LogMessageEntity', 'Dalamud.Game.ChatHandlers',
+        'Dalamud.Game.ClientState.Statuses.Status', 'Dalamud.Game.ClientState.Statuses.StatusList',
+        'Dalamud.Game.ClientState.Objects.Types.BattleChara'
     )
     'FFXIVClientStructs.dll' = @(
         'FFXIVClientStructs.FFXIV.Client.Game.UI.PlayerState',
+        'FFXIVClientStructs.FFXIV.Client.Game.Status',
         'FFXIVClientStructs.FFXIV.Client.UI.Agent.AgentFishGuide',
         'FFXIVClientStructs.FFXIV.Client.Game.Event.EventFramework',
         'FFXIVClientStructs.FFXIV.Client.Game.Event.EventHandlerModule',
