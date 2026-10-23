@@ -28,20 +28,20 @@
 | SDK/대상 | global.json의10.0.402 · Dalamud SDK15.0.0 · x64/net10.0-windows |
 | 정규 개발 DLL | DUCKBILL_ROOT/src/DuckbillFisher.Plugin/bin/Debug/DuckbillFisher.dll |
 | 이번 별도 Debug | .cache/casting-alerts-build/DuckbillFisher.dll |
-| 0.5.2.0 확인 대상 Release | .cache/release-validation/0.5.2.0/DuckbillFisher.dll |
-| 0.5.2.0 고정 후보 ZIP | artifacts/share/0.5.2.0/DuckbillFisher-0.5.2.0.zip |
+| 현재 게시본 확인 Release | .cache/release-validation/0.5.2.0/DuckbillFisher.dll |
+| 현재 게시본 ZIP | artifacts/share/0.5.2.0/DuckbillFisher-0.5.2.0.zip |
 | 이번 KR 대조 보고서 | .cache/compat-15.0.3.9/metadata.json |
-| 현재 게시본 추출 DLL | .cache/release-validation/0.5.1.0/DuckbillFisher.dll |
-| 현재 게시본 ZIP | artifacts/share/0.5.1.0/DuckbillFisher-0.5.1.0.zip |
+| 이전0.5.1.0 추출 DLL | .cache/release-validation/0.5.1.0/DuckbillFisher.dll |
+| 이전0.5.1.0 ZIP | artifacts/share/0.5.1.0/DuckbillFisher-0.5.1.0.zip |
 
 참조/캐시 DLL은 Git에 없다. 다른 PC에서는 정확한 지원 배포판과 실제 경로를 확인한다. 최소 참조가 없다고 현재 참조로 Release를 조용히 대체하지 않는다. 같은 프로젝트의 참조별 빌드는 순서대로 하며 명령은 WORKFLOW에 한 곳만 유지한다.
 
 ## 개발본과 게시본 구분
 
-- 현재 소스 버전은0.5.2.0이다. 최소 참조 Release 고정 ZIP/추출본을 준비했고 [실기 확인·게시 대기](verification/releases/RELEASE-0.5.2.0.md)다. 정규/별도 Debug는 이전0.5.1.0 개발본이므로 이번 확인에는 위0.5.2.0 추출 DLL을 사용한다. 소스/태그 push·Release·설치 JSON은 아직 변경하지 않았다.
+- 현재 소스/게시 버전은0.5.2.0이다. 최소 참조 고정 추출본 대표 확인 뒤 같은 ZIP을 게시했다. [소스02061f4/태그·Release421639798·설치 JSON3871a41](verification/releases/RELEASE-0.5.2.0.md), 실제 공유 raw URL0.5.2.0 일치 확인 완료다. 정규/별도 Debug는 이전0.5.1.0 개발본이므로 게시본 확인에는 위0.5.2.0 추출 DLL을 사용한다.
 - 이번 개발 DLL의 버전도0.5.1.0이지만 공개 ZIP과 소스가 다르다. 구조 정비/KR15.0.3.9 후보에 [복수 시전 알림·루어 경과](verification/fishing/TIMER-HISTORY.md#복수-시전-알림과-루어-경과-개발본-2026-10-23)와 [수집 로컬 백업](verification/collection/GUIDE-SNAPSHOT.md#수집-상태-로컬-백업-개발본-2026-10-23)을 추가했다. 설정schema20이며 이번 작업에서 테스트를 추가/실행하지 않았다. 이전 TRX는 `.cache/test-protection/final/final-protection.trx`, 기존 [구조 확인](verification/ARCHITECTURE-TESTS.md)·[KR 실기](verification/native/NATIVE-RUNTIME-DAL4KR.md#15039-대응과-반복-검사-2026-10-23) 대기는 유지한다.
-- 공개0.5.1.0은 소스6e672e8·Release ID419790510·설치 JSONa8d5e89의 고정 ZIP이다. 사용자 대표 확인/원격 게시/익명 해시·실제 raw URL 확인은 [Release 기록](verification/releases/RELEASE-0.5.1.0.md), 실제 설치 확인은 STATUS를 따른다.
-- 게시본 Release 출력은 .cache/release-build/0.5.1.0/, 당시 별도 Debug는 .cache/remaining-empty-build/다. 위 고정 ZIP을 재빌드해 교체하지 않는다.
+- 이전 공개0.5.1.0은 소스6e672e8·Release ID419790510·설치 JSONa8d5e89의 고정 ZIP이다. 사용자 대표 확인/원격 게시/익명 해시·실제 raw URL 확인은 [Release 기록](verification/releases/RELEASE-0.5.1.0.md), 실제 설치 확인은 STATUS를 따른다.
+- 이전0.5.1.0 Release 출력은 .cache/release-build/0.5.1.0/, 당시 별도 Debug는 .cache/remaining-empty-build/다. 위 고정 ZIP을 재빌드해 교체하지 않는다.
 - 이전 버전 추출/빌드/해시 경로는 각 [Release 기록](verification/README.md#배포와-호환성)에 둔다. 새 후보에 과거 대표 확인을 자동 적용하지 않는다.
 - 현재 PC의 게시 이력은 gh CLI 없이 Git credential manager+GitHub API를 사용했다. 토큰은 메모리에서만 쓰고 출력/파일/Git에 남기지 않는다. 캐시의 과거 게시 스크립트는 확인 없이 재실행하지 않는다.
 
