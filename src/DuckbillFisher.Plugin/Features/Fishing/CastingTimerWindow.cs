@@ -46,17 +46,23 @@ internal sealed class CastingTimerWindow : Window
         }
         var spot = view.Spot;
         var spotLabel = UiWidgets.SpotLabel(view);
-        var buttonSize = ImGui.CalcTextSize(UiText.Get(T.TimerSpotFishButton)).X + ImGui.GetStyle().FramePadding.X * 2;
+        var fishLabel = UiText.Get(T.TimerSpotFishButton);
+        var buttonSize = ImGui.GetFrameHeight() + ImGui.CalcTextSize(fishLabel).X + ImGui.GetStyle().FramePadding.X * 2;
         var controlsWidth = buttonSize + ImGui.GetFrameHeight() + ImGui.GetStyle().ItemSpacing.X * 2;
         FishingHistoryPanel.Clipped(spotLabel, Math.Max(1, ImGui.GetContentRegionAvail().X - controlsWidth));
         UiWidgets.Tooltip(spotLabel);
         ImGui.SameLine();
         ImGui.BeginDisabled(spot is null);
-        if (ImGui.Button(UiText.Label(T.TimerSpotFishButton, "TimerSpotFish"))) toggleSpotFish();
+        if (ImGui.Button("###TimerSpotFish", new Vector2(buttonSize, ImGui.GetFrameHeight()))) toggleSpotFish();
+        var buttonOrigin = ImGui.GetItemRectMin() + ImGui.GetStyle().FramePadding;
+        var draw = ImGui.GetWindowDrawList();
+        var color = ImGui.GetColorU32(ImGuiCol.Text);
+        draw.AddText(UiBuilder.IconFont, ImGui.GetFontSize(), buttonOrigin, color, FontAwesomeIcon.Fish.ToIconString());
+        draw.AddText(buttonOrigin + new Vector2(ImGui.GetFrameHeight(), 0), color, fishLabel);
         ImGui.EndDisabled();
-        if (spot is null) UiWidgets.Tooltip(UiText.Get(T.TimerSpotUnavailableHint));
+        UiWidgets.Tooltip(spot is null ? UiText.Get(T.TimerSpotUnavailableHint) : fishLabel);
         ImGui.SameLine();
-        if (UiWidgets.IconButton(FontAwesomeIcon.Cog, "OpenTimerSettings", UiText.Get(T.TimerAlertSettings))) ShowSettings?.Invoke();
+        if (UiWidgets.IconButton(FontAwesomeIcon.Stopwatch, "OpenTimerSettings", UiText.Get(T.TimerAlertSettings))) ShowSettings?.Invoke();
 
         var timed = view.Active ?? view.CurrentRecords.FirstOrDefault();
         var usesFishBait = timed?.BaitKind is FishingBaitKind.Mooch or FishingBaitKind.Swimbait;
