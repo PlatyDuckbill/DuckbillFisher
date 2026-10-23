@@ -909,4 +909,8 @@ internal enum TextKey
     FishingSoundWaveHelp,
     FishingSoundWaveLimits,
     FishingSoundWaveReloadHint,
+    ChangelogFishingSounds,
+    ChangelogFirstCatchSounds,
+    ChangelogSpotFilterRetention,
+    ChangelogTimerSettingsTabs,
 }

@@ -2,12 +2,12 @@
   <PropertyGroup>
     <AssemblyName>DuckbillFisher</AssemblyName>
     <RootNamespace>DuckbillFisher.Plugin</RootNamespace>
-    <Version>0.5.2.0</Version>
+    <Version>0.5.3.0</Version>
     <NeutralLanguage>en</NeutralLanguage>
     <Author>PlatyDuckbill</Author>
     <Name>DuckbillFisher</Name>
     <Punchline>Let Duckbill guide your next catch.</Punchline>
-    <Changelog>Cast alerts, lure timers and collection backup&#xA;&#xA;• Add multiple named cast-time alerts with individual times, enabled states and built-in sound effects.&#xA;• Save and load named alert presets in a separate timer settings screen.&#xA;• See elapsed time since a new lure-effect stack was observed, alongside the existing cast timer.&#xA;• Keep a per-character local collection backup for use when current game observations are unavailable.&#xA;• Open timer settings with the stopwatch shortcut beside the fish-list button.&#xA;• Support the verified KR Dalamud 15.0.3.9 module combination.</Changelog>
+    <Changelog>Bite and trophy fish sounds&#xA;&#xA;• Choose individual built-in sound effects or custom WAV files for bites, big fish and legendary fish.&#xA;• Play trophy fish sounds only on first fish guide registration by default, with an option to play on every confirmed catch.&#xA;• Keep the fishing-spot list's collection filter after plugin or game restarts.&#xA;• Organize timer settings into cast alert and fishing sound tabs, with icons, concise bullet help and common output settings at the upper right.</Changelog>
     <Description>Let Duckbill guide your next catch.&#xA;A fishing companion for FFXIV Korea.&#xA;&#xA;• Browse fish with collection, region and availability filters.&#xA;• Plan spawns with a timeline and monthly calendar.&#xA;• Check baits, mooch chains and time/weather conditions.&#xA;• Prepare baits for favorites or filtered fish, with inventory counts.&#xA;• Find owned baits with page markers and in-game UI highlights.&#xA;• Open fishing spots directly on the map.&#xA;• Get local alerts for favorites, with optional sounds.&#xA;• See fish available now or soon in the quick list.&#xA;• Follow casts with a timer and personal fishing records.&#xA;&#xA;Open: /dbfs or /duckbillfisher. /dbfs cl: compact list; /dbfs ct: casting timer.&#xA;UI: English / Korean. Game names follow your client.&#xA;&#xA;Verified on the supported Korean client and Dalamud build only.&#xA;Does not automate fishing.</Description>
     <RepoUrl>https://github.com/PlatyDuckbill/DuckbillFisher</RepoUrl>
     <Tags>fishing;fish;collection;Korea;한국어</Tags>

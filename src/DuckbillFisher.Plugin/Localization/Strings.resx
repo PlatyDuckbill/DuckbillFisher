@@ -932,4 +932,8 @@ Last saved: {1:yyyy-MM-dd HH:mm}, {2} fish. Used where current observations are 
   <data name="FishingSoundWaveHelp" xml:space="preserve"><value>Custom WAV help</value></data>
   <data name="FishingSoundWaveLimits" xml:space="preserve"><value>Local WAV files only, up to {0} seconds / {1} MB.</value></data>
   <data name="FishingSoundWaveReloadHint" xml:space="preserve"><value>Uses Windows volume. Reload after editing the file.</value></data>
+  <data name="ChangelogFishingSounds" xml:space="preserve"><value>Choose individual built-in sound effects or custom WAV files for bites, big fish, and legendary fish.</value></data>
+  <data name="ChangelogFirstCatchSounds" xml:space="preserve"><value>Trophy fish sounds play only on first fish guide registration by default. Disable first acquisition only to play on every confirmed catch.</value></data>
+  <data name="ChangelogSpotFilterRetention" xml:space="preserve"><value>Keep the fishing-spot list's collection filter after restarting the plugin or game.</value></data>
+  <data name="ChangelogTimerSettingsTabs" xml:space="preserve"><value>Use separate cast alert and fishing sound tabs in timer settings, with icons, bullet help, and common output settings at the upper right.</value></data>
 </root>

@@ -932,4 +932,8 @@
   <data name="FishingSoundWaveHelp" xml:space="preserve"><value>커스텀 WAV 안내</value></data>
   <data name="FishingSoundWaveLimits" xml:space="preserve"><value>로컬 WAV 파일만 지원하며, 최대 {0}초 / {1}MB입니다.</value></data>
   <data name="FishingSoundWaveReloadHint" xml:space="preserve"><value>Windows 음량을 따릅니다. 파일을 수정했다면 재불러오기를 누르세요.</value></data>
+  <data name="ChangelogFishingSounds" xml:space="preserve"><value>입질·터주·터주왕마다 기본 효과음 또는 커스텀 WAV를 개별로 지정할 수 있습니다.</value></data>
+  <data name="ChangelogFirstCatchSounds" xml:space="preserve"><value>터주·터주왕은 기본으로 어류도감 최초 등록 시에만 울립니다. 최초 습득 옵션을 해제하면 확인된 어획마다 울립니다.</value></data>
+  <data name="ChangelogSpotFilterRetention" xml:space="preserve"><value>플러그인·게임을 다시 시작해도 낚시터 어류 목록의 수집 필터를 유지합니다.</value></data>
+  <data name="ChangelogTimerSettingsTabs" xml:space="preserve"><value>타이머 설정을 캐스팅 알림/효과음 두 탭으로 나누고 아이콘·불릿 설명과 우측 상단 공통 출력 설정으로 정리했습니다.</value></data>
 </root>
