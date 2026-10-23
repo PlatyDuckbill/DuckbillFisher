@@ -903,4 +903,10 @@ Last saved: {1:yyyy-MM-dd HH:mm}, {2} fish. Used where current observations are 
   <data name="TimerAlertPresetHint" xml:space="preserve"><value>Save names, times, enabled states and sounds. An existing name is replaced. Up to {0} presets. Loading replaces the current alert list; passed deadlines are not replayed.</value></data>
   <data name="TimerLureUnknown" xml:space="preserve"><value>Lure: unknown</value></data>
   <data name="TimerLureInactive" xml:space="preserve"><value>Lure: inactive</value></data>
+  <data name="ChangelogCastAlerts" xml:space="preserve"><value>Add multiple cast-time alerts with names, individual times and built-in sound effects.</value></data>
+  <data name="ChangelogTimerPresets" xml:space="preserve"><value>Edit alerts with + / − in a separate timer settings screen, and save or load named presets.</value></data>
+  <data name="ChangelogLureElapsed" xml:space="preserve"><value>See time since a new lure-effect stack was observed, alongside the existing cast timer. Reusing a lure restarts its elapsed timer when the stack increases.</value></data>
+  <data name="ChangelogCollectionBackup" xml:space="preserve"><value>Keep collection states in a per-character local backup. Saved states fill unknown current observations; manual choices still take priority.</value></data>
+  <data name="ChangelogTimerShortcuts" xml:space="preserve"><value>Open timer settings with the stopwatch shortcut beside the fish-list button and its fish icon.</value></data>
+  <data name="ChangelogKr15039" xml:space="preserve"><value>Support the verified KR Dalamud 15.0.3.9 module combination with the existing exact compatibility checks.</value></data>
 </root>

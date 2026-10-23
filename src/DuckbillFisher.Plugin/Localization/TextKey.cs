@@ -880,4 +880,10 @@ internal enum TextKey
     TimerAlertPresetHint,
     TimerLureUnknown,
     TimerLureInactive,
+    ChangelogCastAlerts,
+    ChangelogTimerPresets,
+    ChangelogLureElapsed,
+    ChangelogCollectionBackup,
+    ChangelogTimerShortcuts,
+    ChangelogKr15039,
 }
