@@ -1,5 +1,6 @@
 using System.Numerics;
 using Dalamud.Bindings.ImGui;
+using Dalamud.Interface;
 using Dalamud.Interface.Windowing;
 using Dalamud.Plugin.Services;
 using DuckbillFisher.Core;
@@ -35,7 +36,6 @@ internal sealed class CastingTimerWindow : Window
     public override void OnClose() => buffs.SetActive(false);
     public override void Draw()
     {
-        if (ImGui.Button(UiText.Label(T.TimerAlertSettings, "OpenTimerSettings"))) ShowSettings?.Invoke();
         var view = tracker.View;
         var retained = !view.HasSession && view.CurrentTrip is not null && view.TimerRetainedUntil is not null;
         if (retained && view.TimerRetainedUntil is { } expires)
@@ -47,13 +47,16 @@ internal sealed class CastingTimerWindow : Window
         var spot = view.Spot;
         var spotLabel = UiWidgets.SpotLabel(view);
         var buttonSize = ImGui.CalcTextSize(UiText.Get(T.TimerSpotFishButton)).X + ImGui.GetStyle().FramePadding.X * 2;
-        FishingHistoryPanel.Clipped(spotLabel, Math.Max(1, ImGui.GetContentRegionAvail().X - buttonSize - 10));
+        var controlsWidth = buttonSize + ImGui.GetFrameHeight() + ImGui.GetStyle().ItemSpacing.X * 2;
+        FishingHistoryPanel.Clipped(spotLabel, Math.Max(1, ImGui.GetContentRegionAvail().X - controlsWidth));
         UiWidgets.Tooltip(spotLabel);
         ImGui.SameLine();
         ImGui.BeginDisabled(spot is null);
         if (ImGui.Button(UiText.Label(T.TimerSpotFishButton, "TimerSpotFish"))) toggleSpotFish();
         ImGui.EndDisabled();
         if (spot is null) UiWidgets.Tooltip(UiText.Get(T.TimerSpotUnavailableHint));
+        ImGui.SameLine();
+        if (UiWidgets.IconButton(FontAwesomeIcon.Cog, "OpenTimerSettings", UiText.Get(T.TimerAlertSettings))) ShowSettings?.Invoke();
 
         var timed = view.Active ?? view.CurrentRecords.FirstOrDefault();
         var usesFishBait = timed?.BaitKind is FishingBaitKind.Mooch or FishingBaitKind.Swimbait;
