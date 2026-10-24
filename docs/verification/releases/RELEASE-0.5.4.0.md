@@ -28,3 +28,11 @@
 - 추출 DLL `DUCKBILL_ROOT/.cache/release-validation/0.5.4.0-notes/DuckbillFisher.dll`, SHA256 **1A13387FDFC138506A943429CFBB8B7E2846C7FE7D3590FD82838354AB970597**.
 - 추출7파일/빌드 해시·버전/API15/metadata/URL, 내장3자료·한영984키/값 일치를 재확인했다. 결과 `.cache/release-build/0.5.4.0-notes-validation.json`. 기존 후보/해시는 덮어쓰지 않았다.
 - 새 고정본 정상 로드·간결한 노트 확인을 요청했다. 최초 후보의 기능 대표 정상 보고와 구분하며 새 고정본 응답 후 같은 ZIP을 게시한다.
+
+## 첫 공개 범위에 맞춘 최종 문구 후보
+
+- 사용자가 백업 기능의 첫 정식 배포이므로 이전 백업 관련 문구를 삭제하도록 요청했다. 내장 한영/설치 화면/GitHub 노트에서 개발용 백업의 개인 기록 삭제 안내만 제거했다. 파일 판독/복원 동작과 기능 코드는 유지했다. 공개 안내는 실제 배포 이력을 기준으로 작성하도록 배포 지침도 보완했다.
+- 최종 소스 **b4193351acc3e31314fc97e79b17ad1e9405ae13**. 별도 `.cache/release-final-notes-build/` → 정규 Debug·최소 지원 Release 경고0/오류0, 한영984키·문서114개/로컬 링크570개·diff/prepare 검사 통과. 테스트 추가/실행 없음.
+- 최종 ZIP `artifacts/share/0.5.4.0-final/DuckbillFisher-0.5.4.0.zip`, **568,830바이트**, SHA256 **7FAFEACE0C9042C78F3150B10802F28CA26EEF79BFD963BCF8CA20CE1CE40B8C**.
+- 최종 추출 DLL `DUCKBILL_ROOT/.cache/release-validation/0.5.4.0-final/DuckbillFisher.dll`, SHA256 **A0524B48DD68FC9EE607433C0FA5698D4B5582BCF63B12E42534F4704A4F2032**.
+- 추출7파일/빌드 해시·버전/API/metadata/URL·내장3자료·한영984키/값 일치를 다시 확인했다. 결과 `.cache/release-build/0.5.4.0-final-validation.json`. 최종 DLL의 정상 로드·해당 문구 제거 확인을 요청했으며 응답 후 같은 ZIP으로 승인된 게시를 이어간다. 이전 후보는 덮어쓰거나 게시하지 않았다.
