@@ -8,7 +8,13 @@ using T = DuckbillFisher.Plugin.Localization.TextKey;
 
 namespace DuckbillFisher.Plugin;
 
-internal sealed record SpawnAlertDisplay(uint FishId, uint ItemId, string Name, FishingSpotView Spot, DateTimeOffset Start, int LeadMinutes);
+internal sealed record SpawnAlertDisplay(uint FishId, uint ItemId, string Name, FishingSpotView Spot, DateTimeOffset Start, int LeadMinutes)
+{
+    public DateTimeOffset? End { get; init; }
+    public DateTimeOffset? OccurrenceEnd { get; init; }
+    public bool RequiresIntuition { get; init; }
+    public bool AlreadyOpen { get; init; }
+}
 internal sealed record SpawnAlertDelivery(DateTimeOffset SentAt, SpawnAlertDisplay Fish, XivChatType Channel,
     int Sound, bool SoundPlayed);
 internal enum FavoriteAlertState { Disabled, WaitingCharacter, Caught, Unknown, Unsupported, Always, Pending, Armed }
@@ -56,6 +62,7 @@ internal sealed class SpawnAlerts : IDisposable
         this.framework = framework;
         this.output = output;
         this.log = log;
+        output.Delivered += RecordDelivery;
         framework.Update += OnUpdate;
     }
 
@@ -195,14 +202,29 @@ internal sealed class SpawnAlerts : IDisposable
         var batch = reserved.OrderBy(alert => alert.Start).ThenBy(alert => alert.FishId)
             .Where(alert => alert.Start > sentAt || personal.AlertLead(alert.FishId) == 0 &&
                 deliveryWindows[alert.FishId].End > sentAt)
-            .Select(alert => Display(alert.FishId, alert.Start, personal.AlertLead(alert.FishId))).ToArray();
+            .Select(alert => Display(alert.FishId, alert.Start, personal.AlertLead(alert.FishId)) with
+            {
+                End = deliveryWindows[alert.FishId].End,
+                OccurrenceEnd = FishingAvailability.Find(sentAt, rowsById[alert.FishId].Details!.Rule,
+                    rowsById[alert.FishId].Details!.Spot!.WeatherRates) is { Kind: FishingWindowKind.Open, End: { } end }
+                    ? end : deliveryWindows[alert.FishId].End,
+                RequiresIntuition = rowsById[alert.FishId].Details!.Rule.Predators.Length > 0,
+            }).ToArray();
         if (batch.Length == 0)
             return;
         // One chat message per poll, regardless of how many fish share the deadline.
-        var soundPlayed = output.Print(batch, sentAt, personal);
-        var history = batch.Reverse().Select(fish => new SpawnAlertDelivery(sentAt, fish, personal.SpawnAlertChannel,
-            personal.SpawnAlertSound, soundPlayed)).Concat(view.History).Take(200).ToArray();
-        view = view with { Sent = view.Sent + batch.Length, Batches = view.Batches + 1, History = history };
+        output.Print(batch, sentAt, personal);
+    }
+
+    private void RecordDelivery(SpawnAlertPrintResult result, DateTimeOffset at, FishPreferencesView settings)
+    {
+        lock (gate)
+        {
+            if (disposed || view.Session != settings.Session) return;
+            var history = result.Sent.Reverse().Select(fish => new SpawnAlertDelivery(at, fish, settings.SpawnAlertChannel,
+                settings.SpawnAlertSound, result.SoundPlayed)).Concat(view.History).Take(200).ToArray();
+            view = view with { Sent = view.Sent + result.Sent.Length, Batches = view.Batches + 1, History = history };
+        }
     }
 
     private SpawnAlertDisplay Display(uint id, DateTimeOffset start, int lead)
@@ -263,7 +285,7 @@ internal sealed class SpawnAlerts : IDisposable
         var settings = preferences.View;
         var customSound = output.CustomSound;
         return string.Create(CultureInfo.InvariantCulture,
-            $"DuckbillFisher MVP-03/alerts/v7\nPlugin={typeof(Plugin).Assembly.GetName().Version}; Enabled={settings.SpawnAlertsEnabled}; LeadMinutes={settings.SpawnAlertLeadMinutes}; Channel={settings.SpawnAlertChannel}; Channels={ChatChannelChoices.All.Length}; Sound={settings.SpawnAlertSound}; SoundReady={output.SoundAvailable}; Session={snapshot.Session}; Status={snapshot.Status.Key}\nAudience={settings.SpawnAlertAudience}; RemoveOnRegistration={settings.RemoveFavoriteOnRegistration}; Favorites={snapshot.Favorites.Count}; CustomLeads={settings.FishAlertLeadMinutes.Count}; History={snapshot.History.Count}; Eligible={snapshot.Eligible}; Armed={snapshot.Armed}; Sent={snapshot.Sent}; Batches={snapshot.Batches}; Rebases={snapshot.Rebases}\nNextFish={snapshot.Next?.FishId}; NextLead={snapshot.Next?.LeadMinutes}; NextStart={snapshot.Next?.Start:O}; DueAt={snapshot.Next?.Start.AddMinutes(-snapshot.Next.LeadMinutes):O}\nCustomSoundState={customSound.State}; CustomSoundCode={customSound.ErrorCode}\nDedup=PersistedWindowStartPerCharacter; CatchUp=False; PersonalReadiness=False");
+            $"DuckbillFisher MVP-03/alerts/v8\nPlugin={typeof(Plugin).Assembly.GetName().Version}; Enabled={settings.SpawnAlertsEnabled}; CurrentSpotEnabled={settings.CurrentSpotAlertsEnabled}; LeadMinutes={settings.SpawnAlertLeadMinutes}; Channel={settings.SpawnAlertChannel}; Channels={ChatChannelChoices.All.Length}; Sound={settings.SpawnAlertSound}; SoundReady={output.SoundAvailable}; Session={snapshot.Session}; Status={snapshot.Status.Key}\nAudience={settings.SpawnAlertAudience}; RemoveOnRegistration={settings.RemoveFavoriteOnRegistration}; Favorites={snapshot.Favorites.Count}; CustomLeads={settings.FishAlertLeadMinutes.Count}; History={snapshot.History.Count}; Eligible={snapshot.Eligible}; Armed={snapshot.Armed}; Sent={snapshot.Sent}; Batches={snapshot.Batches}; Rebases={snapshot.Rebases}\nNextFish={snapshot.Next?.FishId}; NextLead={snapshot.Next?.LeadMinutes}; NextStart={snapshot.Next?.Start:O}; DueAt={snapshot.Next?.Start.AddMinutes(-snapshot.Next.LeadMinutes):O}\nCustomSoundState={customSound.State}; CustomSoundCode={customSound.ErrorCode}\nAdvanceDedup=PersistedWindowStartPerCharacter; OpeningDedup=PersistedOwnOccurrenceEndPerCharacter; CurrentSpotCatchUp=FirstIdentifiedCast; PersonalReadiness=False");
     }
 
     public void Dispose()
@@ -275,5 +297,6 @@ internal sealed class SpawnAlerts : IDisposable
             retryAfter.Clear();
         }
         framework.Update -= OnUpdate;
+        output.Delivered -= RecordDelivery;
     }
 }

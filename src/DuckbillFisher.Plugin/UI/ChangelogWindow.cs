@@ -15,6 +15,13 @@ internal sealed class ChangelogWindow : Window
     // Keep the confirmed candidate unchanged when it is published.
     private static readonly ReleaseNotes[] PublishedReleases =
     [
+        new(new(0, 6, 0, 0),
+        [
+            (FontAwesomeIcon.Compass, T.ChangelogRecommendations),
+            (FontAwesomeIcon.Sync, T.ChangelogRecommendationRefresh),
+            (FontAwesomeIcon.Bell, T.ChangelogCurrentSpotAlerts),
+            (FontAwesomeIcon.Clock, T.ChangelogZeroAlerts),
+        ]),
         new(new(0, 5, 4, 0),
         [
             (FontAwesomeIcon.Edit, T.ChangelogFishNotes),
@@ -176,7 +183,8 @@ internal sealed class ChangelogWindow : Window
                 var release = releases[i];
                 var label = $"{UiText.Get(T.ChangelogRelease, release.Version)}###ReleaseNotes.{release.Version}";
                 if (!ImGui.CollapsingHeader(label, i == 0 ? ImGuiTreeNodeFlags.DefaultOpen : ImGuiTreeNodeFlags.None)) continue;
-                ImGui.TextDisabled(UiText.Get(T.ChangelogPublishedAt, release.PublishedAtUtc.ToOffset(TimeSpan.FromHours(9))));
+                if (release.PublishedAtUtc is { } publishedAt)
+                    ImGui.TextDisabled(UiText.Get(T.ChangelogPublishedAt, publishedAt.ToOffset(TimeSpan.FromHours(9))));
                 ImGui.Spacing();
                 if (release.FeatureTitle is { } title)
                 {
@@ -215,7 +223,7 @@ internal sealed class ChangelogWindow : Window
         ImGui.Spacing();
     }
 
-    private sealed record ReleaseNotes(Version Version, (FontAwesomeIcon Icon, T Text)[] Entries, DateTimeOffset PublishedAtUtc,
+    private sealed record ReleaseNotes(Version Version, (FontAwesomeIcon Icon, T Text)[] Entries, DateTimeOffset? PublishedAtUtc = null,
         T? FeatureTitle = null, T? FeatureSummary = null, (FontAwesomeIcon Icon, T Text)[]? OtherEntries = null,
         FontAwesomeIcon FeatureIcon = FontAwesomeIcon.ChartBar);
 }

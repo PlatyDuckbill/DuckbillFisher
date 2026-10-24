@@ -11,6 +11,7 @@ internal sealed class CommonSettingsBackup
 {
     public required HashSet<uint> Favorites { get; set; } = [];
     public required bool SpawnAlertsEnabled { get; set; }
+    public bool CurrentSpotAlertsEnabled { get; set; } = true;
     public required int SpawnAlertLeadMinutes { get; set; } = SpawnAlertScheduler.DefaultLeadMinutes;
     public required ushort SpawnAlertChannelId { get; set; } = (ushort)XivChatType.SystemMessage;
     public required int SpawnAlertSound { get; set; }
@@ -33,6 +34,7 @@ internal sealed class CommonSettingsBackup
     public static CommonSettingsBackup From(FishPreferencesConfiguration value) => new()
     {
         Favorites = [.. value.Favorites], SpawnAlertsEnabled = value.SpawnAlertsEnabled,
+        CurrentSpotAlertsEnabled = value.CurrentSpotAlertsEnabled,
         SpawnAlertLeadMinutes = value.SpawnAlertLeadMinutes, SpawnAlertChannelId = value.SpawnAlertChannelId,
         SpawnAlertSound = value.SpawnAlertSound, CustomAlertSoundPath = value.CustomAlertSoundPath,
         SpawnAlertAudience = value.SpawnAlertAudience, RemoveFavoriteOnRegistration = value.RemoveFavoriteOnRegistration,
@@ -47,6 +49,7 @@ internal sealed class CommonSettingsBackup
     {
         target.Favorites = [.. Favorites];
         target.SpawnAlertsEnabled = SpawnAlertsEnabled;
+        target.CurrentSpotAlertsEnabled = CurrentSpotAlertsEnabled;
         target.SpawnAlertLeadMinutes = SpawnAlertLeadMinutes;
         target.SpawnAlertChannelId = SpawnAlertChannelId;
         target.SpawnAlertSound = SpawnAlertSound;

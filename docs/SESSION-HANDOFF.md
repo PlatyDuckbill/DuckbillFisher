@@ -1,6 +1,6 @@
 # 세션 인수인계
 
-갱신: 2026-10-24. 현재 사실/확인 대기는 [STATUS](STATUS.md), 버전별 근거는 [검증 색인](verification/README.md)에 둔다.
+갱신: 2026-10-25. 현재 사실/확인 대기는 [STATUS](STATUS.md), 버전별 근거는 [검증 색인](verification/README.md)에 둔다.
 
 ## 재개 순서
 
@@ -27,7 +27,7 @@
 | upstream 컴파일 참조 | .cache/upstream-15.0.3.6/refs/ · build/dalamud-reference.json 고정 해시 |
 | SDK/대상 | global.json의10.0.402 · Dalamud SDK15.0.0 · x64/net10.0-windows |
 | 정규 개발 DLL | DUCKBILL_ROOT/src/DuckbillFisher.Plugin/bin/Debug/DuckbillFisher.dll |
-| 이번 별도 Debug | .cache/spawn-zero-build/DuckbillFisher.dll |
+| 이번 별도 Debug | .cache/recommendation-build/DuckbillFisher.dll |
 | 현재 게시본 재추출 Release | .cache/release-publish-check/0.5.4.0/DuckbillFisher.dll |
 | 현재 게시본 고정 ZIP | artifacts/share/0.5.4.0-final/DuckbillFisher-0.5.4.0.zip |
 | 이전0.5.3.0 확인 Release | .cache/release-validation/0.5.3.0/DuckbillFisher.dll |
@@ -46,7 +46,7 @@
 
 - 이전 공개0.5.3.0은 고정 ZIP/추출 DLL의 사용자 대표 정상 확인 뒤 같은 ZIP을 게시했다. 소스6dd27eb·Release421678993·설치 JSONc416117·ZIP/DLL 해시는 [배포 기록](verification/releases/RELEASE-0.5.3.0.md)을 따른다. 정규/별도 Debug를 게시본 확인에 쓰지 않으며 확인 뒤 실행 파일을 다시 빌드하지 않는다.
 - 이전 공개0.5.2.0은 최소 참조 고정 추출본 대표 확인 뒤 같은 ZIP을 게시했다. [소스02061f4/태그·Release421639798·설치 JSON3871a41](verification/releases/RELEASE-0.5.2.0.md), 당시 실제 공유 raw URL0.5.2.0 일치 확인 완료다. 이전판 확인에는 위0.5.2.0 추출 DLL을 사용한다.
-- 이번 정규/별도 Debug는0.5.4.0/schema23이며 고정 Release 확인에는 사용하지 않는다. [어종별 기록/백업](verification/configuration/FISH-PERSONAL.md)과 [출현 알림0분](verification/alerts/SPAWN-ALERTS.md#출현-시점-알림과-기본0분-2026-10-24)을 포함한다. 테스트 추가/실행 없음. 이전 TRX는 `.cache/test-protection/final/final-protection.trx`, 기존 [구조 확인](verification/ARCHITECTURE-TESTS.md)·[KR 실기](verification/native/NATIVE-RUNTIME-DAL4KR.md#15039-대응과-반복-검사-2026-10-23) 대기는 유지한다.
+- 이번 정규/별도 Debug는0.6.0.0/schema24 개발본이며 공개0.5.4.0 고정 Release 확인에는 사용하지 않는다. 추천·현재 낚시터 알림·0~120분 출현 알림을 포함한다. [추천 검수/한계](verification/forecast/RECOMMENDATIONS.md)와 [현재 낚시터 알림](verification/alerts/SPAWN-ALERTS.md#현재-낚시터-출현-알림-0600-2026-10-25)을 따른다. 테스트 추가/실행·게임 확인·패키징/게시 없음. 이전 공개판의 실기/실제 저장소 업데이트 대기는 STATUS에 유지한다.
 - 이전 공개0.5.1.0은 소스6e672e8·Release ID419790510·설치 JSONa8d5e89의 고정 ZIP이다. 사용자 대표 확인/원격 게시/익명 해시·실제 raw URL 확인은 [Release 기록](verification/releases/RELEASE-0.5.1.0.md), 실제 설치 확인은 STATUS를 따른다.
 - 이전0.5.1.0 Release 출력은 .cache/release-build/0.5.1.0/, 당시 별도 Debug는 .cache/remaining-empty-build/다. 위 고정 ZIP을 재빌드해 교체하지 않는다.
 - 이전 버전 추출/빌드/해시 경로는 각 [Release 기록](verification/README.md#배포와-호환성)에 둔다. 새 후보에 과거 대표 확인을 자동 적용하지 않는다.
@@ -56,6 +56,6 @@
 
 - 일반 자료의 남은 이름/ID/이유는 [잔여 보고서](verification/data/reports/fishing-data-2026-10-17/remaining.md), 재생성은 [data/README](../data/README.md)를 따른다. 완성 자료를 보완 단계 baseline으로 다시 넣지 않는다.
 - 초기 예측 고정 기대값은10종이며 보존 v1 입력은140종이다. [fixture 설명](../tests/DuckbillFisher.Core.Tests/Fixtures/README.md)을 확인하고 자동 덮어쓰지 않는다. 제품은 v2 조건/v1 등급을 내장한다.
-- 진단은 필요한 짧은 구역부터 요청한다. 자료는 catalog/v9의 DataValidation/IntuitionForecast, 예측은 summary/v10의 SelectedForecast/ForecastComparison/SelectedConditions/SelectedIntuition, 음원은 alerts/v7의 CustomSoundState/Code, 미끼는 bait-ui/v7의 Pages를 사용한다.
+- 진단은 필요한 짧은 구역부터 요청한다. 자료는 catalog/v9의 DataValidation/IntuitionForecast, 예측은 summary/v10의 SelectedForecast/ForecastComparison/SelectedConditions/SelectedIntuition, 음원은 alerts/v8의 CustomSoundState/Code, 미끼는 bait-ui/v7의 Pages를 사용한다.
 - 타이머 상태 API의 정적 근거는 .cache/timer-status-api.json, 시트 도우미는 .cache/timer-status-audit/다. 기존 공개판 근거는 [타이머 기록](verification/fishing/TIMER-HISTORY.md)에 있다.
 - 예측 정적 자료 도우미/UTC·CSV와 비교 한계는 [FORECAST](verification/forecast/FORECAST.md)에, 과거 소스/문서 경로는 Git 이력에 보존된다. 문서 전체 사본이나 새로운 재개 상태 사본을 반복 생성하지 않는다.

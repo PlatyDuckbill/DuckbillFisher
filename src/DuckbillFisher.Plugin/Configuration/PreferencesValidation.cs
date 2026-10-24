@@ -21,6 +21,8 @@ internal static class PreferencesValidation
         Enum.IsDefined(value.SpawnAlertAudience) &&
         value.FishAlertLeadMinutes is not null && value.FishAlertLeadMinutes.All(pair => pair.Key != 0 &&
             pair.Value is >= SpawnAlertScheduler.MinLeadMinutes and <= SpawnAlertScheduler.MaxLeadMinutes) &&
+        value.OpeningAlertWindows is not null && value.OpeningAlertWindows.All(pair => pair.Key != 0 && pair.Value is not null &&
+            pair.Value.All(window => window.Key != 0 && window.Value is > 0 and <= 253402300799999)) &&
         value.AlertWindows is not null && value.AlertWindows.All(pair => pair.Key != 0 && pair.Value is not null &&
             pair.Value.All(window => window.Key != 0 && window.Value is > 0 and <= 253402300799999));
 }

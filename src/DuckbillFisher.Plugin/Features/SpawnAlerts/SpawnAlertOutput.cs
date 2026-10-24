@@ -1,6 +1,7 @@
 using System.Diagnostics;
 using Dalamud.Game.Text;
 using Dalamud.Game.Text.SeStringHandling;
+using Dalamud.Game.Text.SeStringHandling.Payloads;
 using Dalamud.Plugin.Services;
 using DuckbillFisher.Core;
 using DuckbillFisher.Plugin.Localization;
@@ -8,6 +9,8 @@ using FFXIVClientStructs.FFXIV.Client.UI;
 using T = DuckbillFisher.Plugin.Localization.TextKey;
 
 namespace DuckbillFisher.Plugin;
+
+internal sealed record SpawnAlertPrintResult(SpawnAlertDisplay[] Sent, bool SoundPlayed);
 
 /// <summary>Local chat payloads and the inspected KR chat sound call. No chat commands or server sends.</summary>
 internal sealed class SpawnAlertOutput : IDisposable
@@ -27,6 +30,9 @@ internal sealed class SpawnAlertOutput : IDisposable
     private bool soundAvailable;
     private bool alertsEnabled;
     private UiMessage? previewResult;
+    private readonly Dictionary<uint, DalamudLinkPayload> detailLinks = [];
+    public Action<uint>? ShowDetail { get; set; }
+    public event Action<SpawnAlertPrintResult, DateTimeOffset, FishPreferencesView>? Delivered;
 
     public SpawnAlertOutput(IFramework framework, IChatGui chat, FishPreferences preferences, bool nativeCompatible, IPluginLog log)
     {
@@ -75,8 +81,8 @@ internal sealed class SpawnAlertOutput : IDisposable
                 previewResult = null;
                 session = personal.Session;
             }
-            if (alertsEnabled && !personal.SpawnAlertsEnabled) customSound.Stop();
-            alertsEnabled = personal.SpawnAlertsEnabled;
+            if (alertsEnabled && !(personal.SpawnAlertsEnabled || personal.CurrentSpotAlertsEnabled)) customSound.Stop();
+            alertsEnabled = personal.SpawnAlertsEnabled || personal.CurrentSpotAlertsEnabled;
             customSound.Configure(personal.HasCharacter && personal.SpawnAlertSound == CustomAlertSound.Choice,
                 personal.CustomAlertSoundPath, personal.Session);
             soundAvailable = personal.HasCharacter && (personal.SpawnAlertSound == CustomAlertSound.Choice
@@ -98,25 +104,37 @@ internal sealed class SpawnAlertOutput : IDisposable
         }
     }
 
-    public bool Print(IReadOnlyList<SpawnAlertDisplay> batch, DateTimeOffset now, FishPreferencesView settings)
+    public SpawnAlertPrintResult Print(IReadOnlyList<SpawnAlertDisplay> batch, DateTimeOffset now, FishPreferencesView settings)
     {
         if (!framework.IsInFrameworkUpdateThread)
             throw new InvalidOperationException("Alert output must run on Framework.Update.");
+        if (disposed || preferences.View.Session != settings.Session) return new([], false);
+        var opening = batch.Where(fish => fish.LeadMinutes == 0 && fish.End > now && fish.OccurrenceEnd is not null).ToArray();
+        var accepted = preferences.ReserveOpeningAlerts(settings.Session,
+            opening.Select(fish => (fish.FishId, fish.OccurrenceEnd!.Value)).ToArray());
+        var sent = batch.Where(fish => fish.LeadMinutes > 0 || accepted?.Contains(fish.FishId) == true).ToArray();
+        if (sent.Length == 0) return new([], false);
         var message = new SeStringBuilder();
         var first = true;
-        foreach (var fish in batch.Take(3))
+        var advanceShown = 0;
+        foreach (var fish in sent)
         {
+            if (fish.LeadMinutes > 0 && advanceShown++ >= 3) continue;
             if (!first)
                 message.AddText("\n");
             first = false;
+            if (fish.LeadMinutes == 0)
+            {
+                AppendOpening(message, fish, now);
+                continue;
+            }
             foreach (var payload in SeString.CreateItemLink(fish.ItemId, false, fish.Name).Payloads)
                 message.Add(payload);
             message.AddText(UiText.Get(T.AlertLinkedRemaining, Remaining(fish.Start - now)));
             foreach (var payload in SeString.CreateMapLink(fish.Spot.TerritoryId, fish.Spot.MapId, fish.Spot.X, fish.Spot.Y).Payloads)
                 message.Add(payload);
         }
-        if (batch.Count > 3)
-            message.AddText(UiText.Get(T.AlertExtraHistory, batch.Count - 3));
+        if (advanceShown > 3) message.AddText(UiText.Get(T.AlertExtraHistory, advanceShown - 3));
         chat.Print(new XivChatEntry
         {
             Type = settings.SpawnAlertChannel,
@@ -129,7 +147,42 @@ internal sealed class SpawnAlertOutput : IDisposable
             // Managed API failures only; chat already queued must remain in delivery history.
             log.Error(ex, "Could not play the alert sound; local chat was already queued.");
         }
-        return soundPlayed;
+        var result = new SpawnAlertPrintResult(sent, soundPlayed);
+        Delivered?.Invoke(result, now, settings);
+        return result;
+    }
+
+    private void AppendOpening(SeStringBuilder message, SpawnAlertDisplay fish, DateTimeOffset now)
+    {
+        if (!detailLinks.TryGetValue(fish.FishId, out var link))
+        {
+            link = chat.AddChatLinkHandler(fish.FishId, (id, _) =>
+            {
+                if (!disposed) ShowDetail?.Invoke(id);
+            });
+            detailLinks.Add(fish.FishId, link);
+        }
+        // Keep the entire sentence in resources; payload positions can move in translation.
+        var sentence = UiText.Get(fish.AlreadyOpen ? T.SpotAlertAlreadyOpen : T.SpotAlertOpening,
+            "\u0001", "\u0002", Countdown(fish.End!.Value - now));
+        var start = 0;
+        for (var index = 0; index < sentence.Length; index++)
+        {
+            if (sentence[index] is not ('\u0001' or '\u0002')) continue;
+            message.AddText(sentence[start..index]);
+            if (sentence[index] == '\u0001')
+                foreach (var payload in SeString.CreateItemLink(fish.ItemId, false, fish.Name).Payloads) message.Add(payload);
+            else message.Add(link).AddText(UiText.Get(T.SpotAlertDetail)).Add(RawPayload.LinkTerminator);
+            start = index + 1;
+        }
+        message.AddText(sentence[start..]);
+        if (fish.RequiresIntuition) message.AddText(UiText.Get(T.SpotAlertIntuition));
+    }
+
+    public static string Countdown(TimeSpan time)
+    {
+        var value = TimeSpan.FromSeconds(Math.Max(0, Math.Ceiling(time.TotalSeconds)));
+        return UiText.Get(T.SpotAlertRemaining, (int)value.TotalHours, value.Minutes, value.Seconds);
     }
 
     public static string Remaining(TimeSpan time)
@@ -185,6 +238,10 @@ internal sealed class SpawnAlertOutput : IDisposable
             preview = null;
         }
         framework.Update -= OnUpdate;
+        foreach (var id in detailLinks.Keys) chat.RemoveChatLinkHandler(id);
+        detailLinks.Clear();
+        ShowDetail = null;
+        Delivered = null;
         customSound.Dispose();
     }
 }

@@ -372,7 +372,7 @@
   <data name="TabAlerts" xml:space="preserve"><value>Favorites management</value></data>
   <data name="AlertsRulesHeading" xml:space="preserve"><value>Delivery rules and scope</value></data>
   <data name="AlertsIntro" xml:space="preserve"><value>Manage favorites and their local reminders. By default, all favorites can alert regardless of collection status. Uncaught only uses the final collection status with manual overrides first and excludes Unknown. List filters are independent. Normal time/weather windows do not establish personal readiness.</value></data>
-  <data name="AlertsEnable" xml:space="preserve"><value>Enable spawn alerts</value></data>
+  <data name="AlertsEnable" xml:space="preserve"><value>Enable favorite spawn alerts</value></data>
   <data name="AlertsLead" xml:space="preserve"><value>Default minutes before opening</value></data>
   <data name="AlertsLeadRange" xml:space="preserve"><value>Range: {0}–{1} real minutes. Use 0 to notify when the window opens. Settings are shared; delivery records are separate for each character.</value></data>
   <data name="AlertsPolicy" xml:space="preserve"><value>Only future reminders are armed. Login, reload, settings changes and long pauses never replay missed alerts. Saved per-character window records prevent duplicates. Each channel is a local display type; no message is sent to other players. One selected sound plays per batch, with default channel sounds silenced. Reserved reminders are not retried if output fails. Time/weather windows do not establish personal readiness.</value></data>
@@ -1010,4 +1010,93 @@ Last saved: {1:yyyy-MM-dd HH:mm}, {2} fish. Used where current observations are 
   <data name="ChangelogFirstCatchSounds" xml:space="preserve"><value>Trophy fish sounds play only on first fish guide registration by default. Disable first acquisition only to play on every confirmed catch.</value></data>
   <data name="ChangelogSpotFilterRetention" xml:space="preserve"><value>Keep the fishing-spot list's collection filter after restarting the plugin or game.</value></data>
   <data name="ChangelogTimerSettingsTabs" xml:space="preserve"><value>Use separate cast alert and fishing sound tabs in timer settings, with icons, bullet help, and common output settings at the upper right.</value></data>
+  <data name="SpotAlertsEnable" xml:space="preserve"><value>Notify uncaught big and legendary fish at the current hole</value></data>
+  <data name="SpotAlertsHint" xml:space="preserve"><value>After the first cast identifies the hole, also notify fish already available. Once per occurrence, including future occurrences. Independent of favorites; uses the channel and sound below. Does not check active Intuition.</value></data>
+  <data name="SpotAlertOpening" xml:space="preserve"><value>{0} is now available · {1} · {2} remaining</value></data>
+  <data name="SpotAlertAlreadyOpen" xml:space="preserve"><value>{0} is available · {1} · {2} remaining</value></data>
+  <data name="SpotAlertDetail" xml:space="preserve"><value>View details</value></data>
+  <data name="SpotAlertIntuition" xml:space="preserve"><value> · Intuition preparation required</value></data>
+  <data name="RecommendationTitle" xml:space="preserve"><value>Recommendations</value></data>
+  <data name="RecommendationIntro" xml:space="preserve"><value>Uncaught big and legendary fish to start preparing for now. Assumes a fresh start and Fish Eyes OFF.</value></data>
+  <data name="RecommendationRefresh" xml:space="preserve"><value>Refresh recommendations</value></data>
+  <data name="RecommendationHours" xml:space="preserve"><value>Next {0} hours</value></data>
+  <data name="RecommendationHorizonHelp" xml:space="preserve"><value>The horizon for target opportunities, not a play-time limit. Candidates outside this range are not silently included.</value></data>
+  <data name="RecommendationOptions" xml:space="preserve"><value>Candidate scope and preparation assumptions</value></data>
+  <data name="RecommendationUnknownOption" xml:space="preserve"><value>Include unknown collection status</value></data>
+  <data name="RecommendationFavorites" xml:space="preserve"><value>Favorites only</value></data>
+  <data name="RecommendationLegendary" xml:space="preserve"><value>Legendary fish only</value></data>
+  <data name="RecommendationStorageOption" xml:space="preserve"><value>Include reviewed stored-bait strategies</value></data>
+  <data name="RecommendationStorageAssumption" xml:space="preserve"><value>Storage assumes access to the skill and staying at the hole. Current level, GP, and stored quantities are not read. Initially includes the intermediate storage route for the Greater Serpent of Ronka.</value></data>
+  <data name="RecommendationUnsupported" xml:space="preserve"><value>Condition data does not match the current game build.</value></data>
+  <data name="RecommendationFailed" xml:space="preserve"><value>Calculation failed. Press Refresh recommendations to retry.</value></data>
+  <data name="RecommendationComputing" xml:space="preserve"><value>Calculating candidates and preparation routes…</value></data>
+  <data name="RecommendationSnapshot" xml:space="preserve"><value>As of {0:MM/dd HH:mm:ss} · {1} ranked · {2} other/review · {3} collection unknown</value></data>
+  <data name="RecommendationStale" xml:space="preserve"><value>Collection status or time has changed. Refresh to update the ranking.</value></data>
+  <data name="RecommendationEmpty" xml:space="preserve"><value>No ranked candidates in this scope. Review other candidates below or change the horizon or collection filter.</value></data>
+  <data name="RecommendationMore" xml:space="preserve"><value>Show more</value></data>
+  <data name="RecommendationOther" xml:space="preserve"><value>Outside horizon / preparation review ({0})</value></data>
+  <data name="RecommendationOtherRow" xml:space="preserve"><value>{0} · {1}</value></data>
+  <data name="RecommendationMethod" xml:space="preserve"><value>Ranking method and limits</value></data>
+  <data name="RecommendationMethodHelp" xml:space="preserve"><value>Initial weights: preparation timing 40, condition rarity 30, room for the first target cast 20, and next gap 10. Not success probabilities. Prerequisite frequency uses the rarest single condition as a proxy, not exact combined frequency. Includes 2 minutes for travel/setup. Similar candidates are not forced into different categories.</value></data>
+  <data name="RecommendationAnalysis" xml:space="preserve"><value>Frequency analysis: {0:yyyy-MM-dd} to {1:yyyy-MM-dd} UTC · 30 days</value></data>
+  <data name="RecommendationEnded" xml:space="preserve"><value>Selected occurrence ended · refresh needed</value></data>
+  <data name="RecommendationOpens" xml:space="preserve"><value>Available in {0}</value></data>
+  <data name="RecommendationEnds" xml:space="preserve"><value>Available · {0} remaining</value></data>
+  <data name="RecommendationAlways" xml:space="preserve"><value>No time/weather restriction · preparation still required</value></data>
+  <data name="RecommendationUnknown" xml:space="preserve"><value>Unknown</value></data>
+  <data name="RecommendationLocationTime" xml:space="preserve"><value>{0} · {1}</value></data>
+  <data name="RecommendationNowCaught" xml:space="preserve"><value>Now caught · excluded when you refresh.</value></data>
+  <data name="RecommendationStartNow" xml:space="preserve"><value>Prepare now</value></data>
+  <data name="RecommendationStartLater" xml:space="preserve"><value>Suggested preparation starts in {0}</value></data>
+  <data name="RecommendationRoom" xml:space="preserve"><value>Estimated room to attempt</value></data>
+  <data name="RecommendationTight" xml:space="preserve"><value>Tight · only the faster estimate fits</value></data>
+  <data name="RecommendationLate" xml:space="preserve"><value>Preparation estimates miss this occurrence</value></data>
+  <data name="RecommendationSummary" xml:space="preserve"><value>{0} · {1} · {2}</value></data>
+  <data name="RecommendationMap" xml:space="preserve"><value>Map</value></data>
+  <data name="RecommendationSchedule" xml:space="preserve"><value>Open schedule</value></data>
+  <data name="RecommendationUnknownCollection" xml:space="preserve"><value>Collection status is unknown for this candidate.</value></data>
+  <data name="RecommendationEstimate" xml:space="preserve"><value>Preparation times are design estimates, not measured averages or guarantees. Assumes no existing mooch bait, Intuition progress, or stored bait.</value></data>
+  <data name="RecommendationFrequency" xml:space="preserve"><value>{0} condition opportunities in 30 days · basis: {1}</value></data>
+  <data name="RecommendationFrequencyProxy" xml:space="preserve"><value>Frequency proxy: {0} in 30 days · limiting single condition: {1} · combined frequency unverified</value></data>
+  <data name="RecommendationNoRarity" xml:space="preserve"><value>No timetable rarity bonus. This does not mean the fish is easy to catch.</value></data>
+  <data name="RecommendationNext" xml:space="preserve"><value>Next opportunity using the same frequency basis: {0:MM/dd HH:mm}</value></data>
+  <data name="RecommendationNextUnknown" xml:space="preserve"><value>The next opportunity is continuous or not found within 30 days. No extra score is awarded.</value></data>
+  <data name="RecommendationScore" xml:space="preserve"><value>Reference score {0:0.0} = timing {1:0.0} + rarity {2:0.0} + room {3:0.0} + next gap {4:0.0}</value></data>
+  <data name="RecommendationAlternatives" xml:space="preserve"><value>Other routes for this occurrence</value></data>
+  <data name="RecommendationExtraStorage" xml:space="preserve"><value>Optional: extra stored {0} can reduce repeating the first two stages, at the cost of more preparation and time at the hole. {1} and the remaining chain still occur during availability. Extra stock is not required for the first cast and adds no score bonus. Stored quantity is not a target attempt count.</value></data>
+  <data name="RecommendationStethacanthus" xml:space="preserve"><value>Basic route: build {0} progress and time the final catch to trigger Intuition. Unverified alternatives such as delaying collectable acceptance are not calculated.</value></data>
+  <data name="RecommendationRubyDragon" xml:space="preserve"><value>Includes {0} time/weather restrictions. Mooch-loop success and retry counts are not guaranteed; failure may require preparing bait again.</value></data>
+  <data name="RecommendationPlanSummary" xml:space="preserve"><value>{0} · required work about {1:0.#} min · condition/retention wait about {2:0.#} min</value></data>
+  <data name="RecommendationStoredPlan" xml:space="preserve"><value>Intermediate stored-bait route</value></data>
+  <data name="RecommendationBasicPlan" xml:space="preserve"><value>Basic preparation route</value></data>
+  <data name="RecommendationFirstCast" xml:space="preserve"><value>Planned first target cast: {0:MM/dd HH:mm:ss}</value></data>
+  <data name="RecommendationFirstCastLate" xml:space="preserve"><value>The planning estimate does not reach a first target cast in this occurrence. Steps below show the faster route or a reference preparation plan.</value></data>
+  <data name="RecommendationSharedCatch" xml:space="preserve"><value>Uses the final Intuition catch as target mooch bait as well. Additional preparation may trigger Intuition too early.</value></data>
+  <data name="RecommendationStep" xml:space="preserve"><value>{0:MM/dd HH:mm}–{1:HH:mm} · {2} · {3} · estimate {4:0.##}–{5:0.##} min</value></data>
+  <data name="RecommendationTrigger" xml:space="preserve"><value>Final Intuition trigger catch</value></data>
+  <data name="RecommendationPrey" xml:space="preserve"><value>Intuition prerequisite</value></data>
+  <data name="RecommendationStore" xml:space="preserve"><value>Acquire and store mooch bait</value></data>
+  <data name="RecommendationMooch" xml:space="preserve"><value>Acquire mooch bait</value></data>
+  <data name="RecommendationRetention" xml:space="preserve"><value>Assumes staying at the same hole and retaining prerequisite progress and mooch opportunities. Visiting other holes or actions affecting retention are not modelled. Consumption or failure may require repeating preparation.</value></data>
+  <data name="RecommendationItem" xml:space="preserve"><value>Fish #{0}</value></data>
+  <data name="RecommendationOutside" xml:space="preserve"><value>No opportunity within the selected horizon</value></data>
+  <data name="RecommendationNoFreshPath" xml:space="preserve"><value>No fresh-start route connects to an occurrence in this horizon</value></data>
+  <data name="RecommendationDurationUnknown" xml:space="preserve"><value>Intuition duration unknown · ranking deferred</value></data>
+  <data name="RecommendationNested" xml:space="preserve"><value>Prerequisite itself requires Intuition · preparation review needed</value></data>
+  <data name="RecommendationAmbiguous" xml:space="preserve"><value>Alternative mooch path needs review</value></data>
+  <data name="RecommendationMissing" xml:space="preserve"><value>Condition or preparation data needs review</value></data>
+  <data name="ChangelogRecommendations" xml:space="preserve"><value>Choose fish to pursue now with preparation routes and condition rarity in view.</value></data>
+  <data name="ChangelogRecommendationRefresh" xml:space="preserve"><value>Read a stable recommendation list and refresh it for the current time when ready.</value></data>
+  <data name="ChangelogCurrentSpotAlerts" xml:space="preserve"><value>Get local chat notices with detail links for uncaught big and legendary fish at the current hole.</value></data>
+  <data name="ChangelogZeroAlerts" xml:space="preserve"><value>Set spawn alerts from 0 to 120 minutes ahead; new settings notify at the start.</value></data>
+  <data name="SpotAlertsEnabledStatus" xml:space="preserve"><value>Current-hole alerts enabled · favorite spawn alerts disabled</value></data>
+  <data name="RecommendationOptionalStock" xml:space="preserve"><value>Optional, if a storage slot is free: {1} spare {0} · extra work estimate {2:0.##}–{3:0.##} min, planning allowance {4:0.##} min. Does not affect the score.</value></data>
+  <data name="RecommendationOptionalStart" xml:space="preserve"><value>Suggested start including optional stock: {0:MM/dd HH:mm} · if already past, consider the basic route first.</value></data>
+  <data name="RecommendationFrequencyShort" xml:space="preserve"><value>Condition proxy: {0}/30 days</value></data>
+  <data name="RecommendationAlwaysFrequency" xml:space="preserve"><value>Continuous conditions</value></data>
+  <data name="RecommendationPreparationStart" xml:space="preserve"><value>Suggested preparation start: {0:MM/dd HH:mm} (includes 2 min travel/setup)</value></data>
+  <data name="RecommendationBefore" xml:space="preserve"><value>Before availability</value></data>
+  <data name="RecommendationDuring" xml:space="preserve"><value>During availability</value></data>
+  <data name="RecommendationAcross" xml:space="preserve"><value>Preparation spanning the opening</value></data>
+  <data name="SpotAlertRemaining" xml:space="preserve"><value>{0:00}:{1:00}:{2:00}</value></data>
 </root>

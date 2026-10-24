@@ -41,7 +41,9 @@ internal sealed class SpawnAlertsPanel(FishPreferences preferences, SpawnAlerts 
         var view = alerts.View;
         if (view.Session != settings.Session)
             view = new(settings.Session, new(T.AlertsWaitingCharacter), 0, 0, 0, 0, 0, []);
-        if (view.Status.Key != T.AlertsWatching)
+        if (view.Status.Key == T.AlertsDisabled && settings.CurrentSpotAlertsEnabled)
+            ImGui.TextWrapped(UiText.Get(T.SpotAlertsEnabledStatus));
+        else if (view.Status.Key != T.AlertsWatching)
             ImGui.TextWrapped(view.Status.Display);
         if (settings.Error is { } error)
             ImGui.TextWrapped(error.Display);
@@ -84,6 +86,7 @@ internal sealed class SpawnAlertsPanel(FishPreferences preferences, SpawnAlerts 
     private void DrawSettings(FishPreferencesView settings)
     {
         var enabled = settings.SpawnAlertsEnabled;
+        var currentSpot = settings.CurrentSpotAlertsEnabled;
         var minutes = settings.SpawnAlertLeadMinutes;
         var channel = Math.Max(0, Array.IndexOf(ChatChannelChoices.All, settings.SpawnAlertChannel));
         var sound = settings.SpawnAlertSound;
@@ -103,6 +106,8 @@ internal sealed class SpawnAlertsPanel(FishPreferences preferences, SpawnAlerts 
         ImGui.EndChild();
         ImGui.PopStyleVar();
         ImGui.PopStyleColor();
+        changed |= ImGui.Checkbox(UiText.Label(T.SpotAlertsEnable, "CurrentSpotAlertsEnabled"), ref currentSpot);
+        ImGui.TextWrapped(UiText.Get(T.SpotAlertsHint));
         ImGui.Spacing();
         ImGui.Separator();
         ImGui.Spacing();
@@ -192,7 +197,7 @@ internal sealed class SpawnAlertsPanel(FishPreferences preferences, SpawnAlerts 
             ImGui.TextWrapped(UiText.Get(T.AlertSoundUnavailable));
         if (changed)
             preferences.SetSpawnAlerts(enabled, minutes, ChatChannelChoices.All[channel], sound,
-                uncaughtOnly ? SpawnAlertAudience.UncaughtOnly : SpawnAlertAudience.AllFavorites, removeOnRegistration);
+                uncaughtOnly ? SpawnAlertAudience.UncaughtOnly : SpawnAlertAudience.AllFavorites, removeOnRegistration, currentSpot);
 
         if (ImGui.CollapsingHeader(UiText.Label(T.AlertsRulesHeading, "SpawnAlertRules")))
         {

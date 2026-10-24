@@ -20,6 +20,7 @@ internal sealed class MainWindow : Window
     private readonly FishingHistoryBrowser fishingHistory;
     private readonly CollectionProgressPanel collectionProgress;
     private readonly SpawnSchedulePanel schedule;
+    private readonly FishRecommendationPanel recommendations;
     private readonly SettingsBackupPanel backup;
     public Action? ShowCompact { get; set; }
     public Action? ShowTimer { get; set; }
@@ -33,13 +34,14 @@ internal sealed class MainWindow : Window
     private int lastSession = -1;
     private int selectedMarker;
     private bool selectSettings;
+    private bool selectSchedule;
     private MainPage selectedPage;
-    private enum MainPage { Catalog, Collection, Schedule, Alerts, History, Settings, Guide, Fishing }
+    private enum MainPage { Catalog, Recommendations, Collection, Schedule, Alerts, History, Settings, Guide, Fishing }
 
     public MainWindow(FishingActivityProbe observer, FishGuideDiagnostics fishGuide, FishListPanel fishList,
         SpawnAlertsPanel spawnAlerts, FishPreferences preferences, Action languageChanged,
         FishingHistoryBrowser fishingHistory, CollectionProgressPanel collectionProgress, SpawnSchedulePanel schedule,
-        SettingsBackupPanel backup) : base("DuckbillFisher###DuckbillFisher.Main")
+        SettingsBackupPanel backup, FishRecommendationPanel recommendations) : base("DuckbillFisher###DuckbillFisher.Main")
     {
         this.observer = observer;
         this.fishGuide = fishGuide;
@@ -50,6 +52,8 @@ internal sealed class MainWindow : Window
         this.fishingHistory = fishingHistory;
         this.collectionProgress = collectionProgress;
         this.schedule = schedule;
+        this.recommendations = recommendations;
+        recommendations.ShowSchedule = () => selectSchedule = true;
         this.backup = backup;
         UiText.SetLanguage(preferences.View.Language);
         markerLabels = Markers.Select(key => UiText.Get(key)).ToArray();
@@ -68,7 +72,7 @@ internal sealed class MainWindow : Window
     }
 
     public override void OnOpen() => ShowUnreadChangelog?.Invoke();
-    public override void OnClose() { schedule.SetActive(false); backup.CloseDialogs(); }
+    public override void OnClose() { schedule.SetActive(false); recommendations.SetActive(false); backup.CloseDialogs(); }
 
     public override void Draw()
     {
@@ -83,10 +87,12 @@ internal sealed class MainWindow : Window
         spawnAlerts.DeveloperMode = settings.DeveloperMode;
         DrawNavigation(settings.DeveloperMode);
         schedule.SetActive(selectedPage == MainPage.Schedule);
+        recommendations.SetActive(selectedPage == MainPage.Recommendations);
         ImGui.PushID(selectedPage.ToString());
         switch (selectedPage)
         {
             case MainPage.Catalog: fishList.Draw(); break;
+            case MainPage.Recommendations: recommendations.Draw(); break;
             case MainPage.Collection: collectionProgress.Draw(); break;
             case MainPage.Schedule: schedule.Draw(); break;
             case MainPage.Alerts: spawnAlerts.Draw(); break;
@@ -127,8 +133,9 @@ internal sealed class MainWindow : Window
             if (ImGui.BeginTabBar("DiagnosticsTabs", ImGuiTabBarFlags.FittingPolicyScroll))
             {
                 NavigationTab(MainPage.Catalog, T.TabCatalog, "CatalogTab", FontAwesomeIcon.Fish);
+                NavigationTab(MainPage.Recommendations, T.RecommendationTitle, "RecommendationsTab", FontAwesomeIcon.Compass);
                 NavigationTab(MainPage.Collection, T.TabCollectionProgress, "CollectionProgressTab", FontAwesomeIcon.ChartBar);
-                NavigationTab(MainPage.Schedule, T.ScheduleTitle, "SpawnScheduleTab", FontAwesomeIcon.CalendarAlt);
+                NavigationTab(MainPage.Schedule, T.ScheduleTitle, "SpawnScheduleTab", FontAwesomeIcon.CalendarAlt, selectSchedule);
                 NavigationTab(MainPage.Alerts, T.TabAlerts, "SpawnAlertsTab", FontAwesomeIcon.Star);
                 NavigationTab(MainPage.History, T.TabHistory, "FishingHistoryTab", FontAwesomeIcon.History);
                 NavigationTab(MainPage.Settings, T.TabSettings, "SettingsTab", FontAwesomeIcon.Cog, selectSettings);
@@ -139,6 +146,7 @@ internal sealed class MainWindow : Window
                 }
                 ImGui.EndTabBar();
                 selectSettings = false;
+                selectSchedule = false;
             }
         }
         ImGui.EndChild();

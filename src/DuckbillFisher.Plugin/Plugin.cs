@@ -28,6 +28,7 @@ public sealed class Plugin : IDalamudPlugin
     private readonly FishingItemLinkService itemLinks;
     private readonly FishingRegionObserver fishingRegion;
     private readonly SpawnAlerts spawnAlerts;
+    private readonly CurrentSpotAlerts currentSpotAlerts;
     private readonly SpawnAlertOutput alertOutput;
     private readonly SpawnAlertsPanel spawnAlertsPanel;
     private readonly CompactFishObserver compactObserver;
@@ -47,6 +48,7 @@ public sealed class Plugin : IDalamudPlugin
     private readonly BaitFinder baitFinder;
     private readonly CollectionProgress collectionProgress;
     private readonly SpawnSchedule schedule;
+    private readonly FishRecommendationService recommendations;
     private bool disposed;
 
     public Plugin(IDalamudPluginInterface pluginInterface, ICommandManager commandManager, ICondition conditions,
@@ -138,6 +140,12 @@ public sealed class Plugin : IDalamudPlugin
             fishCatalog, detailPanel, fishingMap, guideOpener, soundLibrary);
         collectionProgress = new CollectionProgress(fishCatalog, fishPreferences, fishCollection, framework);
         schedule = new SpawnSchedule(fishCatalog, fishPreferences, fishCollection, fishingRegion, preparationQuery, framework, log);
+        recommendations = new(fishCatalog, fishPreferences, fishCollection, framework, log);
+        currentSpotAlerts = new(fishingTracker, fishCatalog, fishPreferences, fishCollection, alertOutput, framework, log);
+        alertOutput.ShowDetail = id =>
+        {
+            if (fishCatalog.View.RowsById.TryGetValue(id, out var fish)) detailWindow.Show(fish);
+        };
         var collectionFishWindow = new CollectionProgressFishWindow(collectionProgress, fishCatalog, fishPreferences,
             fishCollection, textureProvider, fishingMap, detailWindow.Show);
         mainWindow = new MainWindow(fishingObserver, fishGuide, new FishListPanel(fishCatalog, textureProvider, detailPanel,
@@ -146,7 +154,8 @@ public sealed class Plugin : IDalamudPlugin
             () => commandInfo.HelpMessage = UiText.Get(TextKey.CommandHelp),
             new FishingHistoryBrowser(fishingTracker, fishCatalog, new FishingHistoryPanel(fishingTracker, textureProvider, detailWindow.Show)),
             new CollectionProgressPanel(collectionProgress, fishCatalog, fishPreferences, fishCollection, guideOpener, collectionFishWindow.Show),
-            new SpawnSchedulePanel(schedule, fishCatalog, fishPreferences, textureProvider, detailWindow.Show, fishingMap), backupPanel);
+            new SpawnSchedulePanel(schedule, fishCatalog, fishPreferences, textureProvider, detailWindow.Show, fishingMap), backupPanel,
+            new FishRecommendationPanel(recommendations, fishCatalog, fishPreferences, fishCollection, detailWindow.Show, fishingMap, guideOpener));
         mainWindow.ShowCompact = compactWindow.Toggle;
         mainWindow.ShowTimer = timerWindow.Toggle;
         var changelogWindow = new ChangelogWindow(fishPreferences);
@@ -202,11 +211,13 @@ public sealed class Plugin : IDalamudPlugin
         compactObserver.Dispose();
         collectionProgress.Dispose();
         schedule.Dispose();
+        recommendations.Dispose();
         baitPreparation.Dispose();
         baitStock.Dispose();
         baitUiProbe.Dispose();
         baitFinder.Dispose();
         spawnAlerts.Dispose();
+        currentSpotAlerts.Dispose();
         timerNotifications.Dispose();
         timerSettings.Dispose();
         fishingSounds.Dispose();

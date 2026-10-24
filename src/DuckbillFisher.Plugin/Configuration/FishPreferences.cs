@@ -18,6 +18,7 @@ internal sealed record FishPreferencesView(int Revision, int Session, bool HasCh
     public int SettingsRestoreRevision { get; init; }
     internal ulong CharacterId { get; init; }
     public bool SpawnAlertsEnabled { get; init; }
+    public bool CurrentSpotAlertsEnabled { get; init; } = true;
     public int SpawnAlertLeadMinutes { get; init; } = SpawnAlertScheduler.DefaultLeadMinutes;
     public XivChatType SpawnAlertChannel { get; init; } = XivChatType.SystemMessage;
     public int SpawnAlertSound { get; init; }
@@ -69,7 +70,7 @@ internal sealed class FishPreferences : IDisposable
     private readonly object gate = new();
     private readonly Queue<Edit> pending = new();
     private readonly Queue<PersonalEdit> pendingPersonal = new();
-    private (bool Enabled, int LeadMinutes, XivChatType Channel, int Sound, SpawnAlertAudience Audience, bool RemoveOnRegistration)? pendingAlerts;
+    private (bool Enabled, int LeadMinutes, XivChatType Channel, int Sound, SpawnAlertAudience Audience, bool RemoveOnRegistration, bool CurrentSpot)? pendingAlerts;
     private readonly Dictionary<uint, int?> pendingFishAlerts = [];
     private CatalogSettings? pendingCatalog;
     private PresetEdit? pendingPreset;
@@ -285,13 +286,13 @@ internal sealed class FishPreferences : IDisposable
     }
 
     public void SetSpawnAlerts(bool enabled, int leadMinutes, XivChatType channel, int sound,
-        SpawnAlertAudience audience, bool removeOnRegistration)
+        SpawnAlertAudience audience, bool removeOnRegistration, bool currentSpot)
     {
         lock (gate)
             if (!disposed && writable)
                 pendingAlerts = (enabled, Math.Clamp(leadMinutes, SpawnAlertScheduler.MinLeadMinutes, SpawnAlertScheduler.MaxLeadMinutes),
                     ChatChannelChoices.Supports(channel) ? channel : XivChatType.SystemMessage, Math.Clamp(sound, 0, CustomAlertSound.Choice),
-                    Enum.IsDefined(audience) ? audience : SpawnAlertAudience.AllFavorites, removeOnRegistration);
+                    Enum.IsDefined(audience) ? audience : SpawnAlertAudience.AllFavorites, removeOnRegistration, currentSpot);
     }
 
     public void SetCustomSoundPath(string path)
@@ -372,6 +373,30 @@ internal sealed class FishPreferences : IDisposable
             var success = Save(candidate);
             Publish();
             return success ? accepted : null;
+        }
+    }
+
+    public IReadOnlySet<uint>? ReserveOpeningAlerts(int expectedSession,
+        IReadOnlyList<(uint FishId, DateTimeOffset End)> occurrences)
+    {
+        if (!framework.IsInFrameworkUpdateThread)
+            throw new InvalidOperationException("Opening reservations must run on Framework.Update.");
+        lock (gate)
+        {
+            if (disposed || !writable || characterId == 0 || expectedSession != view.Session ||
+                !(configuration.SpawnAlertsEnabled || configuration.CurrentSpotAlertsEnabled)) return new HashSet<uint>();
+            if (occurrences.Count == 0) return new HashSet<uint>();
+            configuration.OpeningAlertWindows.TryGetValue(characterId, out var previous);
+            var accepted = occurrences.Where(value => value.End.ToUnixTimeMilliseconds() >
+                (previous?.GetValueOrDefault(value.FishId) ?? 0)).ToArray();
+            if (accepted.Length == 0) return new HashSet<uint>();
+            var candidate = CopyConfiguration();
+            if (!candidate.OpeningAlertWindows.TryGetValue(characterId, out var saved))
+                candidate.OpeningAlertWindows[characterId] = saved = [];
+            foreach (var value in accepted) saved[value.FishId] = value.End.ToUnixTimeMilliseconds();
+            var success = Save(candidate);
+            Publish();
+            return success ? accepted.Select(value => value.FishId).ToHashSet() : null;
         }
     }
 
@@ -535,9 +560,11 @@ internal sealed class FishPreferences : IDisposable
             if (pendingAlerts is { } alertSettings)
             {
                 changed |= candidate.SpawnAlertsEnabled != alertSettings.Enabled || candidate.SpawnAlertLeadMinutes != alertSettings.LeadMinutes ||
+                    candidate.CurrentSpotAlertsEnabled != alertSettings.CurrentSpot ||
                     candidate.SpawnAlertChannelId != (ushort)alertSettings.Channel || candidate.SpawnAlertSound != alertSettings.Sound ||
                     candidate.SpawnAlertAudience != alertSettings.Audience || candidate.RemoveFavoriteOnRegistration != alertSettings.RemoveOnRegistration;
                 candidate.SpawnAlertsEnabled = alertSettings.Enabled;
+                candidate.CurrentSpotAlertsEnabled = alertSettings.CurrentSpot;
                 candidate.SpawnAlertLeadMinutes = alertSettings.LeadMinutes;
                 candidate.SpawnAlertChannelId = (ushort)alertSettings.Channel;
                 candidate.SpawnAlertSound = alertSettings.Sound;
@@ -656,6 +683,7 @@ internal sealed class FishPreferences : IDisposable
             SavedCollection = backupChanged ? savedStates?.ToFrozenDictionary() ?? FrozenDictionary<uint, bool>.Empty : view.SavedCollection,
             CollectionSavedUtc = backup?.UpdatedUtc,
             CharacterId = characterId, SpawnAlertsEnabled = configuration.SpawnAlertsEnabled,
+            CurrentSpotAlertsEnabled = configuration.CurrentSpotAlertsEnabled,
             SpawnAlertLeadMinutes = configuration.SpawnAlertLeadMinutes,
             SpawnAlertChannel = (XivChatType)configuration.SpawnAlertChannelId, SpawnAlertSound = configuration.SpawnAlertSound,
             CustomAlertSoundPath = configuration.CustomAlertSoundPath,
@@ -684,6 +712,7 @@ internal sealed class FishPreferences : IDisposable
         CollectionBackups = configuration.CollectionBackups.ToDictionary(pair => pair.Key, pair => pair.Value.Copy()),
         Characters = configuration.Characters.ToDictionary(pair => pair.Key, pair => new Dictionary<uint, bool>(pair.Value)),
         SpawnAlertsEnabled = configuration.SpawnAlertsEnabled,
+        CurrentSpotAlertsEnabled = configuration.CurrentSpotAlertsEnabled,
         SpawnAlertLeadMinutes = configuration.SpawnAlertLeadMinutes,
         SpawnAlertChannelId = configuration.SpawnAlertChannelId, SpawnAlertSound = configuration.SpawnAlertSound,
         CustomAlertSoundPath = configuration.CustomAlertSoundPath,
@@ -700,6 +729,7 @@ internal sealed class FishPreferences : IDisposable
         SpotFishHideCaught = configuration.SpotFishHideCaught,
         FishAlertLeadMinutes = new(configuration.FishAlertLeadMinutes),
         AlertWindows = configuration.AlertWindows.ToDictionary(pair => pair.Key, pair => new Dictionary<uint, long>(pair.Value)),
+        OpeningAlertWindows = configuration.OpeningAlertWindows.ToDictionary(pair => pair.Key, pair => new Dictionary<uint, long>(pair.Value)),
     };
 
     private bool Save(FishPreferencesConfiguration candidate)

@@ -17,6 +17,7 @@ public sealed class FishPreferencesConfiguration : IPluginConfiguration
     public Dictionary<ulong, Dictionary<uint, bool>> Characters { get; set; } = [];
     public Dictionary<ulong, FishCollectionBackup> CollectionBackups { get; set; } = [];
     public bool SpawnAlertsEnabled { get; set; }
+    public bool CurrentSpotAlertsEnabled { get; set; } = true;
     public int SpawnAlertLeadMinutes { get; set; } = SpawnAlertScheduler.DefaultLeadMinutes;
     public SpawnAlertChannel SpawnAlertChannel { get; set; }
     public ushort SpawnAlertChannelId { get; set; } = (ushort)XivChatType.SystemMessage;
@@ -38,4 +39,6 @@ public sealed class FishPreferencesConfiguration : IPluginConfiguration
     public Dictionary<uint, FishPersonalRecord> PersonalRecords { get; set; } = [];
     // Last reserved window start per fish/character. Also suppresses repeats after clock rollback.
     public Dictionary<ulong, Dictionary<uint, long>> AlertWindows { get; set; } = [];
+    // Canonical time/weather occurrence END, separate from advance reservations.
+    public Dictionary<ulong, Dictionary<uint, long>> OpeningAlertWindows { get; set; } = [];
 }
