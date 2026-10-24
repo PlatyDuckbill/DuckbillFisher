@@ -28,10 +28,10 @@
 | SDK/대상 | global.json의10.0.402 · Dalamud SDK15.0.0 · x64/net10.0-windows |
 | 정규 개발 DLL | DUCKBILL_ROOT/src/DuckbillFisher.Plugin/bin/Debug/DuckbillFisher.dll |
 | 이번 별도 Debug | .cache/release-final-notes-build/DuckbillFisher.dll |
-| 이번 고정 Release 후보 DLL | .cache/release-validation/0.5.4.0-final/DuckbillFisher.dll |
-| 이번 고정 Release 후보 ZIP | artifacts/share/0.5.4.0-final/DuckbillFisher-0.5.4.0.zip |
-| 현재 게시본 확인 Release | .cache/release-validation/0.5.3.0/DuckbillFisher.dll |
-| 현재 게시본 ZIP | artifacts/share/0.5.3.0/DuckbillFisher-0.5.3.0.zip |
+| 현재 게시본 재추출 Release | .cache/release-publish-check/0.5.4.0/DuckbillFisher.dll |
+| 현재 게시본 고정 ZIP | artifacts/share/0.5.4.0-final/DuckbillFisher-0.5.4.0.zip |
+| 이전0.5.3.0 확인 Release | .cache/release-validation/0.5.3.0/DuckbillFisher.dll |
+| 이전0.5.3.0 ZIP | artifacts/share/0.5.3.0/DuckbillFisher-0.5.3.0.zip |
 | 이전0.5.2.0 추출 DLL | .cache/release-validation/0.5.2.0/DuckbillFisher.dll |
 | 이전0.5.2.0 ZIP | artifacts/share/0.5.2.0/DuckbillFisher-0.5.2.0.zip |
 | 이번 KR 대조 보고서 | .cache/compat-15.0.3.9/metadata.json |
@@ -42,9 +42,9 @@
 
 ## 개발본과 게시본 구분
 
-- 이번 배포 후보는0.5.4.0/schema23·소스b419335의 `0.5.4.0-final` 고정본이다. 최초 고정본 기능 대표 정상 보고 후 사용자 선택에 따라 내장/공개 노트를 줄이고 첫 공개에 불필요한 이전 백업 안내를 삭제했다. 별도→정규 Debug/최소 지원 Release 경고0/오류0·추출/내장 자료·한영984키 검사 통과, 최종 추출 DLL 로드/문구 응답 대기다. 응답 뒤 같은 ZIP으로 승인된 게시를 이어간다. [해시/재개](verification/releases/RELEASE-0.5.4.0.md). 공개0.5.3.0 경로와 구분한다.
+- 현재 공개판은0.5.4.0/schema23·소스b419335의 `0.5.4.0-final` 고정 ZIP이다. 최초 기능 대표 정상 보고와 최종 ‘배포 하자’ 응답 후 같은 ZIP/Release422641881을 게시했다. 익명 해시/아이콘 확인 뒤 설치 JSONa154196 push·실제 공유 raw URL0.5.4.0 일치 확인 완료, 실제 Dalamud 업데이트는 별도 대기다. 원래 최종 추출 경로의 Plugin DLL이 없어 위 새 경로에 동일 ZIP을 재추출하고7파일 해시를 확인했다. [해시/게시 근거](verification/releases/RELEASE-0.5.4.0.md). 실행 파일 재빌드 없음.
 
-- 현재 공개판은0.5.3.0이며 소스/배포 후보는0.5.4.0이다. 위 고정 ZIP/추출 DLL의 사용자 대표 정상 확인 뒤 같은 ZIP을 게시했다. 소스6dd27eb·Release421678993·설치 JSONc416117·ZIP/DLL 해시는 [배포 기록](verification/releases/RELEASE-0.5.3.0.md)을 따른다. 설치/업데이트 확인 범위는 STATUS를 따른다. 정규/별도 Debug를 게시본 확인에 쓰지 않으며 확인 뒤 실행 파일을 다시 빌드하지 않는다.
+- 이전 공개0.5.3.0은 고정 ZIP/추출 DLL의 사용자 대표 정상 확인 뒤 같은 ZIP을 게시했다. 소스6dd27eb·Release421678993·설치 JSONc416117·ZIP/DLL 해시는 [배포 기록](verification/releases/RELEASE-0.5.3.0.md)을 따른다. 정규/별도 Debug를 게시본 확인에 쓰지 않으며 확인 뒤 실행 파일을 다시 빌드하지 않는다.
 - 이전 공개0.5.2.0은 최소 참조 고정 추출본 대표 확인 뒤 같은 ZIP을 게시했다. [소스02061f4/태그·Release421639798·설치 JSON3871a41](verification/releases/RELEASE-0.5.2.0.md), 당시 실제 공유 raw URL0.5.2.0 일치 확인 완료다. 이전판 확인에는 위0.5.2.0 추출 DLL을 사용한다.
 - 이번 정규/별도 Debug는0.5.4.0/schema23이며 고정 Release 확인에는 사용하지 않는다. [어종별 기록/백업](verification/configuration/FISH-PERSONAL.md)을 포함한다. 테스트 추가/실행 없음. 이전 TRX는 `.cache/test-protection/final/final-protection.trx`, 기존 [구조 확인](verification/ARCHITECTURE-TESTS.md)·[KR 실기](verification/native/NATIVE-RUNTIME-DAL4KR.md#15039-대응과-반복-검사-2026-10-23) 대기는 유지한다.
 - 이전 공개0.5.1.0은 소스6e672e8·Release ID419790510·설치 JSONa8d5e89의 고정 ZIP이다. 사용자 대표 확인/원격 게시/익명 해시·실제 raw URL 확인은 [Release 기록](verification/releases/RELEASE-0.5.1.0.md), 실제 설치 확인은 STATUS를 따른다.

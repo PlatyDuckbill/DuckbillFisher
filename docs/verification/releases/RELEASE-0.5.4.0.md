@@ -1,6 +1,6 @@
-# 0.5.4.0 배포 후보
+# 0.5.4.0 배포 기록
 
-2026-10-24. 사용자 ‘배포 진행하자. 노트 잘 써서’ 요청에 따라 개발본 검수 뒤 버전 업데이트/배포 단계로 진행한다. 이전 Debug 안내를 새 ZIP의 실기 확인으로 확대하지 않으며 **고정 Release 추출본 확인 뒤 같은 ZIP만 게시**한다. [영어 노트](../../releases/0.5.4.0.md).
+2026-10-24. 최초 고정본 기능 대표 정상 보고 후 사용자 요청으로 업데이트 내역을 줄였다. 최종 고정본 경로/문구 확인 요청에 **‘배포 하자’** 응답을 받고 **동일 ZIP을 게시**했다. **Release/익명 자산·설치 JSON·실제 공유 raw URL 확인 완료**이며 실제 Dalamud 업데이트는 별도 대기다. [영어 노트](../../releases/0.5.4.0.md).
 
 ## 변경과 검사
 
@@ -37,3 +37,11 @@
 - 최종 추출 DLL `DUCKBILL_ROOT/.cache/release-validation/0.5.4.0-final/DuckbillFisher.dll`, SHA256 **A0524B48DD68FC9EE607433C0FA5698D4B5582BCF63B12E42534F4704A4F2032**.
 - 추출7파일/빌드 해시·버전/API/metadata/URL·내장3자료·한영984키/값 일치를 다시 확인했다. 결과 `.cache/release-build/0.5.4.0-final-validation.json`. 최종 DLL의 정상 로드·해당 문구 제거 확인을 요청했으며 응답 후 같은 ZIP으로 승인된 게시를 이어간다. 이전 후보는 덮어쓰거나 게시하지 않았다.
 - 최종 추출 DLL 경로와 로드/문구 확인을 안내한 뒤 사용자 **‘배포 하자’** 응답을 받았다. 최종본 게시 진행 확인으로 기록하며, 기능 대표 정상 보고는 최초 고정본의 **‘확인 완료고 정상’** 범위를 따른다. 게시 직전 최종 ZIP/추출7파일 해시와 소스 이후 런타임/포장 변경 없음을 재확인했다. 실행 파일 재빌드 없이 위 최종 ZIP을 게시한다.
+
+## 원격 게시와 설치 목록
+
+- 소스 **b4193351acc3e31314fc97e79b17ad1e9405ae13**를 가리키는 새v0.5.4.0 태그와 승인 범위 main을 정상 push했다. [공개 Release](https://github.com/PlatyDuckbill/DuckbillFisher/releases/tag/v0.5.4.0)는 ID**422641881**, 실제 공개 **2026-10-24T09:41:44Z / 한국18:41:44**다.
+- 초안의 ZIP/체크섬 크기·서버digest를 확인한 뒤 공개했다. 익명 정식 ZIP·체크섬·태그 아이콘 HTTP200/원본 SHA256 일치, 공개 Release 본문과 영어 노트 일치를 확인했다. 확인한 ZIP을 재빌드하거나 기존 태그/자산을 덮어쓰지 않았다. 결과 `.cache/release-remote-check/0.5.4.0/`의 publish-state.json/public-release.json/download-check.json이다.
+- 게시 직전 원래 최종 추출 경로에 Plugin DLL이 없어 고정 ZIP의7엔트리를 기존 검사 보고서 해시와 직접 대조했다. `.cache/release-publish-check/0.5.4.0/`에 새로 추출한7파일도 같은 해시이며 Plugin은 위 **A0524B48…**과 일치한다. 원래 후보 경로/파일을 변경하지 않았고 ZIP/실행 파일 재빌드는 없다. prepublish-files.json에 기록했다.
+- 익명 자산 확인 후 후보 설치 JSON을 **a154196bae644038e726bc72190d572dd9ea9c11**로 커밋·push했다. 인증 정보는 메모리에서만 사용하고 출력/파일/Git에 남기지 않았다.
+- 쿼리 없는 실제 공유 raw URL은 **2026-10-24T09:42:05Z**, **09:42:28Z**, **09:44:31Z**에 HTTP200이지만 캐시의0.5.3.0을 반환했다. **2026-10-24T09:45:52.4384009Z / 한국18:45:52**에 같은 URL의 HTTP200·0.5.4.0/API15·이름/설명/노트·설치/업데이트/아이콘 경로·LastUpdate 등22필드의 후보 JSON 일치를 확인했다. public-index-attempts.jsonl/public-index-check.json/public-pluginmaster.json에 기록했으며 캐시 우회 URL로 대체하지 않았다. 실제 Dalamud 저장소 업데이트·정상 로드/설정 복원은 별도 대기다.
