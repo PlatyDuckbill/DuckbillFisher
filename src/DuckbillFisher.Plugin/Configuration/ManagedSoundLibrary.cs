@@ -48,7 +48,7 @@ internal sealed class ManagedSoundLibrary : IDisposable
     public void ImportFile(SoundSlot slot, string source, int expectedSession)
     {
         var personal = preferences.View;
-        if (!personal.CanEdit || personal.Session != expectedSession) return;
+        if (!personal.CanEdit || personal.Session != expectedSession || !ManagedSoundFiles.UsesCustomSound(personal, slot)) return;
         lock (gate)
         {
             if (disposed || paused || !draining.IsCompleted || session != expectedSession || imports.ContainsKey(slot)) return;
@@ -143,10 +143,12 @@ internal sealed class ManagedSoundLibrary : IDisposable
             }
             if (applied) Reload?.Invoke(slot, request.Session);
         }
-        // Adopt old external paths once per path/session. A missing original is never discarded.
+        // Adopt only selected custom sounds once per path/session. Dormant paths are left alone.
         foreach (var slot in ManagedSoundFiles.Slots)
         {
-            var path = ManagedSoundFiles.Selected(preferences.View, slot);
+            var current = preferences.View;
+            if (!ManagedSoundFiles.UsesCustomSound(current, slot)) continue;
+            var path = ManagedSoundFiles.Selected(current, slot);
             lock (gate)
                 if (path.Length == 0 || files.IsManaged(slot, path) || imports.ContainsKey(slot) ||
                     attempted.GetValueOrDefault(slot) == path) continue;

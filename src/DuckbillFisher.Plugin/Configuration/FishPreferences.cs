@@ -148,7 +148,8 @@ internal sealed class FishPreferences : IDisposable
         lock (gate)
         {
             if (disposed || !writable || view.Session != expectedSession || view.SettingsRestoreRevision != restoreRevision ||
-                pendingRestore is not null || ManagedSoundFiles.Selected(view, slot) != previous) return false;
+                pendingRestore is not null || !ManagedSoundFiles.UsesCustomSound(view, slot) ||
+                ManagedSoundFiles.Selected(view, slot) != previous) return false;
             var candidate = CopyConfiguration();
             var common = CommonSettingsBackup.From(candidate);
             ManagedSoundFiles.Select(common, slot, path);

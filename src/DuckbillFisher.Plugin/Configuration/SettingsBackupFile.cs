@@ -34,6 +34,10 @@ internal static class SettingsBackupFile
     {
         var sounds = new Dictionary<SoundSlot, byte[]>();
         if (!settings.IsValid(PreferencesMigration.CurrentVersion)) throw new BackupException(BackupIssue.Invalid);
+        // A remembered path is not a selected WAV. Sanitize only the exported snapshot;
+        // keep the live preference and older format-v1 imports intact.
+        foreach (var slot in ManagedSoundFiles.Slots)
+            if (!ManagedSoundFiles.UsesCustomSound(settings, slot)) ManagedSoundFiles.Select(settings, slot, "");
         if (includeSounds)
             foreach (var slot in ManagedSoundFiles.Slots)
             {

@@ -3,7 +3,7 @@
   <data name="BackupHeading" xml:space="preserve"><value>Settings backup</value></data>
   <data name="BackupScope" xml:space="preserve"><value>Includes interface, filters, favorites, presets, alerts and timer settings. Character collection, fishing history and sent-alert records are excluded.</value></data>
   <data name="BackupIncludeSounds" xml:space="preserve"><value>Include custom WAV files (ZIP)</value></data>
-  <data name="BackupZipHint" xml:space="preserve"><value>Creates a ZIP with settings.json and configured WAV files. Missing WAV files prevent export. Existing backup files are not overwritten.</value></data>
+  <data name="BackupZipHint" xml:space="preserve"><value>Creates a ZIP with settings.json and files for sounds currently set to custom WAV. Paths remembered under None or built-in effects are excluded. Missing selected WAV files prevent export. Existing backups are not overwritten.</value></data>
   <data name="BackupJsonHint" xml:space="preserve"><value>Creates one JSON with settings and WAV paths only. Move audio separately when restoring on another PC.</value></data>
   <data name="BackupExport" xml:space="preserve"><value>Export backup</value></data>
   <data name="BackupImport" xml:space="preserve"><value>Open backup</value></data>

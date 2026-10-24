@@ -22,6 +22,21 @@ internal sealed class ManagedSoundFiles(string configDirectory)
     public string FilePath(SoundSlot slot) => Path.Combine(directory, Name(slot));
     public bool IsManaged(SoundSlot slot, string path) => string.Equals(FilePath(slot), path, StringComparison.OrdinalIgnoreCase);
 
+    public static bool UsesCustomSound(CommonSettingsBackup settings, SoundSlot slot) => (slot switch
+    {
+        SoundSlot.SpawnAlert => settings.SpawnAlertSound,
+        SoundSlot.Bite => settings.Timer.BiteSound.Sound,
+        SoundSlot.BigFish => settings.Timer.BigFishSound.Sound,
+        _ => settings.Timer.LegendaryFishSound.Sound,
+    }) == CustomAlertSound.Choice;
+    public static bool UsesCustomSound(FishPreferencesView settings, SoundSlot slot) => (slot switch
+    {
+        SoundSlot.SpawnAlert => settings.SpawnAlertSound,
+        SoundSlot.Bite => settings.Timer.BiteSound.Sound,
+        SoundSlot.BigFish => settings.Timer.BigFishSound.Sound,
+        _ => settings.Timer.LegendaryFishSound.Sound,
+    }) == CustomAlertSound.Choice;
+
     public static string Selected(CommonSettingsBackup settings, SoundSlot slot) => slot switch
     {
         SoundSlot.SpawnAlert => settings.CustomAlertSoundPath,
