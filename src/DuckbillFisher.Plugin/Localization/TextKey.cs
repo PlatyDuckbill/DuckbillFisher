@@ -192,6 +192,7 @@ internal enum TextKey
     AlertExtraHistory,
     AlertRemainingHours,
     AlertRemainingMinutes,
+    AlertOpeningNow,
     AlertSettingsHeading,
     AlertDiagnosticsHeading,
     AlertFavoritesCount,

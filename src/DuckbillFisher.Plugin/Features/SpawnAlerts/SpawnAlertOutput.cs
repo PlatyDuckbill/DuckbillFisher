@@ -134,6 +134,8 @@ internal sealed class SpawnAlertOutput : IDisposable
 
     public static string Remaining(TimeSpan time)
     {
+        if (time <= TimeSpan.Zero)
+            return UiText.Get(T.AlertOpeningNow);
         var minutes = Math.Max(0, (int)Math.Ceiling(time.TotalMinutes));
         return minutes >= 60
             ? UiText.Get(T.AlertRemainingHours, minutes / 60, minutes % 60)

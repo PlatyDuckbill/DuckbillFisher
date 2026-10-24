@@ -191,8 +191,10 @@ internal sealed class SpawnAlerts : IDisposable
         var sentAt = DateTimeOffset.UtcNow;
         if (sentAt < now || sentAt - now > TimeSpan.FromSeconds(10))
             return; // A slow save or clock jump must not replay a stale batch.
+        var deliveryWindows = candidates.ToDictionary(fish => fish.FishId, fish => fish.Window);
         var batch = reserved.OrderBy(alert => alert.Start).ThenBy(alert => alert.FishId)
-            .Where(alert => alert.Start > sentAt)
+            .Where(alert => alert.Start > sentAt || personal.AlertLead(alert.FishId) == 0 &&
+                deliveryWindows[alert.FishId].End > sentAt)
             .Select(alert => Display(alert.FishId, alert.Start, personal.AlertLead(alert.FishId))).ToArray();
         if (batch.Length == 0)
             return;

@@ -284,6 +284,7 @@ internal sealed class SpawnAlertsPanel(FishPreferences preferences, SpawnAlerts 
                     ImGui.SetNextItemWidth(ImGui.GetFontSize() * 5.5f);
                     if (ImGui.InputInt(UiText.Label(T.AlertFishMinutes, "FishLead"), ref lead))
                         preferences.SetFishAlertLead(fish.FishId, lead);
+                    UiWidgets.Tooltip(UiText.Get(T.AlertsLeadRange, SpawnAlertScheduler.MinLeadMinutes, SpawnAlertScheduler.MaxLeadMinutes));
                     ImGui.EndDisabled();
                     ImGui.SameLine();
                     if (UiWidgets.FavoriteButton("RemoveAlertFavorite", true))

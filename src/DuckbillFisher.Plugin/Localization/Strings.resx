@@ -374,7 +374,7 @@
   <data name="AlertsIntro" xml:space="preserve"><value>Manage favorites and their local reminders. By default, all favorites can alert regardless of collection status. Uncaught only uses the final collection status with manual overrides first and excludes Unknown. List filters are independent. Normal time/weather windows do not establish personal readiness.</value></data>
   <data name="AlertsEnable" xml:space="preserve"><value>Enable spawn alerts</value></data>
   <data name="AlertsLead" xml:space="preserve"><value>Default minutes before opening</value></data>
-  <data name="AlertsLeadRange" xml:space="preserve"><value>Range: {0}–{1} real minutes. Settings are shared; delivery records are separate for each character.</value></data>
+  <data name="AlertsLeadRange" xml:space="preserve"><value>Range: {0}–{1} real minutes. Use 0 to notify when the window opens. Settings are shared; delivery records are separate for each character.</value></data>
   <data name="AlertsPolicy" xml:space="preserve"><value>Only future reminders are armed. Login, reload, settings changes and long pauses never replay missed alerts. Saved per-character window records prevent duplicates. Each channel is a local display type; no message is sent to other players. One selected sound plays per batch, with default channel sounds silenced. Reserved reminders are not retried if output fails. Time/weather windows do not establish personal readiness.</value></data>
   <data name="AlertsDisabled" xml:space="preserve"><value>Spawn alerts are disabled.</value></data>
   <data name="AlertsWaitingCharacter" xml:space="preserve"><value>Waiting for character data. Previous character reservations have been discarded.</value></data>
@@ -396,6 +396,7 @@
   <data name="AlertExtraHistory" xml:space="preserve"><value> · {0} more in delivery history</value></data>
   <data name="AlertRemainingHours" xml:space="preserve"><value>in {0}h {1}m</value></data>
   <data name="AlertRemainingMinutes" xml:space="preserve"><value>in {0}m</value></data>
+  <data name="AlertOpeningNow" xml:space="preserve"><value>opening now</value></data>
   <data name="AlertSettingsHeading" xml:space="preserve"><value>Spawn alert settings</value></data>
   <data name="AlertDiagnosticsHeading" xml:space="preserve"><value>Alert diagnostics</value></data>
   <data name="AlertFavoritesCount" xml:space="preserve"><value>{0} favorites shown · hover for details</value></data>

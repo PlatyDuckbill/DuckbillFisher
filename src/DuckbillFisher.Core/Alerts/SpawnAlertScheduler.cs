@@ -10,8 +10,8 @@ public sealed record SpawnAlertEvaluation(IReadOnlyList<SpawnAlert> Due, int Arm
 /// <summary>Crosses advance-alert deadlines using explicit UTC and monotonic time inputs. Never catches up.</summary>
 public sealed class SpawnAlertScheduler
 {
-    public const int DefaultLeadMinutes = 5;
-    public const int MinLeadMinutes = 1;
+    public const int DefaultLeadMinutes = 0;
+    public const int MinLeadMinutes = 0;
     public const int MaxLeadMinutes = 60;
     private Dictionary<uint, (DateTimeOffset Start, int Lead)> armed = [];
     private DateTimeOffset? previousUtc;
@@ -76,10 +76,14 @@ public sealed class SpawnAlertScheduler
             foreach (var fish in candidates)
             {
                 if (fish.FishId == 0 || !fish.Favorite || !Includes(audience, fish.Collection) ||
-                    fish.Window is not { Kind: FishingWindowKind.Upcoming, Start: { } start } || start <= now)
+                    fish.Window is not { Kind: FishingWindowKind.Upcoming, Start: { } start })
                     continue;
                 var lead = fish.LeadMinutes ?? leadMinutes;
                 if (lead is < MinLeadMinutes or > MaxLeadMinutes)
+                    continue;
+                // A zero-minute deadline crosses the opening itself. Only an already armed,
+                // still-open window may be delivered; positive leads must remain before opening.
+                if (start <= now && (lead != 0 || fish.Window.End is not { } end || end <= now))
                     continue;
                 var deadline = start.AddMinutes(-lead);
                 if (deadline > now)
