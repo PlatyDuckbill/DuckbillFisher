@@ -27,9 +27,9 @@
 | upstream 컴파일 참조 | .cache/upstream-15.0.3.6/refs/ · build/dalamud-reference.json 고정 해시 |
 | SDK/대상 | global.json의10.0.402 · Dalamud SDK15.0.0 · x64/net10.0-windows |
 | 정규 개발 DLL | DUCKBILL_ROOT/src/DuckbillFisher.Plugin/bin/Debug/DuckbillFisher.dll |
-| 이번 별도 Debug | .cache/release-notes-build/DuckbillFisher.dll |
-| 이번 고정 Release 후보 DLL | .cache/release-validation/0.5.4.0/DuckbillFisher.dll |
-| 이번 고정 Release 후보 ZIP | artifacts/share/0.5.4.0/DuckbillFisher-0.5.4.0.zip |
+| 이번 별도 Debug | .cache/release-notes-short-build/DuckbillFisher.dll |
+| 이번 고정 Release 후보 DLL | .cache/release-validation/0.5.4.0-notes/DuckbillFisher.dll |
+| 이번 고정 Release 후보 ZIP | artifacts/share/0.5.4.0-notes/DuckbillFisher-0.5.4.0.zip |
 | 현재 게시본 확인 Release | .cache/release-validation/0.5.3.0/DuckbillFisher.dll |
 | 현재 게시본 ZIP | artifacts/share/0.5.3.0/DuckbillFisher-0.5.3.0.zip |
 | 이전0.5.2.0 추출 DLL | .cache/release-validation/0.5.2.0/DuckbillFisher.dll |
@@ -42,7 +42,7 @@
 
 ## 개발본과 게시본 구분
 
-- 이번 배포 후보는0.5.4.0/schema23·소스622544e다. 버전/설치·내장 한영 노트를 갱신했고 최소 지원 Release 경고0/오류0·고정 ZIP 추출/내장 자료·한영984키 검사를 통과했다. 위 고정 추출 DLL의 사용자 대표 확인을 요청했으며 응답 뒤 같은 ZIP으로 승인된 게시를 이어간다. 해시와 게시 재개는 [0.5.4.0 기록](verification/releases/RELEASE-0.5.4.0.md)을 따른다. 공개0.5.3.0 경로는 아래와 구분한다.
+- 이번 배포 후보는0.5.4.0/schema23·소스6cc17b8의 `0.5.4.0-notes` 고정본이다. 최초 고정본 기능 대표 정상 보고 후 사용자 선택에 따라 내장/공개 노트를 간결하게 재작성했다. 새 별도→정규 Debug/최소 지원 Release 경고0/오류0·추출/내장 자료·한영984키 검사 통과, 새 추출 DLL 로드/노트 응답 대기다. 응답 뒤 같은 ZIP으로 승인된 게시를 이어간다. [해시/재개](verification/releases/RELEASE-0.5.4.0.md). 공개0.5.3.0 경로와 구분한다.
 
 - 현재 공개판은0.5.3.0이며 소스/배포 후보는0.5.4.0이다. 위 고정 ZIP/추출 DLL의 사용자 대표 정상 확인 뒤 같은 ZIP을 게시했다. 소스6dd27eb·Release421678993·설치 JSONc416117·ZIP/DLL 해시는 [배포 기록](verification/releases/RELEASE-0.5.3.0.md)을 따른다. 설치/업데이트 확인 범위는 STATUS를 따른다. 정규/별도 Debug를 게시본 확인에 쓰지 않으며 확인 뒤 실행 파일을 다시 빌드하지 않는다.
 - 이전 공개0.5.2.0은 최소 참조 고정 추출본 대표 확인 뒤 같은 ZIP을 게시했다. [소스02061f4/태그·Release421639798·설치 JSON3871a41](verification/releases/RELEASE-0.5.2.0.md), 당시 실제 공유 raw URL0.5.2.0 일치 확인 완료다. 이전판 확인에는 위0.5.2.0 추출 DLL을 사용한다.
