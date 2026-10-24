@@ -2,6 +2,17 @@ namespace DuckbillFisher.Plugin.Localization;
 
 internal enum TextKey
 {
+    ChangelogPersonalFeatureTitle,
+    ChangelogPersonalFeatureSummary,
+    ChangelogFishNotes,
+    ChangelogFishAttempts,
+    ChangelogFishPresetLinks,
+    ChangelogPortableBackups,
+    ChangelogManagedWav,
+    ChangelogSpawnSettingsTab,
+    ChangelogCastChannel,
+    ChangelogPresetConfirmation,
+    ChangelogSettingsPolish,
     FishNoteClear,
     FishNoteClearQuestion,
     FishNoteCleared,
