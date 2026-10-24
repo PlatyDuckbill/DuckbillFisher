@@ -12,7 +12,9 @@
 
 ## 고정 산출물과 남은 단계
 
-- 최소 지원 `.cache/compat-15.0.3.6/full/` Release 빌드와 prepare-release.ps1 이후 ZIP/추출 DLL의 버전/API·파일/내장 자료·한영 리소스 및 해시를 기록한다.
-- 예정 ZIP: `artifacts/share/0.5.4.0/DuckbillFisher-0.5.4.0.zip`, 추출 DLL: `DUCKBILL_ROOT/.cache/release-validation/0.5.4.0/DuckbillFisher.dll`.
+- 소스 **622544e92fca75ad34921f3594692d21fa840d18**. 최소 지원 `.cache/compat-15.0.3.6/full/` Release 빌드 경고0/오류0·prepare-release.ps1 통과. ZIP 추출7파일과 빌드 출력 해시·프로젝트/manifest/후보 설치 JSON의 버전/API15·설명/Changelog·다운로드/태그 아이콘 URL이 일치한다.
+- Plugin/한국어 위성 DLL0.5.4.0·Core 식별자, 내장 조건/등급/고지3자료의 원본 해시와 패키지 한영 각각984키/값의 .resx 일치를 확인했다. 결과는 `.cache/release-build/0.5.4.0-validation.json`이다. 자료/패키지 검사이며 게임 실행 검증은 아니다.
+- 고정 ZIP: `artifacts/share/0.5.4.0/DuckbillFisher-0.5.4.0.zip`, **569,558바이트**, SHA256 **A424CD0DB7C1F759080F00F46B0D96727B08C151C8F75758D7B034D531C7D743**. 옆 체크섬/후보 설치 JSON도 고정했다.
+- 추출 DLL: `DUCKBILL_ROOT/.cache/release-validation/0.5.4.0/DuckbillFisher.dll`, SHA256 **B9B17B314804C6D753D605714EEC7C76893F6E0CF783D64F77B90AAFD4B0C5F3**.
 - 고정 추출본의 최신 노트/백업·개인 기록·설정 UI·기존 도감/타이머/한영/재로드 대표 확인이 남아 있다. 확인 뒤에는 실행 파일을 재빌드하지 않는다.
 - 게시 순서는 확인한 소스/태그 push → Release의 ZIP/체크섬 공개 → 익명 파일/해시·아이콘 확인 → 설치 JSON 갱신 → 실제 공유 raw URL 확인이다. 현재 공개판/실제 업데이트·전수/다른 캐릭터/장애의 확인 범위는 [STATUS](../../STATUS.md)를 따른다.
