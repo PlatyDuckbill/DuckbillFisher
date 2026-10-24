@@ -1,3 +1,4 @@
+using Dalamud.Game.Text;
 using DuckbillFisher.Core;
 
 namespace DuckbillFisher.Plugin;
@@ -8,6 +9,7 @@ public sealed record CastingTimerSettings
     public const int MaxSeconds = 3600;
     public const int MaxPresets = 20;
     public const int MaxNameLength = 64;
+    public ushort AlertChannelId { get; init; } = (ushort)XivChatType.SystemMessage;
     public List<CastTimerAlert> Alerts { get; init; } = [];
     public List<CastingTimerPreset> Presets { get; init; } = [];
     public FishingSoundSettings BiteSound { get; init; } = new();
@@ -19,7 +21,7 @@ public sealed record CastingTimerSettings
         alert is not null && alert.Id != Guid.Empty && alert.Seconds is >= 1 and <= MaxSeconds &&
         ValidName(alert.Name) && alert.Sound is >= 0 and <= 16) &&
         alerts.Select(alert => alert.Id).Distinct().Count() == alerts.Count;
-    public bool IsValid() => BiteSound is not null && BiteSound.IsValid() &&
+    public bool IsValid() => ChatChannelChoices.IsKnown((XivChatType)AlertChannelId) && BiteSound is not null && BiteSound.IsValid() &&
         BigFishSound is not null && BigFishSound.IsValid() && LegendaryFishSound is not null && LegendaryFishSound.IsValid() &&
         ValidAlerts(Alerts) && Presets is { Count: <= MaxPresets } &&
         Presets.All(preset => preset is not null && preset.Id != Guid.Empty && ValidName(preset.Name) &&
@@ -27,7 +29,7 @@ public sealed record CastingTimerSettings
         Presets.Select(preset => preset.Id).Distinct().Count() == Presets.Count &&
         Presets.Select(preset => preset.Name).Distinct(StringComparer.OrdinalIgnoreCase).Count() == Presets.Count;
     public CastingTimerSettings Copy() => this with { Alerts = [.. Alerts], Presets = Presets.Select(preset => preset.Copy()).ToList() };
-    public bool Matches(CastingTimerSettings other) => BiteSound == other.BiteSound && BigFishSound == other.BigFishSound &&
+    public bool Matches(CastingTimerSettings other) => AlertChannelId == other.AlertChannelId && BiteSound == other.BiteSound && BigFishSound == other.BigFishSound &&
         LegendaryFishSound == other.LegendaryFishSound && Alerts.SequenceEqual(other.Alerts) &&
         Presets.Count == other.Presets.Count && Presets.Zip(other.Presets).All(pair =>
             pair.First.Id == pair.Second.Id && pair.First.Name == pair.Second.Name && pair.First.Alerts.SequenceEqual(pair.Second.Alerts));

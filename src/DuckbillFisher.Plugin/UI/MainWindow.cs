@@ -51,7 +51,6 @@ internal sealed class MainWindow : Window
         this.collectionProgress = collectionProgress;
         this.schedule = schedule;
         this.backup = backup;
-        spawnAlerts.ShowSettings = OpenSettings;
         UiText.SetLanguage(preferences.View.Language);
         markerLabels = Markers.Select(key => UiText.Get(key)).ToArray();
         languageChanged();
@@ -211,8 +210,6 @@ internal sealed class MainWindow : Window
         ImGui.EndDisabled();
         if (ImGui.Button(UiText.Label(T.ChangelogTitle, "ShowChangelog"))) ShowChangelog?.Invoke();
         if (settings.Error is { } error) ImGui.TextWrapped(error.Display);
-        UiWidgets.Heading(T.AlertSettingsHeading);
-        spawnAlerts.DrawSettings();
         backup.Draw(settings);
         UiWidgets.Heading(T.DataSourceLabel);
         FishDetailPanel.DrawSources();

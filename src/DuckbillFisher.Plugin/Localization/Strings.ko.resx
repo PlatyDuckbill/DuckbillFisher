@@ -345,7 +345,7 @@
   <data name="AlertExtraHistory" xml:space="preserve"><value> · 외 {0}종은 발송 기록 참고</value></data>
   <data name="AlertRemainingHours" xml:space="preserve"><value>{0}시간 {1}분 후</value></data>
   <data name="AlertRemainingMinutes" xml:space="preserve"><value>{0}분 후</value></data>
-  <data name="AlertSettingsHeading" xml:space="preserve"><value>알림 설정</value></data>
+  <data name="AlertSettingsHeading" xml:space="preserve"><value>출현 알림 설정</value></data>
   <data name="AlertDiagnosticsHeading" xml:space="preserve"><value>알림 진단</value></data>
   <data name="AlertFavoritesCount" xml:space="preserve"><value>표시 즐겨찾기 {0}종 · 마우스를 올리면 안내 표시</value></data>
   <data name="CatalogFiltersHeading" xml:space="preserve"><value>필터 · {0}</value></data>
@@ -939,7 +939,7 @@
   <data name="FishingSoundFirstCatchOnly" xml:space="preserve"><value>최초 습득 시에만</value></data>
   <data name="TimerAlertTab" xml:space="preserve"><value>캐스팅 알림</value></data>
   <data name="TimerAlertOutputHint" xml:space="preserve"><value>공통 출력 설정에서 채팅 표시 채널을 선택합니다. 효과음은 각 탭에서 개별로 지정합니다.</value></data>
-  <data name="TimerAlertDeliveryHint" xml:space="preserve"><value>채팅 표시 채널은 공통 출력 설정에서, 효과음은 알림별로 선택합니다.</value></data>
+  <data name="TimerAlertDeliveryHint" xml:space="preserve"><value>위 채널은 캐스팅 알림에만 적용하며 효과음은 알림별로 선택합니다. 출현 알림 채널은 별도로 설정합니다.</value></data>
   <data name="TimerAlertLifecycleHint" xml:space="preserve"><value>타이머를 닫아도 동작하며, 낚아채기·중단 시 남은 알림을 취소합니다.</value></data>
   <data name="TimerAlertMissedHint" xml:space="preserve"><value>이미 지난 알림이나 관찰이 끊긴 동안의 알림은 다시 울리지 않습니다.</value></data>
   <data name="TimerAlertRulesHeading" xml:space="preserve"><value>알림 목록</value></data>

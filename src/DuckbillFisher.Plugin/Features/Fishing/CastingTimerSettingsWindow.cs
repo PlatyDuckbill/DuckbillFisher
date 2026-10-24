@@ -22,7 +22,6 @@ internal sealed class CastingTimerSettingsWindow(FishPreferences preferences, Sp
     private string presetName = "";
     private SettingsTab selectedTab;
     private enum SettingsTab { CastAlerts, FishingSounds }
-    public Action? ShowOutputSettings { get; set; }
 
     public override void PreDraw()
     {
@@ -51,7 +50,7 @@ internal sealed class CastingTimerSettingsWindow(FishPreferences preferences, Sp
         }
         var changed = false;
         DrawNavigation();
-        // Each tab owns its scrolling; navigation and output settings remain visible.
+        // Each tab owns its scrolling; navigation remains visible.
         var contentId = selectedTab == SettingsTab.CastAlerts ? "CastAlertContent" : "FishingSoundContent";
         if (ImGui.BeginChild(contentId))
         {
@@ -67,16 +66,7 @@ internal sealed class CastingTimerSettingsWindow(FishPreferences preferences, Sp
 
     private void DrawNavigation()
     {
-        var available = ImGui.GetContentRegionAvail().X;
-        var spacing = ImGui.GetStyle().ItemSpacing.X;
-        var fullButtonWidth = ActionWidth(T.TimerAlertOutputSettings);
-        var tabTextWidth = ImGui.CalcTextSize(UiText.Get(T.TimerAlertTab)).X + ImGui.CalcTextSize(UiText.Get(T.FishingSoundsHeading)).X;
-        var tabPadding = 2 * (ImGui.GetFontSize() + ImGui.GetStyle().ItemInnerSpacing.X + ImGui.GetStyle().FramePadding.X * 2);
-        // Keep both tab labels reachable at narrow widths; the cog retains the full tooltip.
-        var iconOnly = available - fullButtonWidth - spacing < tabTextWidth + tabPadding;
-        var buttonWidth = iconOnly ? ImGui.GetFrameHeight() : fullButtonWidth;
-        var tabsWidth = Math.Max(1, available - buttonWidth - spacing);
-        if (ImGui.BeginChild("TimerSettingsNavigation", new Vector2(tabsWidth, ImGui.GetFrameHeightWithSpacing()), false,
+        if (ImGui.BeginChild("TimerSettingsNavigation", new Vector2(0, ImGui.GetFrameHeightWithSpacing()), false,
             ImGuiWindowFlags.NoScrollbar | ImGuiWindowFlags.NoScrollWithMouse))
         {
             if (ImGui.BeginTabBar("TimerSettingsTabs", ImGuiTabBarFlags.FittingPolicyScroll))
@@ -87,12 +77,6 @@ internal sealed class CastingTimerSettingsWindow(FishPreferences preferences, Sp
             }
         }
         ImGui.EndChild();
-        ImGui.SameLine(0, spacing);
-        var openOutput = iconOnly
-            ? UiWidgets.IconButton(FontAwesomeIcon.Cog, "TimerAlertOutputSettings", UiText.Get(T.TimerAlertOutputHint))
-            : ActionButton(FontAwesomeIcon.Cog, T.TimerAlertOutputSettings, "TimerAlertOutputSettings");
-        if (!iconOnly) UiWidgets.Tooltip(UiText.Get(T.TimerAlertOutputHint));
-        if (openOutput) ShowOutputSettings?.Invoke();
     }
 
     private void NavigationTab(SettingsTab page, T label, string id, FontAwesomeIcon icon)
@@ -117,11 +101,16 @@ internal sealed class CastingTimerSettingsWindow(FishPreferences preferences, Sp
 
     private bool DrawCastAlerts(FishPreferencesView personal)
     {
+        var channel = Math.Max(0, Array.IndexOf(ChatChannelChoices.All, (Dalamud.Game.Text.XivChatType)draft.AlertChannelId));
+        ImGui.SetNextItemWidth(ImGui.GetFontSize() * 14);
+        var names = ChatChannelChoices.Names;
+        var changed = ImGui.Combo(UiText.Label(T.AlertChannel, "TimerChatChannel"), ref channel, names, names.Length);
+        if (changed) draft = draft with { AlertChannelId = (ushort)ChatChannelChoices.All[channel] };
         HintBullet(T.TimerAlertHint);
         HintBullet(T.TimerAlertDeliveryHint);
         HintBullet(T.TimerAlertLifecycleHint);
         HintBullet(T.TimerAlertMissedHint);
-        var changed = DrawPresets();
+        changed |= DrawPresets();
         SectionHeading(FontAwesomeIcon.Bell, T.TimerAlertRulesHeading);
         HintBullet(T.TimerAlertLimit, CastingTimerSettings.MaxAlerts, CastingTimerSettings.MaxSeconds);
         ImGui.BeginDisabled(draft.Alerts.Count >= CastingTimerSettings.MaxAlerts);

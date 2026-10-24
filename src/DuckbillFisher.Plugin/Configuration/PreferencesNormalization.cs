@@ -24,6 +24,11 @@ internal static class PreferencesNormalization
         loaded.Schedule = PreferencesMigration.Schedule(loaded.Schedule, version);
         loaded.LastSeenChangelogVersion = PreferencesMigration.SeenVersion(loaded.LastSeenChangelogVersion);
         loaded.Timer = loaded.Timer is not null && loaded.Timer.IsValid() ? loaded.Timer.Copy() : new();
+        // Older configurations and format-v1 backups shared the spawn channel with cast alerts.
+        // Copy it once; later changes to either channel remain independent.
+        if (version < 22) loaded.Timer = loaded.Timer with { AlertChannelId = loaded.SpawnAlertChannelId };
+        else if (!ChatChannelChoices.Supports((Dalamud.Game.Text.XivChatType)loaded.Timer.AlertChannelId))
+            loaded.Timer = loaded.Timer with { AlertChannelId = (ushort)Dalamud.Game.Text.XivChatType.SystemMessage };
         loaded.CollectionBackups = (loaded.CollectionBackups ?? []).Where(pair => pair.Key != 0 && pair.Value is not null && pair.Value.IsValid())
             .ToDictionary(pair => pair.Key, pair => pair.Value.Copy());
         loaded.Version = PreferencesMigration.CurrentVersion;

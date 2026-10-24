@@ -148,7 +148,6 @@ public sealed class Plugin : IDalamudPlugin
             new SpawnSchedulePanel(schedule, fishCatalog, fishPreferences, textureProvider, detailWindow.Show, fishingMap), backupPanel);
         mainWindow.ShowCompact = compactWindow.Toggle;
         mainWindow.ShowTimer = timerWindow.Toggle;
-        timerSettings.ShowOutputSettings = mainWindow.OpenSettings;
         var changelogWindow = new ChangelogWindow(fishPreferences);
         mainWindow.ShowChangelog = () => changelogWindow.IsOpen = true;
         mainWindow.ShowUnreadChangelog = changelogWindow.ShowIfUnread;

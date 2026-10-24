@@ -345,7 +345,7 @@
   <data name="AlertExtraHistory" xml:space="preserve"><value> · {0} more in delivery history</value></data>
   <data name="AlertRemainingHours" xml:space="preserve"><value>in {0}h {1}m</value></data>
   <data name="AlertRemainingMinutes" xml:space="preserve"><value>in {0}m</value></data>
-  <data name="AlertSettingsHeading" xml:space="preserve"><value>Alert settings</value></data>
+  <data name="AlertSettingsHeading" xml:space="preserve"><value>Spawn alert settings</value></data>
   <data name="AlertDiagnosticsHeading" xml:space="preserve"><value>Alert diagnostics</value></data>
   <data name="AlertFavoritesCount" xml:space="preserve"><value>{0} favorites shown · hover for details</value></data>
   <data name="CatalogFiltersHeading" xml:space="preserve"><value>Filters · {0}</value></data>
@@ -939,7 +939,7 @@ Last saved: {1:yyyy-MM-dd HH:mm}, {2} fish. Used where current observations are 
   <data name="FishingSoundFirstCatchOnly" xml:space="preserve"><value>First acquisition only</value></data>
   <data name="TimerAlertTab" xml:space="preserve"><value>Cast alerts</value></data>
   <data name="TimerAlertOutputHint" xml:space="preserve"><value>Choose the local chat channel in common output settings. Configure individual sounds in each tab.</value></data>
-  <data name="TimerAlertDeliveryHint" xml:space="preserve"><value>Choose the local chat channel in common output settings and a sound for each alert.</value></data>
+  <data name="TimerAlertDeliveryHint" xml:space="preserve"><value>The chat channel above is for cast alerts only. Choose a sound for each alert; spawn alerts have their own channel.</value></data>
   <data name="TimerAlertLifecycleHint" xml:space="preserve"><value>Alerts work with the timer closed. Hooking or stopping cancels the remaining alerts.</value></data>
   <data name="TimerAlertMissedHint" xml:space="preserve"><value>Past alerts and alerts missed during observation gaps are never replayed.</value></data>
   <data name="TimerAlertRulesHeading" xml:space="preserve"><value>Alert list</value></data>

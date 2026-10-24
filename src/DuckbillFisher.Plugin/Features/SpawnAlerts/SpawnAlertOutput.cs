@@ -148,7 +148,7 @@ internal sealed class SpawnAlertOutput : IDisposable
         if (!personal.HasCharacter || personal.Session != settings.Session) return;
         chat.Print(new XivChatEntry
         {
-            Type = settings.SpawnAlertChannel, Name = "DuckbillFisher", Silent = true,
+            Type = (XivChatType)settings.Timer.AlertChannelId, Name = "DuckbillFisher", Silent = true,
             Message = new SeStringBuilder().AddText(string.Join("\n", alerts.Select(alert =>
                 string.IsNullOrWhiteSpace(alert.Name) ? UiText.Get(T.TimerAlertMessage, alert.Seconds) :
                 UiText.Get(T.TimerAlertNamedMessage, alert.Name, alert.Seconds)))).Build(),

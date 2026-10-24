@@ -25,20 +25,14 @@ internal sealed class SpawnAlertsPanel(FishPreferences preferences, SpawnAlerts 
     private string search = "";
     private FishGuideRow? selectedRow;
     private bool resetDetailScroll;
+    private bool selectSettings;
     public bool DeveloperMode { get; set; }
-    public Action? ShowSettings { get; set; }
     public void Draw() => DrawContent();
-    public void DrawSettings()
-    {
-        var settings = preferences.View;
-        if (soundDialogSession != settings.Session) { soundFiles.Reset(); soundDialogSession = settings.Session; }
-        DrawSettings(settings, settings.SpawnAlertsEnabled);
-        soundFiles.Draw();
-    }
 
     private void DrawContent()
     {
         var settings = preferences.View;
+        if (soundDialogSession != settings.Session) { soundFiles.Reset(); soundDialogSession = settings.Session; }
         if (lastSession != settings.Session)
         {
             selectedId = null;
@@ -55,7 +49,7 @@ internal sealed class SpawnAlertsPanel(FishPreferences preferences, SpawnAlerts 
                 settings.SpawnAlertAudience, settings.RemoveFavoriteOnRegistration);
         ImGui.EndDisabled();
         ImGui.SameLine();
-        if (UiWidgets.IconButton(FontAwesomeIcon.Cog, "AlertSettings", UiText.Get(T.AlertSettingsHeading))) ShowSettings?.Invoke();
+        if (UiWidgets.IconButton(FontAwesomeIcon.Cog, "AlertSettings", UiText.Get(T.AlertSettingsHeading))) selectSettings = true;
         if (view.Status.Key != T.AlertsWatching)
             ImGui.TextWrapped(view.Status.Display);
         if (settings.Error is { } error)
@@ -72,11 +66,19 @@ internal sealed class SpawnAlertsPanel(FishPreferences preferences, SpawnAlerts 
                 ImGui.SetClipboardText(alerts.CreateReport());
         }
         ImGui.Separator();
-        if (ImGui.BeginTabBar("SpawnAlertViews"))
+        if (ImGui.BeginTabBar("SpawnAlertViews", ImGuiTabBarFlags.FittingPolicyScroll))
         {
             if (ImGui.BeginTabItem(UiText.Label(T.AlertFavorites, "AlertFavorites")))
             {
                 DrawFavorites(view, settings);
+                ImGui.EndTabItem();
+            }
+            var settingsFlags = selectSettings ? ImGuiTabItemFlags.SetSelected : ImGuiTabItemFlags.None;
+            selectSettings = false;
+            if (ImGui.BeginTabItem(UiText.Label(T.AlertSettingsHeading, "AlertSettings"), settingsFlags))
+            {
+                if (ImGui.BeginChild("SpawnAlertSettingsContent")) DrawSettings(settings, enabled);
+                ImGui.EndChild();
                 ImGui.EndTabItem();
             }
             if (ImGui.BeginTabItem(UiText.Label(T.AlertHistory, "AlertHistory")))
@@ -87,6 +89,7 @@ internal sealed class SpawnAlertsPanel(FishPreferences preferences, SpawnAlerts 
             }
             ImGui.EndTabBar();
         }
+        soundFiles.Draw();
     }
 
     private void DrawSettings(FishPreferencesView settings, bool enabled)
