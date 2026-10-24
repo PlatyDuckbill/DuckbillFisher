@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <root>
   <data name="ChangelogPersonalFeatureTitle" xml:space="preserve"><value>어종별 기록과 설정 백업</value></data>
-  <data name="ChangelogPersonalFeatureSummary" xml:space="preserve"><value>어종마다 메모와 도전 횟수를 기록하고 캐스팅 프리셋을 연결할 수 있습니다. 저장한 설정과 커스텀 음원도 백업 하나로 함께 옮길 수 있습니다.</value></data>
-  <data name="ChangelogFishNotes" xml:space="preserve"><value>어종 상세의 ‘메모·캐스팅 타이머 관리’에서 최대 1,000자 메모를 저장·되돌리기 할 수 있으며, 비우기는 확인 한 번을 거칩니다.</value></data>
-  <data name="ChangelogFishAttempts" xml:space="preserve"><value>어종별 도전 횟수를 직접 입력하거나 1씩 늘리고 줄여 개인 기록으로 남길 수 있습니다.</value></data>
-  <data name="ChangelogFishPresetLinks" xml:space="preserve"><value>어종에 캐스팅 프리셋을 연결하고 버튼으로 적용할 수 있습니다. 상세에서 프리셋 관리를 열 수 있으며, 수정은 다음 적용에 반영되고 삭제해도 메모와 횟수는 유지됩니다.</value></data>
-  <data name="ChangelogPortableBackups" xml:space="preserve"><value>설정과 저장된 어종별 기록을 JSON 또는 WAV 포함 ZIP으로 내보내고, 미리 보기 후 복원할 수 있습니다. 개인 기록이 없는 이전 백업은 현재 기록을 비우기 전에 경고합니다.</value></data>
-  <data name="ChangelogManagedWav" xml:space="preserve"><value>커스텀 WAV는 전용 복사본을 보관해 원본을 옮겨도 재생할 수 있습니다. 원본 수정 후에는 파일을 다시 선택하며, 백업에는 현재 커스텀 WAV를 선택한 용도만 포함합니다.</value></data>
-  <data name="ChangelogSpawnSettingsTab" xml:space="preserve"><value>즐겨찾기와 발송 기록 사이에 출현 알림 설정을 모았습니다. 최상단의 켜기 스위치를 강조하고 사전 시간·표시 채널·소리 입력을 정렬했습니다.</value></data>
-  <data name="ChangelogCastChannel" xml:space="preserve"><value>타이머 설정에서 캐스팅 알림의 로컬 표시 채널을 출현 알림과 별도로 지정할 수 있습니다.</value></data>
-  <data name="ChangelogPresetConfirmation" xml:space="preserve"><value>같은 이름의 프리셋을 저장할 때 덮어쓰기를 확인합니다. 확인하면 기존 어종 연결을 유지하고, 취소하면 저장된 프리셋을 보존합니다.</value></data>
-  <data name="ChangelogSettingsPolish" xml:space="preserve"><value>일반 설정의 입력과 아이콘 버튼을 정리하고 긴 도움말은 접었습니다. 프리셋·알림 개수는 제목 옆에, 상한과 초 범위는 관련 툴팁에 표시합니다.</value></data>
+  <data name="ChangelogPersonalFeatureSummary" xml:space="preserve"><value>어종별 기록을 남기고 설정과 음원을 함께 백업하세요.</value></data>
+  <data name="ChangelogFishNotes" xml:space="preserve"><value>어종마다 개인 메모를 저장할 수 있습니다.</value></data>
+  <data name="ChangelogFishAttempts" xml:space="preserve"><value>어종별 도전 횟수를 직접 기록할 수 있습니다.</value></data>
+  <data name="ChangelogFishPresetLinks" xml:space="preserve"><value>어종에 캐스팅 프리셋을 연결하고 바로 적용할 수 있습니다.</value></data>
+  <data name="ChangelogPortableBackups" xml:space="preserve"><value>설정과 개인 기록을 JSON 또는 WAV 포함 ZIP으로 백업할 수 있습니다. 개인 기록이 없는 이전 백업을 복원하면 현재 메모·횟수·연결이 비워집니다.</value></data>
+  <data name="ChangelogManagedWav" xml:space="preserve"><value>원본 WAV를 옮기거나 삭제해도 지정한 커스텀 음원을 계속 사용할 수 있습니다.</value></data>
+  <data name="ChangelogSpawnSettingsTab" xml:space="preserve"><value>즐겨찾기 관리의 새 출현 알림 설정 탭에서 출현 알림을 관리할 수 있습니다.</value></data>
+  <data name="ChangelogCastChannel" xml:space="preserve"><value>캐스팅 알림의 채팅 채널을 출현 알림과 따로 지정할 수 있습니다.</value></data>
+  <data name="ChangelogPresetConfirmation" xml:space="preserve"><value>같은 이름의 프리셋을 저장할 때 덮어쓸지 확인합니다.</value></data>
+  <data name="ChangelogSettingsPolish" xml:space="preserve"><value>설정 배치와 도움말을 정리해 원하는 항목을 찾기 쉽게 했습니다.</value></data>
   <data name="FishNoteClear" xml:space="preserve"><value>메모 비우기</value></data>
   <data name="FishNoteClearQuestion" xml:space="preserve"><value>저장된 메모와 작성 중인 메모를 비울까요?</value></data>
   <data name="FishNoteCleared" xml:space="preserve"><value>메모를 비웠습니다.</value></data>

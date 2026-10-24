@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <root>
-  <data name="ChangelogPersonalFeatureTitle" xml:space="preserve"><value>Personal fish records and portable backups</value></data>
-  <data name="ChangelogPersonalFeatureSummary" xml:space="preserve"><value>Keep notes, record attempts and link cast alert presets for each fish. Move your saved settings and custom sounds together in one backup.</value></data>
-  <data name="ChangelogFishNotes" xml:space="preserve"><value>Save up to 1,000 characters of notes per fish in Notes and casting timer. Save or revert changes, and clear a note after one confirmation.</value></data>
-  <data name="ChangelogFishAttempts" xml:space="preserve"><value>Keep personal attempt counts for each fish using minus, plus or direct number entry.</value></data>
-  <data name="ChangelogFishPresetLinks" xml:space="preserve"><value>Link a cast alert preset to a fish and apply it with a button. Open preset management directly; updates take effect on the next apply, and deleting a preset keeps notes and counts.</value></data>
-  <data name="ChangelogPortableBackups" xml:space="preserve"><value>Export and restore saved settings and fish records as JSON, or as a ZIP with selected WAV files. Preview before restoring; older backups without personal records warn before clearing current records.</value></data>
-  <data name="ChangelogManagedWav" xml:space="preserve"><value>Custom WAV choices now keep managed copies, so moving the original does not break playback. Select the source again to import edits; backups include only selected custom sounds.</value></data>
-  <data name="ChangelogSpawnSettingsTab" xml:space="preserve"><value>Spawn alert settings now sits between Favorites and Delivery history, with the main enable control at the top and aligned time, channel and sound fields.</value></data>
-  <data name="ChangelogCastChannel" xml:space="preserve"><value>Choose the cast alert local display channel in timer settings independently of spawn alerts.</value></data>
-  <data name="ChangelogPresetConfirmation" xml:space="preserve"><value>Saving a preset with an existing name asks before overwriting. Confirming keeps its fish links; cancelling preserves the saved preset.</value></data>
-  <data name="ChangelogSettingsPolish" xml:space="preserve"><value>Use aligned general settings and grouped icon buttons, with longer help folded away. Preset and alert counts appear beside headings, and limits are shown in tooltips.</value></data>
+  <data name="ChangelogPersonalFeatureTitle" xml:space="preserve"><value>Fish notes and settings backups</value></data>
+  <data name="ChangelogPersonalFeatureSummary" xml:space="preserve"><value>Keep personal fish records and back up your settings and sounds.</value></data>
+  <data name="ChangelogFishNotes" xml:space="preserve"><value>Save a personal note for each fish.</value></data>
+  <data name="ChangelogFishAttempts" xml:space="preserve"><value>Track your attempts for each fish manually.</value></data>
+  <data name="ChangelogFishPresetLinks" xml:space="preserve"><value>Link a cast alert preset to a fish and apply it from fish details.</value></data>
+  <data name="ChangelogPortableBackups" xml:space="preserve"><value>Back up settings and saved fish records as JSON, or include WAV files in a ZIP. Restoring older backups without personal records clears current notes, counts and links.</value></data>
+  <data name="ChangelogManagedWav" xml:space="preserve"><value>Keep custom sounds working after moving or deleting the original WAV file.</value></data>
+  <data name="ChangelogSpawnSettingsTab" xml:space="preserve"><value>Manage spawn alerts in the new Spawn alert settings tab in Favorites management.</value></data>
+  <data name="ChangelogCastChannel" xml:space="preserve"><value>Choose a cast alert chat channel separately from spawn alerts.</value></data>
+  <data name="ChangelogPresetConfirmation" xml:space="preserve"><value>Confirm before overwriting a preset with the same name.</value></data>
+  <data name="ChangelogSettingsPolish" xml:space="preserve"><value>Find settings more easily with tidier controls and shorter help.</value></data>
   <data name="FishNoteClear" xml:space="preserve"><value>Clear note</value></data>
   <data name="FishNoteClearQuestion" xml:space="preserve"><value>Clear both the saved note and the current draft?</value></data>
   <data name="FishNoteCleared" xml:space="preserve"><value>Note cleared.</value></data>
