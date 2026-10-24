@@ -12,7 +12,7 @@ public sealed class SpawnAlertScheduler
 {
     public const int DefaultLeadMinutes = 0;
     public const int MinLeadMinutes = 0;
-    public const int MaxLeadMinutes = 60;
+    public const int MaxLeadMinutes = 120;
     private Dictionary<uint, (DateTimeOffset Start, int Lead)> armed = [];
     private DateTimeOffset? previousUtc;
     private TimeSpan previousElapsed;
