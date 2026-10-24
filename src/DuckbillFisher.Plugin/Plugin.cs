@@ -21,6 +21,9 @@ public sealed class Plugin : IDalamudPlugin
     private readonly FishCatalog fishCatalog;
     private readonly FishingMapService fishingMap;
     private readonly FishPreferences fishPreferences;
+    private readonly ManagedSoundLibrary soundLibrary;
+    private readonly SettingsBackup settingsBackup;
+    private readonly SettingsBackupPanel backupPanel;
     private readonly FishCollectionObserver fishCollection;
     private readonly FishingItemLinkService itemLinks;
     private readonly FishingRegionObserver fishingRegion;
@@ -64,6 +67,10 @@ public sealed class Plugin : IDalamudPlugin
         fishGuide = new FishGuideDiagnostics(clientState, playerState, fishCatalog, gameGui, framework, collectionReader);
         fishingMap = new FishingMapService(gameGui, clientState, framework);
         fishPreferences = new FishPreferences(pluginInterface, clientState, playerState, framework, log);
+        var managedSounds = new ManagedSoundFiles(pluginInterface.GetPluginConfigDirectory());
+        soundLibrary = new ManagedSoundLibrary(fishPreferences, managedSounds, framework);
+        settingsBackup = new SettingsBackup(fishPreferences, managedSounds, soundLibrary, framework);
+        backupPanel = new SettingsBackupPanel(settingsBackup, fishPreferences);
         var activityReader = new NativeFishingActivityReader(framework, collectionReader);
         fishingObserver = new FishingActivityProbe(conditions, clientState, playerState, framework, chat,
             dataManager, fishPreferences, activityReader);
@@ -78,6 +85,20 @@ public sealed class Plugin : IDalamudPlugin
         alertOutput = new SpawnAlertOutput(framework, chat, fishPreferences, collectionReader.IsCompatible, log);
         timerNotifications = new CastingTimerNotifications(fishingTracker, fishPreferences, alertOutput, framework, log);
         fishingSounds = new FishingSoundNotifications(fishingTracker, fishCollection, fishCatalog, fishPreferences, alertOutput, framework, log);
+        soundLibrary.Reload = (slot, session) =>
+        {
+            if (slot == SoundSlot.SpawnAlert) alertOutput.ReloadCustomSound();
+            else fishingSounds.Reload(slot switch
+            {
+                SoundSlot.Bite => FishingSoundKind.Bite,
+                SoundSlot.BigFish => FishingSoundKind.BigFish,
+                _ => FishingSoundKind.LegendaryFish,
+            }, session);
+        };
+        settingsBackup.Restored = session =>
+        {
+            foreach (var slot in ManagedSoundFiles.Slots) soundLibrary.Reload?.Invoke(slot, session);
+        };
         spawnAlerts = new SpawnAlerts(fishCatalog, fishPreferences, fishCollection, framework, alertOutput, log);
         baitStock = new BaitStockObserver(inventory, clientState, playerState, conditions, framework, fishPreferences, () => collectionReader.IsCompatible);
         var preparationQuery = new CatalogQueryState(fishPreferences.View.Catalog);
@@ -108,12 +129,12 @@ public sealed class Plugin : IDalamudPlugin
         fishingBuffs = new FishingBuffObserver(objectTable, clientState, playerState, conditions, framework, dataManager,
             fishPreferences, fishingTracker, () => collectionReader.IsCompatible);
         timerWindow = new CastingTimerWindow(fishingTracker, fishingBuffs, textureProvider, detailWindow.Show, spotFishWindow.Toggle);
-        timerSettings = new CastingTimerSettingsWindow(fishPreferences, alertOutput, fishingSounds);
+        timerSettings = new CastingTimerSettingsWindow(fishPreferences, alertOutput, fishingSounds, soundLibrary);
         timerWindow.ShowSettings = () => timerSettings.IsOpen = true;
         compactObserver = new CompactFishObserver(fishCatalog, fishPreferences, framework, fishCollection, fishingRegion);
         compactWindow = new CompactFishWindow(compactObserver, fishPreferences, fishCollection, textureProvider, detailWindow.Show, fishingMap);
         spawnAlertsPanel = new SpawnAlertsPanel(fishPreferences, spawnAlerts, alertOutput, fishCollection, textureProvider,
-            fishCatalog, detailPanel, fishingMap, guideOpener);
+            fishCatalog, detailPanel, fishingMap, guideOpener, soundLibrary);
         collectionProgress = new CollectionProgress(fishCatalog, fishPreferences, fishCollection, framework);
         schedule = new SpawnSchedule(fishCatalog, fishPreferences, fishCollection, fishingRegion, preparationQuery, framework, log);
         var collectionFishWindow = new CollectionProgressFishWindow(collectionProgress, fishCatalog, fishPreferences,
@@ -124,7 +145,7 @@ public sealed class Plugin : IDalamudPlugin
             () => commandInfo.HelpMessage = UiText.Get(TextKey.CommandHelp),
             new FishingHistoryBrowser(fishingTracker, fishCatalog, new FishingHistoryPanel(fishingTracker, textureProvider, detailWindow.Show)),
             new CollectionProgressPanel(collectionProgress, fishCatalog, fishPreferences, fishCollection, guideOpener, collectionFishWindow.Show),
-            new SpawnSchedulePanel(schedule, fishCatalog, fishPreferences, textureProvider, detailWindow.Show, fishingMap));
+            new SpawnSchedulePanel(schedule, fishCatalog, fishPreferences, textureProvider, detailWindow.Show, fishingMap), backupPanel);
         mainWindow.ShowCompact = compactWindow.Toggle;
         mainWindow.ShowTimer = timerWindow.Toggle;
         timerSettings.ShowOutputSettings = mainWindow.OpenSettings;
@@ -175,6 +196,9 @@ public sealed class Plugin : IDalamudPlugin
         pluginInterface.UiBuilder.OpenConfigUi -= mainWindow.OpenSettings;
         commandManager.RemoveHandler(Command);
         if (shortCommandRegistered) commandManager.RemoveHandler(ShortCommand);
+        backupPanel.Dispose();
+        settingsBackup.Dispose();
+        soundLibrary.Dispose();
         compactObserver.Dispose();
         collectionProgress.Dispose();
         schedule.Dispose();

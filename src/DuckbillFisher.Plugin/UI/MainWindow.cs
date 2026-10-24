@@ -20,6 +20,7 @@ internal sealed class MainWindow : Window
     private readonly FishingHistoryBrowser fishingHistory;
     private readonly CollectionProgressPanel collectionProgress;
     private readonly SpawnSchedulePanel schedule;
+    private readonly SettingsBackupPanel backup;
     public Action? ShowCompact { get; set; }
     public Action? ShowTimer { get; set; }
     public Action? ShowChangelog { get; set; }
@@ -37,7 +38,8 @@ internal sealed class MainWindow : Window
 
     public MainWindow(FishingActivityProbe observer, FishGuideDiagnostics fishGuide, FishListPanel fishList,
         SpawnAlertsPanel spawnAlerts, FishPreferences preferences, Action languageChanged,
-        FishingHistoryBrowser fishingHistory, CollectionProgressPanel collectionProgress, SpawnSchedulePanel schedule) : base("DuckbillFisher###DuckbillFisher.Main")
+        FishingHistoryBrowser fishingHistory, CollectionProgressPanel collectionProgress, SpawnSchedulePanel schedule,
+        SettingsBackupPanel backup) : base("DuckbillFisher###DuckbillFisher.Main")
     {
         this.observer = observer;
         this.fishGuide = fishGuide;
@@ -48,6 +50,7 @@ internal sealed class MainWindow : Window
         this.fishingHistory = fishingHistory;
         this.collectionProgress = collectionProgress;
         this.schedule = schedule;
+        this.backup = backup;
         spawnAlerts.ShowSettings = OpenSettings;
         UiText.SetLanguage(preferences.View.Language);
         markerLabels = Markers.Select(key => UiText.Get(key)).ToArray();
@@ -66,7 +69,7 @@ internal sealed class MainWindow : Window
     }
 
     public override void OnOpen() => ShowUnreadChangelog?.Invoke();
-    public override void OnClose() => schedule.SetActive(false);
+    public override void OnClose() { schedule.SetActive(false); backup.CloseDialogs(); }
 
     public override void Draw()
     {
@@ -103,6 +106,7 @@ internal sealed class MainWindow : Window
                 break;
         }
         ImGui.PopID();
+        backup.DrawDialogs();
     }
 
     private void DrawNavigation(bool developerMode)
@@ -209,6 +213,7 @@ internal sealed class MainWindow : Window
         if (settings.Error is { } error) ImGui.TextWrapped(error.Display);
         UiWidgets.Heading(T.AlertSettingsHeading);
         spawnAlerts.DrawSettings();
+        backup.Draw(settings);
         UiWidgets.Heading(T.DataSourceLabel);
         FishDetailPanel.DrawSources();
     }

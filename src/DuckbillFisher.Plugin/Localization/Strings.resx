@@ -1,5 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
 <root>
+  <data name="BackupHeading" xml:space="preserve"><value>Settings backup</value></data>
+  <data name="BackupScope" xml:space="preserve"><value>Includes interface, filters, favorites, presets, alerts and timer settings. Character collection, fishing history and sent-alert records are excluded.</value></data>
+  <data name="BackupIncludeSounds" xml:space="preserve"><value>Include custom WAV files (ZIP)</value></data>
+  <data name="BackupZipHint" xml:space="preserve"><value>Creates a ZIP with settings.json and configured WAV files. Missing WAV files prevent export. Existing backup files are not overwritten.</value></data>
+  <data name="BackupJsonHint" xml:space="preserve"><value>Creates one JSON with settings and WAV paths only. Move audio separately when restoring on another PC.</value></data>
+  <data name="BackupExport" xml:space="preserve"><value>Export backup</value></data>
+  <data name="BackupImport" xml:space="preserve"><value>Open backup</value></data>
+  <data name="BackupWorking" xml:space="preserve"><value>Processing backup…</value></data>
+  <data name="BackupExported" xml:space="preserve"><value>Backup saved.</value></data>
+  <data name="BackupRestored" xml:space="preserve"><value>Settings restored.</value></data>
+  <data name="BackupPreview" xml:space="preserve"><value>Backup (UTC): {0}&#10;Favorites: {1} · Catalog presets: {2} · WAV files: {3}</value></data>
+  <data name="BackupReplaceHint" xml:space="preserve"><value>Restore replaces the common settings and included WAV files. Character collection and fishing history are preserved.</value></data>
+  <data name="BackupRestore" xml:space="preserve"><value>Restore settings</value></data>
+  <data name="BackupCancel" xml:space="preserve"><value>Cancel</value></data>
+  <data name="BackupUnsupported" xml:space="preserve"><value>This backup version is not supported. Backups from a newer plugin require that version or later.</value></data>
+  <data name="BackupInvalid" xml:space="preserve"><value>The backup is incomplete, damaged or has invalid settings. No settings were applied.</value></data>
+  <data name="BackupFileError" xml:space="preserve"><value>Could not read or save the backup, WAV files or settings. Check file access, WAV sources and whether the backup filename already exists.</value></data>
+  <data name="BackupRollbackFailed" xml:space="preserve"><value>Restore failed, and some previous WAV files could not be recovered. Check the managed sound files before using custom audio.</value></data>
+  <data name="ManagedSoundCopying" xml:space="preserve"><value>Saving a managed WAV copy…</value></data>
+  <data name="ManagedSoundSaved" xml:space="preserve"><value>Managed WAV saved. Moving or deleting the original will not affect playback.</value></data>
+  <data name="ManagedSoundFailed" xml:space="preserve"><value>Could not import the WAV. Check the local source, file limits and folder permissions.</value></data>
+  <data name="ManagedSoundHint" xml:space="preserve"><value>The selected WAV is copied to a fixed file in the plugin sound folder. Choose the file again to import edits; reloading reads the managed copy.</value></data>
   <data name="MinimumRemainingMinutes" xml:space="preserve"><value>Minimum time left (min)</value></data>
   <data name="MinimumRemainingHint" xml:space="preserve"><value>Hide fish currently available when less than this many real minutes remain. Leave blank or enter 0 for no limit. Upcoming fish are unaffected. Unknown times and always-available fish remain visible.</value></data>
   <data name="ChangelogFishingBuffTimers" xml:space="preserve"><value>The casting timer shows icons and live remaining time for Patience and Fisher's Intuition.</value></data>
@@ -667,7 +689,7 @@ Main inventory only. An unknown quantity is not zero.</value></data>
   <data name="CustomSoundChoose" xml:space="preserve"><value>Choose WAV file</value></data>
   <data name="CustomSoundReload" xml:space="preserve"><value>Reload file</value></data>
   <data name="CustomSoundStop" xml:space="preserve"><value>Stop</value></data>
-  <data name="CustomSoundHint" xml:space="preserve"><value>Local WAV, up to {0} seconds / {1} MB. Uses Windows audio volume. Reload after editing the file.</value></data>
+  <data name="CustomSoundHint" xml:space="preserve"><value>Local WAV, up to {0} seconds / {1} MB. Uses Windows audio volume. Choose the source again after editing it.</value></data>
   <data name="CustomSoundNoFile" xml:space="preserve"><value>Choose a WAV file.</value></data>
   <data name="CustomSoundReady" xml:space="preserve"><value>WAV ready.</value></data>
   <data name="CustomSoundLoading" xml:space="preserve"><value>Loading WAV…</value></data>

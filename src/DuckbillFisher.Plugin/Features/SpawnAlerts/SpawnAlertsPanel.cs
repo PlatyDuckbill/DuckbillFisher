@@ -10,7 +10,7 @@ namespace DuckbillFisher.Plugin;
 
 internal sealed class SpawnAlertsPanel(FishPreferences preferences, SpawnAlerts alerts, SpawnAlertOutput output,
     FishCollectionObserver collection, ITextureProvider textures, FishCatalog catalog, FishDetailPanel detailPanel, FishingMapService maps,
-    FishGuideOpenService guideOpener) : IDisposable
+    FishGuideOpenService guideOpener, ManagedSoundLibrary soundLibrary) : IDisposable
 {
     private readonly FileDialogManager soundFiles = new();
     private int soundDialogSession = -1;
@@ -120,7 +120,7 @@ internal sealed class SpawnAlertsPanel(FishPreferences preferences, SpawnAlerts 
             changed |= ImGui.Combo("###SpawnAlertSound", ref sound, sounds, sounds.Length);
             ImGui.TableNextColumn();
             ImGui.Dummy(new System.Numerics.Vector2(0, ImGui.GetTextLineHeight()));
-            ImGui.BeginDisabled(sound == 0 || !output.SoundAvailable || !settings.HasCharacter);
+            ImGui.BeginDisabled(sound == 0 || !output.SoundAvailable || !settings.HasCharacter || soundLibrary.Busy(SoundSlot.SpawnAlert));
             if (ImGui.Button(UiText.Label(T.AlertSoundPreview, "PreviewAlertSound"))) output.RequestPreview(sound, settings.Session);
             ImGui.EndDisabled();
             ImGui.EndTable();
@@ -128,18 +128,24 @@ internal sealed class SpawnAlertsPanel(FishPreferences preferences, SpawnAlerts 
         if (sound == CustomAlertSound.Choice)
         {
             if (settings.CustomAlertSoundPath.Length > 0) ImGui.TextWrapped(settings.CustomAlertSoundPath);
+            ImGui.BeginDisabled(soundLibrary.Busy(SoundSlot.SpawnAlert));
             if (ImGui.Button(UiText.Label(T.CustomSoundChoose, "CustomSoundChoose")))
             {
                 var expectedSession = settings.Session;
                 soundFiles.OpenFileDialog(UiText.Get(T.CustomSoundChoose), ".wav,.WAV", (bool ok, string path) =>
                 {
-                    if (!disposed && ok && preferences.View.Session == expectedSession) preferences.SetCustomSoundPath(path);
+                    if (!disposed && ok && preferences.View.Session == expectedSession) soundLibrary.ImportFile(SoundSlot.SpawnAlert, path, expectedSession);
                 });
             }
+            ImGui.EndDisabled();
             ImGui.SameLine();
+            ImGui.BeginDisabled(soundLibrary.Busy(SoundSlot.SpawnAlert));
             if (ImGui.Button(UiText.Label(T.CustomSoundReload, "CustomSoundReload"))) output.ReloadCustomSound();
+            ImGui.EndDisabled();
             ImGui.SameLine();
             if (ImGui.Button(UiText.Label(T.CustomSoundStop, "CustomSoundStop"))) output.StopCustomSound();
+            if (soundLibrary.Message(SoundSlot.SpawnAlert) is { } importMessage) ImGui.TextWrapped(importMessage.Display);
+            ImGui.TextWrapped(UiText.Get(T.ManagedSoundHint));
             ImGui.PushStyleColor(ImGuiCol.Text, ImGui.GetStyle().Colors[(int)ImGuiCol.TextDisabled]);
             ImGui.TextWrapped(UiText.Get(T.CustomSoundHint, CustomAlertSound.MaxSeconds, CustomAlertSound.MaxMegabytes));
             ImGui.PopStyleColor();

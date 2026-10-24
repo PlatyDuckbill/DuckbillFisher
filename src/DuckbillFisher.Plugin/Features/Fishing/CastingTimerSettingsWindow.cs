@@ -9,11 +9,11 @@ using T = DuckbillFisher.Plugin.Localization.TextKey;
 
 namespace DuckbillFisher.Plugin;
 
-internal sealed class CastingTimerSettingsWindow(FishPreferences preferences, SpawnAlertOutput output, FishingSoundNotifications fishingSounds)
+internal sealed class CastingTimerSettingsWindow(FishPreferences preferences, SpawnAlertOutput output, FishingSoundNotifications fishingSounds,
+    ManagedSoundLibrary soundLibrary)
     : Window("DuckbillFisher###DuckbillFisher.TimerSettings"), IDisposable
 {
     private readonly FileDialogManager soundFiles = new();
-    private (FishingSoundKind Kind, int Session, string Path)? selectedFile;
     private int dialogSession = -1;
     private bool disposed;
     private CastingTimerSettings draft = new();
@@ -37,20 +37,19 @@ internal sealed class CastingTimerSettingsWindow(FishPreferences preferences, Sp
     public override void OnClose()
     {
         soundFiles.Reset();
-        selectedFile = null;
         if (lastSaved is not null && draft.IsValid() && !draft.Matches(lastSaved)) preferences.SetTimer(draft);
     }
 
     public override void Draw()
     {
         var personal = preferences.View;
-        if (dialogSession != personal.Session) { soundFiles.Reset(); selectedFile = null; dialogSession = personal.Session; }
+        if (dialogSession != personal.Session) { soundFiles.Reset(); dialogSession = personal.Session; }
         if (lastSaved is null || !personal.Timer.Matches(lastSaved))
         {
             lastSaved = personal.Timer.Copy();
             draft = personal.Timer.Copy();
         }
-        var changed = ApplySelectedFile(personal);
+        var changed = false;
         DrawNavigation();
         // Each tab owns its scrolling; navigation and output settings remain visible.
         var contentId = selectedTab == SettingsTab.CastAlerts ? "CastAlertContent" : "FishingSoundContent";
@@ -171,21 +170,6 @@ internal sealed class CastingTimerSettingsWindow(FishPreferences preferences, Sp
         return changed;
     }
 
-    private bool ApplySelectedFile(FishPreferencesView personal)
-    {
-        var changed = false;
-        if (selectedFile is { } file)
-        {
-            selectedFile = null;
-            if (personal.CanEdit && file.Session == personal.Session)
-            {
-                ReplaceSound(file.Kind, FishingSoundNotifications.Settings(draft, file.Kind) with { CustomPath = file.Path });
-                changed = true;
-            }
-        }
-        return changed;
-    }
-
     private bool DrawFishingSounds(FishPreferencesView personal)
     {
         var changed = false;
@@ -195,6 +179,12 @@ internal sealed class CastingTimerSettingsWindow(FishPreferences preferences, Sp
         {
             ImGui.PushID((int)kind);
             var rule = FishingSoundNotifications.Settings(draft, kind);
+            var slot = kind switch
+            {
+                FishingSoundKind.Bite => SoundSlot.Bite,
+                FishingSoundKind.BigFish => SoundSlot.BigFish,
+                _ => SoundSlot.LegendaryFish,
+            };
             var title = kind switch
             {
                 FishingSoundKind.Bite => T.FishingSoundBite,
@@ -220,7 +210,7 @@ internal sealed class CastingTimerSettingsWindow(FishPreferences preferences, Sp
             ImGui.SetNextItemWidth(ImGui.GetFontSize() * 12);
             changed |= ImGui.Combo(UiText.Label(T.AlertSound, "FishingSoundChoice"), ref sound, names, names.Length);
             ImGui.SameLine();
-            ImGui.BeginDisabled(!personal.HasCharacter || sound == 0);
+            ImGui.BeginDisabled(!personal.HasCharacter || sound == 0 || soundLibrary.Busy(slot));
             if (UiWidgets.IconButton(FontAwesomeIcon.VolumeUp, "PreviewFishingSound", UiText.Get(T.AlertSoundPreview)))
                 fishingSounds.Preview(kind, personal.Session);
             ImGui.EndDisabled();
@@ -237,21 +227,26 @@ internal sealed class CastingTimerSettingsWindow(FishPreferences preferences, Sp
                     ImGui.TextWrapped(UiText.Get(T.FishingSoundFile, Path.GetFileName(rule.CustomPath)));
                     UiWidgets.Tooltip(rule.CustomPath);
                 }
+                ImGui.BeginDisabled(soundLibrary.Busy(slot));
                 if (ActionButton(FontAwesomeIcon.FolderOpen, T.CustomSoundChoose, "ChooseFishingSound"))
                 {
                     var expectedSession = personal.Session;
                     soundFiles.OpenFileDialog(UiText.Get(T.CustomSoundChoose), ".wav,.WAV", (bool ok, string path) =>
                     {
                         if (!disposed && ok && preferences.View.Session == expectedSession)
-                            selectedFile = (kind, expectedSession, path);
+                            soundLibrary.ImportFile(slot, path, expectedSession);
                     });
                 }
+                ImGui.EndDisabled();
                 ImGui.SameLine();
+                ImGui.BeginDisabled(soundLibrary.Busy(slot));
                 if (UiWidgets.IconButton(FontAwesomeIcon.SyncAlt, "ReloadFishingSound", UiText.Get(T.CustomSoundReload)))
                     fishingSounds.Reload(kind, personal.Session);
+                ImGui.EndDisabled();
                 ImGui.SameLine();
                 if (UiWidgets.IconButton(FontAwesomeIcon.Stop, "StopFishingSound", UiText.Get(T.CustomSoundStop)))
                     fishingSounds.Stop(kind, personal.Session);
+                if (soundLibrary.Message(slot) is { } importMessage) ImGui.TextWrapped(importMessage.Display);
                 ImGui.TextWrapped(UiText.Get(fishingSounds.CustomSound(kind).State switch
                 {
                     CustomSoundState.Ready => T.CustomSoundReady,
@@ -271,7 +266,7 @@ internal sealed class CastingTimerSettingsWindow(FishPreferences preferences, Sp
         {
             SectionHeading(FontAwesomeIcon.InfoCircle, T.FishingSoundWaveHelp);
             HintBullet(T.FishingSoundWaveLimits, CustomAlertSound.MaxSeconds, CustomAlertSound.MaxMegabytes);
-            HintBullet(T.FishingSoundWaveReloadHint);
+            HintBullet(T.ManagedSoundHint);
         }
         if (fishingSounds.PreviewResult is { } preview) ImGui.TextWrapped(preview.Display);
         return changed;
@@ -284,7 +279,7 @@ internal sealed class CastingTimerSettingsWindow(FishPreferences preferences, Sp
         _ => draft with { LegendaryFishSound = value },
     };
 
-    public void Dispose() { disposed = true; selectedFile = null; soundFiles.Reset(); }
+    public void Dispose() { disposed = true; soundFiles.Reset(); }
 
     private bool DrawPresets()
     {

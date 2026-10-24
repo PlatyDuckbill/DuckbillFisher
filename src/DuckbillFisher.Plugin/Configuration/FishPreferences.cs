@@ -13,6 +13,7 @@ internal sealed record FishPreferencesView(int Revision, int Session, bool HasCh
 {
     // Only inputs to catalog/collection filtering; alert reservations do not invalidate them.
     public int CatalogRevision { get; init; }
+    public int SettingsRestoreRevision { get; init; }
     internal ulong CharacterId { get; init; }
     public bool SpawnAlertsEnabled { get; init; }
     public int SpawnAlertLeadMinutes { get; init; } = SpawnAlertScheduler.DefaultLeadMinutes;
@@ -75,6 +76,7 @@ internal sealed class FishPreferences : IDisposable
     private bool? pendingSpotFishHideCaught;
     private string? pendingCustomSoundPath;
     private Version? pendingChangelogVersion;
+    private (CommonSettingsBackup Settings, int Session, CancellationToken Token, Action<bool> Completed)? pendingRestore;
     private FishPreferencesConfiguration configuration = new();
     private FishPreferencesView view = new(0, 0, false, false,
         FrozenSet<uint>.Empty, FrozenDictionary<uint, bool>.Empty, null);
@@ -98,30 +100,7 @@ internal sealed class FishPreferences : IDisposable
             else if (saved is FishPreferencesConfiguration loaded && PreferencesValidation.IsValid(loaded))
             {
                 configuration = loaded;
-                if (loaded.Version <= 3)
-                    configuration.SpawnAlertChannelId = (ushort)(loaded.SpawnAlertChannel switch
-                    {
-                        SpawnAlertChannel.Say => XivChatType.Say,
-                        SpawnAlertChannel.CrossWorldLinkshell1 => XivChatType.CrossLinkShell1,
-                        _ => XivChatType.SystemMessage,
-                    });
-                // A removed display channel must not invalidate favorites or character records.
-                if (!ChatChannelChoices.Supports((XivChatType)configuration.SpawnAlertChannelId))
-                    configuration.SpawnAlertChannelId = (ushort)XivChatType.SystemMessage;
-                // Schema 8 applies the requested enabled default once; later saved opt-outs are retained.
-                if (loaded.Version < 8)
-                    configuration.RemoveFavoriteOnRegistration = true;
-                configuration.Catalog = PreferencesMigration.Catalog(loaded.Catalog, loaded.Version);
-                configuration.Compact = PreferencesMigration.Compact(loaded.Compact, loaded.Catalog, loaded.Version);
-                configuration.CatalogPresets = PreferencesMigration.Presets(loaded.CatalogPresets, loaded.Version);
-                configuration.CustomAlertSoundPath ??= "";
-                configuration.UiScalePercent = UiScale.Normalize(configuration.UiScalePercent);
-                configuration.Schedule = PreferencesMigration.Schedule(loaded.Schedule, loaded.Version);
-                configuration.LastSeenChangelogVersion = PreferencesMigration.SeenVersion(loaded.LastSeenChangelogVersion);
-                configuration.Timer = loaded.Timer is not null && loaded.Timer.IsValid() ? loaded.Timer.Copy() : new();
-                configuration.CollectionBackups = (loaded.CollectionBackups ?? []).Where(pair => pair.Key != 0 && pair.Value is not null && pair.Value.IsValid())
-                    .ToDictionary(pair => pair.Key, pair => pair.Value.Copy());
-                configuration.Version = FishPreferencesConfiguration.CurrentVersion;
+                PreferencesNormalization.Normalize(loaded);
                 writable = true;
             }
             else
@@ -137,6 +116,48 @@ internal sealed class FishPreferences : IDisposable
     }
 
     public FishPreferencesView View { get { lock (gate) return view; } }
+
+    public CommonSettingsBackup? ExportSettings()
+    {
+        lock (gate) return !disposed && writable ? CommonSettingsBackup.From(configuration) : null;
+    }
+
+    public bool RestoreSettings(CommonSettingsBackup settings, int session, CancellationToken token, Action<bool> completed)
+    {
+        lock (gate)
+        {
+            if (disposed || !writable || session != view.Session || token.IsCancellationRequested || pendingRestore is not null) return false;
+            pendingRestore = (settings, session, token, completed);
+            return true;
+        }
+    }
+
+    public void CancelSettingsRestore()
+    {
+        lock (gate)
+        {
+            pendingRestore?.Completed(false);
+            pendingRestore = null;
+        }
+    }
+
+    public bool SetManagedSoundPath(SoundSlot slot, string path, string previous, int expectedSession, int restoreRevision)
+    {
+        if (!framework.IsInFrameworkUpdateThread)
+            throw new InvalidOperationException("Managed sound settings must be saved on Framework.Update.");
+        lock (gate)
+        {
+            if (disposed || !writable || view.Session != expectedSession || view.SettingsRestoreRevision != restoreRevision ||
+                pendingRestore is not null || ManagedSoundFiles.Selected(view, slot) != previous) return false;
+            var candidate = CopyConfiguration();
+            var common = CommonSettingsBackup.From(candidate);
+            ManagedSoundFiles.Select(common, slot, path);
+            common.Apply(candidate);
+            var saved = Save(candidate);
+            Publish();
+            return saved;
+        }
+    }
 
     public void MarkChangelogSeen(Version version)
     {
@@ -345,6 +366,38 @@ internal sealed class FishPreferences : IDisposable
             }
             else if (stateErrorChanged)
                 Publish();
+            if (pendingRestore is { } restore)
+            {
+                pendingRestore = null;
+                var success = false;
+                if (writable && restore.Session == view.Session && !restore.Token.IsCancellationRequested)
+                {
+                    var restored = CopyConfiguration();
+                    restore.Settings.Apply(restored);
+                    success = Save(restored);
+                    if (success) view = view with { SettingsRestoreRevision = view.SettingsRestoreRevision + 1, CatalogPresetError = null };
+                    Publish();
+                }
+                restore.Completed(success);
+                if (success)
+                {
+                    // Restore replaces common settings; discard older common edits, preserve manual collection edits.
+                    pendingAlerts = null;
+                    pendingFishAlerts.Clear();
+                    pendingCatalog = null;
+                    pendingPreset = null;
+                    pendingInterface = null;
+                    pendingUiScale = null;
+                    pendingCompact = null;
+                    pendingSchedule = null;
+                    pendingTimer = null;
+                    pendingSpotFishHideCaught = null;
+                    pendingCustomSoundPath = null;
+                    var manualEdits = pending.Where(edit => edit.Manual).ToArray();
+                    pending.Clear();
+                    foreach (var edit in manualEdits) pending.Enqueue(edit);
+                }
+            }
             if (pending.Count == 0 && pendingAlerts is null && pendingFishAlerts.Count == 0 && pendingCatalog is null && pendingPreset is null && pendingInterface is null && pendingUiScale is null && pendingCompact is null && pendingSchedule is null && pendingTimer is null && pendingSpotFishHideCaught is null && pendingCustomSoundPath is null && pendingChangelogVersion is null)
                 return;
             var candidate = CopyConfiguration();
@@ -497,6 +550,7 @@ internal sealed class FishPreferences : IDisposable
             manualChanged ? manual.ToFrozenDictionary() : view.ManualCaught, view.Error)
         {
             CatalogRevision = catalogRevision,
+            SettingsRestoreRevision = view.SettingsRestoreRevision,
             SavedCollection = backupChanged ? savedStates?.ToFrozenDictionary() ?? FrozenDictionary<uint, bool>.Empty : view.SavedCollection,
             CollectionSavedUtc = backup?.UpdatedUtc,
             CharacterId = characterId, SpawnAlertsEnabled = configuration.SpawnAlertsEnabled,
@@ -579,6 +633,8 @@ internal sealed class FishPreferences : IDisposable
             pendingSpotFishHideCaught = null;
             pendingCustomSoundPath = null;
             pendingChangelogVersion = null;
+            pendingRestore?.Completed(false);
+            pendingRestore = null;
         }
         framework.Update -= OnUpdate;
     }

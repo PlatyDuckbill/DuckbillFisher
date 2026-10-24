@@ -24,6 +24,7 @@
 | UI 배율 | UiScale, MainWindow, FishPreferences | WindowSystem 그리기에만 글자/스타일 배율 적용 후 finally로 원복. 게임 미끼 UI overlay는 범위 밖 |
 | 로컬 출력 | SpawnAlerts, SpawnAlertOutput, FishingMapService, FishingItemLinkService, FishGuideOpenService | 채팅/SE와 명시적 클릭 처리, 서버 송신 없음 |
 | 커스텀 WAV | CustomAlertSound, SpawnAlertsPanel | 전용 스레드의 Windows MCI alias/임시 복사본, 관리 요청·세대·상태만 공유 |
+| 설정 백업·전용 WAV | CommonSettingsBackup, SettingsBackupFile, SettingsBackup, ManagedSoundFiles, ManagedSoundLibrary | 공통 설정만 버전별 JSON/ZIP 변환·제한/해시 검증. 관리 작업자 파일 처리, Framework 설정 적용·세션/취소·영구 음원 원자 교체/실패 복구. [계약](../product/SETTINGS-BACKUP.md) |
 | 업데이트 내역 | ChangelogWindow, MainWindow, FishPreferences | 메인 OnOpen에서 미확인 버전 안내, 내장 한영 릴리스 요약·최대 최신10개 표시, 공통 확인 버전을 기존 Framework 설정 큐로 저장. 원격 조회 없음 |
 | 진단 | FishingConditionObserver, FishingActivityProbe, FishGuideDiagnostics, BaitUiProbe | 원시 관찰과 제품 판정 구분, 개발자 도구 |
 
@@ -31,7 +32,7 @@
 
 - Core는 Alerts/Catalog/Collection/Data/Fishing/Forecast로 나눈다. 게임 API·파일 저장·번역·ImGui를 가져오지 않는다.
 - Plugin의 Features는 Catalog/Collection/Fishing/Bait/SpawnAlerts/SpawnSchedule 단위로 화면과 해당 처리를 가까이 둔다. 공통 표시만 UI, 게임 읽기/실행 어댑터는 Game/Native·Contracts·Services, 개발 관찰은 Diagnostics에 둔다.
-- Configuration의 FishPreferencesConfiguration은 기존 직렬화 타입, PreferencesValidation은 입력 검증, PreferencesMigration은 파일 접근 없는 표시 설정 변환, FishPreferences는 Framework 요청·세션·저장·snapshot 발행을 맡는다.
+- Configuration의 FishPreferencesConfiguration은 기존 직렬화 타입, PreferencesValidation은 입력 검증, PreferencesMigration은 파일 접근 없는 표시 설정 변환, PreferencesNormalization은 일반 로딩/백업의 공통 정규화, FishPreferences는 Framework 요청·세션·저장·snapshot 발행을 맡는다. 백업 DTO는 캐릭터/발송/안내 확인 상태를 포함하지 않는다.
 - 디렉터리 이동은 namespace/AssemblyName/InternalName과 설정·리소스 이름을 바꾸지 않는다. Localization은 리소스 이름/검사 스크립트의 고정 경로를 유지한다.
 - 별도 DI 프레임워크·DB·이벤트 버스를 추가하지 않는다. Plugin은 Plugin.cs에서 직접 조립한다. SDK/버전은 global.json·csproj·lock 파일과 공통 build/DalamudReferences.targets를 기준으로 하며 의존성 업그레이드는 별도 작업이다.
 
