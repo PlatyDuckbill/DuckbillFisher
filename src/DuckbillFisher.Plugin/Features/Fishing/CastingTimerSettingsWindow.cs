@@ -105,11 +105,9 @@ internal sealed class CastingTimerSettingsWindow(FishPreferences preferences, Sp
         ImGui.SetNextItemWidth(ImGui.GetFontSize() * 14);
         var names = ChatChannelChoices.Names;
         var changed = ImGui.Combo(UiText.Label(T.AlertChannel, "TimerChatChannel"), ref channel, names, names.Length);
+        UiWidgets.Tooltip(UiText.Get(T.TimerAlertDeliveryHint));
         if (changed) draft = draft with { AlertChannelId = (ushort)ChatChannelChoices.All[channel] };
-        HintBullet(T.TimerAlertHint);
-        HintBullet(T.TimerAlertDeliveryHint);
-        HintBullet(T.TimerAlertLifecycleHint);
-        HintBullet(T.TimerAlertMissedHint);
+        ImGui.TextWrapped(UiText.Get(T.TimerAlertHint));
         changed |= DrawPresets();
         SectionHeading(FontAwesomeIcon.Bell, T.TimerAlertRulesHeading);
         HintBullet(T.TimerAlertLimit, CastingTimerSettings.MaxAlerts, CastingTimerSettings.MaxSeconds);
@@ -306,6 +304,7 @@ internal sealed class CastingTimerSettingsWindow(FishPreferences preferences, Sp
             draft = draft with { Alerts = [.. selected.Alerts] };
             changed = true;
         }
+        UiWidgets.Tooltip(UiText.Get(T.TimerAlertPresetReplaceHint));
         ImGui.EndDisabled();
         ImGui.SameLine();
         ImGui.BeginDisabled(selected is null);
@@ -332,8 +331,6 @@ internal sealed class CastingTimerSettingsWindow(FishPreferences preferences, Sp
             changed = true;
         }
         ImGui.EndDisabled();
-        HintBullet(T.TimerAlertPresetContentsHint);
-        HintBullet(T.TimerAlertPresetReplaceHint);
         HintBullet(T.TimerAlertPresetHint, CastingTimerSettings.MaxPresets);
         return changed;
     }
@@ -361,18 +358,5 @@ internal sealed class CastingTimerSettingsWindow(FishPreferences preferences, Sp
     private static float ActionWidth(T key) => ImGui.GetFrameHeight() + ImGui.CalcTextSize(UiText.Get(key)).X +
         ImGui.GetStyle().FramePadding.X * 2;
 
-    private static bool ActionButton(FontAwesomeIcon icon, T key, string id)
-    {
-        var clicked = ImGui.Button($"###{id}", new Vector2(ActionWidth(key), ImGui.GetFrameHeight()));
-        var min = ImGui.GetItemRectMin();
-        var max = ImGui.GetItemRectMax();
-        var origin = min + ImGui.GetStyle().FramePadding;
-        var draw = ImGui.GetWindowDrawList();
-        var color = ImGui.GetColorU32(ImGuiCol.Text);
-        draw.PushClipRect(min, max, true);
-        draw.AddText(UiBuilder.IconFont, ImGui.GetFontSize(), origin, color, icon.ToIconString());
-        draw.AddText(origin + new Vector2(ImGui.GetFrameHeight(), 0), color, UiText.Get(key));
-        draw.PopClipRect();
-        return clicked;
-    }
+    private static bool ActionButton(FontAwesomeIcon icon, T key, string id) => UiWidgets.ActionButton(icon, key, id);
 }

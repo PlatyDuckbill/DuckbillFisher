@@ -192,27 +192,59 @@ internal sealed class MainWindow : Window
         UiWidgets.Heading(T.InterfaceSettings);
         var language = (int)settings.Language;
         var developer = settings.DeveloperMode;
-        ImGui.BeginDisabled(!settings.CanEdit);
-        ImGui.SetNextItemWidth(ImGui.GetFontSize() * 12);
-        var changed = ImGui.Combo(UiText.Label(T.Language, "Language"), ref language, LanguageNames, LanguageNames.Length);
-        changed |= ImGui.Checkbox(UiText.Label(T.DeveloperMode, "DeveloperMode"), ref developer);
-        ImGui.EndDisabled();
-        UiWidgets.Tooltip(UiText.Get(T.DeveloperModeHint));
+        var changed = false;
+        if (ImGui.BeginTable("InterfaceSettingsFields", 2, ImGuiTableFlags.SizingFixedFit))
+        {
+            var labelWidth = new[] { T.Language, T.UiScale, T.DeveloperMode, T.ChangelogTitle }
+                .Max(key => ImGui.CalcTextSize(UiText.Get(key)).X);
+            ImGui.TableSetupColumn("Setting", ImGuiTableColumnFlags.WidthFixed, labelWidth);
+            ImGui.TableSetupColumn("Value", ImGuiTableColumnFlags.WidthStretch);
+            ImGui.BeginDisabled(!settings.CanEdit);
+            ImGui.TableNextRow();
+            ImGui.TableNextColumn();
+            ImGui.AlignTextToFramePadding();
+            ImGui.TextUnformatted(UiText.Get(T.Language));
+            ImGui.TableNextColumn();
+            ImGui.SetNextItemWidth(Math.Max(1, Math.Min(ImGui.GetContentRegionAvail().X, ImGui.GetFontSize() * 14)));
+            changed = ImGui.Combo("###Language", ref language, LanguageNames, LanguageNames.Length);
+            ImGui.TableNextRow();
+            ImGui.TableNextColumn();
+            ImGui.AlignTextToFramePadding();
+            ImGui.TextUnformatted(UiText.Get(T.UiScale));
+            ImGui.TableNextColumn();
+            var scaleIndex = Array.IndexOf(UiScale.Choices, settings.UiScalePercent);
+            var scaleWidth = Math.Min(ImGui.GetContentRegionAvail().X, ImGui.GetFontSize() * 14);
+            ImGui.SetNextItemWidth(Math.Max(1, scaleWidth - ImGui.GetFrameHeight() - ImGui.GetStyle().ItemSpacing.X));
+            if (ImGui.Combo("###UiScale", ref scaleIndex, UiScale.Labels, UiScale.Labels.Length))
+                preferences.SetUiScale(UiScale.Choices[scaleIndex]);
+            UiWidgets.Tooltip(UiText.Get(T.UiScaleHint));
+            ImGui.SameLine();
+            if (UiWidgets.IconButton(FontAwesomeIcon.Undo, "ResetUiScale", UiText.Get(T.UiScaleReset)))
+                preferences.SetUiScale(UiScale.DefaultPercent);
+            ImGui.TableNextRow();
+            ImGui.TableNextColumn();
+            ImGui.AlignTextToFramePadding();
+            ImGui.TextUnformatted(UiText.Get(T.DeveloperMode));
+            ImGui.TableNextColumn();
+            changed |= ImGui.Checkbox("###DeveloperMode", ref developer);
+            UiWidgets.Tooltip(UiText.Get(T.DeveloperModeHint));
+            ImGui.EndDisabled();
+            ImGui.TableNextRow();
+            ImGui.TableNextColumn();
+            ImGui.AlignTextToFramePadding();
+            ImGui.TextUnformatted(UiText.Get(T.ChangelogTitle));
+            ImGui.TableNextColumn();
+            var updatesWidth = Math.Max(1, Math.Min(ImGui.GetContentRegionAvail().X, ImGui.GetFontSize() * 14));
+            if (UiWidgets.ActionButton(FontAwesomeIcon.History, T.SettingsViewUpdates, "ShowChangelog", updatesWidth)) ShowChangelog?.Invoke();
+            ImGui.EndTable();
+        }
         if (changed) preferences.SetInterface((UiLanguage)language, developer);
-        ImGui.BeginDisabled(!settings.CanEdit);
-        var scaleIndex = Array.IndexOf(UiScale.Choices, settings.UiScalePercent);
-        ImGui.SetNextItemWidth(ImGui.GetFontSize() * 8);
-        if (ImGui.Combo(UiText.Label(T.UiScale, "UiScale"), ref scaleIndex, UiScale.Labels, UiScale.Labels.Length))
-            preferences.SetUiScale(UiScale.Choices[scaleIndex]);
-        UiWidgets.Tooltip(UiText.Get(T.UiScaleHint));
-        if (ImGui.Button(UiText.Label(T.UiScaleReset, "ResetUiScale")))
-            preferences.SetUiScale(UiScale.DefaultPercent);
-        ImGui.EndDisabled();
-        if (ImGui.Button(UiText.Label(T.ChangelogTitle, "ShowChangelog"))) ShowChangelog?.Invoke();
         if (settings.Error is { } error) ImGui.TextWrapped(error.Display);
         backup.Draw(settings);
-        UiWidgets.Heading(T.DataSourceLabel);
-        FishDetailPanel.DrawSources();
+        ImGui.Spacing();
+        ImGui.Separator();
+        if (FishingData.Failure is not null || ImGui.CollapsingHeader(UiText.Label(T.DataSourceLabel, "SettingsSources")))
+            FishDetailPanel.DrawSources();
     }
 
     private void DrawFishGuide()

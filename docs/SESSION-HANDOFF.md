@@ -27,7 +27,7 @@
 | upstream 컴파일 참조 | .cache/upstream-15.0.3.6/refs/ · build/dalamud-reference.json 고정 해시 |
 | SDK/대상 | global.json의10.0.402 · Dalamud SDK15.0.0 · x64/net10.0-windows |
 | 정규 개발 DLL | DUCKBILL_ROOT/src/DuckbillFisher.Plugin/bin/Debug/DuckbillFisher.dll |
-| 이번 별도 Debug | .cache/alert-settings-build/DuckbillFisher.dll |
+| 이번 별도 Debug | .cache/settings-ui-build/DuckbillFisher.dll |
 | 현재 게시본 확인 Release | .cache/release-validation/0.5.3.0/DuckbillFisher.dll |
 | 현재 게시본 ZIP | artifacts/share/0.5.3.0/DuckbillFisher-0.5.3.0.zip |
 | 이전0.5.2.0 추출 DLL | .cache/release-validation/0.5.2.0/DuckbillFisher.dll |
@@ -42,7 +42,7 @@
 
 - 현재 소스/공개판은0.5.3.0이다. 위 고정 ZIP/추출 DLL의 사용자 대표 정상 확인 뒤 같은 ZIP을 게시했다. 소스6dd27eb·Release421678993·설치 JSONc416117·ZIP/DLL 해시는 [배포 기록](verification/releases/RELEASE-0.5.3.0.md)을 따른다. 설치/업데이트 확인 범위는 STATUS를 따른다. 정규/별도 Debug를 게시본 확인에 쓰지 않으며 확인 뒤 실행 파일을 다시 빌드하지 않는다.
 - 이전 공개0.5.2.0은 최소 참조 고정 추출본 대표 확인 뒤 같은 ZIP을 게시했다. [소스02061f4/태그·Release421639798·설치 JSON3871a41](verification/releases/RELEASE-0.5.2.0.md), 당시 실제 공유 raw URL0.5.2.0 일치 확인 완료다. 이전판 확인에는 위0.5.2.0 추출 DLL을 사용한다.
-- 이번 정규/별도 Debug는 버전0.5.3.0/schema22로 공개 ZIP과 다르다. 기존 설정 백업 위에 [출현 알림 설정 탭·캐스팅 채널 분리](verification/alerts/SPAWN-ALERTS.md#출현-알림-설정-탭캐스팅-채널-분리-2026-10-24)를 추가했으며 새 실기 확인은 대기다. 테스트 추가/실행 없음. 이전 TRX는 `.cache/test-protection/final/final-protection.trx`, 기존 [구조 확인](verification/ARCHITECTURE-TESTS.md)·[KR 실기](verification/native/NATIVE-RUNTIME-DAL4KR.md#15039-대응과-반복-검사-2026-10-23) 대기는 유지한다.
+- 이번 정규/별도 Debug는 버전0.5.3.0/schema22로 공개 ZIP과 다르다. 기존 설정 백업 위에 [알림 탭/독립 채널과 설정 화면 정리](verification/alerts/SPAWN-ALERTS.md#설정-화면-정리-2026-10-24)를 추가했으며 새 실기 확인은 대기다. 테스트 추가/실행 없음. 이전 TRX는 `.cache/test-protection/final/final-protection.trx`, 기존 [구조 확인](verification/ARCHITECTURE-TESTS.md)·[KR 실기](verification/native/NATIVE-RUNTIME-DAL4KR.md#15039-대응과-반복-검사-2026-10-23) 대기는 유지한다.
 - 이전 공개0.5.1.0은 소스6e672e8·Release ID419790510·설치 JSONa8d5e89의 고정 ZIP이다. 사용자 대표 확인/원격 게시/익명 해시·실제 raw URL 확인은 [Release 기록](verification/releases/RELEASE-0.5.1.0.md), 실제 설치 확인은 STATUS를 따른다.
 - 이전0.5.1.0 Release 출력은 .cache/release-build/0.5.1.0/, 당시 별도 Debug는 .cache/remaining-empty-build/다. 위 고정 ZIP을 재빌드해 교체하지 않는다.
 - 이전 버전 추출/빌드/해시 경로는 각 [Release 기록](verification/README.md#배포와-호환성)에 둔다. 새 후보에 과거 대표 확인을 자동 적용하지 않는다.

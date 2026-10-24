@@ -58,6 +58,25 @@ internal static class UiWidgets
         return clicked;
     }
 
+    public static bool ActionButton(FontAwesomeIcon icon, T key, string id, float width = 0)
+    {
+        var label = UiText.Get(key);
+        if (width <= 0) width = ImGui.GetFrameHeight() + ImGui.CalcTextSize(label).X + ImGui.GetStyle().FramePadding.X * 2;
+        var clicked = ImGui.Button($"###{id}", new Vector2(width, ImGui.GetFrameHeight()));
+        var min = ImGui.GetItemRectMin();
+        var max = ImGui.GetItemRectMax();
+        var contentWidth = ImGui.GetFrameHeight() + ImGui.CalcTextSize(label).X;
+        var origin = min + new Vector2(Math.Max(ImGui.GetStyle().FramePadding.X, (width - contentWidth) / 2), ImGui.GetStyle().FramePadding.Y);
+        var draw = ImGui.GetWindowDrawList();
+        var color = ImGui.GetColorU32(ImGuiCol.Text);
+        draw.PushClipRect(min, max, true);
+        draw.AddText(UiBuilder.IconFont, ImGui.GetFontSize(), origin, color, icon.ToIconString());
+        draw.AddText(origin + new Vector2(ImGui.GetFrameHeight(), 0), color, label);
+        draw.PopClipRect();
+        if (contentWidth + ImGui.GetStyle().FramePadding.X * 2 > width) Tooltip(label);
+        return clicked;
+    }
+
     public static bool GameIcon(ITextureProvider textures, uint iconId, float size, string tooltip)
     {
         var available = false;

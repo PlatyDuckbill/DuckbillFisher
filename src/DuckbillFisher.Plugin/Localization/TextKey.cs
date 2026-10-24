@@ -2,6 +2,10 @@ namespace DuckbillFisher.Plugin.Localization;
 
 internal enum TextKey
 {
+    SettingsViewUpdates,
+    BackupHelp,
+    BackupZipSummary,
+    BackupJsonSummary,
     BackupHeading,
     BackupScope,
     BackupIncludeSounds,

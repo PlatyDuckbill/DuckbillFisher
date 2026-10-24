@@ -25,7 +25,6 @@ internal sealed class SpawnAlertsPanel(FishPreferences preferences, SpawnAlerts 
     private string search = "";
     private FishGuideRow? selectedRow;
     private bool resetDetailScroll;
-    private bool selectSettings;
     public bool DeveloperMode { get; set; }
     public void Draw() => DrawContent();
 
@@ -42,14 +41,6 @@ internal sealed class SpawnAlertsPanel(FishPreferences preferences, SpawnAlerts 
         var view = alerts.View;
         if (view.Session != settings.Session)
             view = new(settings.Session, new(T.AlertsWaitingCharacter), 0, 0, 0, 0, 0, []);
-        var enabled = settings.SpawnAlertsEnabled;
-        ImGui.BeginDisabled(!settings.CanEdit);
-        if (ImGui.Checkbox(UiText.Label(T.AlertsEnable, "SpawnAlertsEnabled"), ref enabled))
-            preferences.SetSpawnAlerts(enabled, settings.SpawnAlertLeadMinutes, settings.SpawnAlertChannel, settings.SpawnAlertSound,
-                settings.SpawnAlertAudience, settings.RemoveFavoriteOnRegistration);
-        ImGui.EndDisabled();
-        ImGui.SameLine();
-        if (UiWidgets.IconButton(FontAwesomeIcon.Cog, "AlertSettings", UiText.Get(T.AlertSettingsHeading))) selectSettings = true;
         if (view.Status.Key != T.AlertsWatching)
             ImGui.TextWrapped(view.Status.Display);
         if (settings.Error is { } error)
@@ -73,11 +64,9 @@ internal sealed class SpawnAlertsPanel(FishPreferences preferences, SpawnAlerts 
                 DrawFavorites(view, settings);
                 ImGui.EndTabItem();
             }
-            var settingsFlags = selectSettings ? ImGuiTabItemFlags.SetSelected : ImGuiTabItemFlags.None;
-            selectSettings = false;
-            if (ImGui.BeginTabItem(UiText.Label(T.AlertSettingsHeading, "AlertSettings"), settingsFlags))
+            if (ImGui.BeginTabItem(UiText.Label(T.AlertSettingsHeading, "AlertSettings")))
             {
-                if (ImGui.BeginChild("SpawnAlertSettingsContent")) DrawSettings(settings, enabled);
+                if (ImGui.BeginChild("SpawnAlertSettingsContent")) DrawSettings(settings);
                 ImGui.EndChild();
                 ImGui.EndTabItem();
             }
@@ -92,37 +81,68 @@ internal sealed class SpawnAlertsPanel(FishPreferences preferences, SpawnAlerts 
         soundFiles.Draw();
     }
 
-    private void DrawSettings(FishPreferencesView settings, bool enabled)
+    private void DrawSettings(FishPreferencesView settings)
     {
+        var enabled = settings.SpawnAlertsEnabled;
         var minutes = settings.SpawnAlertLeadMinutes;
         var channel = Math.Max(0, Array.IndexOf(ChatChannelChoices.All, settings.SpawnAlertChannel));
         var sound = settings.SpawnAlertSound;
         var uncaughtOnly = settings.SpawnAlertAudience == SpawnAlertAudience.UncaughtOnly;
         var removeOnRegistration = settings.RemoveFavoriteOnRegistration;
         ImGui.BeginDisabled(!settings.CanEdit);
-        var changed = ImGui.Checkbox(UiText.Label(T.AlertUncaughtOnly, "AlertUncaughtOnly"), ref uncaughtOnly);
+        var changed = false;
+        var style = ImGui.GetStyle();
+        var background = style.Colors[(int)ImGuiCol.Header];
+        background.W = enabled ? 0.32f : 0.12f;
+        ImGui.PushStyleColor(ImGuiCol.ChildBg, background);
+        ImGui.PushStyleVar(ImGuiStyleVar.FramePadding, style.FramePadding + new System.Numerics.Vector2(2, 3));
+        var masterHeight = ImGui.GetFrameHeight() + style.WindowPadding.Y * 2 + style.ChildBorderSize * 2;
+        if (ImGui.BeginChild("SpawnAlertsMaster", new System.Numerics.Vector2(0, masterHeight), true,
+            ImGuiWindowFlags.AlwaysUseWindowPadding | ImGuiWindowFlags.NoScrollbar | ImGuiWindowFlags.NoScrollWithMouse))
+            changed = ImGui.Checkbox(UiText.Label(T.AlertsEnable, "SpawnAlertsEnabled"), ref enabled);
+        ImGui.EndChild();
+        ImGui.PopStyleVar();
+        ImGui.PopStyleColor();
+        ImGui.Spacing();
+        ImGui.Separator();
+        ImGui.Spacing();
+        changed |= ImGui.Checkbox(UiText.Label(T.AlertUncaughtOnly, "AlertUncaughtOnly"), ref uncaughtOnly);
         changed |= ImGui.Checkbox(UiText.Label(T.AlertAutoRemove, "AlertAutoRemove"), ref removeOnRegistration);
         if (ImGui.IsItemHovered()) ImGui.SetTooltip(UiText.Get(T.AlertAutoRemoveHint));
-        if (ImGui.BeginTable("AlertOutputSettings", 2, ImGuiTableFlags.SizingStretchSame))
+        ImGui.Spacing();
+        if (ImGui.BeginTable("AlertOutputSettings", 2, ImGuiTableFlags.SizingFixedFit))
         {
+            var labelWidth = new[] { T.AlertsLead, T.AlertChannel, T.AlertSound }
+                .Max(key => ImGui.CalcTextSize(UiText.Get(key)).X);
+            ImGui.TableSetupColumn("Setting", ImGuiTableColumnFlags.WidthFixed, labelWidth);
+            ImGui.TableSetupColumn("Value", ImGuiTableColumnFlags.WidthStretch);
+            ImGui.TableNextRow();
             ImGui.TableNextColumn();
+            ImGui.AlignTextToFramePadding();
             ImGui.TextUnformatted(UiText.Get(T.AlertsLead));
+            ImGui.TableNextColumn();
             ImGui.SetNextItemWidth(-1);
             changed |= ImGui.InputInt("###SpawnAlertLead", ref minutes);
             UiWidgets.Tooltip(UiText.Get(T.AlertsLeadRange, SpawnAlertScheduler.MinLeadMinutes, SpawnAlertScheduler.MaxLeadMinutes));
+            ImGui.TableNextRow();
             ImGui.TableNextColumn();
+            ImGui.AlignTextToFramePadding();
             ImGui.TextUnformatted(UiText.Get(T.AlertChannel));
+            ImGui.TableNextColumn();
             ImGui.SetNextItemWidth(-1);
             var channelNames = ChatChannelChoices.Names;
             changed |= ImGui.Combo("###SpawnAlertChannel", ref channel, channelNames, channelNames.Length);
+            ImGui.TableNextRow();
             ImGui.TableNextColumn();
+            ImGui.AlignTextToFramePadding();
             ImGui.TextUnformatted(UiText.Get(T.AlertSound));
-            ImGui.SetNextItemWidth(-1);
+            ImGui.TableNextColumn();
+            var previewWidth = ImGui.CalcTextSize(UiText.Get(T.AlertSoundPreview)).X + ImGui.GetStyle().FramePadding.X * 2;
+            ImGui.SetNextItemWidth(Math.Max(1, ImGui.GetContentRegionAvail().X - previewWidth - ImGui.GetStyle().ItemSpacing.X));
             var sounds = Enumerable.Range(0, CustomAlertSound.Choice + 1).Select(value => value == 0 ? UiText.Get(T.AlertSoundNone)
                 : value == CustomAlertSound.Choice ? UiText.Get(T.CustomSound) : UiText.Get(T.AlertSoundNumber, value)).ToArray();
             changed |= ImGui.Combo("###SpawnAlertSound", ref sound, sounds, sounds.Length);
-            ImGui.TableNextColumn();
-            ImGui.Dummy(new System.Numerics.Vector2(0, ImGui.GetTextLineHeight()));
+            ImGui.SameLine();
             ImGui.BeginDisabled(sound == 0 || !output.SoundAvailable || !settings.HasCharacter || soundLibrary.Busy(SoundSlot.SpawnAlert));
             if (ImGui.Button(UiText.Label(T.AlertSoundPreview, "PreviewAlertSound"))) output.RequestPreview(sound, settings.Session);
             ImGui.EndDisabled();

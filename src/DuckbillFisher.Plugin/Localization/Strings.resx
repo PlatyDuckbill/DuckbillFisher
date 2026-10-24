@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <root>
+  <data name="SettingsViewUpdates" xml:space="preserve"><value>View updates</value></data>
+  <data name="BackupHelp" xml:space="preserve"><value>Backup details</value></data>
+  <data name="BackupZipSummary" xml:space="preserve"><value>Save settings and custom WAV files in one ZIP.</value></data>
+  <data name="BackupJsonSummary" xml:space="preserve"><value>Save settings and WAV paths in one JSON.</value></data>
   <data name="BackupHeading" xml:space="preserve"><value>Settings backup</value></data>
   <data name="BackupScope" xml:space="preserve"><value>Includes interface, filters, favorites, presets, alerts and timer settings. Character collection, fishing history and sent-alert records are excluded.</value></data>
   <data name="BackupIncludeSounds" xml:space="preserve"><value>Include custom WAV files (ZIP)</value></data>
@@ -906,12 +910,12 @@ Click for fish details.</value></data>
 Last saved: {1:yyyy-MM-dd HH:mm}, {2} fish. Used where current observations are unknown; newer registrations may be missing.</value></data>
   <data name="TimerAlertMessage" xml:space="preserve"><value>Cast elapsed: {0} seconds.</value></data>
   <data name="TimerAlertSettings" xml:space="preserve"><value>Timer settings</value></data>
-  <data name="TimerAlertHint" xml:space="preserve"><value>Each enabled alert fires once per cast when its configured time is reached.</value></data>
+  <data name="TimerAlertHint" xml:space="preserve"><value>Each alert fires once at the set time; hooking or stopping cancels remaining alerts.</value></data>
   <data name="TimerAlertAdd" xml:space="preserve"><value>Add alert</value></data>
   <data name="TimerAlertRemove" xml:space="preserve"><value>Remove</value></data>
   <data name="TimerAlertSeconds" xml:space="preserve"><value>Seconds after cast</value></data>
   <data name="TimerAlertEnabled" xml:space="preserve"><value>Enabled</value></data>
-  <data name="TimerAlertLimit" xml:space="preserve"><value>Up to {0} alerts, from 1 to {1} seconds each.</value></data>
+  <data name="TimerAlertLimit" xml:space="preserve"><value>Up to {0} alerts · 1–{1} seconds</value></data>
   <data name="TimerLureElapsed" xml:space="preserve"><value>{0} ({2}): {1} elapsed</value></data>
   <data name="TimerLureHint" xml:space="preserve"><value>Time since a new lure stack was observed. Using the skill again restarts this timer. An existing effect when reopening has unknown start time.</value></data>
   <data name="TimerAlertNamedMessage" xml:space="preserve"><value>{0}: {1} seconds since cast.</value></data>
@@ -922,7 +926,7 @@ Last saved: {1:yyyy-MM-dd HH:mm}, {2} fish. Used where current observations are 
   <data name="TimerAlertSelectPreset" xml:space="preserve"><value>Select preset</value></data>
   <data name="TimerAlertLoadPreset" xml:space="preserve"><value>Load preset</value></data>
   <data name="TimerAlertSavePreset" xml:space="preserve"><value>Save preset</value></data>
-  <data name="TimerAlertPresetHint" xml:space="preserve"><value>Saving with an existing name replaces that preset. Keep up to {0} presets.</value></data>
+  <data name="TimerAlertPresetHint" xml:space="preserve"><value>Same name overwrites · Up to {0} presets</value></data>
   <data name="TimerLureUnknown" xml:space="preserve"><value>Lure: unknown</value></data>
   <data name="TimerLureInactive" xml:space="preserve"><value>Lure: inactive</value></data>
   <data name="ChangelogCastAlerts" xml:space="preserve"><value>Add multiple cast-time alerts with names, individual times and built-in sound effects.</value></data>

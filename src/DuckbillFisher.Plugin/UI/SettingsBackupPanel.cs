@@ -1,4 +1,5 @@
 using Dalamud.Bindings.ImGui;
+using Dalamud.Interface;
 using System.Globalization;
 using Dalamud.Interface.ImGuiFileDialog;
 using DuckbillFisher.Plugin.Localization;
@@ -16,11 +17,12 @@ internal sealed class SettingsBackupPanel(SettingsBackup backup, FishPreferences
     {
         var status = backup.View;
         UiWidgets.Heading(T.BackupHeading);
-        ImGui.TextWrapped(UiText.Get(T.BackupScope));
         ImGui.BeginDisabled(!personal.CanEdit || status.Busy);
         ImGui.Checkbox(UiText.Label(T.BackupIncludeSounds, "BackupIncludeSounds"), ref includeSounds);
-        ImGui.TextWrapped(UiText.Get(includeSounds ? T.BackupZipHint : T.BackupJsonHint));
-        if (ImGui.Button(UiText.Label(T.BackupExport, "ExportSettings")))
+        ImGui.TextWrapped(UiText.Get(includeSounds ? T.BackupZipSummary : T.BackupJsonSummary));
+        ImGui.Spacing();
+        var actionWidth = Math.Max(1, (ImGui.GetContentRegionAvail().X - ImGui.GetStyle().ItemSpacing.X) / 2);
+        if (UiWidgets.ActionButton(FontAwesomeIcon.FileExport, T.BackupExport, "ExportSettings", actionWidth))
         {
             var expectedSession = personal.Session;
             var withSounds = includeSounds;
@@ -34,7 +36,7 @@ internal sealed class SettingsBackupPanel(SettingsBackup backup, FishPreferences
                 });
         }
         ImGui.SameLine();
-        if (ImGui.Button(UiText.Label(T.BackupImport, "ImportSettings")))
+        if (UiWidgets.ActionButton(FontAwesomeIcon.FileImport, T.BackupImport, "ImportSettings", actionWidth))
         {
             var expectedSession = personal.Session;
             dialogs.OpenFileDialog(UiText.Get(T.BackupImport), ".zip,.json", (bool ok, string path) =>
@@ -43,7 +45,16 @@ internal sealed class SettingsBackupPanel(SettingsBackup backup, FishPreferences
             });
         }
         ImGui.EndDisabled();
-        if (status.Path is { } selected) ImGui.TextWrapped(selected);
+        if (ImGui.CollapsingHeader(UiText.Label(T.BackupHelp, "BackupHelp")))
+        {
+            ImGui.TextWrapped(UiText.Get(T.BackupScope));
+            ImGui.TextWrapped(UiText.Get(includeSounds ? T.BackupZipHint : T.BackupJsonHint));
+        }
+        if (status.Path is { } selected)
+        {
+            ImGui.TextWrapped(Path.GetFileName(selected));
+            UiWidgets.Tooltip(selected);
+        }
         if (status.Busy) ImGui.TextWrapped(UiText.Get(T.BackupWorking));
         if (status.Message is { } message) ImGui.TextWrapped(message.Display);
         if (!status.CanRestore) return;
@@ -51,9 +62,9 @@ internal sealed class SettingsBackupPanel(SettingsBackup backup, FishPreferences
         ImGui.TextWrapped(UiText.Get(T.BackupPreview, created, status.Favorites, status.Presets, status.Sounds));
         ImGui.TextWrapped(UiText.Get(T.BackupReplaceHint));
         ImGui.BeginDisabled(!personal.CanEdit || status.Busy);
-        if (ImGui.Button(UiText.Label(T.BackupRestore, "ConfirmSettingsRestore"))) backup.Restore();
+        if (UiWidgets.ActionButton(FontAwesomeIcon.Check, T.BackupRestore, "ConfirmSettingsRestore", actionWidth)) backup.Restore();
         ImGui.SameLine();
-        if (ImGui.Button(UiText.Label(T.BackupCancel, "CancelSettingsRestore"))) backup.Cancel();
+        if (UiWidgets.ActionButton(FontAwesomeIcon.Times, T.BackupCancel, "CancelSettingsRestore", actionWidth)) backup.Cancel();
         ImGui.EndDisabled();
     }
 

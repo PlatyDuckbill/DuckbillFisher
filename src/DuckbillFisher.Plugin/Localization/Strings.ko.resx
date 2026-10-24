@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <root>
+  <data name="SettingsViewUpdates" xml:space="preserve"><value>내역 보기</value></data>
+  <data name="BackupHelp" xml:space="preserve"><value>백업 범위·주의사항</value></data>
+  <data name="BackupZipSummary" xml:space="preserve"><value>설정과 커스텀 WAV를 ZIP 하나로 저장합니다.</value></data>
+  <data name="BackupJsonSummary" xml:space="preserve"><value>설정과 WAV 경로를 JSON 하나로 저장합니다.</value></data>
   <data name="BackupHeading" xml:space="preserve"><value>설정 백업</value></data>
   <data name="BackupScope" xml:space="preserve"><value>UI·필터·즐겨찾기·프리셋·알림·타이머 설정을 포함합니다. 캐릭터별 수집 상태·낚시 기록·알림 발송 기록은 제외합니다.</value></data>
   <data name="BackupIncludeSounds" xml:space="preserve"><value>커스텀 WAV 포함 (ZIP)</value></data>
@@ -906,12 +910,12 @@
 마지막 저장: {1:yyyy-MM-dd HH:mm}, {2}종. 현재 조회가 미확인인 어종에 사용하며 이후 등록은 반영되지 않았을 수 있습니다.</value></data>
   <data name="TimerAlertMessage" xml:space="preserve"><value>시전 후 {0}초가 지났습니다.</value></data>
   <data name="TimerAlertSettings" xml:space="preserve"><value>타이머 설정</value></data>
-  <data name="TimerAlertHint" xml:space="preserve"><value>시전 후 설정한 시간이 되면 알림마다 한 번씩 알려줍니다.</value></data>
+  <data name="TimerAlertHint" xml:space="preserve"><value>설정 시간에 1회 알림 · 낚아채기·중단 시 남은 알림 취소</value></data>
   <data name="TimerAlertAdd" xml:space="preserve"><value>알림 추가</value></data>
   <data name="TimerAlertRemove" xml:space="preserve"><value>삭제</value></data>
   <data name="TimerAlertSeconds" xml:space="preserve"><value>시전 후 (초)</value></data>
   <data name="TimerAlertEnabled" xml:space="preserve"><value>사용</value></data>
-  <data name="TimerAlertLimit" xml:space="preserve"><value>최대 {0}개, 각 1~{1}초까지 설정할 수 있습니다.</value></data>
+  <data name="TimerAlertLimit" xml:space="preserve"><value>최대 {0}개 · 1~{1}초</value></data>
   <data name="TimerLureElapsed" xml:space="preserve"><value>{0} ({2}중첩): 사용 후 {1}</value></data>
   <data name="TimerLureHint" xml:space="preserve"><value>루어 효과의 새 중첩을 관찰한 뒤 경과한 시간입니다. 기술을 다시 사용하면 다시 셉니다. 다시 열 때 이미 있던 효과는 시작 시각이 미확인입니다.</value></data>
   <data name="TimerAlertNamedMessage" xml:space="preserve"><value>{0}: 시전 후 {1}초가 지났습니다.</value></data>
@@ -922,7 +926,7 @@
   <data name="TimerAlertSelectPreset" xml:space="preserve"><value>프리셋 선택</value></data>
   <data name="TimerAlertLoadPreset" xml:space="preserve"><value>프리셋 불러오기</value></data>
   <data name="TimerAlertSavePreset" xml:space="preserve"><value>프리셋 저장</value></data>
-  <data name="TimerAlertPresetHint" xml:space="preserve"><value>같은 이름으로 저장하면 덮어쓰며, 최대 {0}개까지 보관합니다.</value></data>
+  <data name="TimerAlertPresetHint" xml:space="preserve"><value>같은 이름은 덮어쓰기 · 최대 {0}개</value></data>
   <data name="TimerLureUnknown" xml:space="preserve"><value>루어: 미확인</value></data>
   <data name="TimerLureInactive" xml:space="preserve"><value>루어: 미적용</value></data>
   <data name="ChangelogCastAlerts" xml:space="preserve"><value>시전 후 초 알림을 여러 개 등록하고 이름·시간·기본 효과음을 지정할 수 있습니다.</value></data>
