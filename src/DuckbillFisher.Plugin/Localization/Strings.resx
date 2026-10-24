@@ -5,7 +5,7 @@
   <data name="ChangelogFishNotes" xml:space="preserve"><value>Save a personal note for each fish.</value></data>
   <data name="ChangelogFishAttempts" xml:space="preserve"><value>Track your attempts for each fish manually.</value></data>
   <data name="ChangelogFishPresetLinks" xml:space="preserve"><value>Link a cast alert preset to a fish and apply it from fish details.</value></data>
-  <data name="ChangelogPortableBackups" xml:space="preserve"><value>Back up settings and saved fish records as JSON, or include WAV files in a ZIP. Restoring older backups without personal records clears current notes, counts and links.</value></data>
+  <data name="ChangelogPortableBackups" xml:space="preserve"><value>Back up and restore settings and saved fish records as JSON, or include WAV files in a ZIP.</value></data>
   <data name="ChangelogManagedWav" xml:space="preserve"><value>Keep custom sounds working after moving or deleting the original WAV file.</value></data>
   <data name="ChangelogSpawnSettingsTab" xml:space="preserve"><value>Manage spawn alerts in the new Spawn alert settings tab in Favorites management.</value></data>
   <data name="ChangelogCastChannel" xml:space="preserve"><value>Choose a cast alert chat channel separately from spawn alerts.</value></data>
