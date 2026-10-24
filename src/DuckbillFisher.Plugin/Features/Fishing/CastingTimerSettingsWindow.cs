@@ -22,6 +22,9 @@ internal sealed class CastingTimerSettingsWindow(FishPreferences preferences, Sp
     private string presetName = "";
     private SettingsTab selectedTab;
     private bool showPresets;
+    private PresetOverwrite? overwrite;
+    private UiMessage? presetError;
+    private int draftSession = -1, draftRestoreRevision = -1;
     private enum SettingsTab { CastAlerts, FishingSounds }
 
     public void OpenPresets() { selectedTab = SettingsTab.CastAlerts; showPresets = true; IsOpen = true; }
@@ -40,18 +43,22 @@ internal sealed class CastingTimerSettingsWindow(FishPreferences preferences, Sp
     public override void OnClose()
     {
         soundFiles.Reset();
-        if (lastSaved is not null && draft.IsValid() && !draft.Matches(lastSaved)) preferences.SetTimer(draft);
+        overwrite = null;
+        if (lastSaved is not null && draft.IsValid() && !draft.Matches(lastSaved)) preferences.SetTimer(draft, draftSession, draftRestoreRevision);
     }
 
     public override void Draw()
     {
         var personal = preferences.View;
-        if (dialogSession != personal.Session) { soundFiles.Reset(); dialogSession = personal.Session; }
-        if (lastSaved is null || !personal.Timer.Matches(lastSaved))
+        var contextChanged = draftSession != personal.Session || draftRestoreRevision != personal.SettingsRestoreRevision;
+        if (contextChanged) { overwrite = null; presetError = null; }
+        if (dialogSession != personal.Session) { soundFiles.Reset(); overwrite = null; presetError = null; dialogSession = personal.Session; }
+        if (lastSaved is null || contextChanged || !personal.Timer.Matches(lastSaved))
         {
             lastSaved = personal.Timer.Copy();
             draft = personal.Timer.Copy();
         }
+        draftSession = personal.Session; draftRestoreRevision = personal.SettingsRestoreRevision;
         var changed = false;
         DrawNavigation();
         // Each tab owns its scrolling; navigation remains visible.
@@ -65,7 +72,7 @@ internal sealed class CastingTimerSettingsWindow(FishPreferences preferences, Sp
             ImGui.EndDisabled();
         }
         ImGui.EndChild();
-        if (changed && draft.IsValid()) preferences.SetTimer(draft);
+        if (changed && draft.IsValid()) preferences.SetTimer(draft, personal.Session, personal.SettingsRestoreRevision);
         soundFiles.Draw();
     }
 
@@ -114,15 +121,17 @@ internal sealed class CastingTimerSettingsWindow(FishPreferences preferences, Sp
         UiWidgets.Tooltip(UiText.Get(T.TimerAlertDeliveryHint));
         if (changed) draft = draft with { AlertChannelId = (ushort)ChatChannelChoices.All[channel] };
         ImGui.TextWrapped(UiText.Get(T.TimerAlertHint));
-        changed |= DrawPresets();
-        SectionHeading(FontAwesomeIcon.Bell, T.TimerAlertRulesHeading);
-        HintBullet(T.TimerAlertLimit, CastingTimerSettings.MaxAlerts, CastingTimerSettings.MaxSeconds);
+        changed |= DrawPresets(personal);
+        SectionHeading(FontAwesomeIcon.Bell, T.TimerAlertRulesHeading, draft.Alerts.Count, CastingTimerSettings.MaxAlerts,
+            new(T.TimerAlertLimit, CastingTimerSettings.MaxAlerts, CastingTimerSettings.MaxSeconds));
         ImGui.BeginDisabled(draft.Alerts.Count >= CastingTimerSettings.MaxAlerts);
         if (ActionButton(FontAwesomeIcon.Plus, T.TimerAlertAdd, "AddTimerAlert"))
         {
             draft.Alerts.Add(new(Guid.NewGuid(), 10));
             changed = true;
         }
+        if (draft.Alerts.Count >= CastingTimerSettings.MaxAlerts)
+            UiWidgets.Tooltip(UiText.Get(T.TimerAlertLimit, CastingTimerSettings.MaxAlerts, CastingTimerSettings.MaxSeconds));
         ImGui.EndDisabled();
         if (draft.Alerts.Count == 0) ImGui.TextWrapped(UiText.Get(T.TimerAlertEmpty));
         // Rule groups scroll vertically on narrow screens without hiding columns.
@@ -142,6 +151,7 @@ internal sealed class CastingTimerSettingsWindow(FishPreferences preferences, Sp
             var seconds = rule.Seconds;
             ImGui.SetNextItemWidth(ImGui.GetFontSize() * 8);
             changed |= ImGui.InputInt(UiText.Label(T.TimerAlertSeconds, "Seconds"), ref seconds);
+            UiWidgets.Tooltip(UiText.Get(T.TimerAlertSecondsRange, CastingTimerSettings.MaxSeconds));
             var sound = rule.Sound;
             var soundNames = Enumerable.Range(0, 17).Select(value => value == 0
                 ? UiText.Get(T.AlertSoundNone) : UiText.Get(T.AlertSoundNumber, value)).ToArray();
@@ -272,12 +282,13 @@ internal sealed class CastingTimerSettingsWindow(FishPreferences preferences, Sp
         _ => draft with { LegendaryFishSound = value },
     };
 
-    public void Dispose() { disposed = true; soundFiles.Reset(); }
+    public void Dispose() { disposed = true; overwrite = null; soundFiles.Reset(); }
 
-    private bool DrawPresets()
+    private bool DrawPresets(FishPreferencesView personal)
     {
         var changed = false;
-        SectionHeading(FontAwesomeIcon.Save, T.TimerAlertPresets);
+        SectionHeading(FontAwesomeIcon.Save, T.TimerAlertPresets, draft.Presets.Count, CastingTimerSettings.MaxPresets,
+            new(T.TimerAlertPresetHint, CastingTimerSettings.MaxPresets));
         var selected = draft.Presets.FirstOrDefault(preset => preset.Id == selectedPreset);
         ImGui.SetNextItemWidth(Math.Max(80, ImGui.GetContentRegionAvail().X - ActionWidth(T.TimerAlertLoadPreset) -
             ImGui.GetFrameHeight() - ImGui.GetStyle().ItemSpacing.X * 2));
@@ -330,14 +341,62 @@ internal sealed class CastingTimerSettingsWindow(FishPreferences preferences, Sp
             existing < 0 && draft.Presets.Count >= CastingTimerSettings.MaxPresets);
         if (ActionButton(FontAwesomeIcon.Save, T.TimerAlertSavePreset, "SaveTimerPreset"))
         {
-            var preset = new CastingTimerPreset(existing >= 0 ? draft.Presets[existing].Id : Guid.NewGuid(), name, [.. draft.Alerts]);
-            if (existing >= 0) draft.Presets[existing] = preset;
-            else draft.Presets.Add(preset);
-            selectedPreset = preset.Id;
-            changed = true;
+            presetError = null;
+            if (existing >= 0)
+            {
+                var source = draft.Presets[existing];
+                overwrite = new(source.Copy(), new(source.Id, name, [.. draft.Alerts]),
+                    personal.Session, personal.SettingsRestoreRevision);
+                ImGui.OpenPopup(UiText.Label(T.TimerPresetOverwriteTitle, "TimerPresetOverwrite"));
+            }
+            else
+            {
+                var preset = new CastingTimerPreset(Guid.NewGuid(), name, [.. draft.Alerts]);
+                draft.Presets.Add(preset);
+                selectedPreset = preset.Id;
+                changed = true;
+            }
         }
+        if (existing < 0 && draft.Presets.Count >= CastingTimerSettings.MaxPresets)
+            UiWidgets.Tooltip(UiText.Get(T.TimerAlertPresetHint, CastingTimerSettings.MaxPresets));
         ImGui.EndDisabled();
-        HintBullet(T.TimerAlertPresetHint, CastingTimerSettings.MaxPresets);
+        changed |= DrawOverwriteConfirmation();
+        if (presetError is { } error) ImGui.TextWrapped(error.Display);
+        return changed;
+    }
+
+    private bool DrawOverwriteConfirmation()
+    {
+        var open = true;
+        if (!ImGui.BeginPopupModal(UiText.Label(T.TimerPresetOverwriteTitle, "TimerPresetOverwrite"), ref open,
+            ImGuiWindowFlags.AlwaysAutoResize)) return false;
+        var request = overwrite;
+        var personal = preferences.View;
+        if (request is null || request.Session != personal.Session || request.RestoreRevision != personal.SettingsRestoreRevision || !personal.CanEdit)
+        { overwrite = null; ImGui.CloseCurrentPopup(); ImGui.EndPopup(); return false; }
+        ImGui.PushTextWrapPos(ImGui.GetCursorPosX() + ImGui.GetFontSize() * 24);
+        ImGui.TextUnformatted(UiText.Get(T.TimerPresetOverwriteQuestion, request.Replacement.Name));
+        ImGui.PopTextWrapPos();
+        var changed = false;
+        if (ImGui.Button(UiText.Label(T.Cancel, "CancelTimerPresetOverwrite")))
+        { overwrite = null; ImGui.CloseCurrentPopup(); }
+        ImGui.SameLine();
+        if (ImGui.Button(UiText.Label(T.TimerPresetOverwrite, "ConfirmTimerPresetOverwrite")))
+        {
+            var index = draft.Presets.FindIndex(preset => preset.Id == request.Source.Id);
+            if (index < 0 || draft.Presets[index].Name != request.Source.Name ||
+                !draft.Presets[index].Alerts.SequenceEqual(request.Source.Alerts))
+                presetError = new(T.TimerPresetChanged);
+            else
+            {
+                draft.Presets[index] = request.Replacement.Copy();
+                selectedPreset = request.Replacement.Id;
+                changed = true;
+            }
+            overwrite = null;
+            ImGui.CloseCurrentPopup();
+        }
+        ImGui.EndPopup();
         return changed;
     }
 
@@ -350,7 +409,7 @@ internal sealed class CastingTimerSettingsWindow(FishPreferences preferences, Sp
         ImGui.EndGroup();
     }
 
-    private static void SectionHeading(FontAwesomeIcon icon, T key)
+    private static void SectionHeading(FontAwesomeIcon icon, T key, int? count = null, int maximum = 0, UiMessage? hint = null)
     {
         ImGui.Spacing();
         ImGui.Separator();
@@ -358,6 +417,12 @@ internal sealed class CastingTimerSettingsWindow(FishPreferences preferences, Sp
         UiWidgets.Icon(icon);
         ImGui.SameLine();
         ImGui.TextUnformatted(UiText.Get(key));
+        if (count is { } current)
+        {
+            ImGui.SameLine();
+            ImGui.TextDisabled(UiText.Get(T.TimerSettingsCount, current, maximum));
+            if (hint is not null) UiWidgets.Tooltip(hint.Display);
+        }
         ImGui.Spacing();
     }
 
@@ -365,4 +430,5 @@ internal sealed class CastingTimerSettingsWindow(FishPreferences preferences, Sp
         ImGui.GetStyle().FramePadding.X * 2;
 
     private static bool ActionButton(FontAwesomeIcon icon, T key, string id) => UiWidgets.ActionButton(icon, key, id);
+    private sealed record PresetOverwrite(CastingTimerPreset Source, CastingTimerPreset Replacement, int Session, int RestoreRevision);
 }

@@ -1,8 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <root>
-  <data name="FishPersonalHeading" xml:space="preserve"><value>나의 기록 · 도전 {0:N0}회</value></data>
-  <data name="FishPersonalHeadingNote" xml:space="preserve"><value>나의 기록 · 메모 있음 · 도전 {0:N0}회</value></data>
-  <data name="FishPersonalHeadingDraft" xml:space="preserve"><value>나의 기록 · 미저장 메모 · 도전 {0:N0}회</value></data>
+  <data name="FishNoteClear" xml:space="preserve"><value>메모 비우기</value></data>
+  <data name="FishNoteClearQuestion" xml:space="preserve"><value>저장된 메모와 작성 중인 메모를 비울까요?</value></data>
+  <data name="FishNoteCleared" xml:space="preserve"><value>메모를 비웠습니다.</value></data>
+  <data name="TimerPresetOverwriteTitle" xml:space="preserve"><value>프리셋 덮어쓰기</value></data>
+  <data name="TimerPresetOverwriteQuestion" xml:space="preserve"><value>기존 ‘{0}’ 프리셋을 덮어쓸까요?</value></data>
+  <data name="TimerPresetOverwrite" xml:space="preserve"><value>덮어쓰기</value></data>
+  <data name="TimerPresetChanged" xml:space="preserve"><value>프리셋이 바뀌었습니다. 다시 선택한 뒤 저장하세요.</value></data>
+  <data name="TimerSettingsCount" xml:space="preserve"><value>{0}/{1}</value></data>
+  <data name="TimerAlertSecondsRange" xml:space="preserve"><value>1~{0}초</value></data>
+  <data name="FishPersonalHeading" xml:space="preserve"><value>메모·캐스팅 타이머 관리</value></data>
+  <data name="FishPersonalHeadingNote" xml:space="preserve"><value>메모·캐스팅 타이머 관리</value></data>
+  <data name="FishPersonalHeadingDraft" xml:space="preserve"><value>메모·캐스팅 타이머 관리 (저장 전)</value></data>
   <data name="FishPersonalScope" xml:space="preserve"><value>수동 기록 · 캐릭터 공통 저장</value></data>
   <data name="FishPersonalLimit" xml:space="preserve"><value>개인 기록은 최대 {0:N0}종까지 저장할 수 있습니다.</value></data>
   <data name="FishNote" xml:space="preserve"><value>개인 메모</value></data>
@@ -14,8 +23,8 @@
   <data name="FishNoteSaved" xml:space="preserve"><value>저장됨</value></data>
   <data name="FishNoteConflict" xml:space="preserve"><value>저장된 메모가 바뀌었습니다. 되돌리기로 최신 메모를 불러온 뒤 수정하세요.</value></data>
   <data name="FishNoteDraftLimit" xml:space="preserve"><value>미저장 메모는 최대 {0}개까지 유지합니다. 다른 메모를 먼저 저장하거나 되돌려 주세요.</value></data>
-  <data name="FishAttempts" xml:space="preserve"><value>수동 도전 횟수</value></data>
-  <data name="FishAttemptsHint" xml:space="preserve"><value>0~{0:N0}회. 직접 수정할 때만 바뀌며 도전 횟수의 기준은 자유롭게 정할 수 있습니다.</value></data>
+  <data name="FishAttempts" xml:space="preserve"><value>도전 횟수</value></data>
+  <data name="FishAttemptsHint" xml:space="preserve"><value>개인 기록용으로 도전 횟수를 직접 조절하는 기능입니다.</value></data>
   <data name="FishAttemptsDecrease" xml:space="preserve"><value>도전 횟수 1 감소</value></data>
   <data name="FishAttemptsIncrease" xml:space="preserve"><value>도전 횟수 1 증가</value></data>
   <data name="FishPreset" xml:space="preserve"><value>타이머 프리셋</value></data>
@@ -26,13 +35,13 @@
   <data name="FishPresetEmpty" xml:space="preserve"><value>캐스팅 알림 설정에서 프리셋을 먼저 저장하세요.</value></data>
   <data name="FishPresetMissing" xml:space="preserve"><value>연결한 프리셋이 없습니다. 다른 프리셋을 선택하세요.</value></data>
   <data name="FishPresetApplied" xml:space="preserve"><value>‘{0}’ 프리셋을 타이머에 적용했습니다.</value></data>
-  <data name="BackupPersonalRecordsMissing" xml:space="preserve"><value>이전 백업에는 개인 기록이 없습니다. 복원하면 현재 메모·수동 횟수·프리셋 연결도 비워집니다.</value></data>
+  <data name="BackupPersonalRecordsMissing" xml:space="preserve"><value>이전 백업에는 개인 기록이 없습니다. 복원하면 현재 메모·도전 횟수·프리셋 연결도 비워집니다.</value></data>
   <data name="SettingsViewUpdates" xml:space="preserve"><value>내역 보기</value></data>
   <data name="BackupHelp" xml:space="preserve"><value>백업 범위·주의사항</value></data>
   <data name="BackupZipSummary" xml:space="preserve"><value>설정과 커스텀 WAV를 ZIP 하나로 저장합니다.</value></data>
   <data name="BackupJsonSummary" xml:space="preserve"><value>설정과 WAV 경로를 JSON 하나로 저장합니다.</value></data>
   <data name="BackupHeading" xml:space="preserve"><value>설정 백업</value></data>
-  <data name="BackupScope" xml:space="preserve"><value>UI·필터·즐겨찾기·프리셋·알림·타이머 설정과 저장된 어종별 메모·수동 도전 횟수·프리셋 연결을 포함합니다. 캐릭터별 수집 상태·낚시 기록·알림 발송 기록은 제외합니다.</value></data>
+  <data name="BackupScope" xml:space="preserve"><value>UI·필터·즐겨찾기·프리셋·알림·타이머 설정과 저장된 어종별 메모·도전 횟수·프리셋 연결을 포함합니다. 캐릭터별 수집 상태·낚시 기록·알림 발송 기록은 제외합니다.</value></data>
   <data name="BackupIncludeSounds" xml:space="preserve"><value>커스텀 WAV 포함 (ZIP)</value></data>
   <data name="BackupZipHint" xml:space="preserve"><value>settings.json과 현재 커스텀 WAV를 선택한 용도의 파일만 ZIP으로 저장합니다. 없음·SE에 남은 예전 경로는 제외합니다. 선택한 WAV를 읽을 수 없으면 내보내지 않습니다. 기존 백업은 덮어쓰지 않습니다.</value></data>
   <data name="BackupJsonHint" xml:space="preserve"><value>설정과 WAV 경로만 JSON 하나로 저장합니다. 다른 PC에서 복원하려면 음원 파일을 따로 옮겨야 합니다.</value></data>
@@ -953,7 +962,7 @@
   <data name="TimerAlertSelectPreset" xml:space="preserve"><value>프리셋 선택</value></data>
   <data name="TimerAlertLoadPreset" xml:space="preserve"><value>프리셋 불러오기</value></data>
   <data name="TimerAlertSavePreset" xml:space="preserve"><value>프리셋 저장</value></data>
-  <data name="TimerAlertPresetHint" xml:space="preserve"><value>같은 이름은 덮어쓰기 · 최대 {0}개</value></data>
+  <data name="TimerAlertPresetHint" xml:space="preserve"><value>프리셋은 최대 {0}개까지 저장할 수 있습니다.</value></data>
   <data name="TimerLureUnknown" xml:space="preserve"><value>루어: 미확인</value></data>
   <data name="TimerLureInactive" xml:space="preserve"><value>루어: 미적용</value></data>
   <data name="ChangelogCastAlerts" xml:space="preserve"><value>시전 후 초 알림을 여러 개 등록하고 이름·시간·기본 효과음을 지정할 수 있습니다.</value></data>

@@ -16,6 +16,16 @@ internal sealed class FishPersonalPanel(FishPreferences preferences)
 
     public void Draw(uint fishId, FishPreferencesView personal, bool editable)
     {
+        if (drafts.TryGetValue(fishId, out var pendingDraft) && pendingDraft.ClearTask is { IsCompleted: true } clearTask)
+        {
+            pendingDraft.ClearTask = null;
+            if (clearTask.GetAwaiter().GetResult())
+            {
+                personal = preferences.View;
+                pendingDraft.Text = pendingDraft.Source = personal.PersonalRecords.GetValueOrDefault(fishId)?.Note ?? "";
+                pendingDraft.Submitted = false;
+            }
+        }
         if (session != personal.Session || restoreRevision != personal.SettingsRestoreRevision)
         {
             drafts.Clear(); session = personal.Session; restoreRevision = personal.SettingsRestoreRevision;
@@ -23,13 +33,11 @@ internal sealed class FishPersonalPanel(FishPreferences preferences)
         var record = personal.PersonalRecords.GetValueOrDefault(fishId) ?? new();
         if (drafts.TryGetValue(fishId, out var existing)) existing.Sync(record.Note);
         var dirty = existing?.Dirty == true;
-        var heading = UiText.Get(dirty ? T.FishPersonalHeadingDraft : record.Note.Length > 0
-            ? T.FishPersonalHeadingNote : T.FishPersonalHeading, record.Attempts);
+        var heading = UiText.Get(dirty ? T.FishPersonalHeadingDraft : T.FishPersonalHeading);
         var open = ImGui.CollapsingHeader(heading + "###FishPersonalRecord");
         UiWidgets.Tooltip(heading);
         if (!open) return;
         var canEdit = personal.CanEdit && editable;
-        ImGui.TextDisabled(UiText.Get(T.FishPersonalScope));
         var draft = GetDraft(fishId, record.Note);
         if (draft is null) ImGui.TextWrapped(UiText.Get(T.FishNoteDraftLimit, MaxDrafts));
         else DrawNote(fishId, record, draft, personal, canEdit);
@@ -44,7 +52,7 @@ internal sealed class FishPersonalPanel(FishPreferences preferences)
             ImGui.TableNextRow(); ImGui.TableNextColumn();
             ImGui.AlignTextToFramePadding();
             ImGui.TextUnformatted(UiText.Get(T.FishAttempts));
-            UiWidgets.Tooltip(UiText.Get(T.FishAttemptsHint, FishPersonalRecord.MaxAttempts));
+            UiWidgets.Tooltip(UiText.Get(T.FishAttemptsHint));
             ImGui.TableNextColumn();
             var valueWidth = Math.Max(1, ImGui.GetContentRegionAvail().X - ImGui.GetFrameHeight() * 2 - ImGui.GetStyle().ItemSpacing.X * 2);
             ImGui.BeginDisabled(record.Attempts == 0);
@@ -56,6 +64,7 @@ internal sealed class FishPersonalPanel(FishPreferences preferences)
             ImGui.SetNextItemWidth(valueWidth);
             if (ImGui.InputInt("###FishAttempts", ref attempts, 0, 0))
                 preferences.SetFishAttempts(fishId, Math.Clamp(attempts, 0, FishPersonalRecord.MaxAttempts), personal.Session, personal.SettingsRestoreRevision);
+            UiWidgets.Tooltip(UiText.Get(T.FishAttemptsHint));
             ImGui.SameLine();
             ImGui.BeginDisabled(record.Attempts == FishPersonalRecord.MaxAttempts);
             if (UiWidgets.IconButton(FontAwesomeIcon.Plus, "IncreaseAttempts", UiText.Get(T.FishAttemptsIncrease)))
@@ -105,16 +114,26 @@ internal sealed class FishPersonalPanel(FishPreferences preferences)
     private void DrawNote(uint fishId, FishPersonalRecord record, NoteDraft draft, FishPreferencesView personal, bool canEdit)
     {
         ImGui.TextUnformatted(UiText.Get(T.FishNote));
-        ImGui.BeginDisabled(!canEdit);
+        ImGui.BeginDisabled(!canEdit || draft.ClearTask is not null);
         if (ImGui.InputTextMultiline("###FishNote", ref draft.Text, FishPersonalRecord.MaxNoteLength * 4 + 1,
             new Vector2(-1, ImGui.GetTextLineHeightWithSpacing() * 4), ImGuiInputTextFlags.AllowTabInput)) draft.Submitted = false;
         var valid = FishPersonalRecord.ValidNote(draft.Text);
-        var saveWidth = Math.Max(1, ImGui.GetContentRegionAvail().X - ImGui.GetFrameHeightWithSpacing());
+        var actionWidth = Math.Max(1, (ImGui.GetContentRegionAvail().X - ImGui.GetFrameHeight() - ImGui.GetStyle().ItemSpacing.X * 2) / 2);
         ImGui.BeginDisabled(!draft.Dirty || !valid);
-        if (UiWidgets.ActionButton(FontAwesomeIcon.Save, T.FishNoteSave, "SaveFishNote", saveWidth))
+        if (UiWidgets.ActionButton(FontAwesomeIcon.Save, T.FishNoteSave, "SaveFishNote", actionWidth))
         {
             preferences.SaveFishNote(fishId, draft.Text, draft.Source, personal.Session, personal.SettingsRestoreRevision);
             draft.Submitted = true;
+        }
+        ImGui.EndDisabled();
+        ImGui.SameLine();
+        var clearLabel = UiText.Label(T.FishNoteClear, "ClearFishNoteConfirmation");
+        var hostId = ImGui.GetID(clearLabel);
+        ImGui.BeginDisabled(draft.Text.Length == 0 && record.Note.Length == 0);
+        if (UiWidgets.ActionButton(FontAwesomeIcon.TrashAlt, T.FishNoteClear, "ClearFishNote", actionWidth))
+        {
+            draft.Confirmation = new(hostId, personal.Session, personal.SettingsRestoreRevision, record.Note);
+            ImGui.OpenPopup(clearLabel);
         }
         ImGui.EndDisabled();
         ImGui.SameLine();
@@ -139,6 +158,32 @@ internal sealed class FishPersonalPanel(FishPreferences preferences)
         var conflictShown = personal.PersonalResult is { } result && result.FishId == fishId && result.Message.Key == T.FishNoteConflict;
         if (record.Note != draft.Source && record.Note != draft.Text && !conflictShown)
             ImGui.TextWrapped(UiText.Get(T.FishNoteConflict));
+        DrawClearConfirmation(clearLabel, hostId, fishId, draft, personal, canEdit);
+    }
+
+    private void DrawClearConfirmation(string label, uint hostId, uint fishId, NoteDraft draft, FishPreferencesView personal, bool canEdit)
+    {
+        var open = true;
+        if (!ImGui.BeginPopupModal(label, ref open, ImGuiWindowFlags.AlwaysAutoResize)) return;
+        var confirm = draft.Confirmation;
+        if (!canEdit || confirm is null || confirm.HostId != hostId || confirm.Session != personal.Session ||
+            confirm.RestoreRevision != personal.SettingsRestoreRevision || draft.ClearTask is not null)
+        { draft.Confirmation = null; ImGui.CloseCurrentPopup(); ImGui.EndPopup(); return; }
+        ImGui.PushTextWrapPos(ImGui.GetCursorPosX() + ImGui.GetFontSize() * 24);
+        ImGui.TextUnformatted(UiText.Get(T.FishNoteClearQuestion));
+        ImGui.PopTextWrapPos();
+        if (ImGui.Button(UiText.Label(T.Cancel, "CancelClearFishNote")))
+        { draft.Confirmation = null; ImGui.CloseCurrentPopup(); }
+        ImGui.SameLine();
+        if (ImGui.Button(UiText.Label(T.FishNoteClear, "ConfirmClearFishNote")))
+        {
+            var completion = new TaskCompletionSource<bool>(TaskCreationOptions.RunContinuationsAsynchronously);
+            if (preferences.ClearFishNote(fishId, confirm.ExpectedNote, confirm.Session, confirm.RestoreRevision,
+                success => completion.TrySetResult(success))) draft.ClearTask = completion.Task;
+            draft.Confirmation = null;
+            ImGui.CloseCurrentPopup();
+        }
+        ImGui.EndPopup();
     }
 
     private NoteDraft? GetDraft(uint fishId, string saved)
@@ -162,7 +207,10 @@ internal sealed class FishPersonalPanel(FishPreferences preferences)
         public string Text = saved;
         public string Source = saved;
         public bool Submitted;
+        public Task<bool>? ClearTask;
+        public ClearConfirmation? Confirmation;
         public bool Dirty => Text != Source;
         public void Sync(string saved) { if (!Dirty || Text == saved) Text = Source = saved; }
     }
+    private sealed record ClearConfirmation(uint HostId, int Session, int RestoreRevision, string ExpectedNote);
 }

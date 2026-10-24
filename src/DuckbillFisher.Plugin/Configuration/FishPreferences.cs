@@ -77,7 +77,7 @@ internal sealed class FishPreferences : IDisposable
     private int? pendingUiScale;
     private CompactViewSettings? pendingCompact;
     private SpawnScheduleSettings? pendingSchedule;
-    private CastingTimerSettings? pendingTimer;
+    private TimerEdit? pendingTimer;
     private bool? pendingSpotFishHideCaught;
     private string? pendingCustomSoundPath;
     private Version? pendingChangelogVersion;
@@ -127,6 +127,8 @@ internal sealed class FishPreferences : IDisposable
         if (FishPersonalRecord.ValidNote(note))
             QueuePersonal(new(fishId, PersonalEditKind.Note, session, restoreRevision, Note: note, ExpectedNote: expectedNote));
     }
+    public bool ClearFishNote(uint fishId, string expectedNote, int session, int restoreRevision, Action<bool> completed) =>
+        QueuePersonal(new(fishId, PersonalEditKind.ClearNote, session, restoreRevision, Note: "", ExpectedNote: expectedNote, Completed: completed));
     public void SetFishAttempts(uint fishId, int attempts, int session, int restoreRevision)
     {
         if (attempts is >= 0 and <= FishPersonalRecord.MaxAttempts)
@@ -141,11 +143,21 @@ internal sealed class FishPreferences : IDisposable
     }
     public void ApplyFishTimerPreset(uint fishId, int session, int restoreRevision) =>
         QueuePersonal(new(fishId, PersonalEditKind.ApplyPreset, session, restoreRevision));
-    private void QueuePersonal(PersonalEdit edit)
+    private bool QueuePersonal(PersonalEdit edit)
     {
         lock (gate)
+        {
             if (!disposed && writable && edit.FishId != 0 && edit.Session == view.Session && edit.RestoreRevision == view.SettingsRestoreRevision)
+            {
                 pendingPersonal.Enqueue(edit);
+                return true;
+            }
+            return false;
+        }
+    }
+    private void CancelPersonalEdits()
+    {
+        while (pendingPersonal.TryDequeue(out var edit)) edit.Completed?.Invoke(false);
     }
 
     public CommonSettingsBackup? ExportSettings()
@@ -224,10 +236,11 @@ internal sealed class FishPreferences : IDisposable
             if (!disposed && writable && settings.IsValid()) pendingSchedule = settings;
     }
 
-    public void SetTimer(CastingTimerSettings settings)
+    public void SetTimer(CastingTimerSettings settings, int expectedSession, int expectedRestoreRevision)
     {
         lock (gate)
-            if (!disposed && writable && settings.IsValid()) pendingTimer = settings.Copy();
+            if (!disposed && writable && settings.IsValid() && expectedSession == view.Session && expectedRestoreRevision == view.SettingsRestoreRevision)
+                pendingTimer = new(settings.Copy(), expectedSession, expectedRestoreRevision);
     }
 
     public void SetSpotFishHideCaught(bool hideCaught)
@@ -425,7 +438,7 @@ internal sealed class FishPreferences : IDisposable
                     pendingTimer = null;
                     pendingSpotFishHideCaught = null;
                     pendingCustomSoundPath = null;
-                    pendingPersonal.Clear();
+                    CancelPersonalEdits();
                     var manualEdits = pending.Where(edit => edit.Manual).ToArray();
                     pending.Clear();
                     foreach (var edit in manualEdits) pending.Enqueue(edit);
@@ -435,9 +448,10 @@ internal sealed class FishPreferences : IDisposable
                 return;
             var candidate = CopyConfiguration();
             var changed = false;
-            var timerEdited = pendingTimer is not null;
+            var timerEdited = pendingTimer is { } queuedTimer && queuedTimer.Session == view.Session && queuedTimer.RestoreRevision == view.SettingsRestoreRevision;
             var personalEdited = pendingPersonal.Count > 0;
             FishPersonalResult? personalResult = null;
+            List<Action<bool>>? personalCompletions = null;
             if (pendingSpotFishHideCaught is { } hideCaught)
             {
                 changed |= candidate.SpotFishHideCaught != hideCaught;
@@ -446,8 +460,11 @@ internal sealed class FishPreferences : IDisposable
             }
             if (pendingTimer is { } timer)
             {
-                changed |= !candidate.Timer.Matches(timer);
-                candidate.Timer = timer;
+                if (timerEdited)
+                {
+                    changed |= !candidate.Timer.Matches(timer.Settings);
+                    candidate.Timer = timer.Settings;
+                }
                 pendingTimer = null;
             }
             if (pendingUiScale is { } scalePercent)
@@ -541,7 +558,8 @@ internal sealed class FishPreferences : IDisposable
             pendingFishAlerts.Clear();
             while (pendingPersonal.TryDequeue(out var edit))
             {
-                if (edit.Session != view.Session || edit.RestoreRevision != view.SettingsRestoreRevision) continue;
+                if (edit.Session != view.Session || edit.RestoreRevision != view.SettingsRestoreRevision)
+                { edit.Completed?.Invoke(false); continue; }
                 var record = candidate.PersonalRecords.GetValueOrDefault(edit.FishId) ?? new();
                 if (edit.Kind == PersonalEditKind.ApplyPreset)
                 {
@@ -552,9 +570,10 @@ internal sealed class FishPreferences : IDisposable
                     personalResult = new(edit.FishId, new(T.FishPresetApplied, preset.Name));
                     continue;
                 }
-                if (edit.Kind == PersonalEditKind.Note && record.Note != edit.ExpectedNote && record.Note != edit.Note)
+                if ((edit.Kind is PersonalEditKind.Note or PersonalEditKind.ClearNote) && record.Note != edit.ExpectedNote && record.Note != edit.Note)
                 {
                     personalResult = new(edit.FishId, new(T.FishNoteConflict));
+                    edit.Completed?.Invoke(false);
                     continue;
                 }
                 if (edit.Kind == PersonalEditKind.Preset && edit.PresetId is { } presetId && !candidate.Timer.Presets.Any(value => value.Id == presetId))
@@ -564,12 +583,17 @@ internal sealed class FishPreferences : IDisposable
                 }
                 var updated = edit.Kind switch
                 {
-                    PersonalEditKind.Note => record with { Note = edit.Note! },
+                    PersonalEditKind.Note or PersonalEditKind.ClearNote => record with { Note = edit.Note! },
                     PersonalEditKind.Attempts => record with { Attempts = edit.Amount },
                     PersonalEditKind.AttemptsDelta => record with { Attempts = (int)Math.Clamp((long)record.Attempts + edit.Amount, 0, FishPersonalRecord.MaxAttempts) },
                     PersonalEditKind.Preset => record with { TimerPresetId = edit.PresetId },
                     _ => record,
                 };
+                if (edit.Kind == PersonalEditKind.ClearNote)
+                {
+                    personalResult = new(edit.FishId, new(T.FishNoteCleared));
+                    (personalCompletions ??= []).Add(edit.Completed!);
+                }
                 if (updated == record) continue;
                 if (updated.IsEmpty()) changed |= candidate.PersonalRecords.Remove(edit.FishId);
                 else if (!candidate.PersonalRecords.ContainsKey(edit.FishId) && candidate.PersonalRecords.Count >= FishPersonalRecord.MaxEntries)
@@ -602,6 +626,8 @@ internal sealed class FishPreferences : IDisposable
             var savedChanges = !changed || Save(candidate);
             if (personalEdited) view = view with { PersonalResult = savedChanges ? personalResult : null };
             Publish();
+            if (personalCompletions is not null)
+                foreach (var complete in personalCompletions) complete(savedChanges);
         }
     }
 
@@ -700,7 +726,7 @@ internal sealed class FishPreferences : IDisposable
         {
             disposed = true;
             pending.Clear();
-            pendingPersonal.Clear();
+            CancelPersonalEdits();
             pendingAlerts = null;
             pendingFishAlerts.Clear();
             pendingCatalog = null;
@@ -721,7 +747,8 @@ internal sealed class FishPreferences : IDisposable
 
     private sealed record Edit(uint FishId, bool? Value, bool Manual, int Session);
     private sealed record PresetEdit(CatalogPreset? Add, Guid Remove);
-    private enum PersonalEditKind { Note, Attempts, AttemptsDelta, Preset, ApplyPreset }
+    private sealed record TimerEdit(CastingTimerSettings Settings, int Session, int RestoreRevision);
+    private enum PersonalEditKind { Note, ClearNote, Attempts, AttemptsDelta, Preset, ApplyPreset }
     private sealed record PersonalEdit(uint FishId, PersonalEditKind Kind, int Session, int RestoreRevision,
-        string? Note = null, string? ExpectedNote = null, int Amount = 0, Guid? PresetId = null);
+        string? Note = null, string? ExpectedNote = null, int Amount = 0, Guid? PresetId = null, Action<bool>? Completed = null);
 }

@@ -2,6 +2,15 @@ namespace DuckbillFisher.Plugin.Localization;
 
 internal enum TextKey
 {
+    FishNoteClear,
+    FishNoteClearQuestion,
+    FishNoteCleared,
+    TimerPresetOverwriteTitle,
+    TimerPresetOverwriteQuestion,
+    TimerPresetOverwrite,
+    TimerPresetChanged,
+    TimerSettingsCount,
+    TimerAlertSecondsRange,
     FishPersonalHeading,
     FishPersonalHeadingNote,
     FishPersonalHeadingDraft,
