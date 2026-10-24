@@ -21,10 +21,14 @@ internal sealed class CastingTimerSettingsWindow(FishPreferences preferences, Sp
     private Guid? selectedPreset;
     private string presetName = "";
     private SettingsTab selectedTab;
+    private bool showPresets;
     private enum SettingsTab { CastAlerts, FishingSounds }
+
+    public void OpenPresets() { selectedTab = SettingsTab.CastAlerts; showPresets = true; IsOpen = true; }
 
     public override void PreDraw()
     {
+        if (showPresets) ImGui.SetNextWindowFocus();
         WindowName = $"{UiText.Get(T.TimerAlertSettings)}###DuckbillFisher.TimerSettings";
         SizeConstraints = new WindowSizeConstraints { MinimumSize = new Vector2(410, 360), MaximumSize = new Vector2(float.MaxValue) };
         Size = new Vector2(580, 580);
@@ -54,6 +58,7 @@ internal sealed class CastingTimerSettingsWindow(FishPreferences preferences, Sp
         var contentId = selectedTab == SettingsTab.CastAlerts ? "CastAlertContent" : "FishingSoundContent";
         if (ImGui.BeginChild(contentId))
         {
+            if (showPresets && selectedTab == SettingsTab.CastAlerts) { ImGui.SetScrollY(0); showPresets = false; }
             if (personal.Error is { } error) ImGui.TextWrapped(error.Display);
             ImGui.BeginDisabled(!personal.CanEdit);
             changed |= selectedTab == SettingsTab.CastAlerts ? DrawCastAlerts(personal) : DrawFishingSounds(personal);
@@ -84,7 +89,8 @@ internal sealed class CastingTimerSettingsWindow(FishPreferences preferences, Sp
         var fontSize = ImGui.GetFontSize();
         var gap = fontSize + ImGui.GetStyle().ItemInnerSpacing.X;
         var padding = new string(' ', Math.Max(1, (int)MathF.Ceiling(gap / Math.Max(1, ImGui.CalcTextSize(" ").X))));
-        var active = ImGui.BeginTabItem($"{padding}{UiText.Label(label, id)}");
+        var flags = showPresets && page == SettingsTab.CastAlerts ? ImGuiTabItemFlags.SetSelected : ImGuiTabItemFlags.None;
+        var active = ImGui.BeginTabItem($"{padding}{UiText.Label(label, id)}", flags);
         if (ImGui.IsItemVisible())
         {
             var min = ImGui.GetItemRectMin();

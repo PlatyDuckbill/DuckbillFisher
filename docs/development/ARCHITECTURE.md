@@ -24,6 +24,7 @@
 | UI 배율 | UiScale, MainWindow, FishPreferences | WindowSystem 그리기에만 글자/스타일 배율 적용 후 finally로 원복. 게임 미끼 UI overlay는 범위 밖 |
 | 로컬 출력 | SpawnAlerts, SpawnAlertOutput, FishingMapService, FishingItemLinkService, FishGuideOpenService | 채팅/SE와 명시적 클릭 처리, 서버 송신 없음 |
 | 커스텀 WAV | CustomAlertSound, SpawnAlertsPanel | 전용 스레드의 Windows MCI alias/임시 복사본, 관리 요청·세대·상태만 공유 |
+| 어종별 개인 기록 | FishPersonalRecord, FishPersonalPanel, FishPreferences | 어종 ID별 공통 메모/수동 횟수/프리셋ID.64개 초안·명시적 저장/적용, 세션/복원 세대·필드별 요청·충돌/실패 보존. 백업 포함 |
 | 설정 백업·전용 WAV | CommonSettingsBackup, SettingsBackupFile, SettingsBackup, ManagedSoundFiles, ManagedSoundLibrary | 공통 설정만 버전별 JSON/ZIP 변환·제한/해시 검증. 관리 작업자 파일 처리, Framework 설정 적용·세션/취소·영구 음원 원자 교체/실패 복구. [계약](../product/SETTINGS-BACKUP.md) |
 | 업데이트 내역 | ChangelogWindow, MainWindow, FishPreferences | 메인 OnOpen에서 미확인 버전 안내, 내장 한영 릴리스 요약·최대 최신10개 표시, 공통 확인 버전을 기존 Framework 설정 큐로 저장. 원격 조회 없음 |
 | 진단 | FishingConditionObserver, FishingActivityProbe, FishGuideDiagnostics, BaitUiProbe | 원시 관찰과 제품 판정 구분, 개발자 도구 |
@@ -63,7 +64,8 @@
 
 ## 저장·수집·알림
 
-- FishPreferences schema22: 공통 즐겨찾기/필터/언어/UI 배율/간이 목록 전용 즐겨찾기 필터/알림 설정·커스텀 WAV 원본 경로·일정표/업데이트 내역 확인 버전(LastSeenChangelogVersion)·시전 알림/이름 있는 프리셋·입질/터주/터주왕 효과음·낚시터 목록 수집 필터, 캐릭터별 수동 수집/자동 관찰 백업(UTC·상태)/알림 중복 방지 기록. schema1~21 변환과 손상/미지원 원본 보존을 유지한다. 이전 설정은 새 효과음 없음·최초 습득만 켜짐·낚시터 수집 숨김을 기본 적용하고 기존 알림/프리셋을 보존한다. 이전 설정은 간이 목록의 즐겨찾기 선택을 당시 메인 필터에서 한 번 이어받는다. 선택적인 확인 버전만 잘못되면 확인 전으로, 배율이 누락/선택 범위 밖이면100%로 정규화하며 다른 설정을 버리지 않는다.
+- FishPreferences schema23: 공통 즐겨찾기/필터/언어/UI 배율/간이 목록 전용 즐겨찾기 필터/알림 설정·커스텀 WAV 원본 경로·일정표/업데이트 내역 확인 버전(LastSeenChangelogVersion)·시전 알림/이름 있는 프리셋·입질/터주/터주왕 효과음·낚시터 목록 수집 필터, 캐릭터별 수동 수집/자동 관찰 백업(UTC·상태)/알림 중복 방지 기록. schema1~22 변환과 손상/미지원 원본 보존을 유지한다. 이전 설정은 새 효과음 없음·최초 습득만 켜짐·낚시터 수집 숨김을 기본 적용하고 기존 알림/프리셋을 보존한다. 이전 설정은 간이 목록의 즐겨찾기 선택을 당시 메인 필터에서 한 번 이어받는다. 선택적인 확인 버전만 잘못되면 확인 전으로, 배율이 누락/선택 범위 밖이면100%로 정규화하며 다른 설정을 버리지 않는다.
+- PersonalRecords는 최대4,096종의 불변 값이며 필드별 요청을 Framework에서 현재 저장본에 적용한다. 메모/횟수 편집만으로 CatalogRevision을 올리지 않고 같은 snapshot 맵을 재사용한다. 타이머 프리셋 삭제는 연결만 정리하고 명시적 적용은 기존 알림ID/채널/효과음 보존 계약을 따른다. CommonSettingsBackup의 선택 필드로 JSON/ZIP에 포함하며 미저장 초안은 제외한다.
 - 캐스팅 알림의 로컬 채팅 채널은 Timer.AlertChannelId로 출현 알림 채널과 분리한다.21 이하 로딩/백업은 종전 채널을 한 번 이어받고 이후 독립 저장한다. 즐겨찾기 관리의 가운데 출현 알림 설정 탭이 기존 메인 설정의 옵션을 담당한다.
 - 업데이트 내역을 표시한 뒤 사용자가 닫으면 확인 버전을 저장한다. 저장 실패 시 이전 상태를 유지하고 재로드 때 다시 표시할 수 있다. 캐릭터/언어 전환은 확인 버전을 초기화하지 않고, 더 최신 확인값을 이전 DLL로 낮추지 않는다. 내역 저장만으로 CatalogRevision을 올리지 않는다.
 - 전체 Revision과 메모리 전용 CatalogRevision을 구분한다. 목록·타이머 낚시터 필터·미끼 준비는 캐릭터/즐겨찾기/수동 수집/목록 설정/언어 변경에 반응하며 알림 예약 저장만으로 재계산하지 않는다. 같은 즐겨찾기/수동 상태의 불변 집합은 재사용한다.

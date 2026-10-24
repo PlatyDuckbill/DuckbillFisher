@@ -130,6 +130,7 @@ public sealed class Plugin : IDalamudPlugin
             fishPreferences, fishingTracker, () => collectionReader.IsCompatible);
         timerWindow = new CastingTimerWindow(fishingTracker, fishingBuffs, textureProvider, detailWindow.Show, spotFishWindow.Toggle);
         timerSettings = new CastingTimerSettingsWindow(fishPreferences, alertOutput, fishingSounds, soundLibrary);
+        detailPanel.ShowTimerPresets = timerSettings.OpenPresets;
         timerWindow.ShowSettings = () => timerSettings.IsOpen = true;
         compactObserver = new CompactFishObserver(fishCatalog, fishPreferences, framework, fishCollection, fishingRegion);
         compactWindow = new CompactFishWindow(compactObserver, fishPreferences, fishCollection, textureProvider, detailWindow.Show, fishingMap);

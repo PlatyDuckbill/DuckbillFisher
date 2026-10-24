@@ -59,8 +59,10 @@ internal sealed class SettingsBackupPanel(SettingsBackup backup, FishPreferences
         if (status.Message is { } message) ImGui.TextWrapped(message.Display);
         if (!status.CanRestore) return;
         var created = status.CreatedUtc.GetValueOrDefault().ToUniversalTime().ToString("yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture);
-        ImGui.TextWrapped(UiText.Get(T.BackupPreview, created, status.Favorites, status.Presets, status.Sounds));
+        ImGui.TextWrapped(UiText.Get(T.BackupPreview, created, status.Favorites, status.Presets, status.Sounds, status.PersonalRecords));
         ImGui.TextWrapped(UiText.Get(T.BackupReplaceHint));
+        if (status.SourceSettingsVersion < 23 && personal.PersonalRecords.Count > 0)
+            ImGui.TextWrapped(UiText.Get(T.BackupPersonalRecordsMissing));
         ImGui.BeginDisabled(!personal.CanEdit || status.Busy);
         if (UiWidgets.ActionButton(FontAwesomeIcon.Check, T.BackupRestore, "ConfirmSettingsRestore", actionWidth)) backup.Restore();
         ImGui.SameLine();

@@ -41,6 +41,7 @@ docs/
 | 터주작 아이디어 | [TROPHY-FISHING-PROPOSALS](product/TROPHY-FISHING-PROPOSALS.md) | 후보 기록은 착수 승인과 다름 |
 | 출현 일정표 | [동작·구조](product/SPAWN-SCHEDULE.md), [가상 HTML 시안](product/mockups/spawn-schedule.html) | 공개0.5.0.0 시간축/월 달력·고정 Release 대표 확인 완료. [확인 순서](verification/catalog/UI.md#0500-r7-옵션-제거와-단일-대상-전환-2026-10-21) |
 | 설정 백업·전용 WAV | [포함 범위·형식·호환성](product/SETTINGS-BACKUP.md) | [빌드·실기 확인 절차](verification/configuration/SETTINGS-BACKUP.md) |
+| 어종별 개인 기록 | [메모·수동 횟수·프리셋 연결](product/FISH-PERSONAL.md) | [검수 순서·백업 확인](verification/configuration/FISH-PERSONAL.md) |
 | 기존 외부 조사 | [REFERENCES](development/REFERENCES.md) | 조사일 기준. 새 정책/API 작업 때 재확인 |
 
 ## 이력과 스킬

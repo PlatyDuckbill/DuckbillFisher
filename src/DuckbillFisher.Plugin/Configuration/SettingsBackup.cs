@@ -5,7 +5,11 @@ using DuckbillFisher.Plugin.Localization;
 namespace DuckbillFisher.Plugin;
 
 internal sealed record SettingsBackupView(bool Busy, string? Path, UiMessage? Message,
-    DateTimeOffset? CreatedUtc, int Favorites, int Presets, int Sounds, bool CanRestore);
+    DateTimeOffset? CreatedUtc, int Favorites, int Presets, int Sounds, bool CanRestore)
+{
+    public int PersonalRecords { get; init; }
+    public int SourceSettingsVersion { get; init; }
+}
 
 internal sealed class SettingsBackup : IDisposable
 {
@@ -60,7 +64,11 @@ internal sealed class SettingsBackup : IDisposable
             if (disposed || version != generation) return;
             prepared = result;
             view = new(false, path, null, result.Document.CreatedUtc, result.Document.Settings.Favorites.Count,
-                result.Document.Settings.CatalogPresets.Count, result.Sounds.Count, true);
+                result.Document.Settings.CatalogPresets.Count, result.Sounds.Count, true)
+            {
+                PersonalRecords = result.Document.Settings.PersonalRecords.Count,
+                SourceSettingsVersion = result.Document.SettingsVersion,
+            };
         }
     });
 

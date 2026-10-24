@@ -3,7 +3,7 @@ namespace DuckbillFisher.Plugin;
 /// <summary>Pure persisted-setting transformations. Never reads or writes the configuration file.</summary>
 internal static class PreferencesMigration
 {
-    public const int CurrentVersion = 22;
+    public const int CurrentVersion = 23;
     public static bool Supports(int version) => version is >= 1 and <= CurrentVersion;
 
     public static CatalogSettings Catalog(CatalogSettings source, int version)

@@ -26,8 +26,9 @@ internal static class SettingsBackupFile
 {
     public const int FormatVersion = 1;
     public const int FirstSettingsVersion = 21;
-    private const int MaxJsonBytes = 4 * 1024 * 1024;
-    private const int MaxArchiveBytes = 64 * 1024 * 1024;
+    // Bounded for 4096 notes of up to 1000 UTF-16 characters, including JSON escaping.
+    private const int MaxJsonBytes = 32 * 1024 * 1024;
+    private const int MaxArchiveBytes = 96 * 1024 * 1024;
     private static readonly JsonSerializerOptions Json = new() { WriteIndented = true, MaxDepth = 32 };
 
     public static async Task WriteAsync(string path, CommonSettingsBackup settings, bool includeSounds, CancellationToken token)

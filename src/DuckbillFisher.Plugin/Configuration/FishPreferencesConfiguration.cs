@@ -35,6 +35,7 @@ public sealed class FishPreferencesConfiguration : IPluginConfiguration
     public CastingTimerSettings Timer { get; set; } = new();
     public bool SpotFishHideCaught { get; set; } = true;
     public Dictionary<uint, int> FishAlertLeadMinutes { get; set; } = [];
+    public Dictionary<uint, FishPersonalRecord> PersonalRecords { get; set; } = [];
     // Last reserved window start per fish/character. Also suppresses repeats after clock rollback.
     public Dictionary<ulong, Dictionary<uint, long>> AlertWindows { get; set; } = [];
 }

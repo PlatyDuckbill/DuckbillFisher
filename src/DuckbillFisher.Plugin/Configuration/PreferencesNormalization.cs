@@ -31,6 +31,8 @@ internal static class PreferencesNormalization
             loaded.Timer = loaded.Timer with { AlertChannelId = (ushort)Dalamud.Game.Text.XivChatType.SystemMessage };
         loaded.CollectionBackups = (loaded.CollectionBackups ?? []).Where(pair => pair.Key != 0 && pair.Value is not null && pair.Value.IsValid())
             .ToDictionary(pair => pair.Key, pair => pair.Value.Copy());
+        loaded.PersonalRecords = new(loaded.PersonalRecords ?? []);
+        FishPersonalRecord.RemoveMissingPresets(loaded.PersonalRecords, loaded.Timer);
         loaded.Version = PreferencesMigration.CurrentVersion;
     }
 }

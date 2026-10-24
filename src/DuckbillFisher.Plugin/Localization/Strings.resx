@@ -1,11 +1,38 @@
 <?xml version="1.0" encoding="utf-8"?>
 <root>
+  <data name="FishPersonalHeading" xml:space="preserve"><value>Personal record · {0:N0} attempts</value></data>
+  <data name="FishPersonalHeadingNote" xml:space="preserve"><value>Personal record · Note · {0:N0} attempts</value></data>
+  <data name="FishPersonalHeadingDraft" xml:space="preserve"><value>Personal record · Unsaved note · {0:N0} attempts</value></data>
+  <data name="FishPersonalScope" xml:space="preserve"><value>Manual entries · Shared across characters</value></data>
+  <data name="FishPersonalLimit" xml:space="preserve"><value>Keep personal records for up to {0:N0} fish.</value></data>
+  <data name="FishNote" xml:space="preserve"><value>Personal note</value></data>
+  <data name="FishNoteSave" xml:space="preserve"><value>Save note</value></data>
+  <data name="FishNoteRevert" xml:space="preserve"><value>Revert to the saved note</value></data>
+  <data name="FishNoteInvalid" xml:space="preserve"><value>Notes allow up to {0:N0} characters; only line breaks and tabs are allowed as control characters.</value></data>
+  <data name="FishNoteLength" xml:space="preserve"><value>{0:N0}/{1:N0} characters</value></data>
+  <data name="FishNoteUnsaved" xml:space="preserve"><value>Unsaved</value></data>
+  <data name="FishNoteSaved" xml:space="preserve"><value>Saved</value></data>
+  <data name="FishNoteConflict" xml:space="preserve"><value>The saved note changed. Revert to it before editing again.</value></data>
+  <data name="FishNoteDraftLimit" xml:space="preserve"><value>Up to {0} unsaved notes can stay open. Save or revert another draft first.</value></data>
+  <data name="FishAttempts" xml:space="preserve"><value>Manual attempts</value></data>
+  <data name="FishAttemptsHint" xml:space="preserve"><value>Enter 0–{0:N0}. Counts change only when you edit them; use your own counting rule.</value></data>
+  <data name="FishAttemptsDecrease" xml:space="preserve"><value>Decrease attempts by 1</value></data>
+  <data name="FishAttemptsIncrease" xml:space="preserve"><value>Increase attempts by 1</value></data>
+  <data name="FishPreset" xml:space="preserve"><value>Timer preset</value></data>
+  <data name="FishPresetNone" xml:space="preserve"><value>Not linked</value></data>
+  <data name="FishPresetApply" xml:space="preserve"><value>Apply to timer</value></data>
+  <data name="FishPresetApplyHint" xml:space="preserve"><value>Replaces the current cast alert list. Keeps the chat channel and fishing sound settings.</value></data>
+  <data name="FishPresetManage" xml:space="preserve"><value>Manage presets</value></data>
+  <data name="FishPresetEmpty" xml:space="preserve"><value>Save a preset in cast alert settings first.</value></data>
+  <data name="FishPresetMissing" xml:space="preserve"><value>The linked preset is unavailable. Select another preset.</value></data>
+  <data name="FishPresetApplied" xml:space="preserve"><value>Applied “{0}” to the timer.</value></data>
+  <data name="BackupPersonalRecordsMissing" xml:space="preserve"><value>This older backup has no personal records. Restoring also clears current notes, manual counts and preset links.</value></data>
   <data name="SettingsViewUpdates" xml:space="preserve"><value>View updates</value></data>
   <data name="BackupHelp" xml:space="preserve"><value>Backup details</value></data>
   <data name="BackupZipSummary" xml:space="preserve"><value>Save settings and custom WAV files in one ZIP.</value></data>
   <data name="BackupJsonSummary" xml:space="preserve"><value>Save settings and WAV paths in one JSON.</value></data>
   <data name="BackupHeading" xml:space="preserve"><value>Settings backup</value></data>
-  <data name="BackupScope" xml:space="preserve"><value>Includes interface, filters, favorites, presets, alerts and timer settings. Character collection, fishing history and sent-alert records are excluded.</value></data>
+  <data name="BackupScope" xml:space="preserve"><value>Includes interface, filters, favorites, presets, alerts, timer settings, saved fish notes, manual attempts and preset links. Character collection, fishing history and sent-alert records are excluded.</value></data>
   <data name="BackupIncludeSounds" xml:space="preserve"><value>Include custom WAV files (ZIP)</value></data>
   <data name="BackupZipHint" xml:space="preserve"><value>Creates a ZIP with settings.json and files for sounds currently set to custom WAV. Paths remembered under None or built-in effects are excluded. Missing selected WAV files prevent export. Existing backups are not overwritten.</value></data>
   <data name="BackupJsonHint" xml:space="preserve"><value>Creates one JSON with settings and WAV paths only. Move audio separately when restoring on another PC.</value></data>
@@ -14,8 +41,8 @@
   <data name="BackupWorking" xml:space="preserve"><value>Processing backup…</value></data>
   <data name="BackupExported" xml:space="preserve"><value>Backup saved.</value></data>
   <data name="BackupRestored" xml:space="preserve"><value>Settings restored.</value></data>
-  <data name="BackupPreview" xml:space="preserve"><value>Backup (UTC): {0}&#10;Favorites: {1} · Catalog presets: {2} · WAV files: {3}</value></data>
-  <data name="BackupReplaceHint" xml:space="preserve"><value>Restore replaces the common settings and included WAV files. Character collection and fishing history are preserved.</value></data>
+  <data name="BackupPreview" xml:space="preserve"><value>Backup (UTC): {0}&#10;Favorites: {1} · Catalog presets: {2} · WAV files: {3}&#10;Fish personal records: {4}</value></data>
+  <data name="BackupReplaceHint" xml:space="preserve"><value>Restore replaces common settings, fish personal records and included WAV files. Character collection and fishing history are preserved.</value></data>
   <data name="BackupRestore" xml:space="preserve"><value>Restore settings</value></data>
   <data name="BackupCancel" xml:space="preserve"><value>Cancel</value></data>
   <data name="BackupUnsupported" xml:space="preserve"><value>This backup version is not supported. Backups from a newer plugin require that version or later.</value></data>

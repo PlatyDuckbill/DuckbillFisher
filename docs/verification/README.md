@@ -8,6 +8,7 @@
 - [0.5.2.0 복수 시전 알림·루어 경과·수집 백업 배포](releases/RELEASE-0.5.2.0.md)
 - [코드 구조·상수·설정 분리와 핵심 동작 테스트](ARCHITECTURE-TESTS.md)
 - [설정 JSON/ZIP 백업·영어 고정 이름의 전용 WAV 개발본](configuration/SETTINGS-BACKUP.md)
+- [어종별 메모·수동 도전 횟수·타이머 프리셋 연결/백업 검수본](configuration/FISH-PERSONAL.md)
 
 - [0.5.1.0 타이머 효과·시간 필터 배포](releases/RELEASE-0.5.1.0.md)
 

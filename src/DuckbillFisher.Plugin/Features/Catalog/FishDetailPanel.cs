@@ -11,7 +11,9 @@ namespace DuckbillFisher.Plugin;
 internal sealed class FishDetailPanel(FishPreferences preferences, ITextureProvider textures,
     FishingMapService maps, FishingConditionPanel conditions)
 {
+    private readonly FishPersonalPanel personalPanel = new(preferences);
     public Action<uint, uint>? OpenRelated { get; set; }
+    public Action? ShowTimerPresets { get => personalPanel.ManagePresets; set => personalPanel.ManagePresets = value; }
 
     public void Draw(FishGuideRow? fish, FishCatalogView catalog, FishPreferencesView personal, FishCollectionView observed,
         Action<FishGuideRow>? showDetail = null)
@@ -49,6 +51,8 @@ internal sealed class FishDetailPanel(FishPreferences preferences, ITextureProvi
         }
         if (!personal.HasCharacter) ImGui.TextWrapped(UiText.Get(T.ManualPlayerRequired));
         if (personal.Error is { } error) ImGui.TextWrapped(error.Display);
+
+        personalPanel.Draw(fish.FishParameterId, personal, fish.IsDisplayable);
 
         UiWidgets.Heading(T.DetailAvailability);
         if (fish.IsOceanFishing) DrawOcean(fish.Ocean);

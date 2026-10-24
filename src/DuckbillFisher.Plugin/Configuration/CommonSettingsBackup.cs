@@ -27,6 +27,8 @@ internal sealed class CommonSettingsBackup
     public required CastingTimerSettings Timer { get; set; } = new();
     public required bool SpotFishHideCaught { get; set; } = true;
     public required Dictionary<uint, int> FishAlertLeadMinutes { get; set; } = [];
+    // Optional since settings schema23; format-v1/schema21~22 backups have no personal records.
+    public Dictionary<uint, FishPersonalRecord> PersonalRecords { get; set; } = [];
 
     public static CommonSettingsBackup From(FishPreferencesConfiguration value) => new()
     {
@@ -38,6 +40,7 @@ internal sealed class CommonSettingsBackup
         Language = value.Language, UiScalePercent = value.UiScalePercent, DeveloperMode = value.DeveloperMode,
         Compact = value.Compact, Schedule = value.Schedule, Timer = value.Timer.Copy(),
         SpotFishHideCaught = value.SpotFishHideCaught, FishAlertLeadMinutes = new(value.FishAlertLeadMinutes),
+        PersonalRecords = new(value.PersonalRecords),
     };
 
     public void Apply(FishPreferencesConfiguration target)
@@ -60,11 +63,12 @@ internal sealed class CommonSettingsBackup
         target.Timer = Timer.Copy();
         target.SpotFishHideCaught = SpotFishHideCaught;
         target.FishAlertLeadMinutes = new(FishAlertLeadMinutes);
+        target.PersonalRecords = new(PersonalRecords);
     }
 
     public bool IsValid(int version)
     {
-        if (Favorites is null || Catalog?.IsValid() != true || Compact?.IsValid() != true ||
+        if (!FishPersonalRecord.ValidEntries(PersonalRecords) || Favorites is null || Catalog?.IsValid() != true || Compact?.IsValid() != true ||
             Schedule?.IsValid() != true || Timer?.IsValid() != true || FishAlertLeadMinutes is null ||
             CatalogPresets is null || CatalogPresets.Count > CatalogPreset.MaxCount ||
             CatalogPresets.Any(preset => preset is null || preset.Id == Guid.Empty ||
