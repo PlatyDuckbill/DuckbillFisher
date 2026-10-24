@@ -36,3 +36,4 @@
 - 최종 ZIP `artifacts/share/0.5.4.0-final/DuckbillFisher-0.5.4.0.zip`, **568,830바이트**, SHA256 **7FAFEACE0C9042C78F3150B10802F28CA26EEF79BFD963BCF8CA20CE1CE40B8C**.
 - 최종 추출 DLL `DUCKBILL_ROOT/.cache/release-validation/0.5.4.0-final/DuckbillFisher.dll`, SHA256 **A0524B48DD68FC9EE607433C0FA5698D4B5582BCF63B12E42534F4704A4F2032**.
 - 추출7파일/빌드 해시·버전/API/metadata/URL·내장3자료·한영984키/값 일치를 다시 확인했다. 결과 `.cache/release-build/0.5.4.0-final-validation.json`. 최종 DLL의 정상 로드·해당 문구 제거 확인을 요청했으며 응답 후 같은 ZIP으로 승인된 게시를 이어간다. 이전 후보는 덮어쓰거나 게시하지 않았다.
+- 최종 추출 DLL 경로와 로드/문구 확인을 안내한 뒤 사용자 **‘배포 하자’** 응답을 받았다. 최종본 게시 진행 확인으로 기록하며, 기능 대표 정상 보고는 최초 고정본의 **‘확인 완료고 정상’** 범위를 따른다. 게시 직전 최종 ZIP/추출7파일 해시와 소스 이후 런타임/포장 변경 없음을 재확인했다. 실행 파일 재빌드 없이 위 최종 ZIP을 게시한다.
