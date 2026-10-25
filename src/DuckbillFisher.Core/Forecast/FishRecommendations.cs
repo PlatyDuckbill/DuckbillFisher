@@ -36,6 +36,8 @@ public sealed record FishRecommendation(uint ItemId, RecommendationIssue Issue, 
     public uint PreparationGateItem { get; init; }
     public DateTimeOffset? PreparationGateEnd { get; init; }
     public double? GapHours { get; init; }
+    // Target time/weather calendar, separate from the prerequisite used for rarity scoring.
+    public DateTimeOffset? NextOwnOpportunity { get; init; }
 }
 public sealed record RecommendationResult(DateTimeOffset At, DateTimeOffset Through, DateTimeOffset AnalysisStart,
     IReadOnlyList<FishRecommendation> Ranked, IReadOnlyList<FishRecommendation> Other)
@@ -214,6 +216,8 @@ public sealed class FishRecommendations
                 OwnConditionsAlways = FishingAvailability.IsAlways(rule), MoochDepth = Path(rule)!.Length,
                 IntuitionCatchCount = rule.Predators.Sum(prey => prey.Count),
                 PreparationGateItem = gate.ItemId, PreparationGateEnd = gate.Window?.End, GapHours = gap,
+                NextOwnOpportunity = FishingAvailability.IsAlways(rule) ? null
+                    : NextOpportunity(id, OpportunityBasis.OwnConditions, choice.Window, choice.Plan.Steps, token).Next,
             };
         }).ToArray();
         var feasible = candidates.Where(value => value.Issue == RecommendationIssue.None).ToArray();

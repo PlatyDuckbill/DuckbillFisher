@@ -6,7 +6,11 @@ namespace DuckbillFisher.Plugin;
 internal sealed record RecommendationOptions(int Hours = 3, bool IncludeUnknown = false,
     bool FavoritesOnly = false, bool LegendaryOnly = false, bool AllowStorage = true);
 internal enum RecommendationState { Waiting, Computing, Ready, Failed, Unsupported }
-internal sealed record RecommendationEntry(FishGuideRow Fish, CollectionStatus Collection, FishRecommendation Recommendation);
+internal sealed record RecommendationEntry(FishGuideRow Fish, CollectionStatus Collection, FishRecommendation Recommendation)
+{
+    public int FrequencyRank { get; init; }
+    public int FrequencyComparisonCount { get; init; }
+}
 internal sealed record FishRecommendationView(int Session, RecommendationState State, DateTimeOffset At,
     RecommendationEntry[] Ranked, RecommendationEntry[] Other, int UnknownCount, int CaughtCount)
 {
@@ -131,10 +135,14 @@ internal sealed class FishRecommendationService : IDisposable
                         settings.IncludeUnknown && value.Collection == CollectionStatus.Unknown).ToDictionary(value => value.Fish.ItemId);
                     var result = planner.Calculate(now, settings.Hours, included.Keys, settings.AllowStorage, token);
                     RecommendationEntry Entry(FishRecommendation value) => new(included[value.ItemId].Fish, included[value.ItemId].Collection, value);
+                    // Equal frequencies share a rank; these compare only the filtered horizon's rare candidates.
+                    var frequencyRanks = result.Rare.Select((value, index) => (value.OpportunityCount, Rank: index + 1))
+                        .GroupBy(value => value.OpportunityCount).ToDictionary(group => group.Key, group => group.First().Rank);
                     return initial with { State = RecommendationState.Ready, AnalysisStart = result.AnalysisStart,
                         Ranked = result.Ranked.Select(Entry).ToArray(), Other = result.Other.Select(Entry).ToArray(),
                         Now = result.Now.Select(Entry).ToArray(), Preparation = result.Preparation.Select(Entry).ToArray(),
-                        Rare = result.Rare.Select(Entry).ToArray() };
+                        Rare = result.Rare.Select(value => Entry(value) with
+                        { FrequencyRank = frequencyRanks[value.OpportunityCount], FrequencyComparisonCount = result.Rare.Count }).ToArray() };
                 }
                 catch (OperationCanceledException) { return null; }
                 catch (Exception ex)
