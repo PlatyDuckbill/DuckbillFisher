@@ -134,7 +134,9 @@ internal sealed class MainWindow : Window
         if (ImGui.BeginChild("MainNavigationTabs", new Vector2(tabWidth, ImGui.GetFrameHeightWithSpacing()), false,
             ImGuiWindowFlags.NoScrollbar | ImGuiWindowFlags.NoScrollWithMouse))
         {
-            if (ImGui.BeginTabBar("DiagnosticsTabs", ImGuiTabBarFlags.FittingPolicyScroll))
+            // A live ImGui context can retain the previous tab order across plugin reloads.
+            // Use a stable ID for this menu order instead of reusing the old tab-bar state.
+            if (ImGui.BeginTabBar("MainNavigation.FavoritesSecond", ImGuiTabBarFlags.FittingPolicyScroll))
             {
                 NavigationTab(MainPage.Catalog, T.TabCatalog, "CatalogTab", FontAwesomeIcon.Fish);
                 NavigationTab(MainPage.Alerts, T.TabAlerts, "SpawnAlertsTab", FontAwesomeIcon.Star);

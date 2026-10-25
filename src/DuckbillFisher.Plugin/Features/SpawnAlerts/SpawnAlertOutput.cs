@@ -123,16 +123,7 @@ internal sealed class SpawnAlertOutput : IDisposable
             if (!first)
                 message.AddText("\n");
             first = false;
-            if (fish.LeadMinutes == 0)
-            {
-                AppendOpening(message, fish, now);
-                continue;
-            }
-            foreach (var payload in SeString.CreateItemLink(fish.ItemId, false, fish.Name).Payloads)
-                message.Add(payload);
-            message.AddText(UiText.Get(T.AlertLinkedRemaining, Remaining(fish.Start - now)));
-            foreach (var payload in SeString.CreateMapLink(fish.Spot.TerritoryId, fish.Spot.MapId, fish.Spot.X, fish.Spot.Y).Payloads)
-                message.Add(payload);
+            AppendNotification(message, fish, now);
         }
         if (advanceShown > 3) message.AddText(UiText.Get(T.AlertExtraHistory, advanceShown - 3));
         chat.Print(new XivChatEntry
@@ -152,7 +143,7 @@ internal sealed class SpawnAlertOutput : IDisposable
         return result;
     }
 
-    private void AppendOpening(SeStringBuilder message, SpawnAlertDisplay fish, DateTimeOffset now)
+    private void AppendNotification(SeStringBuilder message, SpawnAlertDisplay fish, DateTimeOffset now)
     {
         if (!detailLinks.TryGetValue(fish.FishId, out var link))
         {
@@ -163,8 +154,10 @@ internal sealed class SpawnAlertOutput : IDisposable
             detailLinks.Add(fish.FishId, link);
         }
         // Keep the entire sentence in resources; payload positions can move in translation.
-        var sentence = UiText.Get(fish.AlreadyOpen ? T.SpotAlertAlreadyOpen : T.SpotAlertOpening,
-            "\u0001", "\u0002", Countdown(fish.End!.Value - now));
+        var advance = fish.LeadMinutes > 0;
+        var key = advance ? T.SpotAlertAdvance : fish.AlreadyOpen ? T.SpotAlertAlreadyOpen : T.SpotAlertOpening;
+        var sentence = UiText.Get(key, "\u0001", "\u0002",
+            Countdown((advance ? fish.Start : fish.End!.Value) - now));
         var start = 0;
         for (var index = 0; index < sentence.Length; index++)
         {

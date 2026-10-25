@@ -1011,11 +1011,11 @@ Last saved: {1:yyyy-MM-dd HH:mm}, {2} fish. Used where current observations are 
   <data name="ChangelogSpotFilterRetention" xml:space="preserve"><value>Keep the fishing-spot list's collection filter after restarting the plugin or game.</value></data>
   <data name="ChangelogTimerSettingsTabs" xml:space="preserve"><value>Use separate cast alert and fishing sound tabs in timer settings, with icons, bullet help, and common output settings at the upper right.</value></data>
   <data name="SpotAlertsEnable" xml:space="preserve"><value>Notify uncaught big and legendary fish at the current hole</value></data>
-  <data name="SpotAlertsHint" xml:space="preserve"><value>After the first cast identifies the hole, also notify fish already available. Once per occurrence, including future occurrences. Independent of favorites; uses the channel and sound below. Does not check active Intuition.</value></data>
-  <data name="SpotAlertOpening" xml:space="preserve"><value>{0} is now available · {1} · {2} remaining</value></data>
-  <data name="SpotAlertAlreadyOpen" xml:space="preserve"><value>{0} is available · {1} · {2} remaining</value></data>
+  <data name="SpotAlertsHint" xml:space="preserve"><value>After the first cast, notify once per occurrence, including fish already available.</value></data>
+  <data name="SpotAlertOpening" xml:space="preserve"><value>{0} now available · {1} · Ends in {2}</value></data>
+  <data name="SpotAlertAlreadyOpen" xml:space="preserve"><value>{0} available · {1} · Ends in {2}</value></data>
   <data name="SpotAlertDetail" xml:space="preserve"><value>View details</value></data>
-  <data name="SpotAlertIntuition" xml:space="preserve"><value> · Intuition preparation required</value></data>
+  <data name="SpotAlertIntuition" xml:space="preserve"><value> · Intuition required</value></data>
   <data name="RecommendationTitle" xml:space="preserve"><value>Recommendations</value></data>
   <data name="RecommendationIntro" xml:space="preserve"><value>Uncaught big and legendary fish to start preparing for now. Assumes a fresh start and Fish Eyes OFF.</value></data>
   <data name="RecommendationRefresh" xml:space="preserve"><value>Refresh</value></data>
@@ -1271,4 +1271,8 @@ Select to see why this fish is recommended.</value></data>
   <data name="GuideWarningSaved" xml:space="preserve"><value>Collection refresh needed · using saved status for now.</value></data>
   <data name="GuideWarningRetry" xml:space="preserve"><value>Collection status could not be verified. Open the Fish Guide again.</value></data>
   <data name="GuideWarningUnsupported" xml:space="preserve"><value>Collection status cannot be verified.</value></data>
+  <data name="SpotAlertAdvance" xml:space="preserve"><value>{0} upcoming · {1} · Starts in {2}</value></data>
+  <data name="SpotAlertsHelp" xml:space="preserve"><value>Once a cast identifies the current hole, notify fish already available and those that appear later.
+Repeated casts or return visits do not repeat an alert for the same occurrence. Future occurrences notify again.
+Shares duplicate prevention with zero-minute favorite alerts and uses the channel and sound below. Does not check whether Intuition is active.</value></data>
 </root>

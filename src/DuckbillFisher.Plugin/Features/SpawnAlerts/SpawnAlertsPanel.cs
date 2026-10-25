@@ -106,7 +106,9 @@ internal sealed class SpawnAlertsPanel(FishPreferences preferences, SpawnAlerts 
         ImGui.PopStyleVar();
         ImGui.PopStyleColor();
         changed |= ImGui.Checkbox(UiText.Label(T.SpotAlertsEnable, "CurrentSpotAlertsEnabled"), ref currentSpot);
+        UiWidgets.Tooltip(UiText.Get(T.SpotAlertsHelp));
         ImGui.TextWrapped(UiText.Get(T.SpotAlertsHint));
+        UiWidgets.Tooltip(UiText.Get(T.SpotAlertsHelp));
         ImGui.Spacing();
         ImGui.Separator();
         ImGui.Spacing();

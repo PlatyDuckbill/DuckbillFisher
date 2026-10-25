@@ -1232,4 +1232,6 @@ internal enum TextKey
     GuideWarningSaved,
     GuideWarningRetry,
     GuideWarningUnsupported,
+    SpotAlertAdvance,
+    SpotAlertsHelp,
 }
