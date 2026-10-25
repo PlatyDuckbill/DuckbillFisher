@@ -132,8 +132,7 @@ internal sealed class FishRecommendationPanel(FishRecommendationService service,
         var space = ImGui.GetContentRegionAvail();
         var height = Math.Max(ImGui.GetFontSize() * 8, space.Y - ImGui.GetFrameHeightWithSpacing());
         var now = service.Now;
-        if (space.X >= ImGui.GetFontSize() * 50 && ImGui.BeginTable("RecommendationSplit", 2,
-                ImGuiTableFlags.Resizable | ImGuiTableFlags.BordersInnerV))
+        if (ImGui.BeginTable("RecommendationSplit", 2, ImGuiTableFlags.Resizable | ImGuiTableFlags.BordersInnerV))
         {
             ImGui.TableSetupColumn("###RecommendationListColumn", ImGuiTableColumnFlags.WidthStretch, 0.48f);
             ImGui.TableSetupColumn("###RecommendationDetailColumn", ImGuiTableColumnFlags.WidthStretch, 0.52f);
@@ -142,13 +141,6 @@ internal sealed class FishRecommendationPanel(FishRecommendationService service,
             ImGui.TableNextColumn();
             DrawDetail(Array.Find(entries, value => value.Fish.ItemId == selection[focus]) ?? selected, height, view.At, now);
             ImGui.EndTable();
-        }
-        else
-        {
-            DrawList(entries, Math.Max(ImGui.GetFontSize() * 5, height * 0.42f), now);
-            ImGui.Separator();
-            DrawDetail(Array.Find(entries, value => value.Fish.ItemId == selection[focus]) ?? selected,
-                Math.Max(ImGui.GetFontSize() * 6, height * 0.58f - ImGui.GetStyle().ItemSpacing.Y * 2), view.At, now);
         }
         DrawOther(view);
     }
