@@ -31,7 +31,7 @@ internal sealed class FishRowRenderer(ITextureProvider textures, FishingMapServi
     private static bool IsWide(float width) => width >= ImGui.GetFontSize() * 23;
     private static int LineCount(float width) => IsWide(width) ? 3 : 4;
     public static float GetHeight(float width) => ImGui.GetTextLineHeightWithSpacing() * LineCount(width) + 8;
-    private static bool WideRecommendation(float width) => width >= ImGui.GetFontSize() * 50;
+    private static bool WideRecommendation(float width) => width >= ImGui.GetFontSize() * 42;
     public static float GetRecommendationHeight(float width) => ImGui.GetTextLineHeightWithSpacing() * (WideRecommendation(width) ? 4 : 5) + 8;
 
     public bool Draw(FishGuideRow fish, float height, bool selected, string state, string place,

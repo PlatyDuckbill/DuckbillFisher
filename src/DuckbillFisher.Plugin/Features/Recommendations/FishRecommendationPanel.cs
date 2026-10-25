@@ -39,7 +39,8 @@ internal sealed class FishRecommendationPanel(FishRecommendationService service,
         var personal = preferences.View;
         if (session != personal.Session)
         { session = personal.Session; options = new(); service.Configure(options); evidence = null; evidenceView = null; evidenceRequest = 0; resetScroll = true; }
-        if (!ImGui.BeginChild("RecommendationContent")) { ImGui.EndChild(); return; }
+        if (!ImGui.BeginChild("RecommendationContent", Vector2.Zero, false, ImGuiWindowFlags.NoScrollbar | ImGuiWindowFlags.NoScrollWithMouse))
+        { ImGui.EndChild(); return; }
         Toolbar();
         var view = service.View;
         if (view.Generation != generation)
@@ -130,7 +131,8 @@ internal sealed class FishRecommendationPanel(FishRecommendationService service,
             DrawFooter(view);
             return;
         }
-        var height = Math.Max(ImGui.GetFontSize() * 8, ImGui.GetContentRegionAvail().Y - ImGui.GetFrameHeightWithSpacing());
+        var footerHeight = ImGui.GetFrameHeight() + ImGui.GetStyle().ItemSpacing.Y * 2;
+        var height = Math.Max(1, ImGui.GetContentRegionAvail().Y - footerHeight);
         var now = service.Now;
         DrawList(entries, height, now);
         if (evidenceRequest != 0)
@@ -156,6 +158,8 @@ internal sealed class FishRecommendationPanel(FishRecommendationService service,
         if (ImGui.BeginChild("RecommendationList", new Vector2(0, height)))
         {
             if (resetScroll) { ImGui.SetScrollY(0); resetScroll = false; }
+            ImGui.PushStyleVar(ImGuiStyleVar.ItemSpacing, new Vector2(ImGui.GetStyle().ItemSpacing.X,
+                Math.Min(ImGui.GetStyle().ItemSpacing.Y, ImGui.GetFontSize() * 0.18f)));
             var rowHeight = FishRowRenderer.GetRecommendationHeight(ImGui.GetContentRegionAvail().X);
             var clipper = ImGui.ImGuiListClipper();
             try
@@ -165,7 +169,7 @@ internal sealed class FishRecommendationPanel(FishRecommendationService service,
                     for (var index = clipper.DisplayStart; index < clipper.DisplayEnd; index++)
                         DrawRow(entries[index], rowHeight, now);
             }
-            finally { clipper.Destroy(); }
+            finally { clipper.Destroy(); ImGui.PopStyleVar(); }
         }
         ImGui.EndChild();
     }
@@ -258,21 +262,33 @@ internal sealed class FishRecommendationPanel(FishRecommendationService service,
 
     private void DrawFooter(FishRecommendationView view)
     {
+        if (!ImGui.BeginChild("RecommendationFooter", new Vector2(0, ImGui.GetFrameHeight()), false,
+                ImGuiWindowFlags.NoScrollbar | ImGuiWindowFlags.NoScrollWithMouse))
+        { ImGui.EndChild(); return; }
         var left = ImGui.GetCursorPosX();
-        var buttonWidth = ImGui.CalcTextSize(UiText.Get(T.RecommendationOther, view.Other.Length)).X + ImGui.GetStyle().FramePadding.X * 2;
-        DrawOther(view);
+        var available = ImGui.GetContentRegionAvail().X;
+        var buttonWidth = Math.Min(ImGui.CalcTextSize(UiText.Get(T.RecommendationOther, view.Other.Length)).X
+            + ImGui.GetStyle().FramePadding.X * 2, available * 0.6f);
+        DrawOther(view, buttonWidth);
         var stamp = UiText.Get(view.NeedsRefresh ? T.RecommendationSnapshotStale : T.RecommendationAsOf, view.At.ToLocalTime());
+        var remaining = Math.Max(1, available - buttonWidth - ImGui.GetStyle().ItemSpacing.X);
+        if (ImGui.CalcTextSize(stamp).X > remaining) stamp = UiText.Get(T.RecommendationAsOf, view.At.ToLocalTime());
+        if (ImGui.CalcTextSize(stamp).X > remaining) stamp = UiText.Get(T.RecommendationClockTime, view.At.ToLocalTime());
         var width = ImGui.CalcTextSize(stamp).X;
-        var right = ImGui.GetWindowContentRegionMax().X;
-        if (left + buttonWidth + ImGui.GetStyle().ItemSpacing.X + width <= right)
-            ImGui.SameLine(Math.Max(left + buttonWidth + ImGui.GetStyle().ItemSpacing.X, right - width));
-        if (view.NeedsRefresh) Colored(Gold, stamp); else ImGui.TextDisabled(stamp);
+        ImGui.SameLine(Math.Max(left + buttonWidth + ImGui.GetStyle().ItemSpacing.X, left + available - width));
+        ImGui.AlignTextToFramePadding();
+        if (view.NeedsRefresh) ImGui.PushStyleColor(ImGuiCol.Text, Gold);
+        ImGui.TextUnformatted(stamp);
+        if (view.NeedsRefresh) ImGui.PopStyleColor();
         Tooltip(UiText.Get(T.RecommendationManualHelp));
+        ImGui.EndChild();
     }
 
-    private void DrawOther(FishRecommendationView view)
+    private void DrawOther(FishRecommendationView view, float width)
     {
-        if (ImGui.SmallButton($"{UiText.Get(T.RecommendationOther, view.Other.Length)}###RecommendationOther")) ImGui.OpenPopup("RecommendationOtherPopup");
+        var label = UiText.Get(T.RecommendationOther, view.Other.Length);
+        if (ImGui.Button($"{label}###RecommendationOther", new Vector2(width, ImGui.GetFrameHeight()))) ImGui.OpenPopup("RecommendationOtherPopup");
+        if (ImGui.CalcTextSize(label).X + ImGui.GetStyle().FramePadding.X * 2 > width) Tooltip(label);
         ImGui.SetNextWindowSize(new Vector2(ImGui.GetFontSize() * 34, ImGui.GetFontSize() * 23), ImGuiCond.Appearing);
         if (!ImGui.BeginPopup("RecommendationOtherPopup")) return;
         foreach (var entry in view.Other.Take(otherShown))

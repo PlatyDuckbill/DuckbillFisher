@@ -1160,7 +1160,7 @@ Select to see the preparation plan.</value></data>
   <data name="RecommendationEstimateOnly" xml:space="preserve"><value>Whether a first cast fits depends on how long preparation takes.</value></data>
   <data name="RecommendationPreparationOpens" xml:space="preserve"><value>Preparation opportunity in {0}</value></data>
   <data name="RecommendationNextPreyLabel" xml:space="preserve"><value>Next prerequisite appearance</value></data>
-  <data name="RecommendationSnapshotStale" xml:space="preserve"><value>Queried {0:HH:mm} · refresh to update</value></data>
+  <data name="RecommendationSnapshotStale" xml:space="preserve"><value>Queried {0:HH:mm} · refresh available</value></data>
   <data name="RecommendationCandidateTooltip" xml:space="preserve"><value>{0}
 {1}
 {3}
@@ -1213,7 +1213,7 @@ Select to see why this fish is recommended.</value></data>
   <data name="RecommendationIntuitionRequirementReason" xml:space="preserve"><value>Fish required for Intuition: {0}</value></data>
   <data name="RecommendationBaitBeforeReason" xml:space="preserve"><value>Mooch bait to catch before the target appears: {0}</value></data>
   <data name="RecommendationStoredBaitReason" xml:space="preserve"><value>Mooch bait to prepare and store: {0} (storage skill required)</value></data>
-  <data name="RecommendationBaitFitsReason" xml:space="preserve"><value>The estimate allows an attempt this occurrence after catching {0} for mooching.</value></data>
+  <data name="RecommendationBaitFitsReason" xml:space="preserve"><value>No bait storage · catch {0} for mooching first</value></data>
   <data name="RecommendationBaitNeededReason" xml:space="preserve"><value>Mooch bait to catch first: {0}</value></data>
   <data name="RecommendationDirectUpcomingReason" xml:space="preserve"><value>No mooch bait or Intuition fish need to be caught first.</value></data>
   <data name="RecommendationDirectNowReason" xml:space="preserve"><value>No mooch bait or Intuition fish need to be caught first.</value></data>
@@ -1264,4 +1264,5 @@ Select to see why this fish is recommended.</value></data>
   <data name="RecommendationProxyFrequencyCompact" xml:space="preserve"><value>{1}: {0} / 30 days</value></data>
   <data name="RecommendationRowReason" xml:space="preserve"><value>Why · {0}</value></data>
   <data name="RecommendationNamedRange" xml:space="preserve"><value>{0} · {1}</value></data>
+  <data name="RecommendationStoredStrategyReason" xml:space="preserve"><value>Uses bait storage · fish to store: {0}</value></data>
 </root>

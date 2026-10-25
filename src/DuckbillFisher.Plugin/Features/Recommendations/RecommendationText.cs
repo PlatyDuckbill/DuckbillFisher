@@ -174,6 +174,8 @@ internal sealed class RecommendationText(FishCatalog catalog)
     private string ActionReason(RecommendationEntry entry, DateTimeOffset now)
     {
         var value = entry.Recommendation; var plan = value.Plan!;
+        if (plan.StoredItemId != 0)
+            return UiText.Get(T.RecommendationStoredStrategyReason, Name(plan.StoredItemId));
         if (value.PreparationGateEnd is { } deadline && deadline > now)
             return UiText.Get(T.RecommendationGateDeadlineReason, Name(value.PreparationGateItem), deadline.ToLocalTime());
         if (value.IntuitionCatchCount > 0)
@@ -188,9 +190,7 @@ internal sealed class RecommendationText(FishCatalog catalog)
             if (value.Window?.Start is { } opening && opening > now &&
                 plan.Steps.LastOrDefault(step => step.End <= opening) is { } prepared)
             {
-                var storage = plan.StoredItemId == prepared.ItemId || value.Alternatives.Any(alternative => alternative.StoredItemId == prepared.ItemId);
-                return UiText.Get(storage ? T.RecommendationStoredBaitReason : T.RecommendationBaitBeforeReason,
-                    Name(prepared.ItemId), opening.ToLocalTime());
+                return UiText.Get(T.RecommendationBaitBeforeReason, Name(prepared.ItemId), opening.ToLocalTime());
             }
             var bait = plan.Steps.LastOrDefault();
             if (bait is not null)

@@ -1225,4 +1225,5 @@ internal enum TextKey
     RecommendationProxyFrequencyCompact,
     RecommendationRowReason,
     RecommendationNamedRange,
+    RecommendationStoredStrategyReason,
 }
