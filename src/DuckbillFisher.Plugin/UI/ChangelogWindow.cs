@@ -17,14 +17,17 @@ internal sealed class ChangelogWindow : Window
     [
         new(new(0, 6, 0, 0),
         [
-            (FontAwesomeIcon.Compass, T.ChangelogRecommendations),
+            (FontAwesomeIcon.Compass, T.ChangelogRecommendationNow),
+            (FontAwesomeIcon.Fish, T.ChangelogRecommendationPreparation),
+            (FontAwesomeIcon.Star, T.ChangelogRecommendationRare),
+            (FontAwesomeIcon.SyncAlt, T.ChangelogRecommendationRefresh),
+        ], FeatureTitle: T.ChangelogRecommendationFeatureTitle, FeatureSummary: T.ChangelogRecommendations, OtherEntries:
+        [
             (FontAwesomeIcon.Bell, T.ChangelogCurrentSpotAlerts),
             (FontAwesomeIcon.Clock, T.ChangelogZeroAlerts),
-        ], OtherEntries:
-        [
             (FontAwesomeIcon.Link, T.ChangelogSpawnDetailLinks),
             (FontAwesomeIcon.BookOpen, T.ChangelogCollectionRefreshPrompt),
-        ]),
+        ], FeatureIcon: FontAwesomeIcon.Compass),
         new(new(0, 5, 4, 0),
         [
             (FontAwesomeIcon.Edit, T.ChangelogFishNotes),

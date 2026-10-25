@@ -1254,4 +1254,8 @@ internal enum TextKey
     RecommendationScheduleDirectOpenReason,
     ChangelogSpawnDetailLinks,
     ChangelogCollectionRefreshPrompt,
+    ChangelogRecommendationFeatureTitle,
+    ChangelogRecommendationNow,
+    ChangelogRecommendationPreparation,
+    ChangelogRecommendationRare,
 }

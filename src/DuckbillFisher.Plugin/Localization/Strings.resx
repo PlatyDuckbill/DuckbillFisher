@@ -1090,8 +1090,8 @@ Prep work and Least frequent use their own sort criteria.</value></data>
   <data name="RecommendationNested" xml:space="preserve"><value>Prerequisite itself requires Intuition · preparation review needed</value></data>
   <data name="RecommendationAmbiguous" xml:space="preserve"><value>Alternative mooch path needs review</value></data>
   <data name="RecommendationMissing" xml:space="preserve"><value>Condition or preparation data needs review</value></data>
-  <data name="ChangelogRecommendations" xml:space="preserve"><value>New fishing recommendations group fish to target now, fish to prepare for, and less frequent appearances.</value></data>
-  <data name="ChangelogRecommendationRefresh" xml:space="preserve"><value>Keep the recommendation order while reading, then refresh it for the current time.</value></data>
+  <data name="ChangelogRecommendations" xml:space="preserve"><value>Choose your next big-fish target in the new Recommendations tab, with appearance schedules, mooch chains and Intuition requirements together.</value></data>
+  <data name="ChangelogRecommendationRefresh" xml:space="preserve"><value>Narrow candidates with the time range and filters, then refresh for the latest appearance schedules.</value></data>
   <data name="ChangelogCurrentSpotAlerts" xml:space="preserve"><value>Local chat alerts notify you when uncaught big or legendary fish appear at your current fishing hole.</value></data>
   <data name="ChangelogZeroAlerts" xml:space="preserve"><value>Spawn alerts now support notifications at the start of an appearance or up to 120 minutes beforehand.</value></data>
   <data name="SpotAlertsEnabledStatus" xml:space="preserve"><value>Current-hole alerts enabled · favorite spawn alerts disabled</value></data>
@@ -1294,4 +1294,8 @@ Shares duplicate prevention with zero-minute favorite alerts and uses the channe
   <data name="RecommendationTargetConditionsUnknown" xml:space="preserve"><value>The target&apos;s time or weather conditions are unavailable.</value></data>
   <data name="ChangelogSpawnDetailLinks" xml:space="preserve"><value>Spawn alerts show the time remaining and link directly to fish details.</value></data>
   <data name="ChangelogCollectionRefreshPrompt" xml:space="preserve"><value>A Fish Guide shortcut appears across all main tabs when collection status needs refreshing.</value></data>
+  <data name="ChangelogRecommendationFeatureTitle" xml:space="preserve"><value>New feature · Fishing recommendations</value></data>
+  <data name="ChangelogRecommendationNow" xml:space="preserve"><value>Fish to target now: see candidates available now or within 30 minutes.</value></data>
+  <data name="ChangelogRecommendationPreparation" xml:space="preserve"><value>Prep work: browse candidates requiring mooch bait or Intuition catches, with prerequisite appearance schedules.</value></data>
+  <data name="ChangelogRecommendationRare" xml:space="preserve"><value>Least frequent: browse fish by fewest appearances over 30 days and check their next appearance.</value></data>
 </root>
