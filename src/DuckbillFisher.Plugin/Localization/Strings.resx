@@ -1017,10 +1017,11 @@ Last saved: {1:yyyy-MM-dd HH:mm}, {2} fish. Used where current observations are 
   <data name="SpotAlertDetail" xml:space="preserve"><value>View details</value></data>
   <data name="SpotAlertIntuition" xml:space="preserve"><value> · Intuition required</value></data>
   <data name="RecommendationTitle" xml:space="preserve"><value>Recommendations</value></data>
-  <data name="RecommendationIntro" xml:space="preserve"><value>Uncaught big and legendary fish to start preparing for now. Assumes a fresh start and Fish Eyes OFF.</value></data>
+  <data name="RecommendationIntro" xml:space="preserve"><value>Uncaught big and legendary fish to browse by availability, mooch chains and Intuition requirements. Current preparation progress is not tracked.</value></data>
   <data name="RecommendationRefresh" xml:space="preserve"><value>Refresh</value></data>
   <data name="RecommendationHours" xml:space="preserve"><value>Next {0} hours</value></data>
-  <data name="RecommendationHorizonHelp" xml:space="preserve"><value>Includes fish available now and appearances beginning within the selected range. Three hours means now through three hours from now. It is not a play-time limit.</value></data>
+  <data name="RecommendationHorizonHelp" xml:space="preserve"><value>Find target and prerequisite appearances within the selected range, including those available now.
+Fish to target now includes only those available now or within 30 minutes. The range is not a play-session limit.</value></data>
   <data name="RecommendationOptions" xml:space="preserve"><value>Recommendation filters</value></data>
   <data name="RecommendationUnknownOption" xml:space="preserve"><value>Include unknown collection status</value></data>
   <data name="RecommendationFavorites" xml:space="preserve"><value>Favorites only</value></data>
@@ -1029,7 +1030,7 @@ Last saved: {1:yyyy-MM-dd HH:mm}, {2} fish. Used where current observations are 
   <data name="RecommendationStorageAssumption" xml:space="preserve"><value>Storage assumes access to the skill and staying at the hole. Current level, GP, and stored quantities are not read. Initially includes the intermediate storage route for the Greater Serpent of Ronka.</value></data>
   <data name="RecommendationUnsupported" xml:space="preserve"><value>Condition data does not match the current game build.</value></data>
   <data name="RecommendationFailed" xml:space="preserve"><value>Recommendations could not be calculated. Press Refresh to try again.</value></data>
-  <data name="RecommendationComputing" xml:space="preserve"><value>Calculating candidates and preparation routes…</value></data>
+  <data name="RecommendationComputing" xml:space="preserve"><value>Looking up appearances and preparation requirements…</value></data>
   <data name="RecommendationSnapshot" xml:space="preserve"><value>As of {0:MM/dd HH:mm:ss} · {1} ranked · {2} other/review · {3} collection unknown</value></data>
   <data name="RecommendationStale" xml:space="preserve"><value>Refresh available</value></data>
   <data name="RecommendationEmpty" xml:space="preserve"><value>No ranked candidates in this scope. Review other candidates below or change the horizon or collection filter.</value></data>
@@ -1037,9 +1038,9 @@ Last saved: {1:yyyy-MM-dd HH:mm}, {2} fish. Used where current observations are 
   <data name="RecommendationOther" xml:space="preserve"><value>Excluded / needs review · {0}</value></data>
   <data name="RecommendationOtherRow" xml:space="preserve"><value>{0} · {1}</value></data>
   <data name="RecommendationMethod" xml:space="preserve"><value>Recommendation help</value></data>
-  <data name="RecommendationMethodHelp" xml:space="preserve"><value>Fish to target now: travel or preparation starts within five minutes. Frequency and whether preparation fits also affect ranking.
-Prep work: completed advance catches are required. Intuition catches, longer mooch chains, and difficult or closing prerequisites are compared by workload and time until preparation starts.
-Least frequent: candidates matching the selected range and filters, ordered by fewest appearances over 30 days. Equal counts share a rank; longer gaps until the next appearance come first.</value></data>
+  <data name="RecommendationMethodHelp" xml:space="preserve"><value>Fish to target now: available now or within 30 minutes.
+Prep work: candidates in the selected range that require mooch bait or Intuition catches.
+Least frequent: candidates in that range ordered by fewest appearances over 30 days.</value></data>
   <data name="RecommendationAnalysis" xml:space="preserve"><value>Frequency analysis · {0:MM/dd}–{1:MM/dd} (UTC)</value></data>
   <data name="RecommendationEnded" xml:space="preserve"><value>Queried occurrence ended · refresh needed</value></data>
   <data name="RecommendationOpens" xml:space="preserve"><value>Appears in {0}</value></data>
@@ -1057,7 +1058,7 @@ Least frequent: candidates matching the selected range and filters, ordered by f
   <data name="RecommendationMap" xml:space="preserve"><value>Map</value></data>
   <data name="RecommendationSchedule" xml:space="preserve"><value>Open schedule</value></data>
   <data name="RecommendationUnknownCollection" xml:space="preserve"><value>Collection status is unknown for this candidate.</value></data>
-  <data name="RecommendationEstimate" xml:space="preserve"><value>Preparation times are design estimates, not measured statistics. The calculation uses prerequisite counts and time/weather conditions, with two minutes for travel/setup. It assumes no accumulated Intuition or stored bait and does not model current progress or catch probability. Advance workload excludes work after the target appears.</value></data>
+  <data name="RecommendationEstimate" xml:space="preserve"><value>Preparation duration, first-cast time and optimal stored quantities are not calculated. Use the required fish and their schedules to choose preparation order and swimbait use. Fish Eyes is off.</value></data>
   <data name="RecommendationFrequency" xml:space="preserve"><value>{0} appearances over 30 days</value></data>
   <data name="RecommendationFrequencyProxy" xml:space="preserve"><value>Prerequisite {1} appears {0} times over 30 days</value></data>
   <data name="RecommendationNoRarity" xml:space="preserve"><value>No timetable rarity bonus. This does not mean the fish is easy to catch.</value></data>
@@ -1089,7 +1090,7 @@ Prep work and Least frequent use their own sort criteria.</value></data>
   <data name="RecommendationNested" xml:space="preserve"><value>Prerequisite itself requires Intuition · preparation review needed</value></data>
   <data name="RecommendationAmbiguous" xml:space="preserve"><value>Alternative mooch path needs review</value></data>
   <data name="RecommendationMissing" xml:space="preserve"><value>Condition or preparation data needs review</value></data>
-  <data name="ChangelogRecommendations" xml:space="preserve"><value>Browse fish to target now, prep work, or the least frequent appearances, with recommendation reasons.</value></data>
+  <data name="ChangelogRecommendations" xml:space="preserve"><value>Compare appearances, mooch chains and Intuition requirements across three recommendation tabs.</value></data>
   <data name="ChangelogRecommendationRefresh" xml:space="preserve"><value>Keep the recommendation order while reading, then refresh it for the current time.</value></data>
   <data name="ChangelogCurrentSpotAlerts" xml:space="preserve"><value>Get local chat notices with detail links for uncaught big and legendary fish at the current hole.</value></data>
   <data name="ChangelogZeroAlerts" xml:space="preserve"><value>Set spawn alerts from 0 to 120 minutes ahead; new settings notify at the start.</value></data>
@@ -1110,14 +1111,14 @@ Prep work and Least frequent use their own sort criteria.</value></data>
   <data name="RecommendationTabCount" xml:space="preserve"><value>{0} · {1}</value></data>
   <data name="RecommendationAsOf" xml:space="preserve"><value>Queried {0:HH:mm}</value></data>
   <data name="RecommendationManualHelp" xml:space="preserve"><value>The list and order stay fixed while the countdown runs. Press Refresh to get recommendations for the current time.</value></data>
-  <data name="RecommendationNowHint" xml:space="preserve"><value>Fish to travel for or prepare now.
-Travel or preparation starts within five minutes. Frequency and whether preparation fits also affect ranking.</value></data>
-  <data name="RecommendationPreparationHint" xml:space="preserve"><value>Fish worth preparing ahead: Intuition catches, longer mooch chains, or difficult prerequisites that can be caught before opening.
-Preparation workload and time until preparation starts determine the order. An ordinary single mooch catch is only included when its current appearance ends before the target opens.</value></data>
-  <data name="RecommendationRareHint" xml:space="preserve"><value>Candidates in the selected range and filters, ordered by fewest appearances over 30 days.
-Equal counts share a rank. Longer waits from this appearance's end until the next come first. A named prerequisite is shown when its frequency is used.</value></data>
-  <data name="RecommendationNowEmpty" xml:space="preserve"><value>No candidate needs travel or preparation now. Check the other tabs for upcoming opportunities.</value></data>
-  <data name="RecommendationPreparationEmpty" xml:space="preserve"><value>No candidate needs prep work in this period.</value></data>
+  <data name="RecommendationNowHint" xml:space="preserve"><value>Candidates available now or within 30 minutes.
+Available fish come first, then upcoming appearances. Unrestricted fish follow. This does not mean prerequisites are complete.</value></data>
+  <data name="RecommendationPreparationHint" xml:space="preserve"><value>Candidates in the selected range that need mooch bait or Intuition catches.
+Available and nearer appearances come first. View each prerequisite schedule in the evidence popup. Completion before opening is not predicted.</value></data>
+  <data name="RecommendationRareHint" xml:space="preserve"><value>Candidates in the selected range, ordered by fewest appearances over 30 days.
+Equal counts share a rank and are ordered by appearance time. A named prerequisite&apos;s frequency is shown only if the target has no fixed appearance time.</value></data>
+  <data name="RecommendationNowEmpty" xml:space="preserve"><value>No candidate is available now or within 30 minutes. Check Prep work or Least frequent for later appearances.</value></data>
+  <data name="RecommendationPreparationEmpty" xml:space="preserve"><value>No candidate requires mooch bait or Intuition preparation in this range.</value></data>
   <data name="RecommendationRareEmpty" xml:space="preserve"><value>No candidate with a known appearance frequency was found in this period.</value></data>
   <data name="RecommendationUnknownCount" xml:space="preserve"><value>Collection status unknown · {0} fish</value></data>
   <data name="RecommendationRowTooltip" xml:space="preserve"><value>{0}
@@ -1138,8 +1139,8 @@ Select to see the preparation plan.</value></data>
   <data name="RecommendationSpareWork" xml:space="preserve"><value>About {0:0}–{1:0} extra minutes · requires a free storage slot</value></data>
   <data name="RecommendationFrequencyLabel" xml:space="preserve"><value>Appearance frequency · 30 days</value></data>
   <data name="RecommendationOwnAlways" xml:space="preserve"><value>The target has no time or weather restriction</value></data>
-  <data name="RecommendationFrequencyHelp" xml:space="preserve"><value>Each continuous time/weather interval counts once. A prerequisite basis uses the least frequent required fish. This is neither the number of opportunities satisfying every Intuition/mooch condition nor the catch probability.</value></data>
-  <data name="RecommendationCalculation" xml:space="preserve"><value>Calculation details</value></data>
+  <data name="RecommendationFrequencyHelp" xml:space="preserve"><value>Each continuous time/weather interval counts as one appearance. A named prerequisite&apos;s frequency is used only when the target has no fixed appearance time. This is not a count of Intuition activations or a catch probability.</value></data>
+  <data name="RecommendationCalculation" xml:space="preserve"><value>Query details</value></data>
   <data name="RecommendationTimelineLegend" xml:space="preserve"><value>Top: preparation / bottom: conditions and first cast</value></data>
   <data name="RecommendationTimelineHelp" xml:space="preserve"><value>Blue: bait or Intuition accumulation / gold: Intuition trigger / purple: bait storage. The lower green bar shows the target&apos;s time/weather conditions, not Intuition duration. The dot is the estimated first cast; the white line is now. Times are local to this PC and preparation bars are estimates.</value></data>
   <data name="RecommendationFlowStep" xml:space="preserve"><value>{0} · {1}
@@ -1187,7 +1188,7 @@ Select to see why this fish is recommended.</value></data>
   <data name="RecommendationConnectionLabel" xml:space="preserve"><value>Condition check</value></data>
   <data name="RecommendationConnectionReady" xml:space="preserve"><value>Preparation can lead to a target cast (estimated)</value></data>
   <data name="RecommendationConnectionDirect" xml:space="preserve"><value>Travel fits before the target opportunity ends</value></data>
-  <data name="RecommendationCalculationNote" xml:space="preserve"><value>Calculated for the {0:HH:mm} snapshot.</value></data>
+  <data name="RecommendationCalculationNote" xml:space="preserve"><value>Schedules queried at {0:HH:mm}.</value></data>
   <data name="RecommendationPreyCountBadge" xml:space="preserve"><value>Prey {0} / 30d</value></data>
   <data name="RecommendationCountBadge" xml:space="preserve"><value>{0} / 30 days</value></data>
   <data name="RecommendationAdvanceIntuition" xml:space="preserve"><value>Up to {0} Intuition prerequisite catches can be prepared before the target appears.</value></data>
@@ -1226,7 +1227,7 @@ Select to see why this fish is recommended.</value></data>
   <data name="RecommendationFirstCastLabel" xml:space="preserve"><value>First cast estimate</value></data>
   <data name="RecommendationScopeShort" xml:space="preserve"><value>Includes fish available now</value></data>
   <data name="RecommendationTimeLabel" xml:space="preserve"><value>Appearance</value></data>
-  <data name="RecommendationIntuitionTimeHelp" xml:space="preserve"><value>The time shown belongs to the named Intuition prerequisite in the queried preparation plan. The least frequent required Intuition fish is the representative; each prerequisite&apos;s own availability is listed below.</value></data>
+  <data name="RecommendationIntuitionTimeHelp" xml:space="preserve"><value>When the target has no fixed appearance time, an actual prerequisite schedule is shown. The least frequent restricted prerequisite with an opportunity in this range is selected. Check the other required schedules as well.</value></data>
   <data name="RecommendationNextPreyShortLabel" xml:space="preserve"><value>Next prey</value></data>
   <data name="RecommendationNextPreyHelp" xml:space="preserve"><value>The target has no fixed appearance time. This shows the next appearance of the named fish needed for Intuition or mooching.</value></data>
   <data name="RecommendationNextTargetHelp" xml:space="preserve"><value>The next appearance under the target&apos;s own time and weather conditions. Intuition and mooching requirements must also be met.</value></data>
@@ -1242,7 +1243,7 @@ Select to see why this fish is recommended.</value></data>
   <data name="RecommendationFollowingSummary" xml:space="preserve"><value>Next occurrence · {0}</value></data>
   <data name="RecommendationNextPreySummary" xml:space="preserve"><value>Next prey appearance · {0}</value></data>
   <data name="RecommendationRangeTitle" xml:space="preserve"><value>Search range</value></data>
-  <data name="RecommendationAssumptionsTitle" xml:space="preserve"><value>Preparation assumptions</value></data>
+  <data name="RecommendationAssumptionsTitle" xml:space="preserve"><value>What to check</value></data>
   <data name="RecommendationPreparationUncertain" xml:space="preserve"><value>Preparation timing needs review</value></data>
   <data name="RecommendationPreparationNow" xml:space="preserve"><value>Start preparation · now (estimated)</value></data>
   <data name="RecommendationPreparationAt" xml:space="preserve"><value>Start preparation · {0} (estimated)</value></data>
@@ -1275,4 +1276,20 @@ Select to see why this fish is recommended.</value></data>
   <data name="SpotAlertsHelp" xml:space="preserve"><value>Once a cast identifies the current hole, notify fish already available and those that appear later.
 Repeated casts or return visits do not repeat an alert for the same occurrence. Future occurrences notify again.
 Shares duplicate prevention with zero-minute favorite alerts and uses the channel and sound below. Does not check whether Intuition is active.</value></data>
+  <data name="RecommendationBaitAlways" xml:space="preserve"><value>Mooch bait · no time/weather restrictions</value></data>
+  <data name="RecommendationBaitExpired" xml:space="preserve"><value>Mooch bait appearance ended · refresh needed</value></data>
+  <data name="RecommendationBaitUpcoming" xml:space="preserve"><value>Mooch bait · appears {0}</value></data>
+  <data name="RecommendationBaitOpen" xml:space="preserve"><value>Mooch bait available · {0} remaining</value></data>
+  <data name="RecommendationFrequencyUnavailable" xml:space="preserve"><value>No appearance within 30 days</value></data>
+  <data name="RecommendationCombinedRequirements" xml:space="preserve"><value>Mooch · {0} / Intuition · {1}</value></data>
+  <data name="RecommendationPreparationScheduleReason" xml:space="preserve"><value>The target has no fixed appearance time; showing the schedule for {0}.</value></data>
+  <data name="RecommendationScheduleUpcomingReason" xml:space="preserve"><value>Appears {0}. Check the preparation requirements.</value></data>
+  <data name="RecommendationScheduleOpenReason" xml:space="preserve"><value>Time and weather conditions are met. Check mooch and Intuition requirements separately.</value></data>
+  <data name="RecommendationPreparationConditions" xml:space="preserve"><value>Required fish and appearances</value></data>
+  <data name="RecommendationIntuitionConditionLabel" xml:space="preserve"><value>Intuition</value></data>
+  <data name="RecommendationMoochConditionLabel" xml:space="preserve"><value>Mooch bait</value></data>
+  <data name="RecommendationPreparationUnknown" xml:space="preserve"><value>Some prerequisite appearance conditions are unavailable.</value></data>
+  <data name="RecommendationOpenNoEnd" xml:space="preserve"><value>Available · end time unknown</value></data>
+  <data name="RecommendationPreyOpenNoEnd" xml:space="preserve"><value>Prerequisite available · end time unknown</value></data>
+  <data name="RecommendationRangeNoEnd" xml:space="preserve"><value>{0}–end time unknown</value></data>
 </root>

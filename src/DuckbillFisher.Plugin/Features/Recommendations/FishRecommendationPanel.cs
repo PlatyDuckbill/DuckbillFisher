@@ -108,7 +108,7 @@ internal sealed class FishRecommendationPanel(FishRecommendationService service,
         Tooltip(UiText.Get(T.RecommendationHorizonHelp));
         ImGui.SameLine(0, gap);
         if (UiWidgets.IconButton(FontAwesomeIcon.Filter, "RecommendationFilters", UiText.Get(T.RecommendationOptions),
-                options.IncludeUnknown || options.FavoritesOnly || options.LegendaryOnly || !options.AllowStorage))
+                options.IncludeUnknown || options.FavoritesOnly || options.LegendaryOnly))
             ImGui.OpenPopup("RecommendationFiltersPopup");
         ImGui.SameLine(0, gap);
         if (UiWidgets.IconButton(FontAwesomeIcon.QuestionCircle, "RecommendationHelp", UiText.Get(T.RecommendationMethod)))
@@ -116,14 +116,12 @@ internal sealed class FishRecommendationPanel(FishRecommendationService service,
         if (ImGui.BeginPopup("RecommendationFiltersPopup"))
         {
             var unknown = options.IncludeUnknown; var favorites = options.FavoritesOnly;
-            var legendary = options.LegendaryOnly; var storage = options.AllowStorage;
+            var legendary = options.LegendaryOnly;
             var changed = ImGui.Checkbox(UiText.Label(T.RecommendationUnknownOption, "RecommendationUnknown"), ref unknown);
             changed |= ImGui.Checkbox(UiText.Label(T.RecommendationFavorites, "RecommendationFavorites"), ref favorites);
             changed |= ImGui.Checkbox(UiText.Label(T.RecommendationLegendary, "RecommendationLegendary"), ref legendary);
-            changed |= ImGui.Checkbox(UiText.Label(T.RecommendationStorageOption, "RecommendationStorage"), ref storage);
-            Tooltip(UiText.Get(T.RecommendationStorageAssumption));
             ImGui.TextDisabled(UiText.Get(T.RecommendationUnknownCount, service.View.UnknownCount));
-            if (changed) { options = new(options.Hours, unknown, favorites, legendary, storage); service.Configure(options); }
+            if (changed) { options = new(options.Hours, unknown, favorites, legendary); service.Configure(options); }
             ImGui.EndPopup();
         }
         var helpWidth = Math.Min(ImGui.GetFontSize() * 30, ImGui.GetMainViewport().WorkSize.X * 0.8f);
@@ -133,6 +131,7 @@ internal sealed class FishRecommendationPanel(FishRecommendationService service,
             ImGui.PushTextWrapPos(ImGui.GetCursorPosX() + ImGui.GetContentRegionAvail().X);
             ImGui.TextUnformatted(UiText.Get(T.RecommendationRangeTitle));
             ImGui.TextUnformatted(UiText.Get(T.RecommendationHorizonHelp));
+            ImGui.TextUnformatted(UiText.Get(T.RecommendationMethodHelp));
             ImGui.Spacing();
             ImGui.TextUnformatted(UiText.Get(T.RecommendationAssumptionsTitle));
             ImGui.TextUnformatted(UiText.Get(T.RecommendationIntro));
@@ -205,11 +204,10 @@ internal sealed class FishRecommendationPanel(FishRecommendationService service,
         var caught = preferences.View.Collection(fish.FishParameterId, collection.View) == CollectionStatus.Caught;
         var appearance = RecommendationText.Timing(value, now);
         var hint = UiText.Get(T.RecommendationCandidateTooltip, fish.Name, RecommendationText.Appearance(value, now),
-            string.Join("\n", text.Reasons(entry, focus, now)), focus == 2 ? text.Next(value, now) : text.ListContext(entry, focus, now));
+            string.Join("\n", text.Reasons(entry, focus, now)), focus == 2 ? text.Next(value, now) : text.ListContext(entry));
         var info = new RecommendationRowInfo(caught ? UiText.Get(T.RecommendationNowCaught) : appearance,
             text.Source(entry), hint,
-            caught || value.Issue == RecommendationIssue.EstimatedLate ? Gold : TimingColor(value, now),
-            focus == 1 && RecommendationText.AdvancePreparationExpired(value, now) ? Gold : null)
+            caught ? Gold : TimingColor(value, now))
         {
             Range = text.CurrentRange(value, now), Next = text.Next(value, now, compact: true), Frequency = text.FrequencyCompact(value),
             Reason = text.RowReason(entry, focus, now), OpenDetail = () => showDetail(fish), OpenEvidence = () => evidenceRequest = fish.ItemId,
@@ -222,7 +220,7 @@ internal sealed class FishRecommendationPanel(FishRecommendationService service,
 
     private void DrawEvidence(RecommendationEntry entry, FishRecommendationView view, DateTimeOffset now)
     {
-        var value = entry.Recommendation; var fish = entry.Fish; var plan = value.Plan!;
+        var value = entry.Recommendation; var fish = entry.Fish;
         UiWidgets.GameIcon(textures, fish.IconId, ImGui.GetFontSize() * 2.4f, fish.Name);
         ImGui.SameLine(); ImGui.BeginGroup();
         ImGui.TextWrapped(fish.Name);
@@ -234,12 +232,19 @@ internal sealed class FishRecommendationPanel(FishRecommendationService service,
         if (value.OwnConditionsAlways) Tooltip(UiText.Get(T.RecommendationIntuitionTimeHelp));
         else if (value.Window is { Start: { } opening, End: { } closing })
             Tooltip(UiText.Get(T.ScheduleWindowRange, opening.ToLocalTime(), closing.ToLocalTime()));
-        if (value.IntuitionCatchCount > 0)
+        if (value.Preparation.Count > 0)
         {
-            foreach (var opportunity in value.IntuitionPreparation)
-                ImGui.TextWrapped(text.IntuitionPreparation(opportunity, now));
-            if (value.IntuitionPreparation.Count == 0)
-                ImGui.TextWrapped(UiText.Get(T.RecommendationIntuitionSummary, text.Requirements(entry)));
+            ImGui.Spacing();
+            ImGui.TextUnformatted(UiText.Get(T.RecommendationPreparationConditions));
+            if (ImGui.BeginTable("PreparationConditions", 2, ImGuiTableFlags.SizingStretchProp | ImGuiTableFlags.RowBg))
+            {
+                ImGui.TableSetupColumn("###Kind", ImGuiTableColumnFlags.WidthFixed, ImGui.GetFontSize() * 4);
+                ImGui.TableSetupColumn("###RequiredFish", ImGuiTableColumnFlags.WidthStretch);
+                foreach (var condition in value.Preparation)
+                    FactRow(condition.Kind == PreparationKind.Intuition ? T.RecommendationIntuitionConditionLabel : T.RecommendationMoochConditionLabel,
+                        text.Preparation(condition, now));
+                ImGui.EndTable();
+            }
         }
         if (RecommendationText.NextAt(value) is not null || RecommendationText.NextUsesPrey(value) || !value.OwnConditionsAlways)
         {
@@ -250,8 +255,7 @@ internal sealed class FishRecommendationPanel(FishRecommendationService service,
         if (preferences.View.Collection(fish.FishParameterId, collection.View) == CollectionStatus.Caught)
             Colored(Gold, UiText.Get(T.RecommendationNowCaught));
         else if (entry.Collection == CollectionStatus.Unknown) Colored(Gold, UiText.Get(T.RecommendationUnknownCollection));
-        if (plan.Readiness != RecommendationReadiness.Planned)
-            Colored(Gold, UiText.Get(plan.Readiness == RecommendationReadiness.Late ? T.RecommendationEstimatedLate : T.RecommendationEstimateOnly));
+        if (value.PreparationUnknown) Colored(Gold, UiText.Get(T.RecommendationPreparationUnknown));
 
         ImGui.Separator();
         ImGui.TextUnformatted(UiText.Get(T.RecommendationWhy));
@@ -264,10 +268,10 @@ internal sealed class FishRecommendationPanel(FishRecommendationService service,
         if (ImGui.SmallButton(UiText.Label(T.RecommendationMap, "RecommendationMap")) && fish.Details?.Spot is { } spot) maps.Request(spot);
         ImGui.EndDisabled();
         ImGui.Spacing();
-        DrawCalculation(entry, view);
+        DrawQueryFacts(entry, view);
     }
 
-    private void DrawCalculation(RecommendationEntry entry, FishRecommendationView view)
+    private void DrawQueryFacts(RecommendationEntry entry, FishRecommendationView view)
     {
         ImGui.PushID(evidenceFocus);
         if (ImGui.TreeNodeEx(UiText.Label(T.RecommendationCalculation, "RecommendationCalculation"), ImGuiTreeNodeFlags.NoTreePushOnOpen))
@@ -276,11 +280,11 @@ internal sealed class FishRecommendationPanel(FishRecommendationService service,
             {
                 ImGui.TableSetupColumn("###BasisLabel", ImGuiTableColumnFlags.WidthFixed, ImGui.GetFontSize() * 5.5f);
                 ImGui.TableSetupColumn("###BasisValue", ImGuiTableColumnFlags.WidthStretch);
-                foreach (var fact in text.Evidence(entry, evidenceFocus, view)) FactRow(fact.Label, fact.Value);
+                foreach (var fact in text.Evidence(entry, view)) FactRow(fact.Label, fact.Value);
                 ImGui.EndTable();
             }
             ImGui.TextDisabled(UiText.Get(T.RecommendationCalculationNote, view.At.ToLocalTime()));
-            Tooltip(UiText.Get(evidenceFocus == 2 ? T.RecommendationFrequencyHelp : T.RecommendationEstimate));
+            Tooltip(UiText.Get(T.RecommendationFrequencyHelp));
         }
         ImGui.PopID();
     }
@@ -329,8 +333,7 @@ internal sealed class FishRecommendationPanel(FishRecommendationService service,
 
     private static Vector4 TimingColor(FishRecommendation value, DateTimeOffset now)
     {
-        var window = value.OwnConditionsAlways && value.IntuitionCatchCount > 0
-            ? RecommendationText.PrimaryIntuition(value)?.Window : value.Window;
+        var window = value.DisplayWindow;
         return window?.End <= now ? Gold : window?.Start > now ? Blue : Green;
     }
 
@@ -360,11 +363,7 @@ internal sealed class FishRecommendationPanel(FishRecommendationService service,
     private static T Issue(RecommendationIssue issue) => issue switch
     {
         RecommendationIssue.OutsideHorizon => T.RecommendationOutside,
-        RecommendationIssue.NoFreshPath => T.RecommendationNoFreshPath,
-        RecommendationIssue.EstimatedLate => T.RecommendationEstimatedLate,
-        RecommendationIssue.IntuitionDurationUnknown => T.RecommendationDurationUnknown,
-        RecommendationIssue.NestedIntuition => T.RecommendationNested,
-        RecommendationIssue.AmbiguousPath => T.RecommendationAmbiguous,
+        RecommendationIssue.ConditionsUnknown => T.RecommendationUnknown,
         _ => T.RecommendationMissing,
     };
 }

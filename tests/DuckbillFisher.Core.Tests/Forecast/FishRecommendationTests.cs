@@ -5,224 +5,214 @@ namespace DuckbillFisher.Core.Tests;
 
 public sealed class FishRecommendationTests
 {
-    // An ET midnight in a modern UTC date, with room for the calendar look-back.
     private static readonly DateTimeOffset Day = DateTimeOffset.FromUnixTimeSeconds(1_764_000_000);
     private static FishingRule Rule(uint id, double start = 0, double end = 24) => new()
     { ItemId = id, FishingSpotId = 1, StartHour = start, EndHour = end, BaitSteps = [[999]] };
-    private static FishRecommendations Planner(params FishingRule[] rules) =>
-        new(rules.Select(rule => new FishingForecastInput(rule, [new(1, 100)])));
-    private static FishRecommendation Find(RecommendationResult result, uint id) =>
-        Assert.Single(result.Ranked.Concat(result.Other), fish => fish.ItemId == id);
+    private static FishRecommendations Browser(params FishingRule[] rules) =>
+        new(rules.Select(rule => new FishingForecastInput(rule, [new(1, 75), new(2, 25)])));
 
     [Fact]
-    public void EstimatedLateCandidateStaysAccessibleButIsNotRanked()
+    public void ShortRemainingWindowIsKeptWithoutAnEstimatedPreparationExclusion()
     {
-        // Only 125 seconds remain; even travel + the fast bait estimate takes 135 seconds.
-        var target = Rule(1, 0, 1) with { BaitSteps = [[999], [3]] };
-        var result = Planner(target, Rule(2), Rule(3)).Calculate(Day.AddSeconds(50), 1, [1, 2], true);
-        Assert.DoesNotContain(result.Ranked, fish => fish.ItemId == 1);
-        Assert.Contains(result.Other, fish => fish.ItemId == 1);
-        Assert.Contains(result.Ranked, fish => fish.ItemId == 2);
-        Assert.DoesNotContain(result.Now, fish => fish.ItemId == 1);
-        Assert.Equal(RecommendationIssue.EstimatedLate, Assert.Single(result.Rare, fish => fish.ItemId == 1).Issue);
+        var target = Rule(1, 0, 1) with { BaitSteps = [[999], [2], [3], [4]] };
+        var result = Browser(target, Rule(2), Rule(3), Rule(4)).Calculate(Day.AddSeconds(50), 1, [1]);
+        var fish = Assert.Single(result.Now);
+        Assert.Equal(3, fish.MoochDepth);
+        Assert.Equal(Day.AddSeconds(175), fish.Window.End);
+        Assert.Single(result.Preparation);
+        Assert.Empty(result.Other);
+    }
+
+    [Theory]
+    [InlineData(1799, true)]
+    [InlineData(1800, true)]
+    [InlineData(1801, false)]
+    public void TargetNowUsesAnInclusiveThirtyMinuteBoundary(int seconds, bool expected)
+    {
+        var result = Browser(Rule(1, seconds / 175.0, 12)).Calculate(Day, 1, [1]);
+        Assert.Single(result.Ranked);
+        Assert.Equal(expected, result.Now.Count == 1);
     }
 
     [Fact]
-    public void AlwaysAvailableBaitDoesNotMislabelOwnFrequencyAsPrerequisiteFrequency()
+    public void SelectedRangeStillLimitsPreparationAndRarity()
     {
-        var target = Rule(1, 10, 12) with { BaitSteps = [[999], [2]] };
-        var fish = Find(Planner(target, Rule(2)).Calculate(Day.AddSeconds(120), 1, [1], true), 1);
+        var browser = Browser(Rule(1, 22, 23) with { BaitSteps = [[999], [2]] }, Rule(2));
+        var shortRange = browser.Calculate(Day, 1, [1]);
+        Assert.Empty(shortRange.Preparation);
+        Assert.Empty(shortRange.Rare);
+        Assert.Equal(RecommendationIssue.OutsideHorizon, Assert.Single(shortRange.Other).Issue);
+        var longerRange = browser.Calculate(Day, 3, [1]);
+        Assert.Single(longerRange.Preparation);
+        Assert.Single(longerRange.Rare);
+        Assert.Empty(longerRange.Now);
+    }
+
+    [Fact]
+    public void PrepIncludesASingleMoochAndIntuitionWithoutInventingAWorkload()
+    {
+        var result = Browser(Rule(1), Rule(2) with { BaitSteps = [[999], [4]] },
+            Rule(3) with { Predators = [new(4, 3)] }, Rule(4)).Calculate(Day, 3, [1, 2, 3]);
+        Assert.Equal(new uint[] { 2, 3 }, result.Preparation.Select(value => value.ItemId));
+        var intuition = Assert.Single(result.Preparation.Single(value => value.ItemId == 3).Preparation);
+        Assert.Equal(3, intuition.Count);
+        Assert.Equal(PreparationKind.Intuition, intuition.Kind);
+        Assert.Equal(FishingWindowKind.Always, intuition.Window.Kind);
+    }
+
+    [Fact]
+    public void RonkaAndAnEquivalentFishUseTheSameGenericRequirementRules()
+    {
+        var ordinary = Rule(1, 10, 12) with { BaitSteps = [[999], [2], [3], [4]] };
+        var ronka = ordinary with { ItemId = 33243 };
+        var result = Browser(ordinary, ronka, Rule(2), Rule(3), Rule(4, 10, 12)).Calculate(Day, 3, [1, 33243]);
+        var first = result.Ranked.Single(value => value.ItemId == 1);
+        var second = result.Ranked.Single(value => value.ItemId == 33243);
+        Assert.Equal(first.Preparation, second.Preparation);
+        Assert.Equal(first.OpportunityCount, second.OpportunityCount);
+        Assert.Equal(first.Window, second.Window);
+        Assert.Equal(2, result.Preparation.Count);
+    }
+
+    [Fact]
+    public void MissingIntuitionDurationDoesNotHideKnownSchedulesAndCatchCounts()
+    {
+        var result = Browser(Rule(1, 10, 12) with { Predators = [new(2, 5)], IntuitionSeconds = null },
+            Rule(2, 2, 3)).Calculate(Day, 3, [1]);
+        var fish = Assert.Single(result.Ranked);
+        Assert.Equal(5, fish.IntuitionCatchCount);
+        Assert.Equal(RecommendationIssue.None, fish.Issue);
+        Assert.Single(result.Preparation);
+    }
+
+    [Fact]
+    public void UnrestrictedIntuitionShowsTheActualPreyIntervalWithoutBuffExtension()
+    {
+        var result = Browser(Rule(1) with { Predators = [new(2, 3)], IntuitionSeconds = 600 }, Rule(2, 13, 14))
+            .Calculate(Day, 3, [1]);
+        var fish = Assert.Single(result.Preparation);
+        Assert.Equal(FishingWindowKind.Always, fish.Window.Kind);
+        Assert.Null(fish.Window.Start);
+        Assert.Equal(Day.AddSeconds(2275), fish.DisplayWindow.Start);
+        Assert.Equal(Day.AddSeconds(2450), fish.DisplayWindow.End);
+        Assert.Empty(result.Now);
+        Assert.Equal(OpportunityBasis.PrerequisiteProxy, fish.Basis);
+        Assert.Equal(2u, fish.BasisItemId);
+    }
+
+    [Fact]
+    public void SeparatePreySchedulesAreShownWithoutClaimingTheyCanBeCompletedTogether()
+    {
+        var result = Browser(Rule(1) with { Predators = [new(2, 3), new(3, 5)] }, Rule(2, 4, 6), Rule(3, 12, 14))
+            .Calculate(Day, 3, [1]);
+        var fish = Assert.Single(result.Preparation);
+        Assert.Equal(2, fish.Preparation.Count);
+        Assert.Equal(3, fish.Preparation.Single(value => value.ItemId == 2).Count);
+        Assert.Equal(5, fish.Preparation.Single(value => value.ItemId == 3).Count);
+        Assert.True(fish.Preparation[0].Window.End < fish.Preparation[1].Window.Start);
+        Assert.Equal(RecommendationIssue.None, fish.Issue);
+    }
+
+    [Fact]
+    public void RestrictedTargetsUseTheirOwnFrequencyAndNextAppearance()
+    {
+        var target = Rule(1, 0, 12) with { BaitSteps = [[999], [2]], Predators = [new(3, 1)] };
+        var result = Browser(target, Rule(2, 20, 21), Rule(3, 22, 23)).Calculate(Day, 3, [1]);
+        var fish = Assert.Single(result.Ranked);
+        var baseline = Assert.Single(Browser(target with { BaitSteps = [[999]], Predators = [] }).Calculate(Day, 3, [1]).Ranked);
         Assert.Equal(OpportunityBasis.OwnConditions, fish.Basis);
         Assert.Equal(1u, fish.BasisItemId);
+        Assert.Equal(baseline.OpportunityCount, fish.OpportunityCount);
+        Assert.Equal(Day.AddSeconds(4200), fish.NextOwnOpportunity);
     }
 
     [Fact]
-    public void IntuitionTriggerCanWaitForTheLaterMoochOpportunity()
+    public void AlwaysAvailableFishHaveNoInventedRarity()
     {
-        // The target opens at ET0, but its bait only opens at ET4 (700 real seconds).
-        // Catching the trigger at ET0 wastes the 60-second buff; delay that catch instead.
-        var target = Rule(1, 0, 12) with
-        { Predators = [new(2, 1)], IntuitionSeconds = 60, BaitSteps = [[999], [3]] };
-        var fish = Find(Planner(target, Rule(2), Rule(3, 4, 8)).Calculate(Day, 1, [1], true), 1);
-        var plan = Assert.IsType<RecommendationPlan>(fish.Plan);
-        Assert.NotNull(plan.FastFirstCast);
-        Assert.True(plan.FastFirstCast >= Day.AddSeconds(700));
-        var trigger = Assert.Single(plan.Steps, step => step.Role == PreparationRole.Trigger);
-        Assert.True(plan.FastFirstCast < trigger.End.AddSeconds(60));
+        var result = Browser(Rule(1)).Calculate(Day, 3, [1]);
+        Assert.Single(result.Now);
+        Assert.Empty(result.Rare);
+        Assert.Empty(result.Preparation);
+        Assert.Equal(0, Assert.Single(result.Ranked).OpportunityCount);
     }
 
     [Fact]
-    public void TriggerBeforePreyClosesCanCarryIntoTargetOpening()
+    public void UnknownTargetIsExcludedButMissingPreyDoesNotBecomeAnEstimate()
     {
-        var target = Rule(1, 8, 10) with { Predators = [new(2, 1)], IntuitionSeconds = 300 };
-        var fish = Find(Planner(target, Rule(2, 4, 7)).Calculate(Day.AddSeconds(300), 1, [1], true), 1);
-        var plan = Assert.IsType<RecommendationPlan>(fish.Plan);
-        var trigger = Assert.Single(plan.Steps, step => step.Role == PreparationRole.Trigger);
-        Assert.True(trigger.End <= Day.AddSeconds(1225));
-        Assert.Equal(Day.AddSeconds(1400), plan.FirstCast);
-        Assert.True(plan.FirstCast < trigger.End.AddSeconds(300));
+        var result = Browser(Rule(1) with { ConditionsKnown = false }, Rule(2, 10, 12) with { Predators = [new(3, 1)] })
+            .Calculate(Day, 3, [1, 2]);
+        Assert.Equal(RecommendationIssue.ConditionsUnknown, Assert.Single(result.Other).Issue);
+        var fish = Assert.Single(result.Ranked);
+        Assert.True(fish.PreparationUnknown);
+        Assert.Equal(FishingWindowKind.Unknown, Assert.Single(fish.Preparation).Window.Kind);
     }
 
     [Fact]
-    public void RonkaSeparatesPreStockAndInWindowChainWithoutAwardingExtraStockPoints()
+    public void RarityUsesFewestContinuousConditionEpisodesFirst()
     {
-        var target = Rule(33243, 10, 12) with { BaitSteps = [[999], [27490], [27491], [28071]] };
-        var planner = Planner(target, Rule(27490), Rule(27491), Rule(28071, 10, 12) with { BigFish = true });
-        var fish = Find(planner.Calculate(Day.AddSeconds(600), 1, [33243], true), 33243);
-        var plan = Assert.IsType<RecommendationPlan>(fish.Plan);
-        Assert.True(plan.Steps.Single(step => step.ItemId == 27491).End <= Day.AddSeconds(1750));
-        Assert.True(plan.Steps.Single(step => step.ItemId == 28071).Start >= Day.AddSeconds(1750));
-        Assert.True(plan.FirstCast > Day.AddSeconds(1750));
-        Assert.Equal(2, plan.AdvanceMoochCount);
-        var stored = Assert.Single(fish.Alternatives, alternative => alternative.Strategy == RecommendationStrategy.RonkaStored);
-        Assert.NotNull(stored.OptionalStock);
-        Assert.Equal(plan.Score, stored.Score, 6);
-        var withoutStorage = Find(planner.Calculate(Day.AddSeconds(600), 1, [33243], false), 33243);
-        Assert.Equal(plan.Score, withoutStorage.Plan!.Score, 6);
-    }
-
-    [Fact]
-    public void LastIntuitionCatchAlsoProvidesTheSingleStepMoochBait()
-    {
-        var target = Rule(17592, 0, 3) with
-        { BaitSteps = [[999], [12715]], Predators = [new(12715, 5)], IntuitionSeconds = 120 };
-        var fish = Find(Planner(target, Rule(12715)).Calculate(Day, 1, [17592], true), 17592);
-        var plan = Assert.IsType<RecommendationPlan>(fish.Plan);
-        Assert.True(plan.SharedCatch);
-        Assert.Equal(5, plan.Steps.Count(step => step.ItemId == 12715));
-        Assert.Equal(PreparationRole.Trigger, plan.Steps[^1].Role);
-    }
-
-    [Fact]
-    public void HorizonDoesNotSilentlyExpandAndUnknownIntuitionIsNotAssumed()
-    {
-        var upcoming = Rule(1, 23, 24);
-        var unknown = Rule(2) with { Predators = [new(3, 1)] };
-        var planner = Planner(upcoming, unknown, Rule(3));
-        var shortResult = planner.Calculate(Day.AddSeconds(100), 1, [1, 2], true);
-        Assert.Equal(RecommendationIssue.OutsideHorizon, Find(shortResult, 1).Issue);
-        Assert.Equal(RecommendationIssue.IntuitionDurationUnknown, Find(shortResult, 2).Issue);
-        Assert.Contains(planner.Calculate(Day.AddSeconds(100), 3, [1], true).Ranked, fish => fish.ItemId == 1);
-    }
-
-    [Fact]
-    public void NowViewIncludesPreparationDueNowButNotAWindowThatOnlyOpensLater()
-    {
-        var direct = Rule(1, 10, 12);
-        var prepare = Rule(2, 10, 12) with { Predators = [new(3, 10)], IntuitionSeconds = 360 };
-        var result = Planner(direct, prepare, Rule(3)).Calculate(Day.AddSeconds(970), 1, [1, 2], true);
-        Assert.DoesNotContain(result.Now, fish => fish.ItemId == 1);
-        Assert.Contains(result.Now, fish => fish.ItemId == 2);
-        Assert.Contains(result.Preparation, fish => fish.ItemId == 2);
-        Assert.Contains(result.Rare, fish => fish.ItemId == 1);
-    }
-
-    [Fact]
-    public void PreparationViewRetainsFutureWorkWithoutCallingItActionableNow()
-    {
-        var target = Rule(1, 20, 22) with { Predators = [new(2, 5)], IntuitionSeconds = 360 };
-        var result = Planner(target, Rule(2)).Calculate(Day.AddSeconds(100), 1, [1], true);
-        Assert.Empty(result.Now);
-        var fish = Assert.Single(result.Preparation);
-        Assert.True(fish.Plan!.RecommendedStart > Day.AddSeconds(400));
-        Assert.True(fish.Plan.HasAdvancePreparation);
-    }
-
-    [Fact]
-    public void PrerequisiteGapUsesThatPrerequisitesEndInsteadOfTheIntuitionExtension()
-    {
-        var target = Rule(1) with { Predators = [new(2, 1)], IntuitionSeconds = 350 };
-        var fish = Find(Planner(target, Rule(2, 2, 4)).Calculate(Day.AddSeconds(120), 1, [1], true), 1);
-        Assert.True(fish.OwnConditionsAlways);
-        Assert.Equal(OpportunityBasis.PrerequisiteProxy, fish.Basis);
-        Assert.Equal(Day.AddSeconds(4550), fish.NextOpportunity);
-        Assert.Equal(3850.0 / 3600, fish.GapHours!.Value, 6);
-    }
-
-    [Fact]
-    public void PreparationSortKeepsLargerDueWorkVisibleBeforeSmallerWork()
-    {
-        var large = Rule(1, 10, 12) with { Predators = [new(3, 10)], IntuitionSeconds = 360 };
-        var small = Rule(2, 10, 12) with { Predators = [new(3, 6)], IntuitionSeconds = 360 };
-        var result = Planner(large, small, Rule(3)).Calculate(Day.AddSeconds(970), 1, [2, 1], true);
-        Assert.Equal(1u, result.Preparation[0].ItemId);
-        Assert.Equal(2u, result.Preparation[1].ItemId);
-        Assert.All(result.Preparation, fish => Assert.Contains(result.Now, current => current.ItemId == fish.ItemId));
-    }
-
-    [Fact]
-    public void RareViewUsesFrequencyInsteadOfTargetNowScoreAndExcludesContinuousConditions()
-    {
-        var common = Rule(1, 0, 1);
-        var rare = Rule(2, 0, 1) with { WeatherIds = [1], PreviousWeatherIds = [2] };
-        var planner = new FishRecommendations(new[] { common, rare, Rule(3) }
-            .Select(rule => new FishingForecastInput(rule, [new(1, 50), new(2, 50)])));
-        var result = planner.Calculate(Day, 24, [1, 2, 3], true);
+        var result = Browser(Rule(1, 0, 1), Rule(2) with { WeatherIds = [2] }).Calculate(Day, 24, [1, 2]);
+        Assert.Equal(2, result.Rare.Count);
         Assert.Equal(2u, result.Rare[0].ItemId);
-        Assert.Equal(1u, result.Rare[1].ItemId);
         Assert.True(result.Rare[0].OpportunityCount < result.Rare[1].OpportunityCount);
-        Assert.DoesNotContain(result.Rare, fish => fish.ItemId == 3);
     }
 
     [Fact]
-    public void RefreshUsesNewTimeAndCancelledCalculationDoesNotReturnAPartialList()
+    public void RefreshMovesPastAnEndedOccurrenceWithoutReusingItsCountdown()
     {
-        var planner = Planner(Rule(1, 10, 12));
-        var first = planner.Calculate(Day.AddSeconds(100), 1, [1], true);
-        var later = planner.Calculate(Day.AddSeconds(1500), 1, [1], true);
-        Assert.Empty(first.Now);
-        Assert.Single(later.Now);
-        Assert.Equal(Day.AddSeconds(1500), later.At);
+        var browser = Browser(Rule(1, 0, 1));
+        var initial = Assert.Single(browser.Calculate(Day, 3, [1]).Now);
+        var refreshed = Assert.Single(browser.Calculate(Day.AddSeconds(176), 3, [1]).Ranked);
+        Assert.Equal(Day, initial.Window.Start);
+        Assert.Equal(Day.AddSeconds(4200), refreshed.Window.Start);
+    }
+
+    [Fact]
+    public void AnalysisDayIsUtcAndDuplicateTargetsAreNotRepeated()
+    {
+        var now = Day.ToOffset(TimeSpan.FromHours(9));
+        var browser = Browser(Rule(1));
+        var result = browser.Calculate(now, 24, [1, 1]);
+        Assert.Single(result.Ranked);
+        Assert.Equal(new DateTimeOffset(now.UtcDateTime.Date, TimeSpan.Zero), result.AnalysisStart);
+        Assert.Equal(now.AddHours(24), result.Through);
+        var later = browser.Calculate(now.AddDays(1), 24, [1]);
+        Assert.Equal(result.AnalysisStart.AddDays(1), later.AnalysisStart);
+    }
+
+    [Fact]
+    public void SharedMoochAndIntuitionFishKeepsItsIntuitionRoleAndRequiredCount()
+    {
+        var target = Rule(1) with { BaitSteps = [[999], [2]], Predators = [new(2, 5)] };
+        var fish = Assert.Single(Browser(target, Rule(2, 4, 6)).Calculate(Day, 3, [1]).Preparation);
+        Assert.Equal(2, fish.Preparation.Count);
+        Assert.Equal(PreparationKind.Intuition, fish.PrimaryPreparation!.Kind);
+        Assert.Equal(5, fish.PrimaryPreparation.Count);
+        Assert.Equal(5, fish.IntuitionCatchCount);
+    }
+
+    [Fact]
+    public void ContinuousWeatherConditionKeepsItsOpenWindowWithAnUnknownEnd()
+    {
+        var browser = new FishRecommendations([new(Rule(1) with { WeatherIds = [1] }, [new(1, 100)])]);
+        var fish = Assert.Single(browser.Calculate(Day, 3, [1]).Now);
+        Assert.Null(fish.Window.End);
+        Assert.Equal(FishingWindowKind.Open, fish.Window.Kind);
+        Assert.Equal(1, fish.OpportunityCount);
+        Assert.False(fish.OwnConditionsAlways);
+    }
+
+    [Fact]
+    public void CurrentWindowPreservesTheStartBeforeTheQueryBaseline()
+    {
+        var result = Browser(Rule(1, 23, 2)).Calculate(Day, 3, [1]);
+        Assert.Equal(Day.AddSeconds(-175), Assert.Single(result.Now).Window.Start);
+    }
+
+    [Fact]
+    public void CancelledQueryCannotReturnAPartialList()
+    {
         using var cancellation = new CancellationTokenSource();
         cancellation.Cancel();
-        Assert.Throws<OperationCanceledException>(() => planner.Calculate(Day, 3, [1], true, cancellation.Token));
-    }
-
-    [Fact]
-    public void IntuitionWorkThatCanOnlyStartAtOpeningIsNotAdvancePreparation()
-    {
-        var target = Rule(1, 10, 12) with { Predators = [new(2, 1)], IntuitionSeconds = 360 };
-        var result = Planner(target, Rule(2, 10, 12)).Calculate(Day.AddSeconds(120), 1, [1], true);
-        var fish = Assert.Single(result.Ranked);
-        Assert.NotNull(fish.Plan!.FirstCast);
-        Assert.True(fish.Plan.Steps[0].Start >= Day.AddSeconds(1750));
-        Assert.Equal(0, fish.Plan.AdvanceWorkMinutes);
-        Assert.False(fish.Plan.HasAdvancePreparation);
-        Assert.Empty(result.Preparation);
-    }
-
-    [Fact]
-    public void WorkCrossingOpeningCountsOnlyItsAdvancePartAndDoesNotClaimACatchIsSecured()
-    {
-        var target = Rule(1, 10, 12) with { Predators = [new(2, 2)], IntuitionSeconds = 360 };
-        // Arrival at 1720; the first catch completes at 1810. Target opens at 1750.
-        var fish = Find(Planner(target, Rule(2)).Calculate(Day.AddSeconds(1600), 1, [1], true), 1);
-        Assert.Equal(3, fish.Plan!.WorkMinutes);
-        Assert.Equal(0.5, fish.Plan.AdvanceWorkMinutes, 6);
-        Assert.Equal(0, fish.Plan.AdvanceIntuitionCount);
-        Assert.True(fish.Plan.HasAdvancePreparation);
-    }
-
-    [Fact]
-    public void UnrestrictedIntuitionTargetRetainsItsPreparationWithoutAnInventedOpening()
-    {
-        var target = Rule(1) with { Predators = [new(2, 3)], IntuitionSeconds = 360 };
-        var result = Planner(target, Rule(2)).Calculate(Day, 1, [1], true);
-        var fish = Assert.Single(result.Preparation);
-        Assert.True(fish.OwnConditionsAlways);
-        Assert.Null(fish.Window!.Start);
-        Assert.Equal(4.5, fish.Plan!.AdvanceWorkMinutes);
-        Assert.Equal(3, fish.Plan.AdvanceIntuitionCount);
-    }
-
-    [Fact]
-    public void UpcomingBaitIsNotDescribedAsACurrentlyOpenPreparationOpportunity()
-    {
-        var target = Rule(1, 10, 12) with { BaitSteps = [[999], [2]] };
-        var result = Planner(target, Rule(2, 8, 12)).Calculate(Day.AddSeconds(1300), 1, [1], true);
-        var fish = Assert.Single(result.Now);
-        Assert.NotNull(fish.Plan!.FirstCast);
-        Assert.Null(fish.PreparationGateEnd);
-        Assert.Equal(0u, fish.PreparationGateItem);
+        Assert.Throws<OperationCanceledException>(() => Browser(Rule(1)).Calculate(Day, 3, [1], cancellation.Token));
     }
 }

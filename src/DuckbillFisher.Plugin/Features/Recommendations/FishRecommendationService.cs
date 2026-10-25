@@ -4,7 +4,7 @@ using DuckbillFisher.Core;
 namespace DuckbillFisher.Plugin;
 
 internal sealed record RecommendationOptions(int Hours = 3, bool IncludeUnknown = false,
-    bool FavoritesOnly = false, bool LegendaryOnly = false, bool AllowStorage = true);
+    bool FavoritesOnly = false, bool LegendaryOnly = false);
 internal enum RecommendationState { Waiting, Computing, Ready, Failed, Unsupported }
 internal sealed record RecommendationEntry(FishGuideRow Fish, CollectionStatus Collection, FishRecommendation Recommendation)
 {
@@ -23,7 +23,7 @@ internal sealed record FishRecommendationView(int Session, RecommendationState S
 }
 
 /// <summary>Explicit snapshots: entering, changing options, or pressing refresh requests work.
-/// Collection/time changes only flag staleness. Framework captures managed values; worker plans.</summary>
+/// Collection/time changes only flag staleness. Framework captures managed values; worker reads schedules.</summary>
 internal sealed class FishRecommendationService : IDisposable
 {
     private readonly FishCatalog catalog;
@@ -133,7 +133,7 @@ internal sealed class FishRecommendationService : IDisposable
                 {
                     var included = targets.Where(value => value.Collection == CollectionStatus.Uncaught ||
                         settings.IncludeUnknown && value.Collection == CollectionStatus.Unknown).ToDictionary(value => value.Fish.ItemId);
-                    var result = planner.Calculate(now, settings.Hours, included.Keys, settings.AllowStorage, token);
+                    var result = planner.Calculate(now, settings.Hours, included.Keys, token);
                     RecommendationEntry Entry(FishRecommendation value) => new(included[value.ItemId].Fish, included[value.ItemId].Collection, value);
                     // Equal frequencies share a rank; these compare only the filtered horizon's rare candidates.
                     var frequencyRanks = result.Rare.Select((value, index) => (value.OpportunityCount, Rank: index + 1))
