@@ -13,6 +13,9 @@ internal sealed record FishRecommendationView(int Session, RecommendationState S
     public DateTimeOffset AnalysisStart { get; init; }
     public bool NeedsRefresh { get; init; }
     public int Generation { get; init; }
+    public RecommendationEntry[] Now { get; init; } = [];
+    public RecommendationEntry[] Preparation { get; init; } = [];
+    public RecommendationEntry[] Rare { get; init; } = [];
 }
 
 /// <summary>Explicit snapshots: entering, changing options, or pressing refresh requests work.
@@ -61,7 +64,7 @@ internal sealed class FishRecommendationService : IDisposable
         }
     }
     public void Configure(RecommendationOptions value)
-    { lock (gate) if (!disposed && options != value) { options = value; requested++; } }
+    { lock (gate) if (!disposed && options != value) { options = value; requested++; view = Empty(preferences.View.Session); } }
     public void Refresh() { lock (gate) if (!disposed) requested++; }
 
     private void Update(IFramework _)
@@ -83,7 +86,8 @@ internal sealed class FishRecommendationService : IDisposable
             var now = clock.GetUtcNow();
             if (lastUtc != default && (now < lastUtc || now - lastUtc > TimeSpan.FromSeconds(5)) ||
                 view.At != default && now - view.At >= TimeSpan.FromMinutes(1) ||
-                observed.Revision != collectionRevision || personal.CatalogRevision != personalRevision)
+                observed.Revision != collectionRevision || personal.CatalogRevision != personalRevision ||
+                sourceRows is not null && !ReferenceEquals(sourceRows, data.Rows))
                 view = view with { NeedsRefresh = true };
             lastUtc = now;
             if (started != requested) cancellation?.Cancel();
@@ -128,7 +132,9 @@ internal sealed class FishRecommendationService : IDisposable
                     var result = planner.Calculate(now, settings.Hours, included.Keys, settings.AllowStorage, token);
                     RecommendationEntry Entry(FishRecommendation value) => new(included[value.ItemId].Fish, included[value.ItemId].Collection, value);
                     return initial with { State = RecommendationState.Ready, AnalysisStart = result.AnalysisStart,
-                        Ranked = result.Ranked.Select(Entry).ToArray(), Other = result.Other.Select(Entry).ToArray() };
+                        Ranked = result.Ranked.Select(Entry).ToArray(), Other = result.Other.Select(Entry).ToArray(),
+                        Now = result.Now.Select(Entry).ToArray(), Preparation = result.Preparation.Select(Entry).ToArray(),
+                        Rare = result.Rare.Select(Entry).ToArray() };
                 }
                 catch (OperationCanceledException) { return null; }
                 catch (Exception ex)

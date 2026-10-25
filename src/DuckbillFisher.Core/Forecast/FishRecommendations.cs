@@ -1,6 +1,7 @@
 namespace DuckbillFisher.Core;
 
-public enum RecommendationIssue { None, ConditionsUnknown, MissingPreparation, IntuitionDurationUnknown, NestedIntuition, AmbiguousPath, OutsideHorizon, NoFreshPath }
+public enum RecommendationIssue { None, ConditionsUnknown, MissingPreparation, IntuitionDurationUnknown, NestedIntuition, AmbiguousPath, OutsideHorizon, NoFreshPath, EstimatedLate }
+public enum RecommendationReadiness { Planned, EstimateOnly, Late }
 public enum PreparationRole { Mooch, Intuition, Trigger, StoredMooch }
 public enum RecommendationStrategy { Basic, RonkaStored }
 public enum OpportunityBasis { OwnConditions, PrerequisiteProxy, Always }
@@ -16,19 +17,39 @@ public sealed record RecommendationPlan(RecommendationStrategy Strategy, DateTim
     public bool SharedCatch { get; init; }
     public uint StoredItemId { get; init; }
     public OptionalStoredPreparation? OptionalStock { get; init; }
+    public RecommendationReadiness Readiness { get; init; }
+    public double ShortWorkMinutes { get; init; }
+    public double LongWorkMinutes { get; init; }
+    public double AdvanceWorkMinutes { get; init; }
+    public bool HasAdvancePreparation { get; init; }
 }
 public sealed record FishRecommendation(uint ItemId, RecommendationIssue Issue, FishingWindow? Window,
     RecommendationPlan? Plan, IReadOnlyList<RecommendationPlan> Alternatives, double Rarity, double NextGapScore,
-    int OpportunityCount, OpportunityBasis Basis, uint BasisItemId, DateTimeOffset? NextOpportunity);
+    int OpportunityCount, OpportunityBasis Basis, uint BasisItemId, DateTimeOffset? NextOpportunity)
+{
+    public int OwnOpportunityCount { get; init; }
+    public bool OwnConditionsAlways { get; init; }
+    public int MoochDepth { get; init; }
+    public int IntuitionCatchCount { get; init; }
+    public uint PreparationGateItem { get; init; }
+    public DateTimeOffset? PreparationGateEnd { get; init; }
+    public double? GapHours { get; init; }
+}
 public sealed record RecommendationResult(DateTimeOffset At, DateTimeOffset Through, DateTimeOffset AnalysisStart,
-    IReadOnlyList<FishRecommendation> Ranked, IReadOnlyList<FishRecommendation> Other);
+    IReadOnlyList<FishRecommendation> Ranked, IReadOnlyList<FishRecommendation> Other)
+{
+    public IReadOnlyList<FishRecommendation> Now { get; init; } = [];
+    public IReadOnlyList<FishRecommendation> Preparation { get; init; } = [];
+    public IReadOnlyList<FishRecommendation> Rare { get; init; } = [];
+}
 
 /// <summary>Fresh-start planning, with explicit design estimates, not catch probabilities.
 /// Own condition calendars are independent of the existing Intuition forecast contract.</summary>
 public sealed class FishRecommendations
 {
-    public const int StrategyRevision = 1;
+    public const int StrategyRevision = 2;
     public const double TravelMinutes = 2;
+    public const double ActionSoonMinutes = 5;
     private readonly IReadOnlyDictionary<uint, FishingForecastInput> inputs;
     // Owned by one background worker at a time. No UI/game objects or translated text.
     private readonly Dictionary<uint, FishingWindow[]> calendars = [];
@@ -36,7 +57,7 @@ public sealed class FishRecommendations
     private sealed record TaskStep(uint ItemId, PreparationRole Role, PreparationBudget Budget);
     private sealed record Strategy(RecommendationStrategy Kind, TaskStep[] Tasks, int TriggerIndex, bool SharedCatch, uint StoredItem);
     private sealed record Placement(DateTimeOffset First, DateTimeOffset Cast, RecommendationStep[] Steps,
-        double Work, double Wait);
+        double Work, double Wait, DateTimeOffset? Triggered = null);
 
     public FishRecommendations(IEnumerable<FishingForecastInput> inputs) =>
         this.inputs = inputs.GroupBy(value => value.Rule.ItemId).ToDictionary(group => group.Key, group => group.First());
@@ -49,15 +70,38 @@ public sealed class FishRecommendations
         if (day != analysisStart) { calendars.Clear(); analysisStart = day; }
         var through = now.AddHours(hours);
         var results = new List<FishRecommendation>();
+        var nowCandidates = new List<FishRecommendation>();
+        var preparationCandidates = new List<FishRecommendation>();
+        var rareCandidates = new List<FishRecommendation>();
         foreach (var id in itemIds.Distinct())
         {
             token.ThrowIfCancellationRequested();
-            results.Add(CalculateFish(id, now, through, allowStorage, token));
+            results.Add(CalculateFish(id, now, through, allowStorage, token, out var candidates));
+            var viable = candidates.Where(value => value.Issue == RecommendationIssue.None).ToArray();
+            var actionable = viable.Where(value => value.Plan!.RecommendedStart <= now.AddMinutes(ActionSoonMinutes)).ToArray();
+            if (actionable.Length > 0) nowCandidates.Add(Best(actionable));
+            var prepare = viable.Where(value => value.Plan!.HasAdvancePreparation)
+                .OrderByDescending(value => value.Plan!.RecommendedStart <= now.AddMinutes(ActionSoonMinutes))
+                .ThenByDescending(value => value.Plan!.AdvanceWorkMinutes).ThenBy(value => value.Plan!.RecommendedStart).ToArray();
+            if (prepare.Length > 0) preparationCandidates.Add(prepare[0]);
+            // A rarity view orders known restricted conditions; it does not invent a rarity cutoff.
+            // Prefer the earliest reachable occurrence, retaining an estimated-late one only if none fits.
+            var rare = (viable.Length > 0 ? viable : candidates).Where(value => value.OpportunityCount > 0)
+                .OrderBy(value => value.Window?.Start ?? now).ThenBy(value => value.Plan!.Readiness)
+                .ThenBy(value => value.Plan!.Strategy).FirstOrDefault();
+            if (rare is not null) rareCandidates.Add(rare);
         }
         return new(now, through, analysisStart,
-            results.Where(value => value.Plan is not null).OrderByDescending(value => value.Plan!.Score)
+            results.Where(value => value.Issue == RecommendationIssue.None && value.Plan is not null).OrderByDescending(value => value.Plan!.Score)
                 .ThenBy(value => value.Plan!.RecommendedStart).ThenBy(value => value.ItemId).ToArray(),
-            results.Where(value => value.Plan is null).OrderBy(value => value.Issue).ThenBy(value => value.ItemId).ToArray());
+            results.Where(value => value.Issue != RecommendationIssue.None || value.Plan is null).OrderBy(value => value.Issue).ThenBy(value => value.ItemId).ToArray())
+        {
+            Now = nowCandidates.OrderByDescending(value => value.Plan!.Score).ThenBy(value => value.ItemId).ToArray(),
+            Preparation = preparationCandidates.OrderByDescending(value => value.Plan!.RecommendedStart <= now.AddMinutes(ActionSoonMinutes))
+                .ThenByDescending(value => value.Plan!.AdvanceWorkMinutes).ThenBy(value => value.Plan!.RecommendedStart).ThenBy(value => value.ItemId).ToArray(),
+            Rare = rareCandidates.OrderBy(value => value.OpportunityCount).ThenByDescending(value => value.GapHours ?? 0)
+                .ThenBy(value => value.Window?.Start).ThenBy(value => value.ItemId).ToArray(),
+        };
     }
 
     private FishingWindow[] Calendar(uint id, CancellationToken token)
@@ -72,8 +116,9 @@ public sealed class FishRecommendations
     }
 
     private FishRecommendation CalculateFish(uint id, DateTimeOffset now, DateTimeOffset through,
-        bool allowStorage, CancellationToken token)
+        bool allowStorage, CancellationToken token, out FishRecommendation[] candidates)
     {
+        candidates = [];
         FishRecommendation Other(RecommendationIssue issue, FishingWindow? next = null) =>
             new(id, issue, next, null, [], 0, 0, 0, OpportunityBasis.OwnConditions, id, null);
         if (!inputs.TryGetValue(id, out var input) || !FishingAvailability.IsValid(input.Rule, input.WeatherRates))
@@ -100,7 +145,6 @@ public sealed class FishRecommendations
             basis = dependency == id ? OpportunityBasis.OwnConditions : OpportunityBasis.PrerequisiteProxy;
         }
         if (count == int.MaxValue) { count = 0; basis = OpportunityBasis.Always; }
-        else if (dependentIds.Length > 1) basis = OpportunityBasis.PrerequisiteProxy;
         var rarity = count == 0 ? 0 : Math.Clamp(Math.Log10(1 + 30.0 / count) / Math.Log10(31), 0, 1);
         var occurrences = Occurrences(rule, now, through, strategies, token).ToArray();
         if (occurrences.Length == 0)
@@ -115,10 +159,6 @@ public sealed class FishRecommendations
             token.ThrowIfCancellationRequested();
             var start = window.Start is { } s && s > now ? s : now;
             var end = window.End ?? through.AddDays(1);
-            var next = basis == OpportunityBasis.Always ? null : Calendar(basisId, token)
-                .FirstOrDefault(value => value.Start >= (window.End ?? start.AddSeconds(1)))?.Start;
-            var nextScore = next is { } nextAt
-                ? Math.Clamp(Math.Log10(1 + Math.Max(0, (nextAt - end).TotalHours)) / Math.Log10(73), 0, 1) : 0;
             foreach (var strategy in strategies)
             {
                 // Zero-work placement distinguishes a closed prerequisite from an estimated late attempt.
@@ -131,29 +171,74 @@ public sealed class FishRecommendations
                 var desiredCast = reference?.Cast ?? earliestFast?.Cast ?? start;
                 var reversed = Reverse(strategy, desiredCast, 1, token);
                 var recommended = reversed?.First.AddMinutes(-TravelMinutes) ?? start.AddMinutes(-TravelMinutes);
-                var planned = Forward(strategy, rule, now.AddMinutes(TravelMinutes), start, end, 1, reversed, token);
+                var planned = Forward(strategy, rule, now.AddMinutes(TravelMinutes), start, end, 1, reversed, token) ?? reference;
                 var fast = Forward(strategy, rule, now.AddMinutes(TravelMinutes), start, end, 0, Reverse(strategy, desiredCast, 0, token), token) ?? earliestFast;
                 var slow = Forward(strategy, rule, now.AddMinutes(TravelMinutes), start, end, 2, Reverse(strategy, desiredCast, 2, token), token)
                     ?? Forward(strategy, rule, now.AddMinutes(TravelMinutes), start, end, 2, null, token);
                 var t = 1 / (1 + Math.Max(0, (recommended - now).TotalMinutes) / 20);
-                var q = slow is not null ? 1 : fast is not null ? 0.5 : 0;
-                var shown = planned ?? fast ?? reversed ?? possible;
+                var q = planned is not null ? slow is not null ? 1 : 0.75 : fast is not null || slow is not null ? 0.5 : 0;
+                var shown = planned ?? fast ?? slow ?? reversed;
+                if (shown is null) continue; // A zero-work feasibility sketch is never a preparation estimate.
+                var (next, gap) = NextOpportunity(basisId, basis, window, shown.Steps, token);
+                var nextScore = gap is { } hours ? Math.Clamp(Math.Log10(1 + hours) / Math.Log10(73), 0, 1) : 0;
                 var plan = new RecommendationPlan(strategy.Kind, recommended, planned?.Cast, fast?.Cast, slow?.Cast,
                     shown.Steps, shown.Work, shown.Wait, t, q, 40 * t + 30 * rarity + 20 * q + 10 * nextScore)
                 { SharedCatch = strategy.SharedCatch, StoredItemId = strategy.StoredItem,
-                    OptionalStock = OptionalStock(strategy, desiredCast, token) };
+                    OptionalStock = OptionalStock(strategy, desiredCast, token),
+                    Readiness = planned is not null ? RecommendationReadiness.Planned : q > 0 ? RecommendationReadiness.EstimateOnly : RecommendationReadiness.Late,
+                    ShortWorkMinutes = strategy.Tasks.Sum(step => step.Budget.ShortMinutes),
+                    LongWorkMinutes = strategy.Tasks.Sum(step => step.Budget.LongMinutes),
+                    AdvanceWorkMinutes = shown.Steps.Where(step => rule.Predators.Length > 0 || window.Start is { } at && step.Start < at)
+                        .Sum(step => step.Budget.PlanningMinutes),
+                    HasAdvancePreparation = rule.Predators.Length > 0 || shown.Steps.Any(step => window.Start is { } at && step.Start < at) };
                 choices.Add((window, plan, nextScore, next));
             }
         }
         if (choices.Count == 0) return Other(RecommendationIssue.NoFreshPath, occurrences[0]);
-        var bestScore = choices.Max(value => value.Plan.Score);
-        var best = choices.Where(value => value.Plan.Score >= bestScore - 3)
-            .OrderBy(value => value.Plan.WaitMinutes).ThenBy(value => value.Plan.WorkMinutes)
-            .ThenBy(value => value.Plan.Strategy).ThenBy(value => value.Window.Start).First();
-        return new(id, RecommendationIssue.None, best.Window, best.Plan,
-            choices.Where(value => value.Window == best.Window && value.Plan != best.Plan)
-                .GroupBy(value => value.Plan.Strategy).Select(group => group.OrderByDescending(value => value.Plan.Score).First().Plan).ToArray(),
-            rarity, best.NextScore, count, basis, basisId, best.Next);
+        candidates = choices.Select(choice =>
+        {
+            var gate = choice.Plan.Steps.Where(step => step.Start <= now.AddMinutes(ActionSoonMinutes + TravelMinutes))
+                .Select(step => (step.ItemId, Window: Calendar(step.ItemId, token)
+                    .FirstOrDefault(value => value.Start <= step.Start && value.End > step.Start)))
+                .Where(value => value.Window?.End > now).OrderBy(value => value.Window!.End).FirstOrDefault();
+            var (_, gap) = NextOpportunity(basisId, basis, choice.Window, choice.Plan.Steps, token);
+            return new FishRecommendation(id, choice.Plan.Readiness == RecommendationReadiness.Late ? RecommendationIssue.EstimatedLate : RecommendationIssue.None,
+                choice.Window, choice.Plan, choices.Where(value => value.Window == choice.Window && value.Plan != choice.Plan)
+                    .GroupBy(value => value.Plan.Strategy).Select(group => group.OrderByDescending(value => value.Plan.Score).First().Plan).ToArray(),
+                rarity, choice.NextScore, count, basis, basisId, choice.Next)
+            {
+                OwnOpportunityCount = FishingAvailability.IsAlways(rule) ? 0 : Count(id, token),
+                OwnConditionsAlways = FishingAvailability.IsAlways(rule), MoochDepth = Path(rule)!.Length,
+                IntuitionCatchCount = rule.Predators.Sum(prey => prey.Count),
+                PreparationGateItem = gate.ItemId, PreparationGateEnd = gate.Window?.End, GapHours = gap,
+            };
+        }).ToArray();
+        var feasible = candidates.Where(value => value.Issue == RecommendationIssue.None).ToArray();
+        return Best(feasible.Length > 0 ? feasible : candidates);
+    }
+
+    private static FishRecommendation Best(FishRecommendation[] choices)
+    {
+        var bestScore = choices.Max(value => value.Plan!.Score);
+        return choices.Where(value => value.Plan!.Score >= bestScore - 3).OrderBy(value => value.Plan!.Readiness)
+            .ThenBy(value => value.Plan!.WaitMinutes).ThenBy(value => value.Plan!.WorkMinutes)
+            .ThenBy(value => value.Plan!.Strategy).ThenBy(value => value.Window?.Start).First();
+    }
+
+    private (DateTimeOffset? Next, double? GapHours) NextOpportunity(uint basisId, OpportunityBasis basis,
+        FishingWindow targetWindow, IReadOnlyList<RecommendationStep> steps, CancellationToken token)
+    {
+        if (basis == OpportunityBasis.Always) return (null, null);
+        var calendar = Calendar(basisId, token);
+        var gate = targetWindow;
+        if (basis == OpportunityBasis.PrerequisiteProxy)
+        {
+            var step = steps.LastOrDefault(step => step.ItemId == basisId);
+            gate = step is null ? targetWindow : calendar.FirstOrDefault(window => window.Start <= step.Start && window.End > step.Start) ?? targetWindow;
+        }
+        if (gate.End is not { } end) return (null, null);
+        var next = calendar.FirstOrDefault(window => window.Start >= end)?.Start;
+        return (next, next is { } at ? Math.Max(0, (at - end).TotalHours) : null);
     }
 
     private int Count(uint id, CancellationToken token)
@@ -295,7 +380,7 @@ public sealed class FishRecommendations
             var range = Calendar(task.ItemId, token).LastOrDefault(window => window.Kind == FishingWindowKind.Always ||
                 window.Start <= next - duration && (window.End is null || window.End >= window.Start + duration));
             if (range is null) return null;
-            var end = range.End is { } endAt && endAt <= next ? endAt.AddMilliseconds(-1) : next;
+            var end = range.End is { } endAt && endAt <= next ? duration == TimeSpan.Zero ? endAt.AddMilliseconds(-1) : endAt : next;
             var start = end - duration;
             if (range.Start > start) return null;
             steps[index] = new(task.ItemId, 1, task.Role, task.Budget, start, end);
@@ -306,6 +391,29 @@ public sealed class FishRecommendations
 
     private Placement? Forward(Strategy strategy, FishingRule target, DateTimeOffset arrival,
         DateTimeOffset opening, DateTimeOffset closing, int scenario, Placement? intended, CancellationToken token)
+    {
+        if (strategy.TriggerIndex < 0)
+            return PlaceForward(strategy, target, arrival, opening, closing, scenario, intended, null, token);
+        var lifetime = target.IntuitionSeconds!.Value;
+        if (strategy.Tasks.Skip(strategy.TriggerIndex + 1).Sum(step => Minutes(step, scenario)) * 60 >= lifetime) return null;
+        DateTimeOffset? triggerNotBefore = null;
+        // If a later bait gate consumes the buff, keep the accumulated catches and defer the trigger.
+        // Every repair advances the trigger. Bound work and observe cancellation on each pass.
+        for (var retry = 0; retry < 128; retry++)
+        {
+            token.ThrowIfCancellationRequested();
+            var placed = PlaceForward(strategy, target, arrival, opening, closing, scenario, intended, triggerNotBefore, token);
+            if (placed is null) return null;
+            if (placed.Triggered is not { } triggered || placed.Cast < triggered.AddSeconds(lifetime)) return placed;
+            triggerNotBefore = placed.Cast.AddSeconds(-lifetime).AddMilliseconds(1)
+                .AddMinutes(-Minutes(strategy.Tasks[strategy.TriggerIndex], scenario));
+        }
+        return null;
+    }
+
+    private Placement? PlaceForward(Strategy strategy, FishingRule target, DateTimeOffset arrival,
+        DateTimeOffset opening, DateTimeOffset closing, int scenario, Placement? intended,
+        DateTimeOffset? triggerNotBefore, CancellationToken token)
     {
         var cursor = arrival;
         if (scenario == 1 && intended?.First > cursor) cursor = intended.First;
@@ -332,6 +440,7 @@ public sealed class FishRecommendations
                 // Do not demand that the prey is still available at the target's exact start.
                 var earliestTriggerStart = opening.AddSeconds(-target.IntuitionSeconds!.Value).AddMilliseconds(1) - duration;
                 if (desired < earliestTriggerStart) desired = earliestTriggerStart;
+                if (triggerNotBefore > desired) desired = triggerNotBefore.Value;
                 if (desired > cursor) cursor = desired;
             }
             DateTimeOffset? start = null;
@@ -348,8 +457,8 @@ public sealed class FishRecommendations
             if (index == strategy.TriggerIndex) triggered = cursor;
         }
         var cast = cursor > opening ? cursor : opening;
-        if (cast >= closing || triggered is { } trigger && cast >= trigger.AddSeconds(target.IntuitionSeconds!.Value)) return null;
+        if (cast >= closing) return null;
         return new(steps.Count > 0 ? steps[0].Start : cast, cast, steps.ToArray(), work,
-            Math.Max(0, (cast - (steps.Count > 0 ? steps[0].Start : cast)).TotalMinutes - work));
+            Math.Max(0, (cast - (steps.Count > 0 ? steps[0].Start : cast)).TotalMinutes - work), triggered);
     }
 }
