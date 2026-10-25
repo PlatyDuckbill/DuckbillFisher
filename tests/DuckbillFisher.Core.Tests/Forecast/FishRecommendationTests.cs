@@ -73,6 +73,7 @@ public sealed class FishRecommendationTests
         Assert.True(plan.Steps.Single(step => step.ItemId == 27491).End <= Day.AddSeconds(1750));
         Assert.True(plan.Steps.Single(step => step.ItemId == 28071).Start >= Day.AddSeconds(1750));
         Assert.True(plan.FirstCast > Day.AddSeconds(1750));
+        Assert.Equal(2, plan.AdvanceMoochCount);
         var stored = Assert.Single(fish.Alternatives, alternative => alternative.Strategy == RecommendationStrategy.RonkaStored);
         Assert.NotNull(stored.OptionalStock);
         Assert.Equal(plan.Score, stored.Score, 6);
@@ -175,5 +176,53 @@ public sealed class FishRecommendationTests
         using var cancellation = new CancellationTokenSource();
         cancellation.Cancel();
         Assert.Throws<OperationCanceledException>(() => planner.Calculate(Day, 3, [1], true, cancellation.Token));
+    }
+
+    [Fact]
+    public void IntuitionWorkThatCanOnlyStartAtOpeningIsNotAdvancePreparation()
+    {
+        var target = Rule(1, 10, 12) with { Predators = [new(2, 1)], IntuitionSeconds = 360 };
+        var result = Planner(target, Rule(2, 10, 12)).Calculate(Day.AddSeconds(120), 1, [1], true);
+        var fish = Assert.Single(result.Ranked);
+        Assert.NotNull(fish.Plan!.FirstCast);
+        Assert.True(fish.Plan.Steps[0].Start >= Day.AddSeconds(1750));
+        Assert.Equal(0, fish.Plan.AdvanceWorkMinutes);
+        Assert.False(fish.Plan.HasAdvancePreparation);
+        Assert.Empty(result.Preparation);
+    }
+
+    [Fact]
+    public void WorkCrossingOpeningCountsOnlyItsAdvancePartAndDoesNotClaimACatchIsSecured()
+    {
+        var target = Rule(1, 10, 12) with { Predators = [new(2, 2)], IntuitionSeconds = 360 };
+        // Arrival at 1720; the first catch completes at 1810. Target opens at 1750.
+        var fish = Find(Planner(target, Rule(2)).Calculate(Day.AddSeconds(1600), 1, [1], true), 1);
+        Assert.Equal(3, fish.Plan!.WorkMinutes);
+        Assert.Equal(0.5, fish.Plan.AdvanceWorkMinutes, 6);
+        Assert.Equal(0, fish.Plan.AdvanceIntuitionCount);
+        Assert.True(fish.Plan.HasAdvancePreparation);
+    }
+
+    [Fact]
+    public void UnrestrictedIntuitionTargetRetainsItsPreparationWithoutAnInventedOpening()
+    {
+        var target = Rule(1) with { Predators = [new(2, 3)], IntuitionSeconds = 360 };
+        var result = Planner(target, Rule(2)).Calculate(Day, 1, [1], true);
+        var fish = Assert.Single(result.Preparation);
+        Assert.True(fish.OwnConditionsAlways);
+        Assert.Null(fish.Window!.Start);
+        Assert.Equal(4.5, fish.Plan!.AdvanceWorkMinutes);
+        Assert.Equal(3, fish.Plan.AdvanceIntuitionCount);
+    }
+
+    [Fact]
+    public void UpcomingBaitIsNotDescribedAsACurrentlyOpenPreparationOpportunity()
+    {
+        var target = Rule(1, 10, 12) with { BaitSteps = [[999], [2]] };
+        var result = Planner(target, Rule(2, 8, 12)).Calculate(Day.AddSeconds(1300), 1, [1], true);
+        var fish = Assert.Single(result.Now);
+        Assert.NotNull(fish.Plan!.FirstCast);
+        Assert.Null(fish.PreparationGateEnd);
+        Assert.Equal(0u, fish.PreparationGateItem);
     }
 }

@@ -22,6 +22,8 @@ public sealed record RecommendationPlan(RecommendationStrategy Strategy, DateTim
     public double LongWorkMinutes { get; init; }
     public double AdvanceWorkMinutes { get; init; }
     public bool HasAdvancePreparation { get; init; }
+    public int AdvanceMoochCount { get; init; }
+    public int AdvanceIntuitionCount { get; init; }
 }
 public sealed record FishRecommendation(uint ItemId, RecommendationIssue Issue, FishingWindow? Window,
     RecommendationPlan? Plan, IReadOnlyList<RecommendationPlan> Alternatives, double Rarity, double NextGapScore,
@@ -47,7 +49,7 @@ public sealed record RecommendationResult(DateTimeOffset At, DateTimeOffset Thro
 /// Own condition calendars are independent of the existing Intuition forecast contract.</summary>
 public sealed class FishRecommendations
 {
-    public const int StrategyRevision = 2;
+    public const int StrategyRevision = 3;
     public const double TravelMinutes = 2;
     public const double ActionSoonMinutes = 5;
     private readonly IReadOnlyDictionary<uint, FishingForecastInput> inputs;
@@ -179,6 +181,7 @@ public sealed class FishRecommendations
                 var q = planned is not null ? slow is not null ? 1 : 0.75 : fast is not null || slow is not null ? 0.5 : 0;
                 var shown = planned ?? fast ?? slow ?? reversed;
                 if (shown is null) continue; // A zero-work feasibility sketch is never a preparation estimate.
+                var advance = AdvancePreparation(rule, window, shown.Steps);
                 var (next, gap) = NextOpportunity(basisId, basis, window, shown.Steps, token);
                 var nextScore = gap is { } hours ? Math.Clamp(Math.Log10(1 + hours) / Math.Log10(73), 0, 1) : 0;
                 var plan = new RecommendationPlan(strategy.Kind, recommended, planned?.Cast, fast?.Cast, slow?.Cast,
@@ -188,9 +191,8 @@ public sealed class FishRecommendations
                     Readiness = planned is not null ? RecommendationReadiness.Planned : q > 0 ? RecommendationReadiness.EstimateOnly : RecommendationReadiness.Late,
                     ShortWorkMinutes = strategy.Tasks.Sum(step => step.Budget.ShortMinutes),
                     LongWorkMinutes = strategy.Tasks.Sum(step => step.Budget.LongMinutes),
-                    AdvanceWorkMinutes = shown.Steps.Where(step => rule.Predators.Length > 0 || window.Start is { } at && step.Start < at)
-                        .Sum(step => step.Budget.PlanningMinutes),
-                    HasAdvancePreparation = rule.Predators.Length > 0 || shown.Steps.Any(step => window.Start is { } at && step.Start < at) };
+                    AdvanceWorkMinutes = advance.Minutes, HasAdvancePreparation = advance.Minutes > 0,
+                    AdvanceMoochCount = advance.MoochCount, AdvanceIntuitionCount = advance.IntuitionCount };
                 choices.Add((window, plan, nextScore, next));
             }
         }
@@ -200,7 +202,8 @@ public sealed class FishRecommendations
             var gate = choice.Plan.Steps.Where(step => step.Start <= now.AddMinutes(ActionSoonMinutes + TravelMinutes))
                 .Select(step => (step.ItemId, Window: Calendar(step.ItemId, token)
                     .FirstOrDefault(value => value.Start <= step.Start && value.End > step.Start)))
-                .Where(value => value.Window?.End > now).OrderBy(value => value.Window!.End).FirstOrDefault();
+                .Where(value => value.Window?.Start <= now && value.Window.End > now)
+                .OrderBy(value => value.Window!.End).FirstOrDefault();
             var (_, gap) = NextOpportunity(basisId, basis, choice.Window, choice.Plan.Steps, token);
             return new FishRecommendation(id, choice.Plan.Readiness == RecommendationReadiness.Late ? RecommendationIssue.EstimatedLate : RecommendationIssue.None,
                 choice.Window, choice.Plan, choices.Where(value => value.Window == choice.Window && value.Plan != choice.Plan)
@@ -223,6 +226,27 @@ public sealed class FishRecommendations
         return choices.Where(value => value.Plan!.Score >= bestScore - 3).OrderBy(value => value.Plan!.Readiness)
             .ThenBy(value => value.Plan!.WaitMinutes).ThenBy(value => value.Plan!.WorkMinutes)
             .ThenBy(value => value.Plan!.Strategy).ThenBy(value => value.Window?.Start).First();
+    }
+
+    private static (double Minutes, int MoochCount, int IntuitionCount) AdvancePreparation(
+        FishingRule rule, FishingWindow window, IReadOnlyList<RecommendationStep> steps)
+    {
+        // An unrestricted Intuition target has no opening to prepare before; its prerequisites
+        // are the preparation itself. Restricted targets count only work before their opening.
+        var unrestrictedIntuition = FishingAvailability.IsAlways(rule) && rule.Predators.Length > 0;
+        var minutes = 0.0;
+        var mooch = 0; var intuition = 0;
+        foreach (var step in steps)
+        {
+            var fraction = unrestrictedIntuition ? 1 : window.Start is { } opening && step.End > step.Start
+                ? Math.Clamp((opening - step.Start).TotalSeconds / (step.End - step.Start).TotalSeconds, 0, 1) : 0;
+            minutes += step.Budget.PlanningMinutes * fraction;
+            // A catch completed after opening is not described as bait/prey already secured.
+            if (fraction < 1) continue;
+            if (step.Role is PreparationRole.Intuition or PreparationRole.Trigger) intuition += step.Count;
+            else mooch += step.Count;
+        }
+        return (minutes, mooch, intuition);
     }
 
     private (DateTimeOffset? Next, double? GapHours) NextOpportunity(uint basisId, OpportunityBasis basis,

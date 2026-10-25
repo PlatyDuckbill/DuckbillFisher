@@ -34,7 +34,6 @@ internal sealed class MainWindow : Window
     private int lastSession = -1;
     private int selectedMarker;
     private bool selectSettings;
-    private bool selectSchedule;
     private MainPage selectedPage;
     private enum MainPage { Catalog, Recommendations, Collection, Schedule, Alerts, History, Settings, Guide, Fishing }
 
@@ -53,7 +52,6 @@ internal sealed class MainWindow : Window
         this.collectionProgress = collectionProgress;
         this.schedule = schedule;
         this.recommendations = recommendations;
-        recommendations.ShowSchedule = () => selectSchedule = true;
         this.backup = backup;
         UiText.SetLanguage(preferences.View.Language);
         markerLabels = Markers.Select(key => UiText.Get(key)).ToArray();
@@ -135,7 +133,7 @@ internal sealed class MainWindow : Window
                 NavigationTab(MainPage.Catalog, T.TabCatalog, "CatalogTab", FontAwesomeIcon.Fish);
                 NavigationTab(MainPage.Recommendations, T.RecommendationTitle, "RecommendationsTab", FontAwesomeIcon.Compass);
                 NavigationTab(MainPage.Collection, T.TabCollectionProgress, "CollectionProgressTab", FontAwesomeIcon.ChartBar);
-                NavigationTab(MainPage.Schedule, T.ScheduleTitle, "SpawnScheduleTab", FontAwesomeIcon.CalendarAlt, selectSchedule);
+                NavigationTab(MainPage.Schedule, T.ScheduleTitle, "SpawnScheduleTab", FontAwesomeIcon.CalendarAlt);
                 NavigationTab(MainPage.Alerts, T.TabAlerts, "SpawnAlertsTab", FontAwesomeIcon.Star);
                 NavigationTab(MainPage.History, T.TabHistory, "FishingHistoryTab", FontAwesomeIcon.History);
                 NavigationTab(MainPage.Settings, T.TabSettings, "SettingsTab", FontAwesomeIcon.Cog, selectSettings);
@@ -146,7 +144,6 @@ internal sealed class MainWindow : Window
                 }
                 ImGui.EndTabBar();
                 selectSettings = false;
-                selectSchedule = false;
             }
         }
         ImGui.EndChild();
