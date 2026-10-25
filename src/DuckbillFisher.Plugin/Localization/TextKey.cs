@@ -1220,4 +1220,9 @@ internal enum TextKey
     RecommendationWindowRange,
     RecommendationIntuitionPreparationLine,
     RecommendationIntuitionFollowing,
+    RecommendationDetailsButton,
+    RecommendationEvidenceButton,
+    RecommendationProxyFrequencyCompact,
+    RecommendationRowReason,
+    RecommendationNamedRange,
 }

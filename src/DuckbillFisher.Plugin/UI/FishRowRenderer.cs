@@ -10,7 +10,15 @@ using T = DuckbillFisher.Plugin.Localization.TextKey;
 
 namespace DuckbillFisher.Plugin;
 
-internal sealed record RecommendationRowInfo(string Timing, string Context, string TimingHint, Vector4 Tint, Vector4? ContextTint = null);
+internal sealed record RecommendationRowInfo(string Timing, string Context, string TimingHint, Vector4 Tint, Vector4? ContextTint = null)
+{
+    public string Range { get; init; } = "";
+    public string Next { get; init; } = "";
+    public string Frequency { get; init; } = "";
+    public string Reason { get; init; } = "";
+    public Action? OpenDetail { get; init; }
+    public Action? OpenEvidence { get; init; }
+}
 
 /// <summary>Shared catalog/favorite/recommendation rows. Uses managed data and borrowed textures only.</summary>
 internal sealed class FishRowRenderer(ITextureProvider textures, FishingMapService maps)
@@ -23,7 +31,8 @@ internal sealed class FishRowRenderer(ITextureProvider textures, FishingMapServi
     private static bool IsWide(float width) => width >= ImGui.GetFontSize() * 23;
     private static int LineCount(float width) => IsWide(width) ? 3 : 4;
     public static float GetHeight(float width) => ImGui.GetTextLineHeightWithSpacing() * LineCount(width) + 8;
-    public static float GetRecommendationHeight() => ImGui.GetTextLineHeightWithSpacing() * 4 + 8;
+    private static bool WideRecommendation(float width) => width >= ImGui.GetFontSize() * 50;
+    public static float GetRecommendationHeight(float width) => ImGui.GetTextLineHeightWithSpacing() * (WideRecommendation(width) ? 4 : 5) + 8;
 
     public bool Draw(FishGuideRow fish, float height, bool selected, string state, string place,
         FishingWindow? forecast, DateTimeOffset now, bool usesOtherRegion = false, bool favorite = false, bool compact = false,
@@ -77,15 +86,21 @@ internal sealed class FishRowRenderer(ITextureProvider textures, FishingMapServi
         }
         var textX = iconSize + 14;
         var textWidth = Math.Max(1, width - textX - 4);
+        var recommendationWide = WideRecommendation(width);
+        var identityWidth = recommendation is not null ? textWidth * (recommendationWide ? 0.40f : 0.44f) : textWidth;
+        var scheduleX = textX + identityWidth + 12;
+        var scheduleWidth = recommendationWide ? textWidth * 0.29f - 12 : textWidth - identityWidth - 12;
+        var comparisonX = scheduleX + scheduleWidth + 12;
+        var comparisonWidth = textX + textWidth - comparisonX;
         var name = fish.IsOceanFishing ? UiText.Get(T.OceanRowLabel, fish.DisplayName)
             : fish.Grade is FishGrade.Big or FishGrade.Legendary
                 ? UiText.Get(T.RowGradeLabel, new UiMessage(fish.Grade == FishGrade.Legendary ? T.GradeLegendaryLabel : T.GradeBigLabel), fish.DisplayName)
                 : fish.DisplayName;
         var badgePadding = collectionStatus is not null ? ImGui.GetStyle().FramePadding.X : 0;
-        var stateWidth = Math.Min(ImGui.CalcTextSize(state).X + badgePadding * 2, textWidth * 0.45f);
+        var stateWidth = Math.Min(ImGui.CalcTextSize(state).X + badgePadding * 2, identityWidth * 0.45f);
         ImGui.SetCursorPos(start + new Vector2(textX, 4));
-        LineText(name, Math.Max(1, textWidth - stateWidth - 10), false);
-        ImGui.SetCursorPos(start + new Vector2(textX + textWidth - stateWidth, 4));
+        LineText(name, Math.Max(1, identityWidth - stateWidth - 10), false);
+        ImGui.SetCursorPos(start + new Vector2(textX + identityWidth - stateWidth, 4));
         var collectionColor = collectionStatus switch
         {
             CollectionStatus.Caught => new Vector4(0.85f, 1, 0.90f, 1),
@@ -116,7 +131,7 @@ internal sealed class FishRowRenderer(ITextureProvider textures, FishingMapServi
             : forecast is not null ? CompactWindow(forecast, now) : UiText.Get(T.ForecastUnavailable));
         var intuitionForecast = !fish.IsOceanFishing && fish.Details is { Predators.Length: > 0 };
         if (intuitionForecast && recommendation is null) time = UiText.Get(T.RowIntuitionForecast, time);
-        var timerWidth = Math.Min(ImGui.CalcTextSize(time).X, textWidth * (recommendation is not null ? 0.72f : 0.53f));
+        var timerWidth = recommendation is not null ? scheduleWidth : Math.Min(ImGui.CalcTextSize(time).X, textWidth * 0.53f);
         var pinSize = MathF.Round(ImGui.GetTextLineHeightWithSpacing() - 1);
         var pinWidth = UiWidgets.MapPinWidth(pinSize);
         ImGui.SetCursorPos(start + new Vector2(textX, 4 + line));
@@ -127,8 +142,9 @@ internal sealed class FishRowRenderer(ITextureProvider textures, FishingMapServi
         ImGui.EndDisabled();
         if (pinClicked && spot is not null) maps.Request(spot);
         ImGui.SetCursorPos(start + new Vector2(textX + pinWidth + 5, 4 + line));
-        LineText(place, Math.Max(1, textWidth - timerWidth - pinWidth - 16), true);
-        ImGui.SetCursorPos(start + new Vector2(textX + textWidth - timerWidth, 4 + line));
+        LineText(place, Math.Max(1, identityWidth - (recommendation is null ? timerWidth : 0) - pinWidth - 16), true);
+        ImGui.SetCursorPos(start + new Vector2(recommendation is not null ? scheduleX : textX + textWidth - timerWidth,
+            4 + (recommendation is not null ? 0 : line)));
         if (open) ImGui.PushStyleColor(ImGuiCol.Text, OpenAccent);
         if (recommendation is not null) ImGui.PushStyleColor(ImGuiCol.Text, recommendation.Tint);
         LineText(time, timerWidth, false, showTooltip: recommendation is null);
@@ -154,14 +170,37 @@ internal sealed class FishRowRenderer(ITextureProvider textures, FishingMapServi
             tokens[fish.FishParameterId] = BuildTokens(fish);
         }
         var icons = tokens[fish.FishParameterId];
-        var baitWidth = recommendation is not null ? textWidth : wide ? BaitWidth(icons.Bait, icons.Conditions, cached.Summary, textWidth) : textWidth;
+        var baitWidth = recommendation is not null ? identityWidth : wide ? BaitWidth(icons.Bait, icons.Conditions, cached.Summary, textWidth) : textWidth;
         ImGui.SetCursorPos(start + new Vector2(textX, 4 + line * 2));
         DrawTokens(icons.Bait, baitWidth, cached.Summary.Bait);
+        var actionClicked = false; var actionHovered = false;
         if (recommendation is not null)
         {
-            ImGui.SetCursorPos(start + new Vector2(textX, 4 + line * 3));
+            ImGui.SetCursorPos(start + new Vector2(scheduleX, 4 + line));
+            var range = !recommendationWide && recommendation.Context.Length > 0
+                ? recommendation.Range.Length == 0 ? recommendation.Context
+                    : UiText.Get(T.RecommendationNamedRange, recommendation.Context, recommendation.Range) : recommendation.Range;
+            LineText(range, scheduleWidth, false);
+            ImGui.SetCursorPos(start + new Vector2(recommendationWide ? comparisonX : scheduleX, 4 + (recommendationWide ? 0 : line * 2)));
+            LineText(recommendation.Next, recommendationWide ? comparisonWidth : scheduleWidth, false);
+            ImGui.SetCursorPos(start + new Vector2(recommendationWide ? comparisonX : textX, 4 + line * (recommendationWide ? 1 : 3)));
+            LineText(recommendation.Frequency, recommendationWide ? comparisonWidth : identityWidth, false);
+            if (recommendationWide)
+            {
+                ImGui.SetCursorPos(start + new Vector2(scheduleX, 4 + line * 2));
+                LineText(recommendation.Context, scheduleWidth, true);
+            }
+            ImGui.SetCursorPos(start + new Vector2(recommendationWide ? comparisonX : scheduleX, 4 + line * (recommendationWide ? 2 : 3)));
+            if (ImGui.SmallButton(UiText.Label(T.RecommendationDetailsButton, "RecommendationOpenDetail")))
+            { actionClicked = true; recommendation.OpenDetail?.Invoke(); }
+            actionHovered |= ImGui.IsItemHovered();
+            ImGui.SameLine();
+            if (ImGui.SmallButton(UiText.Label(T.RecommendationEvidenceButton, "RecommendationOpenEvidence")))
+            { actionClicked = true; recommendation.OpenEvidence?.Invoke(); }
+            actionHovered |= ImGui.IsItemHovered();
+            ImGui.SetCursorPos(start + new Vector2(textX, 4 + line * (recommendationWide ? 3 : 4)));
             if (recommendation.ContextTint is { } tint) ImGui.PushStyleColor(ImGuiCol.Text, tint);
-            LineText(recommendation.Context, textWidth, false);
+            LineText(recommendation.Reason, textWidth, false);
             if (recommendation.ContextTint is not null) ImGui.PopStyleColor();
         }
         else
@@ -174,7 +213,7 @@ internal sealed class FishRowRenderer(ITextureProvider textures, FishingMapServi
         ImGui.SetCursorPos(next);
         ImGui.PopID();
         // A map click is its own action and must not also open/select the detail view.
-        return clicked && !pinClicked && !pinHovered;
+        return clicked && !pinClicked && !pinHovered && !actionClicked && !actionHovered;
     }
     private sealed record RowToken(uint Icon, string Text, string Hint);
 

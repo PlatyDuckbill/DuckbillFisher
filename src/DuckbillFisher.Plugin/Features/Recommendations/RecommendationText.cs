@@ -73,11 +73,40 @@ internal sealed class RecommendationText(FishCatalog catalog)
                 start.ToLocalTime().Date == end.ToLocalTime().Date ? UiText.Get(T.RecommendationClockTime, end.ToLocalTime()) : When(end, now), Timing(value, now))
             : Timing(value, now);
 
+    public string CurrentRange(FishRecommendation value, DateTimeOffset now)
+    {
+        var window = value.OwnConditionsAlways ? PrimaryIntuition(value)?.Window : value.Window;
+        return window is { Start: { } start, End: { } end }
+            ? UiText.Get(T.RecommendationWindowRange, When(start, now),
+                start.ToLocalTime().Date == end.ToLocalTime().Date ? UiText.Get(T.RecommendationClockTime, end.ToLocalTime()) : When(end, now)) : "";
+    }
+
+    public string Source(RecommendationEntry entry) => entry.Recommendation.OwnConditionsAlways && PrimaryIntuition(entry.Recommendation) is { } primary
+        ? PrimaryRequirement(entry, primary) : "";
+
+    public string FrequencyCompact(FishRecommendation value) => value.OpportunityCount <= 0 ? ""
+        : UiText.Get(value.Basis == OpportunityBasis.PrerequisiteProxy ? T.RecommendationProxyFrequencyCompact : T.RecommendationCountBadge,
+            value.OpportunityCount, Name(value.BasisItemId));
+
+    public string RowReason(RecommendationEntry entry, int focus, DateTimeOffset now)
+    {
+        var reasons = Reasons(entry, focus, now);
+        var value = entry.Recommendation;
+        // The frequency is already visible. Prefer the gap after this appearance in
+        // the rarity view, and for fish with no prerequisite catches to explain.
+        var reason = reasons.Length > 1 && (focus == 2 || value.IntuitionCatchCount == 0 && value.MoochDepth == 0)
+            ? reasons[1] : reasons[0];
+        return UiText.Get(T.RecommendationRowReason, reason);
+    }
+
     public string Next(FishRecommendation value, DateTimeOffset now, bool compact = false)
     {
         if (NextAt(value) is not { } next)
+        {
+            if (compact && value.OwnConditionsAlways && !NextUsesPrey(value)) return "";
             return NextUsesPrey(value) ? UiText.Get(T.RecommendationNextPreyUnknown, Name(value.BasisItemId))
                 : UiText.Get(value.OwnConditionsAlways ? T.RecommendationNoFixedSpawn : T.RecommendationNextUnknown);
+        }
         if (next <= now) return UiText.Get(T.RecommendationRefreshNeeded);
         if (NextUsesPrey(value))
             return UiText.Get(compact ? T.RecommendationNextPreyCompact : T.RecommendationNextPreyTime,
