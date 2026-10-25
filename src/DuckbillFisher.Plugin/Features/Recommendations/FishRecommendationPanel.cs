@@ -185,7 +185,8 @@ internal sealed class FishRecommendationPanel(FishRecommendationService service,
         Clipped(screen + new Vector2(x, 3 + line), width - x,
             caught ? UiText.Get(T.RecommendationNowCaught) : RecommendationText.Timing(value, now),
             caught || value.Issue == RecommendationIssue.EstimatedLate ? Gold : TimingColor(value, now));
-        Clipped(screen + new Vector2(x, 3 + line * 2), width - x, text.ListContext(entry, focus, now), textColor);
+        Clipped(screen + new Vector2(x, 3 + line * 2), width - x, text.ListContext(entry, focus, now),
+            focus == 1 && RecommendationText.AdvancePreparationExpired(value, now) ? Gold : textColor);
         ImGui.SetCursorPos(after);
         ImGui.PopID();
     }
@@ -206,7 +207,14 @@ internal sealed class FishRecommendationPanel(FishRecommendationService service,
         else if (value.Window is { Start: { } opening, End: { } closing })
             Tooltip(UiText.Get(T.ScheduleWindowRange, opening.ToLocalTime(), closing.ToLocalTime()));
         if (value.IntuitionCatchCount > 0)
+        {
+            if (value.OwnConditionsAlways)
+            {
+                ImGui.TextWrapped(RecommendationText.PreparationStart(value, now));
+                Tooltip(UiText.Get(T.RecommendationPreparationTimeHelp));
+            }
             ImGui.TextWrapped(UiText.Get(T.RecommendationIntuitionSummary, text.Requirements(entry)));
+        }
         if (RecommendationText.NextAt(value) is not null || RecommendationText.NextUsesPrey(value) || !value.OwnConditionsAlways)
         {
             ImGui.TextWrapped(UiText.Get(RecommendationText.NextUsesPrey(value)
@@ -282,9 +290,9 @@ internal sealed class FishRecommendationPanel(FishRecommendationService service,
         ImGui.EndPopup();
     }
 
-    private static Vector4 TimingColor(FishRecommendation value, DateTimeOffset now) => value.OwnConditionsAlways
-        ? value.IntuitionCatchCount > 0 ? Blue : Green
-        : value.Window?.End <= now ? Gold : value.Window?.Start > now ? Blue : Green;
+    private static Vector4 TimingColor(FishRecommendation value, DateTimeOffset now) => value.Window?.End <= now ? Gold
+        : value.OwnConditionsAlways ? value.IntuitionCatchCount > 0 ? Blue : Green
+        : value.Window?.Start > now ? Blue : Green;
 
     private static void FactRow(T label, string value, Vector4? color = null, string? tooltip = null)
     {

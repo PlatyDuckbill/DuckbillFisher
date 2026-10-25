@@ -1038,8 +1038,8 @@ Last saved: {1:yyyy-MM-dd HH:mm}, {2} fish. Used where current observations are 
   <data name="RecommendationOtherRow" xml:space="preserve"><value>{0} · {1}</value></data>
   <data name="RecommendationMethod" xml:space="preserve"><value>Recommendation help</value></data>
   <data name="RecommendationMethodHelp" xml:space="preserve"><value>Fish to target now: travel or preparation starts within five minutes. Frequency and whether preparation fits also affect ranking.
-Prepare ahead: candidates with work before the target appears. Work due now comes first, then larger advance workloads. This also includes prerequisites for unrestricted Intuition targets.
-Rare opportunities: compares candidates matching the selected range and filters by fewest appearances over 30 days. Equal counts share a rank; longer waits until the next appearance come first. Candidates whose preparation does not fit remain accessible with a reason. Fish can appear in multiple tabs.</value></data>
+Prepare ahead: completed advance catches are required. Intuition catches, longer mooch chains, and difficult or closing prerequisites are compared by workload and time until preparation starts.
+Rare opportunities: candidates matching the selected range and filters, ordered by fewest appearances over 30 days. Equal counts share a rank; longer gaps until the next appearance come first.</value></data>
   <data name="RecommendationAnalysis" xml:space="preserve"><value>Frequency analysis · {0:MM/dd}–{1:MM/dd} (UTC)</value></data>
   <data name="RecommendationEnded" xml:space="preserve"><value>Selected occurrence ended · refresh needed</value></data>
   <data name="RecommendationOpens" xml:space="preserve"><value>Appears in {0}</value></data>
@@ -1112,8 +1112,8 @@ Prepare ahead and Rare opportunities use their own sort criteria.</value></data>
   <data name="RecommendationManualHelp" xml:space="preserve"><value>The list and ranking stay fixed while you read. Countdowns remain live; Refresh recalculates from the current time.</value></data>
   <data name="RecommendationNowHint" xml:space="preserve"><value>Fish to travel for or prepare now.
 Travel or preparation starts within five minutes. Frequency and whether preparation fits also affect ranking.</value></data>
-  <data name="RecommendationPreparationHint" xml:space="preserve"><value>Fish with prerequisites to catch before they appear.
-Work due now comes first, then larger advance workloads. For Intuition targets with no fixed appearance time, their prerequisite preparation is compared.</value></data>
+  <data name="RecommendationPreparationHint" xml:space="preserve"><value>Fish worth preparing ahead: Intuition catches, longer mooch chains, or difficult prerequisites that can be caught before opening.
+Preparation workload and time until preparation starts determine the order. An ordinary single mooch catch is only included when its current appearance ends before the target opens.</value></data>
   <data name="RecommendationRareHint" xml:space="preserve"><value>Candidates in the selected range and filters, ordered by fewest appearances over 30 days.
 Equal counts share a rank. Longer waits from this appearance's end until the next come first. A named prerequisite is shown when its frequency is used.</value></data>
   <data name="RecommendationNowEmpty" xml:space="preserve"><value>No candidate needs travel or preparation now. Check the other tabs for upcoming opportunities.</value></data>
@@ -1172,7 +1172,7 @@ Select to see why this fish is recommended.</value></data>
   <data name="RecommendationNextTime" xml:space="preserve"><value>{0} (in {1})</value></data>
   <data name="RecommendationRefreshNeeded" xml:space="preserve"><value>This saved opportunity has passed. Refresh to update it.</value></data>
   <data name="RecommendationOrderLabel" xml:space="preserve"><value>Sort order</value></data>
-  <data name="RecommendationPreparationOrder" xml:space="preserve"><value>Preparation due now → advance workload → start time</value></data>
+  <data name="RecommendationPreparationOrder" xml:space="preserve"><value>Advance workload adjusted for time until preparation starts</value></data>
   <data name="RecommendationRareOrder" xml:space="preserve"><value>Fewest predicted appearances over 30 days first</value></data>
   <data name="RecommendationNowOrder" xml:space="preserve"><value>Combines start time, appearance frequency, preparation fit and the next opportunity</value></data>
   <data name="RecommendationCountBasis" xml:space="preserve"><value>Frequency basis</value></data>
@@ -1243,4 +1243,11 @@ Select to see why this fish is recommended.</value></data>
   <data name="RecommendationNextPreySummary" xml:space="preserve"><value>Next prey appearance · {0}</value></data>
   <data name="RecommendationRangeTitle" xml:space="preserve"><value>Search range</value></data>
   <data name="RecommendationAssumptionsTitle" xml:space="preserve"><value>Preparation assumptions</value></data>
+  <data name="RecommendationPreparationUncertain" xml:space="preserve"><value>Preparation timing needs review</value></data>
+  <data name="RecommendationPreparationNow" xml:space="preserve"><value>Start preparation · now (estimated)</value></data>
+  <data name="RecommendationPreparationAt" xml:space="preserve"><value>Start preparation · {0} (estimated)</value></data>
+  <data name="RecommendationIntuitionConditions" xml:space="preserve"><value>No time or weather restrictions · Intuition required</value></data>
+  <data name="RecommendationAdvanceExpired" xml:space="preserve"><value>The target has appeared. Refresh to review this preparation plan.</value></data>
+  <data name="RecommendationPreparationTimeHelp" xml:space="preserve"><value>Estimated travel and preparation start for the plan captured at query time. It does not track your actual Intuition progress or predict a successful catch.</value></data>
+  <data name="RecommendationAdvanceExpiredShort" xml:space="preserve"><value>Appearance started · refresh needed</value></data>
 </root>

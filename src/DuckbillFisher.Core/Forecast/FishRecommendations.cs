@@ -51,9 +51,11 @@ public sealed record RecommendationResult(DateTimeOffset At, DateTimeOffset Thro
 /// Own condition calendars are independent of the existing Intuition forecast contract.</summary>
 public sealed class FishRecommendations
 {
-    public const int StrategyRevision = 3;
+    public const int StrategyRevision = 4;
     public const double TravelMinutes = 2;
     public const double ActionSoonMinutes = 5;
+    private const double RegularCatchPlanningMinutes = 1.5;
+    private const double PreparationWaitScaleMinutes = 60;
     private readonly IReadOnlyDictionary<uint, FishingForecastInput> inputs;
     // Owned by one background worker at a time. No UI/game objects or translated text.
     private readonly Dictionary<uint, FishingWindow[]> calendars = [];
@@ -84,9 +86,7 @@ public sealed class FishRecommendations
             var viable = candidates.Where(value => value.Issue == RecommendationIssue.None).ToArray();
             var actionable = viable.Where(value => value.Plan!.RecommendedStart <= now.AddMinutes(ActionSoonMinutes)).ToArray();
             if (actionable.Length > 0) nowCandidates.Add(Best(actionable));
-            var prepare = viable.Where(value => value.Plan!.HasAdvancePreparation)
-                .OrderByDescending(value => value.Plan!.RecommendedStart <= now.AddMinutes(ActionSoonMinutes))
-                .ThenByDescending(value => value.Plan!.AdvanceWorkMinutes).ThenBy(value => value.Plan!.RecommendedStart).ToArray();
+            var prepare = OrderPreparation(viable.Where(value => IsAdvancePreparationCandidate(value, now)), now).ToArray();
             if (prepare.Length > 0) preparationCandidates.Add(prepare[0]);
             // A rarity view orders known restricted conditions; it does not invent a rarity cutoff.
             // Prefer the earliest reachable occurrence, retaining an estimated-late one only if none fits.
@@ -101,12 +101,35 @@ public sealed class FishRecommendations
             results.Where(value => value.Issue != RecommendationIssue.None || value.Plan is null).OrderBy(value => value.Issue).ThenBy(value => value.ItemId).ToArray())
         {
             Now = nowCandidates.OrderByDescending(value => value.Plan!.Score).ThenBy(value => value.ItemId).ToArray(),
-            Preparation = preparationCandidates.OrderByDescending(value => value.Plan!.RecommendedStart <= now.AddMinutes(ActionSoonMinutes))
-                .ThenByDescending(value => value.Plan!.AdvanceWorkMinutes).ThenBy(value => value.Plan!.RecommendedStart).ThenBy(value => value.ItemId).ToArray(),
+            Preparation = OrderPreparation(preparationCandidates, now).ToArray(),
             Rare = rareCandidates.OrderBy(value => value.OpportunityCount).ThenByDescending(value => value.GapHours ?? 0)
                 .ThenBy(value => value.Window?.Start).ThenBy(value => value.ItemId).ToArray(),
         };
     }
+
+    private static bool IsAdvancePreparationCandidate(FishRecommendation value, DateTimeOffset now)
+    {
+        var plan = value.Plan!;
+        if (!plan.HasAdvancePreparation) return false;
+        if (!value.OwnConditionsAlways && !(value.Window?.Start > now)) return false;
+        // Merely starting a catch before opening is not an item secured in advance.
+        if (plan.AdvanceIntuitionCount + plan.AdvanceMoochCount == 0) return false;
+        if (plan.AdvanceIntuitionCount > 0 || plan.AdvanceMoochCount >= 2) return true;
+        var opening = value.Window?.Start;
+        // A single ordinary mooch fish normally belongs in target-now. Keep it here
+        // if it closes by the time the target opens, or the catch itself needs extra work.
+        return (value.PreparationGateEnd is { } gate && opening is { } start && gate <= start) ||
+            plan.Steps.Any(step => (value.OwnConditionsAlways || step.End <= opening) &&
+                step.Budget.PlanningMinutes > RegularCatchPlanningMinutes);
+    }
+
+    private static IOrderedEnumerable<FishRecommendation> OrderPreparation(IEnumerable<FishRecommendation> candidates, DateTimeOffset now) =>
+        // Smoothly discount work that starts later. The old due-within-five-minutes
+        // bucket put a tiny imminent catch ahead of substantial preparation.
+        candidates.OrderByDescending(value => value.Plan!.AdvanceWorkMinutes /
+                (1 + Math.Max(0, (value.Plan.RecommendedStart - now).TotalMinutes) / PreparationWaitScaleMinutes))
+            .ThenByDescending(value => value.Plan!.AdvanceWorkMinutes)
+            .ThenBy(value => value.Plan!.RecommendedStart).ThenBy(value => value.ItemId);
 
     private FishingWindow[] Calendar(uint id, CancellationToken token)
     {
@@ -366,7 +389,7 @@ public sealed class FishRecommendations
     {
         // Design-estimate v1. Wide ranges are not empirical percentiles or bait bite times.
         // Rare predecessor work has a separate budget; availability is placed per stage, never depth * minutes.
-        var budget = inputs[id].Rule.BigFish ? new PreparationBudget(0.5, 6, 15) : new PreparationBudget(0.25, 1.5, 4);
+        var budget = inputs[id].Rule.BigFish ? new PreparationBudget(0.5, 6, 15) : new PreparationBudget(0.25, RegularCatchPlanningMinutes, 4);
         if (id == 20040) budget = new(0.5, 6, 15); // Sculptor: reviewed difficult prerequisite, despite its regular grade.
         // Ronka's final mooch stage has only ET10-12. Separate provisional planning budget;
         // the long bound may still consume most of that opportunity. No measured bite-time claim.

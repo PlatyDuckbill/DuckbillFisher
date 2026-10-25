@@ -1204,4 +1204,11 @@ internal enum TextKey
     RecommendationNextPreySummary,
     RecommendationRangeTitle,
     RecommendationAssumptionsTitle,
+    RecommendationPreparationUncertain,
+    RecommendationPreparationNow,
+    RecommendationPreparationAt,
+    RecommendationIntuitionConditions,
+    RecommendationAdvanceExpired,
+    RecommendationPreparationTimeHelp,
+    RecommendationAdvanceExpiredShort,
 }
