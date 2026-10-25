@@ -10,7 +10,9 @@ using T = DuckbillFisher.Plugin.Localization.TextKey;
 
 namespace DuckbillFisher.Plugin;
 
-/// <summary>Shared catalog/favorite row presentation. Uses cached managed data and borrowed textures only.</summary>
+internal sealed record RecommendationRowInfo(string Timing, string Context, string TimingHint, Vector4 Tint, Vector4? ContextTint = null);
+
+/// <summary>Shared catalog/favorite/recommendation rows. Uses managed data and borrowed textures only.</summary>
 internal sealed class FishRowRenderer(ITextureProvider textures, FishingMapService maps)
 {
     private static readonly Vector4 OpenBackground = new(0.10f, 0.48f, 0.30f, 0.14f);
@@ -21,10 +23,12 @@ internal sealed class FishRowRenderer(ITextureProvider textures, FishingMapServi
     private static bool IsWide(float width) => width >= ImGui.GetFontSize() * 23;
     private static int LineCount(float width) => IsWide(width) ? 3 : 4;
     public static float GetHeight(float width) => ImGui.GetTextLineHeightWithSpacing() * LineCount(width) + 8;
+    public static float GetRecommendationHeight() => ImGui.GetTextLineHeightWithSpacing() * 4 + 8;
 
     public bool Draw(FishGuideRow fish, float height, bool selected, string state, string place,
         FishingWindow? forecast, DateTimeOffset now, bool usesOtherRegion = false, bool favorite = false, bool compact = false,
-        FishingSpotView? spot = null, bool canOpenMap = false, CollectionStatus? collectionStatus = null)
+        FishingSpotView? spot = null, bool canOpenMap = false, CollectionStatus? collectionStatus = null,
+        RecommendationRowInfo? recommendation = null)
     {
         if (culture != UiText.Culture)
         {
@@ -37,7 +41,7 @@ internal sealed class FishRowRenderer(ITextureProvider textures, FishingMapServi
         var width = ImGui.GetContentRegionAvail().X;
         var wide = IsWide(width);
         var line = ImGui.GetTextLineHeightWithSpacing();
-        var open = !fish.IsOceanFishing && forecast is { Kind: FishingWindowKind.Open } &&
+        var open = recommendation is null && !fish.IsOceanFishing && forecast is { Kind: FishingWindowKind.Open } &&
             (forecast.Start is null || forecast.Start <= now) && (forecast.End is null || now < forecast.End);
         if (open)
         {
@@ -51,8 +55,8 @@ internal sealed class FishRowRenderer(ITextureProvider textures, FishingMapServi
             ImGui.GetWindowDrawList().AddRectFilled(screen, screen + new Vector2(2, height), ImGui.GetColorU32(OpenAccent));
         }
         var next = ImGui.GetCursorPos();
-        var iconSize = line * (wide || compact ? 2 : 3);
-        var informationHeight = line * LineCount(width) - ImGui.GetStyle().ItemSpacing.Y;
+        var iconSize = line * (wide || compact || recommendation is not null ? 2 : 3);
+        var informationHeight = line * (recommendation is not null ? 3 : LineCount(width)) - ImGui.GetStyle().ItemSpacing.Y;
         var iconY = 4 + Math.Max(0, (informationHeight - iconSize) / 2);
         ImGui.SetCursorPos(start + new Vector2(4, iconY));
         UiWidgets.GameIcon(textures, fish.IconId, iconSize, fish.DisplayName);
@@ -60,7 +64,8 @@ internal sealed class FishRowRenderer(ITextureProvider textures, FishingMapServi
         {
             var badge = MathF.Round(ImGui.GetTextLineHeightWithSpacing() * 1.15f);
             ImGui.SetCursorPos(start + new Vector2(4 + iconSize - badge, iconY));
-            UiWidgets.GameIcon(textures, intuition.Intuition?.IconId ?? 0, badge, FishingWindowPanel.IntuitionNotice(forecast));
+            UiWidgets.GameIcon(textures, intuition.Intuition?.IconId ?? 0, badge,
+                recommendation is not null ? UiText.Get(T.RowIntuition) : FishingWindowPanel.IntuitionNotice(forecast));
         }
         if (favorite)
         {
@@ -107,11 +112,11 @@ internal sealed class FishRowRenderer(ITextureProvider textures, FishingMapServi
         if (collectionColor is not null) ImGui.PopStyleColor();
 
         // Location is clipped first; the timer keeps its own width on the same line.
-        var time = fish.IsOceanFishing ? UiText.Get(T.RowOceanWindow)
-            : forecast is not null ? CompactWindow(forecast, now) : UiText.Get(T.ForecastUnavailable);
+        var time = recommendation?.Timing ?? (fish.IsOceanFishing ? UiText.Get(T.RowOceanWindow)
+            : forecast is not null ? CompactWindow(forecast, now) : UiText.Get(T.ForecastUnavailable));
         var intuitionForecast = !fish.IsOceanFishing && fish.Details is { Predators.Length: > 0 };
-        if (intuitionForecast) time = UiText.Get(T.RowIntuitionForecast, time);
-        var timerWidth = Math.Min(ImGui.CalcTextSize(time).X, textWidth * 0.53f);
+        if (intuitionForecast && recommendation is null) time = UiText.Get(T.RowIntuitionForecast, time);
+        var timerWidth = Math.Min(ImGui.CalcTextSize(time).X, textWidth * (recommendation is not null ? 0.72f : 0.53f));
         var pinSize = MathF.Round(ImGui.GetTextLineHeightWithSpacing() - 1);
         var pinWidth = UiWidgets.MapPinWidth(pinSize);
         ImGui.SetCursorPos(start + new Vector2(textX, 4 + line));
@@ -125,15 +130,20 @@ internal sealed class FishRowRenderer(ITextureProvider textures, FishingMapServi
         LineText(place, Math.Max(1, textWidth - timerWidth - pinWidth - 16), true);
         ImGui.SetCursorPos(start + new Vector2(textX + textWidth - timerWidth, 4 + line));
         if (open) ImGui.PushStyleColor(ImGuiCol.Text, OpenAccent);
-        LineText(time, timerWidth, false);
+        if (recommendation is not null) ImGui.PushStyleColor(ImGuiCol.Text, recommendation.Tint);
+        LineText(time, timerWidth, false, showTooltip: recommendation is null);
+        if (recommendation is not null) ImGui.PopStyleColor();
         if (open) ImGui.PopStyleColor();
         if (ImGui.IsItemHovered())
         {
+            if (recommendation is not null)
+                ImGui.SetNextWindowSize(new Vector2(Math.Min(ImGui.GetFontSize() * 30, ImGui.GetMainViewport().WorkSize.X * 0.8f)
+                    + ImGui.GetStyle().WindowPadding.X * 2, 0));
             ImGui.BeginTooltip();
             ImGui.PushTextWrapPos(ImGui.GetFontSize() * 30);
-            ImGui.TextUnformatted(usesOtherRegion ? UiText.Get(T.RegionForecastElsewhere, time)
-                : forecast is null ? time : FormatWindow(forecast, now));
-            if (intuitionForecast) ImGui.TextUnformatted(FishingWindowPanel.IntuitionNotice(forecast));
+            ImGui.TextUnformatted(recommendation?.TimingHint ?? (usesOtherRegion ? UiText.Get(T.RegionForecastElsewhere, time)
+                : forecast is null ? time : FormatWindow(forecast, now)));
+            if (intuitionForecast && recommendation is null) ImGui.TextUnformatted(FishingWindowPanel.IntuitionNotice(forecast));
             ImGui.PopTextWrapPos();
             ImGui.EndTooltip();
         }
@@ -144,13 +154,23 @@ internal sealed class FishRowRenderer(ITextureProvider textures, FishingMapServi
             tokens[fish.FishParameterId] = BuildTokens(fish);
         }
         var icons = tokens[fish.FishParameterId];
-        var baitWidth = wide ? BaitWidth(icons.Bait, icons.Conditions, cached.Summary, textWidth) : textWidth;
+        var baitWidth = recommendation is not null ? textWidth : wide ? BaitWidth(icons.Bait, icons.Conditions, cached.Summary, textWidth) : textWidth;
         ImGui.SetCursorPos(start + new Vector2(textX, 4 + line * 2));
         DrawTokens(icons.Bait, baitWidth, cached.Summary.Bait);
-        ImGui.SetCursorPos(start + new Vector2(textX + (wide ? baitWidth + 6 : 0), 4 + line * (wide ? 2 : 3)));
-        DrawTokens(icons.Conditions, wide ? Math.Max(1, textWidth - baitWidth - 6) : textWidth,
-            usesOtherRegion ? UiText.Get(T.RegionForecastElsewhere, cached.Summary.Conditions) : cached.Summary.Conditions,
-            forceMore: usesOtherRegion);
+        if (recommendation is not null)
+        {
+            ImGui.SetCursorPos(start + new Vector2(textX, 4 + line * 3));
+            if (recommendation.ContextTint is { } tint) ImGui.PushStyleColor(ImGuiCol.Text, tint);
+            LineText(recommendation.Context, textWidth, false);
+            if (recommendation.ContextTint is not null) ImGui.PopStyleColor();
+        }
+        else
+        {
+            ImGui.SetCursorPos(start + new Vector2(textX + (wide ? baitWidth + 6 : 0), 4 + line * (wide ? 2 : 3)));
+            DrawTokens(icons.Conditions, wide ? Math.Max(1, textWidth - baitWidth - 6) : textWidth,
+                usesOtherRegion ? UiText.Get(T.RegionForecastElsewhere, cached.Summary.Conditions) : cached.Summary.Conditions,
+                forceMore: usesOtherRegion);
+        }
         ImGui.SetCursorPos(next);
         ImGui.PopID();
         // A map click is its own action and must not also open/select the detail view.
@@ -283,7 +303,7 @@ internal sealed class FishRowRenderer(ITextureProvider textures, FishingMapServi
         ? UiText.Get(T.DurationDays, Math.Floor(duration.TotalDays), duration.Hours, duration.Minutes, duration.Seconds)
         : UiText.Get(compact ? T.RowCountdown : T.DurationShort, Math.Floor(duration.TotalHours), duration.Minutes, duration.Seconds);
 
-    private static void LineText(string text, float width, bool disabled)
+    private static void LineText(string text, float width, bool disabled, bool showTooltip = true)
     {
         var position = ImGui.GetCursorScreenPos();
         width = Math.Max(1, width);
@@ -292,7 +312,7 @@ internal sealed class FishRowRenderer(ITextureProvider textures, FishingMapServi
         ImGui.GetWindowDrawList().AddText(position, ImGui.GetColorU32(disabled ? ImGuiCol.TextDisabled : ImGuiCol.Text), text);
         ImGui.PopClipRect();
         ImGui.Dummy(size);
-        if (ImGui.IsItemHovered() && ImGui.CalcTextSize(text).X > width)
+        if (showTooltip && ImGui.IsItemHovered() && ImGui.CalcTextSize(text).X > width)
         {
             ImGui.BeginTooltip();
             ImGui.PushTextWrapPos(ImGui.GetFontSize() * 35);

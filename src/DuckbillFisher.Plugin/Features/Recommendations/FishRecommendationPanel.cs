@@ -19,6 +19,7 @@ internal sealed class FishRecommendationPanel(FishRecommendationService service,
     private static readonly Vector4 Gold = new(0.98f, 0.73f, 0.35f, 1);
     private static readonly Vector4 Blue = new(0.55f, 0.75f, 1, 1);
     private readonly RecommendationText text = new(catalog);
+    private readonly FishRowRenderer rows = new(textures, maps);
     private RecommendationOptions options = new();
     private readonly uint[] selection = new uint[3];
     private int generation = -1, session = -1, focus, otherShown = 20;
@@ -143,7 +144,7 @@ internal sealed class FishRecommendationPanel(FishRecommendationService service,
         if (ImGui.BeginChild("RecommendationList", new Vector2(0, height)))
         {
             if (resetScroll) { ImGui.SetScrollY(0); resetScroll = false; }
-            var rowHeight = ImGui.GetTextLineHeightWithSpacing() * 3 + ImGui.GetStyle().FramePadding.Y * 2;
+            var rowHeight = FishRowRenderer.GetRecommendationHeight();
             var clipper = ImGui.ImGuiListClipper();
             try
             {
@@ -160,35 +161,20 @@ internal sealed class FishRecommendationPanel(FishRecommendationService service,
     private void DrawRow(RecommendationEntry entry, float height, DateTimeOffset now)
     {
         var fish = entry.Fish; var value = entry.Recommendation;
-        ImGui.PushID((int)fish.ItemId);
-        var start = ImGui.GetCursorPos(); var screen = ImGui.GetCursorScreenPos();
-        var width = ImGui.GetContentRegionAvail().X;
-        var line = ImGui.GetTextLineHeightWithSpacing();
-        var chosen = selection[focus] == fish.ItemId;
-        if (ImGui.Selectable("###RecommendationFish", chosen, ImGuiSelectableFlags.AllowItemOverlap, new Vector2(width, height)))
-            selection[focus] = fish.ItemId;
-        if (ImGui.IsItemHovered())
-            Tooltip(UiText.Get(T.RecommendationCandidateTooltip, fish.Name, RecommendationText.Appearance(value, now),
-                string.Join("\n", text.Reasons(entry, focus, now)), focus == 2 ? text.Next(value, now) : text.ListContext(entry, focus, now)));
-        var after = ImGui.GetCursorPos();
-        var iconSize = line * 2;
-        ImGui.SetCursorPos(start + new Vector2(4, 3));
-        UiWidgets.GameIcon(textures, fish.IconId, iconSize, fish.Name);
-        var x = iconSize + 12;
         var badge = focus == 2 ? UiText.Get(value.Basis == OpportunityBasis.PrerequisiteProxy
             ? T.RecommendationPreyCountBadge : T.RecommendationCountBadge, value.OpportunityCount) : "";
-        var badgeWidth = badge.Length == 0 ? 0 : Math.Min(ImGui.CalcTextSize(badge).X, width * 0.4f);
-        var textColor = ImGui.GetStyle().Colors[(int)ImGuiCol.Text];
-        Clipped(screen + new Vector2(x, 3), width - x - (badgeWidth > 0 ? badgeWidth + 12 : 0), fish.Name, textColor);
-        if (badgeWidth > 0) Clipped(screen + new Vector2(width - badgeWidth - 4, 3), badgeWidth, badge, textColor);
         var caught = preferences.View.Collection(fish.FishParameterId, collection.View) == CollectionStatus.Caught;
-        Clipped(screen + new Vector2(x, 3 + line), width - x,
-            caught ? UiText.Get(T.RecommendationNowCaught) : RecommendationText.Timing(value, now),
-            caught || value.Issue == RecommendationIssue.EstimatedLate ? Gold : TimingColor(value, now));
-        Clipped(screen + new Vector2(x, 3 + line * 2), width - x, text.ListContext(entry, focus, now),
-            focus == 1 && RecommendationText.AdvancePreparationExpired(value, now) ? Gold : textColor);
-        ImGui.SetCursorPos(after);
-        ImGui.PopID();
+        var appearance = RecommendationText.Timing(value, now);
+        var hint = UiText.Get(T.RecommendationCandidateTooltip, fish.Name, RecommendationText.Appearance(value, now),
+            string.Join("\n", text.Reasons(entry, focus, now)), focus == 2 ? text.Next(value, now) : text.ListContext(entry, focus, now));
+        var info = new RecommendationRowInfo(caught ? UiText.Get(T.RecommendationNowCaught) : appearance,
+            text.ListContext(entry, focus, now), hint,
+            caught || value.Issue == RecommendationIssue.EstimatedLate ? Gold : TimingColor(value, now),
+            focus == 1 && RecommendationText.AdvancePreparationExpired(value, now) ? Gold : null);
+        var place = fish.Details?.Spot is { } spot ? UiText.Get(T.RecommendationPlace, spot.Zone, spot.Name) : UiText.Get(T.RecommendationUnknown);
+        if (rows.Draw(fish, height, selection[focus] == fish.ItemId, badge, place, null, now,
+                spot: fish.Details?.Spot, canOpenMap: preferences.View.HasCharacter, recommendation: info))
+            selection[focus] = fish.ItemId;
     }
 
     private void DrawDetail(RecommendationEntry entry, float height, FishRecommendationView view, DateTimeOffset now)
@@ -208,12 +194,10 @@ internal sealed class FishRecommendationPanel(FishRecommendationService service,
             Tooltip(UiText.Get(T.ScheduleWindowRange, opening.ToLocalTime(), closing.ToLocalTime()));
         if (value.IntuitionCatchCount > 0)
         {
-            if (value.OwnConditionsAlways)
-            {
-                ImGui.TextWrapped(RecommendationText.PreparationStart(value, now));
-                Tooltip(UiText.Get(T.RecommendationPreparationTimeHelp));
-            }
-            ImGui.TextWrapped(UiText.Get(T.RecommendationIntuitionSummary, text.Requirements(entry)));
+            foreach (var opportunity in value.IntuitionPreparation)
+                ImGui.TextWrapped(text.IntuitionPreparation(opportunity, now));
+            if (value.IntuitionPreparation.Count == 0)
+                ImGui.TextWrapped(UiText.Get(T.RecommendationIntuitionSummary, text.Requirements(entry)));
         }
         if (RecommendationText.NextAt(value) is not null || RecommendationText.NextUsesPrey(value) || !value.OwnConditionsAlways)
         {
@@ -290,9 +274,12 @@ internal sealed class FishRecommendationPanel(FishRecommendationService service,
         ImGui.EndPopup();
     }
 
-    private static Vector4 TimingColor(FishRecommendation value, DateTimeOffset now) => value.Window?.End <= now ? Gold
-        : value.OwnConditionsAlways ? value.IntuitionCatchCount > 0 ? Blue : Green
-        : value.Window?.Start > now ? Blue : Green;
+    private static Vector4 TimingColor(FishRecommendation value, DateTimeOffset now)
+    {
+        var window = value.OwnConditionsAlways && value.IntuitionCatchCount > 0
+            ? RecommendationText.PrimaryIntuition(value)?.Window : value.Window;
+        return window?.End <= now ? Gold : window?.Start > now ? Blue : Green;
+    }
 
     private static void FactRow(T label, string value, Vector4? color = null, string? tooltip = null)
     {
@@ -304,12 +291,6 @@ internal sealed class FishRecommendationPanel(FishRecommendationService service,
     }
     private static void Bullet(string text)
     { ImGui.PushTextWrapPos(); ImGui.BulletText(text); ImGui.PopTextWrapPos(); }
-    private static void Clipped(Vector2 origin, float width, string text, Vector4 color)
-    {
-        var draw = ImGui.GetWindowDrawList();
-        draw.PushClipRect(origin, origin + new Vector2(Math.Max(1, width), ImGui.GetTextLineHeight()), true);
-        draw.AddText(origin, ImGui.GetColorU32(color), text); draw.PopClipRect();
-    }
     private static void Colored(Vector4 color, string text)
     { ImGui.PushStyleColor(ImGuiCol.Text, color); ImGui.TextWrapped(text); ImGui.PopStyleColor(); }
     private static void Tooltip(string message)

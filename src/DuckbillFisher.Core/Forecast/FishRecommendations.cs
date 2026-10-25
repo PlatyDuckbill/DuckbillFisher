@@ -5,6 +5,7 @@ public enum RecommendationReadiness { Planned, EstimateOnly, Late }
 public enum PreparationRole { Mooch, Intuition, Trigger, StoredMooch }
 public enum RecommendationStrategy { Basic, RonkaStored }
 public enum OpportunityBasis { OwnConditions, PrerequisiteProxy, Always }
+public sealed record IntuitionPreparationWindow(uint ItemId, int Count, FishingWindow Window);
 public sealed record PreparationBudget(double ShortMinutes, double PlanningMinutes, double LongMinutes);
 public sealed record OptionalStoredPreparation(uint ItemId, int ExtraCount, PreparationBudget Budget, DateTimeOffset? SuggestedStart);
 public sealed record RecommendationStep(uint ItemId, int Count, PreparationRole Role, PreparationBudget Budget,
@@ -38,6 +39,8 @@ public sealed record FishRecommendation(uint ItemId, RecommendationIssue Issue, 
     public double? GapHours { get; init; }
     // Target time/weather calendar, separate from the prerequisite used for rarity scoring.
     public DateTimeOffset? NextOwnOpportunity { get; init; }
+    public IReadOnlyList<IntuitionPreparationWindow> IntuitionPreparation { get; init; } = [];
+    public uint PrimaryIntuitionItemId { get; init; }
 }
 public sealed record RecommendationResult(DateTimeOffset At, DateTimeOffset Through, DateTimeOffset AnalysisStart,
     IReadOnlyList<FishRecommendation> Ranked, IReadOnlyList<FishRecommendation> Other)
@@ -172,6 +175,8 @@ public sealed class FishRecommendations
             basis = dependency == id ? OpportunityBasis.OwnConditions : OpportunityBasis.PrerequisiteProxy;
         }
         if (count == int.MaxValue) { count = 0; basis = OpportunityBasis.Always; }
+        var primaryIntuitionItemId = rule.Predators.OrderBy(prey => Count(prey.ItemId, token)).ThenBy(prey => prey.ItemId)
+            .Select(prey => prey.ItemId).FirstOrDefault();
         var rarity = count == 0 ? 0 : Math.Clamp(Math.Log10(1 + 30.0 / count) / Math.Log10(31), 0, 1);
         var occurrences = Occurrences(rule, now, through, strategies, token).ToArray();
         if (occurrences.Length == 0)
@@ -241,6 +246,10 @@ public sealed class FishRecommendations
                 PreparationGateItem = gate.ItemId, PreparationGateEnd = gate.Window?.End, GapHours = gap,
                 NextOwnOpportunity = FishingAvailability.IsAlways(rule) ? null
                     : NextOpportunity(id, OpportunityBasis.OwnConditions, choice.Window, choice.Plan.Steps, token).Next,
+                IntuitionPreparation = IntuitionPreparation(rule, choice.Plan, token),
+                // This is a named prerequisite's own calendar, never the merged synthetic
+                // preparation interval or the estimated travel/preparation start time.
+                PrimaryIntuitionItemId = primaryIntuitionItemId,
             };
         }).ToArray();
         var feasible = candidates.Where(value => value.Issue == RecommendationIssue.None).ToArray();
@@ -253,6 +262,18 @@ public sealed class FishRecommendations
         return choices.Where(value => value.Plan!.Score >= bestScore - 3).OrderBy(value => value.Plan!.Readiness)
             .ThenBy(value => value.Plan!.WaitMinutes).ThenBy(value => value.Plan!.WorkMinutes)
             .ThenBy(value => value.Plan!.Strategy).ThenBy(value => value.Window?.Start).First();
+    }
+
+    private IntuitionPreparationWindow[] IntuitionPreparation(FishingRule rule, RecommendationPlan plan, CancellationToken token)
+    {
+        var ids = rule.Predators.Select(prey => prey.ItemId).ToHashSet();
+        return plan.Steps.Where(step => ids.Contains(step.ItemId) && (step.Role is PreparationRole.Intuition or PreparationRole.Trigger))
+            .Select(step => (Step: step, Window: Calendar(step.ItemId, token).FirstOrDefault(window =>
+                (window.Start is null || window.Start <= step.Start) && (window.End is null || window.End > step.Start))))
+            .Where(value => value.Window is not null)
+            .GroupBy(value => (value.Step.ItemId, Window: value.Window!))
+            .Select(group => new IntuitionPreparationWindow(group.Key.ItemId, group.Sum(value => value.Step.Count), group.Key.Window))
+            .OrderBy(value => value.Window.Start).ThenBy(value => value.ItemId).ToArray();
     }
 
     private static (double Minutes, int MoochCount, int IntuitionCount) AdvancePreparation(

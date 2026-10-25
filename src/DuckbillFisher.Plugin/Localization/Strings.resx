@@ -1226,7 +1226,7 @@ Select to see why this fish is recommended.</value></data>
   <data name="RecommendationFirstCastLabel" xml:space="preserve"><value>First cast estimate</value></data>
   <data name="RecommendationScopeShort" xml:space="preserve"><value>Includes fish available now</value></data>
   <data name="RecommendationTimeLabel" xml:space="preserve"><value>Appearance</value></data>
-  <data name="RecommendationIntuitionTimeHelp" xml:space="preserve"><value>The target has no time or weather restrictions of its own. If Intuition is required, catch the listed fish to trigger it.</value></data>
+  <data name="RecommendationIntuitionTimeHelp" xml:space="preserve"><value>The time shown belongs to the named Intuition prerequisite in the queried preparation plan. The least frequent required Intuition fish is the representative; each prerequisite&apos;s own availability is listed below.</value></data>
   <data name="RecommendationNextPreyShortLabel" xml:space="preserve"><value>Next prey</value></data>
   <data name="RecommendationNextPreyHelp" xml:space="preserve"><value>The target has no fixed appearance time. This shows the next appearance of the named fish needed for Intuition or mooching.</value></data>
   <data name="RecommendationNextTargetHelp" xml:space="preserve"><value>The next appearance under the target&apos;s own time and weather conditions. Intuition and mooching requirements must also be met.</value></data>
@@ -1250,4 +1250,13 @@ Select to see why this fish is recommended.</value></data>
   <data name="RecommendationAdvanceExpired" xml:space="preserve"><value>The target has appeared. Refresh to review this preparation plan.</value></data>
   <data name="RecommendationPreparationTimeHelp" xml:space="preserve"><value>Estimated travel and preparation start for the plan captured at query time. It does not track your actual Intuition progress or predict a successful catch.</value></data>
   <data name="RecommendationAdvanceExpiredShort" xml:space="preserve"><value>Appearance started · refresh needed</value></data>
+  <data name="RecommendationIntuitionTimeUnknown" xml:space="preserve"><value>Intuition prey · availability unknown</value></data>
+  <data name="RecommendationIntuitionAlways" xml:space="preserve"><value>Intuition prey · no time or weather restrictions</value></data>
+  <data name="RecommendationIntuitionExpired" xml:space="preserve"><value>Intuition prey appearance ended · refresh needed</value></data>
+  <data name="RecommendationIntuitionUpcoming" xml:space="preserve"><value>Intuition prey · appears {0}</value></data>
+  <data name="RecommendationIntuitionOpen" xml:space="preserve"><value>Intuition prey available · {0} left</value></data>
+  <data name="RecommendationPreparationWindowEnded" xml:space="preserve"><value>Planned preparation opportunity ended</value></data>
+  <data name="RecommendationWindowRange" xml:space="preserve"><value>{0}–{1}</value></data>
+  <data name="RecommendationIntuitionPreparationLine" xml:space="preserve"><value>{0} · {1}</value></data>
+  <data name="RecommendationIntuitionFollowing" xml:space="preserve"><value>{0} · following appearance {1}</value></data>
 </root>

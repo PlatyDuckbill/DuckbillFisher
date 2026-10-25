@@ -1211,4 +1211,13 @@ internal enum TextKey
     RecommendationAdvanceExpired,
     RecommendationPreparationTimeHelp,
     RecommendationAdvanceExpiredShort,
+    RecommendationIntuitionTimeUnknown,
+    RecommendationIntuitionAlways,
+    RecommendationIntuitionExpired,
+    RecommendationIntuitionUpcoming,
+    RecommendationIntuitionOpen,
+    RecommendationPreparationWindowEnded,
+    RecommendationWindowRange,
+    RecommendationIntuitionPreparationLine,
+    RecommendationIntuitionFollowing,
 }
