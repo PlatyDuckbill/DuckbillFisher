@@ -1020,7 +1020,8 @@
   <data name="RecommendationIntro" xml:space="preserve"><value>지금 새로 시작할 미수집 터주·터주왕 후보입니다. 현재 준비 상태는 반영하지 않으며 물고기의 눈은 OFF 기준입니다.</value></data>
   <data name="RecommendationRefresh" xml:space="preserve"><value>다시 추천</value></data>
   <data name="RecommendationHours" xml:space="preserve"><value>앞으로 {0}시간</value></data>
-  <data name="RecommendationHorizonHelp" xml:space="preserve"><value>세 탭에 같은 기간을 적용합니다. 3시간이면 현재 출현 중인 어종과 앞으로 3시간 안에 출현할 어종을 찾고, 24시간이면 앞으로 24시간까지 찾습니다. 플레이 시간이나 준비 시간의 제한이 아닙니다. 직감 등 선행 조건으로 기회가 정해지는 어종은 준비 기회를 기준으로 찾습니다.</value></data>
+  <data name="RecommendationHorizonHelp" xml:space="preserve"><value>현재 출현 중인 어종과 선택한 시간 안에 출현할 어종을 찾습니다.
+3시간을 선택하면 지금부터 3시간 뒤까지의 출현을 조회합니다. 플레이 시간 제한은 아닙니다.</value></data>
   <data name="RecommendationOptions" xml:space="preserve"><value>추천 필터</value></data>
   <data name="RecommendationUnknownOption" xml:space="preserve"><value>수집 여부 미확인도 포함</value></data>
   <data name="RecommendationFavorites" xml:space="preserve"><value>즐겨찾기만</value></data>
@@ -1108,11 +1109,14 @@
   <data name="RecommendationRareTab" xml:space="preserve"><value>희귀 어종</value></data>
   <data name="RecommendationScope" xml:space="preserve"><value>현재 출현 중이거나, 선택한 시간 안에 출현할 어종을 찾습니다.</value></data>
   <data name="RecommendationTabCount" xml:space="preserve"><value>{0} · {1}</value></data>
-  <data name="RecommendationAsOf" xml:space="preserve"><value>{0:HH:mm} 기준</value></data>
+  <data name="RecommendationAsOf" xml:space="preserve"><value>{0:HH:mm} 조회</value></data>
   <data name="RecommendationManualHelp" xml:space="preserve"><value>목록과 순위는 읽는 동안 유지됩니다. 남은 시간만 흐르며, ‘다시 추천’을 누르면 현재 시각으로 다시 계산합니다.</value></data>
-  <data name="RecommendationNowHint" xml:space="preserve"><value>지금 잡으러 가거나 준비할 후보</value></data>
-  <data name="RecommendationPreparationHint" xml:space="preserve"><value>출현 전에 준비할 후보부터</value></data>
-  <data name="RecommendationRareHint" xml:space="preserve"><value>30일간 출현 횟수가 적은 순</value></data>
+  <data name="RecommendationNowHint" xml:space="preserve"><value>지금 출발하거나 준비를 시작할 후보입니다.
+출발·준비 시작이 5분 이내인 어종 중 출현 빈도와 준비 후 도전 가능 여부를 함께 고려합니다.</value></data>
+  <data name="RecommendationPreparationHint" xml:space="preserve"><value>출현 전에 확보할 어종이 있는 후보입니다.
+지금 준비할 후보를 먼저, 그 안에서는 사전 준비량이 많은 순으로 보여줍니다. 고정 출현 시각이 없는 직감 어종은 직감용 어종 준비를 비교합니다.</value></data>
+  <data name="RecommendationRareHint" xml:space="preserve"><value>선택한 기간·필터의 후보를 30일간 출현 횟수가 적은 순으로 보여줍니다.
+횟수가 같으면 공동 순위이며, 이번 출현 종료부터 다음 출현까지 오래 기다려야 하는 후보가 먼저 나옵니다. 빈도가 선행 어종 기준이면 이름을 표시합니다.</value></data>
   <data name="RecommendationNowEmpty" xml:space="preserve"><value>지금 출발하거나 준비를 시작할 후보가 없습니다. 다른 탭에서 앞으로의 기회를 살펴보세요.</value></data>
   <data name="RecommendationPreparationEmpty" xml:space="preserve"><value>이 기간에는 미리 준비할 후보가 없습니다.</value></data>
   <data name="RecommendationRareEmpty" xml:space="preserve"><value>이 기간에는 출현 횟수로 비교할 후보가 없습니다.</value></data>
@@ -1136,7 +1140,7 @@
   <data name="RecommendationFrequencyLabel" xml:space="preserve"><value>출현 빈도 · 30일 기준</value></data>
   <data name="RecommendationOwnAlways" xml:space="preserve"><value>대상 어종의 시간·날씨 제한 없음</value></data>
   <data name="RecommendationFrequencyHelp" xml:space="preserve"><value>시간·날씨가 이어지는 한 구간을 1회로 셉니다. 선행 어종 기준일 때는 필요한 어종 중 출현 횟수가 가장 적은 어종을 표시합니다. 직감·생미끼까지 모두 충족하는 실제 기회 횟수나 낚일 확률은 아닙니다.</value></data>
-  <data name="RecommendationCalculation" xml:space="preserve"><value>추천 근거 자세히</value></data>
+  <data name="RecommendationCalculation" xml:space="preserve"><value>계산 근거</value></data>
   <data name="RecommendationTimelineLegend" xml:space="preserve"><value>위: 준비 / 아래: 출현 조건·첫 투척</value></data>
   <data name="RecommendationTimelineHelp" xml:space="preserve"><value>파랑: 생미끼·직감 누적 / 노랑: 직감 발동 / 보라: 생미끼 보관. 아래 초록 막대는 대상의 시간·날씨 조건이며 직감 지속 시간은 아닙니다. 점은 첫 투척 예상, 흰 선은 현재 시각입니다. 표시 시각은 PC의 현지 시각이며 준비 막대는 추정입니다.</value></data>
   <data name="RecommendationFlowStep" xml:space="preserve"><value>{0} · {1}
@@ -1157,7 +1161,7 @@
   <data name="RecommendationEstimateOnly" xml:space="preserve"><value>준비 시간에 따라 출현 중 첫 투척 가능 여부가 달라집니다.</value></data>
   <data name="RecommendationPreparationOpens" xml:space="preserve"><value>준비 기회까지 {0}</value></data>
   <data name="RecommendationNextPreyLabel" xml:space="preserve"><value>선행 어종의 다음 출현</value></data>
-  <data name="RecommendationSnapshotStale" xml:space="preserve"><value>{0:HH:mm} 기준 · 다시 추천 가능</value></data>
+  <data name="RecommendationSnapshotStale" xml:space="preserve"><value>{0:HH:mm} 조회 · 다시 추천으로 갱신</value></data>
   <data name="RecommendationCandidateTooltip" xml:space="preserve"><value>{0}
 {1}
 {3}
@@ -1166,7 +1170,7 @@
   <data name="RecommendationPlace" xml:space="preserve"><value>{0} · {1}</value></data>
   <data name="RecommendationWhy" xml:space="preserve"><value>추천 이유</value></data>
   <data name="RecommendationStorageNote" xml:space="preserve"><value>중간 생미끼를 보관해 앞의 2단계를 미리 준비할 수 있습니다.</value></data>
-  <data name="RecommendationNextTime" xml:space="preserve"><value>{0:MM/dd HH:mm} ({1} 후)</value></data>
+  <data name="RecommendationNextTime" xml:space="preserve"><value>{0} ({1} 후)</value></data>
   <data name="RecommendationRefreshNeeded" xml:space="preserve"><value>조회한 일정이 지났습니다. 다시 추천해 주세요.</value></data>
   <data name="RecommendationOrderLabel" xml:space="preserve"><value>정렬 기준</value></data>
   <data name="RecommendationPreparationOrder" xml:space="preserve"><value>지금 준비할 후보 → 사전 준비량 → 시작 시각</value></data>
@@ -1198,25 +1202,25 @@
   <data name="RecommendationDurationMinutes" xml:space="preserve"><value>{0}분</value></data>
   <data name="RecommendationIntuitionSpawn" xml:space="preserve"><value>직감 발동 시 출현</value></data>
   <data name="RecommendationNoFixedSpawn" xml:space="preserve"><value>정해진 출현 시각 없음</value></data>
-  <data name="RecommendationNextPreyCompact" xml:space="preserve"><value>준비 어종 {0} · 다음 {1:MM/dd HH:mm}</value></data>
-  <data name="RecommendationNextPreyTime" xml:space="preserve"><value>{0} · {1:MM/dd HH:mm} ({2} 후)</value></data>
-  <data name="RecommendationNextCompact" xml:space="preserve"><value>다음 {0:MM/dd HH:mm}</value></data>
+  <data name="RecommendationNextPreyCompact" xml:space="preserve"><value>준비 어종 {0} · 이후 {1}</value></data>
+  <data name="RecommendationNextPreyTime" xml:space="preserve"><value>{0} · {1} ({2} 후)</value></data>
+  <data name="RecommendationNextCompact" xml:space="preserve"><value>이번 이후 · {0}</value></data>
   <data name="RecommendationCatchCount" xml:space="preserve"><value>{0} {1}마리</value></data>
-  <data name="RecommendationStartReason" xml:space="preserve"><value>이 계획의 준비 시작은 {0:HH:mm}쯤입니다.</value></data>
-  <data name="RecommendationMissedGap" xml:space="preserve"><value>이번 출현이 끝나면 {0} 동안 다시 출현하지 않습니다.</value></data>
-  <data name="RecommendationPreyGapReason" xml:space="preserve"><value>{0}의 이번 출현이 끝나면 다음 출현까지 {1}을 기다려야 합니다.</value></data>
-  <data name="RecommendationGateDeadlineReason" xml:space="preserve"><value>{0} 출현은 {1:HH:mm}까지입니다. 지금 이 어종부터 준비할 수 있습니다.</value></data>
-  <data name="RecommendationIntuitionBeforeReason" xml:space="preserve"><value>{0}를 미리 잡아둘 수 있어 출현 전에 준비할 후보입니다.</value></data>
-  <data name="RecommendationIntuitionRequirementReason" xml:space="preserve"><value>직감 조건은 {0}입니다. 이 어종부터 잡아두는 계획입니다.</value></data>
-  <data name="RecommendationBaitBeforeReason" xml:space="preserve"><value>미끼용 {0} 확보를 출현 전에 끝내둘 수 있습니다 ({1:HH:mm} 출현).</value></data>
-  <data name="RecommendationStoredBaitReason" xml:space="preserve"><value>보관 기술이 있다면 {0} 확보·보관을 미리 해두고 {1:HH:mm} 출현을 기다릴 수 있습니다.</value></data>
-  <data name="RecommendationBaitFitsReason" xml:space="preserve"><value>미끼용 {0} 확보 후에도 이번 출현 안에 도전할 수 있는 것으로 계산했습니다.</value></data>
-  <data name="RecommendationBaitNeededReason" xml:space="preserve"><value>미끼로 쓸 {0}부터 확보해야 하는 어종입니다.</value></data>
-  <data name="RecommendationDirectUpcomingReason" xml:space="preserve"><value>{0:HH:mm} 출현에 맞춰 이동할 후보입니다. 생미끼·직감용 어종 준비는 없습니다.</value></data>
-  <data name="RecommendationDirectNowReason" xml:space="preserve"><value>현재 출현 중이고, 먼저 잡아야 할 생미끼·직감용 어종이 없습니다.</value></data>
-  <data name="RecommendationRarePreyRankReason" xml:space="preserve"><value>{3} 출현 횟수 기준, 이 기간 후보 {0}종 중 적은 순으로 {1}위입니다 ({2}회/30일).</value></data>
-  <data name="RecommendationRarestReason" xml:space="preserve"><value>이 기간 후보 {0}종 중 출현 횟수가 가장 적습니다 ({2}회/30일).</value></data>
-  <data name="RecommendationRareRankReason" xml:space="preserve"><value>이 기간 후보 {0}종 중 출현 횟수가 적은 순으로 {1}위입니다 ({2}회/30일).</value></data>
+  <data name="RecommendationStartReason" xml:space="preserve"><value>준비 시작 권장 · {0:HH:mm}쯤</value></data>
+  <data name="RecommendationMissedGap" xml:space="preserve"><value>이번을 놓치면 출현 종료 후 {0} 대기</value></data>
+  <data name="RecommendationPreyGapReason" xml:space="preserve"><value>준비 어종을 놓치면 {1} 대기 · {0} 기준</value></data>
+  <data name="RecommendationGateDeadlineReason" xml:space="preserve"><value>{0}부터 확보 · {1:HH:mm}까지 출현</value></data>
+  <data name="RecommendationIntuitionBeforeReason" xml:space="preserve"><value>직감용 어종 사전 확보 · {0}</value></data>
+  <data name="RecommendationIntuitionRequirementReason" xml:space="preserve"><value>직감용 어종부터 준비 · {0}</value></data>
+  <data name="RecommendationBaitBeforeReason" xml:space="preserve"><value>미끼용 {0} 사전 확보 가능 · {1:HH:mm} 출현</value></data>
+  <data name="RecommendationStoredBaitReason" xml:space="preserve"><value>{0} 사전 확보·보관 가능 · 보관 기술 필요 ({1:HH:mm} 출현)</value></data>
+  <data name="RecommendationBaitFitsReason" xml:space="preserve"><value>미끼용 {0} 확보 후 이번 출현에 도전 가능 (추정)</value></data>
+  <data name="RecommendationBaitNeededReason" xml:space="preserve"><value>먼저 확보할 생미끼 · {0}</value></data>
+  <data name="RecommendationDirectUpcomingReason" xml:space="preserve"><value>생미끼·직감 준비 없음 · {0:HH:mm} 출현</value></data>
+  <data name="RecommendationDirectNowReason" xml:space="preserve"><value>바로 낚시 가능 · 생미끼·직감 준비 없음</value></data>
+  <data name="RecommendationRarePreyRankReason" xml:space="preserve"><value>출현 횟수 적은 순 {1}위 / {0}종 · {2}회/30일 ({3} 기준)</value></data>
+  <data name="RecommendationRarestReason" xml:space="preserve"><value>후보 {0}종 중 가장 드물게 출현 · 30일간 {2}회</value></data>
+  <data name="RecommendationRareRankReason" xml:space="preserve"><value>출현 횟수 적은 순 {1}위 / {0}종 · 30일간 {2}회</value></data>
   <data name="RecommendationGapComparison" xml:space="preserve"><value>{0} · 간격이 길수록 먼저</value></data>
   <data name="RecommendationBeforeCatchLabel" xml:space="preserve"><value>미리 확보</value></data>
   <data name="RecommendationIntuitionLabel" xml:space="preserve"><value>직감 조건</value></data>
@@ -1229,4 +1233,15 @@
   <data name="RecommendationNextTargetHelp" xml:space="preserve"><value>목표 어종 자체의 시간·날씨 조건에 따른 다음 출현입니다. 직감·생미끼 조건은 별도로 충족해야 합니다.</value></data>
   <data name="RecommendationFrequencyShortLabel" xml:space="preserve"><value>출현 횟수</value></data>
   <data name="RecommendationNextPreyUnknown" xml:space="preserve"><value>{0} · 30일 내 다음 출현 미확인</value></data>
+  <data name="RecommendationTodayTime" xml:space="preserve"><value>오늘 {0:HH:mm}</value></data>
+  <data name="RecommendationTomorrowTime" xml:space="preserve"><value>내일 {0:HH:mm}</value></data>
+  <data name="RecommendationClockTime" xml:space="preserve"><value>{0:HH:mm}</value></data>
+  <data name="RecommendationAppearanceSummary" xml:space="preserve"><value>{0}~{1} · {2}</value></data>
+  <data name="RecommendationPrepareFish" xml:space="preserve"><value>미리 확보 · {0}</value></data>
+  <data name="RecommendationIntuitionSummary" xml:space="preserve"><value>직감 · {0}</value></data>
+  <data name="RecommendationMoochSummary" xml:space="preserve"><value>생미끼 · {0}</value></data>
+  <data name="RecommendationFollowingSummary" xml:space="preserve"><value>이번 이후 · {0}</value></data>
+  <data name="RecommendationNextPreySummary" xml:space="preserve"><value>준비 어종 다음 출현 · {0}</value></data>
+  <data name="RecommendationRangeTitle" xml:space="preserve"><value>어종을 찾는 범위</value></data>
+  <data name="RecommendationAssumptionsTitle" xml:space="preserve"><value>준비 시간의 가정</value></data>
 </root>

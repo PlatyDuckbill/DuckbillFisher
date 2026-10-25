@@ -31,6 +31,19 @@ internal sealed class RecommendationText(FishCatalog catalog)
     public static bool NextUsesPrey(FishRecommendation value) => value.OwnConditionsAlways && value.Basis == OpportunityBasis.PrerequisiteProxy;
     public static DateTimeOffset? NextAt(FishRecommendation value) => value.OwnConditionsAlways ? value.NextOpportunity : value.NextOwnOpportunity;
 
+    public static string When(DateTimeOffset at, DateTimeOffset now)
+    {
+        var local = at.ToLocalTime();
+        var days = (local.Date - now.ToLocalTime().Date).Days;
+        return UiText.Get(days == 0 ? T.RecommendationTodayTime : days == 1 ? T.RecommendationTomorrowTime : T.RecommendationDate, local);
+    }
+
+    public static string Appearance(FishRecommendation value, DateTimeOffset now) => !value.OwnConditionsAlways &&
+        value.Window is { Start: { } start, End: { } end }
+            ? UiText.Get(T.RecommendationAppearanceSummary, When(start, now),
+                start.ToLocalTime().Date == end.ToLocalTime().Date ? UiText.Get(T.RecommendationClockTime, end.ToLocalTime()) : When(end, now), Timing(value, now))
+            : Timing(value, now);
+
     public string Next(FishRecommendation value, DateTimeOffset now, bool compact = false)
     {
         if (NextAt(value) is not { } next)
@@ -39,8 +52,27 @@ internal sealed class RecommendationText(FishCatalog catalog)
         if (next <= now) return UiText.Get(T.RecommendationRefreshNeeded);
         if (NextUsesPrey(value))
             return UiText.Get(compact ? T.RecommendationNextPreyCompact : T.RecommendationNextPreyTime,
-                Name(value.BasisItemId), next.ToLocalTime(), Duration(next - now));
-        return UiText.Get(compact ? T.RecommendationNextCompact : T.RecommendationNextTime, next.ToLocalTime(), Duration(next - now));
+                Name(value.BasisItemId), When(next, now), Duration(next - now));
+        return UiText.Get(compact ? T.RecommendationNextCompact : T.RecommendationNextTime, When(next, now), Duration(next - now));
+    }
+
+    public string ListContext(RecommendationEntry entry, int focus, DateTimeOffset now)
+    {
+        var value = entry.Recommendation;
+        if (focus == 2) return Next(value, now, compact: true);
+        if (value.Window?.End <= now) return UiText.Get(T.RecommendationRefreshNeeded);
+        if (focus == 1 && value.Window?.Start > now)
+        {
+            var intuition = BeforeIntuition(value);
+            if (intuition.Length > 0) return UiText.Get(T.RecommendationPrepareFish, intuition);
+            if (!value.OwnConditionsAlways && value.Window?.Start is { } opening &&
+                value.Plan!.Steps.LastOrDefault(step => step.End <= opening) is { } prepared)
+                return UiText.Get(T.RecommendationPrepareFish, Name(prepared.ItemId));
+        }
+        if (value.IntuitionCatchCount > 0) return UiText.Get(T.RecommendationIntuitionSummary, Requirements(entry));
+        if (value.MoochDepth > 0 && value.Plan!.Steps.LastOrDefault() is { } bait)
+            return UiText.Get(T.RecommendationMoochSummary, Name(bait.ItemId));
+        return entry.Fish.Details?.Spot is { } spot ? spot.Name : UiText.Get(T.RecommendationUnknown);
     }
 
     public string Frequency(FishRecommendation value) => value.OpportunityCount > 0
@@ -131,15 +163,10 @@ internal sealed class RecommendationText(FishCatalog catalog)
             else if (!value.OwnConditionsAlways && value.Window?.Start is { } opening &&
                 plan.Steps.LastOrDefault(step => step.End <= opening) is { } prepared)
                 yield return (T.RecommendationBeforeCatchLabel, Name(prepared.ItemId));
-            else if (value.IntuitionCatchCount > 0) yield return (T.RecommendationIntuitionLabel, Requirements(entry));
         }
         if (plan.Steps.Count > 0)
             yield return (T.RecommendationFirstCastLabel, plan.FirstCast is { } cast
                 ? UiText.Get(T.RecommendationDate, cast.ToLocalTime()) : UiText.Get(T.RecommendationEstimateOnly));
-        yield return (T.RecommendationAvailabilityLabel, value.OwnConditionsAlways
-            ? UiText.Get(value.IntuitionCatchCount > 0 ? T.RecommendationIntuitionSpawn : T.RecommendationAlways)
-            : value.Window is { Start: { } from, End: { } to }
-                ? UiText.Get(T.RecommendationWindowTimes, from.ToLocalTime(), to.ToLocalTime()) : UiText.Get(T.RecommendationUnknown));
         if (value.OpportunityCount > 0) yield return (T.RecommendationFrequencyShortLabel, Frequency(value));
     }
 
