@@ -10,7 +10,7 @@ namespace DuckbillFisher.Plugin;
 
 internal sealed class FishRecommendationPanel(FishRecommendationService service, FishCatalog catalog,
     FishPreferences preferences, FishCollectionObserver collection, Action<FishGuideRow> showDetail, FishingMapService maps,
-    FishGuideOpenService guideOpener, ITextureProvider textures)
+    ITextureProvider textures)
 {
     private static readonly int[] Hours = [1, 3, 6, 12, 24];
     private static readonly T[] TabNames = [T.RecommendationNowTab, T.RecommendationPreparationTab, T.RecommendationRareTab];
@@ -123,7 +123,6 @@ internal sealed class FishRecommendationPanel(FishRecommendationService service,
             changed |= ImGui.Checkbox(UiText.Label(T.RecommendationStorageOption, "RecommendationStorage"), ref storage);
             Tooltip(UiText.Get(T.RecommendationStorageAssumption));
             ImGui.TextDisabled(UiText.Get(T.RecommendationUnknownCount, service.View.UnknownCount));
-            UiWidgets.GuideBanner(collection.View, preferences.View, guideOpener);
             if (changed) { options = new(options.Hours, unknown, favorites, legendary, storage); service.Configure(options); }
             ImGui.EndPopup();
         }

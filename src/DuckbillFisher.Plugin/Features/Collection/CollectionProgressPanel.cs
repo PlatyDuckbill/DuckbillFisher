@@ -7,7 +7,7 @@ using T = DuckbillFisher.Plugin.Localization.TextKey;
 namespace DuckbillFisher.Plugin;
 
 internal sealed class CollectionProgressPanel(CollectionProgress progress, FishCatalog catalog, FishPreferences preferences,
-    FishCollectionObserver collection, FishGuideOpenService guideOpener, Action<CollectionProgressSelection> showFish)
+    Action<CollectionProgressSelection> showFish)
 {
     private int scope;
 
@@ -17,7 +17,6 @@ internal sealed class CollectionProgressPanel(CollectionProgress progress, FishC
         var data = catalog.View;
         var view = progress.View;
         if (data.Status.Key != T.CatalogLoaded) ImGui.TextWrapped(data.Status.Display);
-        UiWidgets.GuideBanner(collection.View, personal, guideOpener);
         if (view.Session != personal.Session)
         {
             ImGui.TextWrapped(UiText.Get(T.CollectionProgressWaiting));

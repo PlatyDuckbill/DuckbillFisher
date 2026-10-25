@@ -1018,7 +1018,7 @@ Last saved: {1:yyyy-MM-dd HH:mm}, {2} fish. Used where current observations are 
   <data name="SpotAlertIntuition" xml:space="preserve"><value> · Intuition preparation required</value></data>
   <data name="RecommendationTitle" xml:space="preserve"><value>Recommendations</value></data>
   <data name="RecommendationIntro" xml:space="preserve"><value>Uncaught big and legendary fish to start preparing for now. Assumes a fresh start and Fish Eyes OFF.</value></data>
-  <data name="RecommendationRefresh" xml:space="preserve"><value>Refresh recommendations</value></data>
+  <data name="RecommendationRefresh" xml:space="preserve"><value>Refresh</value></data>
   <data name="RecommendationHours" xml:space="preserve"><value>Next {0} hours</value></data>
   <data name="RecommendationHorizonHelp" xml:space="preserve"><value>Includes fish available now and appearances beginning within the selected range. Three hours means now through three hours from now. It is not a play-time limit.</value></data>
   <data name="RecommendationOptions" xml:space="preserve"><value>Recommendation filters</value></data>
@@ -1028,7 +1028,7 @@ Last saved: {1:yyyy-MM-dd HH:mm}, {2} fish. Used where current observations are 
   <data name="RecommendationStorageOption" xml:space="preserve"><value>Include reviewed stored-bait strategies</value></data>
   <data name="RecommendationStorageAssumption" xml:space="preserve"><value>Storage assumes access to the skill and staying at the hole. Current level, GP, and stored quantities are not read. Initially includes the intermediate storage route for the Greater Serpent of Ronka.</value></data>
   <data name="RecommendationUnsupported" xml:space="preserve"><value>Condition data does not match the current game build.</value></data>
-  <data name="RecommendationFailed" xml:space="preserve"><value>Calculation failed. Press Refresh recommendations to retry.</value></data>
+  <data name="RecommendationFailed" xml:space="preserve"><value>Recommendations could not be calculated. Press Refresh to try again.</value></data>
   <data name="RecommendationComputing" xml:space="preserve"><value>Calculating candidates and preparation routes…</value></data>
   <data name="RecommendationSnapshot" xml:space="preserve"><value>As of {0:MM/dd HH:mm:ss} · {1} ranked · {2} other/review · {3} collection unknown</value></data>
   <data name="RecommendationStale" xml:space="preserve"><value>Refresh available</value></data>
@@ -1038,16 +1038,16 @@ Last saved: {1:yyyy-MM-dd HH:mm}, {2} fish. Used where current observations are 
   <data name="RecommendationOtherRow" xml:space="preserve"><value>{0} · {1}</value></data>
   <data name="RecommendationMethod" xml:space="preserve"><value>Recommendation help</value></data>
   <data name="RecommendationMethodHelp" xml:space="preserve"><value>Fish to target now: travel or preparation starts within five minutes. Frequency and whether preparation fits also affect ranking.
-Prepare ahead: completed advance catches are required. Intuition catches, longer mooch chains, and difficult or closing prerequisites are compared by workload and time until preparation starts.
-Rare opportunities: candidates matching the selected range and filters, ordered by fewest appearances over 30 days. Equal counts share a rank; longer gaps until the next appearance come first.</value></data>
+Prep work: completed advance catches are required. Intuition catches, longer mooch chains, and difficult or closing prerequisites are compared by workload and time until preparation starts.
+Least frequent: candidates matching the selected range and filters, ordered by fewest appearances over 30 days. Equal counts share a rank; longer gaps until the next appearance come first.</value></data>
   <data name="RecommendationAnalysis" xml:space="preserve"><value>Frequency analysis · {0:MM/dd}–{1:MM/dd} (UTC)</value></data>
-  <data name="RecommendationEnded" xml:space="preserve"><value>Selected occurrence ended · refresh needed</value></data>
+  <data name="RecommendationEnded" xml:space="preserve"><value>Queried occurrence ended · refresh needed</value></data>
   <data name="RecommendationOpens" xml:space="preserve"><value>Appears in {0}</value></data>
   <data name="RecommendationEnds" xml:space="preserve"><value>Available · {0} left</value></data>
   <data name="RecommendationAlways" xml:space="preserve"><value>No time/weather restriction</value></data>
   <data name="RecommendationUnknown" xml:space="preserve"><value>Unknown</value></data>
   <data name="RecommendationLocationTime" xml:space="preserve"><value>{0} · {1}</value></data>
-  <data name="RecommendationNowCaught" xml:space="preserve"><value>Now caught · excluded when you refresh.</value></data>
+  <data name="RecommendationNowCaught" xml:space="preserve"><value>Caught · removed from the list when you refresh.</value></data>
   <data name="RecommendationStartNow" xml:space="preserve"><value>Now</value></data>
   <data name="RecommendationStartLater" xml:space="preserve"><value>Suggested preparation starts in {0}</value></data>
   <data name="RecommendationRoom" xml:space="preserve"><value>Estimated room to attempt</value></data>
@@ -1065,7 +1065,7 @@ Rare opportunities: candidates matching the selected range and filters, ordered 
   <data name="RecommendationNextUnknown" xml:space="preserve"><value>No next appearance found within 30 days</value></data>
   <data name="RecommendationScore" xml:space="preserve"><value>Target-now score {0:0.0}
 Start time {1:0.0} + frequency {2:0.0} + preparation fit {3:0.0} + next opportunity {4:0.0}
-Prepare ahead and Rare opportunities use their own sort criteria.</value></data>
+Prep work and Least frequent use their own sort criteria.</value></data>
   <data name="RecommendationAlternatives" xml:space="preserve"><value>Other routes for this occurrence</value></data>
   <data name="RecommendationExtraStorage" xml:space="preserve"><value>Optional: extra stored {0} can reduce repeating the first two stages, at the cost of more preparation and time at the hole. {1} and the remaining chain still occur during availability. Extra stock is not required for the first cast and adds no score bonus. Stored quantity is not a target attempt count.</value></data>
   <data name="RecommendationStethacanthus" xml:space="preserve"><value>Basic route: build {0} progress and time the final catch to trigger Intuition. Unverified alternatives such as delaying collectable acceptance are not calculated.</value></data>
@@ -1089,8 +1089,8 @@ Prepare ahead and Rare opportunities use their own sort criteria.</value></data>
   <data name="RecommendationNested" xml:space="preserve"><value>Prerequisite itself requires Intuition · preparation review needed</value></data>
   <data name="RecommendationAmbiguous" xml:space="preserve"><value>Alternative mooch path needs review</value></data>
   <data name="RecommendationMissing" xml:space="preserve"><value>Condition or preparation data needs review</value></data>
-  <data name="ChangelogRecommendations" xml:space="preserve"><value>Browse fish to target now, prepare ahead, or rare opportunities, with clear recommendation reasons.</value></data>
-  <data name="ChangelogRecommendationRefresh" xml:space="preserve"><value>Read a stable recommendation list and refresh it for the current time when ready.</value></data>
+  <data name="ChangelogRecommendations" xml:space="preserve"><value>Browse fish to target now, prep work, or the least frequent appearances, with recommendation reasons.</value></data>
+  <data name="ChangelogRecommendationRefresh" xml:space="preserve"><value>Keep the recommendation order while reading, then refresh it for the current time.</value></data>
   <data name="ChangelogCurrentSpotAlerts" xml:space="preserve"><value>Get local chat notices with detail links for uncaught big and legendary fish at the current hole.</value></data>
   <data name="ChangelogZeroAlerts" xml:space="preserve"><value>Set spawn alerts from 0 to 120 minutes ahead; new settings notify at the start.</value></data>
   <data name="SpotAlertsEnabledStatus" xml:space="preserve"><value>Current-hole alerts enabled · favorite spawn alerts disabled</value></data>
@@ -1104,12 +1104,12 @@ Prepare ahead and Rare opportunities use their own sort criteria.</value></data>
   <data name="RecommendationAcross" xml:space="preserve"><value>Preparation spanning the opening</value></data>
   <data name="SpotAlertRemaining" xml:space="preserve"><value>{0:00}:{1:00}:{2:00}</value></data>
   <data name="RecommendationNowTab" xml:space="preserve"><value>Fish to target now</value></data>
-  <data name="RecommendationPreparationTab" xml:space="preserve"><value>Prepare ahead</value></data>
-  <data name="RecommendationRareTab" xml:space="preserve"><value>Rare opportunities</value></data>
+  <data name="RecommendationPreparationTab" xml:space="preserve"><value>Prep work</value></data>
+  <data name="RecommendationRareTab" xml:space="preserve"><value>Least frequent</value></data>
   <data name="RecommendationScope" xml:space="preserve"><value>Find fish available now or appearing within the selected time.</value></data>
   <data name="RecommendationTabCount" xml:space="preserve"><value>{0} · {1}</value></data>
   <data name="RecommendationAsOf" xml:space="preserve"><value>Queried {0:HH:mm}</value></data>
-  <data name="RecommendationManualHelp" xml:space="preserve"><value>The list and ranking stay fixed while you read. Countdowns remain live; Refresh recalculates from the current time.</value></data>
+  <data name="RecommendationManualHelp" xml:space="preserve"><value>The list and order stay fixed while the countdown runs. Press Refresh to get recommendations for the current time.</value></data>
   <data name="RecommendationNowHint" xml:space="preserve"><value>Fish to travel for or prepare now.
 Travel or preparation starts within five minutes. Frequency and whether preparation fits also affect ranking.</value></data>
   <data name="RecommendationPreparationHint" xml:space="preserve"><value>Fish worth preparing ahead: Intuition catches, longer mooch chains, or difficult prerequisites that can be caught before opening.
@@ -1117,7 +1117,7 @@ Preparation workload and time until preparation starts determine the order. An o
   <data name="RecommendationRareHint" xml:space="preserve"><value>Candidates in the selected range and filters, ordered by fewest appearances over 30 days.
 Equal counts share a rank. Longer waits from this appearance's end until the next come first. A named prerequisite is shown when its frequency is used.</value></data>
   <data name="RecommendationNowEmpty" xml:space="preserve"><value>No candidate needs travel or preparation now. Check the other tabs for upcoming opportunities.</value></data>
-  <data name="RecommendationPreparationEmpty" xml:space="preserve"><value>No candidate needs advance preparation in this period.</value></data>
+  <data name="RecommendationPreparationEmpty" xml:space="preserve"><value>No candidate needs prep work in this period.</value></data>
   <data name="RecommendationRareEmpty" xml:space="preserve"><value>No candidate with a known appearance frequency was found in this period.</value></data>
   <data name="RecommendationUnknownCount" xml:space="preserve"><value>Collection status unknown · {0} fish</value></data>
   <data name="RecommendationRowTooltip" xml:space="preserve"><value>{0}
@@ -1170,7 +1170,7 @@ Select to see why this fish is recommended.</value></data>
   <data name="RecommendationWhy" xml:space="preserve"><value>Why this fish</value></data>
   <data name="RecommendationStorageNote" xml:space="preserve"><value>Storing the intermediate bait lets you prepare the first two stages ahead.</value></data>
   <data name="RecommendationNextTime" xml:space="preserve"><value>{0} (in {1})</value></data>
-  <data name="RecommendationRefreshNeeded" xml:space="preserve"><value>This saved opportunity has passed. Refresh to update it.</value></data>
+  <data name="RecommendationRefreshNeeded" xml:space="preserve"><value>The queried opportunity has passed. Please refresh.</value></data>
   <data name="RecommendationOrderLabel" xml:space="preserve"><value>Sort order</value></data>
   <data name="RecommendationPreparationOrder" xml:space="preserve"><value>Advance workload adjusted for time until preparation starts</value></data>
   <data name="RecommendationRareOrder" xml:space="preserve"><value>Fewest predicted appearances over 30 days first</value></data>
@@ -1247,7 +1247,7 @@ Select to see why this fish is recommended.</value></data>
   <data name="RecommendationPreparationNow" xml:space="preserve"><value>Start preparation · now (estimated)</value></data>
   <data name="RecommendationPreparationAt" xml:space="preserve"><value>Start preparation · {0} (estimated)</value></data>
   <data name="RecommendationIntuitionConditions" xml:space="preserve"><value>No time or weather restrictions · Intuition required</value></data>
-  <data name="RecommendationAdvanceExpired" xml:space="preserve"><value>The target has appeared. Refresh to review this preparation plan.</value></data>
+  <data name="RecommendationAdvanceExpired" xml:space="preserve"><value>The target has appeared. Refresh to review the preparation plan.</value></data>
   <data name="RecommendationPreparationTimeHelp" xml:space="preserve"><value>Estimated travel and preparation start for the plan captured at query time. It does not track your actual Intuition progress or predict a successful catch.</value></data>
   <data name="RecommendationAdvanceExpiredShort" xml:space="preserve"><value>Appearance started · refresh needed</value></data>
   <data name="RecommendationIntuitionTimeUnknown" xml:space="preserve"><value>Intuition prey · availability unknown</value></data>
@@ -1267,4 +1267,8 @@ Select to see why this fish is recommended.</value></data>
   <data name="RecommendationStoredStrategyReason" xml:space="preserve"><value>Uses bait storage · fish to store: {0}</value></data>
   <data name="RecommendationGapShortReason" xml:space="preserve"><value>Wait {0} after this occurrence</value></data>
   <data name="RecommendationPreyGapShortReason" xml:space="preserve"><value>{0}: wait {1} after this occurrence</value></data>
+  <data name="GuideWarningRequired" xml:space="preserve"><value>Collection status has not been refreshed. Open the Fish Guide once.</value></data>
+  <data name="GuideWarningSaved" xml:space="preserve"><value>Collection refresh needed · using saved status for now.</value></data>
+  <data name="GuideWarningRetry" xml:space="preserve"><value>Collection status could not be verified. Open the Fish Guide again.</value></data>
+  <data name="GuideWarningUnsupported" xml:space="preserve"><value>Collection status cannot be verified.</value></data>
 </root>

@@ -137,7 +137,7 @@ public sealed class Plugin : IDalamudPlugin
         compactObserver = new CompactFishObserver(fishCatalog, fishPreferences, framework, fishCollection, fishingRegion);
         compactWindow = new CompactFishWindow(compactObserver, fishPreferences, fishCollection, textureProvider, detailWindow.Show, fishingMap);
         spawnAlertsPanel = new SpawnAlertsPanel(fishPreferences, spawnAlerts, alertOutput, fishCollection, textureProvider,
-            fishCatalog, detailPanel, fishingMap, guideOpener, soundLibrary);
+            fishCatalog, detailPanel, fishingMap, soundLibrary);
         collectionProgress = new CollectionProgress(fishCatalog, fishPreferences, fishCollection, framework);
         schedule = new SpawnSchedule(fishCatalog, fishPreferences, fishCollection, fishingRegion, preparationQuery, framework, log);
         recommendations = new(fishCatalog, fishPreferences, fishCollection, framework, log);
@@ -149,13 +149,14 @@ public sealed class Plugin : IDalamudPlugin
         var collectionFishWindow = new CollectionProgressFishWindow(collectionProgress, fishCatalog, fishPreferences,
             fishCollection, textureProvider, fishingMap, detailWindow.Show);
         mainWindow = new MainWindow(fishingObserver, fishGuide, new FishListPanel(fishCatalog, textureProvider, detailPanel,
-                fishPreferences, fishCollection, fishingRegion, fishingMap, guideOpener, preparationQuery, () => preparationWindow.IsOpen = true, detailWindow.Show),
+                fishPreferences, fishCollection, fishingRegion, fishingMap, preparationQuery, () => preparationWindow.IsOpen = true, detailWindow.Show),
             spawnAlertsPanel, fishPreferences,
             () => commandInfo.HelpMessage = UiText.Get(TextKey.CommandHelp),
             new FishingHistoryBrowser(fishingTracker, fishCatalog, new FishingHistoryPanel(fishingTracker, textureProvider, detailWindow.Show)),
-            new CollectionProgressPanel(collectionProgress, fishCatalog, fishPreferences, fishCollection, guideOpener, collectionFishWindow.Show),
+            new CollectionProgressPanel(collectionProgress, fishCatalog, fishPreferences, collectionFishWindow.Show),
             new SpawnSchedulePanel(schedule, fishCatalog, fishPreferences, textureProvider, detailWindow.Show, fishingMap), backupPanel,
-            new FishRecommendationPanel(recommendations, fishCatalog, fishPreferences, fishCollection, detailWindow.Show, fishingMap, guideOpener, textureProvider));
+            new FishRecommendationPanel(recommendations, fishCatalog, fishPreferences, fishCollection, detailWindow.Show, fishingMap, textureProvider),
+            fishCollection, guideOpener);
         mainWindow.ShowCompact = compactWindow.Toggle;
         mainWindow.ShowTimer = timerWindow.Toggle;
         var changelogWindow = new ChangelogWindow(fishPreferences);

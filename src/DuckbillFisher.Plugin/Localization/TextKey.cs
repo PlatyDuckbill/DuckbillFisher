@@ -1228,4 +1228,8 @@ internal enum TextKey
     RecommendationStoredStrategyReason,
     RecommendationGapShortReason,
     RecommendationPreyGapShortReason,
+    GuideWarningRequired,
+    GuideWarningSaved,
+    GuideWarningRetry,
+    GuideWarningUnsupported,
 }

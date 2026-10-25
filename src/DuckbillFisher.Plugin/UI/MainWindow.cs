@@ -22,6 +22,8 @@ internal sealed class MainWindow : Window
     private readonly SpawnSchedulePanel schedule;
     private readonly FishRecommendationPanel recommendations;
     private readonly SettingsBackupPanel backup;
+    private readonly FishCollectionObserver collection;
+    private readonly FishGuideOpenService guideOpener;
     public Action? ShowCompact { get; set; }
     public Action? ShowTimer { get; set; }
     public Action? ShowChangelog { get; set; }
@@ -40,7 +42,8 @@ internal sealed class MainWindow : Window
     public MainWindow(FishingActivityProbe observer, FishGuideDiagnostics fishGuide, FishListPanel fishList,
         SpawnAlertsPanel spawnAlerts, FishPreferences preferences, Action languageChanged,
         FishingHistoryBrowser fishingHistory, CollectionProgressPanel collectionProgress, SpawnSchedulePanel schedule,
-        SettingsBackupPanel backup, FishRecommendationPanel recommendations) : base("DuckbillFisher###DuckbillFisher.Main")
+        SettingsBackupPanel backup, FishRecommendationPanel recommendations, FishCollectionObserver collection,
+        FishGuideOpenService guideOpener) : base("DuckbillFisher###DuckbillFisher.Main")
     {
         this.observer = observer;
         this.fishGuide = fishGuide;
@@ -53,6 +56,8 @@ internal sealed class MainWindow : Window
         this.schedule = schedule;
         this.recommendations = recommendations;
         this.backup = backup;
+        this.collection = collection;
+        this.guideOpener = guideOpener;
         UiText.SetLanguage(preferences.View.Language);
         markerLabels = Markers.Select(key => UiText.Get(key)).ToArray();
         languageChanged();
@@ -84,6 +89,7 @@ internal sealed class MainWindow : Window
         fishList.DeveloperMode = settings.DeveloperMode;
         spawnAlerts.DeveloperMode = settings.DeveloperMode;
         DrawNavigation(settings.DeveloperMode);
+        UiWidgets.GuideWarning(collection.View, settings, guideOpener);
         schedule.SetActive(selectedPage == MainPage.Schedule);
         recommendations.SetActive(selectedPage == MainPage.Recommendations);
         ImGui.PushID(selectedPage.ToString());
@@ -131,10 +137,10 @@ internal sealed class MainWindow : Window
             if (ImGui.BeginTabBar("DiagnosticsTabs", ImGuiTabBarFlags.FittingPolicyScroll))
             {
                 NavigationTab(MainPage.Catalog, T.TabCatalog, "CatalogTab", FontAwesomeIcon.Fish);
+                NavigationTab(MainPage.Alerts, T.TabAlerts, "SpawnAlertsTab", FontAwesomeIcon.Star);
                 NavigationTab(MainPage.Recommendations, T.RecommendationTitle, "RecommendationsTab", FontAwesomeIcon.Compass);
                 NavigationTab(MainPage.Collection, T.TabCollectionProgress, "CollectionProgressTab", FontAwesomeIcon.ChartBar);
                 NavigationTab(MainPage.Schedule, T.ScheduleTitle, "SpawnScheduleTab", FontAwesomeIcon.CalendarAlt);
-                NavigationTab(MainPage.Alerts, T.TabAlerts, "SpawnAlertsTab", FontAwesomeIcon.Star);
                 NavigationTab(MainPage.History, T.TabHistory, "FishingHistoryTab", FontAwesomeIcon.History);
                 NavigationTab(MainPage.Settings, T.TabSettings, "SettingsTab", FontAwesomeIcon.Cog, selectSettings);
                 if (developerMode)

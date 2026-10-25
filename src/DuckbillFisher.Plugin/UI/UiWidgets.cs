@@ -197,4 +197,61 @@ internal static class UiWidgets
         ImGui.EndChild();
         ImGui.PopStyleColor();
     }
+
+    public static void GuideWarning(FishCollectionView collection, FishPreferencesView personal, FishGuideOpenService opener)
+    {
+        if (collection.GuidePrompt(personal.Session, personal.HasCharacter) is not { } prompt) return;
+        var failure = opener.Failure(personal.Session);
+        var saved = personal.CollectionSavedUtc is not null && personal.SavedCollection.Count > 0;
+        var key = !opener.IsSupported ? T.GuideWarningUnsupported
+            : failure is not null || prompt.Key == T.CollectionGuideRetryRequired ? T.GuideWarningRetry
+            : saved ? T.GuideWarningSaved : T.GuideWarningRequired;
+        var text = UiText.Get(key);
+        var detail = saved ? UiText.Get(T.CollectionBackupBanner, prompt.Display,
+            personal.CollectionSavedUtc!.Value.ToLocalTime(), personal.SavedCollection.Count) : prompt.Display;
+        var hints = new List<string> { detail };
+        if (!opener.IsSupported) hints.Add(opener.CompatibilityReason.Display);
+        if (failure is not null) hints.Add(failure.Display);
+        var hint = string.Join("\n", hints);
+        var frame = ImGui.GetFrameHeight();
+        ImGui.PushStyleColor(ImGuiCol.ChildBg, new Vector4(0.42f, 0.29f, 0.06f, 0.72f));
+        if (ImGui.BeginChild("GlobalGuideWarning", new Vector2(0, frame), false,
+                ImGuiWindowFlags.NoScrollbar | ImGuiWindowFlags.NoScrollWithMouse))
+        {
+            var available = ImGui.GetContentRegionAvail().X;
+            var label = UiText.Get(T.OpenFishGuide);
+            var buttonWidth = Math.Min(ImGui.CalcTextSize(label).X + ImGui.GetStyle().FramePadding.X * 2, available * 0.35f);
+            var gap = ImGui.GetStyle().ItemSpacing.X;
+            ImGui.AlignTextToFramePadding();
+            Icon(FontAwesomeIcon.ExclamationTriangle);
+            GuideWarningHint(hint);
+            ImGui.SameLine();
+            var textWidth = Math.Max(1, available - frame - buttonWidth - gap * 2);
+            var origin = ImGui.GetCursorScreenPos();
+            ImGui.GetWindowDrawList().PushClipRect(origin, origin + new Vector2(textWidth, frame), true);
+            ImGui.GetWindowDrawList().AddText(origin + new Vector2(0, ImGui.GetStyle().FramePadding.Y), ImGui.GetColorU32(ImGuiCol.Text), text);
+            ImGui.GetWindowDrawList().PopClipRect();
+            ImGui.Dummy(new Vector2(textWidth, frame));
+            GuideWarningHint(hint);
+            ImGui.SameLine();
+            ImGui.BeginDisabled(!opener.IsSupported);
+            if (ImGui.Button(UiText.Label(T.OpenFishGuide, "OpenFishGuide"), new Vector2(buttonWidth, frame))) opener.Request(personal);
+            ImGui.EndDisabled();
+            GuideWarningHint(hint);
+        }
+        ImGui.EndChild();
+        ImGui.PopStyleColor();
+    }
+
+    private static void GuideWarningHint(string message)
+    {
+        if (!ImGui.IsItemHovered(ImGuiHoveredFlags.AllowWhenDisabled)) return;
+        var width = Math.Min(ImGui.GetFontSize() * 30, ImGui.GetMainViewport().WorkSize.X * 0.8f);
+        ImGui.SetNextWindowSize(new Vector2(width + ImGui.GetStyle().WindowPadding.X * 2, 0));
+        ImGui.BeginTooltip();
+        ImGui.PushTextWrapPos(ImGui.GetCursorPosX() + width);
+        ImGui.TextUnformatted(message);
+        ImGui.PopTextWrapPos();
+        ImGui.EndTooltip();
+    }
 }
