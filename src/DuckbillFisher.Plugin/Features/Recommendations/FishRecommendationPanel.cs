@@ -98,7 +98,10 @@ internal sealed class FishRecommendationPanel(FishRecommendationService service,
 
     private void Toolbar(float refreshWidth, float rangeWidth, float gap)
     {
+        ImGui.BeginDisabled(!preferences.View.HasCharacter);
         if (UiWidgets.ActionButton(FontAwesomeIcon.SyncAlt, T.RecommendationRefresh, "RefreshRecommendations", refreshWidth)) service.Refresh();
+        ImGui.EndDisabled();
+        Tooltip(UiText.Get(preferences.View.HasCharacter ? T.RecommendationManualHelp : T.AlertsWaitingCharacter));
         ImGui.SameLine(0, gap);
         var hours = Math.Max(0, Array.IndexOf(Hours, options.Hours));
         ImGui.SetNextItemWidth(rangeWidth);
@@ -204,7 +207,7 @@ internal sealed class FishRecommendationPanel(FishRecommendationService service,
         var caught = preferences.View.Collection(fish.FishParameterId, collection.View) == CollectionStatus.Caught;
         var appearance = RecommendationText.Timing(value, now);
         var hint = UiText.Get(T.RecommendationCandidateTooltip, fish.Name, RecommendationText.Appearance(value, now),
-            string.Join("\n", text.Reasons(entry, focus, now)), focus == 2 ? text.Next(value, now) : text.ListContext(entry));
+            string.Join("\n", text.Reasons(entry, focus, now)));
         var info = new RecommendationRowInfo(caught ? UiText.Get(T.RecommendationNowCaught) : appearance,
             text.Source(entry), hint,
             caught ? Gold : TimingColor(value, now))
@@ -264,7 +267,7 @@ internal sealed class FishRecommendationPanel(FishRecommendationService service,
         if (ImGui.SmallButton(UiText.Label(T.SpotAlertDetail, "RecommendationOpenDetail"))) showDetail(fish);
         UiWidgets.FlowNext(ImGui.CalcTextSize(UiText.Get(T.RecommendationMap)).X + ImGui.GetStyle().FramePadding.X * 2,
             ImGui.GetWindowContentRegionMax().X);
-        ImGui.BeginDisabled(fish.Details?.Spot is null);
+        ImGui.BeginDisabled(!preferences.View.HasCharacter || fish.Details?.Spot is null);
         if (ImGui.SmallButton(UiText.Label(T.RecommendationMap, "RecommendationMap")) && fish.Details?.Spot is { } spot) maps.Request(spot);
         ImGui.EndDisabled();
         ImGui.Spacing();
@@ -316,9 +319,14 @@ internal sealed class FishRecommendationPanel(FishRecommendationService service,
     private void DrawOther(FishRecommendationView view, float width)
     {
         var label = UiText.Get(T.RecommendationOther, view.Other.Length);
+        ImGui.BeginDisabled(view.Other.Length == 0);
         if (ImGui.Button($"{label}###RecommendationOther", new Vector2(width, ImGui.GetFrameHeight()))) ImGui.OpenPopup("RecommendationOtherPopup");
+        ImGui.EndDisabled();
         if (ImGui.CalcTextSize(label).X + ImGui.GetStyle().FramePadding.X * 2 > width) Tooltip(label);
-        ImGui.SetNextWindowSize(new Vector2(ImGui.GetFontSize() * 34, ImGui.GetFontSize() * 23), ImGuiCond.Appearing);
+        var work = ImGui.GetMainViewport().WorkSize;
+        var size = new Vector2(Math.Min(ImGui.GetFontSize() * 34, work.X * 0.85f), Math.Min(ImGui.GetFontSize() * 23, work.Y * 0.8f));
+        ImGui.SetNextWindowSize(size, ImGuiCond.Appearing);
+        ImGui.SetNextWindowSizeConstraints(new Vector2(Math.Min(size.X, ImGui.GetFontSize() * 16), 0), size);
         if (!ImGui.BeginPopup("RecommendationOtherPopup")) return;
         foreach (var entry in view.Other.Take(otherShown))
         {
@@ -363,7 +371,7 @@ internal sealed class FishRecommendationPanel(FishRecommendationService service,
     private static T Issue(RecommendationIssue issue) => issue switch
     {
         RecommendationIssue.OutsideHorizon => T.RecommendationOutside,
-        RecommendationIssue.ConditionsUnknown => T.RecommendationUnknown,
+        RecommendationIssue.ConditionsUnknown => T.RecommendationTargetConditionsUnknown,
         _ => T.RecommendationMissing,
     };
 }

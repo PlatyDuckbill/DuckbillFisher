@@ -109,7 +109,9 @@ public sealed class PreferencesTests
     [InlineData(0, false)]
     [InlineData(1, true)]
     [InlineData(19, true)]
-    [InlineData(20, false)]
+    [InlineData(20, true)]
+    [InlineData(24, true)]
+    [InlineData(25, false)]
     public void UnsupportedSchemaIsNotMigrated(int version, bool expected) =>
         Assert.Equal(expected, PreferencesMigration.Supports(version));
 

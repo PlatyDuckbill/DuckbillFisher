@@ -3,14 +3,18 @@ namespace DuckbillFisher.Core;
 public enum RecommendationIssue { None, ConditionsUnknown, MissingPreparation, OutsideHorizon }
 public enum OpportunityBasis { OwnConditions, PrerequisiteProxy, Always }
 public enum PreparationKind { Mooch, Intuition }
-public sealed record PreparationCondition(uint ItemId, int Count, PreparationKind Kind, FishingWindow Window);
+public sealed record PreparationCondition(uint ItemId, int Count, PreparationKind Kind, FishingWindow Window)
+{
+    public int OpportunityCount { get; init; }
+    public DateTimeOffset? NextOpportunity { get; init; }
+}
 public sealed record FishRecommendation(uint ItemId, RecommendationIssue Issue, FishingWindow Window,
     int OpportunityCount, OpportunityBasis Basis, uint BasisItemId, DateTimeOffset? NextOpportunity)
 {
     public bool OwnConditionsAlways { get; init; }
     public int MoochDepth { get; init; }
     public int IntuitionCatchCount { get; init; }
-    public uint[][] MoochPath { get; init; } = [];
+    public IReadOnlyList<IReadOnlyList<uint>> MoochPath { get; init; } = [];
     public IReadOnlyList<PreparationCondition> Preparation { get; init; } = [];
     public PreparationCondition? PrimaryPreparation { get; init; }
     public DateTimeOffset? NextOwnOpportunity { get; init; }
@@ -46,24 +50,16 @@ public sealed class FishRecommendations
         var day = new DateTimeOffset(now.UtcDateTime.Date, TimeSpan.Zero);
         if (day != analysisStart) { calendars.Clear(); analysisStart = day; }
         var through = now.AddHours(hours);
-        var results = new List<FishRecommendation>();
+        var facts = new List<FishRecommendation>();
         foreach (var id in itemIds.Distinct())
         {
             token.ThrowIfCancellationRequested();
-            results.Add(Describe(id, now, through, token));
+            facts.Add(Describe(id, now, token));
         }
-        var included = Order(results.Where(value => value.Issue == RecommendationIssue.None), now).ToArray();
-        return new(now, through, analysisStart, included,
-            results.Where(value => value.Issue != RecommendationIssue.None).OrderBy(value => value.Issue).ThenBy(value => value.ItemId).ToArray())
-        {
-            Now = Order(included.Where(value => InRange(value.DisplayWindow, now, now.AddMinutes(SoonMinutes))), now).ToArray(),
-            Preparation = Order(included.Where(value => value.MoochDepth > 0 || value.IntuitionCatchCount > 0), now).ToArray(),
-            Rare = included.Where(value => value.OpportunityCount > 0).OrderBy(value => value.OpportunityCount)
-                .ThenBy(value => value.DisplayWindow.Start ?? now).ThenBy(value => value.ItemId).ToArray(),
-        };
+        return FishRecommendationSelection.Select(now, through, analysisStart, facts);
     }
 
-    private FishRecommendation Describe(uint id, DateTimeOffset now, DateTimeOffset through, CancellationToken token)
+    private FishRecommendation Describe(uint id, DateTimeOffset now, CancellationToken token)
     {
         var own = Current(id, now, token);
         FishRecommendation Unknown() => new(id, RecommendationIssue.ConditionsUnknown, own, 0, OpportunityBasis.OwnConditions, id, null);
@@ -71,42 +67,26 @@ public sealed class FishRecommendations
         var rule = input.Rule;
         var path = rule.BaitSteps.Length > 0 ? rule.BaitSteps.Skip(1).ToArray()
             : rule.BaitPath.Skip(1).Select(item => new[] { item }).ToArray();
-        var preparation = path.SelectMany(step => step).Distinct()
-            .Select(item => new PreparationCondition(item, 1, PreparationKind.Mooch, Current(item, now, token)))
-            .Concat(rule.Predators.Select(prey => new PreparationCondition(prey.ItemId, prey.Count,
-                PreparationKind.Intuition, Current(prey.ItemId, now, token)))).ToArray();
-        var always = own.Kind == FishingWindowKind.Always;
-        var restricted = preparation.Where(value => value.Window.Kind is FishingWindowKind.Open or FishingWindowKind.Upcoming).ToArray();
-        var primary = restricted.Where(value => InRange(value.Window, now, through))
-            .OrderBy(value => Count(value.ItemId, token)).ThenBy(value => value.Window.Start).ThenBy(value => value.ItemId)
-                .ThenByDescending(value => value.Kind == PreparationKind.Intuition).FirstOrDefault()
-            ?? restricted.OrderBy(value => value.Window.Start).ThenBy(value => value.ItemId)
-                .ThenByDescending(value => value.Kind == PreparationKind.Intuition).FirstOrDefault()
-            ?? preparation.OrderBy(value => value.Window.Kind == FishingWindowKind.Unknown)
-                .ThenByDescending(value => value.Kind == PreparationKind.Intuition).FirstOrDefault();
-        var display = always && primary is not null ? primary.Window : own;
-        var issue = display.Kind == FishingWindowKind.Unknown ? RecommendationIssue.MissingPreparation
-            : !InRange(display, now, through) ? RecommendationIssue.OutsideHorizon : RecommendationIssue.None;
-        var basisId = always && primary is not null && primary.Window.Kind != FishingWindowKind.Always ? primary.ItemId : id;
-        var basis = always ? basisId != id ? OpportunityBasis.PrerequisiteProxy : OpportunityBasis.Always : OpportunityBasis.OwnConditions;
-        var nextOwn = Next(id, own, token);
-        return new(id, issue, own, Count(basisId, token), basis, basisId,
-            always && primary is not null ? Next(primary.ItemId, primary.Window, token) : nextOwn)
+        PreparationCondition Requirement(uint item, int count, PreparationKind kind)
         {
-            OwnConditionsAlways = always, MoochDepth = path.Length, MoochPath = path,
-            IntuitionCatchCount = rule.Predators.Sum(prey => prey.Count), Preparation = preparation,
-            PrimaryPreparation = primary, NextOwnOpportunity = nextOwn,
+            var window = Current(item, now, token);
+            return new(item, count, kind, window)
+            { OpportunityCount = Count(item, token), NextOpportunity = Next(item, window, token) };
+        }
+        var preparation = path.SelectMany(step => step).Distinct()
+            .Select(item => Requirement(item, 1, PreparationKind.Mooch))
+            .Concat(rule.Predators.Select(prey => Requirement(prey.ItemId, prey.Count, PreparationKind.Intuition))).ToArray();
+        var always = own.Kind == FishingWindowKind.Always;
+        var nextOwn = Next(id, own, token);
+        return new(id, RecommendationIssue.None, own, Count(id, token),
+            always ? OpportunityBasis.Always : OpportunityBasis.OwnConditions, id, nextOwn)
+        {
+            OwnConditionsAlways = always, MoochDepth = path.Length,
+            MoochPath = Array.AsReadOnly(path.Select(step => (IReadOnlyList<uint>)Array.AsReadOnly(step.ToArray())).ToArray()),
+            IntuitionCatchCount = rule.Predators.Sum(prey => prey.Count), Preparation = Array.AsReadOnly(preparation),
+            NextOwnOpportunity = nextOwn,
         };
     }
-
-    private static IOrderedEnumerable<FishRecommendation> Order(IEnumerable<FishRecommendation> values, DateTimeOffset now) =>
-        values.OrderBy(value => value.DisplayWindow.Kind == FishingWindowKind.Always ? 2 : value.DisplayWindow.Start > now ? 1 : 0)
-            .ThenBy(value => value.DisplayWindow.Start > now ? value.DisplayWindow.Start : value.DisplayWindow.End ?? DateTimeOffset.MaxValue)
-            .ThenBy(value => value.ItemId);
-
-    private static bool InRange(FishingWindow window, DateTimeOffset now, DateTimeOffset through) =>
-        window.Kind == FishingWindowKind.Always || window.Kind is FishingWindowKind.Open or FishingWindowKind.Upcoming
-            && (window.End is null || window.End > now) && window.Start <= through;
 
     private FishingWindow Current(uint id, DateTimeOffset now, CancellationToken token)
     {

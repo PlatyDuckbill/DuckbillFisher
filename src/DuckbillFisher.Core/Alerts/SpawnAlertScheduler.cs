@@ -19,6 +19,13 @@ public sealed class SpawnAlertScheduler
     private int previousSession;
     private bool wasEnabled;
 
+    /// <summary>Shared opening key for favorite-zero and current-hole notices.
+    /// The caller owns per-character persistence; advance reservations use a separate start key.</summary>
+    public static IReadOnlyList<(uint FishId, DateTimeOffset End)> UnseenOpenings(
+        IReadOnlyDictionary<uint, long>? previous, IReadOnlyList<(uint FishId, DateTimeOffset End)> occurrences) =>
+        occurrences.Where(value => value.End.ToUnixTimeMilliseconds() >
+            (previous?.GetValueOrDefault(value.FishId) ?? 0)).ToArray();
+
     public static bool Includes(SpawnAlertAudience audience, CollectionStatus collection) => audience switch
     {
         SpawnAlertAudience.AllFavorites => true,

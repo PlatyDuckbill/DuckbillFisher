@@ -209,6 +209,37 @@ public sealed class FishRecommendationTests
     }
 
     [Fact]
+    public void AReadyPrerequisiteIsNotHiddenByARarerOneLaterInTheSelectedRange()
+    {
+        var rates = Enumerable.Range(1, 100).Select(value => new WeatherChance((uint)value, 1)).ToArray();
+        var laterWeather = (uint)FishingAvailability.ForecastTarget(Day.ToUnixTimeSeconds() + 8400) + 1;
+        var target = Rule(1) with { Predators = [new(2, 1), new(3, 1)] };
+        var common = Rule(2, 0, 1);
+        var rare = Rule(3) with { WeatherIds = [laterWeather] };
+        var browser = new FishRecommendations(new[] { target, common, rare }
+            .Select(rule => new FishingForecastInput(rule, rates)));
+        var later = FishingAvailability.Find(Day, rare, rates);
+        Assert.InRange(later.Start!.Value, Day.AddMinutes(31), Day.AddHours(3));
+        var result = browser.Calculate(Day, 3, [1]);
+        Assert.Single(result.Now);
+        Assert.Equal(2u, result.Now[0].PrimaryPreparation!.ItemId);
+        Assert.Equal(3u, Assert.Single(result.Rare).PrimaryPreparation!.ItemId);
+        Assert.Equal(browser.Calculate(Day, 1, [1]).Now.Select(value => value.ItemId), result.Now.Select(value => value.ItemId));
+    }
+
+    [Fact]
+    public void RequirementSnapshotsDoNotExposeTheMutableInputMoochArrays()
+    {
+        var path = new uint[][] { [999], [2] };
+        var browser = Browser(Rule(1) with { BaitSteps = path }, Rule(2));
+        var snapshot = Assert.Single(browser.Calculate(Day, 3, [1]).Ranked);
+        path[1][0] = 3;
+        Assert.Equal(2u, snapshot.MoochPath[0][0]);
+        Assert.Throws<NotSupportedException>(() => ((IList<uint>)snapshot.MoochPath[0])[0] = 4);
+        Assert.Throws<NotSupportedException>(() => ((IList<PreparationCondition>)snapshot.Preparation).Clear());
+    }
+
+    [Fact]
     public void CancelledQueryCannotReturnAPartialList()
     {
         using var cancellation = new CancellationTokenSource();

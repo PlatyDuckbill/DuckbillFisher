@@ -27,13 +27,13 @@ internal sealed class RecommendationText(FishCatalog catalog)
                 : window.End <= now ? UiText.Get(intuition ? T.RecommendationIntuitionExpired : T.RecommendationBaitExpired)
                 : window.Start > now ? UiText.Get(intuition ? T.RecommendationIntuitionUpcoming : T.RecommendationBaitUpcoming, When(window.Start.Value, now))
                 : window.End is { } end ? UiText.Get(intuition ? T.RecommendationIntuitionOpen : T.RecommendationBaitOpen, Duration(end - now))
-                : window.Kind == FishingWindowKind.Open ? UiText.Get(T.RecommendationPreyOpenNoEnd) : UiText.Get(T.RecommendationUnknown);
+                : window.Start <= now ? UiText.Get(T.RecommendationPreyOpenNoEnd) : UiText.Get(T.RecommendationUnknown);
         }
         if (window.End <= now) return UiText.Get(T.RecommendationEnded);
         return window.Kind == FishingWindowKind.Always ? UiText.Get(T.RecommendationAlways)
             : window.Start > now ? UiText.Get(T.RecommendationOpens, Duration(window.Start.Value - now))
             : window.End is { } closing ? UiText.Get(T.RecommendationEnds, Duration(closing - now))
-            : window.Kind == FishingWindowKind.Open ? UiText.Get(T.RecommendationOpenNoEnd) : UiText.Get(T.RecommendationUnknown);
+            : window.Start <= now ? UiText.Get(T.RecommendationOpenNoEnd) : UiText.Get(T.RecommendationUnknown);
     }
 
     public static bool NextUsesPrey(FishRecommendation value) => value.OwnConditionsAlways && value.Basis == OpportunityBasis.PrerequisiteProxy;
@@ -85,7 +85,6 @@ internal sealed class RecommendationText(FishCatalog catalog)
             : UiText.Get(compact ? T.RecommendationNextCompact : T.RecommendationNextTime, When(next, now), Duration(next - now));
     }
 
-    public string ListContext(RecommendationEntry entry) => RequirementSummary(entry);
     public string Requirements(RecommendationEntry entry) => string.Join(", ", entry.Recommendation.Preparation
         .Where(value => value.Kind == PreparationKind.Intuition).Select(value => UiText.Get(T.RecommendationCatchCount, Name(value.ItemId), value.Count)));
     public string MoochPath(RecommendationEntry entry) => string.Join(" → ", entry.Recommendation.MoochPath
@@ -103,7 +102,8 @@ internal sealed class RecommendationText(FishCatalog catalog)
     {
         var value = entry.Recommendation;
         if (value.DisplayWindow.End <= now) return UiText.Get(T.RecommendationRefreshNeeded);
-        if (focus == 2 && NextAt(value) is { } next && value.DisplayWindow.End is { } end && next > end)
+        if ((focus == 2 || value.MoochDepth == 0 && value.IntuitionCatchCount == 0) &&
+            NextAt(value) is { } next && value.DisplayWindow.End is { } end && next > end)
             return NextUsesPrey(value) ? UiText.Get(T.RecommendationPreyGapShortReason, Name(value.BasisItemId), Duration(next - end))
                 : UiText.Get(T.RecommendationGapShortReason, Duration(next - end));
         return UiText.Get(T.RecommendationRowReason, focus == 2 ? Frequency(value) : RequirementSummary(entry));
@@ -117,7 +117,8 @@ internal sealed class RecommendationText(FishCatalog catalog)
             : value.OwnConditionsAlways && value.PrimaryPreparation is { } primary ? UiText.Get(T.RecommendationPreparationScheduleReason, Name(primary.ItemId))
             : value.Window.Kind == FishingWindowKind.Always ? UiText.Get(T.RecommendationAlways)
             : value.Window.Start > now ? UiText.Get(T.RecommendationScheduleUpcomingReason, When(value.Window.Start.Value, now))
-            : UiText.Get(T.RecommendationScheduleOpenReason);
+            : UiText.Get(value.MoochDepth == 0 && value.IntuitionCatchCount == 0
+                ? T.RecommendationScheduleDirectOpenReason : T.RecommendationScheduleOpenReason);
         return [first, RequirementSummary(entry)];
     }
 

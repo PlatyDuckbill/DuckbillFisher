@@ -754,7 +754,7 @@ Main inventory only. An unknown quantity is not zero.</value></data>
   <data name="CustomSoundLoginRequired" xml:space="preserve"><value>Log in to load and preview the WAV.</value></data>
   <data name="ChangelogTitle" xml:space="preserve"><value>What's new</value></data>
   <data name="ChangelogVersion" xml:space="preserve"><value>Installed version · {0}</value></data>
-  <data name="ChangelogPublishedHint" xml:space="preserve"><value>Latest {0} published releases, newest first. Expand a version to read its changes.</value></data>
+  <data name="ChangelogPublishedHint" xml:space="preserve"><value>Browse the {0} most recent updates.</value></data>
   <data name="ChangelogRelease" xml:space="preserve"><value>Version {0}</value></data>
   <data name="ChangelogAudio" xml:space="preserve"><value>Custom WAV alerts: choose, preview, reload, and stop a local sound file in Settings.</value></data>
   <data name="ChangelogForecast" xml:space="preserve"><value>Forecasts up to 30 real days ahead. Use the Fish Eyes button in the filter bar to switch the forecast and sorting basis.</value></data>
@@ -1090,10 +1090,10 @@ Prep work and Least frequent use their own sort criteria.</value></data>
   <data name="RecommendationNested" xml:space="preserve"><value>Prerequisite itself requires Intuition · preparation review needed</value></data>
   <data name="RecommendationAmbiguous" xml:space="preserve"><value>Alternative mooch path needs review</value></data>
   <data name="RecommendationMissing" xml:space="preserve"><value>Condition or preparation data needs review</value></data>
-  <data name="ChangelogRecommendations" xml:space="preserve"><value>Compare appearances, mooch chains and Intuition requirements across three recommendation tabs.</value></data>
+  <data name="ChangelogRecommendations" xml:space="preserve"><value>Choose fish to pursue by comparing appearances, mooch chains and Intuition requirements.</value></data>
   <data name="ChangelogRecommendationRefresh" xml:space="preserve"><value>Keep the recommendation order while reading, then refresh it for the current time.</value></data>
-  <data name="ChangelogCurrentSpotAlerts" xml:space="preserve"><value>Get local chat notices with detail links for uncaught big and legendary fish at the current hole.</value></data>
-  <data name="ChangelogZeroAlerts" xml:space="preserve"><value>Set spawn alerts from 0 to 120 minutes ahead; new settings notify at the start.</value></data>
+  <data name="ChangelogCurrentSpotAlerts" xml:space="preserve"><value>Get local chat alerts for uncaught big and legendary fish where you are fishing.</value></data>
+  <data name="ChangelogZeroAlerts" xml:space="preserve"><value>Set spawn alerts at the appearance start or up to 120 minutes ahead.</value></data>
   <data name="SpotAlertsEnabledStatus" xml:space="preserve"><value>Current-hole alerts enabled · favorite spawn alerts disabled</value></data>
   <data name="RecommendationOptionalStock" xml:space="preserve"><value>Optional, if a storage slot is free: {1} spare {0} · extra work estimate {2:0.##}–{3:0.##} min, planning allowance {4:0.##} min. Does not affect the score.</value></data>
   <data name="RecommendationOptionalStart" xml:space="preserve"><value>Start with spare preparation · {0:MM/dd HH:mm}</value></data>
@@ -1164,9 +1164,7 @@ Select to see the preparation plan.</value></data>
   <data name="RecommendationSnapshotStale" xml:space="preserve"><value>Queried {0:HH:mm} · refresh available</value></data>
   <data name="RecommendationCandidateTooltip" xml:space="preserve"><value>{0}
 {1}
-{3}
-{2}
-Select to see why this fish is recommended.</value></data>
+{2}</value></data>
   <data name="RecommendationPlace" xml:space="preserve"><value>{0} · {1}</value></data>
   <data name="RecommendationWhy" xml:space="preserve"><value>Why this fish</value></data>
   <data name="RecommendationStorageNote" xml:space="preserve"><value>Storing the intermediate bait lets you prepare the first two stages ahead.</value></data>
@@ -1227,7 +1225,7 @@ Select to see why this fish is recommended.</value></data>
   <data name="RecommendationFirstCastLabel" xml:space="preserve"><value>First cast estimate</value></data>
   <data name="RecommendationScopeShort" xml:space="preserve"><value>Includes fish available now</value></data>
   <data name="RecommendationTimeLabel" xml:space="preserve"><value>Appearance</value></data>
-  <data name="RecommendationIntuitionTimeHelp" xml:space="preserve"><value>When the target has no fixed appearance time, an actual prerequisite schedule is shown. The least frequent restricted prerequisite with an opportunity in this range is selected. Check the other required schedules as well.</value></data>
+  <data name="RecommendationIntuitionTimeHelp" xml:space="preserve"><value>When the target has no fixed appearance time, an actual prerequisite schedule is shown. The least frequent restricted prerequisite with an opportunity in the current tab&apos;s range is selected. Check the other required schedules as well.</value></data>
   <data name="RecommendationNextPreyShortLabel" xml:space="preserve"><value>Next prey</value></data>
   <data name="RecommendationNextPreyHelp" xml:space="preserve"><value>The target has no fixed appearance time. This shows the next appearance of the named fish needed for Intuition or mooching.</value></data>
   <data name="RecommendationNextTargetHelp" xml:space="preserve"><value>The next appearance under the target&apos;s own time and weather conditions. Intuition and mooching requirements must also be met.</value></data>
@@ -1283,7 +1281,7 @@ Shares duplicate prevention with zero-minute favorite alerts and uses the channe
   <data name="RecommendationFrequencyUnavailable" xml:space="preserve"><value>No appearance within 30 days</value></data>
   <data name="RecommendationCombinedRequirements" xml:space="preserve"><value>Mooch · {0} / Intuition · {1}</value></data>
   <data name="RecommendationPreparationScheduleReason" xml:space="preserve"><value>The target has no fixed appearance time; showing the schedule for {0}.</value></data>
-  <data name="RecommendationScheduleUpcomingReason" xml:space="preserve"><value>Appears {0}. Check the preparation requirements.</value></data>
+  <data name="RecommendationScheduleUpcomingReason" xml:space="preserve"><value>Appears {0}.</value></data>
   <data name="RecommendationScheduleOpenReason" xml:space="preserve"><value>Time and weather conditions are met. Check mooch and Intuition requirements separately.</value></data>
   <data name="RecommendationPreparationConditions" xml:space="preserve"><value>Required fish and appearances</value></data>
   <data name="RecommendationIntuitionConditionLabel" xml:space="preserve"><value>Intuition</value></data>
@@ -1292,4 +1290,8 @@ Shares duplicate prevention with zero-minute favorite alerts and uses the channe
   <data name="RecommendationOpenNoEnd" xml:space="preserve"><value>Available · end time unknown</value></data>
   <data name="RecommendationPreyOpenNoEnd" xml:space="preserve"><value>Prerequisite available · end time unknown</value></data>
   <data name="RecommendationRangeNoEnd" xml:space="preserve"><value>{0}–end time unknown</value></data>
+  <data name="RecommendationScheduleDirectOpenReason" xml:space="preserve"><value>Currently available.</value></data>
+  <data name="RecommendationTargetConditionsUnknown" xml:space="preserve"><value>The target&apos;s time or weather conditions are unavailable.</value></data>
+  <data name="ChangelogSpawnDetailLinks" xml:space="preserve"><value>Open fish details directly from spawn alerts.</value></data>
+  <data name="ChangelogCollectionRefreshPrompt" xml:space="preserve"><value>Check collection refresh status and open the Fish Guide from any main tab.</value></data>
 </root>

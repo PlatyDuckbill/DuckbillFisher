@@ -18,9 +18,12 @@ internal sealed class ChangelogWindow : Window
         new(new(0, 6, 0, 0),
         [
             (FontAwesomeIcon.Compass, T.ChangelogRecommendations),
-            (FontAwesomeIcon.Sync, T.ChangelogRecommendationRefresh),
             (FontAwesomeIcon.Bell, T.ChangelogCurrentSpotAlerts),
             (FontAwesomeIcon.Clock, T.ChangelogZeroAlerts),
+        ], OtherEntries:
+        [
+            (FontAwesomeIcon.Link, T.ChangelogSpawnDetailLinks),
+            (FontAwesomeIcon.BookOpen, T.ChangelogCollectionRefreshPrompt),
         ]),
         new(new(0, 5, 4, 0),
         [

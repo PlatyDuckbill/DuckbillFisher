@@ -15,6 +15,7 @@
 | 수집 관찰 | FishCollectionObserver, NativeFishCollectionReader | 도감 전체 대조와 검증된 등록 로그, 수동 상태와 분리 |
 | 수집 현황 | CollectionProgress, CollectionProgressPanel, CollectionProgressFishWindow | Framework 집계·선택한 확장팩/지역/먼바다 배열만 준비, 행·수집 revision·수동 상태·세션 변경 시 재계산. 목록1개 재사용·보이는 행만 렌더링·범위 교체/닫기 때 캐시 해제. Draw는 snapshot 표시 |
 | 출현 일정표 | Core FishingForecast.Enumerate/EnumerateCalendar, Plugin SpawnSchedule, SpawnScheduleCalendar, SpawnSchedulePanel | 일반30일/달력32일 분리. Framework 대상 필터링·선택 날짜 회차 캐시, 관리 입력만 취소 가능한 작업에서 계산. 월 데이터는 압축 UTC 구간 배열, UI는 보이는 행/날짜 칸만 표시 |
+| 터주작 추천 | Core FishRecommendations/FishRecommendationSelection, Plugin FishRecommendationService/RecommendationText/FishRecommendationPanel | 일정·요구량/빈도 snapshot 수집과 탭별 선별·정렬 분리. 단일 취소 작업자·UTC 캐시·요청 세대. UI는 표시/명시 요청만 담당 |
 | 시전 관찰 | FishingTracker, NativeFishingActivityReader, FishingLogContracts | 본인 로그·시전 단계·시간 상관관계, 미검증 결과 Unknown |
 | 시전 알림 | Core CastTimerAlerts, CastingTimerNotifications, CastingTimerSettingsWindow | 단조 시간 교차·시전별 알림ID 중복 방지. Framework에서 기존 추적기만 소비하고 선택SE/로컬 채팅 재사용, 화면 닫힘과 독립 |
 | 낚시 효과 | FishingBuffObserver | 타이머가 열렸을 때 Framework에서 공개 LocalPlayer.StatusList의850/568·루어3972/3973의Param을200ms 주기로 복사. 루어는 같은 시전의 새1~3중첩만 시작 시각을 알 수 있다. 기존 KR 조합 가드·로그인/캐릭터·어부/이동 확인, 단조 만료·1초 신선도. Draw는 관리 값만 표시 |
@@ -42,6 +43,13 @@
 - Game/Contracts/FishingGameIds는 이미 사용하던 KR 직업·상태·액션 시트 ID만 관리한다. 이름 부여는 지원 게임/DLL 조합 확대가 아니며 네이티브 오프셋·해시·로그 지문은 각 검증 계약에 남긴다.
 - 예측 기간/직감 가정/기록 상한은 해당 Core 기능, 설정 허용 범위는 해당 설정 타입, 표본 주기/유효기간은 관찰기에 둔다. UI 배율 선택/정규화는 Configuration/UiScaleSettings를 UI/UiScale과 공유한다.
 - 숫자가 같아도 의미가 다르면 합치지 않는다. ET 시간 환산의175초와 미확인 직감 지속 시간 가정175초는 각각 유지한다. 화면 전용 색/간격을 전역 상수로 옮기지 않는다.
+
+### 추천의 현재 경계와 고도화 지점
+
+- FishRecommendations는 입력 조건/날씨에서 자체 출현·준비 어종·요구량·30일 횟수·다음 출현을 수집한다. 준비 어종의 횟수/다음 구간도 값으로 캡처하고 생미끼 경로/요구 목록은 읽기 전용 snapshot으로 게시한다.
+- FishRecommendationSelection은 이 값과 명시적인 조회 시각/범위만 받아 탭별 대표 어종·포함 여부·정렬을 선택한다. 달력 재조회·시계·게임/UI/저장 접근이 없다. 지금 탭은30분 범위로 별도 선택하므로3/24시간 범위의 더 드문 선행 어종이 현재 기회를 가리지 않는다.
+- Plugin 서비스는 수집 필터/캐릭터·요청 세대·취소/단일 작업자를 관리하고 RecommendationText는 키/인자로 표시한다. UI는 이 계층을 우회해 선별/빈도 계산을 하지 않는다.
+- 향후 준비/보관 계산은 별도 계획 결과로 추가하고 시간·날씨 사실/빈도나 수집 관찰 상태를 덮어쓰지 않는다. 계획을 순위에 쓰는 판단은 선택 정책에서, 표시는 기존 근거 팝업에서 확장한다. 현재 불필요한 전략 인터페이스/플러그인 체계나 개인 준비 상태 읽기는 추가하지 않았다. 실제 고도화에는 검증된 보관 적격성/직감/시간 자료와 별도 기준 결정이 필요하다.
 
 ## 스레드·시각·수명
 

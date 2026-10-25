@@ -50,14 +50,58 @@ public sealed class SpawnAlertSchedulerTests
     }
 
     [Theory]
-    [InlineData(0)]
-    [InlineData(61)]
+    [InlineData(-1)]
+    [InlineData(121)]
     public void InvalidGlobalAndIndividualLeadTimesAreIgnored(int lead)
     {
         var scheduler = new SpawnAlertScheduler();
         Assert.Equal(0, scheduler.Evaluate(Now, TimeSpan.FromSeconds(100), 1, true, lead,
             SpawnAlertAudience.AllFavorites, [Fish]).Armed);
         Assert.Equal(0, Evaluate(new(), 0, candidates: [Fish with { LeadMinutes = lead }]).Armed);
+    }
+
+    [Fact]
+    public void ZeroMinuteAlertCrossesOpeningOnceButDoesNotCatchUpOnStartup()
+    {
+        var candidate = Fish with { LeadMinutes = 0, Window = new(FishingWindowKind.Upcoming, Now.AddSeconds(1), Now.AddMinutes(2)) };
+        var scheduler = new SpawnAlertScheduler();
+        Assert.Empty(Evaluate(scheduler, 0, candidates: [candidate]).Due);
+        Assert.Single(Evaluate(scheduler, 1, candidates: [candidate]).Due);
+        Assert.Empty(Evaluate(scheduler, 2, candidates: [candidate]).Due);
+        Assert.Empty(Evaluate(new(), 1, candidates: [candidate]).Due);
+    }
+
+    [Fact]
+    public void TwoHourAdvanceIsValidAndOpeningTheNextOccurrenceNotifiesAgain()
+    {
+        var scheduler = new SpawnAlertScheduler();
+        var future = Fish with { LeadMinutes = 120, Window = new(FishingWindowKind.Upcoming, Now.AddMinutes(120).AddSeconds(1), Now.AddMinutes(125)) };
+        Evaluate(scheduler, 0, candidates: [future]);
+        Assert.Single(Evaluate(scheduler, 1, candidates: [future]).Due);
+        Assert.Empty(Evaluate(scheduler, 2, candidates: [future]).Due);
+        scheduler = new();
+        var first = Fish with { LeadMinutes = 0, Window = new(FishingWindowKind.Upcoming, Now.AddSeconds(1), Now.AddSeconds(2)) };
+        Evaluate(scheduler, 0, candidates: [first]);
+        Assert.Single(Evaluate(scheduler, 1, candidates: [first]).Due);
+        var next = first with { Window = new(FishingWindowKind.Upcoming, Now.AddSeconds(4), Now.AddSeconds(5)) };
+        Evaluate(scheduler, 2, candidates: [next]);
+        Assert.Empty(Evaluate(scheduler, 3, candidates: [next]).Due);
+        Assert.Single(Evaluate(scheduler, 4, candidates: [next]).Due);
+    }
+
+    [Fact]
+    public void OpeningReservationsSuppressTheSameOccurrenceAndAllowTheNextOne()
+    {
+        var end = Now.AddMinutes(10);
+        var first = SpawnAlertScheduler.UnseenOpenings(null, [(1u, end)]);
+        Assert.Single(first);
+        var persisted = first.ToDictionary(value => value.FishId, value => value.End.ToUnixTimeMilliseconds());
+        Assert.Empty(SpawnAlertScheduler.UnseenOpenings(persisted, [(1u, end)]));
+        Assert.Empty(SpawnAlertScheduler.UnseenOpenings(persisted, [(1u, end.AddSeconds(-1))]));
+        Assert.Single(SpawnAlertScheduler.UnseenOpenings(persisted, [(1u, end.AddMinutes(10))]));
+        Assert.Single(SpawnAlertScheduler.UnseenOpenings(persisted, [(2u, end)]));
+        // A different character's independently supplied state must not inherit this reservation.
+        Assert.Single(SpawnAlertScheduler.UnseenOpenings(new Dictionary<uint, long>(), [(1u, end)]));
     }
 
     [Fact]

@@ -387,9 +387,8 @@ internal sealed class FishPreferences : IDisposable
                 !(configuration.SpawnAlertsEnabled || configuration.CurrentSpotAlertsEnabled)) return new HashSet<uint>();
             if (occurrences.Count == 0) return new HashSet<uint>();
             configuration.OpeningAlertWindows.TryGetValue(characterId, out var previous);
-            var accepted = occurrences.Where(value => value.End.ToUnixTimeMilliseconds() >
-                (previous?.GetValueOrDefault(value.FishId) ?? 0)).ToArray();
-            if (accepted.Length == 0) return new HashSet<uint>();
+            var accepted = SpawnAlertScheduler.UnseenOpenings(previous, occurrences);
+            if (accepted.Count == 0) return new HashSet<uint>();
             var candidate = CopyConfiguration();
             if (!candidate.OpeningAlertWindows.TryGetValue(characterId, out var saved))
                 candidate.OpeningAlertWindows[characterId] = saved = [];

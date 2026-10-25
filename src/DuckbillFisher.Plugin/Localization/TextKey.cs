@@ -1250,4 +1250,8 @@ internal enum TextKey
     RecommendationOpenNoEnd,
     RecommendationPreyOpenNoEnd,
     RecommendationRangeNoEnd,
+    RecommendationTargetConditionsUnknown,
+    RecommendationScheduleDirectOpenReason,
+    ChangelogSpawnDetailLinks,
+    ChangelogCollectionRefreshPrompt,
 }
