@@ -94,8 +94,12 @@ internal sealed class RecommendationText(FishCatalog catalog)
         var value = entry.Recommendation;
         // The frequency is already visible. Prefer the gap after this appearance in
         // the rarity view, and for fish with no prerequisite catches to explain.
-        var reason = reasons.Length > 1 && (focus == 2 || value.IntuitionCatchCount == 0 && value.MoochDepth == 0)
-            ? reasons[1] : reasons[0];
+        var showGap = reasons.Length > 1 && (focus == 2 || value.IntuitionCatchCount == 0 && value.MoochDepth == 0);
+        if (showGap && !value.OwnConditionsAlways && value.NextOwnOpportunity is { } next && value.Window?.End is { } end && next > end)
+            return UiText.Get(T.RecommendationGapShortReason, Duration(next - end));
+        if (showGap && value.OwnConditionsAlways && value.Basis == OpportunityBasis.PrerequisiteProxy && value.GapHours is > 0)
+            return UiText.Get(T.RecommendationPreyGapShortReason, Name(value.BasisItemId), Duration(TimeSpan.FromHours(value.GapHours.Value)));
+        var reason = showGap ? reasons[1] : reasons[0];
         return UiText.Get(T.RecommendationRowReason, reason);
     }
 

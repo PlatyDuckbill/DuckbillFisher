@@ -41,7 +41,7 @@ internal sealed class FishRecommendationPanel(FishRecommendationService service,
         { session = personal.Session; options = new(); service.Configure(options); evidence = null; evidenceView = null; evidenceRequest = 0; resetScroll = true; }
         if (!ImGui.BeginChild("RecommendationContent", Vector2.Zero, false, ImGuiWindowFlags.NoScrollbar | ImGuiWindowFlags.NoScrollWithMouse))
         { ImGui.EndChild(); return; }
-        Toolbar();
+        DrawHeader(service.View);
         var view = service.View;
         if (view.Generation != generation)
         { generation = view.Generation; otherShown = 20; evidence = null; evidenceView = null; evidenceRequest = 0; resetScroll = true; }
@@ -57,21 +57,60 @@ internal sealed class FishRecommendationPanel(FishRecommendationService service,
         ImGui.EndChild();
     }
 
-    private void Toolbar()
+    private void DrawHeader(FishRecommendationView view)
     {
-        if (UiWidgets.ActionButton(FontAwesomeIcon.SyncAlt, T.RecommendationRefresh, "RefreshRecommendations")) service.Refresh();
-        UiWidgets.FlowNext(ImGui.GetFontSize() * 8, ImGui.GetWindowContentRegionMax().X);
+        var available = ImGui.GetContentRegionAvail().X;
+        var frame = ImGui.GetFrameHeight();
+        var gap = Math.Min(ImGui.GetStyle().ItemSpacing.X, ImGui.GetTextLineHeight() * 0.4f);
+        var padding = ImGui.GetStyle().FramePadding.X * 2;
+        var refreshNatural = frame + ImGui.CalcTextSize(UiText.Get(T.RecommendationRefresh)).X + padding;
+        var rangeNatural = Hours.Max(value => ImGui.CalcTextSize(UiText.Get(T.RecommendationHours, value)).X) + frame + padding;
+        var fixedWidth = frame * 2 + gap * 3;
+        var controlsWidth = Math.Min(refreshNatural + rangeNatural + fixedWidth, Math.Max(frame * 4 + gap * 3, available * 0.54f));
+        var refreshWidth = Math.Min(refreshNatural, (controlsWidth - fixedWidth) * 0.48f);
+        var rangeWidth = Math.Max(1, controlsWidth - fixedWidth - refreshWidth);
+        var tabWidth = Math.Max(1, available - controlsWidth - gap);
+        var height = ImGui.GetFrameHeightWithSpacing();
+        if (ImGui.BeginChild("RecommendationTabs", new Vector2(tabWidth, height), false,
+                ImGuiWindowFlags.NoScrollbar | ImGuiWindowFlags.NoScrollWithMouse))
+        {
+            if (ImGui.BeginTabBar("RecommendationFocus", ImGuiTabBarFlags.FittingPolicyScroll))
+            {
+                var counts = new[] { view.Now.Length, view.Preparation.Length, view.Rare.Length };
+                for (var index = 0; index < TabNames.Length; index++)
+                {
+                    var selected = ImGui.BeginTabItem($"{UiText.Get(T.RecommendationTabCount, UiText.Get(TabNames[index]), counts[index])}###RecommendationFocus{index}");
+                    Tooltip(UiText.Get(TabHints[index]));
+                    if (!selected) continue;
+                    if (focus != index) { focus = index; resetScroll = true; }
+                    ImGui.EndTabItem();
+                }
+                ImGui.EndTabBar();
+            }
+        }
+        ImGui.EndChild();
+        ImGui.SameLine(0, gap);
+        if (ImGui.BeginChild("RecommendationControls", new Vector2(controlsWidth, height), false,
+                ImGuiWindowFlags.NoScrollbar | ImGuiWindowFlags.NoScrollWithMouse))
+            Toolbar(refreshWidth, rangeWidth, gap);
+        ImGui.EndChild();
+    }
+
+    private void Toolbar(float refreshWidth, float rangeWidth, float gap)
+    {
+        if (UiWidgets.ActionButton(FontAwesomeIcon.SyncAlt, T.RecommendationRefresh, "RefreshRecommendations", refreshWidth)) service.Refresh();
+        ImGui.SameLine(0, gap);
         var hours = Math.Max(0, Array.IndexOf(Hours, options.Hours));
-        ImGui.SetNextItemWidth(ImGui.GetFontSize() * 8);
+        ImGui.SetNextItemWidth(rangeWidth);
         var labels = Hours.Select(value => UiText.Get(T.RecommendationHours, value)).ToArray();
         if (ImGui.Combo("###RecommendationHours", ref hours, labels, labels.Length))
         { options = options with { Hours = Hours[hours] }; service.Configure(options); }
         Tooltip(UiText.Get(T.RecommendationHorizonHelp));
-        UiWidgets.FlowNext(ImGui.GetFrameHeight(), ImGui.GetWindowContentRegionMax().X);
+        ImGui.SameLine(0, gap);
         if (UiWidgets.IconButton(FontAwesomeIcon.Filter, "RecommendationFilters", UiText.Get(T.RecommendationOptions),
                 options.IncludeUnknown || options.FavoritesOnly || options.LegendaryOnly || !options.AllowStorage))
             ImGui.OpenPopup("RecommendationFiltersPopup");
-        UiWidgets.FlowNext(ImGui.GetFrameHeight(), ImGui.GetWindowContentRegionMax().X);
+        ImGui.SameLine(0, gap);
         if (UiWidgets.IconButton(FontAwesomeIcon.QuestionCircle, "RecommendationHelp", UiText.Get(T.RecommendationMethod)))
             ImGui.OpenPopup("RecommendationHelpPopup");
         if (ImGui.BeginPopup("RecommendationFiltersPopup"))
@@ -109,19 +148,6 @@ internal sealed class FishRecommendationPanel(FishRecommendationService service,
 
     private void DrawResults(FishRecommendationView view)
     {
-        if (ImGui.BeginTabBar("RecommendationFocus"))
-        {
-            var counts = new[] { view.Now.Length, view.Preparation.Length, view.Rare.Length };
-            for (var index = 0; index < TabNames.Length; index++)
-            {
-                var selected = ImGui.BeginTabItem($"{UiText.Get(T.RecommendationTabCount, UiText.Get(TabNames[index]), counts[index])}###RecommendationFocus{index}");
-                Tooltip(UiText.Get(TabHints[index]));
-                if (!selected) continue;
-                if (focus != index) { focus = index; resetScroll = true; }
-                ImGui.EndTabItem();
-            }
-            ImGui.EndTabBar();
-        }
         var entries = focus switch { 1 => view.Preparation, 2 => view.Rare, _ => view.Now };
         if (entries.Length == 0)
         {
@@ -160,7 +186,7 @@ internal sealed class FishRecommendationPanel(FishRecommendationService service,
             if (resetScroll) { ImGui.SetScrollY(0); resetScroll = false; }
             ImGui.PushStyleVar(ImGuiStyleVar.ItemSpacing, new Vector2(ImGui.GetStyle().ItemSpacing.X,
                 Math.Min(ImGui.GetStyle().ItemSpacing.Y, ImGui.GetFontSize() * 0.18f)));
-            var rowHeight = FishRowRenderer.GetRecommendationHeight(ImGui.GetContentRegionAvail().X);
+            var rowHeight = FishRowRenderer.GetRecommendationHeight();
             var clipper = ImGui.ImGuiListClipper();
             try
             {

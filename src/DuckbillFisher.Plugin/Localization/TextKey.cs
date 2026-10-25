@@ -1226,4 +1226,6 @@ internal enum TextKey
     RecommendationRowReason,
     RecommendationNamedRange,
     RecommendationStoredStrategyReason,
+    RecommendationGapShortReason,
+    RecommendationPreyGapShortReason,
 }

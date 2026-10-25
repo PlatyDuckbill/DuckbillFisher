@@ -31,8 +31,7 @@ internal sealed class FishRowRenderer(ITextureProvider textures, FishingMapServi
     private static bool IsWide(float width) => width >= ImGui.GetFontSize() * 23;
     private static int LineCount(float width) => IsWide(width) ? 3 : 4;
     public static float GetHeight(float width) => ImGui.GetTextLineHeightWithSpacing() * LineCount(width) + 8;
-    private static bool WideRecommendation(float width) => width >= ImGui.GetFontSize() * 42;
-    public static float GetRecommendationHeight(float width) => ImGui.GetTextLineHeightWithSpacing() * (WideRecommendation(width) ? 4 : 5) + 8;
+    public static float GetRecommendationHeight() => ImGui.GetTextLineHeightWithSpacing() * 3 + 8;
 
     public bool Draw(FishGuideRow fish, float height, bool selected, string state, string place,
         FishingWindow? forecast, DateTimeOffset now, bool usesOtherRegion = false, bool favorite = false, bool compact = false,
@@ -86,16 +85,16 @@ internal sealed class FishRowRenderer(ITextureProvider textures, FishingMapServi
         }
         var textX = iconSize + 14;
         var textWidth = Math.Max(1, width - textX - 4);
-        var recommendationWide = WideRecommendation(width);
-        var identityWidth = recommendation is not null ? textWidth * (recommendationWide ? 0.40f : 0.44f) : textWidth;
+        var identityWidth = recommendation is not null ? textWidth * 0.40f : textWidth;
         var scheduleX = textX + identityWidth + 12;
-        var scheduleWidth = recommendationWide ? textWidth * 0.29f - 12 : textWidth - identityWidth - 12;
+        var scheduleWidth = textWidth * 0.29f - 12;
         var comparisonX = scheduleX + scheduleWidth + 12;
         var comparisonWidth = textX + textWidth - comparisonX;
         var name = fish.IsOceanFishing ? UiText.Get(T.OceanRowLabel, fish.DisplayName)
             : fish.Grade is FishGrade.Big or FishGrade.Legendary
                 ? UiText.Get(T.RowGradeLabel, new UiMessage(fish.Grade == FishGrade.Legendary ? T.GradeLegendaryLabel : T.GradeBigLabel), fish.DisplayName)
                 : fish.DisplayName;
+        if (recommendation is not null) state = recommendation.Frequency;
         var badgePadding = collectionStatus is not null ? ImGui.GetStyle().FramePadding.X : 0;
         var stateWidth = Math.Min(ImGui.CalcTextSize(state).X + badgePadding * 2, identityWidth * 0.45f);
         ImGui.SetCursorPos(start + new Vector2(textX, 4));
@@ -123,7 +122,7 @@ internal sealed class FishRowRenderer(ITextureProvider textures, FishingMapServi
             ImGui.SetCursorPosX(ImGui.GetCursorPosX() + badgePadding);
         }
         if (collectionColor is { } color) ImGui.PushStyleColor(ImGuiCol.Text, color);
-        LineText(state, Math.Max(1, stateWidth - badgePadding * 2), collectionColor is null);
+        LineText(state, Math.Max(1, stateWidth - badgePadding * 2), collectionColor is null && recommendation is null);
         if (collectionColor is not null) ImGui.PopStyleColor();
 
         // Location is clipped first; the timer keeps its own width on the same line.
@@ -177,30 +176,32 @@ internal sealed class FishRowRenderer(ITextureProvider textures, FishingMapServi
         if (recommendation is not null)
         {
             ImGui.SetCursorPos(start + new Vector2(scheduleX, 4 + line));
-            var range = !recommendationWide && recommendation.Context.Length > 0
+            var range = recommendation.Context.Length > 0
                 ? recommendation.Range.Length == 0 ? recommendation.Context
                     : UiText.Get(T.RecommendationNamedRange, recommendation.Context, recommendation.Range) : recommendation.Range;
             LineText(range, scheduleWidth, false);
-            ImGui.SetCursorPos(start + new Vector2(recommendationWide ? comparisonX : scheduleX, 4 + (recommendationWide ? 0 : line * 2)));
-            LineText(recommendation.Next, recommendationWide ? comparisonWidth : scheduleWidth, false);
-            ImGui.SetCursorPos(start + new Vector2(recommendationWide ? comparisonX : textX, 4 + line * (recommendationWide ? 1 : 3)));
-            LineText(recommendation.Frequency, recommendationWide ? comparisonWidth : identityWidth, false);
-            if (recommendationWide)
-            {
-                ImGui.SetCursorPos(start + new Vector2(scheduleX, 4 + line * 2));
-                LineText(recommendation.Context, scheduleWidth, true);
-            }
-            ImGui.SetCursorPos(start + new Vector2(recommendationWide ? comparisonX : scheduleX, 4 + line * (recommendationWide ? 2 : 3)));
-            if (ImGui.SmallButton(UiText.Label(T.RecommendationDetailsButton, "RecommendationOpenDetail")))
+            ImGui.SetCursorPos(start + new Vector2(comparisonX, 4 + line));
+            LineText(recommendation.Next, comparisonWidth, false);
+            var actionWidth = ImGui.CalcTextSize(UiText.Get(T.RecommendationDetailsButton)).X
+                + ImGui.CalcTextSize(UiText.Get(T.RecommendationEvidenceButton)).X
+                + ImGui.GetStyle().FramePadding.X * 4 + ImGui.GetStyle().ItemSpacing.X;
+            var compactActions = actionWidth > comparisonWidth;
+            if (compactActions) actionWidth = line * 2 + ImGui.GetStyle().ItemSpacing.X;
+            ImGui.SetCursorPos(start + new Vector2(Math.Max(comparisonX, textX + textWidth - actionWidth), 4));
+            if (compactActions
+                ? UiWidgets.IconButton(FontAwesomeIcon.Fish, "RecommendationOpenDetail", UiText.Get(T.RecommendationDetailsButton), size: line)
+                : ImGui.SmallButton(UiText.Label(T.RecommendationDetailsButton, "RecommendationOpenDetail")))
             { actionClicked = true; recommendation.OpenDetail?.Invoke(); }
             actionHovered |= ImGui.IsItemHovered();
             ImGui.SameLine();
-            if (ImGui.SmallButton(UiText.Label(T.RecommendationEvidenceButton, "RecommendationOpenEvidence")))
+            if (compactActions
+                ? UiWidgets.IconButton(FontAwesomeIcon.InfoCircle, "RecommendationOpenEvidence", UiText.Get(T.RecommendationEvidenceButton), size: line)
+                : ImGui.SmallButton(UiText.Label(T.RecommendationEvidenceButton, "RecommendationOpenEvidence")))
             { actionClicked = true; recommendation.OpenEvidence?.Invoke(); }
             actionHovered |= ImGui.IsItemHovered();
-            ImGui.SetCursorPos(start + new Vector2(textX, 4 + line * (recommendationWide ? 3 : 4)));
+            ImGui.SetCursorPos(start + new Vector2(scheduleX, 4 + line * 2));
             if (recommendation.ContextTint is { } tint) ImGui.PushStyleColor(ImGuiCol.Text, tint);
-            LineText(recommendation.Reason, textWidth, false);
+            LineText(recommendation.Reason, textX + textWidth - scheduleX, false);
             if (recommendation.ContextTint is not null) ImGui.PopStyleColor();
         }
         else

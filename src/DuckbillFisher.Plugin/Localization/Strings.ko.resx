@@ -1263,7 +1263,9 @@
   <data name="RecommendationDetailsButton" xml:space="preserve"><value>상세 보기</value></data>
   <data name="RecommendationEvidenceButton" xml:space="preserve"><value>추천 근거</value></data>
   <data name="RecommendationProxyFrequencyCompact" xml:space="preserve"><value>{1} 기준 · {0}회 / 30일</value></data>
-  <data name="RecommendationRowReason" xml:space="preserve"><value>추천 이유 · {0}</value></data>
+  <data name="RecommendationRowReason" xml:space="preserve"><value>{0}</value></data>
   <data name="RecommendationNamedRange" xml:space="preserve"><value>{0} · {1}</value></data>
   <data name="RecommendationStoredStrategyReason" xml:space="preserve"><value>생미끼 보관 사용 · 보관할 어종: {0}</value></data>
+  <data name="RecommendationGapShortReason" xml:space="preserve"><value>출현 종료 후 {0} 대기</value></data>
+  <data name="RecommendationPreyGapShortReason" xml:space="preserve"><value>{0}: 출현 종료 후 {1} 대기</value></data>
 </root>

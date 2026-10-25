@@ -1262,7 +1262,9 @@ Select to see why this fish is recommended.</value></data>
   <data name="RecommendationDetailsButton" xml:space="preserve"><value>Details</value></data>
   <data name="RecommendationEvidenceButton" xml:space="preserve"><value>Why</value></data>
   <data name="RecommendationProxyFrequencyCompact" xml:space="preserve"><value>{1}: {0} / 30 days</value></data>
-  <data name="RecommendationRowReason" xml:space="preserve"><value>Why · {0}</value></data>
+  <data name="RecommendationRowReason" xml:space="preserve"><value>{0}</value></data>
   <data name="RecommendationNamedRange" xml:space="preserve"><value>{0} · {1}</value></data>
   <data name="RecommendationStoredStrategyReason" xml:space="preserve"><value>Uses bait storage · fish to store: {0}</value></data>
+  <data name="RecommendationGapShortReason" xml:space="preserve"><value>Wait {0} after this occurrence</value></data>
+  <data name="RecommendationPreyGapShortReason" xml:space="preserve"><value>{0}: wait {1} after this occurrence</value></data>
 </root>
