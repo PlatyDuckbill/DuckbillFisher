@@ -21,7 +21,8 @@ internal sealed class ChangelogWindow : Window
             (FontAwesomeIcon.Fish, T.ChangelogRecommendationPreparation),
             (FontAwesomeIcon.Star, T.ChangelogRecommendationRare),
             (FontAwesomeIcon.SyncAlt, T.ChangelogRecommendationRefresh),
-        ], FeatureTitle: T.ChangelogRecommendationFeatureTitle, FeatureSummary: T.ChangelogRecommendations, OtherEntries:
+        ], new DateTimeOffset(2026, 10, 26, 5, 34, 15, TimeSpan.Zero),
+            FeatureTitle: T.ChangelogRecommendationFeatureTitle, FeatureSummary: T.ChangelogRecommendations, OtherEntries:
         [
             (FontAwesomeIcon.Bell, T.ChangelogCurrentSpotAlerts),
             (FontAwesomeIcon.Clock, T.ChangelogZeroAlerts),
