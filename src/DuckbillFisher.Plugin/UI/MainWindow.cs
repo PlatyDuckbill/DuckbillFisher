@@ -136,13 +136,13 @@ internal sealed class MainWindow : Window
         {
             // A live ImGui context can retain the previous tab order across plugin reloads.
             // Use a stable ID for this menu order instead of reusing the old tab-bar state.
-            if (ImGui.BeginTabBar("MainNavigation.FavoritesSecond", ImGuiTabBarFlags.FittingPolicyScroll))
+            if (ImGui.BeginTabBar("MainNavigation.ScheduleBeforeCollection", ImGuiTabBarFlags.FittingPolicyScroll))
             {
                 NavigationTab(MainPage.Catalog, T.TabCatalog, "CatalogTab", FontAwesomeIcon.Fish);
                 NavigationTab(MainPage.Alerts, T.TabAlerts, "SpawnAlertsTab", FontAwesomeIcon.Star);
                 NavigationTab(MainPage.Recommendations, T.RecommendationTitle, "RecommendationsTab", FontAwesomeIcon.Compass);
-                NavigationTab(MainPage.Collection, T.TabCollectionProgress, "CollectionProgressTab", FontAwesomeIcon.ChartBar);
                 NavigationTab(MainPage.Schedule, T.ScheduleTitle, "SpawnScheduleTab", FontAwesomeIcon.CalendarAlt);
+                NavigationTab(MainPage.Collection, T.TabCollectionProgress, "CollectionProgressTab", FontAwesomeIcon.ChartBar);
                 NavigationTab(MainPage.History, T.TabHistory, "FishingHistoryTab", FontAwesomeIcon.History);
                 NavigationTab(MainPage.Settings, T.TabSettings, "SettingsTab", FontAwesomeIcon.Cog, selectSettings);
                 if (developerMode)

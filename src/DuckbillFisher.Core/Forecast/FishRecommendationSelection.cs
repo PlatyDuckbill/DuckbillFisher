@@ -17,7 +17,8 @@ internal static class FishRecommendationSelection
             choices.Where(value => value.Issue != RecommendationIssue.None).OrderBy(value => value.Issue).ThenBy(value => value.ItemId).ToArray())
         {
             Now = Order(immediate, now).ToArray(),
-            Preparation = Order(included.Where(value => value.MoochDepth > 0 || value.IntuitionCatchCount > 0), now).ToArray(),
+            Preparation = Order(included.Where(value => (value.MoochDepth > 0 || value.IntuitionCatchCount > 0)
+                && !(value.OwnConditionsAlways && value.Preparation.All(condition => condition.Window.Kind == FishingWindowKind.Always))), now).ToArray(),
             Rare = included.Where(value => value.OpportunityCount > 0).OrderBy(value => value.OpportunityCount)
                 .ThenBy(value => value.DisplayWindow.Start ?? now).ThenBy(value => value.ItemId).ToArray(),
         };
@@ -51,7 +52,8 @@ internal static class FishRecommendationSelection
     }
 
     private static IOrderedEnumerable<FishRecommendation> Order(IEnumerable<FishRecommendation> values, DateTimeOffset now) =>
-        values.OrderBy(value => value.DisplayWindow.Kind == FishingWindowKind.Always ? 2 : value.DisplayWindow.Start > now ? 1 : 0)
+        values.OrderBy(value => value.IsEndingSoon(now) ? 3 : value.DisplayWindow.Kind == FishingWindowKind.Always ? 2 : value.DisplayWindow.Start > now ? 1 : 0)
+            .ThenByDescending(value => value.IsEndingSoon(now) ? value.DisplayWindow.End : null)
             .ThenBy(value => value.DisplayWindow.Start > now ? value.DisplayWindow.Start : value.DisplayWindow.End ?? DateTimeOffset.MaxValue)
             .ThenBy(value => value.ItemId);
 

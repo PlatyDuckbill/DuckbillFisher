@@ -51,8 +51,8 @@ public sealed class FishRecommendationTests
     [Fact]
     public void PrepIncludesASingleMoochAndIntuitionWithoutInventingAWorkload()
     {
-        var result = Browser(Rule(1), Rule(2) with { BaitSteps = [[999], [4]] },
-            Rule(3) with { Predators = [new(4, 3)] }, Rule(4)).Calculate(Day, 3, [1, 2, 3]);
+        var result = Browser(Rule(1), Rule(2, 0, 12) with { BaitSteps = [[999], [4]] },
+            Rule(3, 0, 12) with { Predators = [new(4, 3)] }, Rule(4)).Calculate(Day, 3, [1, 2, 3]);
         Assert.Equal(new uint[] { 2, 3 }, result.Preparation.Select(value => value.ItemId));
         var intuition = Assert.Single(result.Preparation.Single(value => value.ItemId == 3).Preparation);
         Assert.Equal(3, intuition.Count);
@@ -237,6 +237,75 @@ public sealed class FishRecommendationTests
         Assert.Equal(2u, snapshot.MoochPath[0][0]);
         Assert.Throws<NotSupportedException>(() => ((IList<uint>)snapshot.MoochPath[0])[0] = 4);
         Assert.Throws<NotSupportedException>(() => ((IList<PreparationCondition>)snapshot.Preparation).Clear());
+    }
+
+    [Fact]
+    public void AllAlwaysPrerequisitesAreOmittedFromPrepButRemainInTargetNow()
+    {
+        var result = Browser(Rule(1) with { BaitSteps = [[999], [3]] },
+            Rule(2) with { Predators = [new(3, 5)] }, Rule(3)).Calculate(Day, 3, [1, 2]);
+        Assert.Empty(result.Preparation);
+        Assert.Equal(new uint[] { 1, 2 }, result.Now.Select(value => value.ItemId));
+    }
+
+    [Fact]
+    public void UnrestrictedTargetWithATimedPreyIsStillAPrepCandidate()
+    {
+        var result = Browser(Rule(1) with { Predators = [new(2, 3)] }, Rule(2, 6, 12)).Calculate(Day, 3, [1]);
+        var fish = Assert.Single(result.Preparation);
+        Assert.True(fish.OwnConditionsAlways);
+        Assert.Equal(2u, fish.PrimaryPreparation!.ItemId);
+        Assert.Equal(FishingWindowKind.Upcoming, fish.DisplayWindow.Kind);
+    }
+
+    [Fact]
+    public void MissingPrerequisiteConditionsAreNotTreatedAsAlwaysAvailable()
+    {
+        var target = Rule(1) with { BaitSteps = [[999], [2]], Predators = [new(3, 1)] };
+        var fish = Assert.Single(Browser(target, Rule(2)).Calculate(Day, 3, [1]).Preparation);
+        Assert.True(fish.PreparationUnknown);
+    }
+
+    [Theory]
+    [InlineData(599, true)]
+    [InlineData(600, true)]
+    [InlineData(601, false)]
+    public void TenMinuteEndingBoundaryChangesPriorityWithoutRemovingTheFish(int remaining, bool ending)
+    {
+        var result = Browser(Rule(1, 0, remaining / 175.0), Rule(2, 6, 12)).Calculate(Day, 3, [1, 2]);
+        var fish = result.Now.Single(value => value.ItemId == 1);
+        Assert.Equal(ending, fish.IsEndingSoon(Day));
+        Assert.Equal(ending ? new uint[] { 2, 1 } : new uint[] { 1, 2 }, result.Now.Select(value => value.ItemId));
+    }
+
+    [Fact]
+    public void EndingFishFollowOpenUpcomingAndAlwaysFishInTheActionTabs()
+    {
+        var bait = new uint[][] { [999], [9] };
+        var result = Browser(Rule(1, 0, 1) with { BaitSteps = bait }, Rule(2),
+            Rule(3, 6, 12) with { BaitSteps = bait }, Rule(4, 0, 12) with { BaitSteps = bait }, Rule(9))
+            .Calculate(Day, 3, [1, 2, 3, 4]);
+        Assert.Equal(new uint[] { 4, 3, 2, 1 }, result.Now.Select(value => value.ItemId));
+        Assert.Equal(new uint[] { 4, 3, 1 }, result.Preparation.Select(value => value.ItemId));
+    }
+
+    [Fact]
+    public void EndingGroupPrefersMoreTimeButRarityKeepsItsOwnOrder()
+    {
+        var result = Browser(Rule(1, 0, 2), Rule(2, 0, 3), Rule(3, 0, 600 / 175.0)).Calculate(Day, 3, [1, 2, 3]);
+        Assert.Equal(new uint[] { 3, 2, 1 }, result.Now.Select(value => value.ItemId));
+        Assert.Equal(new uint[] { 1, 2, 3 }, result.Rare.Select(value => value.ItemId));
+    }
+
+    [Fact]
+    public void UnknownEndIsNotAssumedToBeAnEndingWindow()
+    {
+        var browser = new FishRecommendations(new[] { Rule(1) with { WeatherIds = [1] }, Rule(2, 0, 1), Rule(3, 6, 12) }
+            .Select(rule => new FishingForecastInput(rule, [new(1, 100)])));
+        var result = browser.Calculate(Day, 3, [1, 2, 3]);
+        Assert.Equal(new uint[] { 1, 3, 2 }, result.Now.Select(value => value.ItemId));
+        Assert.False(result.Now[0].IsEndingSoon(Day));
+        Assert.Null(result.Now[0].Window.End);
     }
 
     [Fact]

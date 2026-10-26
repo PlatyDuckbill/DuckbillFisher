@@ -1039,8 +1039,9 @@
   <data name="RecommendationOtherRow" xml:space="preserve"><value>{0} · {1}</value></data>
   <data name="RecommendationMethod" xml:space="preserve"><value>추천 도움말</value></data>
   <data name="RecommendationMethodHelp" xml:space="preserve"><value>지금 노릴 어종: 현재 출현 중이거나 30분 안에 출현할 후보입니다.
-밑작업: 선택한 기간 안에 기회가 있고 생미끼나 직감 어종을 준비해야 하는 후보입니다.
-출현 드문 순: 같은 기간의 후보를 30일 출현 횟수가 적은 순으로 보여줍니다.</value></data>
+밑작업: 생미끼·직감 준비가 필요한 후보이며, 대상과 준비 어종이 모두 상시면 제외합니다.
+출현 드문 순: 선택한 기간의 후보를 30일 출현 횟수가 적은 순으로 보여줍니다.
+지금 노릴 어종·밑작업에서는 종료까지 10분 이하인 후보를 뒤쪽에 표시합니다. 순위는 조회·갱신할 때 정합니다.</value></data>
   <data name="RecommendationAnalysis" xml:space="preserve"><value>빈도 계산 기간 · {0:MM/dd}~{1:MM/dd} (UTC)</value></data>
   <data name="RecommendationEnded" xml:space="preserve"><value>조회한 회차 종료 · 갱신 필요</value></data>
   <data name="RecommendationOpens" xml:space="preserve"><value>{0} 후 출현</value></data>
@@ -1112,13 +1113,15 @@
   <data name="RecommendationAsOf" xml:space="preserve"><value>{0:HH:mm} 조회</value></data>
   <data name="RecommendationManualHelp" xml:space="preserve"><value>읽는 동안 목록과 순위는 유지되고 남은 시간만 줄어듭니다. ‘갱신’을 누르면 현재 시각으로 다시 추천합니다.</value></data>
   <data name="RecommendationNowHint" xml:space="preserve"><value>현재 출현 중이거나 30분 안에 출현할 후보입니다.
-출현 중인 어종부터, 이후 가까운 출현 순으로 표시합니다. 시간·날씨 제한이 없는 어종은 뒤에 표시합니다. 준비가 끝났다는 뜻은 아닙니다.</value></data>
+출현 중인 어종과 가까운 예정 순으로 보되, 종료까지 10분 이하인 후보는 뒤쪽에 표시합니다.
+읽는 동안 순위는 유지하며, 갱신하면 현재 시각으로 다시 정렬합니다. 준비 완료 여부는 판정하지 않습니다.</value></data>
   <data name="RecommendationPreparationHint" xml:space="preserve"><value>선택한 기간 안에 기회가 있고 생미끼·직감 준비가 필요한 후보입니다.
-출현 중·가까운 출현 순으로 표시합니다. 각 준비 어종의 일정은 추천 근거에서 확인할 수 있으며, 출현 전에 준비를 끝낼 수 있는지는 계산하지 않습니다.</value></data>
+대상과 준비 어종이 모두 시간·날씨 상시일 때만 제외합니다.
+종료까지 10분 이하인 후보는 조회·갱신할 때 뒤쪽에 표시합니다. 출현 전에 준비를 끝낼 수 있는지는 계산하지 않습니다.</value></data>
   <data name="RecommendationRareHint" xml:space="preserve"><value>선택한 기간의 후보를 30일 출현 횟수가 적은 순으로 보여줍니다.
 횟수가 같으면 공동 순위이며 출현 시각 순으로 표시합니다. 대상에 고정 출현 시각이 없으면 대표 준비 어종의 빈도를 이름과 함께 표시합니다.</value></data>
   <data name="RecommendationNowEmpty" xml:space="preserve"><value>현재 출현 중이거나 30분 안에 출현할 후보가 없습니다. 밑작업·출현 드문 순에서 이후 일정을 확인해 보세요.</value></data>
-  <data name="RecommendationPreparationEmpty" xml:space="preserve"><value>이 기간에는 생미끼·직감 준비가 필요한 후보가 없습니다.</value></data>
+  <data name="RecommendationPreparationEmpty" xml:space="preserve"><value>이 기간에는 시간·날씨 조건에 맞춰 준비할 후보가 없습니다.</value></data>
   <data name="RecommendationRareEmpty" xml:space="preserve"><value>이 기간에는 출현 횟수로 비교할 후보가 없습니다.</value></data>
   <data name="RecommendationUnknownCount" xml:space="preserve"><value>수집 여부 미확인 · {0}종</value></data>
   <data name="RecommendationRowTooltip" xml:space="preserve"><value>{0}

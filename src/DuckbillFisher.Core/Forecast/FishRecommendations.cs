@@ -21,6 +21,8 @@ public sealed record FishRecommendation(uint ItemId, RecommendationIssue Issue, 
     public bool PreparationUnknown => Preparation.Any(value => value.Window.Kind == FishingWindowKind.Unknown);
     // An actual prerequisite's own calendar, never a synthesized target/Intuition interval.
     public FishingWindow DisplayWindow => OwnConditionsAlways && PrimaryPreparation is { } primary ? primary.Window : Window;
+    public bool IsEndingSoon(DateTimeOffset at) => DisplayWindow.Start <= at && DisplayWindow.End is { } end && end > at
+        && end - at <= TimeSpan.FromMinutes(FishRecommendations.EndingSoonMinutes);
 }
 public sealed record RecommendationResult(DateTimeOffset At, DateTimeOffset Through, DateTimeOffset AnalysisStart,
     IReadOnlyList<FishRecommendation> Ranked, IReadOnlyList<FishRecommendation> Other)
@@ -34,6 +36,7 @@ public sealed record RecommendationResult(DateTimeOffset At, DateTimeOffset Thro
 public sealed class FishRecommendations
 {
     public const int SoonMinutes = 30;
+    public const int EndingSoonMinutes = 10;
     private readonly IReadOnlyDictionary<uint, FishingForecastInput> inputs;
     // One background worker owns this cache. Refreshes within the UTC day reuse condition calendars.
     private readonly Dictionary<uint, FishingWindow[]> calendars = [];

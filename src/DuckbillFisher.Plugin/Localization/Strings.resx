@@ -1039,8 +1039,9 @@ Fish to target now includes only those available now or within 30 minutes. The r
   <data name="RecommendationOtherRow" xml:space="preserve"><value>{0} · {1}</value></data>
   <data name="RecommendationMethod" xml:space="preserve"><value>Recommendation help</value></data>
   <data name="RecommendationMethodHelp" xml:space="preserve"><value>Fish to target now: available now or within 30 minutes.
-Prep work: candidates in the selected range that require mooch bait or Intuition catches.
-Least frequent: candidates in that range ordered by fewest appearances over 30 days.</value></data>
+Prep work: candidates requiring mooch bait or Intuition catches, excluding those whose target and prerequisites are all unrestricted.
+Least frequent: candidates in the selected range, ordered by fewest appearances over 30 days.
+Target now and Prep work put candidates with 10 minutes or less remaining at the back. Order is set when querying or refreshing.</value></data>
   <data name="RecommendationAnalysis" xml:space="preserve"><value>Frequency analysis · {0:MM/dd}–{1:MM/dd} (UTC)</value></data>
   <data name="RecommendationEnded" xml:space="preserve"><value>Queried occurrence ended · refresh needed</value></data>
   <data name="RecommendationOpens" xml:space="preserve"><value>Appears in {0}</value></data>
@@ -1112,13 +1113,15 @@ Prep work and Least frequent use their own sort criteria.</value></data>
   <data name="RecommendationAsOf" xml:space="preserve"><value>Queried {0:HH:mm}</value></data>
   <data name="RecommendationManualHelp" xml:space="preserve"><value>The list and order stay fixed while the countdown runs. Press Refresh to get recommendations for the current time.</value></data>
   <data name="RecommendationNowHint" xml:space="preserve"><value>Candidates available now or within 30 minutes.
-Available fish come first, then upcoming appearances. Unrestricted fish follow. This does not mean prerequisites are complete.</value></data>
+Available and nearer appearances come first, with candidates ending in 10 minutes or less placed at the back.
+Order stays fixed while reading. Refresh to reorder for the current time. Prerequisite completion is not checked.</value></data>
   <data name="RecommendationPreparationHint" xml:space="preserve"><value>Candidates in the selected range that need mooch bait or Intuition catches.
-Available and nearer appearances come first. View each prerequisite schedule in the evidence popup. Completion before opening is not predicted.</value></data>
+Only candidates whose target and all prerequisites have no time or weather restrictions are excluded.
+Candidates ending in 10 minutes or less move to the back when querying or refreshing. Completion before opening is not predicted.</value></data>
   <data name="RecommendationRareHint" xml:space="preserve"><value>Candidates in the selected range, ordered by fewest appearances over 30 days.
 Equal counts share a rank and are ordered by appearance time. A named prerequisite&apos;s frequency is shown only if the target has no fixed appearance time.</value></data>
   <data name="RecommendationNowEmpty" xml:space="preserve"><value>No candidate is available now or within 30 minutes. Check Prep work or Least frequent for later appearances.</value></data>
-  <data name="RecommendationPreparationEmpty" xml:space="preserve"><value>No candidate requires mooch bait or Intuition preparation in this range.</value></data>
+  <data name="RecommendationPreparationEmpty" xml:space="preserve"><value>No candidate requires preparation around time or weather restrictions in this range.</value></data>
   <data name="RecommendationRareEmpty" xml:space="preserve"><value>No candidate with a known appearance frequency was found in this period.</value></data>
   <data name="RecommendationUnknownCount" xml:space="preserve"><value>Collection status unknown · {0} fish</value></data>
   <data name="RecommendationRowTooltip" xml:space="preserve"><value>{0}

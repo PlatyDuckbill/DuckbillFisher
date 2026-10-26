@@ -70,10 +70,13 @@ internal sealed class FishRecommendationPanel(FishRecommendationService service,
         var refreshWidth = Math.Min(refreshNatural, (controlsWidth - fixedWidth) * 0.48f);
         var rangeWidth = Math.Max(1, controlsWidth - fixedWidth - refreshWidth);
         var tabWidth = Math.Max(1, available - controlsWidth - gap);
-        var height = ImGui.GetFrameHeightWithSpacing();
+        var extraPadding = MathF.Ceiling(ImGui.GetFontSize() * 0.18f);
+        var tabPadding = ImGui.GetStyle().FramePadding + new Vector2(0, extraPadding);
+        var height = ImGui.GetFrameHeightWithSpacing() + extraPadding * 2;
         if (ImGui.BeginChild("RecommendationTabs", new Vector2(tabWidth, height), false,
                 ImGuiWindowFlags.NoScrollbar | ImGuiWindowFlags.NoScrollWithMouse))
         {
+            ImGui.PushStyleVar(ImGuiStyleVar.FramePadding, tabPadding);
             if (ImGui.BeginTabBar("RecommendationFocus", ImGuiTabBarFlags.FittingPolicyScroll))
             {
                 var counts = new[] { view.Now.Length, view.Preparation.Length, view.Rare.Length };
@@ -87,12 +90,16 @@ internal sealed class FishRecommendationPanel(FishRecommendationService service,
                 }
                 ImGui.EndTabBar();
             }
+            ImGui.PopStyleVar();
         }
         ImGui.EndChild();
         ImGui.SameLine(0, gap);
         if (ImGui.BeginChild("RecommendationControls", new Vector2(controlsWidth, height), false,
                 ImGuiWindowFlags.NoScrollbar | ImGuiWindowFlags.NoScrollWithMouse))
+        {
+            ImGui.SetCursorPosY(ImGui.GetCursorPosY() + extraPadding);
             Toolbar(refreshWidth, rangeWidth, gap);
+        }
         ImGui.EndChild();
     }
 
@@ -342,7 +349,7 @@ internal sealed class FishRecommendationPanel(FishRecommendationService service,
     private static Vector4 TimingColor(FishRecommendation value, DateTimeOffset now)
     {
         var window = value.DisplayWindow;
-        return window?.End <= now ? Gold : window?.Start > now ? Blue : Green;
+        return window.End <= now || value.IsEndingSoon(now) ? Gold : window.Start > now ? Blue : Green;
     }
 
     private static void FactRow(T label, string value, Vector4? color = null, string? tooltip = null)
