@@ -30,8 +30,8 @@
 | 이번 별도 Debug | .cache/recommendation-build/DuckbillFisher.dll |
 | 0.6.0.0 고정 Release 추출본 | .cache/release-validation/0.6.0.0/DuckbillFisher.dll · 대표 정상 응답 완료 |
 | 0.6.0.0 고정 ZIP | artifacts/share/0.6.0.0/DuckbillFisher-0.6.0.0.zip · 해시/게시 단계는 STATUS의 배포 기록 |
-| 현재 게시본 재추출 Release | .cache/release-publish-check/0.5.4.0/DuckbillFisher.dll |
-| 현재 게시본 고정 ZIP | artifacts/share/0.5.4.0-final/DuckbillFisher-0.5.4.0.zip |
+| 이전0.5.4.0 재추출 Release | .cache/release-publish-check/0.5.4.0/DuckbillFisher.dll |
+| 이전0.5.4.0 고정 ZIP | artifacts/share/0.5.4.0-final/DuckbillFisher-0.5.4.0.zip |
 | 이전0.5.3.0 확인 Release | .cache/release-validation/0.5.3.0/DuckbillFisher.dll |
 | 이전0.5.3.0 ZIP | artifacts/share/0.5.3.0/DuckbillFisher-0.5.3.0.zip |
 | 이전0.5.2.0 추출 DLL | .cache/release-validation/0.5.2.0/DuckbillFisher.dll |
@@ -48,7 +48,7 @@
 
 - 이전 공개0.5.3.0은 고정 ZIP/추출 DLL의 사용자 대표 정상 확인 뒤 같은 ZIP을 게시했다. 소스6dd27eb·Release421678993·설치 JSONc416117·ZIP/DLL 해시는 [배포 기록](verification/releases/RELEASE-0.5.3.0.md)을 따른다. 정규/별도 Debug를 게시본 확인에 쓰지 않으며 확인 뒤 실행 파일을 다시 빌드하지 않는다.
 - 이전 공개0.5.2.0은 최소 참조 고정 추출본 대표 확인 뒤 같은 ZIP을 게시했다. [소스02061f4/태그·Release421639798·설치 JSON3871a41](verification/releases/RELEASE-0.5.2.0.md), 당시 실제 공유 raw URL0.5.2.0 일치 확인 완료다. 이전판 확인에는 위0.5.2.0 추출 DLL을 사용한다.
-- 이번 정규/별도 Debug는0.6.0.0/schema24 개발본이며 공개0.5.4.0 고정 Release 확인에는 사용하지 않는다. 추천은 사용자 승인으로 일정/조건 중심으로 간소화했고 준비 시간/점수/보관 최적화는 제거했다. 세 탭·전체 폭 목록/근거 팝업·현재 낚시터 알림·0~120분 출현 알림은 유지한다. [추천 검수/한계](verification/forecast/RECOMMENDATIONS.md)와 [현재 낚시터 알림](verification/alerts/SPAWN-ALERTS.md#현재-낚시터-출현-알림-0600-2026-10-25)을 따른다. 최신 추천31개와 앞선 추천22/알림20/설정32개 검사는 각각 명시 승인 범위이며 이후 작업의 상시 테스트 허용은 아니다. 게임 확인·패키징/게시는 대기다. 이전 공개판의 실기/실제 저장소 업데이트 대기는 STATUS에 유지한다.
+- 정규/별도 Debug와 고정 Release 추출본은 구분한다. 공개0.6.0.0 확인에는 위 고정 추출본을 사용하고 재빌드해 교체하지 않는다. [0.6.0.0 배포 기록](verification/releases/RELEASE-0.6.0.0.md)의 소스/해시·게시 단계를 대조한 뒤 재개한다. 추천31개와 앞선 추천22/알림20/설정32개 검사는 각각 명시 승인 범위이며 이후 작업의 상시 테스트 허용은 아니다. 대표 확인을 전수 실기/실제 Dalamud 업데이트 확인으로 확대하지 않는다.
 - 이전 공개0.5.1.0은 소스6e672e8·Release ID419790510·설치 JSONa8d5e89의 고정 ZIP이다. 사용자 대표 확인/원격 게시/익명 해시·실제 raw URL 확인은 [Release 기록](verification/releases/RELEASE-0.5.1.0.md), 실제 설치 확인은 STATUS를 따른다.
 - 이전0.5.1.0 Release 출력은 .cache/release-build/0.5.1.0/, 당시 별도 Debug는 .cache/remaining-empty-build/다. 위 고정 ZIP을 재빌드해 교체하지 않는다.
 - 이전 버전 추출/빌드/해시 경로는 각 [Release 기록](verification/README.md#배포와-호환성)에 둔다. 새 후보에 과거 대표 확인을 자동 적용하지 않는다.
