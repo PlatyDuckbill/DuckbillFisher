@@ -70,19 +70,38 @@ internal sealed class FishRecommendationPanel(FishRecommendationService service,
         var refreshWidth = Math.Min(refreshNatural, (controlsWidth - fixedWidth) * 0.48f);
         var rangeWidth = Math.Max(1, controlsWidth - fixedWidth - refreshWidth);
         var tabWidth = Math.Max(1, available - controlsWidth - gap);
-        var extraPadding = MathF.Ceiling(ImGui.GetFontSize() * 0.18f);
-        var tabPadding = ImGui.GetStyle().FramePadding + new Vector2(0, extraPadding);
-        var height = ImGui.GetFrameHeightWithSpacing() + extraPadding * 2;
+        var height = ImGui.GetFrameHeightWithSpacing();
         if (ImGui.BeginChild("RecommendationTabs", new Vector2(tabWidth, height), false,
                 ImGuiWindowFlags.NoScrollbar | ImGuiWindowFlags.NoScrollWithMouse))
         {
-            ImGui.PushStyleVar(ImGuiStyleVar.FramePadding, tabPadding);
+            // Keep the compact header; background contrast and a marker identify the active tab.
+            var inactive = new Vector4(0.14f, 0.15f, 0.17f, 1);
+            var active = new Vector4(0.46f, 0.19f, 0.21f, 1);
+            ImGui.PushStyleColor(ImGuiCol.Tab, inactive);
+            ImGui.PushStyleColor(ImGuiCol.TabUnfocused, inactive);
+            ImGui.PushStyleColor(ImGuiCol.TabActive, active);
+            ImGui.PushStyleColor(ImGuiCol.TabUnfocusedActive, active);
+            ImGui.PushStyleColor(ImGuiCol.TabHovered, new Vector4(0.34f, 0.25f, 0.27f, 1));
             if (ImGui.BeginTabBar("RecommendationFocus", ImGuiTabBarFlags.FittingPolicyScroll))
             {
                 var counts = new[] { view.Now.Length, view.Preparation.Length, view.Rare.Length };
                 for (var index = 0; index < TabNames.Length; index++)
                 {
+                    ImGui.PushStyleColor(ImGuiCol.Text, index == focus ? Vector4.One : new Vector4(0.78f, 0.80f, 0.83f, 1));
                     var selected = ImGui.BeginTabItem($"{UiText.Get(T.RecommendationTabCount, UiText.Get(TabNames[index]), counts[index])}###RecommendationFocus{index}");
+                    ImGui.PopStyleColor();
+                    if (selected && ImGui.IsItemVisible())
+                    {
+                        var min = ImGui.GetItemRectMin();
+                        var max = ImGui.GetItemRectMax();
+                        var inset = ImGui.GetStyle().FramePadding.X;
+                        var thickness = Math.Max(2, ImGui.GetFontSize() * 0.12f);
+                        var draw = ImGui.GetWindowDrawList();
+                        draw.PushClipRect(min, max, true);
+                        draw.AddRectFilled(new Vector2(min.X + inset, max.Y - thickness),
+                            new Vector2(max.X - inset, max.Y), ImGui.GetColorU32(Gold));
+                        draw.PopClipRect();
+                    }
                     Tooltip(UiText.Get(TabHints[index]));
                     if (!selected) continue;
                     if (focus != index) { focus = index; resetScroll = true; }
@@ -90,14 +109,13 @@ internal sealed class FishRecommendationPanel(FishRecommendationService service,
                 }
                 ImGui.EndTabBar();
             }
-            ImGui.PopStyleVar();
+            ImGui.PopStyleColor(5);
         }
         ImGui.EndChild();
         ImGui.SameLine(0, gap);
         if (ImGui.BeginChild("RecommendationControls", new Vector2(controlsWidth, height), false,
                 ImGuiWindowFlags.NoScrollbar | ImGuiWindowFlags.NoScrollWithMouse))
         {
-            ImGui.SetCursorPosY(ImGui.GetCursorPosY() + extraPadding);
             Toolbar(refreshWidth, rangeWidth, gap);
         }
         ImGui.EndChild();
