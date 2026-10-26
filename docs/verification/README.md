@@ -4,7 +4,7 @@
 
 ## 배포와 호환성
 
-- [0.6.0.0 터주작 추천·현재 낚시터 알림 배포 후보](releases/RELEASE-0.6.0.0.md) · 고정 Release 대표 확인/게시 대기 · [추천 기준/검증](forecast/RECOMMENDATIONS.md)
+- [0.6.0.0 터주작 추천·현재 낚시터 알림 배포](releases/RELEASE-0.6.0.0.md) · 고정 Release 대표 확인 완료/게시 진행 · [추천 기준/검증](forecast/RECOMMENDATIONS.md)
 
 - [0.5.4.0 개인 기록·설정 백업·알림/설정 UI 배포](releases/RELEASE-0.5.4.0.md)
 
