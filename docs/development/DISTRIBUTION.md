@@ -5,7 +5,7 @@
 ## 사용자 설치
 
 ```text
-https://raw.githubusercontent.com/PlatyDuckbill/DuckbillFisher/main/repo/pluginmaster.json
+https://raw.githubusercontent.com/PlatyDuckbill/DuckbillRepo/main/pluginmaster.json
 ```
 
 1. Dalamud 설정의 커스텀 플러그인 저장소에 위 URL을 입력하고 같은 줄 오른쪽 **＋**를 누른다. 추가된 행을 활성화하고 설정을 저장한다. 버튼이 가려지면 폭을 넓힌다.
@@ -13,13 +13,15 @@ https://raw.githubusercontent.com/PlatyDuckbill/DuckbillFisher/main/repo/pluginm
 3. /dbfs 또는 /duckbillfisher로 연다. /dbfs cl은 간이 목록, /dbfs ct는 캐스팅 타이머이며 compact·timer 인자도 두 명령어에서 유지한다. 도감 연동 안내가 있으면 어류도감 열기를 누르고 낚시 탭 조회를 기다린다.
 4. 이후 같은 설치 화면에서 업데이트한다. 저장소 URL을 다시 등록하거나 ZIP을 직접 풀 필요는 없다.
 
+공용 목록은 DuckbillFisher와 DuckbillTweak를 함께 제공한다. 기존 개별 저장소 URL은 제거하고 위 공용 URL을 등록한다. 플러그인 삭제·재설치나 설정 초기화는 필요 없다.
+
 개발자는 설치 확인 시 개발 DLL 등록을 비활성화해 배포 플러그인과 중복 로드하지 않는다. 설정/기록 파일 삭제는 필요 없다. 호환성 차단이면 도감 수동 열기만으로 해결되지 않으므로 짧은 환경 진단부터 확인한다.
 
 ## 배포 구성
 
 | 구성 | 역할 |
 |---|---|
-| repo/pluginmaster.json | 이름·API·버전·아이콘·설치/업데이트 URL |
+| repo/release.json | 공용 자동화가 읽는 단일 배포 객체. 이름·API·버전·아이콘·설치/업데이트 URL. Dalamud에 직접 등록하는 목록이 아님 |
 | GitHub Release의 버전 ZIP | Plugin/Core/위성 리소스/manifest. Source code ZIP과 다름 |
 | 태그의 assets/duckbillfisher-icon.png | 사용자가 제공한 원본 대표 이미지 |
 | ZIP 옆 .sha256 | 확인한 패키지와 게시 파일 동일성 확인 |
@@ -58,7 +60,7 @@ pwsh -NoLogo -NoProfile -File scripts/prepare-release.ps1 `
 if ($LASTEXITCODE -ne 0) { throw 'Package preparation failed' }
 ```
 
-prepare-release.ps1은 필수 파일·허용 목록·API·DLL/manifest 버전을 검사하고 ZIP·SHA256·후보 JSON을 만든다. 기존 산출물을 덮어쓰지 않으므로 새 후보는 별도 출력 경로를 사용한다.
+prepare-release.ps1은 필수 파일·허용 목록·API·DLL/manifest 버전을 검사하고 ZIP·SHA256·후보 `release.json`을 만든다. 기존 도구 호환용 `pluginmaster.json` 후보는 로컬에만 보관하며 공개 경로로 복원하지 않는다. 기존 산출물을 덮어쓰지 않으므로 새 후보는 별도 출력 경로를 사용한다.
 
 필수 파일은 scripts/package-files.ps1이 관리하며 한국어 ko/DuckbillFisher.resources.dll을 포함한다. SDK/게임 DLL·캐시·자격 증명을 ZIP에 넣지 않는다. 내장 데이터/고지가 소스와 같은지 확인한다. 아이콘은 원본을 유지하며 태그의 공개 URL에 연결한다.
 
@@ -75,8 +77,8 @@ prepare-release.ps1은 필수 파일·허용 목록·API·DLL/manifest 버전을
 2. 확인한 소스에 새 버전 태그를 만들고 push한다. 태그/Release/자산이 이미 있으면 현재 상태를 조사하고 덮어쓰지 않는다.
 3. GitHub Release 초안에 영어 요약과 **확인한 ZIP·체크섬**을 업로드한다. 업로드 크기/해시·태그를 확인한 후 공개한다.
 4. 인증 없는 요청으로 ZIP·체크섬·태그 아이콘을 내려받아 HTTP 성공과 원본 해시를 확인한다.
-5. 그 다음에만 후보 JSON을 repo/pluginmaster.json에 반영해 커밋·push한다.
-6. 사용자가 등록한 **실제 공유 raw URL**에서 이름·버전·API·설치/업데이트/아이콘 URL을 다시 확인한다. 캐시 우회 URL만 성공한 것을 완료로 보고하지 않는다.
+5. 그 다음에만 후보 `release.json`을 repo/release.json에 반영해 커밋·push한다. 기존 repo/pluginmaster.json은 복원하지 않는다.
+6. DuckbillRepo의 30분 주기 동기화 또는 수동 실행을 확인한 뒤 사용자가 등록한 **공용 저장소의 실제 공유 raw URL**에서 이름·버전·API·설치/업데이트/아이콘 URL을 다시 확인한다. 캐시 우회 URL만 성공한 것을 완료로 보고하지 않는다.
 7. HTTP/해시 확인과 실제 Dalamud 설치·업데이트 결과를 구분해 STATUS에 기록한다.
 
 GitHub 웹 또는 현재 사용 가능한 인증 도구로 게시한다. 토큰은 메모리에서만 사용하고 출력/파일/Git에 남기지 않는다. 실패 시 이미 공개된 단계와 남은 단계를 기록하고, 검증되지 않은 URL을 가리키도록 설치 목록을 바꾸지 않는다.

@@ -68,8 +68,9 @@ $output = [IO.Path]::GetFullPath($OutputDirectory)
 $assetName = "DuckbillFisher-$version.zip"
 $assetPath = Join-Path $output $assetName
 $indexPath = Join-Path $output 'pluginmaster.json'
+$releasePath = Join-Path $output 'release.json'
 $hashPath = Join-Path $output "$assetName.sha256"
-foreach ($path in @($assetPath, $indexPath, $hashPath)) {
+foreach ($path in @($assetPath, $indexPath, $releasePath, $hashPath)) {
     if (Test-Path -LiteralPath $path) { throw "Output already exists: $path. Use a new OutputDirectory." }
 }
 $downloadUrl = "$($AssetBaseUrl.AbsoluteUri.TrimEnd('/'))/$assetName"
@@ -84,5 +85,6 @@ New-Item -ItemType Directory -Force -Path $output | Out-Null
 Copy-Item -LiteralPath $package -Destination $assetPath
 $hash = (Get-FileHash -LiteralPath $assetPath -Algorithm SHA256).Hash.ToLowerInvariant()
 [IO.File]::WriteAllText($indexPath, "$json`n", [Text.UTF8Encoding]::new($false))
+[IO.File]::WriteAllText($releasePath, (ConvertTo-Json -InputObject $manifest -Depth 20).Replace("`r`n", "`n") + "`n", [Text.UTF8Encoding]::new($false))
 [IO.File]::WriteAllText($hashPath, "$hash  $assetName`n", [Text.UTF8Encoding]::new($false))
-Write-Output "Prepared $assetPath and $indexPath. Nothing has been published."
+Write-Output "Prepared $assetPath and $releasePath. Nothing has been published. $indexPath is a local compatibility candidate only."

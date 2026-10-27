@@ -23,8 +23,10 @@ Korean and English interface options are available. Fish, item, and location nam
 Add this URL to Dalamud's custom plugin repositories, then install **DuckbillFisher** from the plugin installer:
 
 ```text
-https://raw.githubusercontent.com/PlatyDuckbill/DuckbillFisher/main/repo/pluginmaster.json
+https://raw.githubusercontent.com/PlatyDuckbill/DuckbillRepo/main/pluginmaster.json
 ```
+
+The shared repository provides **DuckbillFisher and DuckbillTweak**, installed and updated separately. If you previously added either plugin's individual repository URL, remove that entry and add the shared URL above. Keep your installed plugins and settings.
 
 Open with `/dbfs` or `/duckbillfisher`. Use `/dbfs cl` for the compact list and `/dbfs ct` for the casting timer; the full `compact` and `timer` arguments also work with either command. The same repository supplies future updates through Dalamud. No source build or manual DLL registration is required for normal installation.
 

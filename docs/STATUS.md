@@ -1,8 +1,10 @@
 # 현재 상태
 
-갱신: 2026-10-26 · 공개0.6.0.0/API15 · 게시/실제 공유 URL 확인 완료
+갱신: 2026-10-27 · 공개0.6.0.0/API15 · 공용 저장소 전환
 
 ## 현재 배포와 개발본
+
+- 사용자 요청으로 설치 안내를 DuckbillRepo 공용 URL로 통합했다. 공용 자동화 원본은 단일 객체 `repo/release.json`이며 기존 개별 `repo/pluginmaster.json` URL 종료 절차를 진행한다. 실행 파일/공개 ZIP·태그와 기존 실기 확인 범위는 변경하지 않았다.
 
 - 공개0.6.0.0은 d834004 탭 표시 **‘이상 없음’**, 고정 Release DLL **‘정상 로드·대표 확인 완료’** 응답 후 동일 ZIP/Release423892077을 게시했다. 소스b687024·최소 지원 Release 경고0/오류0·추출7파일/내장 자료/한영1,256키·버전/API/URL/체크섬 검사와 익명 자산 해시 일치 확인 완료. 설치 JSONac71cb5 push 뒤 **실제 공유 raw URL0.6.0.0/API15·22필드 일치 확인 완료**이며 실제 Dalamud 업데이트는 별도 대기다. 이번 테스트 추가/실행 없음. [고정 해시·게시 근거](verification/releases/RELEASE-0.6.0.0.md).
 
@@ -27,7 +29,7 @@
 - 사용자 합의로 공개 API 우선·네이티브 최소화·정확한 KR 조합 검사/업데이트별 대조 방침을 확정했다. 핵심 네이티브 기능의 동등한 공개 대체는 현 지원 참조에서 찾지 못했다. 이미 공개 API인 미끼 수량/버프의 검사 분리는 재검토 결과 현재 가드 유지·구현 후순위를 권고한다. [근거/재검토 조건](verification/native/NATIVE-RUNTIME-DAL4KR.md#공개-api-검사-분리의-타당성-재검토-2026-10-23). 이번 반영은 문서만이며 기존 실기 대기는 유지한다.
 - 공개0.5.0.0 일정표는 고정 추출본 대표 확인·원격 게시/실제 raw URL 대조 완료지만 **실제 Dalamud 저장소 업데이트는 별도 대기**다. [배포](verification/releases/RELEASE-0.5.0.0.md)·[동작](product/SPAWN-SCHEDULE.md).
 - 공개0.4.1.0은 고정 추출본·실제 저장소 업데이트 대표 확인 완료다. [근거](verification/releases/RELEASE-0.4.1.0.md). 그 밖의 버전별 빌드/추출/게시 SHA와 확인 범위는 [검증 색인](verification/README.md#배포와-호환성)을 따른다.
-- 커스텀 저장소: https://raw.githubusercontent.com/PlatyDuckbill/DuckbillFisher/main/repo/pluginmaster.json
+- 커스텀 저장소: https://raw.githubusercontent.com/PlatyDuckbill/DuckbillRepo/main/pluginmaster.json
 - 명령은 /dbfs·/duckbillfisher, cl/compact·ct/timer다. 현재 기능·기본값·저장 정책은 [PRODUCT](product/PRODUCT.md), 구조/테스트 절차는 [ARCHITECTURE](development/ARCHITECTURE.md)·[WORKFLOW](development/WORKFLOW.md)에 둔다.
 
 ## 대표 확인과 기능 경계
