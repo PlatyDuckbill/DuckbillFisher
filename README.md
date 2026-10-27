@@ -26,7 +26,9 @@ Add this URL to Dalamud's custom plugin repositories, then install **DuckbillFis
 https://raw.githubusercontent.com/PlatyDuckbill/DuckbillRepo/main/pluginmaster.json
 ```
 
-The shared repository provides **DuckbillFisher and DuckbillTweak**, installed and updated separately. If you previously added either plugin's individual repository URL, remove that entry and add the shared URL above. Keep your installed plugins and settings.
+The shared repository provides **DuckbillFisher and DuckbillTweak**, installed and updated separately. The old individual repository URLs have been retired. Remove those repository entries and add the shared URL above.
+
+To change an existing plugin's installation source, disable it, **remove only the plugin**, and install it once from the shared repository. **Do not delete or reset plugin configuration or data.** See the [migration steps](https://github.com/PlatyDuckbill/DuckbillRepo#기존-개별-저장소에서-전환).
 
 Open with `/dbfs` or `/duckbillfisher`. Use `/dbfs cl` for the compact list and `/dbfs ct` for the casting timer; the full `compact` and `timer` arguments also work with either command. The same repository supplies future updates through Dalamud. No source build or manual DLL registration is required for normal installation.
 

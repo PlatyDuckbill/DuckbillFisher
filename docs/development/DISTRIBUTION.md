@@ -13,7 +13,7 @@ https://raw.githubusercontent.com/PlatyDuckbill/DuckbillRepo/main/pluginmaster.j
 3. /dbfs 또는 /duckbillfisher로 연다. /dbfs cl은 간이 목록, /dbfs ct는 캐스팅 타이머이며 compact·timer 인자도 두 명령어에서 유지한다. 도감 연동 안내가 있으면 어류도감 열기를 누르고 낚시 탭 조회를 기다린다.
 4. 이후 같은 설치 화면에서 업데이트한다. 저장소 URL을 다시 등록하거나 ZIP을 직접 풀 필요는 없다.
 
-공용 목록은 DuckbillFisher와 DuckbillTweak를 함께 제공한다. 기존 개별 저장소 URL은 제거하고 위 공용 URL을 등록한다. 플러그인 삭제·재설치나 설정 초기화는 필요 없다.
+공용 목록은 DuckbillFisher와 DuckbillTweak를 함께 제공한다. 기존 개별 URL은 종료했다. 기존 사용자는 개별 저장소 URL을 제거하고 위 공용 URL을 등록한 뒤, 설치 출처 전환을 위해 플러그인만 한 번 제거·재설치한다. 설정·기록 삭제/초기화는 선택하지 않는다. [전환 절차](https://github.com/PlatyDuckbill/DuckbillRepo#기존-개별-저장소에서-전환)를 따른다.
 
 개발자는 설치 확인 시 개발 DLL 등록을 비활성화해 배포 플러그인과 중복 로드하지 않는다. 설정/기록 파일 삭제는 필요 없다. 호환성 차단이면 도감 수동 열기만으로 해결되지 않으므로 짧은 환경 진단부터 확인한다.
 

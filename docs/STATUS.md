@@ -4,7 +4,7 @@
 
 ## 현재 배포와 개발본
 
-- 사용자 요청으로 설치 안내를 DuckbillRepo 공용 URL로 통합했다. 공용 자동화 원본은 단일 객체 `repo/release.json`이며 기존 개별 `repo/pluginmaster.json` URL 종료 절차를 진행한다. 실행 파일/공개 ZIP·태그와 기존 실기 확인 범위는 변경하지 않았다.
+- 사용자 요청으로 설치 안내를 DuckbillRepo 공용 URL로 통합했다. 공용 자동화 원본은 단일 객체 `repo/release.json`이며 새 원본의 Actions 검증 성공 후 기존 `repo/pluginmaster.json`을 삭제해 개별 설치 URL을 종료했다. 기존 사용자는 설정·기록을 유지한 1회 재설치로 설치 출처를 전환한다. 실행 파일/공개 ZIP·태그와 기존 실기 확인 범위는 변경하지 않았다.
 
 - 공개0.6.0.0은 d834004 탭 표시 **‘이상 없음’**, 고정 Release DLL **‘정상 로드·대표 확인 완료’** 응답 후 동일 ZIP/Release423892077을 게시했다. 소스b687024·최소 지원 Release 경고0/오류0·추출7파일/내장 자료/한영1,256키·버전/API/URL/체크섬 검사와 익명 자산 해시 일치 확인 완료. 설치 JSONac71cb5 push 뒤 **실제 공유 raw URL0.6.0.0/API15·22필드 일치 확인 완료**이며 실제 Dalamud 업데이트는 별도 대기다. 이번 테스트 추가/실행 없음. [고정 해시·게시 근거](verification/releases/RELEASE-0.6.0.0.md).
 
