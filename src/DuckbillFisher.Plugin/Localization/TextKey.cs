@@ -1258,4 +1258,5 @@ internal enum TextKey
     ChangelogRecommendationNow,
     ChangelogRecommendationPreparation,
     ChangelogRecommendationRare,
+    ChangelogDal4kr15039,
 }

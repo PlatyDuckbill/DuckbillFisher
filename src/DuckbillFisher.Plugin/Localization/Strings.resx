@@ -1301,4 +1301,5 @@ Shares duplicate prevention with zero-minute favorite alerts and uses the channe
   <data name="ChangelogRecommendationNow" xml:space="preserve"><value>Fish to target now: see candidates available now or within 30 minutes.</value></data>
   <data name="ChangelogRecommendationPreparation" xml:space="preserve"><value>Prep work: browse candidates requiring mooch bait or Intuition catches, with prerequisite appearance schedules.</value></data>
   <data name="ChangelogRecommendationRare" xml:space="preserve"><value>Least frequent: browse fish by fewest appearances over 30 days and check their next appearance.</value></data>
+  <data name="ChangelogDal4kr15039" xml:space="preserve"><value>Restored native features blocked after the dal4kr 15.0.3.9 runtime update.</value></data>
 </root>

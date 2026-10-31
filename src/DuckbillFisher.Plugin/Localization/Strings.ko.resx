@@ -1301,4 +1301,5 @@
   <data name="ChangelogRecommendationNow" xml:space="preserve"><value>지금 노릴 어종: 현재 출현 중이거나 30분 안에 출현할 후보를 보여줍니다.</value></data>
   <data name="ChangelogRecommendationPreparation" xml:space="preserve"><value>밑작업: 생미끼·직감 준비가 필요한 후보와 준비 어종의 출현 일정을 보여줍니다.</value></data>
   <data name="ChangelogRecommendationRare" xml:space="preserve"><value>출현 드문 순: 30일 동안 출현 횟수가 적은 어종부터 보고, 다음 출현 시각도 확인할 수 있습니다.</value></data>
+  <data name="ChangelogDal4kr15039" xml:space="preserve"><value>dal4kr 15.0.3.9 런타임 업데이트 후 차단됐던 낚시 타이머, 예측, 알림을 복구했습니다.</value></data>
 </root>
