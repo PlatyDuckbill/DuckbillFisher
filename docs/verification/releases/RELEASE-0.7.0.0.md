@@ -1,6 +1,6 @@
 # 0.7.0.0 배포 기록
 
-2026-11-04(UTC). 사용자 지시 **"배포까지 하자고 돌리는것도 하고. 니가 다해"**에 따라 글로벌 클라이언트 지원판을 배포했다. **Release 공개·익명 자산·설치 JSON·공용 저장소 동기화 확인 완료.** 실제 Dalamud 업데이트는 확인 대기다. [영어 안내](../../releases/0.7.0.0.md).
+2026-11-04(UTC). 사용자 지시 **"배포까지 하자고 돌리는것도 하고. 니가 다해"**에 따라 글로벌 클라이언트 지원판을 배포했다. **Release 공개·익명 자산·설치 JSON·공용 저장소 동기화 확인 완료.** 실제 Dalamud 업데이트는 KR 확인 완료, 글로벌 대기다. [영어 안내](../../releases/0.7.0.0.md).
 
 ## 변경과 자체 점검
 
@@ -32,4 +32,8 @@
 - 그 뒤 후보 `release.json`을 `repo/release.json`에 반영했다.
 - 설치 JSON 커밋 `76adb2c`를 push한 뒤 DuckbillRepo `sync.yml` run **41856027309**를 수동 실행해 성공했다. DuckbillRepo main은 `0eec0f017f2b46719593dcc55d8cc52e4d2a8a27`이다.
 - 실제 공유 raw URL `https://raw.githubusercontent.com/PlatyDuckbill/DuckbillRepo/main/pluginmaster.json`에서 DuckbillFisher 0.7.0.0, API 15, 설치·업데이트 ZIP과 태그 아이콘 URL을 확인했다. DuckbillTweak 0.2.0.4 항목은 그대로다.
-- **남은 확인:** KR·글로벌에서 실제 Dalamud 업데이트로 받은 뒤의 정상 로드, 설정·기록 유지, 업데이트 내역 표시.
+
+## 실제 설치 확인
+
+- **KR (2026-11-05, 사용자 보고 "한국서버 잘 됨. 업데이트내역까지"):** 실제 Dalamud 업데이트로 0.7.0.0을 받아 정상 동작했고, 업데이트 내역 표시까지 확인했다. 설정·기록 유지는 따로 언급되지 않았다.
+- **글로벌:** 실제 Dalamud 업데이트 확인 대기.
