@@ -2,12 +2,12 @@
   <PropertyGroup>
     <AssemblyName>DuckbillFisher</AssemblyName>
     <RootNamespace>DuckbillFisher.Plugin</RootNamespace>
-    <Version>0.6.0.1</Version>
+    <Version>0.7.0.0</Version>
     <NeutralLanguage>en</NeutralLanguage>
     <Author>PlatyDuckbill</Author>
     <Name>DuckbillFisher</Name>
     <Punchline>Let Duckbill guide your next catch.</Punchline>
-    <Changelog>• Restore fishing timer, forecasts and alerts on the updated dal4kr 15.0.3.9 Korean Dalamud distribution.</Changelog>
+    <Changelog>• Use DuckbillFisher on the global client as well as the Korean client.&#xA;• Keeps working after Dalamud updates; if a game change affects a feature, only that feature turns off.&#xA;• On first launch, the interface starts in Korean or English to match your client.</Changelog>
     <Description>Let Duckbill guide your next catch.&#xA;A big-fish hunting companion for FFXIV: choose your next target, prepare baits, and track your collection.&#xA;&#xA;• Choose your next big fish by availability, mooch chains and Intuition requirements.&#xA;• Plan spawns with a timeline and monthly calendar, including Fish Eyes and Intuition forecasts.&#xA;• Track collection progress by expansion and region, synced with the in-game Fish Guide.&#xA;• Prepare baits for favorites or filtered fish, with inventory counts and in-game bait highlights.&#xA;• Get local alerts for favorites and uncaught big fish at your current fishing hole, with optional sounds.&#xA;• Follow casts with a timer and personal fishing records.&#xA;• Browse fish with filters, baits, conditions and map links; see fish available now in the quick list.&#xA;&#xA;Open: /dbfs or /duckbillfisher. /dbfs cl: compact list; /dbfs ct: casting timer.&#xA;UI: English / Korean. Game names follow your client.&#xA;&#xA;Does not automate fishing or send anything to the server.&#xA;The plugin icon was created with AI assistance.</Description>
     <RepoUrl>https://github.com/PlatyDuckbill/DuckbillFisher</RepoUrl>
     <Tags>fishing;fish;big fish;collection;timer;alerts;한국어</Tags>

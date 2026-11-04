@@ -15,6 +15,13 @@ internal sealed class ChangelogWindow : Window
     // Keep the confirmed candidate unchanged when it is published.
     private static readonly ReleaseNotes[] PublishedReleases =
     [
+        new(new(0, 7, 0, 0),
+        [
+            (FontAwesomeIcon.SyncAlt, T.ChangelogDalamudUpdates),
+            (FontAwesomeIcon.Language, T.ChangelogFirstRunLanguage),
+            (FontAwesomeIcon.Clock, T.ChangelogLocalReleaseTime),
+        ], new DateTimeOffset(2026, 11, 4, 14, 45, 0, TimeSpan.Zero),
+            T.ChangelogGlobalFeatureTitle, T.ChangelogGlobalFeatureSummary, FeatureIcon: FontAwesomeIcon.Globe),
         new(new(0, 6, 0, 1), [(FontAwesomeIcon.Wrench, T.ChangelogDal4kr15039)], new DateTimeOffset(2026, 10, 31, 13, 40, 0, TimeSpan.Zero)),
         new(new(0, 6, 0, 0),
         [
@@ -97,15 +104,6 @@ internal sealed class ChangelogWindow : Window
             (FontAwesomeIcon.List, T.ChangelogCompactToggle),
             (FontAwesomeIcon.Star, T.ChangelogNavigationIcons),
         ]),
-        new(new(0, 3, 11, 0),
-        [
-            (FontAwesomeIcon.SearchPlus, T.ChangelogUiScale),
-            (FontAwesomeIcon.Star, T.ChangelogCatalogOptions),
-            (FontAwesomeIcon.ExternalLinkAlt, T.ChangelogSeparateDetail),
-            (FontAwesomeIcon.Fish, T.ChangelogCollectionBadges),
-            (FontAwesomeIcon.MapMarkerAlt, T.ChangelogUnknownSpot),
-            (FontAwesomeIcon.List, T.ChangelogSpotToggle),
-        ], new DateTimeOffset(2026, 10, 20, 7, 59, 10, TimeSpan.Zero)),
     ];
     private readonly ReleaseNotes[] releases = PublishedReleases.Where(release => release.Version <= CurrentVersion).Take(10).ToArray();
     private readonly FishPreferences preferences;

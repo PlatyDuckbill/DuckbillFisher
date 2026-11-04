@@ -4,7 +4,7 @@
 
 **Let Duckbill guide your next catch.**
 
-A Dalamud fishing companion for **FFXIV Korea**. Find your next fish, keep track of your collection, and spend less time looking up conditions.
+A Dalamud big-fish hunting companion for **FFXIV on the Korean and global clients**. Find your next fish, keep track of your collection, and spend less time looking up conditions.
 
 ## Features
 
@@ -36,10 +36,9 @@ Open with `/dbfs` or `/duckbillfisher`. Use `/dbfs cl` for the compact list and 
 
 ## Supported environment and limits
 
-- Current release: **[0.6.0.1](https://github.com/PlatyDuckbill/DuckbillFisher/releases/tag/v0.6.0.1)**, built for **Dalamud API 15**. It adds support for the dal4kr 15.0.3.9 Korean Dalamud distribution to the 0.6.0.0 big-fish recommendations and current-hole alerts. See the [release notes](docs/releases/0.6.0.1.md).
-- Supported game client: Korean client **2026.10.06.0000.0000**. Other regional clients are not verified.
-- Supported Dalamud builds: only the inspected **wasdcxz (15.0.3.6, 15.0.3.7, 15.0.3.9) and dal4kr (15.0.3.7, 15.0.3.9) builds of KR Dalamud**. These distributions can share a version number but have distinct module identities, so each one is checked separately.
-- Native observations require the inspected KR game and DLL versions. A patch can disable these features until compatibility is reviewed.
+- Current release: **[0.7.0.0](https://github.com/PlatyDuckbill/DuckbillFisher/releases/tag/v0.7.0.0)**, built for **Dalamud API 15**. It adds global client support. See the [release notes](docs/releases/0.7.0.0.md).
+- Supported clients: the Korean client with KR Dalamud (wasdcxz or dal4kr) and the global client with Dalamud. Representative checks were done on Korean client 2026.10.06 and global client 2026.10.16.
+- Game features use the structures provided by the running Dalamud, so Dalamud updates do not need a plugin release. Each feature checks what it reads; if a game patch changes it, only that feature turns off and manual settings are kept.
 - Forecasts model time/weather and Intuition preparation opportunities. They do not establish the character's actual catches or active Intuition buff and do not guarantee a catch. Unknown Intuition durations use a marked 175-second assumption. Some conditions, ocean fishing, and spearfishing have incomplete coverage.
 - Casting records cover observed rod-fishing events. Unconfirmed results remain unknown; special outcomes and multiple catches need further observation.
 - No automatic casting, hooking, movement, bait changes, or server chat messages. Alerts are local. No external HTTP requests run inside the plugin.
@@ -56,11 +55,11 @@ DuckbillFisher is licensed under the [GNU Affero General Public License v3.0](LI
 
 ## Development
 
-Start with the [documentation map](docs/README.md). Repository skills live in [.agents/skills](.agents/skills) and share the maintained build and KR compatibility procedures.
+Start with the [documentation map](docs/README.md). Repository skills live in [.agents/skills](.agents/skills) and share the maintained build and native compatibility procedures.
 
 Windows, PowerShell 7, .NET SDK **10.0.101 or later in the 10.0 band** (10.0.402 on the main development PC), and KR or global Dalamud references are used for development. `global.json` sets the SDK floor to match the official build container, and lock files pin dependencies.
 
-Initialize the current PowerShell session with `. ./scripts/enter-dev.ps1`. It sets the checkout root and `DALAMUD_HOME`; use `-DalamudPath` for a different reference distribution. See [environment setup](docs/development/WINDOWS-SETUP.md#개발-환경-변수). Compilation against pinned upstream references does not establish global-client runtime support.
+Initialize the current PowerShell session with `. ./scripts/enter-dev.ps1`. It sets the checkout root and `DALAMUD_HOME`; use `-DalamudPath` for a different reference distribution. See [environment setup](docs/development/WINDOWS-SETUP.md#개발-환경-변수). Building against KR and global references checks compilation only; in-game behavior is checked separately.
 
 Follow [workflow](docs/development/WORKFLOW.md) for direct builds and resource checks, [distribution](docs/development/DISTRIBUTION.md) for packaging and publication, and [session handoff](docs/SESSION-HANDOFF.md) for current machine paths. Tests run only when explicitly requested. Contribution boundaries are in [AGENTS.md](AGENTS.md).
 

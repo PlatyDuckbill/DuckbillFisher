@@ -706,17 +706,11 @@ Main inventory only. An unknown quantity is not zero.</value></data>
   <data name="UiScale" xml:space="preserve"><value>UI scale</value></data>
   <data name="UiScaleHint" xml:space="preserve"><value>Scales DuckbillFisher text, icons, controls, and spacing relative to the Dalamud UI scale. Applies to all plugin views and is saved across reloads. Resize views as needed.</value></data>
   <data name="UiScaleReset" xml:space="preserve"><value>Reset UI scale to 100%</value></data>
-  <data name="ChangelogUiScale" xml:space="preserve"><value>Adjust the plugin UI scale from 80% to 200% in Settings, or reset it to 100%. Text, icons, controls, and spacing scale together across all DuckbillFisher views, and the setting is preserved across reloads.</value></data>
   <data name="CompactFavoritesHint" xml:space="preserve"><value>Toggle favorites only in the compact list. Other filters follow the main catalog.</value></data>
   <data name="TimerSpotUnavailableHint" xml:space="preserve"><value>Available once the current fishing spot is identified. At an unknown spot, a discovery message matched to your catch updates the list. If identification is still pending, cast again after discovering the spot. A previous spot is not used for a new cast.</value></data>
   <data name="OpenIndependentDetail" xml:space="preserve"><value>Open in separate view</value></data>
-  <data name="ChangelogCatalogOptions" xml:space="preserve"><value>Show favorites only in the compact list with its own star toggle. Other filters follow the main catalog, and the choice is saved across reloads.</value></data>
   <data name="TimerUnknownSpot" xml:space="preserve"><value>Undiscovered fishing spot</value></data>
   <data name="TimerSpotIdentifying" xml:space="preserve"><value>Identifying fishing spot…</value></data>
-  <data name="ChangelogSeparateDetail" xml:space="preserve"><value>Open the selected fish in a separate view using the button beside its grade and collection status. The separate view stays on that fish when the main selection changes.</value></data>
-  <data name="ChangelogCollectionBadges" xml:space="preserve"><value>Fishing-spot lists highlight collection status with green caught, red uncaught, and gray unknown badges.</value></data>
-  <data name="ChangelogUnknownSpot" xml:space="preserve"><value>New casts clear the previous fishing spot. Undiscovered spots are labeled, and the name and fish list update when discovery and your catch are confirmed.</value></data>
-  <data name="ChangelogSpotToggle" xml:space="preserve"><value>Click View fish again to close the fishing-spot list.</value></data>
   <data name="ChangelogPublishedAt" xml:space="preserve"><value>Released: {0:MMM d, yyyy h tt} (local time)</value></data>
   <data name="TabCollectionProgress" xml:space="preserve"><value>Collection progress</value></data>
   <data name="CollectionProgressWaiting" xml:space="preserve"><value>Preparing collection progress for the current character.</value></data>
@@ -1049,4 +1043,9 @@ Shares duplicate prevention with zero-minute favorite alerts and uses the channe
   <data name="ChangelogRecommendationPreparation" xml:space="preserve"><value>Prep work: browse candidates requiring mooch bait or Intuition catches, with prerequisite appearance schedules.</value></data>
   <data name="ChangelogRecommendationRare" xml:space="preserve"><value>Least frequent: browse fish by fewest appearances over 30 days and check their next appearance.</value></data>
   <data name="ChangelogDal4kr15039" xml:space="preserve"><value>Restored native features blocked after the dal4kr 15.0.3.9 runtime update.</value></data>
+  <data name="ChangelogGlobalFeatureTitle" xml:space="preserve"><value>Global client support</value></data>
+  <data name="ChangelogGlobalFeatureSummary" xml:space="preserve"><value>Use DuckbillFisher on the global client as well as the Korean client.</value></data>
+  <data name="ChangelogDalamudUpdates" xml:space="preserve"><value>Keeps working after Dalamud updates. If a game change affects a feature, only that feature turns off.</value></data>
+  <data name="ChangelogFirstRunLanguage" xml:space="preserve"><value>On first launch, the interface starts in Korean or English to match your client.</value></data>
+  <data name="ChangelogLocalReleaseTime" xml:space="preserve"><value>Release times in What's new now show in your local time.</value></data>
 </root>
