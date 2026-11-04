@@ -44,7 +44,9 @@ jobs:
         run: |
           set -euo pipefail
           plugin="manifests/testing/live/DuckbillFisher"
-          mkdir -p manifests/stable "$plugin/images" output work artifacts master
+          # Plogon reads stable/ and every testing/<channel>/ in both manifest folders; an empty master means
+          # a new plugin, but the channel folders must exist.
+          mkdir -p manifests/stable "$plugin/images" output work artifacts master/stable master/testing/live
           cp plugin/assets/duckbillfisher-icon.png "$plugin/images/icon.png"
           cat > "$plugin/manifest.toml" <<EOF
           [plugin]
