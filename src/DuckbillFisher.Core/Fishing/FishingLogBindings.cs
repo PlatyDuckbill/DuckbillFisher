@@ -18,7 +18,7 @@ public static partial class FishingLogBindings
     // Patch-time review of those rows is a development step (FishingDataImport --log-contracts).
     public static FrozenDictionary<uint, FrozenSet<string>> Expected { get; } = new Dictionary<uint, string[]>
     {
-        [1110] = ["PlaceName:lnum1"], [1111] = [], [1112] = [], [1113] = [], [1115] = ["PlaceName:lnum1"],
+        [1110] = ["PlaceName:lnum1"], [1111] = [], [1112] = [], [1113] = [], [1114] = ["Item:lnum1"], [1115] = ["PlaceName:lnum1"],
         [1116] = [], [1117] = [], [1118] = ["Item:lnum1"], [1119] = [], [1120] = [], [1121] = ["Item:lnum1"],
         [1127] = [], [1129] = [], [1130] = ["PlaceName:lnum1"], [3511] = [], [3512] = ["Item:lnum1"],
         [3513] = ["PlaceName:lnum1"], [3515] = ["Item:lnum1"], [3525] = ["Item:lnum1"], [3527] = [],

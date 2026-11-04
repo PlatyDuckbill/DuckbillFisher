@@ -34,6 +34,14 @@
   {
     "build": "2026.10.06.0000.0000",
     "language": "Korean",
+    "id": 1114,
+    "state": "Valid",
+    "found": "Item:lnum1",
+    "sha256": "4567C98B59AC7311C033A426F9C616967C86249B56FA0973322A67015CFA9AE9"
+  },
+  {
+    "build": "2026.10.06.0000.0000",
+    "language": "Korean",
     "id": 1115,
     "state": "Valid",
     "found": "PlaceName:lnum1",
@@ -254,6 +262,14 @@
     "state": "Valid",
     "found": "",
     "sha256": "1CC0C01C35F78B19F2EE5CAB82E3D3E0897668BCA34CC0CBF354629815C39918"
+  },
+  {
+    "build": "2026.10.16.0000.0000",
+    "language": "English",
+    "id": 1114,
+    "state": "Valid",
+    "found": "Item:lnum1",
+    "sha256": "F1D8F9FA96CC587B48C755B73215D93AC916456B6C2170E136D19F6882E01552"
   },
   {
     "build": "2026.10.16.0000.0000",
@@ -482,6 +498,14 @@
   {
     "build": "2026.10.16.0000.0000",
     "language": "Japanese",
+    "id": 1114,
+    "state": "Valid",
+    "found": "Item:lnum1",
+    "sha256": "6A9C14142EE16C83EE2B84CE6909F45BBAE5FB730FE5EFAB1C9204E6771478B5"
+  },
+  {
+    "build": "2026.10.16.0000.0000",
+    "language": "Japanese",
     "id": 1115,
     "state": "Valid",
     "found": "PlaceName:lnum1",
@@ -706,6 +730,14 @@
   {
     "build": "2026.10.16.0000.0000",
     "language": "German",
+    "id": 1114,
+    "state": "Valid",
+    "found": "Item:lnum1",
+    "sha256": "731AFA08175045354E6F2470F89F2826F3FFB8E4C0473FCD0049990AA0132747"
+  },
+  {
+    "build": "2026.10.16.0000.0000",
+    "language": "German",
     "id": 1115,
     "state": "Valid",
     "found": "PlaceName:lnum1",
@@ -926,6 +958,14 @@
     "state": "Valid",
     "found": "",
     "sha256": "AC9118ACCB1DAC08BEF4B503ED85BB92FD56BB126C085190F0692F405BC298B4"
+  },
+  {
+    "build": "2026.10.16.0000.0000",
+    "language": "French",
+    "id": 1114,
+    "state": "Valid",
+    "found": "Item:lnum1",
+    "sha256": "179DB78514C00FFB6A91FD8236679EFE4A9C45FC5E09987E827804DCCB0ED5D1"
   },
   {
     "build": "2026.10.16.0000.0000",

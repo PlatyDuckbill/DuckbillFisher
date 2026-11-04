@@ -41,9 +41,9 @@ internal sealed record FishCollectionView(int Revision, int Session, IReadOnlySe
 /// <summary>Session-local observations. Uncaught requires a complete guide snapshot matched against fish bits.</summary>
 internal sealed class FishCollectionObserver : IDisposable
 {
-    // Inspected KR LogMessage: Item lookup uses lnum1 (first numeric parameter).
+    // Fish Guide registration. The shared binding contract (Item:lnum1) is checked on the running client language;
+    // translated text is never compared (FishingLogBindings, GLOBAL-COMPAT.md).
     private const uint RegistrationLogId = 1114;
-    private const string RegistrationMacro = "어류도감에 <sheet(Item,lnum1,0)>의 정보를 기록했습니다!";
     private readonly FishPreferences preferences;
     private readonly FishCatalog catalog;
     private readonly NativeFishCollectionReader reader;
@@ -199,8 +199,8 @@ internal sealed class FishCollectionObserver : IDisposable
         if (logContract is null)
         {
             var sheet = dataManager.GetExcelSheet<LogMessage>();
-            logContract = sheet is not null && sheet.TryGetRow(RegistrationLogId, out var row) &&
-                row.Text.ToMacroString() == RegistrationMacro;
+            logContract = sheet is not null && FishingLogBindings.Evaluate(RegistrationLogId,
+                sheet.GetRowOrDefault(RegistrationLogId)?.Text.ToMacroString()).State == FishingLogContractState.Valid;
         }
         var changed = false;
         var trigger = "none";
