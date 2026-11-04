@@ -33,9 +33,12 @@ jobs:
           repository: goatcorp/Plogon
           ref: 2b0e54d1c116b180f6148fbfb68b3c0201edf438
           path: plogon
+      # Plogon's global.json asks for 10.0.0 with rollForward latestMajor. setup-dotnet ignores rollForward and
+      # tries to install the nonexistent 10.0.0 SDK, so install the latest 10.0 SDK instead. This SDK only runs
+      # Plogon; the plugin itself is built inside Plogon's official container.
       - uses: actions/setup-dotnet@v4
         with:
-          global-json-file: plogon/global.json
+          dotnet-version: '10.0.x'
       - name: Prepare testing/live manifest
         shell: bash
         run: |
