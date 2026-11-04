@@ -239,7 +239,6 @@ internal sealed class SpawnSchedulePanel(SpawnSchedule schedule, FishCatalog cat
         return clicked;
     }
 
-    private static bool Toggle(T text, string id, bool active) => Toggle(UiText.Get(text), id, active);
     private static bool Toggle(string text, string id, bool active)
     {
         if (active) ImGui.PushStyleColor(ImGuiCol.Button, ImGui.GetStyle().Colors[(int)ImGuiCol.ButtonActive]);

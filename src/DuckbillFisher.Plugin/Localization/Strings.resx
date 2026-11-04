@@ -21,9 +21,7 @@
   <data name="TimerSettingsCount" xml:space="preserve"><value>{0}/{1}</value></data>
   <data name="TimerAlertSecondsRange" xml:space="preserve"><value>1–{0} seconds</value></data>
   <data name="FishPersonalHeading" xml:space="preserve"><value>Notes and casting timer</value></data>
-  <data name="FishPersonalHeadingNote" xml:space="preserve"><value>Notes and casting timer</value></data>
   <data name="FishPersonalHeadingDraft" xml:space="preserve"><value>Notes and casting timer (unsaved)</value></data>
-  <data name="FishPersonalScope" xml:space="preserve"><value>Manual entries · Shared across characters</value></data>
   <data name="FishPersonalLimit" xml:space="preserve"><value>Keep personal records for up to {0:N0} fish.</value></data>
   <data name="FishNote" xml:space="preserve"><value>Personal note</value></data>
   <data name="FishNoteSave" xml:space="preserve"><value>Save note</value></data>
@@ -105,14 +103,12 @@
   <data name="CatalogSort" xml:space="preserve"><value>Sort</value></data>
   <data name="CatalogSortName" xml:space="preserve"><value>Name</value></data>
   <data name="CatalogSortId" xml:space="preserve"><value>Fish ID</value></data>
-  <data name="CatalogCount" xml:space="preserve"><value>{0} displayed rows / {1} source sheet rows</value></data>
   <data name="CatalogDetailsPending" xml:space="preserve"><value>Select a fish for details. Green rows have an open time/weather window; personal requirements are separate.</value></data>
   <data name="CatalogNoMatches" xml:space="preserve"><value>No matching fish. Try changing the search or filter.</value></data>
   <data name="CatalogRowInfo" xml:space="preserve"><value>ID {0}</value></data>
   <data name="CopyCatalogReport" xml:space="preserve"><value>Copy short diagnostics</value></data>
   <data name="CatalogIncludeOceanFish" xml:space="preserve"><value>Include ocean fishing fish</value></data>
   <data name="CatalogDiagnostics" xml:space="preserve"><value>Detailed diagnostics</value></data>
-  <data name="CatalogDiagnosticsHint" xml:space="preserve"><value>Use short diagnostics first. Copy the full report only when investigating conditions, maps, or unresolved rows.</value></data>
   <data name="CopyFullCatalogReport" xml:space="preserve"><value>Copy full diagnostics</value></data>
   <data name="CatalogShowUnresolved" xml:space="preserve"><value>Show unresolved rows (diagnostics)</value></data>
   <data name="CatalogUnresolvedCount" xml:space="preserve"><value>{0} unresolved rows in this filter scope are excluded from the default list.</value></data>
@@ -146,7 +142,6 @@
   <data name="NotQueried" xml:space="preserve"><value>not sampled</value></data>
   <data name="None" xml:space="preserve"><value>none</value></data>
   <data name="FishingTitle" xml:space="preserve"><value>ENV-03 fishing observations</value></data>
-  <data name="FishingIntro" xml:space="preserve"><value>Observe the three condition flags while fishing manually. Cast and bite detection are not available yet.</value></data>
   <data name="StartObservation" xml:space="preserve"><value>Start new observation</value></data>
   <data name="StopObservation" xml:space="preserve"><value>Stop observation</value></data>
   <data name="CopyObservation" xml:space="preserve"><value>Copy observation report</value></data>
@@ -199,7 +194,6 @@
   <data name="CatalogDetailsOnly" xml:space="preserve"><value>Only fish with condition details</value></data>
   <data name="CatalogSortWindow" xml:space="preserve"><value>Time remaining</value></data>
   <data name="CatalogSortWindowHint" xml:space="preserve"><value>Open windows: closing soonest first. Then upcoming windows: starting soonest first. Unavailable forecasts follow; always available fish are last. Use Time-restricted only to exclude unrestricted fish. Uses normal time/weather windows; personal requirements are separate.</value></data>
-  <data name="CatalogDetailCoverage" xml:space="preserve"><value>Source information linked: {0} fish. Individual fields may be unknown.</value></data>
   <data name="CatalogDetailPrompt" xml:space="preserve"><value>Select a fish to view fishing spots and details.</value></data>
   <data name="CatalogDetailsMissing" xml:space="preserve"><value>Bait, hookset, and conditions for this fish are not available yet.</value></data>
   <data name="SpotLine" xml:space="preserve"><value>{0} · {1} (X:{2:F1} Y:{3:F1})</value></data>
@@ -210,10 +204,6 @@
   <data name="MapOpenFailed" xml:space="preserve"><value>Could not open the map for {0}.</value></data>
   <data name="MapError" xml:space="preserve"><value>Map request failed: {0}</value></data>
   <data name="BaitPathHeading" xml:space="preserve"><value>Bait → mooch sequence</value></data>
-  <data name="BaitStepLabel" xml:space="preserve"><value>{0}. {1}</value></data>
-  <data name="WeatherHeading" xml:space="preserve"><value>Current weather (any of these)</value></data>
-  <data name="PreviousWeatherHeading" xml:space="preserve"><value>Previous weather (any of these)</value></data>
-  <data name="IntuitionHeading" xml:space="preserve"><value>Intuition catches required (verify progress separately)</value></data>
   <data name="ItemLinkHint" xml:space="preserve"><value>{0}&#10;Click to display a game item link in your chat log.</value></data>
   <data name="ItemLinkPrinted" xml:space="preserve"><value>Displayed a link for {0} in your chat log. Click that link to view the item.</value></data>
   <data name="ItemLinkPlayerRequired" xml:space="preserve"><value>Item links require a logged-in character. Click again after changing characters.</value></data>
@@ -221,7 +211,6 @@
   <data name="HooksetLabel" xml:space="preserve"><value>With Patience: {0}</value></data>
   <data name="HooksetPrecision" xml:space="preserve"><value>Precision Hookset</value></data>
   <data name="HooksetPowerful" xml:space="preserve"><value>Powerful Hookset</value></data>
-  <data name="TugLabel" xml:space="preserve"><value>Tug strength: {0}</value></data>
   <data name="TimeConditionLabel" xml:space="preserve"><value>ET {0}–{1}</value></data>
   <data name="TimeAllDay" xml:space="preserve"><value>All day</value></data>
   <data name="WeatherConditionLabel" xml:space="preserve"><value>Current weather condition: {0}</value></data>
@@ -234,10 +223,8 @@
   <data name="ForecastOpen" xml:space="preserve"><value>Available now · ends in {0}</value></data>
   <data name="ForecastOpenNoEnd" xml:space="preserve"><value>Available now</value></data>
   <data name="ForecastUpcoming" xml:space="preserve"><value>Starts in {0} · {1}</value></data>
-  <data name="ForecastEnd" xml:space="preserve"><value>Ends: local time {0}</value></data>
   <data name="ForecastNotFound" xml:space="preserve"><value>No matching window found within the next {0} real days.</value></data>
   <data name="ForecastUnknown" xml:space="preserve"><value>Availability forecast is not available.</value></data>
-  <data name="ForecastScope" xml:space="preserve"><value>The next window is searched within {0} real days from now using the selected time/weather basis and Intuition prerequisites. Actual active Intuition and personal readiness are not checked.</value></data>
   <data name="ForecastIntuition" xml:space="preserve"><value>Includes prerequisite fish windows and Intuition duration.</value></data>
   <data name="ForecastIntuitionDurationUnknown" xml:space="preserve"><value>The Intuition duration value is invalid, so a forecast is unavailable.</value></data>
   <data name="ForecastIntuitionPrerequisiteUnknown" xml:space="preserve"><value>Intuition prerequisites are unknown or unsupported, so a forecast is unavailable.</value></data>
@@ -248,9 +235,6 @@
   <data name="ForecastNormal" xml:space="preserve"><value>Normal availability</value></data>
   <data name="ForecastWithFishEyes" xml:space="preserve"><value>With Fish Eyes</value></data>
   <data name="ForecastCalculation" xml:space="preserve"><value>Intuition window calculation</value></data>
-  <data name="ForecastTargetRange" xml:space="preserve"><value>Target time/weather: {0}</value></data>
-  <data name="ForecastPrerequisiteRange" xml:space="preserve"><value>Prerequisite {0} × {1}: {2}</value></data>
-  <data name="ForecastFinalRange" xml:space="preserve"><value>Calculated result: {0}</value></data>
   <data name="ForecastCalculationHint" xml:space="preserve"><value>Predicted from time and weather; your current Intuition buff is not included.</value></data>
   <data name="ForecastCalculationPendingHint" xml:space="preserve"><value>No shared preparation window was found. These are individual fish windows.</value></data>
   <data name="ForecastFishColumn" xml:space="preserve"><value>Fish / condition</value></data>
@@ -279,13 +263,10 @@
   <data name="ManualPlayerRequired" xml:space="preserve"><value>Log in to edit this character's manual collection records.</value></data>
   <data name="PreferencesLoadFailed" xml:space="preserve"><value>Preferences could not be loaded or use an unsupported format. Editing is disabled to preserve the existing file.</value></data>
   <data name="PreferencesSaveFailed" xml:space="preserve"><value>Preferences could not be saved. The previous state is still displayed; please try the change again.</value></data>
-  <data name="FavoriteRowState" xml:space="preserve"><value>Favorite · {0}</value></data>
   <data name="FavoriteToggle" xml:space="preserve"><value>Favorite</value></data>
-  <data name="ManualCollectionLabel" xml:space="preserve"><value>Collection: {0}</value></data>
   <data name="MarkCaught" xml:space="preserve"><value>Manually mark caught</value></data>
   <data name="MarkUncaught" xml:space="preserve"><value>Manually mark uncaught</value></data>
   <data name="ClearManualCollection" xml:space="preserve"><value>Clear manual status</value></data>
-  <data name="PreferenceScope" xml:space="preserve"><value>Favorites are shared. Manual records are saved per character and take priority. Clearing a manual record follows the current automatic observation; unconfirmed fish remain Unknown.</value></data>
   <data name="CollectionManualCaught" xml:space="preserve"><value>Caught (manual)</value></data>
   <data name="CollectionManualUncaught" xml:space="preserve"><value>Uncaught (manual)</value></data>
   <data name="CollectionUnknown" xml:space="preserve"><value>Unknown</value></data>
@@ -295,27 +276,16 @@
   <data name="CollectionPositiveOnly" xml:space="preserve"><value>Caught updates from the Fish Guide and new registrations. Uncaught awaits a complete guide comparison.</value></data>
   <data name="CollectionLogUnavailable" xml:space="preserve"><value>Fish Guide lookup is available; new-registration updates are unavailable for this installation.</value></data>
   <data name="CollectionObservedCount" xml:space="preserve"><value>Automatic observations: {0} caught / {1} uncaught · {2}</value></data>
-  <data name="AutomaticObservationLabel" xml:space="preserve"><value>Game observation: {0}</value></data>
   <data name="CollectionAutomaticCaught" xml:space="preserve"><value>Caught</value></data>
   <data name="CollectionAutomaticUncaught" xml:space="preserve"><value>Uncaught</value></data>
   <data name="CollectionGuideConfirmed" xml:space="preserve"><value>Collection states matched the complete game guide at the last lookup.</value></data>
   <data name="CollectionHelp" xml:space="preserve"><value>Collection filter help</value></data>
-  <data name="BaitAlternatives" xml:space="preserve"><value>Step {0}: choose one of these alternatives</value></data>
   <data name="ConditionUnknown" xml:space="preserve"><value>Unknown</value></data>
   <data name="ConditionsPartial" xml:space="preserve"><value>Time and weather conditions are unconfirmed.</value></data>
   <data name="SnaggingRequired" xml:space="preserve"><value>Snagging</value></data>
   <data name="LureModest" xml:space="preserve"><value>Modest Lure</value></data>
   <data name="LureAmbitious" xml:space="preserve"><value>Ambitious Lure</value></data>
-  <data name="FishEyesSupport" xml:space="preserve"><value>Fish Eyes support: {0}. Standard forecasts do not apply this skill.</value></data>
-  <data name="ConditionSupported" xml:space="preserve"><value>Supported</value></data>
-  <data name="ConditionUnsupported" xml:space="preserve"><value>Not supported</value></data>
-  <data name="BigFishLabel" xml:space="preserve"><value>Big fish</value></data>
-  <data name="SourcePatchLabel" xml:space="preserve"><value>Source introduction patch: {0:0.##}</value></data>
-  <data name="RecommendedSpot" xml:space="preserve"><value>These conditions refer to the recommended location: {0} · {1}</value></data>
-  <data name="IntuitionDurationUnknown" xml:space="preserve"><value>Intuition duration: Unknown</value></data>
-  <data name="FolkloreItem" xml:space="preserve"><value>Required folklore book: {0}</value></data>
   <data name="RequiredSkill" xml:space="preserve"><value>Required skill: {0}</value></data>
-  <data name="RelatedConditions" xml:space="preserve"><value>Show preparation conditions: {0}</value></data>
   <data name="OceanLabel" xml:space="preserve"><value>Ocean fishing</value></data>
   <data name="OceanRowLabel" xml:space="preserve"><value>{0} [Ocean fishing]</value></data>
   <data name="OceanArea" xml:space="preserve"><value>Sea area: {0}</value></data>
@@ -332,9 +302,7 @@
   <data name="RowConditionsUnknown" xml:space="preserve"><value>Time/weather conditions: unconfirmed</value></data>
   <data name="RowOceanConditions" xml:space="preserve"><value>Fish-specific conditions are unconfirmed; see area details.</value></data>
   <data name="RowOceanWindow" xml:space="preserve"><value>Ocean fishing: standard forecast not applied</value></data>
-  <data name="RowStateLocation" xml:space="preserve"><value>{0} · {1}</value></data>
   <data name="RowIntuition" xml:space="preserve"><value>Intuition required</value></data>
-  <data name="RowFolklore" xml:space="preserve"><value>Folklore required</value></data>
   <data name="CurrentRegionOnly" xml:space="preserve"><value>Current region only</value></data>
   <data name="CurrentRegionHint" xml:space="preserve"><value>Includes fish with at least one known ordinary fishing spot in your current region. Combines with search, favorites and collection filters. Ocean fishing and unlocated fish are excluded. Other filter selections are preserved.</value></data>
   <data name="CurrentRegionName" xml:space="preserve"><value>Current region: {0} (ordinary fishing spots)</value></data>
@@ -397,7 +365,6 @@
   <data name="AlertFavoritesCount" xml:space="preserve"><value>{0} favorites shown · hover for details</value></data>
   <data name="CatalogFiltersHeading" xml:space="preserve"><value>Filters · {0}</value></data>
   <data name="CatalogRestoreDefaults" xml:space="preserve"><value>Reset filters / sort</value></data>
-  <data name="CatalogSavedHint" xml:space="preserve"><value>List filters, sort, regions and expansions are saved across reloads and shared between characters. Restore defaults also clears the current search and diagnostic checks. Favorites, collection records and alert settings are preserved.</value></data>
   <data name="CollectionGuideOpenRequired" xml:space="preserve"><value>Collection has not been checked in this session. Open the Fishing tab in the game Fish Guide. Until then, saved states are used where available; other fish remain unknown.</value></data>
   <data name="CollectionGuideRetryRequired" xml:space="preserve"><value>The full guide comparison did not complete. Open the Fishing tab in the game Fish Guide and wait briefly. Current verified observations and saved states remain available; other fish stay unknown.</value></data>
   <data name="CatalogFiltersSummary" xml:space="preserve"><value>Time restrictions only: {0}
@@ -425,7 +392,6 @@ In fish log only: {5}</value></data>
   <data name="AlertArmed" xml:space="preserve"><value>Future reminder armed</value></data>
   <data name="AlertPending" xml:space="preserve"><value>Waiting for a supported future window or planning slot</value></data>
   <data name="ChatChannelFallback" xml:space="preserve"><value>{0}</value></data>
-  <data name="AlertLinkedRemaining" xml:space="preserve"><value> {0} </value></data>
   <data name="ChatDebug" xml:space="preserve"><value>Debug</value></data>
   <data name="ChatUrgent" xml:space="preserve"><value>Urgent</value></data>
   <data name="ChatNotice" xml:space="preserve"><value>Notice</value></data>
@@ -521,19 +487,13 @@ In fish log only: {5}</value></data>
   <data name="DetailLocations" xml:space="preserve"><value>Fishing spots</value></data>
   <data name="DetailLocationUnknown" xml:space="preserve"><value>Fishing spot not available</value></data>
   <data name="DetailConditions" xml:space="preserve"><value>Fishing conditions</value></data>
-  <data name="DetailBait" xml:space="preserve"><value>Bait</value></data>
   <data name="DetailHookset" xml:space="preserve"><value>Hookset</value></data>
   <data name="DetailTug" xml:space="preserve"><value>Bite</value></data>
   <data name="DetailTime" xml:space="preserve"><value>ET</value></data>
-  <data name="DetailPreviousWeather" xml:space="preserve"><value>Previous</value></data>
-  <data name="DetailWeather" xml:space="preserve"><value>Current</value></data>
   <data name="DetailRequired" xml:space="preserve"><value>Required</value></data>
   <data name="DetailFolklore" xml:space="preserve"><value>Folklore</value></data>
-  <data name="DetailAdditional" xml:space="preserve"><value>More information</value></data>
-  <data name="ConditionOr" xml:space="preserve"><value>or</value></data>
   <data name="ConditionAny" xml:space="preserve"><value>Any one of these</value></data>
   <data name="CollectionControlHint" xml:space="preserve"><value>Change collection status manually. Reset returns to the current game observation, then the saved backup, then unknown.</value></data>
-  <data name="ForecastBriefScope" xml:space="preserve"><value>Time and weather only · Check personal requirements</value></data>
   <data name="WindowLocalRange" xml:space="preserve"><value>{0:MM-dd HH:mm} – {1:MM-dd HH:mm} (local)</value></data>
   <data name="SearchPlaceholder" xml:space="preserve"><value>Search fish, fishing spot, or ID…</value></data>
   <data name="ResultCount" xml:space="preserve"><value>{0} fish</value></data>
@@ -545,7 +505,6 @@ In fish log only: {5}</value></data>
   <data name="DetailWindowTitle" xml:space="preserve"><value>Fish details</value></data>
   <data name="CompactWindowTitle" xml:space="preserve"><value>Quick list</value></data>
   <data name="CompactOptions" xml:space="preserve"><value>Quick list options</value></data>
-  <data name="OpenMainWindow" xml:space="preserve"><value>Open main window</value></data>
   <data name="OpenCompactWindow" xml:space="preserve"><value>Open quick list</value></data>
   <data name="CompactHorizon" xml:space="preserve"><value>Upcoming minutes</value></data>
   <data name="CompactScope" xml:space="preserve"><value>Shares the main catalog filters except favorites, including minimum time left and the optional minimum/maximum time until spawn. Use the star here to show favorites only; it does not change the main view. Upcoming fish must also fall within this view's 1–180 minute horizon. A blank main bound adds no limit. Always available, unknown and ocean fish are excluded.</value></data>
@@ -553,15 +512,11 @@ In fish log only: {5}</value></data>
   <data name="CompactUpcoming" xml:space="preserve"><value>Upcoming · {0}</value></data>
   <data name="CompactEmpty" xml:space="preserve"><value>No matching fish open or starting within {0} minutes. Adjust the main filters or extend this window&apos;s range.</value></data>
   <data name="FavoritesEmpty" xml:space="preserve"><value>No matching favorites. Add fish with the star in the catalog, or clear your search.</value></data>
-  <data name="CompactSharedFilters" xml:space="preserve"><value>Main filters</value></data>
-  <data name="CompactSharedFiltersHint" xml:space="preserve"><value>Uses the main catalog collection, region, expansion, grade, time and favorites filters. Search and this window&apos;s upcoming range are separate.</value></data>
   <data name="ToggleMainWindow" xml:space="preserve"><value>Show / hide main window</value></data>
   <data name="JumpUpcoming" xml:space="preserve"><value>Upcoming ↓</value></data>
   <data name="JumpTop" xml:space="preserve"><value>Top ↑</value></data>
   <data name="IntuitionRequired" xml:space="preserve"><value>Fisher&apos;s Intuition required</value></data>
   <data name="IntuitionAllRequired" xml:space="preserve"><value>Catch all of the following</value></data>
-  <data name="FishEyesAvailable" xml:space="preserve"><value>{0} supported</value></data>
-  <data name="FishEyesUnavailable" xml:space="preserve"><value>{0} not supported</value></data>
   <data name="WindowOpen" xml:space="preserve"><value>Available now</value></data>
   <data name="WindowUpcoming" xml:space="preserve"><value>Upcoming</value></data>
   <data name="WindowToday" xml:space="preserve"><value>Today {0:HH:mm}</value></data>
@@ -600,7 +555,6 @@ In fish log only: {5}</value></data>
   <data name="TabHistory" xml:space="preserve"><value>Fishing history</value></data>
   <data name="CopyTimerReport" xml:space="preserve"><value>Copy timer summary</value></data>
   <data name="HistoryItemUnknown" xml:space="preserve"><value>Item #{0}</value></data>
-  <data name="HistorySession" xml:space="preserve"><value>Fishing session · {0}</value></data>
   <data name="HistoryStartUnknown" xml:space="preserve"><value>Start time unknown</value></data>
   <data name="HistorySeconds" xml:space="preserve"><value>{0:0.0}s</value></data>
   <data name="HistoryTiming" xml:space="preserve"><value>{0} · {1} · ET {2}</value></data>
@@ -627,15 +581,12 @@ In fish log only: {5}</value></data>
   <data name="HistoryWriteRetry" xml:space="preserve"><value>Saving or deletion could not be completed. Retrying every {0} seconds; pending changes remain in memory for this run.</value></data>
   <data name="HistoryLoading" xml:space="preserve"><value>Loading fishing history…</value></data>
   <data name="HistoryEmpty" xml:space="preserve"><value>No recorded casts yet.</value></data>
-  <data name="HistoryRecent" xml:space="preserve"><value>Recent casts · {0}</value></data>
-  <data name="HistoryCapacity" xml:space="preserve"><value>{0}/{1} casts · newest first</value></data>
   <data name="TimerSpotPending" xml:space="preserve"><value>Fishing spot appears after casting</value></data>
   <data name="TimerSpotFish" xml:space="preserve"><value>Fish at this fishing spot</value></data>
   <data name="TimerEquippedBait" xml:space="preserve"><value>Equipped bait · {0}</value></data>
   <data name="TimerCastLine" xml:space="preserve"><value>{0} · {1}</value></data>
   <data name="TimerCastEt" xml:space="preserve"><value>Cast at ET {0}</value></data>
   <data name="TimerSessionLine" xml:space="preserve"><value>Session {0} · {1}</value></data>
-  <data name="TimerStartUnknownHint" xml:space="preserve"><value>Times start from observed transitions. A cast or session already underway at load has no known start time.</value></data>
   <data name="TimerLoginRequired" xml:space="preserve"><value>Log in to observe fishing</value></data>
   <data name="TimerOceanUnsupported" xml:space="preserve"><value>Ocean fishing recording is not supported yet</value></data>
   <data name="TimerUnavailable" xml:space="preserve"><value>Fishing observation unavailable</value></data>
@@ -749,24 +700,9 @@ Main inventory only. An unknown quantity is not zero.</value></data>
   <data name="ChangelogVersion" xml:space="preserve"><value>Installed version · {0}</value></data>
   <data name="ChangelogPublishedHint" xml:space="preserve"><value>Browse the {0} most recent updates.</value></data>
   <data name="ChangelogRelease" xml:space="preserve"><value>Version {0}</value></data>
-  <data name="ChangelogAudio" xml:space="preserve"><value>Custom WAV alerts: choose, preview, reload, and stop a local sound file in Settings.</value></data>
-  <data name="ChangelogForecast" xml:space="preserve"><value>Forecasts up to 30 real days ahead. Use the Fish Eyes button in the filter bar to switch the forecast and sorting basis.</value></data>
-  <data name="ChangelogIntuition" xml:space="preserve"><value>Expand the Intuition calculation in fish details to compare target and prerequisite times. Unknown durations use a marked 175-second assumption.</value></data>
-  <data name="ChangelogDetails" xml:space="preserve"><value>Related mooch fish open in a comparison detail view with back navigation. Countdowns over a day use days:hours:minutes:seconds.</value></data>
-  <data name="ChangelogStability" xml:space="preserve"><value>Improved data validation and alert replanning, and reduced repeated forecast, inventory, and list allocations.</value></data>
   <data name="ChangelogReopenHint" xml:space="preserve"><value>You can read these notes again in Settings → What's new.</value></data>
   <data name="ChangelogUnsaved" xml:space="preserve"><value>Read status cannot be saved. These notes may appear again after reloading.</value></data>
   <data name="ChangelogDismiss" xml:space="preserve"><value>Got it</value></data>
-  <data name="ChangelogBaitPreparation" xml:space="preserve"><value>Added bait preparation for favorites or filtered fish, with inventory counts and target fish. Find owned baits using page markers and highlights in the game's bait UI.</value></data>
-  <data name="ChangelogRecordRecovery" xml:space="preserve"><value>Improved fishing-record saves, restoration, ordering, and deletion. Added observation of stored live bait used for a cast.</value></data>
-  <data name="ChangelogDataExpansion" xml:space="preserve"><value>Expanded regular fish details from 903 to 1,258 entries and filled supported missing fields. Incomplete conditions remain marked as unverified.</value></data>
-  <data name="ChangelogDal4kr" xml:space="preserve"><value>Added support for the inspected dal4kr build of KR Dalamud 15.0.3.7. Fixed compatibility blocks affecting collection sync, fish-guide opening, the casting timer, and alert sounds on this distribution.</value></data>
-  <data name="ChangelogKrRuntime" xml:space="preserve"><value>Added support for the inspected KR Dalamud 15.0.3.7 runtime alongside 15.0.3.6, restoring native features blocked after the runtime update.</value></data>
-  <data name="ChangelogCompatibilityHint" xml:space="preserve"><value>Show the compatibility block when native features are unavailable, with a compact runtime/profile/status line in diagnostics.</value></data>
-  <data name="ChangelogFirstRelease" xml:space="preserve"><value>First custom-repository release: fish browsing and filters, bait and condition details, map markers, forecasts, favorite alerts, a quick list, a casting timer, and character-specific fishing records. Korean and English UI.</value></data>
-  <data name="ChangelogUpdateNotes" xml:space="preserve"><value>Added release notes to the plugin installer and a Korean/English release history. This screen appears once per version after you close it and can be reopened from Settings → What's new.</value></data>
-  <data name="ChangelogShortCommands" xml:space="preserve"><value>Use /dbfs to toggle the main view, /dbfs cl for the compact list, and /dbfs ct for the casting timer. /duckbillfisher and the full compact / timer arguments still work.</value></data>
-  <data name="ChangelogSpotFish" xml:space="preserve"><value>View fish at the current fishing spot in a separate view that stays open while inspecting fish details, clicking elsewhere, or closing the casting timer.</value></data>
   <data name="UiScale" xml:space="preserve"><value>UI scale</value></data>
   <data name="UiScaleHint" xml:space="preserve"><value>Scales DuckbillFisher text, icons, controls, and spacing relative to the Dalamud UI scale. Applies to all plugin views and is saved across reloads. Resize views as needed.</value></data>
   <data name="UiScaleReset" xml:space="preserve"><value>Reset UI scale to 100%</value></data>
@@ -782,12 +718,10 @@ Main inventory only. An unknown quantity is not zero.</value></data>
   <data name="ChangelogUnknownSpot" xml:space="preserve"><value>New casts clear the previous fishing spot. Undiscovered spots are labeled, and the name and fish list update when discovery and your catch are confirmed.</value></data>
   <data name="ChangelogSpotToggle" xml:space="preserve"><value>Click View fish again to close the fishing-spot list.</value></data>
   <data name="ChangelogPublishedAt" xml:space="preserve"><value>Released: {0:MMM d, yyyy h tt} (local time)</value></data>
-  <data name="ChangelogReleaseTimeUnknown" xml:space="preserve"><value>Release time not recorded</value></data>
   <data name="TabCollectionProgress" xml:space="preserve"><value>Collection progress</value></data>
   <data name="CollectionProgressWaiting" xml:space="preserve"><value>Preparing collection progress for the current character.</value></data>
   <data name="CollectionProgressHint" xml:space="preserve"><value>All fish in the fishing log, independent of catalog filters. Fish found in multiple regions count once in each region; expansion and overall totals count each fish once. Manual collection settings take priority. Unknown does not mean uncaught.</value></data>
   <data name="CollectionProgressOverall" xml:space="preserve"><value>Fishing log total: {0:N0} / {1:N0} caught · {2:N0} unknown</value></data>
-  <data name="CollectionProgressRegular" xml:space="preserve"><value>Regular fishing</value></data>
   <data name="CollectionProgressAll" xml:space="preserve"><value>All fish</value></data>
   <data name="CollectionProgressBig" xml:space="preserve"><value>Big + legendary fish</value></data>
   <data name="CollectionProgressLegendary" xml:space="preserve"><value>Legendary fish</value></data>
@@ -797,7 +731,6 @@ Main inventory only. An unknown quantity is not zero.</value></data>
   <data name="CollectionProgressRegularTotal" xml:space="preserve"><value>Regular fishing total</value></data>
   <data name="CollectionProgressUnknownArea" xml:space="preserve"><value>Location unknown</value></data>
   <data name="CollectionProgressOcean" xml:space="preserve"><value>Ocean fishing</value></data>
-  <data name="CollectionProgressOceanHint" xml:space="preserve"><value>Ocean fish are counted separately, without a big/legendary filter.</value></data>
   <data name="CollectionProgressNoTargets" xml:space="preserve"><value>No fish</value></data>
   <data name="CollectionProgressComplete" xml:space="preserve"><value>{0:N0} / {1:N0} · Complete</value></data>
   <data name="CollectionProgressRatio" xml:space="preserve"><value>{0:N0} / {1:N0} · {2:F1}%</value></data>
@@ -808,17 +741,13 @@ Manual settings included: {3:N0}</value></data>
   <data name="CollectionProgressUnknownCount" xml:space="preserve"><value>{0:N0} unknown</value></data>
   <data name="ChangelogCollectionProgress" xml:space="preserve"><value>Open Collection progress in the main view to see a large regular-fishing summary and ocean-fishing progress by sea area.</value></data>
   <data name="ChangelogCompactToggle" xml:space="preserve"><value>The compact-list button in the main view now toggles the list open and closed.</value></data>
-  <data name="ChangelogFirstOpen" xml:space="preserve"><value>Unread release notes appear when you first open the main view after an update.</value></data>
   <data name="CollectionProgressScopeName" xml:space="preserve"><value>{0}</value></data>
   <data name="CollectionProgressRegionName" xml:space="preserve"><value>{0} / {1}</value></data>
   <data name="CollectionProgressFishTitle" xml:space="preserve"><value>Collection progress · Fish</value></data>
   <data name="CollectionProgressListScope" xml:space="preserve"><value>{0} · {1}</value></data>
   <data name="CollectionProgressListHint" xml:space="preserve"><value>Switch between all fish and hiding caught fish. Unknown fish remain visible. This list stays open until you close it and is reused when you click another area bar.</value></data>
-  <data name="CollectionProgressOceanNoGrades" xml:space="preserve"><value>The current data has no verified big/legendary classifications for ocean fish. Showing all ocean fish.</value></data>
   <data name="CollectionProgressCompactRatio" xml:space="preserve"><value>{0:N0}/{1:N0}</value></data>
-  <data name="CollectionProgressColorHint" xml:space="preserve"><value>Progress colors: 0% gray; below 25% slate blue; below 50% blue; below 75% teal; below 100% green; complete lime green.</value></data>
   <data name="CollectionProgressClickHint" xml:space="preserve"><value>Click to view fish in this scope.</value></data>
-  <data name="ChangelogHousingExpansion" xml:space="preserve"><value>Corrected residential-district expansion grouping, including Shirogane under Stormblood.</value></data>
   <data name="ChangelogProgressFilters" xml:space="preserve"><value>Expand expansions into regions and switch between all fish, big fish including legendary fish, and legendary fish.</value></data>
   <data name="ChangelogProgressBars" xml:space="preserve"><value>Progress bars adapt to the view width. Hover for full counts, percentages, and unknown states.</value></data>
   <data name="ChangelogProgressList" xml:space="preserve"><value>Click an expansion, region, or sea-area bar to open a fish list that stays open until you close it. Clicking another area reuses that list.</value></data>
@@ -831,7 +760,6 @@ Manual settings included: {3:N0}</value></data>
   <data name="CollectionProgressAreaClickHint" xml:space="preserve"><value>Click an expansion, region, or sea-area bar to view fish.</value></data>
   <data name="CollectionProgressOceanArea" xml:space="preserve"><value>Sea area</value></data>
   <data name="TripResultElapsedColumn" xml:space="preserve"><value>Result elapsed</value></data>
-  <data name="HistoryMoochLinkedBait" xml:space="preserve"><value>↳ {0} · mooch from previous catch</value></data>
   <data name="HistoryMoochBait" xml:space="preserve"><value>{0} · mooch</value></data>
   <data name="HistorySwimbaitBait" xml:space="preserve"><value>{0} · stored live bait</value></data>
   <data name="TimerMoochLink" xml:space="preserve"><value>Previous catch → {0} used for this mooch cast</value></data>
@@ -854,11 +782,7 @@ Manual settings included: {3:N0}</value></data>
   <data name="ScheduleSourceHint" xml:space="preserve"><value>Click to switch to {0}.
 Favorites uses every favorite. Current filtered fish uses the main list search and filters. This page adds its own search and hide-caught option.</value></data>
   <data name="ScheduleHideHint" xml:space="preserve"><value>Hide only fish confirmed caught. Unknown collection states remain visible. This also applies to current filtered fish.</value></data>
-  <data name="ScheduleEmphasize" xml:space="preserve"><value>Highlight concurrent spawns</value></data>
-  <data name="ScheduleConcurrentHint" xml:space="preserve"><value>Hover over one interval to highlight shared time on other displayed fish. Move away to clear the highlight.</value></data>
   <data name="ScheduleFishEyesHint" xml:space="preserve"><value>Shares the main list Fish Eyes mode. This changes schedule exploration, while alerts continue to use normal forecasts.</value></data>
-  <data name="ScheduleRange" xml:space="preserve"><value>Local time · {0:MM-dd HH:mm} → {1:MM-dd HH:mm} · UTC{2}</value></data>
-  <data name="ScheduleCounts" xml:space="preserve"><value>Source {0} · after search/collection {1} · timeline {2}</value></data>
   <data name="ScheduleComputing" xml:space="preserve"><value>Calculating the spawn schedule…</value></data>
   <data name="ScheduleFailed" xml:space="preserve"><value>Could not calculate the schedule. Change the period or reopen this page to retry.</value></data>
   <data name="ScheduleNoFavorites" xml:space="preserve"><value>No favorite fish. Add favorites from the fish list or favorites management.</value></data>
@@ -866,34 +790,12 @@ Favorites uses every favorite. Current filtered fish uses the main list search a
   <data name="ScheduleNoMatches" xml:space="preserve"><value>No fish match this page’s search and collection options.</value></data>
   <data name="ScheduleClearSearch" xml:space="preserve"><value>Clear schedule search</value></data>
   <data name="ScheduleFishColumn" xml:space="preserve"><value>Fish / spot · region</value></data>
-  <data name="ScheduleReasonColumn" xml:space="preserve"><value>Reason not shown</value></data>
-  <data name="ScheduleLegend" xml:space="preserve"><value>Available now · green / Upcoming · blue / Concurrent spawns · hatched</value></data>
-  <data name="ScheduleNow" xml:space="preserve"><value>Now {0:HH:mm}</value></data>
-  <data name="ScheduleIntuitionAssumed" xml:space="preserve"><value>Intuition · duration assumed</value></data>
-  <data name="ScheduleIntuition" xml:space="preserve"><value>Intuition</value></data>
   <data name="ScheduleNameTooltip" xml:space="preserve"><value>{0}
 {1}
 Click to open fish details.</value></data>
-  <data name="ScheduleWindowTooltip" xml:space="preserve"><value>{0}
-{1}
-{2}</value></data>
-  <data name="ScheduleTimeList" xml:space="preserve"><value>Spawn times</value></data>
-  <data name="ScheduleListWindow" xml:space="preserve"><value>{0} · {1}</value></data>
-  <data name="ScheduleSelected" xml:space="preserve"><value>Viewing · {0}
-{1}</value></data>
-  <data name="ScheduleOpenDetail" xml:space="preserve"><value>Fish details</value></data>
-  <data name="ScheduleEnded" xml:space="preserve"><value>This spawn has ended. Select another interval.</value></data>
-  <data name="ScheduleRemaining" xml:space="preserve"><value>{0}</value></data>
-  <data name="ScheduleChoose" xml:space="preserve"><value>Click a spawn interval to view its times and fish available at the same time.</value></data>
-  <data name="ScheduleEt" xml:space="preserve"><value>ET · {0} → {1}</value></data>
-  <data name="ScheduleConcurrent" xml:space="preserve"><value>Fish available at the same time · {0}</value></data>
-  <data name="ScheduleConcurrentRow" xml:space="preserve"><value>{0} · {1:MM-dd HH:mm:ss}–{2:MM-dd HH:mm:ss} · {3}</value></data>
-  <data name="ScheduleNoConcurrent" xml:space="preserve"><value>No other displayed fish spawn at the same time.</value></data>
-  <data name="ScheduleComparisonHint" xml:space="preserve"><value>Compares displayed spawn intervals only. Travel, preparation, actual buffs and catch success are not included. Unknown ends are compared only through the displayed period.</value></data>
   <data name="ScheduleOtherHeading" xml:space="preserve"><value>Fish without timeline bars · {0}</value></data>
   <data name="ScheduleNoOther" xml:space="preserve"><value>All fish matching these options are shown on the timeline.</value></data>
   <data name="ScheduleDetail" xml:space="preserve"><value>Details</value></data>
-  <data name="ScheduleNext" xml:space="preserve"><value>Next spawn · {0:MM-dd HH:mm:ss}</value></data>
   <data name="ScheduleOutside" xml:space="preserve"><value>No spawn in the next {0} hours.</value></data>
   <data name="ScheduleAlways" xml:space="preserve"><value>Always available · no time/weather restrictions under this forecast mode.</value></data>
   <data name="ScheduleOceanUnsupported" xml:space="preserve"><value>Ocean fishing · not supported by this schedule.</value></data>
@@ -901,16 +803,13 @@ Click to open fish details.</value></data>
   <data name="ScheduleIncomplete" xml:space="preserve"><value>Partially calculated · showing at most {0} intervals for this fish.</value></data>
   <data name="ScheduleWindowRange" xml:space="preserve"><value>{0:MM-dd HH:mm:ss} → {1:MM-dd HH:mm:ss}</value></data>
   <data name="ScheduleWindowUnknownEnd" xml:space="preserve"><value>{0:MM-dd HH:mm:ss} → end unknown</value></data>
-  <data name="ChangelogSpawnSchedule" xml:space="preserve"><value>Added the spawn schedule for favorites or current filtered fish. Compare multiple spawns over 1, 3, 6, 12 or 24 hours, highlight concurrent spawns, and see why other fish have no timeline bars.</value></data>
   <data name="ScheduleTimelineMode" xml:space="preserve"><value>Timeline</value></data>
   <data name="ScheduleCalendarMode" xml:space="preserve"><value>Monthly calendar</value></data>
-  <data name="ScheduleCompactRange" xml:space="preserve"><value>{0:MM-dd HH:mm} → {1:MM-dd HH:mm} · {2} fish · Now {3:HH:mm}</value></data>
   <data name="ScheduleNoTimed" xml:space="preserve"><value>No timed intervals match this range.</value></data>
   <data name="ScheduleSimpleTooltip" xml:space="preserve"><value>{0}
 {1}</value></data>
   <data name="ScheduleMapTooltip" xml:space="preserve"><value>{0} · {1}
 Click to show a map pin.</value></data>
-  <data name="ScheduleClearSelection" xml:space="preserve"><value>Clear selected interval</value></data>
   <data name="ScheduleClockRange" xml:space="preserve"><value>{0:HH:mm:ss} → {1:HH:mm:ss}</value></data>
   <data name="ScheduleClockUnknownEnd" xml:space="preserve"><value>{0:HH:mm:ss} → end unknown</value></data>
   <data name="ScheduleToday" xml:space="preserve"><value>Today</value></data>
@@ -937,9 +836,7 @@ Click for the full list of intervals below.</value></data>
 Click for fish details.</value></data>
   <data name="ScheduleLocation" xml:space="preserve"><value>{0} · {1}</value></data>
   <data name="ScheduleAxisHint" xml:space="preserve"><value>The vertical line marks the current time ({0:HH:mm:ss}). The axis starts at the preceding half-hour boundary; bars follow actual spawn times. Times use your PC's local time zone.</value></data>
-  <data name="ScheduleCalendarListVisible" xml:space="preserve"><value>Show fish list</value></data>
   <data name="ScheduleCalendarResizeHint" xml:space="preserve"><value>Drag up or down to resize the calendar and fish list. Click Hide list to view only the calendar.</value></data>
-  <data name="ScheduleOptions" xml:space="preserve"><value>Options ▾</value></data>
   <data name="ScheduleFishEyes" xml:space="preserve"><value>Fish Eyes</value></data>
   <data name="ScheduleHideList" xml:space="preserve"><value>Hide list</value></data>
   <data name="ScheduleShowList" xml:space="preserve"><value>Show list</value></data>
@@ -960,7 +857,6 @@ Last saved: {1:yyyy-MM-dd HH:mm}, {2} fish. Used where current observations are 
   <data name="TimerLureElapsed" xml:space="preserve"><value>{0} ({2}): {1} elapsed</value></data>
   <data name="TimerLureHint" xml:space="preserve"><value>Time since a new lure stack was observed. Using the skill again restarts this timer. An existing effect when reopening has unknown start time.</value></data>
   <data name="TimerAlertNamedMessage" xml:space="preserve"><value>{0}: {1} seconds since cast.</value></data>
-  <data name="TimerAlertOutputSettings" xml:space="preserve"><value>Common output settings</value></data>
   <data name="TimerAlertEmpty" xml:space="preserve"><value>Use + to add a cast alert.</value></data>
   <data name="TimerAlertName" xml:space="preserve"><value>Alert name (optional)</value></data>
   <data name="TimerAlertPresets" xml:space="preserve"><value>Cast alert presets</value></data>
@@ -983,12 +879,8 @@ Last saved: {1:yyyy-MM-dd HH:mm}, {2} fish. Used where current observations are 
   <data name="FishingSoundLegendaryFish" xml:space="preserve"><value>Legendary fish</value></data>
   <data name="FishingSoundFirstCatchOnly" xml:space="preserve"><value>First acquisition only</value></data>
   <data name="TimerAlertTab" xml:space="preserve"><value>Cast alerts</value></data>
-  <data name="TimerAlertOutputHint" xml:space="preserve"><value>Choose the local chat channel in common output settings. Configure individual sounds in each tab.</value></data>
   <data name="TimerAlertDeliveryHint" xml:space="preserve"><value>The chat channel above is for cast alerts only. Choose a sound for each alert; spawn alerts have their own channel.</value></data>
-  <data name="TimerAlertLifecycleHint" xml:space="preserve"><value>Alerts work with the timer closed. Hooking or stopping cancels the remaining alerts.</value></data>
-  <data name="TimerAlertMissedHint" xml:space="preserve"><value>Past alerts and alerts missed during observation gaps are never replayed.</value></data>
   <data name="TimerAlertRulesHeading" xml:space="preserve"><value>Alert list</value></data>
-  <data name="TimerAlertPresetContentsHint" xml:space="preserve"><value>Presets save cast alert names, times, enabled states, and sounds.</value></data>
   <data name="TimerAlertPresetReplaceHint" xml:space="preserve"><value>Loading a preset replaces the current cast alert list.</value></data>
   <data name="FishingSoundLifecycleHint" xml:space="preserve"><value>Sounds work with the timer closed and do not print chat messages.</value></data>
   <data name="FishingSoundBiteHint" xml:space="preserve"><value>Plays once when a bite is observed.</value></data>
@@ -998,7 +890,6 @@ Last saved: {1:yyyy-MM-dd HH:mm}, {2} fish. Used where current observations are 
   <data name="FishingSoundFile" xml:space="preserve"><value>Selected file: {0}</value></data>
   <data name="FishingSoundWaveHelp" xml:space="preserve"><value>Custom WAV help</value></data>
   <data name="FishingSoundWaveLimits" xml:space="preserve"><value>Local WAV files only, up to {0} seconds / {1} MB.</value></data>
-  <data name="FishingSoundWaveReloadHint" xml:space="preserve"><value>Uses Windows volume. Reload after editing the file.</value></data>
   <data name="ChangelogFishingSounds" xml:space="preserve"><value>Choose individual built-in sound effects or custom WAV files for bites, big fish, and legendary fish.</value></data>
   <data name="ChangelogFirstCatchSounds" xml:space="preserve"><value>Trophy fish sounds play only on first fish guide registration by default. Disable first acquisition only to play on every confirmed catch.</value></data>
   <data name="ChangelogSpotFilterRetention" xml:space="preserve"><value>Keep the fishing-spot list's collection filter after restarting the plugin or game.</value></data>
@@ -1019,17 +910,11 @@ Fish to target now includes only those available now or within 30 minutes. The r
   <data name="RecommendationUnknownOption" xml:space="preserve"><value>Include unknown collection status</value></data>
   <data name="RecommendationFavorites" xml:space="preserve"><value>Favorites only</value></data>
   <data name="RecommendationLegendary" xml:space="preserve"><value>Legendary fish only</value></data>
-  <data name="RecommendationStorageOption" xml:space="preserve"><value>Include reviewed stored-bait strategies</value></data>
-  <data name="RecommendationStorageAssumption" xml:space="preserve"><value>Storage assumes access to the skill and staying at the hole. Current level, GP, and stored quantities are not read. Initially includes the intermediate storage route for the Greater Serpent of Ronka.</value></data>
   <data name="RecommendationUnsupported" xml:space="preserve"><value>Condition data does not match the current game build.</value></data>
   <data name="RecommendationFailed" xml:space="preserve"><value>Recommendations could not be calculated. Press Refresh to try again.</value></data>
   <data name="RecommendationComputing" xml:space="preserve"><value>Looking up appearances and preparation requirements…</value></data>
-  <data name="RecommendationSnapshot" xml:space="preserve"><value>As of {0:MM/dd HH:mm:ss} · {1} ranked · {2} other/review · {3} collection unknown</value></data>
-  <data name="RecommendationStale" xml:space="preserve"><value>Refresh available</value></data>
-  <data name="RecommendationEmpty" xml:space="preserve"><value>No ranked candidates in this scope. Review other candidates below or change the horizon or collection filter.</value></data>
   <data name="RecommendationMore" xml:space="preserve"><value>Show more</value></data>
   <data name="RecommendationOther" xml:space="preserve"><value>Excluded / needs review · {0}</value></data>
-  <data name="RecommendationOtherRow" xml:space="preserve"><value>{0} · {1}</value></data>
   <data name="RecommendationMethod" xml:space="preserve"><value>Recommendation help</value></data>
   <data name="RecommendationMethodHelp" xml:space="preserve"><value>Fish to target now: available now or within 30 minutes.
 Prep work: candidates requiring mooch bait or Intuition catches, excluding those whose target and prerequisites are all unrestricted.
@@ -1041,67 +926,25 @@ Target now and Prep work put candidates with 10 minutes or less remaining at the
   <data name="RecommendationEnds" xml:space="preserve"><value>Available · {0} left</value></data>
   <data name="RecommendationAlways" xml:space="preserve"><value>No time/weather restriction</value></data>
   <data name="RecommendationUnknown" xml:space="preserve"><value>Unknown</value></data>
-  <data name="RecommendationLocationTime" xml:space="preserve"><value>{0} · {1}</value></data>
   <data name="RecommendationNowCaught" xml:space="preserve"><value>Caught · removed from the list when you refresh.</value></data>
-  <data name="RecommendationStartNow" xml:space="preserve"><value>Now</value></data>
-  <data name="RecommendationStartLater" xml:space="preserve"><value>Suggested preparation starts in {0}</value></data>
-  <data name="RecommendationRoom" xml:space="preserve"><value>Estimated room to attempt</value></data>
-  <data name="RecommendationTight" xml:space="preserve"><value>Tight · only the faster estimate fits</value></data>
-  <data name="RecommendationLate" xml:space="preserve"><value>Preparation estimates miss this occurrence</value></data>
-  <data name="RecommendationSummary" xml:space="preserve"><value>{0} · {1} · {2}</value></data>
   <data name="RecommendationMap" xml:space="preserve"><value>Map</value></data>
-  <data name="RecommendationSchedule" xml:space="preserve"><value>Open schedule</value></data>
   <data name="RecommendationUnknownCollection" xml:space="preserve"><value>Collection status is unknown for this candidate.</value></data>
   <data name="RecommendationEstimate" xml:space="preserve"><value>Preparation duration, first-cast time and optimal stored quantities are not calculated. Use the required fish and their schedules to choose preparation order and swimbait use. Fish Eyes is off.</value></data>
   <data name="RecommendationFrequency" xml:space="preserve"><value>{0} appearances over 30 days</value></data>
   <data name="RecommendationFrequencyProxy" xml:space="preserve"><value>Prerequisite {1} appears {0} times over 30 days</value></data>
-  <data name="RecommendationNoRarity" xml:space="preserve"><value>No timetable rarity bonus. This does not mean the fish is easy to catch.</value></data>
-  <data name="RecommendationNext" xml:space="preserve"><value>Next opportunity using the same frequency basis: {0:MM/dd HH:mm}</value></data>
   <data name="RecommendationNextUnknown" xml:space="preserve"><value>No next appearance found within 30 days</value></data>
-  <data name="RecommendationScore" xml:space="preserve"><value>Target-now score {0:0.0}
-Start time {1:0.0} + frequency {2:0.0} + preparation fit {3:0.0} + next opportunity {4:0.0}
-Prep work and Least frequent use their own sort criteria.</value></data>
-  <data name="RecommendationAlternatives" xml:space="preserve"><value>Other routes for this occurrence</value></data>
-  <data name="RecommendationExtraStorage" xml:space="preserve"><value>Optional: extra stored {0} can reduce repeating the first two stages, at the cost of more preparation and time at the hole. {1} and the remaining chain still occur during availability. Extra stock is not required for the first cast and adds no score bonus. Stored quantity is not a target attempt count.</value></data>
-  <data name="RecommendationStethacanthus" xml:space="preserve"><value>Basic route: build {0} progress and time the final catch to trigger Intuition. Unverified alternatives such as delaying collectable acceptance are not calculated.</value></data>
-  <data name="RecommendationRubyDragon" xml:space="preserve"><value>Includes {0} time/weather restrictions. Mooch-loop success and retry counts are not guaranteed; failure may require preparing bait again.</value></data>
-  <data name="RecommendationPlanSummary" xml:space="preserve"><value>{0} · {1:0.#} min preparation + {2:0.#} min waiting</value></data>
-  <data name="RecommendationStoredPlan" xml:space="preserve"><value>Store intermediate bait</value></data>
-  <data name="RecommendationBasicPlan" xml:space="preserve"><value>Basic preparation</value></data>
-  <data name="RecommendationFirstCast" xml:space="preserve"><value>Estimated first target cast · {0:MM/dd HH:mm:ss}</value></data>
-  <data name="RecommendationFirstCastLate" xml:space="preserve"><value>The baseline preparation estimate does not fit. The displayed steps use another estimate or a reference route.</value></data>
-  <data name="RecommendationSharedCatch" xml:space="preserve"><value>Use the final Intuition catch directly as mooch bait</value></data>
-  <data name="RecommendationStep" xml:space="preserve"><value>{0:MM/dd HH:mm}–{1:HH:mm} · {2} · {3} · estimate {4:0.##}–{5:0.##} min</value></data>
-  <data name="RecommendationTrigger" xml:space="preserve"><value>Final catch → Intuition</value></data>
-  <data name="RecommendationPrey" xml:space="preserve"><value>Intuition accumulation</value></data>
-  <data name="RecommendationStore" xml:space="preserve"><value>Acquire and store mooch bait</value></data>
-  <data name="RecommendationMooch" xml:space="preserve"><value>Acquire mooch bait</value></data>
-  <data name="RecommendationRetention" xml:space="preserve"><value>Assumes staying at the same hole and retaining prerequisite progress and mooch opportunities. Visiting other holes or actions affecting retention are not modelled. Consumption or failure may require repeating preparation.</value></data>
   <data name="RecommendationItem" xml:space="preserve"><value>Fish #{0}</value></data>
   <data name="RecommendationOutside" xml:space="preserve"><value>No target or preparation opportunity in the selected period</value></data>
-  <data name="RecommendationNoFreshPath" xml:space="preserve"><value>No route from a fresh start reaches this opportunity</value></data>
-  <data name="RecommendationDurationUnknown" xml:space="preserve"><value>Intuition duration unknown · ranking deferred</value></data>
-  <data name="RecommendationNested" xml:space="preserve"><value>Prerequisite itself requires Intuition · preparation review needed</value></data>
-  <data name="RecommendationAmbiguous" xml:space="preserve"><value>Alternative mooch path needs review</value></data>
   <data name="RecommendationMissing" xml:space="preserve"><value>Condition or preparation data needs review</value></data>
   <data name="ChangelogRecommendations" xml:space="preserve"><value>Choose your next big-fish target in the new Recommendations tab, with appearance schedules, mooch chains and Intuition requirements together.</value></data>
   <data name="ChangelogRecommendationRefresh" xml:space="preserve"><value>Narrow candidates with the time range and filters, then refresh for the latest appearance schedules.</value></data>
   <data name="ChangelogCurrentSpotAlerts" xml:space="preserve"><value>Local chat alerts notify you when uncaught big or legendary fish appear at your current fishing hole.</value></data>
   <data name="ChangelogZeroAlerts" xml:space="preserve"><value>Spawn alerts now support notifications at the start of an appearance or up to 120 minutes beforehand.</value></data>
   <data name="SpotAlertsEnabledStatus" xml:space="preserve"><value>Current-hole alerts enabled · favorite spawn alerts disabled</value></data>
-  <data name="RecommendationOptionalStock" xml:space="preserve"><value>Optional, if a storage slot is free: {1} spare {0} · extra work estimate {2:0.##}–{3:0.##} min, planning allowance {4:0.##} min. Does not affect the score.</value></data>
-  <data name="RecommendationOptionalStart" xml:space="preserve"><value>Start with spare preparation · {0:MM/dd HH:mm}</value></data>
-  <data name="RecommendationFrequencyShort" xml:space="preserve"><value>{0} appearances / 30 days</value></data>
-  <data name="RecommendationAlwaysFrequency" xml:space="preserve"><value>Continuous conditions</value></data>
-  <data name="RecommendationPreparationStart" xml:space="preserve"><value>Suggested preparation start: {0:MM/dd HH:mm} (includes 2 min travel/setup)</value></data>
-  <data name="RecommendationBefore" xml:space="preserve"><value>Before availability</value></data>
-  <data name="RecommendationDuring" xml:space="preserve"><value>During availability</value></data>
-  <data name="RecommendationAcross" xml:space="preserve"><value>Preparation spanning the opening</value></data>
   <data name="SpotAlertRemaining" xml:space="preserve"><value>{0:00}:{1:00}:{2:00}</value></data>
   <data name="RecommendationNowTab" xml:space="preserve"><value>Fish to target now</value></data>
   <data name="RecommendationPreparationTab" xml:space="preserve"><value>Prep work</value></data>
   <data name="RecommendationRareTab" xml:space="preserve"><value>Least frequent</value></data>
-  <data name="RecommendationScope" xml:space="preserve"><value>Find fish available now or appearing within the selected time.</value></data>
   <data name="RecommendationTabCount" xml:space="preserve"><value>{0} · {1}</value></data>
   <data name="RecommendationAsOf" xml:space="preserve"><value>Queried {0:HH:mm}</value></data>
   <data name="RecommendationManualHelp" xml:space="preserve"><value>The list and order stay fixed while the countdown runs. Press Refresh to get recommendations for the current time.</value></data>
@@ -1117,112 +960,36 @@ Equal counts share a rank and are ordered by appearance time. A named prerequisi
   <data name="RecommendationPreparationEmpty" xml:space="preserve"><value>No candidate requires preparation around time or weather restrictions in this range.</value></data>
   <data name="RecommendationRareEmpty" xml:space="preserve"><value>No candidate with a known appearance frequency was found in this period.</value></data>
   <data name="RecommendationUnknownCount" xml:space="preserve"><value>Collection status unknown · {0} fish</value></data>
-  <data name="RecommendationRowTooltip" xml:space="preserve"><value>{0}
-{1}
-{2}
-{3}
-Select to see the preparation plan.</value></data>
-  <data name="RecommendationRowFacts" xml:space="preserve"><value>{0} · {1}</value></data>
-  <data name="RecommendationAvailabilityLabel" xml:space="preserve"><value>Availability</value></data>
-  <data name="RecommendationBudgetLabel" xml:space="preserve"><value>Estimated preparation</value></data>
-  <data name="RecommendationStartLabel" xml:space="preserve"><value>Leave / start preparation</value></data>
-  <data name="RecommendationNextLabel" xml:space="preserve"><value>Next appearance</value></data>
-  <data name="RecommendationClock" xml:space="preserve"><value>{0:HH:mm}</value></data>
   <data name="RecommendationDate" xml:space="preserve"><value>{0:MM/dd HH:mm}</value></data>
-  <data name="RecommendationPreyBasis" xml:space="preserve"><value>Shows the next appearance of {0}, not the next opportunity satisfying all target conditions.</value></data>
-  <data name="RecommendationFlow" xml:space="preserve"><value>Preparation steps</value></data>
-  <data name="RecommendationSpare" xml:space="preserve"><value>Optional · {1} spare {0}</value></data>
-  <data name="RecommendationSpareWork" xml:space="preserve"><value>About {0:0}–{1:0} extra minutes · requires a free storage slot</value></data>
-  <data name="RecommendationFrequencyLabel" xml:space="preserve"><value>Appearance frequency · 30 days</value></data>
-  <data name="RecommendationOwnAlways" xml:space="preserve"><value>The target has no time or weather restriction</value></data>
   <data name="RecommendationFrequencyHelp" xml:space="preserve"><value>Each continuous time/weather interval counts as one appearance. A named prerequisite&apos;s frequency is used only when the target has no fixed appearance time. This is not a count of Intuition activations or a catch probability.</value></data>
   <data name="RecommendationCalculation" xml:space="preserve"><value>Query details</value></data>
-  <data name="RecommendationTimelineLegend" xml:space="preserve"><value>Top: preparation / bottom: conditions and first cast</value></data>
-  <data name="RecommendationTimelineHelp" xml:space="preserve"><value>Blue: bait or Intuition accumulation / gold: Intuition trigger / purple: bait storage. The lower green bar shows the target&apos;s time/weather conditions, not Intuition duration. The dot is the estimated first cast; the white line is now. Times are local to this PC and preparation bars are estimates.</value></data>
-  <data name="RecommendationFlowStep" xml:space="preserve"><value>{0} · {1}
-{2:MM/dd HH:mm:ss}–{3:HH:mm:ss}</value></data>
-  <data name="RecommendationFlowCatch" xml:space="preserve"><value>{0} × {1}</value></data>
-  <data name="RecommendationFlowRole" xml:space="preserve"><value>{0} · {1:HH:mm}–{2:HH:mm}</value></data>
-  <data name="RecommendationNoPreparation" xml:space="preserve"><value>No prerequisite fish</value></data>
-  <data name="RecommendationBudget" xml:space="preserve"><value>Prep ≈ {0:0}–{1:0} min</value></data>
-  <data name="RecommendationPreyFrequencyShort" xml:space="preserve"><value>Prerequisite {1} · {0} / 30 days</value></data>
-  <data name="RecommendationGateReason" xml:space="preserve"><value>There is {1} left to secure {0} first.</value></data>
-  <data name="RecommendationIntuitionReason" xml:space="preserve"><value>{0} catches for Intuition</value></data>
-  <data name="RecommendationMoochReason" xml:space="preserve"><value>{0} mooch stages</value></data>
-  <data name="RecommendationDirectReason" xml:space="preserve"><value>No mooch or Intuition prerequisites</value></data>
-  <data name="RecommendationPreparationEnded" xml:space="preserve"><value>Planned preparation opportunity ended</value></data>
-  <data name="RecommendationPreyAvailable" xml:space="preserve"><value>Planned preparation interval: {0} left</value></data>
-  <data name="RecommendationAfterPreparation" xml:space="preserve"><value>Available after prerequisites</value></data>
-  <data name="RecommendationEstimatedLate" xml:space="preserve"><value>The preparation estimates do not allow a first cast before this appearance ends.</value></data>
-  <data name="RecommendationEstimateOnly" xml:space="preserve"><value>Whether a first cast fits depends on how long preparation takes.</value></data>
-  <data name="RecommendationPreparationOpens" xml:space="preserve"><value>Preparation opportunity in {0}</value></data>
-  <data name="RecommendationNextPreyLabel" xml:space="preserve"><value>Next prerequisite appearance</value></data>
   <data name="RecommendationSnapshotStale" xml:space="preserve"><value>Queried {0:HH:mm} · refresh available</value></data>
   <data name="RecommendationCandidateTooltip" xml:space="preserve"><value>{0}
 {1}
 {2}</value></data>
   <data name="RecommendationPlace" xml:space="preserve"><value>{0} · {1}</value></data>
   <data name="RecommendationWhy" xml:space="preserve"><value>Why this fish</value></data>
-  <data name="RecommendationStorageNote" xml:space="preserve"><value>Storing the intermediate bait lets you prepare the first two stages ahead.</value></data>
   <data name="RecommendationNextTime" xml:space="preserve"><value>{0} (in {1})</value></data>
   <data name="RecommendationRefreshNeeded" xml:space="preserve"><value>The queried opportunity has passed. Please refresh.</value></data>
-  <data name="RecommendationOrderLabel" xml:space="preserve"><value>Sort order</value></data>
-  <data name="RecommendationPreparationOrder" xml:space="preserve"><value>Advance workload adjusted for time until preparation starts</value></data>
-  <data name="RecommendationRareOrder" xml:space="preserve"><value>Fewest predicted appearances over 30 days first</value></data>
-  <data name="RecommendationNowOrder" xml:space="preserve"><value>Combines start time, appearance frequency, preparation fit and the next opportunity</value></data>
   <data name="RecommendationCountBasis" xml:space="preserve"><value>Frequency basis</value></data>
-  <data name="RecommendationTieBreak" xml:space="preserve"><value>Tie-break</value></data>
-  <data name="RecommendationRareTieBreak" xml:space="preserve"><value>Longest gap from this appearance&apos;s end to the next appearance</value></data>
   <data name="RecommendationAnalysisLabel" xml:space="preserve"><value>Analysis period</value></data>
   <data name="RecommendationAnalysisDates" xml:space="preserve"><value>{0:MM/dd}–{1:MM/dd} (UTC)</value></data>
-  <data name="RecommendationStartEstimate" xml:space="preserve"><value>Preparation starts</value></data>
-  <data name="RecommendationAtSnapshot" xml:space="preserve"><value>From the time of this snapshot</value></data>
-  <data name="RecommendationAdvanceWorkLabel" xml:space="preserve"><value>Advance work assumed</value></data>
-  <data name="RecommendationWorkEstimate" xml:space="preserve"><value>About {0:0.#} min</value></data>
-  <data name="RecommendationConnectionLabel" xml:space="preserve"><value>Condition check</value></data>
-  <data name="RecommendationConnectionReady" xml:space="preserve"><value>Preparation can lead to a target cast (estimated)</value></data>
-  <data name="RecommendationConnectionDirect" xml:space="preserve"><value>Travel fits before the target opportunity ends</value></data>
   <data name="RecommendationCalculationNote" xml:space="preserve"><value>Schedules queried at {0:HH:mm}.</value></data>
-  <data name="RecommendationPreyCountBadge" xml:space="preserve"><value>Prey {0} / 30d</value></data>
   <data name="RecommendationCountBadge" xml:space="preserve"><value>{0} / 30 days</value></data>
-  <data name="RecommendationAdvanceIntuition" xml:space="preserve"><value>Up to {0} Intuition prerequisite catches can be prepared before the target appears.</value></data>
-  <data name="RecommendationAdvanceMooch" xml:space="preserve"><value>The first {0} mooch stages can be prepared before the target appears.</value></data>
-  <data name="RecommendationDaysHours" xml:space="preserve"><value>about {0}d {1}h</value></data>
   <data name="RecommendationSeconds" xml:space="preserve"><value>{0:0}s</value></data>
-  <data name="RecommendationWindowTimes" xml:space="preserve"><value>{0:MM/dd HH:mm}–{1:HH:mm}</value></data>
-  <data name="RecommendationUnderMinute" xml:space="preserve"><value>Less than 1 minute</value></data>
   <data name="RecommendationDurationDays" xml:space="preserve"><value>{0}d {1}h {2}m</value></data>
   <data name="RecommendationDurationHours" xml:space="preserve"><value>{0}h {1}m</value></data>
   <data name="RecommendationDurationMinutes" xml:space="preserve"><value>{0}m</value></data>
-  <data name="RecommendationIntuitionSpawn" xml:space="preserve"><value>Appears with Fisher&apos;s Intuition</value></data>
   <data name="RecommendationNoFixedSpawn" xml:space="preserve"><value>No fixed appearance time</value></data>
   <data name="RecommendationNextPreyCompact" xml:space="preserve"><value>Next occurrence · {0}, {1}</value></data>
   <data name="RecommendationNextPreyTime" xml:space="preserve"><value>{0} · {1} (in {2})</value></data>
   <data name="RecommendationNextCompact" xml:space="preserve"><value>Next occurrence · {0}</value></data>
   <data name="RecommendationCatchCount" xml:space="preserve"><value>{1} × {0}</value></data>
-  <data name="RecommendationStartReason" xml:space="preserve"><value>Start preparation around {0:HH:mm}</value></data>
-  <data name="RecommendationMissedGap" xml:space="preserve"><value>After this appearance ends, it returns {0} later.</value></data>
-  <data name="RecommendationPreyGapReason" xml:space="preserve"><value>Prerequisite {0}: after this appearance ends, it returns {1} later.</value></data>
-  <data name="RecommendationGateDeadlineReason" xml:space="preserve"><value>Fish to catch first: {0} (available until {1:HH:mm})</value></data>
-  <data name="RecommendationIntuitionBeforeReason" xml:space="preserve"><value>Intuition fish to catch ahead: {0}</value></data>
-  <data name="RecommendationIntuitionRequirementReason" xml:space="preserve"><value>Fish required for Intuition: {0}</value></data>
-  <data name="RecommendationBaitBeforeReason" xml:space="preserve"><value>Mooch bait to catch before the target appears: {0}</value></data>
-  <data name="RecommendationStoredBaitReason" xml:space="preserve"><value>Mooch bait to prepare and store: {0} (storage skill required)</value></data>
-  <data name="RecommendationBaitFitsReason" xml:space="preserve"><value>No bait storage · catch {0} for mooching first</value></data>
-  <data name="RecommendationBaitNeededReason" xml:space="preserve"><value>Mooch bait to catch first: {0}</value></data>
-  <data name="RecommendationDirectUpcomingReason" xml:space="preserve"><value>No mooch bait or Intuition fish need to be caught first.</value></data>
   <data name="RecommendationDirectNowReason" xml:space="preserve"><value>No mooch bait or Intuition fish need to be caught first.</value></data>
   <data name="RecommendationRarePreyRankReason" xml:space="preserve"><value>Rank {1} of {0} by fewest appearances: {2}/30 days · based on {3}</value></data>
   <data name="RecommendationRarestReason" xml:space="preserve"><value>This has the fewest appearances among {0} candidates in the selected period ({2} in 30 days).</value></data>
   <data name="RecommendationRareRankReason" xml:space="preserve"><value>Rank {1} of {0} by fewest appearances · {2} in 30 days</value></data>
-  <data name="RecommendationGapComparison" xml:space="preserve"><value>{0} · longer gaps first</value></data>
-  <data name="RecommendationBeforeCatchLabel" xml:space="preserve"><value>Prepare ahead</value></data>
-  <data name="RecommendationIntuitionLabel" xml:space="preserve"><value>Intuition</value></data>
-  <data name="RecommendationFirstCastLabel" xml:space="preserve"><value>First cast estimate</value></data>
-  <data name="RecommendationScopeShort" xml:space="preserve"><value>Includes fish available now</value></data>
-  <data name="RecommendationTimeLabel" xml:space="preserve"><value>Appearance</value></data>
   <data name="RecommendationIntuitionTimeHelp" xml:space="preserve"><value>When the target has no fixed appearance time, an actual prerequisite schedule is shown. The least frequent restricted prerequisite with an opportunity in the current tab&apos;s range is selected. Check the other required schedules as well.</value></data>
-  <data name="RecommendationNextPreyShortLabel" xml:space="preserve"><value>Next prey</value></data>
   <data name="RecommendationNextPreyHelp" xml:space="preserve"><value>The target has no fixed appearance time. This shows the next appearance of the named fish needed for Intuition or mooching.</value></data>
   <data name="RecommendationNextTargetHelp" xml:space="preserve"><value>The next appearance under the target&apos;s own time and weather conditions. Intuition and mooching requirements must also be met.</value></data>
   <data name="RecommendationFrequencyShortLabel" xml:space="preserve"><value>Frequency</value></data>
@@ -1230,36 +997,23 @@ Select to see the preparation plan.</value></data>
   <data name="RecommendationTodayTime" xml:space="preserve"><value>Today {0:HH:mm}</value></data>
   <data name="RecommendationTomorrowTime" xml:space="preserve"><value>Tomorrow {0:HH:mm}</value></data>
   <data name="RecommendationClockTime" xml:space="preserve"><value>{0:HH:mm}</value></data>
-  <data name="RecommendationAppearanceSummary" xml:space="preserve"><value>{0}–{1} · {2}</value></data>
-  <data name="RecommendationPrepareFish" xml:space="preserve"><value>Prepare ahead · {0}</value></data>
   <data name="RecommendationIntuitionSummary" xml:space="preserve"><value>Intuition · {0}</value></data>
   <data name="RecommendationMoochSummary" xml:space="preserve"><value>Mooch bait · {0}</value></data>
   <data name="RecommendationFollowingSummary" xml:space="preserve"><value>Next occurrence · {0}</value></data>
   <data name="RecommendationNextPreySummary" xml:space="preserve"><value>Next prey appearance · {0}</value></data>
   <data name="RecommendationRangeTitle" xml:space="preserve"><value>Search range</value></data>
   <data name="RecommendationAssumptionsTitle" xml:space="preserve"><value>What to check</value></data>
-  <data name="RecommendationPreparationUncertain" xml:space="preserve"><value>Preparation timing needs review</value></data>
-  <data name="RecommendationPreparationNow" xml:space="preserve"><value>Start preparation · now (estimated)</value></data>
-  <data name="RecommendationPreparationAt" xml:space="preserve"><value>Start preparation · {0} (estimated)</value></data>
-  <data name="RecommendationIntuitionConditions" xml:space="preserve"><value>No time or weather restrictions · Intuition required</value></data>
-  <data name="RecommendationAdvanceExpired" xml:space="preserve"><value>The target has appeared. Refresh to review the preparation plan.</value></data>
-  <data name="RecommendationPreparationTimeHelp" xml:space="preserve"><value>Estimated travel and preparation start for the plan captured at query time. It does not track your actual Intuition progress or predict a successful catch.</value></data>
-  <data name="RecommendationAdvanceExpiredShort" xml:space="preserve"><value>Appearance started · refresh needed</value></data>
-  <data name="RecommendationIntuitionTimeUnknown" xml:space="preserve"><value>Intuition prey · availability unknown</value></data>
   <data name="RecommendationIntuitionAlways" xml:space="preserve"><value>Intuition prey · no time or weather restrictions</value></data>
   <data name="RecommendationIntuitionExpired" xml:space="preserve"><value>Intuition prey appearance ended · refresh needed</value></data>
   <data name="RecommendationIntuitionUpcoming" xml:space="preserve"><value>Intuition prey · appears {0}</value></data>
   <data name="RecommendationIntuitionOpen" xml:space="preserve"><value>Intuition prey available · {0} left</value></data>
-  <data name="RecommendationPreparationWindowEnded" xml:space="preserve"><value>Planned preparation opportunity ended</value></data>
   <data name="RecommendationWindowRange" xml:space="preserve"><value>{0}–{1}</value></data>
   <data name="RecommendationIntuitionPreparationLine" xml:space="preserve"><value>{0} · {1}</value></data>
-  <data name="RecommendationIntuitionFollowing" xml:space="preserve"><value>{0} · following appearance {1}</value></data>
   <data name="RecommendationDetailsButton" xml:space="preserve"><value>Details</value></data>
   <data name="RecommendationEvidenceButton" xml:space="preserve"><value>Why</value></data>
   <data name="RecommendationProxyFrequencyCompact" xml:space="preserve"><value>{1}: {0} / 30 days</value></data>
   <data name="RecommendationRowReason" xml:space="preserve"><value>{0}</value></data>
   <data name="RecommendationNamedRange" xml:space="preserve"><value>{0} · {1}</value></data>
-  <data name="RecommendationStoredStrategyReason" xml:space="preserve"><value>Uses bait storage · fish to store: {0}</value></data>
   <data name="RecommendationGapShortReason" xml:space="preserve"><value>Wait {0} after this occurrence</value></data>
   <data name="RecommendationPreyGapShortReason" xml:space="preserve"><value>{0}: wait {1} after this occurrence</value></data>
   <data name="GuideWarningRequired" xml:space="preserve"><value>Collection status has not been refreshed. Open the Fish Guide once.</value></data>

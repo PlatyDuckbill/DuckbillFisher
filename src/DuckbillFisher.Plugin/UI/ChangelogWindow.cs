@@ -106,33 +106,6 @@ internal sealed class ChangelogWindow : Window
             (FontAwesomeIcon.MapMarkerAlt, T.ChangelogUnknownSpot),
             (FontAwesomeIcon.List, T.ChangelogSpotToggle),
         ], new DateTimeOffset(2026, 10, 20, 7, 59, 10, TimeSpan.Zero)),
-        new(new(0, 3, 10, 0),
-        [
-            (FontAwesomeIcon.Terminal, T.ChangelogShortCommands),
-            (FontAwesomeIcon.Fish, T.ChangelogSpotFish),
-        ], new DateTimeOffset(2026, 10, 19, 8, 5, 59, TimeSpan.Zero)),
-        new(new(0, 3, 9, 0), [(FontAwesomeIcon.Newspaper, T.ChangelogUpdateNotes)], new DateTimeOffset(2026, 10, 18, 20, 7, 42, TimeSpan.Zero)),
-        new(new(0, 3, 8, 0),
-        [
-            (FontAwesomeIcon.Music, T.ChangelogAudio),
-            (FontAwesomeIcon.Clock, T.ChangelogForecast),
-            (FontAwesomeIcon.Fish, T.ChangelogIntuition),
-            (FontAwesomeIcon.Search, T.ChangelogDetails),
-            (FontAwesomeIcon.Wrench, T.ChangelogStability),
-        ], new DateTimeOffset(2026, 10, 18, 19, 20, 50, TimeSpan.Zero)),
-        new(new(0, 3, 0, 0),
-        [
-            (FontAwesomeIcon.Fish, T.ChangelogBaitPreparation),
-            (FontAwesomeIcon.History, T.ChangelogRecordRecovery),
-            (FontAwesomeIcon.Search, T.ChangelogDataExpansion),
-        ], new DateTimeOffset(2026, 10, 17, 20, 32, 15, TimeSpan.Zero)),
-        new(new(0, 2, 6, 0), [(FontAwesomeIcon.Wrench, T.ChangelogDal4kr)], new DateTimeOffset(2026, 10, 17, 11, 48, 17, TimeSpan.Zero)),
-        new(new(0, 2, 5, 0),
-        [
-            (FontAwesomeIcon.Wrench, T.ChangelogKrRuntime),
-            (FontAwesomeIcon.Search, T.ChangelogCompatibilityHint),
-        ], new DateTimeOffset(2026, 10, 17, 11, 19, 46, TimeSpan.Zero)),
-        new(new(0, 2, 4, 0), [(FontAwesomeIcon.Fish, T.ChangelogFirstRelease)], new DateTimeOffset(2026, 10, 17, 10, 52, 8, TimeSpan.Zero)),
     ];
     private readonly ReleaseNotes[] releases = PublishedReleases.Where(release => release.Version <= CurrentVersion).Take(10).ToArray();
     private readonly FishPreferences preferences;
