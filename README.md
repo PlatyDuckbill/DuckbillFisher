@@ -50,6 +50,10 @@ See [current verification scope](docs/STATUS.md) and the [remaining roadmap](doc
 
 Fishing conditions are derived from a pinned revision of [FFX|V Fish Tracker App](https://github.com/icykoneko/ff14-fish-tracker-app), under its MIT license. Names, icons, maps, and weather rates are read from the installed game client. See [data provenance](data/README.md) and [third-party notices](THIRD-PARTY-NOTICES.txt); the notices are also embedded in the plugin.
 
+## License
+
+DuckbillFisher is licensed under the [GNU Affero General Public License v3.0](LICENSE). Bundled third-party data keeps its own license; see [third-party notices](THIRD-PARTY-NOTICES.txt).
+
 ## Development
 
 Start with the [documentation map](docs/README.md). Repository skills live in [.agents/skills](.agents/skills) and share the maintained build and KR compatibility procedures.
