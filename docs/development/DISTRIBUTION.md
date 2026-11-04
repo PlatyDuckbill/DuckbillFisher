@@ -73,8 +73,8 @@ prepare-release.ps1은 필수 파일·허용 목록·API·DLL/manifest 버전을
 
 ### 3. Release 먼저, 설치 목록은 이후
 
-1. 승인 범위의 코드/문서만 커밋·정상 push한다. 테스트 미요청 작업의 커밋은 [skip ci]를 사용한다.
-2. **새 버전 배포 직전 필수 점검(2026-11-04 사용자 결정):** push한 배포 소스 커밋으로 GitHub Actions의 **Official build check (Plogon)**을 수동 실행한다.
+1. 승인 범위의 코드/문서만 커밋·정상 push한다. 커밋에 [skip ci]를 붙이지 않는다.
+2. **새 버전 배포 직전 필수 점검(2026-11-04 사용자 결정):** push한 배포 소스 커밋의 GitHub Actions **Official build check (Plogon)** 결과를 확인한다. 문서 외 변경이 있는 main 푸시에서 자동으로 돈다. 문서만 바뀐 커밋이면 수동 실행한다.
    - 공식 빌드 환경(Linux 컨테이너, SDK 10.0.101, 오프라인 lock 복원, 아이콘 검사)에서 빌드가 성공해야 한다.
    - 실패하면 태그와 Release를 만들지 않고 원인을 고친다.
    - 실행 ID와 결과를 해당 Release 기록에 남긴다.
@@ -140,7 +140,7 @@ raw 캐시가 잠시 이전 JSON을 제공할 수 있다. 실제 공유 URL이 �
    dotnet build src/DuckbillFisher.Plugin/DuckbillFisher.Plugin.csproj -c Release "-p:DalamudLibPath=<글로벌 Hooks/dev>" "-p:OutputPath=.cache/plogon-like-release/"
    dotnet restore src/DuckbillFisher.Plugin/DuckbillFisher.Plugin.csproj --locked-mode "-p:DalamudLibPath=<글로벌 Hooks/dev>"
    ```
-2. 커밋을 push한 뒤 GitHub Actions의 **Official build check (Plogon)**(`.github/workflows/plogon-check.yml`)를 수동 실행한다. 이 워크플로는 고정 Plogon이 실제 공식 절차대로 빌드한다(컨테이너, 오프라인, 아이콘 검사). 자동 실행되지 않으며 테스트를 돌리지 않는다.
+2. 커밋을 push하면 GitHub Actions의 **Official build check (Plogon)**(`.github/workflows/plogon-check.yml`)이 돈다. 이 워크플로는 고정 Plogon이 실제 공식 절차대로 빌드한다(컨테이너, 오프라인, 아이콘 검사). main 푸시 중 `docs/`·Markdown·`.agents/`만 바뀐 경우는 건너뛰며, 필요하면 수동 실행한다. 더 새 푸시가 오면 진행 중인 이전 점검은 취소된다. 테스트는 돌리지 않는다.
 3. 매니페스트 형식은 다음과 같다. `commit`은 push된 전체 SHA다.
    ```toml
    [plugin]

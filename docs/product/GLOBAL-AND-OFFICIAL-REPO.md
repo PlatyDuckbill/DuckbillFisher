@@ -147,7 +147,7 @@
 
 - ✅ Plogon 빌드 환경 조사 (2026-11-04). 컨테이너 SDK 10.0.101, 네트워크 차단, lock 파일 복원 방식이다. `global.json`의 정확한 10.0.402 고정이 공식 빌드를 실패시키므로, 최소 10.0.101과 `latestFeature`로 바꿨다. `DalamudReferences.targets`는 조정할 필요가 없다. [절차](../development/DISTRIBUTION.md#공식-저장소-제출-준비)
 - ✅ 로컬 Plogon식 Release 빌드(글로벌 참조)와 locked restore 통과 (2026-11-04)
-- ⏳ 수동 워크플로 **Official build check (Plogon)** 실행. push 후 사용자가 실행한다. 실제 Plogon 컨테이너 빌드 결과를 확인하는 단계다.
+- ⏳ **Official build check (Plogon)** 결과 확인. 2026-11-04부터 문서 외 변경이 있는 main 푸시에서 자동으로 돈다. 실제 Plogon 컨테이너 빌드 결과를 확인하는 단계다.
 - ✅ LICENSE 추가 (2026-11-04)
 - ✅ 아이콘 위치 정리: 우리 저장소가 아니라 제출 PR의 `testing/live/DuckbillFisher/images/icon.png`에 둔다. 원본은 기존 512px PNG다.
 - ✅ 설명·태그 일반화와 AI 생성 아이콘 공개 (2026-11-04, 사용자 승인)

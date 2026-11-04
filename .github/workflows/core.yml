@@ -1,8 +1,7 @@
 name: Build and test
 
+# Manual only: tests run when explicitly requested (AGENTS.md). Pushes run the Plogon build check instead.
 on:
-  push:
-  pull_request:
   workflow_dispatch:
 
 permissions:

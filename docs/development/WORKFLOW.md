@@ -6,7 +6,7 @@
 2. 필요한 설계만 문서 지도에서 읽는다. 큰 UI 변경은 사용자와 합의하고, 게임 접근 변경은 정확한 KR 근거를 확인한다.
 3. 구현·검토 후 변경에 맞는 검사를 수행한다. 문서만 바꾸면 문서 검사, 문자열을 바꾸면 리소스 검사, C#을 바꾸면 직접 빌드다. 테스트는 명시 요청 때만 추가/실행한다.
 4. 빌드 성공과 실제 게임 확인을 구분한다. 실패한 출력 대신 이전 DLL로 확인을 계속하지 않는다. 인게임 변경은 재현 단계·기대 결과·DLL 절대 경로를 안내한다.
-5. STATUS와 필요한 설계/검증 기록을 갱신한다. git diff/status를 확인해 작업 파일만 명시적으로 스테이징하고 커밋한다. 테스트 미요청 작업은 [skip ci]를 붙인다. 푸시/배포는 승인 범위에 있을 때만 진행한다.
+5. STATUS와 필요한 설계/검증 기록을 갱신한다. git diff/status를 확인해 작업 파일만 명시적으로 스테이징하고 커밋한다. [skip ci]는 붙이지 않는다. 푸시/배포는 승인 범위에 있을 때만 진행한다.
 
 ## Windows 빌드
 
@@ -34,7 +34,10 @@ pwsh -NoLogo -NoProfile -File scripts/check-localization.ps1
 - 언로드는 사용자 상시 지시의 기본 상태다. 반복 확인하지 않는다. 파일 잠금 실패를 우회하거나 게임을 강제 종료하지 않는다.
 - 정규 등록 경로는 저장소 아래 src/DuckbillFisher.Plugin/bin/Debug/DuckbillFisher.dll의 **절대 경로**다. 동시에 다른 개발/배포 경로를 로드하지 않는다.
 - 최소 참조/다른 지원 배포판 빌드는 게임 API 변경이나 배포에서 필요한 범위만 수행한다. 일반 upstream CI 성공은 KR 런타임 확인이 아니다.
-- scripts/build.ps1과 scripts/test-release.ps1은 테스트를 실행한다. 일반 작업에서는 사용하지 않는다. CI 설정은 .github/workflows/core.yml을 따른다.
+- scripts/build.ps1과 scripts/test-release.ps1은 테스트를 실행한다. 일반 작업에서는 사용하지 않는다.
+- CI는 두 가지다(2026-11-04 사용자 결정으로 [skip ci] 규칙 폐지).
+  - `.github/workflows/plogon-check.yml`: 공식 빌드 점검. 문서 외 변경이 있는 main 푸시마다 자동으로 돈다. `docs/`·Markdown·`.agents/`만 바뀐 푸시는 건너뛴다. 테스트는 없다.
+  - `.github/workflows/core.yml`: Core 빌드와 테스트. 테스트 요청이 있을 때 Actions에서 수동 실행할 때만 돈다.
 - Release는 [DISTRIBUTION](DISTRIBUTION.md#개발자-배포-절차)을 따른다. 배포 권한·ZIP 실기 확인·게시를 각각 구분한다.
 
 ## 검사와 진단

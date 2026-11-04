@@ -1,13 +1,25 @@
 name: Official build check (Plogon)
 
-# Manual only. Builds the pushed commit the way the official Dalamud repository does: pinned goatcorp/Plogon,
+# Runs on every push to main that changes more than documentation, and on demand.
+# Builds the pushed commit the way the official Dalamud repository does: pinned goatcorp/Plogon,
 # its .NET SDK container, network disabled, packages restored from the committed lock files, and the icon check.
-# This is a build check, not an in-game test and not a submission.
+# This is a build check, not an in-game test and not a submission. It runs no tests.
 on:
+  push:
+    branches: [main]
+    paths-ignore:
+      - 'docs/**'
+      - '**/*.md'
+      - '.agents/**'
   workflow_dispatch:
 
 permissions:
   contents: read
+
+# A newer push replaces a check that is still running for an older commit.
+concurrency:
+  group: plogon-check-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
   plogon:
