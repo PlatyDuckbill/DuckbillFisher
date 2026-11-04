@@ -4,7 +4,7 @@
 
 ## 현재 배포
 
-- **공개0.7.0.0**은 글로벌 클라이언트 지원판이다. 태그 소스5b45e2b, Plogon 점검 run41855137474 성공, 최소 지원 참조 Release 경고0/오류0, 추출7파일/한영1,013키 검사 후 같은 ZIP을 Release434089212에 게시했다. 익명 자산 SHA256 일치, 설치 JSON 반영. 공용 저장소 동기화는 [기록](verification/releases/RELEASE-0.7.0.0.md)을 따른다. 후보 ZIP의 인게임 확인 없이 사용자 지시로 게시했다(개발본 KR·글로벌 대표 확인은 완료). **실제 Dalamud 업데이트는 확인 대기**다.
+- **공개0.7.0.0**은 글로벌 클라이언트 지원판이다. 태그 소스5b45e2b, Plogon 점검 run41855137474 성공, 최소 지원 참조 Release 경고0/오류0, 추출7파일/한영1,013키 검사 후 같은 ZIP을 Release434089212에 게시했다. 익명 자산 SHA256 일치, 설치 JSON 반영. DuckbillRepo 공용 `pluginmaster.json` 동기화와 실제 공유 raw URL 확인 완료. [근거](verification/releases/RELEASE-0.7.0.0.md). 후보 ZIP의 인게임 확인 없이 사용자 지시로 게시했다(개발본 KR·글로벌 대표 확인은 완료). **실제 Dalamud 업데이트는 확인 대기**다.
 - 이전 공개판 **0.6.0.1**은 dal4kr 15.0.3.9 런타임 지원 배포다. 실제 Dalamud 업데이트 확인은 하지 않은 채 0.7.0.0으로 넘어갔다. [근거](verification/releases/RELEASE-0.6.0.1.md).
 - 기능 기준판 **0.6.0.0**은 고정 Release DLL 대표 정상 확인 뒤 Release423892077로 게시했고 실제 공유 raw URL 일치까지 확인했다. [근거](verification/releases/RELEASE-0.6.0.0.md).
 - 실제 Dalamud 저장소 업데이트 확인 완료는 0.5.3.0·0.4.1.0이다. 그 밖의 버전별 소스/해시/게시 단계는 [검증 색인](verification/README.md#배포와-호환성)을 따른다.
