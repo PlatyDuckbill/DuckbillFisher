@@ -31,7 +31,6 @@ internal sealed class FishingBuffObserver : IDisposable
     private readonly IDataManager data;
     private readonly FishPreferences preferences;
     private readonly FishingTracker tracker;
-    private readonly Func<bool> compatible;
     private readonly Stopwatch clock = Stopwatch.StartNew();
     private FishingBuffView view = FishingBuffView.Empty;
     private TimeSpan nextUpdate;
@@ -42,10 +41,10 @@ internal sealed class FishingBuffObserver : IDisposable
     private volatile bool active;
 
     public FishingBuffObserver(IObjectTable objects, IClientState client, IPlayerState player, ICondition conditions,
-        IFramework framework, IDataManager data, FishPreferences preferences, FishingTracker tracker, Func<bool> compatible)
+        IFramework framework, IDataManager data, FishPreferences preferences, FishingTracker tracker)
     {
         this.objects = objects; this.client = client; this.player = player; this.conditions = conditions;
-        this.framework = framework; this.data = data; this.preferences = preferences; this.compatible = compatible;
+        this.framework = framework; this.data = data; this.preferences = preferences;
         this.tracker = tracker;
         framework.Update += Update;
     }
@@ -74,7 +73,7 @@ internal sealed class FishingBuffObserver : IDisposable
         var now = Now;
         nextUpdate = now + PollInterval;
         var personal = preferences.View;
-        if (!compatible() || !personal.HasCharacter || !client.IsLoggedIn || !player.IsLoaded ||
+        if (!personal.HasCharacter || !client.IsLoggedIn || !player.IsLoaded ||
             player.ContentId != personal.CharacterId || player.ClassJob.RowId != FishingGameIds.FisherJob ||
             conditions[ConditionFlag.BetweenAreas] || conditions[ConditionFlag.BetweenAreas51])
         { PublishUnavailable(personal.Session, now); return; }

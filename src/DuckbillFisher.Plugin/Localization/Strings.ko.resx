@@ -196,11 +196,6 @@
   <data name="NativeAddressMissing" xml:space="preserve"><value>PlayerState 주소가 준비되지 않았습니다.</value></data>
   <data name="NativeCharacterChanged" xml:space="preserve"><value>캐릭터가 준비되지 않았거나 조회 도중 변경됐습니다.</value></data>
   <data name="NativeRawSample" xml:space="preserve"><value>원시 수집 비트 표본입니다. 실제 수첩과 대조 전이며 자동 필터에는 사용하지 않습니다.</value></data>
-  <data name="NativeWrongProcess" xml:space="preserve"><value>Unknown: 검증한 게임 프로세스가 아닙니다.</value></data>
-  <data name="NativeGameMismatch" xml:space="preserve"><value>Unknown: 조사한 KR 게임 빌드와 다릅니다. 수집 비트 읽기를 비활성화했습니다.</value></data>
-  <data name="NativeDllMismatch" xml:space="preserve"><value>Unknown: 조사한 KR DLL과 다릅니다. 수집 비트 읽기를 비활성화했습니다.</value></data>
-  <data name="NativeCheckFailed" xml:space="preserve"><value>Unknown: 호환성 확인 실패 ({0}). 수집 비트 읽기를 비활성화했습니다.</value></data>
-  <data name="NativeCompatible" xml:space="preserve"><value>조사한 KR 게임 빌드와 DLL 일치</value></data>
   <data name="CatalogDetailsOnly" xml:space="preserve"><value>상세 조건 있는 어종만</value></data>
   <data name="CatalogSortWindow" xml:space="preserve"><value>남은 시간순</value></data>
   <data name="CatalogSortWindowHint" xml:space="preserve"><value>출현 중인 어종은 종료가 가까운 순, 예정 어종은 출현이 가까운 순입니다. 예측 미확인은 그 뒤, 상시 어종은 맨 아래입니다. 상시 어종을 제외하려면 &quot;시간제만&quot;을 켜세요.</value></data>
@@ -687,8 +682,7 @@
   <data name="TripDeleteQuestion" xml:space="preserve"><value>선택한 낚시 기록 {0}묶음을 삭제하시겠습니까? 삭제 후 복구할 수 없습니다.</value></data>
   <data name="TimerLastSpot" xml:space="preserve"><value>최근 낚시터 · {0}</value></data>
   <data name="TimerCastBait" xml:space="preserve"><value>사용 미끼: {0}</value></data>
-  <data name="NativeRuntimeUnsupported" xml:space="preserve"><value>Dalamud {0}은 아직 검증되지 않았습니다. 지원하는 KR 버전: {1}. 수집 연동과 캐스팅 타이머가 중지되었습니다.</value></data>
-  <data name="NativeFeaturesBlocked" xml:space="preserve"><value>현재 환경에서는 수집 연동·도감 바로 열기·캐스팅 타이머를 사용할 수 없습니다. 도감을 수동으로 열어도 해결되지 않습니다.&#xA;{0}</value></data>
+  <data name="NativeFeaturesBlocked" xml:space="preserve"><value>현재 게임에서 수집 연동 또는 도감 바로 열기를 사용할 수 없습니다. 도감을 수동으로 열어도 해결되지 않습니다.&#xA;{0}</value></data>
   <data name="BaitPreparation" xml:space="preserve"><value>미끼 준비</value></data>
   <data name="BaitSource" xml:space="preserve"><value>준비 대상</value></data>
   <data name="BaitSourceFavorites" xml:space="preserve"><value>즐겨찾기</value></data>
@@ -708,7 +702,6 @@
   <data name="BaitUnresolvedSection" xml:space="preserve"><value>미확인</value></data>
   <data name="BaitStockWaiting" xml:space="preserve"><value>현재 캐릭터의 소지품 조회를 기다리고 있습니다.</value></data>
   <data name="BaitStockUnavailable" xml:space="preserve"><value>소지 수량을 조회할 수 없습니다. —는 0개가 아닙니다.</value></data>
-  <data name="BaitStockUnsupported" xml:space="preserve"><value>이 실행 환경에서는 소지 수량을 조회할 수 없습니다.</value></data>
   <data name="BaitNameStock" xml:space="preserve"><value>{0} · {1}개</value></data>
   <data name="BaitNameUnknown" xml:space="preserve"><value>{0} · —</value></data>
   <data name="BaitStockTooltip" xml:space="preserve"><value>{0}

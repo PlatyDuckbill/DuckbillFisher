@@ -465,8 +465,8 @@ internal sealed class FishListPanel(FishCatalog catalog, ITextureProvider textur
         Append($"Regions={string.Join(',', geography.Regions.Order().Select(id => id.ToString(CultureInfo.InvariantCulture)))}; Expansions={string.Join(',', geography.Expansions.Order().Select(id => id.ToString(CultureInfo.InvariantCulture)))}; RegionOptions={catalog.View.Geography.Regions.Length}; ExpansionOptions={catalog.View.Geography.Expansions.Length}");
         Append($"CollectionSource=ManualOverrideThenGameObservationThenSavedBackup; StorageError={personal.Error?.Key.ToString() ?? "none"}");
         Append($"CatalogPresets={personal.CatalogPresets.Count}; PresetError={personal.CatalogPresetError?.Key.ToString() ?? "none"}");
-        report.AppendLine().AppendLine("DuckbillFisher MVP-04/collection/v4");
-        report.AppendLine(collection.RuntimeDiagnostic);
+        report.AppendLine().AppendLine("DuckbillFisher MVP-04/collection/v5");
+        report.AppendLine(collection.EnvironmentDiagnostic);
         Append($"Session={observed.Session}; Caught={observed.Caught.Count}; Eligible={observed.EligibleRows}; GuideVisible={observed.GuideVisible}");
         Append($"Scans={observed.Scans}; RawFalse={observed.RawFalse}; UnknownReads={observed.Unknown}; RegistrationContract={observed.RegistrationContract}");
         Append($"RegistrationMessages={observed.RegistrationMessages}; AppliedRegistrations={observed.AppliedRegistrations}; LastLogItem={observed.LastLogItem}; LastLogFish={observed.LastLogFish}");

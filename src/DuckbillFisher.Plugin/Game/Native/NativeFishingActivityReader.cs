@@ -6,24 +6,23 @@ namespace DuckbillFisher.Plugin;
 
 internal enum FishingReadState
 {
-    Ready, Unsupported, WrongThread, PlayerUnavailable, NotFisher, AddressUnavailable, InvalidState,
+    Ready, WrongThread, PlayerUnavailable, NotFisher, AddressUnavailable, InvalidState,
 }
 
 internal sealed record FishingNativeSample(FishingReadState Availability, int? Phase = null,
     uint? EquippedBait = null, int? BaitFlags = null, int? SelectedSwimbait = null,
     uint? Swimbait0 = null, uint? Swimbait1 = null, uint? Swimbait2 = null, bool? AtFishingHole = null);
 
-/// <summary>Read-only, inspected KR layouts. No pointer or borrowed span escapes a Framework call.</summary>
-internal sealed class NativeFishingActivityReader(IFramework framework, NativeFishCollectionReader compatibility)
+/// <summary>Read-only ClientStructs layouts of the running client. No pointer or borrowed span escapes a Framework call.</summary>
+internal sealed class NativeFishingActivityReader(IFramework framework)
 {
     public unsafe FishingNativeSample Read(ulong expectedCharacter, bool isFisher)
     {
-        if (!compatibility.IsCompatible) return new(FishingReadState.Unsupported);
         if (!framework.IsInFrameworkUpdateThread) return new(FishingReadState.WrongThread);
         if (expectedCharacter == 0) return new(FishingReadState.PlayerUnavailable);
         if (!isFisher) return new(FishingReadState.NotFisher);
 
-        // These generated addresses were checked against the installed DLL and KR executable.
+        // Static addresses resolved by ClientStructs in the running game; null means unavailable.
         // A resolved signature is not treated as proof of the runtime meaning of a phase.
         var player = NativePlayer.StaticAddressPointers.pInstance;
         if (player == null || !player->IsLoaded || player->ContentId != expectedCharacter)

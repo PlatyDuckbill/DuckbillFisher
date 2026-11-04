@@ -1,4 +1,5 @@
 using System.Collections.Frozen;
+using Dalamud.Game;
 using Dalamud.Plugin.Services;
 using DuckbillFisher.Plugin.Localization;
 using NativePlayerState = FFXIVClientStructs.FFXIV.Client.Game.UI.PlayerState;
@@ -21,38 +22,54 @@ internal sealed record FishGuideSnapshot(FishGuideSnapshotState State, int Entri
 }
 
 /// <summary>
-/// Fish-bit diagnostics and validated game-guide snapshots for the inspected KR installation.
+/// Fish-bit diagnostics and validated game-guide snapshots on the running KR or global client.
 /// Pointers are acquired and discarded within the current framework update.
-/// No offsets, signature scanning, writes, or inferred collection readiness.
+/// No hardcoded offsets, own signatures, writes, or inferred collection readiness.
 /// </summary>
 internal sealed class NativeFishCollectionReader
 {
-    private const uint MaxValidatedFishParameterId = 1522;
+    // Highest readable FishParameter ID, taken from the loaded ClientStructs layout instead of a pinned constant.
+    private static readonly uint MaxFishParameterId = ReadBitLimit();
     private readonly IFramework framework;
-    private readonly NativeRuntimeCompatibility runtime;
-    private readonly UiMessage? unsupportedReason;
 
-    public NativeFishCollectionReader(IFramework framework)
+    public NativeFishCollectionReader(IFramework framework, ClientLanguage language)
     {
         this.framework = framework;
-        // File/assembly checks happen once during construction, never in Draw or a native read.
-        runtime = NativeRuntimeCompatibility.Inspect();
-        unsupportedReason = runtime.Failure;
+        // Report-only; file/assembly reads happen once during construction, never in Draw or a native read.
+        RuntimeEnvironment = NativeEnvironment.Inspect(language);
     }
 
-    public string GameVersion => runtime.GameVersion;
-    public string RuntimeDiagnostic => runtime.Diagnostic;
-    public UiMessage Compatibility => unsupportedReason ?? new(T.NativeCompatible);
-    public bool IsCompatible => unsupportedReason is null;
+    public NativeEnvironment RuntimeEnvironment { get; }
+    public string EnvironmentDiagnostic => $"{RuntimeEnvironment.Diagnostic}; FishBitLimit={MaxFishParameterId}";
+
+    /// <summary>Collection reads need the PlayerState static address that ClientStructs resolved in the running game.</summary>
+    public unsafe bool IsAvailable => NativePlayerState.StaticAddressPointers.pInstance != null;
+    public UiMessage Availability => IsAvailable ? new(T.NativeRawSample) : new(T.NativeAddressMissing);
 
     public static bool Supports(FishGuideRow row) => row.IsDisplayable && row.IsInLog && row.ItemType == "Item" &&
-        row.FishParameterId is > 0 and <= MaxValidatedFishParameterId;
+        row.FishParameterId > 0 && row.FishParameterId <= MaxFishParameterId;
+
+    /// <summary>
+    /// Reads the declared bit count and buffer size from a zeroed local copy of the loaded PlayerState layout.
+    /// No game memory is touched. The generated BitArray accepts index == BitCount (1522 in KR/global 7.57),
+    /// so the limit keeps that ID while never exceeding the fixed buffer.
+    /// </summary>
+    private static unsafe uint ReadBitLimit()
+    {
+        var layout = default(NativePlayerState);
+        var declared = layout.CaughtFishBitArray.BitCount;
+        var buffer = layout.CaughtFish.Length * 8 - 1;
+        return (uint)Math.Max(0, Math.Min(declared, buffer));
+    }
+
+    // Same bit order as InteropGenerator BitArray.Get (byte id/8, bit id%8). The span is bounded by the
+    // loaded layout, and callers have already limited id to MaxFishParameterId.
+    private static unsafe bool IsCaught(NativePlayerState* state, uint id) =>
+        (state->CaughtFish[(int)(id >> 3)] & (1 << (int)(id & 7))) != 0;
 
     public unsafe FishBitSample Read(FishGuideRow row, ulong expectedCharacter, bool fishGuideVisible)
     {
         FishBitSample Unknown(UiMessage reason) => new(row.FishParameterId, null, reason);
-        if (unsupportedReason is not null)
-            return Unknown(unsupportedReason);
         if (!framework.IsInFrameworkUpdateThread)
             return Unknown(new(T.NativeWrongThread));
         if (!fishGuideVisible)
@@ -62,7 +79,7 @@ internal sealed class NativeFishCollectionReader
         if (expectedCharacter == 0)
             return Unknown(new(T.NativePlayerRequired));
 
-        // Installed metadata confirms this is the generated getter for the resolved static address.
+        // Generated getter for the static address ClientStructs resolved in the running game.
         // A null address is rejected before dereference; no pointer survives this call.
         var state = NativePlayerState.StaticAddressPointers.pInstance;
         if (state == null)
@@ -71,8 +88,8 @@ internal sealed class NativeFishCollectionReader
             return Unknown(new(T.NativeCharacterChanged));
 
         // This read is deliberately not wrapped in try/catch: invalid pointers are not recoverable
-        // managed errors. Compatibility, scope, lifetime, and row eligibility are checked first.
-        var value = state->IsFishCaught(row.FishParameterId);
+        // managed errors. Address, scope, lifetime, and row eligibility are checked first.
+        var value = IsCaught(state, row.FishParameterId);
         return new(row.FishParameterId, value, new(T.NativeRawSample));
     }
 
@@ -81,8 +98,8 @@ internal sealed class NativeFishCollectionReader
     public unsafe FishGuideSnapshot ReadGuideSnapshot(IReadOnlyDictionary<uint, uint> expectedItems,
         ulong expectedCharacter, nint agentAddress)
     {
-        if (!IsCompatible || !framework.IsInFrameworkUpdateThread || expectedCharacter == 0 || agentAddress == 0 ||
-            expectedItems.Count == 0 || expectedItems.Keys.Any(id => id is 0 or > MaxValidatedFishParameterId))
+        if (!framework.IsInFrameworkUpdateThread || expectedCharacter == 0 || agentAddress == 0 ||
+            expectedItems.Count == 0 || expectedItems.Keys.Any(id => id == 0 || id > MaxFishParameterId))
             return new(FishGuideSnapshotState.Unavailable);
         var state = NativePlayerState.StaticAddressPointers.pInstance;
         if (state == null || !state->IsLoaded || state->ContentId != expectedCharacter)
@@ -119,7 +136,7 @@ internal sealed class NativeFishCollectionReader
                 continue;
             if (entry.ItemId != expectedItem || !seen.Add(entry.Id))
                 return new(FishGuideSnapshotState.InvalidEntries, count, seen.Count);
-            if (entry.IsCaught != state->IsFishCaught(entry.Id))
+            if (entry.IsCaught != IsCaught(state, entry.Id))
                 mismatches++;
             (entry.IsCaught ? caught : uncaught).Add(entry.Id);
         }

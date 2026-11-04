@@ -1,0 +1,4 @@
+interface:
+  display_name: "DuckbillFisher 실행 계약 조사"
+  short_description: "KR·글로벌 공통 API·네이티브 관찰과 기능별 실행 계약 조사"
+  default_prompt: "Use $duckbill-native to investigate the requested DuckbillFisher native observation or runtime contract issue."

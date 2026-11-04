@@ -196,11 +196,6 @@
   <data name="NativeAddressMissing" xml:space="preserve"><value>PlayerState address is not ready.</value></data>
   <data name="NativeCharacterChanged" xml:space="preserve"><value>Player data is not ready or the character changed during the read.</value></data>
   <data name="NativeRawSample" xml:space="preserve"><value>Raw caught-bit sample; compare it with the game fish log. Automatic filters do not use this value.</value></data>
-  <data name="NativeWrongProcess" xml:space="preserve"><value>Unknown: not the inspected game process.</value></data>
-  <data name="NativeGameMismatch" xml:space="preserve"><value>Unknown: KR game build differs from the inspected build. Native reads are disabled.</value></data>
-  <data name="NativeDllMismatch" xml:space="preserve"><value>Unknown: KR DLLs differ from the inspected files or modules. Native reads are disabled.</value></data>
-  <data name="NativeCheckFailed" xml:space="preserve"><value>Unknown: compatibility check failed ({0}). Native reads are disabled.</value></data>
-  <data name="NativeCompatible" xml:space="preserve"><value>KR game build and DLLs match the inspected installation</value></data>
   <data name="CatalogDetailsOnly" xml:space="preserve"><value>Only fish with condition details</value></data>
   <data name="CatalogSortWindow" xml:space="preserve"><value>Time remaining</value></data>
   <data name="CatalogSortWindowHint" xml:space="preserve"><value>Open windows: closing soonest first. Then upcoming windows: starting soonest first. Unavailable forecasts follow; always available fish are last. Use Time-restricted only to exclude unrestricted fish. Uses normal time/weather windows; personal requirements are separate.</value></data>
@@ -687,8 +682,7 @@ In fish log only: {5}</value></data>
   <data name="TripDeleteQuestion" xml:space="preserve"><value>Delete {0} selected fishing records? This cannot be undone.</value></data>
   <data name="TimerLastSpot" xml:space="preserve"><value>Last fishing spot · {0}</value></data>
   <data name="TimerCastBait" xml:space="preserve"><value>Cast bait: {0}</value></data>
-  <data name="NativeRuntimeUnsupported" xml:space="preserve"><value>Dalamud {0} has not been validated. Supported KR runtime versions: {1}. Collection sync and the casting timer are disabled.</value></data>
-  <data name="NativeFeaturesBlocked" xml:space="preserve"><value>Collection sync, direct guide opening and the casting timer are unavailable in this environment. Opening the guide manually will not resolve this.&#xA;{0}</value></data>
+  <data name="NativeFeaturesBlocked" xml:space="preserve"><value>Collection sync or direct guide opening is unavailable in the current game. Opening the guide manually will not resolve this.&#xA;{0}</value></data>
   <data name="BaitPreparation" xml:space="preserve"><value>Bait preparation</value></data>
   <data name="BaitSource" xml:space="preserve"><value>Targets</value></data>
   <data name="BaitSourceFavorites" xml:space="preserve"><value>Favorites</value></data>
@@ -708,7 +702,6 @@ In fish log only: {5}</value></data>
   <data name="BaitUnresolvedSection" xml:space="preserve"><value>Unverified</value></data>
   <data name="BaitStockWaiting" xml:space="preserve"><value>Waiting for inventory data for this character.</value></data>
   <data name="BaitStockUnavailable" xml:space="preserve"><value>Inventory quantities are unavailable; — does not mean zero.</value></data>
-  <data name="BaitStockUnsupported" xml:space="preserve"><value>Inventory quantities are unavailable on this runtime.</value></data>
   <data name="BaitNameStock" xml:space="preserve"><value>{0} · {1} held</value></data>
   <data name="BaitNameUnknown" xml:space="preserve"><value>{0} · —</value></data>
   <data name="BaitStockTooltip" xml:space="preserve"><value>{0}

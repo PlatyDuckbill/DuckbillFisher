@@ -12,13 +12,10 @@ internal enum BaitUiState { Unavailable, NotOpen, UnsupportedShape, BindingUnava
 internal sealed record BaitUiReading(BaitUiState State, Vector2 Position = default, Vector2 Size = default,
     string Bindings = "", int Matches = 0, uint MatchedNode = 0, BaitPageReading? Page = null);
 
-/// <summary>Borrowed KR UI pointers stay inside one Framework callback. No native function calls or writes.</summary>
-internal sealed class NativeBaitUiReader(IGameGui gui, IFramework framework, Func<bool> compatible, IDataManager data)
+/// <summary>Borrowed UI pointers stay inside one Framework callback. No native function calls or writes.</summary>
+internal sealed class NativeBaitUiReader(IGameGui gui, IFramework framework, IDataManager data)
 {
-    // The embedded field is internal in the supplied binding. Offset 0xD2690 was checked in all
-    // three exact KR DLL profiles and their pinned source; avoid invoking the virtual getter.
-    private const int RaptureAtkModuleOffset = 0xD2690;
-    // KR ItemUICategory 33 is fishing bait, checked against the installed sheet and UI sample.
+    // ItemUICategory 33 is fishing bait in the KR and global sheets (docs/verification/native/GLOBAL-COMPAT.md).
     private const uint BaitCategory = 33;
     private readonly Dictionary<uint, bool> baitItems = [];
 
@@ -33,7 +30,7 @@ internal sealed class NativeBaitUiReader(IGameGui gui, IFramework framework, Fun
     }
     public unsafe BaitUiReading Read(uint target, bool diagnostics = false)
     {
-        if (!framework.IsInFrameworkUpdateThread || !compatible()) return new(BaitUiState.Unavailable);
+        if (!framework.IsInFrameworkUpdateThread) return new(BaitUiState.Unavailable);
         var handle = gui.GetAddonByName("Bait");
         if (handle.IsNull) return new(BaitUiState.NotOpen);
         var addon = (AtkUnitBase*)handle.Address;
@@ -41,9 +38,9 @@ internal sealed class NativeBaitUiReader(IGameGui gui, IFramework framework, Fun
         var nodes = addon->UldManager;
         if (nodes.NodeList == null || nodes.NodeListCount is < 42 or > 64 || addon->RootNode == null)
             return new(BaitUiState.UnsupportedShape);
-        var module = gui.GetUIModule();
-        if (module.IsNull) return new(BaitUiState.Unavailable);
-        var stage = ((RaptureAtkModule*)((byte*)module.Address + RaptureAtkModuleOffset))->AtkModule.AtkStage;
+        // ClientStructs resolves this static address from the running game's signature. No hardcoded
+        // offset or virtual getter is used; an unresolved or empty address leaves the UI unavailable.
+        var stage = AtkStage.Instance();
         if (stage == null) return new(BaitUiState.Unavailable);
         ref var tooltips = ref stage->TooltipManager.TooltipMap;
         if (tooltips.LongCount is < 0 or > 8192) return new(BaitUiState.UnsupportedShape);

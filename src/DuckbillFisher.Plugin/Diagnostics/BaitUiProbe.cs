@@ -16,7 +16,6 @@ internal sealed class BaitUiProbe : IDisposable
     private readonly IFramework framework;
     private readonly IAddonLifecycle lifecycle;
     private readonly FishPreferences preferences;
-    private readonly Func<bool> compatible;
     private readonly NativeBaitUiReader baitReader;
     private readonly BaitFinder finder;
     private readonly object gate = new();
@@ -31,10 +30,10 @@ internal sealed class BaitUiProbe : IDisposable
     private bool disposed;
 
     public BaitUiProbe(IGameGui gui, IFramework framework, IAddonLifecycle lifecycle,
-        FishPreferences preferences, Func<bool> compatible, NativeBaitUiReader baitReader, BaitFinder finder)
+        FishPreferences preferences, NativeBaitUiReader baitReader, BaitFinder finder)
     {
         this.gui = gui; this.framework = framework; this.lifecycle = lifecycle;
-        this.preferences = preferences; this.compatible = compatible;
+        this.preferences = preferences;
         this.baitReader = baitReader;
         this.finder = finder;
         framework.Update += Update;
@@ -157,7 +156,7 @@ internal sealed class BaitUiProbe : IDisposable
                 report = data ?? Header(personal.Session) + $"Status={code}\n";
                 pending = null;
             }
-            if (!personal.HasCharacter || personal.Session != request.Session || !framework.IsInFrameworkUpdateThread || !compatible())
+            if (!personal.HasCharacter || personal.Session != request.Session || !framework.IsInFrameworkUpdateThread)
             { Finish("Unavailable"); return; }
             var names = new[] { "Bait" }.Concat(observedNames.Where(name =>
                 name.Contains("Bait", StringComparison.OrdinalIgnoreCase))).Distinct().ToArray();

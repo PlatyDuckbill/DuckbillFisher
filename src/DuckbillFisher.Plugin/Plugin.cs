@@ -65,7 +65,7 @@ public sealed class Plugin : IDalamudPlugin
             throw new InvalidOperationException(UiText.Get(TextKey.CommandConflict, Command));
 
         fishCatalog = new FishCatalog(dataManager, framework);
-        var collectionReader = new NativeFishCollectionReader(framework);
+        var collectionReader = new NativeFishCollectionReader(framework, dataManager.Language);
         fishGuide = new FishGuideDiagnostics(clientState, playerState, fishCatalog, gameGui, framework, collectionReader);
         fishingMap = new FishingMapService(gameGui, clientState, framework);
         fishPreferences = new FishPreferences(pluginInterface, clientState, playerState, framework, log);
@@ -73,7 +73,7 @@ public sealed class Plugin : IDalamudPlugin
         soundLibrary = new ManagedSoundLibrary(fishPreferences, managedSounds, framework);
         settingsBackup = new SettingsBackup(fishPreferences, managedSounds, soundLibrary, framework);
         backupPanel = new SettingsBackupPanel(settingsBackup, fishPreferences);
-        var activityReader = new NativeFishingActivityReader(framework, collectionReader);
+        var activityReader = new NativeFishingActivityReader(framework);
         fishingObserver = new FishingActivityProbe(conditions, clientState, playerState, framework, chat,
             dataManager, fishPreferences, activityReader);
         guideOpener = new FishGuideOpenService(gameGui, clientState, playerState, framework, fishPreferences, fishCatalog, collectionReader);
@@ -84,7 +84,7 @@ public sealed class Plugin : IDalamudPlugin
                 log.Warning("FishingHistoryDrainIncomplete: Writes={Writes}; Deletes={Deletes}; ReadBlocked={ReadBlocked}", writes, deletes, blocked)));
         itemLinks = new FishingItemLinkService(chat, framework, fishPreferences);
         fishingRegion = new FishingRegionObserver(clientState, conditions, dataManager, framework);
-        alertOutput = new SpawnAlertOutput(framework, chat, fishPreferences, collectionReader.IsCompatible, log);
+        alertOutput = new SpawnAlertOutput(framework, chat, fishPreferences, log);
         timerNotifications = new CastingTimerNotifications(fishingTracker, fishPreferences, alertOutput, framework, log);
         fishingSounds = new FishingSoundNotifications(fishingTracker, fishCollection, fishCatalog, fishPreferences, alertOutput, framework, log);
         soundLibrary.Reload = (slot, session) =>
@@ -102,12 +102,11 @@ public sealed class Plugin : IDalamudPlugin
             foreach (var slot in ManagedSoundFiles.Slots) soundLibrary.Reload?.Invoke(slot, session);
         };
         spawnAlerts = new SpawnAlerts(fishCatalog, fishPreferences, fishCollection, framework, alertOutput, log);
-        baitStock = new BaitStockObserver(inventory, clientState, playerState, conditions, framework, fishPreferences, () => collectionReader.IsCompatible);
+        baitStock = new BaitStockObserver(inventory, clientState, playerState, conditions, framework, fishPreferences);
         var preparationQuery = new CatalogQueryState(fishPreferences.View.Catalog);
         baitPreparation = new BaitPreparation(fishCatalog, fishPreferences, fishCollection, fishingRegion, preparationQuery, framework);
-        var baitReader = new NativeBaitUiReader(gameGui, framework, () => collectionReader.IsCompatible, dataManager);
-        baitFinder = new BaitFinder(framework, addonLifecycle, fishPreferences, baitStock, baitReader,
-            () => collectionReader.IsCompatible, () =>
+        var baitReader = new NativeBaitUiReader(gameGui, framework, dataManager);
+        baitFinder = new BaitFinder(framework, addonLifecycle, fishPreferences, baitStock, baitReader, () =>
             {
                 var personal = fishPreferences.View;
                 if (!personal.HasCharacter || !clientState.IsLoggedIn || !playerState.IsLoaded || playerState.ContentId != personal.CharacterId)
@@ -115,7 +114,7 @@ public sealed class Plugin : IDalamudPlugin
                 var sample = activityReader.Read(personal.CharacterId, playerState.ClassJob.RowId == FishingGameIds.FisherJob);
                 return sample.Availability == FishingReadState.Ready ? sample.EquippedBait : null;
             });
-        baitUiProbe = new BaitUiProbe(gameGui, framework, addonLifecycle, fishPreferences, () => collectionReader.IsCompatible, baitReader, baitFinder);
+        baitUiProbe = new BaitUiProbe(gameGui, framework, addonLifecycle, fishPreferences, baitReader, baitFinder);
         var preparationPanel = new BaitPreparationPanel(baitPreparation, baitStock, fishPreferences, textureProvider, itemLinks, baitUiProbe);
         var preparationWindow = new BaitPreparationWindow(preparationPanel);
         var detailPanel = new FishDetailPanel(fishPreferences, textureProvider, fishingMap, new FishingConditionPanel(textureProvider, itemLinks, baitStock, baitFinder));
@@ -129,7 +128,7 @@ public sealed class Plugin : IDalamudPlugin
         };
         var spotFishWindow = new SpotFishWindow(fishingTracker, fishCatalog, fishPreferences, fishCollection, textureProvider, fishingMap, detailWindow.Show);
         fishingBuffs = new FishingBuffObserver(objectTable, clientState, playerState, conditions, framework, dataManager,
-            fishPreferences, fishingTracker, () => collectionReader.IsCompatible);
+            fishPreferences, fishingTracker);
         timerWindow = new CastingTimerWindow(fishingTracker, fishingBuffs, textureProvider, detailWindow.Show, spotFishWindow.Toggle);
         timerSettings = new CastingTimerSettingsWindow(fishPreferences, alertOutput, fishingSounds, soundLibrary);
         detailPanel.ShowTimerPresets = timerSettings.OpenPresets;

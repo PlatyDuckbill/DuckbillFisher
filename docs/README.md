@@ -53,6 +53,6 @@ docs/
 - [과거 기록 색인](archive/README.md): 초기 환경/타이머 조사·UI 수정 원문·이전 상태 사본. 현재 정책과 분리한다.
 - [검증 기록 템플릿](development/templates/VALIDATION.md): 독립 근거가 필요할 때 관련 항목만 사용.
 - [duckbill-release](../.agents/skills/duckbill-release/SKILL.md): 빌드·패키지·커스텀 저장소 배포 작업.
-- [duckbill-kr-native](../.agents/skills/duckbill-kr-native/SKILL.md): KR API/모듈/메모리 계약 조사 작업.
+- [duckbill-native](../.agents/skills/duckbill-native/SKILL.md): KR·글로벌 공통 API/네이티브 실행 계약 조사 작업.
 
 2026-10-18 정리에서는 핵심 문서의 버전별 회고를 제거하고 현재 계약으로 통합했다. 이번에는 제품/개발/검증/과거 기록으로 실제 경로를 나누고 UI 기록 12개를 원문 구역 단위로 통합했다. 저장소 내부 링크는 새 경로로 갱신했다. 이전 공개 커밋/태그의 경로는 당시 이력에서 조회한다. 정리 전 원문은 Git b33f4eb2faa50503dd514a76c3a1e2a23d2e2df8에 있다. 파일 생성·갱신 기준은 [문서 관리](development/WORKFLOW.md#문서-관리)를 따른다.

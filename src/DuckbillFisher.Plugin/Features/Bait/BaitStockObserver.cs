@@ -6,7 +6,7 @@ using Dalamud.Plugin.Services;
 
 namespace DuckbillFisher.Plugin;
 
-internal enum BaitStockState { Waiting, Ready, Unavailable, Unsupported }
+internal enum BaitStockState { Waiting, Ready, Unavailable }
 internal sealed record BaitStockView(int Session, BaitStockState State, IReadOnlyDictionary<uint, long> Counts)
 {
     public long? Quantity(uint id) => State == BaitStockState.Ready ? Counts.GetValueOrDefault(id) : null;
@@ -23,7 +23,6 @@ internal sealed class BaitStockObserver : IDisposable
     private readonly ICondition conditions;
     private readonly IFramework framework;
     private readonly FishPreferences preferences;
-    private readonly Func<bool> compatible;
     private readonly Dictionary<uint, long> totals = [];
     private BaitStockView view = new(-1, BaitStockState.Waiting, FrozenDictionary<uint, long>.Empty);
     private long sampledAt;
@@ -32,10 +31,10 @@ internal sealed class BaitStockObserver : IDisposable
     private bool disposed;
 
     public BaitStockObserver(IGameInventory inventory, IClientState client, IPlayerState player, ICondition conditions,
-        IFramework framework, FishPreferences preferences, Func<bool> compatible)
+        IFramework framework, FishPreferences preferences)
     {
         this.inventory = inventory; this.client = client; this.player = player; this.conditions = conditions;
-        this.framework = framework; this.preferences = preferences; this.compatible = compatible;
+        this.framework = framework; this.preferences = preferences;
         framework.Update += Update;
     }
 
@@ -69,7 +68,6 @@ internal sealed class BaitStockObserver : IDisposable
             sessionReadyAt = Stopwatch.GetTimestamp();
             return;
         }
-        if (!compatible()) { Publish(session, BaitStockState.Unsupported); return; }
         if (Stopwatch.GetElapsedTime(sessionReadyAt).TotalSeconds < 1 ||
             (sampledAt != 0 && Stopwatch.GetElapsedTime(sampledAt).TotalMilliseconds < 500)) return;
         sampledAt = Stopwatch.GetTimestamp();

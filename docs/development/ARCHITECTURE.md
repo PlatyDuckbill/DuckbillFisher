@@ -63,13 +63,23 @@
 
 ## 호환성과 실패
 
-- 사용자 합의(2026-10-23): 공개 API를 우선하고 네이티브 접근을 필요한 범위로 줄인다. 현재의 정확한 KR 게임/DLL 조합 검사를 유지하며, 업데이트마다 사용 계약을 정적으로 대조한 뒤 지원 조합을 추가하고 별도 실기 확인을 받는다. 런타임 계약 지문에 따른 새 DLL 자동 허용은 도입하지 않는다. 반복 대조 도구는 개발용 근거 수집에만 사용한다. [공개 API 대체 조사](../verification/native/NATIVE-RUNTIME-DAL4KR.md#공개-api-우선-방침과-대체-조사-2026-10-23).
-- NativeRuntimeProfiles는 검증된 **게임 빌드별·배포판별 세 모듈 조합**의 MVID/SHA256을 관리하고 NativeRuntimeCompatibility는 환경 수집과 판정을 담당한다. 각 DLL은 초기화 때 한 번만 해시를 읽어 후보 조합과 비교한다. 같은 숫자 버전의 다른 배포판을 동일시하거나 개별 허용 모듈을 섞지 않는다.
-- 빌드 참조는 `DALAMUD_HOME` 또는 명시한 `DalamudLibPath`로 선택하며 공통 `build/DalamudReferences.targets`가 누락 DLL/API 세대 차이를 검출한다. 컴파일 가능한 SDK/API와 실제 네이티브 지원 계약은 별개다. 새 지역/게임 프로필은 관련 자료·구조·스레드·수명·실기 확인을 마친 뒤 추가하며 현재는 KR 조합만 등록돼 있다.
-- 수집/도감 열기/타이머/SE는 검증된 지원 계약을 재사용한다. 미끼 페이지 연결 실패는 페이지 표식만 생략하며 다른 검증 기능을 막지 않는다.
-- 가드 실패는 실제 사유를 표시하고 네이티브 읽기를 막는다. 정적 자료·수동 상태를 미수집으로 바꾸지 않는다. [런타임 근거](../verification/native/NATIVE-RUNTIME-DAL4KR.md).
+- 사용자 합의(2026-11-04): KR과 글로벌을 같은 빌드로 지원한다. 공개 API를 우선하고 네이티브 접근은 필요한 범위로 줄인다. [재설계안](RUNTIME-CONTRACT-REDESIGN.md)과 [근거](../verification/native/GLOBAL-COMPAT.md)를 따른다. 이 합의는 2026-10-23의 정확한 KR DLL 조합 검사 방침을 대체한다.
+- **전역 가드를 두지 않는다.** 로드 가능 여부는 Dalamud의 API 레벨 판정이, 게임과 배포판의 정합성은 런처·Dalamud가 담당한다. DLL 해시나 게임 빌드 일치로 기능을 막지 않으며, 배포판이 제공한 ClientStructs를 신뢰한다(사용자 수용 위험).
+- NativeEnvironment는 게임 빌드, 클라이언트 언어, Dalamud·ClientStructs·Interop의 버전과 MVID를 **진단 보고에만** 기록한다. 판정에 쓰지 않으므로 DLL 해시를 계산하지 않는다.
+- 기능은 각자 실행 계약을 검사하고, 실패하면 그 기능만 Unknown이나 사용 불가로 둔다.
+  - 수집 비트: PlayerState 정적 주소. 비트 상한은 로드된 ClientStructs의 BitCount와 버퍼 크기에서 읽는다.
+  - 도감 스냅샷: Mode·Entries 형태 검사와 비트 교차 일치.
+  - 도감 열기: OpenForItemId 함수 포인터 해석 여부.
+  - 낚시 상태: EventFramework 주소와 Phase·보관 생미끼 범위.
+  - 로그: 결합 계약.
+  - 미끼 화면: `AtkStage.Instance()`와 노드·AtkValues 형태.
+  - SE: PlaySoundEffect 함수 포인터 해석 여부.
+  - 미끼 수량·버프: 공개 API만 사용하며 네이티브 상태와 묶지 않는다.
+- 하드코딩 오프셋과 자체 시그니처를 쓰지 않는다. 주소와 함수는 ClientStructs가 실행 중인 게임에서 해석한 것만 사용한다. 무효 포인터를 try/catch로 회복하지 않는다.
+- 빌드 참조는 `DALAMUD_HOME` 또는 명시한 `DalamudLibPath`로 선택하며, 공통 `build/DalamudReferences.targets`가 누락 DLL/API 세대 차이를 검출한다. 공식 CI는 글로벌 최신 참조로 빌드하므로, KR과 글로벌 참조 양쪽 빌드 통과를 개발 검사로 유지한다.
+- 실패는 해당 기능의 실제 사유를 표시한다. 정적 자료·수동 상태를 미수집으로 바꾸지 않는다. 미끼 페이지 연결이 실패하면 페이지 표식만 생략하고 다른 기능은 막지 않는다.
 - 단순 Fishing 플래그 관찰기는 어획의 증거가 아니다. FishingTracker는 따로 검증한 본인 로그/단계만 적용한다. Phase 값 하나 또는 Actor=NoSource만으로 성공/실패/본인을 추정하지 않는다.
-- 낚시터는 NotObserved/AwaitingIdentification/Unknown/Known/LastKnown으로 구분한다. 새 시전에는 이전 위치를 지우며 Unknown은 본인1110의 KR PlaceName950일 때만 확정한다. 발견1115/1130/3513의 NoSource는 후보일 뿐이며 같은 시전의 검증된 Local3512·2초 상관·Phase2/4·유일한 Territory+PlaceName 대응이 모두 필요하다. 새로운 네이티브 읽기/가드 완화는 없으며 [정적 근거·실기 대기](../verification/fishing/TIMER-HISTORY.md#03110-미지의-낚시터와-이전-위치-분리-2026-10-20)를 따른다.
+- 낚시터는 NotObserved/AwaitingIdentification/Unknown/Known/LastKnown으로 구분한다. 새 시전에는 이전 위치를 지우며 Unknown은 본인1110의 PlaceName950(KR·글로벌 공통 "미지의 낚시터")일 때만 확정한다. 발견1115/1130/3513의 NoSource는 후보일 뿐이며 같은 시전의 검증된 Local3512·2초 상관·Phase2/4·유일한 Territory+PlaceName 대응이 모두 필요하다. 새로운 네이티브 읽기/가드 완화는 없으며 [정적 근거·실기 대기](../verification/fishing/TIMER-HISTORY.md#03110-미지의-낚시터와-이전-위치-분리-2026-10-20)를 따른다.
 
 ## 저장·수집·알림
 

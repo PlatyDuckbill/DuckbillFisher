@@ -91,6 +91,6 @@ internal sealed class BaitPreparationPanel(BaitPreparation preparation, BaitStoc
         else ImGui.TextUnformatted(count is { } quantity ? UiText.Get(T.BaitQuantity, quantity) : UiText.Get(T.BaitQuantityUnknown));
     }
 
-    public static T StockReason(BaitStockState state) => state == BaitStockState.Unsupported
-        ? T.BaitStockUnsupported : state == BaitStockState.Waiting ? T.BaitStockWaiting : T.BaitStockUnavailable;
+    public static T StockReason(BaitStockState state) =>
+        state == BaitStockState.Waiting ? T.BaitStockWaiting : T.BaitStockUnavailable;
 }

@@ -21,7 +21,6 @@ internal sealed class BaitFinder : IDisposable
     private readonly FishPreferences preferences;
     private readonly BaitStockObserver stock;
     private readonly NativeBaitUiReader reader;
-    private readonly Func<bool> compatible;
     private readonly Func<uint?> selected;
     private readonly object gate = new();
     private BaitFindView view = new(-1, 0, "", BaitFindState.Idle);
@@ -33,16 +32,16 @@ internal sealed class BaitFinder : IDisposable
     public bool Active { get { lock (gate) { Expire(); return active; } } }
 
     public BaitFinder(IFramework framework, IAddonLifecycle lifecycle, FishPreferences preferences,
-        BaitStockObserver stock, NativeBaitUiReader reader, Func<bool> compatible, Func<uint?> selected)
+        BaitStockObserver stock, NativeBaitUiReader reader, Func<uint?> selected)
     {
         this.framework = framework; this.lifecycle = lifecycle; this.preferences = preferences;
-        this.stock = stock; this.reader = reader; this.compatible = compatible; this.selected = selected;
+        this.stock = stock; this.reader = reader; this.selected = selected;
         framework.Update += Update;
         lifecycle.RegisterListener(AddonEvent.PreFinalize, "Bait", OnClose);
         lifecycle.RegisterListener(AddonEvent.PostSetup, "Bait", OnSetup);
     }
 
-    public bool CanRequest(uint item, int session) => !disposed && compatible() && preferences.View.HasCharacter &&
+    public bool CanRequest(uint item, int session) => !disposed && preferences.View.HasCharacter &&
         preferences.View.Session == session && stock.View.Session == session && stock.View.Quantity(item) is > 0;
 
     public void Request(FishingItemView item, int session)
@@ -76,7 +75,7 @@ internal sealed class BaitFinder : IDisposable
             if (!active) return;
             var personal = preferences.View;
             var inventory = stock.View;
-            if (!compatible() || inventory.Session != personal.Session || inventory.State != BaitStockState.Ready ||
+            if (inventory.Session != personal.Session || inventory.State != BaitStockState.Ready ||
                 inventory.Quantity(view.Item) is not > 0)
             { Finish(BaitFindState.Unavailable); return; }
             if (selected() == view.Item) { Finish(BaitFindState.Selected); return; }

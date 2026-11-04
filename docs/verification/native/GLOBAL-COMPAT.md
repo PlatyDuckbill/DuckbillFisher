@@ -96,6 +96,37 @@ dal4kr 15.0.3.9는 DuckbillTweak 조사 캐시의 고정 Release.zip 추출본�
   - 인게임 확인: KR에서 기존 타이머·기록이 그대로인지, 진단이 `Contracts=28/28; RejectedContracts=none`인지 확인해야 한다.
   - 글로벌에서는 네이티브 전역 가드(3단계 전)가 아직 남아 있어 타이머가 동작하지 않는다.
 
+## P1 구현 2·3단계: 오프셋·상한 제거와 전역 가드 제거 (2026-11-04)
+
+- **미끼 화면**: `UIModule + 0xD2690`(RaptureAtkModule) 하드코딩 오프셋을 ClientStructs의 `AtkStage.Instance()`로 바꿨다.
+  - KR·글로벌 FFCS 모두 같은 `StaticAddress` 시그니처(`48 8B 05 ?? ?? ?? ?? 4C 8B 40 18 45 8B 40 18`)를 갖는다.
+  - 해석에 실패해 null이 되면 Unavailable로 처리한다.
+- **수집 비트**: 상한 상수 `1522`를 실행 중 값으로 바꿨다.
+  - 상한은 로드된 ClientStructs의 `CaughtFishBitArray.BitCount`(1522)와 `CaughtFish` 버퍼(191바이트, 마지막 비트 1527) 중 작은 값이다.
+  - 비트는 버퍼 span에서 직접 읽는다. 순서는 `BitArray.Get` IL(`byte[id/8] & 1<<(id%8)`)과 같다.
+  - `Get`은 `index == BitCount`를 허용하므로, 기존 1522 포함 범위를 유지한다.
+- **전역 가드 제거**: `NativeRuntimeProfiles`(해시 5조합)와 `NativeRuntimeCompatibility`를 삭제했다. 보고 전용 `NativeEnvironment`를 추가했다.
+- **기능별 독립 판정**: 각 기능은 다음 조건만 본다. 미끼 수량과 버프는 네이티브 상태와 분리됐다.
+
+  | 기능 | 판정 조건 |
+  |---|---|
+  | 수집 | PlayerState 주소 |
+  | 도감 열기 | 수집 주소 + `OpenForItemId` 함수 포인터 |
+  | 낚시 상태 | 주소와 값 범위 |
+  | 미끼 UI·찾기 | 형태 검사 |
+  | SE | `PlaySoundEffect` 함수 포인터 |
+  | 미끼 수량·버프 | 공개 API |
+
+- **안내와 진단**
+  - 쓰지 않게 된 문구 7개를 삭제했다: `NativeCompatible`, `NativeWrongProcess`, `NativeGameMismatch`, `NativeDllMismatch`, `NativeCheckFailed`, `NativeRuntimeUnsupported`, `BaitStockUnsupported`. 한영 키는 1,250개가 됐다.
+  - 도감 배너 문구(`NativeFeaturesBlocked`)는 "수집 연동 또는 도감 바로 열기 불가 + 사유"로 좁혔다.
+  - 진단 형식을 올렸다: `fish-guide-native/v4`, `collection/v5`. `NativeEnvironment: Game=…; ClientLanguage=…; Dalamud=버전/MVID; FFXIVClientStructs=…; InteropGenerator.Runtime=…; NativeGate=None; FishBitLimit=…`를 기록한다.
+- **빌드**: 모두 경고 0, 오류 0이다.
+  - 플러그인: KR 참조 별도 → 글로벌 참조 별도 → 최소 15.0.3.6 참조 Release → KR 정규 Debug.
+  - 데이터 도구, 한영 리소스 검사도 통과했다.
+  - 테스트 추가·실행은 하지 않았다.
+- **미확인**: KR·글로벌 인게임 동작 전체. 수집, 도감 열기, 타이머·기록, 미끼 찾기, SE, 버프·미끼 수량 순으로 확인한다.
+
 ## P2 사전 확인: 고정 ID와 시트 규모
 
 | ID | KR | 글로벌(영어) |

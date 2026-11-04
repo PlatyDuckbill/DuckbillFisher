@@ -171,7 +171,7 @@ internal static class UiWidgets
         ImGui.PushStyleColor(ImGuiCol.ChildBg, new Vector4(0.42f, 0.29f, 0.06f, 0.72f));
         var text = opener.IsSupported
             ? UiText.Get(prompt.Key == T.CollectionGuideOpenRequired ? T.GuideBannerOpen : T.GuideBannerRetry)
-            : UiText.Get(T.NativeFeaturesBlocked, opener.CompatibilityReason.Display);
+            : UiText.Get(T.NativeFeaturesBlocked, opener.UnavailableReason.Display);
         if (personal.CollectionSavedUtc is { } savedAt && personal.SavedCollection.Count > 0)
             text = UiText.Get(T.CollectionBackupBanner, text, savedAt.ToLocalTime(), personal.SavedCollection.Count);
         var width = Math.Max(1, ImGui.GetContentRegionAvail().X - ImGui.GetFrameHeight() - 24);
@@ -187,11 +187,11 @@ internal static class UiWidgets
             ImGui.PushTextWrapPos(ImGui.GetCursorPosX() + width);
             ImGui.TextUnformatted(text);
             ImGui.PopTextWrapPos();
-            Tooltip(opener.IsSupported ? prompt.Display : opener.CompatibilityReason.Display);
+            Tooltip(opener.IsSupported ? prompt.Display : opener.UnavailableReason.Display);
             ImGui.BeginDisabled(!opener.IsSupported);
             if (ImGui.Button(UiText.Label(T.OpenFishGuide, "OpenFishGuide"))) opener.Request(personal);
             ImGui.EndDisabled();
-            if (!opener.IsSupported) Tooltip(opener.CompatibilityReason.Display);
+            if (!opener.IsSupported) Tooltip(opener.UnavailableReason.Display);
             if (failure is not null) ImGui.TextWrapped(failure.Display);
         }
         ImGui.EndChild();
@@ -210,7 +210,7 @@ internal static class UiWidgets
         var detail = saved ? UiText.Get(T.CollectionBackupBanner, prompt.Display,
             personal.CollectionSavedUtc!.Value.ToLocalTime(), personal.SavedCollection.Count) : prompt.Display;
         var hints = new List<string> { detail };
-        if (!opener.IsSupported) hints.Add(opener.CompatibilityReason.Display);
+        if (!opener.IsSupported) hints.Add(opener.UnavailableReason.Display);
         if (failure is not null) hints.Add(failure.Display);
         var hint = string.Join("\n", hints);
         var frame = ImGui.GetFrameHeight();

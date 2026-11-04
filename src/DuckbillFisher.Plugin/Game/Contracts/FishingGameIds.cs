@@ -1,6 +1,6 @@
 namespace DuckbillFisher.Plugin;
 
-/// <summary>Existing KR sheet identities; compatibility guards remain in the game adapters.</summary>
+/// <summary>Sheet identities with the same meaning in KR and global clients (docs/verification/native/GLOBAL-COMPAT.md).</summary>
 internal static class FishingGameIds
 {
     public const uint FisherJob = 18;

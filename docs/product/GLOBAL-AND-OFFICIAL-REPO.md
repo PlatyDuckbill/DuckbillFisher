@@ -38,10 +38,11 @@
 
 | 대상 | 위치 | 글로벌에서의 문제 | 전환 방향 |
 |---|---|---|---|
-| DLL 해시 조합 가드 | `Game/Native/NativeRuntimeProfiles.cs`, `NativeRuntimeCompatibility.cs` | 미등록 배포판이라 네이티브 기능 전체가 꺼짐 | 제거. 진단 보고용으로만 남김 |
-| 게임 빌드 고정 | 같은 파일의 `SupportedGameVersion` | 2026.10.16 거부 | 제거 또는 보고 전용 |
+| DLL 해시 조합 가드 | (삭제됨) `NativeRuntimeProfiles.cs`, `NativeRuntimeCompatibility.cs` | 미등록 배포판이라 네이티브 기능 전체가 꺼짐 | ✅ 제거. `NativeEnvironment`로 보고만 함 |
+| 게임 빌드 고정 | (삭제됨) `SupportedGameVersion` | 2026.10.16 거부 | ✅ 제거. 보고 전용 |
 | 낚시 로그 지문 | `Game/Contracts/FishingLogContracts.cs` (LogMessage 28개의 KR 문장 SHA256) | 확인 결과 글로벌 4개 언어 모두 0/28 일치로, 타이머·기록이 정지함 | 매개변수-시트 결합 판정. 27/28이 5개 언어에서 동일([근거](../verification/native/GLOBAL-COMPAT.md#p1-낚시-로그-계약의-언어-의존성)) |
-| 하드코딩 오프셋 | `Game/Native/NativeBaitUiReader.cs:20` (`0xD2690`) | 패치에 취약 | ClientStructs 공개 경로로 대체 |
+| 하드코딩 오프셋 | `Game/Native/NativeBaitUiReader.cs` (`0xD2690`) | 패치에 취약 | ✅ `AtkStage.Instance()`로 대체 |
+| 수집 비트 상한 | `Game/Native/NativeFishCollectionReader.cs` (`1522`) | 패치에 취약 | ✅ 로드된 ClientStructs 값으로 대체 |
 | 시트 ID | `Game/Contracts/FishingGameIds.cs`, PlaceName 950, 미끼 분류 33 | KR 시트로만 확인함 | 글로벌 시트로 대조 |
 | 낚시 자료 | `data/fishing.kr.v2.json`, `fish-classifications.kr.v1.json` | KR 클라이언트 기준 | 글로벌로 재생성해 차이 확인 |
 | 컴파일 참조 | `build/DalamudReferences.targets` (`DALAMUD_HOME` 필수) | 공식 CI(Plogon) 빌드 방식과 다를 수 있음 | Plogon 방식 빌드 확인 |
@@ -120,9 +121,11 @@
 - ✅ 재설계안 승인 (2026-11-04). 위험 수용, 끄기 설정 없음, 버전·MVID 기록, 결합 없는 ID는 B안(패치 때 개발 점검)으로 정했다. [재설계안](../development/RUNTIME-CONTRACT-REDESIGN.md)
 - ✅ 구현 1단계: 로그 결합 계약 (2026-11-04). KR과 글로벌 5개 언어 모두 28/28이다. 패치 점검 도구와 해시 기준선을 추가했다. 인게임 확인은 대기다. [결과](../verification/native/GLOBAL-COMPAT.md#p1-구현-1단계-로그-결합-계약-2026-11-04)
 - ✅ `0xD2690` 대체 경로 조사 (2026-11-04). 두 지역 ClientStructs 모두 `AtkStage.Instance()`(정적 시그니처 주소)를 제공한다. 수집 비트 상한 `1522`도 실행 중 값으로 대체할 대상으로 추가했다.
-- ⏳ 구현 2단계: `AtkStage.Instance()` 전환, 수집 비트 수를 실행 중 값으로
-- ⏳ 구현 3단계: 전역 가드 제거, 기능별 상태·안내·진단
-- ⏳ AGENTS.md·ARCHITECTURE의 KR 전용 방침 개정(재설계안 승인 후)
+- ✅ 구현 2단계: `AtkStage.Instance()` 전환, 수집 비트 상한을 실행 중 값으로 (2026-11-04)
+- ✅ 구현 3단계: 전역 가드 제거, 기능별 판정·안내·진단 (2026-11-04). KR·글로벌·최소 참조 빌드 모두 경고 0, 오류 0이다. [결과](../verification/native/GLOBAL-COMPAT.md#p1-구현-23단계-오프셋상한-제거와-전역-가드-제거-2026-11-04)
+- ✅ AGENTS.md·ARCHITECTURE 방침 개정, 스킬을 `duckbill-native`로 일반화 (2026-11-04)
+- ⏳ **KR·글로벌 인게임 확인**(사용자). 이 확인이 끝나면 P1이 완료된다.
+- ⏳ `compare-native-runtime.ps1`이 쓰지 않는 메서드의 차이를 경고로만 보고하도록 개선(선택)
 
 ### P2 자료 범용화 — ⏳
 
@@ -175,6 +178,7 @@
 ## 진행 기록
 
 - 2026-11-04: 목표와 채널 결정. 글로벌 클라이언트와 Dalamud 설치 확인. 공식 저장소 요건과 AI 정책 조사. 이 문서 작성.
+- 2026-11-04: P1 구현 1~4단계 완료. 로그 결합 계약, 오프셋·상한 제거, 전역 가드 제거, 방침 문서 개정. 인게임 확인은 대기다.
 - 2026-11-04: P0 KR 배포판의 공식 저장소 사용 방식, P1 로그 계약 언어 대조, P2 고정 ID 대조 완료. dal4kr 15.0.3.9 구조 대조로 0.6.0.1 근거도 보완. [조사 기록](../verification/native/GLOBAL-COMPAT.md)
 
 ## 출처 (조회 2026-11-04)

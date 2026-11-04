@@ -7,7 +7,7 @@
 1. AGENTS.md·STATUS와 git status --short를 확인한다. tmp_note.md는 읽기·수정·스테이징하지 않는다.
 2. 현재 사용자 요청을 우선하고 [문서 지도](README.md)에서 필요한 문서만 고른다. 과거 verification/archive의 대기/다음 작업은 새 지시가 아니다.
 3. 코드 책임은 [ARCHITECTURE](development/ARCHITECTURE.md), 명령은 [WORKFLOW](development/WORKFLOW.md), 패키지/게시 절차는 [DISTRIBUTION](development/DISTRIBUTION.md)을 따른다.
-4. [duckbill-release](../.agents/skills/duckbill-release/SKILL.md)는 빌드/패키지, [duckbill-kr-native](../.agents/skills/duckbill-kr-native/SKILL.md)는 KR 계약 조사 때만 적용한다.
+4. [duckbill-release](../.agents/skills/duckbill-release/SKILL.md)는 빌드/패키지, [duckbill-native](../.agents/skills/duckbill-native/SKILL.md)는 API·네이티브 실행 계약 조사 때만 적용한다.
 5. 언로드는 상시 기본 상태다. 다시 묻지 않으며 파일 잠금 실패를 우회/강제 종료하지 않는다. 같은 InternalName의 개발/배포본을 동시에 로드하지 않는다.
 6. 테스트는 명시 요청 범위에서만 추가·실행한다. 이번 요청의 테스트 허용을 이후 일반 작업의 상시 실행 지시로 확대하지 않는다.
 7. 명시한 작업 파일만 커밋하며 push/배포는 별도 권한이다. 공개 ZIP/태그를 개발본으로 덮어쓰지 않는다.
@@ -22,6 +22,7 @@
 | 게임 | FFXIV_GAME_PATH · 이 PC 기본 C:/Program Files (x86)/FINAL FANTASY XIV - KOREA/game |
 | KR 게임 빌드 | 2026.10.06.0000.0000 |
 | 현재 KR 참조 | DALAMUD_HOME · 이 PC APPDATA/XIVLauncherKR/addon/Hooks/dev · wasdcxz15.0.3.9 |
+| 글로벌 게임·참조 | 이 PC C:/Program Files (x86)/SquareEnix/FINAL FANTASY XIV - A Realm Reborn/game (2026.10.16) · APPDATA/XIVLauncher/addon/Hooks/dev (goatcorp 15.0.3.9). 빌드 검사에는 `-p:DalamudLibPath`로 지정 |
 | 최소 지원 참조 | .cache/compat-15.0.3.6/full/ |
 | 친구 배포판 참조 | .cache/friend-runtime/provider-refs/ |
 | upstream 컴파일 참조 | .cache/upstream-15.0.3.6/refs/ · build/dalamud-reference.json 고정 해시 |

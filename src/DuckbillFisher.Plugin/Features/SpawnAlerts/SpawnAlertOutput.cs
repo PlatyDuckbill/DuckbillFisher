@@ -12,13 +12,12 @@ namespace DuckbillFisher.Plugin;
 
 internal sealed record SpawnAlertPrintResult(SpawnAlertDisplay[] Sent, bool SoundPlayed);
 
-/// <summary>Local chat payloads and the inspected KR chat sound call. No chat commands or server sends.</summary>
+/// <summary>Local chat payloads and the game chat sound call. No chat commands or server sends.</summary>
 internal sealed class SpawnAlertOutput : IDisposable
 {
     private readonly IFramework framework;
     private readonly IChatGui chat;
     private readonly FishPreferences preferences;
-    private readonly bool nativeCompatible;
     private readonly IPluginLog log;
     private readonly CustomAlertSound customSound;
     private readonly object gate = new();
@@ -34,12 +33,11 @@ internal sealed class SpawnAlertOutput : IDisposable
     public Action<uint>? ShowDetail { get; set; }
     public event Action<SpawnAlertPrintResult, DateTimeOffset, FishPreferencesView>? Delivered;
 
-    public SpawnAlertOutput(IFramework framework, IChatGui chat, FishPreferences preferences, bool nativeCompatible, IPluginLog log)
+    public SpawnAlertOutput(IFramework framework, IChatGui chat, FishPreferences preferences, IPluginLog log)
     {
         this.framework = framework;
         this.chat = chat;
         this.preferences = preferences;
-        this.nativeCompatible = nativeCompatible;
         this.log = log;
         customSound = new(log);
         framework.Update += OnUpdate;
@@ -208,7 +206,7 @@ internal sealed class SpawnAlertOutput : IDisposable
         }
     }
 
-    private unsafe bool NativeSoundReady() => nativeCompatible && framework.IsInFrameworkUpdateThread &&
+    private unsafe bool NativeSoundReady() => framework.IsInFrameworkUpdateThread &&
         UIGlobals.MemberFunctionPointers.PlaySoundEffect != null;
 
     public bool PlaySound(int effect, int expectedSession)
@@ -216,7 +214,7 @@ internal sealed class SpawnAlertOutput : IDisposable
         var personal = preferences.View;
         if (!personal.HasCharacter || personal.Session != expectedSession) return false;
         if (effect == CustomAlertSound.Choice) return customSound.TryPlay(expectedSession);
-        // Never use catch to recover from an invalid native address. Identity + resolved static function only.
+        // Never use catch to recover from an invalid native address. Only the ClientStructs-resolved static function is called.
         if (effect is < 1 or > 16 || !preferences.View.HasCharacter || !NativeSoundReady())
             return false;
         UIGlobals.PlayChatSoundEffect((uint)effect);

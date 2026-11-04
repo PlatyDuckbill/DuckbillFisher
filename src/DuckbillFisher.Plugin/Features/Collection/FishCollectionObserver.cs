@@ -88,7 +88,7 @@ internal sealed class FishCollectionObserver : IDisposable
     }
 
     public FishCollectionView View { get { lock (gate) return view; } }
-    public string RuntimeDiagnostic => reader.RuntimeDiagnostic;
+    public string EnvironmentDiagnostic => reader.EnvironmentDiagnostic;
     // Validated new-registration messages, never guide scans or manual collection edits.
     public event Action<int, uint>? FishRegistered;
 
@@ -164,10 +164,10 @@ internal sealed class FishCollectionObserver : IDisposable
 
     private void Poll(FishPreferencesView personal)
     {
-        if (!reader.IsCompatible)
+        if (!reader.IsAvailable)
         {
             pending.Clear();
-            view = view with { Status = reader.Compatibility };
+            view = view with { Status = reader.Availability };
             return;
         }
         if (!requested)

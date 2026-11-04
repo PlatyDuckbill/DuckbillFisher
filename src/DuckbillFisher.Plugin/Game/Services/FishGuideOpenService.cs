@@ -15,7 +15,7 @@ internal sealed class FishGuideOpenService : IDisposable
     private readonly IFramework framework;
     private readonly FishPreferences preferences;
     private readonly FishCatalog catalog;
-    private readonly NativeFishCollectionReader compatibility;
+    private readonly NativeFishCollectionReader collection;
     private readonly object gate = new();
     private (int Session, ulong Character, long At)? pending;
     private UiMessage? result;
@@ -23,7 +23,7 @@ internal sealed class FishGuideOpenService : IDisposable
     private bool disposed;
 
     public FishGuideOpenService(IGameGui gameGui, IClientState clientState, IPlayerState playerState,
-        IFramework framework, FishPreferences preferences, FishCatalog catalog, NativeFishCollectionReader compatibility)
+        IFramework framework, FishPreferences preferences, FishCatalog catalog, NativeFishCollectionReader collection)
     {
         this.gameGui = gameGui;
         this.clientState = clientState;
@@ -31,12 +31,13 @@ internal sealed class FishGuideOpenService : IDisposable
         this.framework = framework;
         this.preferences = preferences;
         this.catalog = catalog;
-        this.compatibility = compatibility;
+        this.collection = collection;
         framework.Update += OnUpdate;
     }
 
-    public bool IsSupported => compatibility.IsCompatible;
-    public UiMessage CompatibilityReason => compatibility.Compatibility;
+    /// <summary>Needs the collection address and the guide-open function that ClientStructs resolved in the running game.</summary>
+    public unsafe bool IsSupported => collection.IsAvailable && AgentFishGuide.MemberFunctionPointers.OpenForItemId != null;
+    public UiMessage UnavailableReason => !collection.IsAvailable ? collection.Availability : new(T.GuideOpenUnavailable);
 
     public UiMessage? Failure(int session)
     {
@@ -77,13 +78,13 @@ internal sealed class FishGuideOpenService : IDisposable
 
     private unsafe UiMessage? Open(uint itemId, ulong expectedCharacter)
     {
-        if (!compatibility.IsCompatible) return compatibility.Compatibility;
+        if (!IsSupported) return UnavailableReason;
         if (!framework.IsInFrameworkUpdateThread) return new(T.NativeWrongThread);
         if (!clientState.IsLoggedIn || !playerState.IsLoaded || playerState.ContentId != expectedCharacter)
             return new(T.NativePlayerRequired);
 
-        // Installed KR module/source and the executable's unique signature match are recorded
-        // in MVP-01-GUIDE-OPEN.md. Never retain the borrowed agent or write its fields.
+        // The agent comes from Dalamud and the function from ClientStructs signature resolution in the running
+        // game. Never retain the borrowed agent or write its fields.
         var agent = gameGui.GetAgentById((int)AgentId.FishGuide);
         if (agent.IsNull || AgentFishGuide.MemberFunctionPointers.OpenForItemId == null)
             return new(T.GuideOpenUnavailable);
