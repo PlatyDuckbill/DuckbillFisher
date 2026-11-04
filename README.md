@@ -36,9 +36,9 @@ Open with `/dbfs` or `/duckbillfisher`. Use `/dbfs cl` for the compact list and 
 
 ## Supported environment and limits
 
-- Current release: **[0.5.1.0](https://github.com/PlatyDuckbill/DuckbillFisher/releases/tag/v0.5.1.0)**, built for **Dalamud API 15**. Includes a spawn timeline and monthly calendar, Patience/Intuition timer displays, and optional remaining/upcoming time limits. The fixed extracted Release DLL passed representative user checks before publication. The actual custom-repository update remains pending; see the [release record](docs/verification/releases/RELEASE-0.5.1.0.md).
-- Representative game checks use Korean client **2026.10.06.0000.0000** and **XIVLauncherKR Dalamud 15.0.3.6**. Other regional clients are not verified.
-- Version 0.2.6.0 supports the inspected **wasdcxz and dal4kr builds of KR Dalamud 15.0.3.7**. These distributions share a version number but have distinct module identities. Representative checks of fish-guide opening, collection sync, and the casting timer passed on both the local PC and the friend's dal4kr installation after updating.
+- Current release: **[0.6.0.1](https://github.com/PlatyDuckbill/DuckbillFisher/releases/tag/v0.6.0.1)**, built for **Dalamud API 15**. It adds support for the dal4kr 15.0.3.9 Korean Dalamud distribution to the 0.6.0.0 big-fish recommendations and current-hole alerts. See the [release notes](docs/releases/0.6.0.1.md).
+- Supported game client: Korean client **2026.10.06.0000.0000**. Other regional clients are not verified.
+- Supported Dalamud builds: only the inspected **wasdcxz (15.0.3.6, 15.0.3.7, 15.0.3.9) and dal4kr (15.0.3.7, 15.0.3.9) builds of KR Dalamud**. These distributions can share a version number but have distinct module identities, so each one is checked separately.
 - Native observations require the inspected KR game and DLL versions. A patch can disable these features until compatibility is reviewed.
 - Forecasts model time/weather and Intuition preparation opportunities. They do not establish the character's actual catches or active Intuition buff and do not guarantee a catch. Unknown Intuition durations use a marked 175-second assumption. Some conditions, ocean fishing, and spearfishing have incomplete coverage.
 - Casting records cover observed rod-fishing events. Unconfirmed results remain unknown; special outcomes and multiple catches need further observation.

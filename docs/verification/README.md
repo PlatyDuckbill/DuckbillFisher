@@ -4,35 +4,33 @@
 
 ## 배포와 호환성
 
-- [0.6.0.1 dal4kr 15.0.3.9 호환 배포](releases/RELEASE-0.6.0.1.md) · Release/설치 JSON·익명 자산 확인 완료
-
+- [0.6.0.1 dal4kr 15.0.3.9 호환 배포](releases/RELEASE-0.6.0.1.md) · Release/설치 JSON·익명 자산·공용 저장소 동기화 확인 완료
 - [0.6.0.0 터주작 추천·현재 낚시터 알림 배포](releases/RELEASE-0.6.0.0.md) · Release/설치 JSON·실제 공유 raw 확인 완료 · [추천 기준/검증](forecast/RECOMMENDATIONS.md)
-
 - [0.5.4.0 개인 기록·설정 백업·알림/설정 UI 배포](releases/RELEASE-0.5.4.0.md)
-
 - [0.5.3.0 입질·터주 효과음/필터 저장·설정 정리 배포](releases/RELEASE-0.5.3.0.md)
 - [0.5.2.0 복수 시전 알림·루어 경과·수집 백업 배포](releases/RELEASE-0.5.2.0.md)
-- [코드 구조·상수·설정 분리와 핵심 동작 테스트](ARCHITECTURE-TESTS.md)
-- [설정 JSON/ZIP 백업·영어 고정 이름의 전용 WAV 개발본](configuration/SETTINGS-BACKUP.md)
-- [어종별 메모·수동 도전 횟수·타이머 프리셋 연결/백업 검수본](configuration/FISH-PERSONAL.md)
-
 - [0.5.1.0 타이머 효과·시간 필터 배포](releases/RELEASE-0.5.1.0.md)
-
-- [첫 커스텀 저장소 배포: 0.2.4.0](releases/RELEASE-0.2.4.0.md)
-- [0.3.0.0 배포](releases/RELEASE-0.3.0.0.md)
-- [0.3.8.0 배포](releases/RELEASE-0.3.8.0.md)
-- [0.3.9.0 배포](releases/RELEASE-0.3.9.0.md)
-- [0.3.10.0 배포](releases/RELEASE-0.3.10.0.md)
-- [0.3.11.0 배포](releases/RELEASE-0.3.11.0.md)
-- [0.4.0.0 · 수집 현황](releases/RELEASE-0.4.0.0.md)
-- [0.4.1.0 · 낚시 기록/최근 타이머](releases/RELEASE-0.4.1.0.md)
 - [0.5.0.0 · 출현 일정표](releases/RELEASE-0.5.0.0.md)
+- [0.4.1.0 · 낚시 기록/최근 타이머](releases/RELEASE-0.4.1.0.md)
+- [0.4.0.0 · 수집 현황](releases/RELEASE-0.4.0.0.md)
+- [0.3.11.0 배포](releases/RELEASE-0.3.11.0.md)
+- [0.3.10.0 배포](releases/RELEASE-0.3.10.0.md)
+- [0.3.9.0 배포](releases/RELEASE-0.3.9.0.md)
+- [0.3.8.0 배포](releases/RELEASE-0.3.8.0.md)
+- [0.3.0.0 배포](releases/RELEASE-0.3.0.0.md)
+- [첫 커스텀 저장소 배포: 0.2.4.0](releases/RELEASE-0.2.4.0.md)
 - [ENV-03 한섭 수첩 API 조사](native/FISH-API.md)
 - [ENV-03 선택 어종 수집 비트 읽기](native/FISH-NATIVE.md)
 - [ENV-03 수첩 조회의 로그인·캐릭터 경계](native/FISH-SESSION.md)
 - [ENV-03 수첩 열림·어종 매핑 진단](native/FISH-WIN.md)
 - [KR Dalamud 15.0.3.7 호환성: 0.2.5.0](native/NATIVE-RUNTIME-15.0.3.7.md)
-- [0.2.6.0: 동일 버전의 dal4kr 런타임 지원](native/NATIVE-RUNTIME-DAL4KR.md)
+- [0.2.6.0 이후 배포판별 KR 런타임 지원(dal4kr·15.0.3.9 포함)](native/NATIVE-RUNTIME-DAL4KR.md)
+
+## 구조·설정
+
+- [코드 구조·상수·설정 분리와 핵심 동작 테스트](ARCHITECTURE-TESTS.md)
+- [설정 JSON/ZIP 백업·전용 WAV](configuration/SETTINGS-BACKUP.md)
+- [어종별 메모·수동 도전 횟수·타이머 프리셋 연결/백업](configuration/FISH-PERSONAL.md)
 
 ## 미끼 준비와 데이터
 

@@ -1,6 +1,6 @@
 # 세션 인수인계
 
-갱신: 2026-10-26. 현재 사실/확인 대기는 [STATUS](STATUS.md), 버전별 근거는 [검증 색인](verification/README.md)에 둔다.
+갱신: 2026-11-04. 현재 사실/확인 대기는 [STATUS](STATUS.md), 버전별 근거는 [검증 색인](verification/README.md)에 둔다.
 
 ## 재개 순서
 
@@ -27,33 +27,21 @@
 | upstream 컴파일 참조 | .cache/upstream-15.0.3.6/refs/ · build/dalamud-reference.json 고정 해시 |
 | SDK/대상 | global.json의10.0.402 · Dalamud SDK15.0.0 · x64/net10.0-windows |
 | 정규 개발 DLL | DUCKBILL_ROOT/src/DuckbillFisher.Plugin/bin/Debug/DuckbillFisher.dll |
-| 이번 별도 Debug | .cache/recommendation-build/DuckbillFisher.dll |
+| 최근 별도 Debug | .cache/recommendation-build/DuckbillFisher.dll |
 | 0.6.0.1 고정 Release 추출본 | .cache/release-validation/0.6.0.1/DuckbillFisher.dll · Release429963828 게시 |
 | 0.6.0.1 고정 ZIP | artifacts/share/0.6.0.1/DuckbillFisher-0.6.0.1.zip · SHA256 1A5E380AA26D40C032A21856CF3A57BE3FC6F9D75B101A0C977385618E408B1C |
 | 0.6.0.0 고정 Release 추출본 | .cache/release-validation/0.6.0.0/DuckbillFisher.dll · 대표 정상 응답 완료 |
-| 0.6.0.0 고정 ZIP | artifacts/share/0.6.0.0/DuckbillFisher-0.6.0.0.zip · 해시/게시 단계는 STATUS의 배포 기록 |
-| 이전0.5.4.0 재추출 Release | .cache/release-publish-check/0.5.4.0/DuckbillFisher.dll |
-| 이전0.5.4.0 고정 ZIP | artifacts/share/0.5.4.0-final/DuckbillFisher-0.5.4.0.zip |
-| 이전0.5.3.0 확인 Release | .cache/release-validation/0.5.3.0/DuckbillFisher.dll |
-| 이전0.5.3.0 ZIP | artifacts/share/0.5.3.0/DuckbillFisher-0.5.3.0.zip |
-| 이전0.5.2.0 추출 DLL | .cache/release-validation/0.5.2.0/DuckbillFisher.dll |
-| 이전0.5.2.0 ZIP | artifacts/share/0.5.2.0/DuckbillFisher-0.5.2.0.zip |
-| 이번 KR 대조 보고서 | .cache/compat-15.0.3.9/metadata.json |
-| 이전0.5.1.0 추출 DLL | .cache/release-validation/0.5.1.0/DuckbillFisher.dll |
-| 이전0.5.1.0 ZIP | artifacts/share/0.5.1.0/DuckbillFisher-0.5.1.0.zip |
+| 0.6.0.0 고정 ZIP | artifacts/share/0.6.0.0/DuckbillFisher-0.6.0.0.zip |
+| KR 15.0.3.9 대조 보고서 | .cache/compat-15.0.3.9/metadata.json |
 
-참조/캐시 DLL은 Git에 없다. 다른 PC에서는 정확한 지원 배포판과 실제 경로를 확인한다. 최소 참조가 없다고 현재 참조로 Release를 조용히 대체하지 않는다. 같은 프로젝트의 참조별 빌드는 순서대로 하며 명령은 WORKFLOW에 한 곳만 유지한다.
+0.5.4.0 이전 버전의 추출 DLL/ZIP/해시 경로는 각 [Release 기록](verification/README.md#배포와-호환성)에 있다. 참조/캐시 DLL은 Git에 없다. 다른 PC에서는 정확한 지원 배포판과 실제 경로를 확인한다. 최소 참조가 없다고 현재 참조로 Release를 조용히 대체하지 않는다. 같은 프로젝트의 참조별 빌드는 순서대로 하며 명령은 WORKFLOW에 한 곳만 유지한다.
 
 ## 개발본과 게시본 구분
 
-- 현재 공개판은0.5.4.0/schema23·소스b419335의 `0.5.4.0-final` 고정 ZIP이다. 최초 기능 대표 정상 보고와 최종 ‘배포 하자’ 응답 후 같은 ZIP/Release422641881을 게시했다. 익명 해시/아이콘 확인 뒤 설치 JSONa154196 push·실제 공유 raw URL0.5.4.0 일치 확인 완료, 실제 Dalamud 업데이트는 별도 대기다. 원래 최종 추출 경로의 Plugin DLL이 없어 위 새 경로에 동일 ZIP을 재추출하고7파일 해시를 확인했다. [해시/게시 근거](verification/releases/RELEASE-0.5.4.0.md). 실행 파일 재빌드 없음.
-
-- 이전 공개0.5.3.0은 고정 ZIP/추출 DLL의 사용자 대표 정상 확인 뒤 같은 ZIP을 게시했다. 소스6dd27eb·Release421678993·설치 JSONc416117·ZIP/DLL 해시는 [배포 기록](verification/releases/RELEASE-0.5.3.0.md)을 따른다. 정규/별도 Debug를 게시본 확인에 쓰지 않으며 확인 뒤 실행 파일을 다시 빌드하지 않는다.
-- 이전 공개0.5.2.0은 최소 참조 고정 추출본 대표 확인 뒤 같은 ZIP을 게시했다. [소스02061f4/태그·Release421639798·설치 JSON3871a41](verification/releases/RELEASE-0.5.2.0.md), 당시 실제 공유 raw URL0.5.2.0 일치 확인 완료다. 이전판 확인에는 위0.5.2.0 추출 DLL을 사용한다.
-- 정규/별도 Debug와 고정 Release 추출본은 구분한다. 공개0.6.0.0 확인에는 위 고정 추출본을 사용하고 재빌드해 교체하지 않는다. [0.6.0.0 배포 기록](verification/releases/RELEASE-0.6.0.0.md)의 소스/해시·게시 단계를 대조한 뒤 재개한다. 추천31개와 앞선 추천22/알림20/설정32개 검사는 각각 명시 승인 범위이며 이후 작업의 상시 테스트 허용은 아니다. 대표 확인을 전수 실기/실제 Dalamud 업데이트 확인으로 확대하지 않는다.
-- 이전 공개0.5.1.0은 소스6e672e8·Release ID419790510·설치 JSONa8d5e89의 고정 ZIP이다. 사용자 대표 확인/원격 게시/익명 해시·실제 raw URL 확인은 [Release 기록](verification/releases/RELEASE-0.5.1.0.md), 실제 설치 확인은 STATUS를 따른다.
-- 이전0.5.1.0 Release 출력은 .cache/release-build/0.5.1.0/, 당시 별도 Debug는 .cache/remaining-empty-build/다. 위 고정 ZIP을 재빌드해 교체하지 않는다.
-- 이전 버전 추출/빌드/해시 경로는 각 [Release 기록](verification/README.md#배포와-호환성)에 둔다. 새 후보에 과거 대표 확인을 자동 적용하지 않는다.
+- 현재 공개판은 0.6.0.1(소스4e5663c)이다. 게시 단계와 해시는 [0.6.0.1 기록](verification/releases/RELEASE-0.6.0.1.md)을 따른다. 기능 기준판 0.6.0.0 확인에는 위 고정 추출본을 사용하고 재빌드해 교체하지 않는다.
+- 정규/별도 Debug와 고정 Release 추출본은 구분한다. 정규/별도 Debug를 게시본 확인에 쓰지 않으며 확인 뒤 실행 파일을 다시 빌드하지 않는다. 새 후보에 과거 대표 확인을 자동 적용하지 않는다.
+- 이전 버전 확인에는 해당 Release 기록의 추출 DLL을 사용한다. 과거 테스트 허용(추천31개·추천22/알림20/설정32개 등)은 각각 당시 승인 범위였다.
+- 설치 목록의 공용 배포는 DuckbillRepo의 `pluginmaster.json`이며 이 저장소의 repo/release.json이 원본이다. 동기화 절차는 [DISTRIBUTION](development/DISTRIBUTION.md)을 따른다.
 - 현재 PC의 게시 이력은 gh CLI 없이 Git credential manager+GitHub API를 사용했다. 토큰은 메모리에서만 쓰고 출력/파일/Git에 남기지 않는다. 캐시의 과거 게시 스크립트는 확인 없이 재실행하지 않는다.
 
 ## 자료와 진단 재개

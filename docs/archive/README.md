@@ -5,6 +5,7 @@
 ## 초기 설계 조사
 
 - [캐스팅 타이머와 낚시 히스토리](design/CASTING-TIMER-INVESTIGATION.md)
+- [터주작 추천 초기 조사와 폐기한 계산안](design/NEXT-FISH-RECOMMENDATION-INVESTIGATION.md)
 
 ## UI 수정 원문
 
