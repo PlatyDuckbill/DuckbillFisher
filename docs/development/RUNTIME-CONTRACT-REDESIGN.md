@@ -1,6 +1,6 @@
 # 범용 실행 계약 재설계안
 
-작성: 2026-11-04 · 상태: **제안(미승인)**. [글로벌·공식 저장소 계획](../product/GLOBAL-AND-OFFICIAL-REPO.md)의 P1 설계다. 근거는 [호환성 조사](../verification/native/GLOBAL-COMPAT.md)를 따른다. 승인 전에는 코드, [ARCHITECTURE](ARCHITECTURE.md), AGENTS.md를 바꾸지 않는다. 구현이 끝나면 확정된 내용은 ARCHITECTURE로 옮기고, 이 문서는 설계 결정 기록으로 남긴다.
+작성: 2026-11-04 · 상태: **승인(2026-11-04), 구현 중**. [글로벌·공식 저장소 계획](../product/GLOBAL-AND-OFFICIAL-REPO.md)의 P1 설계다. 근거는 [호환성 조사](../verification/native/GLOBAL-COMPAT.md)를 따른다. 승인 전에는 코드, [ARCHITECTURE](ARCHITECTURE.md), AGENTS.md를 바꾸지 않는다. 구현이 끝나면 확정된 내용은 ARCHITECTURE로 옮기고, 이 문서는 설계 결정 기록으로 남긴다.
 
 ## 목표와 비목표
 
@@ -107,7 +107,7 @@
 
 ## 구현 순서 (승인 후, 커밋 단위)
 
-1. 로그 결합 계약으로 교체한다. KR 동작은 같아야 한다.
+1. ✅ 로그 결합 계약으로 교체한다. KR 동작은 같아야 한다. 2026-11-04에 완료했다. 인게임 확인은 대기다. [결과](../verification/native/GLOBAL-COMPAT.md#p1-구현-1단계-로그-결합-계약-2026-11-04)
 2. `AtkStage.Instance()`로 바꾸고, 수집 비트 수를 실행 중 값으로 읽는다.
 3. 전역 가드를 제거하고 기능별 상태, 안내 문구, 진단 형식을 바꾼다.
 4. 방침 문서를 갱신한다: AGENTS.md, ARCHITECTURE, 스킬, 계획 진행도.
@@ -119,7 +119,7 @@
 | # | 항목 | 결정 (2026-11-04) |
 |---|---|---|
 | 1 | 남는 위험: 해시 가드 없이 배포판 ClientStructs를 신뢰 | **수용** |
-| 2 | 결합 없는 13개 ID의 판정 방식 | 대기. 상세 설명 후 결정 |
+| 2 | 결합 없는 13개 ID의 판정 방식 | **B안.** 실행 중에는 행 존재와 기존 조건만 확인한다. 게임 패치 때 `FishingDataImport --log-contracts`로 기준선 대비 문장 변경을 개발자가 점검한다([절차](WORKFLOW.md#검사와-진단)) |
 | 3 | 네이티브 기능 수동 끄기 설정 | **두지 않음.** 주요 플러그인과 같은 방식으로 간다 |
 | 4 | 진단의 환경 보고 범위 | **버전과 MVID 모두 기록** |
 

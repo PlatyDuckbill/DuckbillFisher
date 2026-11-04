@@ -51,6 +51,7 @@ internal sealed class FishingTracker : IDisposable
     private readonly Stopwatch clock = Stopwatch.StartNew();
     private readonly object gate = new();
     private readonly HashSet<uint> validLogs = [];
+    private string rejectedContracts = "NotValidated";
     private readonly Queue<LogFact> pending = new();
     private readonly Dictionary<uint, FishingItemView> items = [];
     private readonly Queue<uint> neededItems = new();
@@ -168,12 +169,12 @@ internal sealed class FishingTracker : IDisposable
         initialized = true;
         try
         {
-            FishingLogContracts.Validate(data, validLogs);
+            rejectedContracts = FishingLogContracts.Validate(data, validLogs);
             foreach (var row in data.GetExcelSheet<IKDSpot>()!)
                 foreach (var target in new[] { row.SpotMain, row.SpotSub })
                     if (target.RowId != 0) oceanTerritories.Add(target.Value.TerritoryType.RowId);
         }
-        catch (Exception) { validLogs.Clear(); }
+        catch (Exception) { validLogs.Clear(); rejectedContracts = "ValidationFailed"; }
         catalog.RequestLoad();
     }
 
@@ -633,7 +634,7 @@ internal sealed class FishingTracker : IDisposable
     public string CreateReport()
     {
         lock (gate) return string.Create(CultureInfo.InvariantCulture,
-            $"DuckbillFisher MVP-02/timer/v5\nPlugin={typeof(Plugin).Assembly.GetName().Version}; Session={session}; State={state}; Read={native?.Availability}; Phase={native?.Phase}\nTrips={trips.Count}; CurrentRecords={view.CurrentRecords.Count}; Active={history.Active is not null}; Casts={casts}; Catches={catches}; Retrieves={retrieves}; Ignored={ignored}; Contracts={validLogs.Count}/{FishingLogContracts.Count}\nSpot={spot?.Id}; PendingSpot={pendingSpot?.Id}; Equipped={native?.EquippedBait}; Storage={view.Storage}; PersistEnabled={writable}\nTimerEnd=HookObservation; TripLimit={FishingAttempts.TripCapacity}; CastLimit={FishingAttempts.Capacity}\nMoochLogs={moochLogs}; MoochApplied={moochApplied}; Failures={failures}; LastFailureLog={lastFailureLog}\nActualMoochBait=LocalLog1121AndCastFlags; UnvalidatedResults=Unknown; OutcomeDoesNotSetCollection=True\nSpotState={spotState}; DiscoveryMessages={discoveryMessages}; AppliedDiscoveries={appliedDiscoveries}; LastDiscoveryPlace={lastDiscoveryPlace}; LastDiscoveryActor={lastDiscoveryActor}; RecordedSpotUpdates={recordedSpotUpdates}\nTimerRetentionSeconds=300; RetainedUntilSeconds={timerRetainedUntil?.TotalSeconds}; TripDuration=FirstObservedCastToEndMonotonic; MoochLink=VerifiedBaitAndPreviousCatch");
+            $"DuckbillFisher MVP-02/timer/v6\nPlugin={typeof(Plugin).Assembly.GetName().Version}; Session={session}; State={state}; Read={native?.Availability}; Phase={native?.Phase}\nTrips={trips.Count}; CurrentRecords={view.CurrentRecords.Count}; Active={history.Active is not null}; Casts={casts}; Catches={catches}; Retrieves={retrieves}; Ignored={ignored}; Contracts={validLogs.Count}/{FishingLogContracts.Count}; ContractMode=ParameterBindings; RejectedContracts={rejectedContracts}\nSpot={spot?.Id}; PendingSpot={pendingSpot?.Id}; Equipped={native?.EquippedBait}; Storage={view.Storage}; PersistEnabled={writable}\nTimerEnd=HookObservation; TripLimit={FishingAttempts.TripCapacity}; CastLimit={FishingAttempts.Capacity}\nMoochLogs={moochLogs}; MoochApplied={moochApplied}; Failures={failures}; LastFailureLog={lastFailureLog}\nActualMoochBait=LocalLog1121AndCastFlags; UnvalidatedResults=Unknown; OutcomeDoesNotSetCollection=True\nSpotState={spotState}; DiscoveryMessages={discoveryMessages}; AppliedDiscoveries={appliedDiscoveries}; LastDiscoveryPlace={lastDiscoveryPlace}; LastDiscoveryActor={lastDiscoveryActor}; RecordedSpotUpdates={recordedSpotUpdates}\nTimerRetentionSeconds=300; RetainedUntilSeconds={timerRetainedUntil?.TotalSeconds}; TripDuration=FirstObservedCastToEndMonotonic; MoochLink=VerifiedBaitAndPreviousCatch");
     }
 
     public void Dispose()

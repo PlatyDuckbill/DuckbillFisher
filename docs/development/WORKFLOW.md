@@ -56,6 +56,19 @@ pwsh -NoLogo -NoProfile -File scripts/compare-native-runtime.ps1 `
     -ReportPath .cache/compat-15.0.3.9/metadata.json
 ```
 
+게임 패치 또는 새 클라이언트를 받으면 낚시 로그 계약을 점검한다. 설치된 클라이언트 시트만 읽는다.
+- 결합 충돌이나 행 누락이 있으면 종료 코드 1로 실패한다.
+- `Review` 줄은 기준선 이후 문장이 바뀐 행이다. 결합이 없는 행(`bound=False`)은 문장의 의미가 유지됐는지 사람이 확인한다.
+- 의미가 그대로면 새 출력을 해시만 남긴 기준선으로 갱신한다. 게임 문장 원문은 커밋하지 않는다.
+- 근거는 [로그 계약](../verification/native/GLOBAL-COMPAT.md#p1-구현-1단계-로그-결합-계약-2026-11-04)을 따른다.
+
+```powershell
+dotnet run --project tools/FishingDataImport -- --log-contracts .cache/log-contracts.json `
+    --baseline docs/verification/native/reports/log-contracts-2026-11-04.json `
+    "$env:FFXIV_GAME_PATH" Korean `
+    "<글로벌 game 폴더>" English,Japanese,German,French
+```
+
 진단은 필요한 상태 필드나 한 줄부터 요청한다. 원시 로그와 사람 설명, 자동 검사와 실기 확인을 구분한다. 전체 로그·주소·캐릭터 식별자·자격 증명은 게시하지 않는다. [검증 템플릿](templates/VALIDATION.md)의 관련 항목만 사용한다.
 
 ## 요청한 테스트 실행
