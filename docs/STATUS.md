@@ -1,10 +1,11 @@
 # 현재 상태
 
-갱신: 2026-11-04 · 공개0.6.0.1/API15·schema24 · KR 게임2026.10.06.0000.0000
+갱신: 2026-11-04 · 공개0.7.0.0/API15·schema24 · KR 게임2026.10.06 · 글로벌 게임2026.10.16
 
 ## 현재 배포
 
-- **공개0.6.0.1**은 dal4kr 15.0.3.9 런타임 지원 배포다. 소스4e5663c·최소 지원 참조 Release 경고0/오류0·추출7파일/한영1,257키 검사 후 같은 ZIP을 Release429963828에 게시했다. 익명 자산 SHA256 일치, 설치 JSON487568b, DuckbillRepo 공용 `pluginmaster.json` 동기화 완료. **실제 Dalamud 업데이트는 확인 대기**다. 사용자 요청으로 테스트 없이 배포했다. [근거](verification/releases/RELEASE-0.6.0.1.md).
+- **공개0.7.0.0**은 글로벌 클라이언트 지원판이다. 태그 소스5b45e2b, Plogon 점검 run41855137474 성공, 최소 지원 참조 Release 경고0/오류0, 추출7파일/한영1,013키 검사 후 같은 ZIP을 Release434089212에 게시했다. 익명 자산 SHA256 일치, 설치 JSON 반영. 공용 저장소 동기화는 [기록](verification/releases/RELEASE-0.7.0.0.md)을 따른다. 후보 ZIP의 인게임 확인 없이 사용자 지시로 게시했다(개발본 KR·글로벌 대표 확인은 완료). **실제 Dalamud 업데이트는 확인 대기**다.
+- 이전 공개판 **0.6.0.1**은 dal4kr 15.0.3.9 런타임 지원 배포다. 실제 Dalamud 업데이트 확인은 하지 않은 채 0.7.0.0으로 넘어갔다. [근거](verification/releases/RELEASE-0.6.0.1.md).
 - 기능 기준판 **0.6.0.0**은 고정 Release DLL 대표 정상 확인 뒤 Release423892077로 게시했고 실제 공유 raw URL 일치까지 확인했다. [근거](verification/releases/RELEASE-0.6.0.0.md).
 - 실제 Dalamud 저장소 업데이트 확인 완료는 0.5.3.0·0.4.1.0이다. 그 밖의 버전별 소스/해시/게시 단계는 [검증 색인](verification/README.md#배포와-호환성)을 따른다.
 - 설치 URL: https://raw.githubusercontent.com/PlatyDuckbill/DuckbillRepo/main/pluginmaster.json (DuckbillFisher·DuckbillTweak 공용). 명령은 /dbfs·/duckbillfisher, cl/compact·ct/timer다.
@@ -30,7 +31,7 @@
 | 타이머·기록 | 낚아채기 정지·완전 접기 후 현재 기록 비움, 요약/상세/삭제·복원·최신순·재등장 방지 | [저장](verification/fishing/HISTORY-STABILITY.md), [최근 타이머](verification/fishing/TIMER-HISTORY.md) |
 | 미끼 | 일반 생미끼·실패/빈 결과, 보관 생미끼 첫 칸, 준비/수량·찾기 표식/강조 | [생미끼](verification/fishing/MOOCH-FAILURE.md), [보관](verification/fishing/SWIMBAIT.md), [준비](verification/bait/BAIT-PREPARATION.md) |
 | 추천·개인 기록·백업 | 고정 Release 대표 정상 보고 | [추천](verification/forecast/RECOMMENDATIONS.md), [개인 기록](verification/configuration/FISH-PERSONAL.md), [백업](verification/configuration/SETTINGS-BACKUP.md) |
-| KR·글로벌 지원 | 공개0.6.0.1은 정확한 wasdcxz/dal4kr 모듈 조합 가드를 쓴다. 미배포 개발본은 가드를 없애고 기능별 실행 계약으로 바꿨으며, 글로벌 대표 확인과 KR 회귀 대표 확인을 마쳤다(2026-11-04) | [공개판 런타임](verification/native/NATIVE-RUNTIME-DAL4KR.md), [개발본](verification/native/GLOBAL-COMPAT.md#글로벌-인게임-대표-확인-2026-11-04-사용자-보고) |
+| KR·글로벌 지원 | 0.7.0.0부터 전역 DLL 가드 없이 기능별 실행 계약을 쓴다. 개발본으로 글로벌 대표 확인과 KR 회귀 대표 확인을 마쳤다(2026-11-04). 0.6.0.1 이하는 정확한 wasdcxz/dal4kr 모듈 조합 가드다 | [확인 기록](verification/native/GLOBAL-COMPAT.md#글로벌-인게임-대표-확인-2026-11-04-사용자-보고), [이전 가드](verification/native/NATIVE-RUNTIME-DAL4KR.md) |
 
 대표 정상 보고를 모든 어종/테마/언어·폭/캐릭터/장애·재로드·저장 실패 조합의 전수 확인으로 확대하지 않는다. 관리 코드 테스트는 게임·네이티브·UI 실기를 대신하지 않는다. 공개 API 우선·네이티브 최소화·기능별 실행 계약 방침은 [ARCHITECTURE](development/ARCHITECTURE.md#호환성과-실패)를 따른다.
 
@@ -43,12 +44,12 @@
 
 ## 다음 한 작업과 미확인
 
-다음 한 작업: **글로벌 지원판 0.7.0.0을 배포한다.** 버전·README·업데이트 내역(한영 내장 안내, 설치 화면, [릴리스 요약](releases/0.7.0.0.md))은 준비했다. 남은 순서는 push → Plogon 점검 → 후보 ZIP 실기 확인 → 게시다. 0.6.0.1의 실제 저장소 업데이트·설정 유지 확인은 사용자 결정으로 이 배포 확인과 함께 한다.
+다음 한 작업: **0.7.0.0을 KR·글로벌에서 실제 Dalamud 업데이트로 받아 정상 로드와 설정·기록 유지를 확인한다.** 업데이트 내역 화면에 0.7.0.0이 맨 위에 나오는지도 본다.
 
 진행 중 장기 작업: KR·글로벌 범용 지원과 공식 저장소 등록. 공식 저장소 제출 준비는 사용자 결정으로 후순위다(2026-11-04). 우리 작업용 문서 정리는 186d209로 마쳤고, 구조 문서는 큰 문제가 없어 그대로 둔다. 단계와 진행도는 [계획](product/GLOBAL-AND-OFFICIAL-REPO.md)에서만 관리한다.
 
 1. 0.6.0.0·0.5.4.0·0.5.2.0·0.5.1.0·0.5.0.0·0.3.9.0의 실제 저장소 업데이트 확인은 대기다. 새 버전 확인으로 이전 버전 확인을 대체하지 않는다.
 2. 추천 활용·첫 투척/반복·다음 회차/0분 중복, 알림 채널/링크/음원 조합, 백업·개인 기록의 장애/경계는 실기 대기다. [UI](verification/catalog/UI.md)·[알림](verification/alerts/SPAWN-ALERTS.md#0600-알림-경계-점검-2026-10-26)·[백업](verification/configuration/SETTINGS-BACKUP.md).
-3. 친구 PC·다른 캐릭터 격리는 미확인이다. 다른 캐릭터는 사용할 캐릭터가 없어 보류했다. 글로벌은 개발본 대표 확인만 했고, 공개판으로 배포한 뒤의 확인은 아직이다.
+3. 친구 PC·다른 캐릭터 격리는 미확인이다. 다른 캐릭터는 사용할 캐릭터가 없어 보류했다. 글로벌은 개발본 대표 확인만 했고, 공개판 0.7.0.0 설치본의 확인은 아직이다.
 4. 모든 테마·보관 생미끼 다른 칸·좁은 폭/한영·저장 장애/절전/상한, 데이터 대표 화면과 외부 좌표 차이4곳은 별도 확인 대상이다. 커스텀 WAV 범위는 [기록](verification/alerts/CUSTOM-SOUND.md)을 따른다.
 5. 사용자 보류: 복수 어획·수량, 입질 초 통계. 직감 반영 구간의 실제 어획·나미타로 자체 날씨 조건은 게임 근거가 필요하다. 후속 후보는 [ROADMAP](product/ROADMAP.md)을 따른다.

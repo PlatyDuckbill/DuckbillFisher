@@ -147,14 +147,14 @@
 
 - ✅ Plogon 빌드 환경 조사 (2026-11-04). 컨테이너 SDK 10.0.101, 네트워크 차단, lock 파일 복원 방식이다. `global.json`의 정확한 10.0.402 고정이 공식 빌드를 실패시키므로, 최소 10.0.101과 `latestFeature`로 바꿨다. `DalamudReferences.targets`는 조정할 필요가 없다. [절차](../development/DISTRIBUTION.md#공식-저장소-제출-준비)
 - ✅ 로컬 Plogon식 Release 빌드(글로벌 참조)와 locked restore 통과 (2026-11-04)
-- ⏳ **Official build check (Plogon)** 결과 확인. 2026-11-04부터 문서 외 변경이 있는 main 푸시에서 자동으로 돈다. 실제 Plogon 컨테이너 빌드 결과를 확인하는 단계다.
+- ✅ **Official build check (Plogon)** 성공 (2026-11-04, run 41855137474). 공식 컨테이너 SDK 10.0.101에서 경고 0, 오류 0, 아이콘 512×512. 문서 외 변경이 있는 main 푸시마다 자동으로 돈다. [기록](../verification/releases/RELEASE-0.7.0.0.md#공식-빌드-점검-plogon)
 - ✅ LICENSE 추가 (2026-11-04)
 - ✅ 아이콘 위치 정리: 우리 저장소가 아니라 제출 PR의 `testing/live/DuckbillFisher/images/icon.png`에 둔다. 원본은 기존 512px PNG다.
 - ✅ 설명·태그 일반화와 AI 생성 아이콘 공개 (2026-11-04, 사용자 승인)
   - 소개를 "터주작 도우미"로 바꾸고 지역 한정 문구를 지웠다. 마지막 줄에 "The plugin icon was created with AI assistance."를 넣었다.
   - 태그는 `fishing;fish;big fish;collection;timer;alerts;한국어`다.
-  - 빌드 산출 매니페스트에 반영된 것을 확인했다. 공개 설치 목록(repo/release.json)은 다음 배포 때 갱신된다.
-- ⏳ README의 지원 환경·소개 문구는 다음 공개판 배포 때 함께 바꾼다. 현재 공개판 0.6.0.1의 사실과 맞춰야 하기 때문이다.
+  - 빌드 산출 매니페스트에 반영된 것을 확인했다. 공개 설치 목록(repo/release.json)은 0.7.0.0 배포로 갱신했다.
+- ✅ README의 지원 환경·소개 문구를 0.7.0.0 배포와 함께 바꿨다 (2026-11-04).
 - ⏳ 공식 manifest의 changelog와 내장 업데이트 안내의 관계 정리
 
 ### P4 이해도와 규모 — ✅

@@ -29,17 +29,15 @@
 | SDK/대상 | global.json 최소 10.0.101(latestFeature, 이 PC 10.0.402) · Dalamud SDK15.0.0 · x64/net10.0-windows |
 | 정규 개발 DLL | DUCKBILL_ROOT/src/DuckbillFisher.Plugin/bin/Debug/DuckbillFisher.dll |
 | 최근 별도 Debug | .cache/recommendation-build/DuckbillFisher.dll |
-| 0.6.0.1 고정 Release 추출본 | .cache/release-validation/0.6.0.1/DuckbillFisher.dll · Release429963828 게시 |
-| 0.6.0.1 고정 ZIP | artifacts/share/0.6.0.1/DuckbillFisher-0.6.0.1.zip · SHA256 1A5E380AA26D40C032A21856CF3A57BE3FC6F9D75B101A0C977385618E408B1C |
-| 0.6.0.0 고정 Release 추출본 | .cache/release-validation/0.6.0.0/DuckbillFisher.dll · 대표 정상 응답 완료 |
-| 0.6.0.0 고정 ZIP | artifacts/share/0.6.0.0/DuckbillFisher-0.6.0.0.zip |
+| 0.7.0.0 고정 Release 추출본 | .cache/release-validation/0.7.0.0/DuckbillFisher.dll · Release434089212 게시 |
+| 0.7.0.0 고정 ZIP | artifacts/share/0.7.0.0/DuckbillFisher-0.7.0.0.zip · SHA256 3391598CEE981ABC7D7F3C46CDC4550B5ADB8C0B6CA098B27D5186BD0553B9CA |
 | KR 15.0.3.9 대조 보고서 | .cache/compat-15.0.3.9/metadata.json |
 
-0.5.4.0 이전 버전의 추출 DLL/ZIP/해시 경로는 각 [Release 기록](verification/README.md#배포와-호환성)에 있다. 참조/캐시 DLL은 Git에 없다. 다른 PC에서는 정확한 지원 배포판과 실제 경로를 확인한다. 최소 참조가 없다고 현재 참조로 Release를 조용히 대체하지 않는다. 같은 프로젝트의 참조별 빌드는 순서대로 하며 명령은 WORKFLOW에 한 곳만 유지한다.
+0.6.0.1 이전 버전의 추출 DLL/ZIP/해시 경로는 각 [Release 기록](verification/README.md#배포와-호환성)에 있다. 참조/캐시 DLL은 Git에 없다. 다른 PC에서는 정확한 지원 배포판과 실제 경로를 확인한다. 최소 참조가 없다고 현재 참조로 Release를 조용히 대체하지 않는다. 같은 프로젝트의 참조별 빌드는 순서대로 하며 명령은 WORKFLOW에 한 곳만 유지한다.
 
 ## 개발본과 게시본 구분
 
-- 현재 공개판은 0.6.0.1(소스4e5663c)이다. 게시 단계와 해시는 [0.6.0.1 기록](verification/releases/RELEASE-0.6.0.1.md)을 따른다. 기능 기준판 0.6.0.0 확인에는 위 고정 추출본을 사용하고 재빌드해 교체하지 않는다.
+- 현재 공개판은 0.7.0.0(태그 소스5b45e2b)이다. 게시 단계와 해시는 [0.7.0.0 기록](verification/releases/RELEASE-0.7.0.0.md)을 따른다. 공개판 확인에는 위 고정 추출본을 사용하고 재빌드해 교체하지 않는다.
 - 정규/별도 Debug와 고정 Release 추출본은 구분한다. 정규/별도 Debug를 게시본 확인에 쓰지 않으며 확인 뒤 실행 파일을 다시 빌드하지 않는다. 새 후보에 과거 대표 확인을 자동 적용하지 않는다.
 - 이전 버전 확인에는 해당 Release 기록의 추출 DLL을 사용한다. 과거 테스트 허용(추천31개·추천22/알림20/설정32개 등)은 각각 당시 승인 범위였다.
 - 설치 목록의 공용 배포는 DuckbillRepo의 `pluginmaster.json`이며 이 저장소의 repo/release.json이 원본이다. 동기화 절차는 [DISTRIBUTION](development/DISTRIBUTION.md)을 따른다.
