@@ -1,0 +1,63 @@
+name: Official build check (Plogon)
+
+# Manual only. Builds the pushed commit the way the official Dalamud repository does: pinned goatcorp/Plogon,
+# its .NET SDK container, network disabled, packages restored from the committed lock files, and the icon check.
+# This is a build check, not an in-game test and not a submission.
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  plogon:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          path: plugin
+      - uses: actions/checkout@v4
+        with:
+          repository: goatcorp/Plogon
+          ref: 2b0e54d1c116b180f6148fbfb68b3c0201edf438
+          path: plogon
+      - uses: actions/setup-dotnet@v4
+        with:
+          global-json-file: plogon/global.json
+      - name: Prepare testing/live manifest
+        shell: bash
+        run: |
+          set -euo pipefail
+          plugin="manifests/testing/live/DuckbillFisher"
+          mkdir -p manifests/stable "$plugin/images" output work artifacts master
+          cp plugin/assets/duckbillfisher-icon.png "$plugin/images/icon.png"
+          cat > "$plugin/manifest.toml" <<EOF
+          [plugin]
+          repository = "https://github.com/${GITHUB_REPOSITORY}.git"
+          commit = "${GITHUB_SHA}"
+          owners = [ "${GITHUB_REPOSITORY_OWNER}" ]
+          project_path = "src/DuckbillFisher.Plugin"
+          changelog = "Official build check"
+          EOF
+          sed -i 's/^ *//' "$plugin/manifest.toml"
+          cat "$plugin/manifest.toml"
+      - name: Run Plogon
+        shell: bash
+        working-directory: plogon/Plogon
+        run: |
+          dotnet run -c Release -- \
+            --manifest-folder="$GITHUB_WORKSPACE/manifests" \
+            --master-manifest-folder="$GITHUB_WORKSPACE/master" \
+            --output-folder="$GITHUB_WORKSPACE/output" \
+            --work-folder="$GITHUB_WORKSPACE/work" \
+            --static-folder="static" \
+            --artifact-folder="$GITHUB_WORKSPACE/artifacts" \
+            --mode=Development --build-all
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: plogon-check
+          path: |
+            artifacts
+            output
+          if-no-files-found: warn

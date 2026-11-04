@@ -53,7 +53,8 @@
 
 | 요건 | 현재 | 조치 |
 |---|---|---|
-| 아이콘 `images/icon.png`, 64~512px | `assets/duckbillfisher-icon.png` 512px, AI 생성 | 위치 이동. 사용자 결정에 따라 유지하고 설명에 AI 생성을 공개한다(공식 측은 직접 만든 아이콘을 선호함) |
+| 아이콘 `images/icon.png`, 64~512px | `assets/duckbillfisher-icon.png` 512px, AI 생성 | 제출 PR의 매니페스트 옆에 복사한다(Plogon 검사: PNG, 정사각형, 64~512px). 사용자 결정에 따라 유지하고 설명에 AI 생성을 공개한다 |
+| .NET SDK | `global.json` 10.0.402 정확 고정 | ✅ 최소 10.0.101과 latestFeature로 변경(Plogon 컨테이너 10.0.101) |
 | 결정적 버전 (시각·증가 빌드 번호 금지) | csproj 고정 `Version` | 충족 |
 | csproj·lock 파일 커밋, 최신 `Dalamud.NET.Sdk` | SDK 15.0.0, lock 파일 있음 | 제출 시점의 최신 SDK 확인 |
 | 창은 Windowing API 사용 | WindowSystem 사용 | 충족(제출 전 재확인) |
@@ -140,9 +141,13 @@
 
 ### P3 공식 빌드와 패키지 요건 — ⏳
 
-- ⏳ Plogon 방식 빌드 확인(`DalamudReferences.targets` 조정 여부)
+- ✅ Plogon 빌드 환경 조사 (2026-11-04). 컨테이너 SDK 10.0.101, 네트워크 차단, lock 파일 복원 방식이다. `global.json`의 정확한 10.0.402 고정이 공식 빌드를 실패시키므로, 최소 10.0.101과 `latestFeature`로 바꿨다. `DalamudReferences.targets`는 조정할 필요가 없다. [절차](../development/DISTRIBUTION.md#공식-저장소-제출-준비)
+- ✅ 로컬 Plogon식 Release 빌드(글로벌 참조)와 locked restore 통과 (2026-11-04)
+- ⏳ 수동 워크플로 **Official build check (Plogon)** 실행. push 후 사용자가 실행한다. 실제 Plogon 컨테이너 빌드 결과를 확인하는 단계다.
 - ✅ LICENSE 추가 (2026-11-04)
-- ⏳ `images/icon.png` 이동, 설명·태그 일반화, 설명에 AI 생성 아이콘 공개
+- ✅ 아이콘 위치 정리: 우리 저장소가 아니라 제출 PR의 `testing/live/DuckbillFisher/images/icon.png`에 둔다. 원본은 기존 512px PNG다.
+- 🔄 설명·태그 일반화와 AI 생성 아이콘 공개. 초안을 사용자 승인 대기 중이다.
+- ⏳ README의 지원 환경·소개 문구는 다음 공개판 배포 때 함께 바꾼다. 현재 공개판 0.6.0.1의 사실과 맞춰야 하기 때문이다.
 - ⏳ 공식 manifest의 changelog와 내장 업데이트 안내의 관계 정리
 
 ### P4 이해도와 규모 — ⏳

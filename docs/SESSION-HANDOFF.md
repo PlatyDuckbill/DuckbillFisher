@@ -26,7 +26,7 @@
 | 최소 지원 참조 | .cache/compat-15.0.3.6/full/ |
 | 친구 배포판 참조 | .cache/friend-runtime/provider-refs/ |
 | upstream 컴파일 참조 | .cache/upstream-15.0.3.6/refs/ · build/dalamud-reference.json 고정 해시 |
-| SDK/대상 | global.json의10.0.402 · Dalamud SDK15.0.0 · x64/net10.0-windows |
+| SDK/대상 | global.json 최소 10.0.101(latestFeature, 이 PC 10.0.402) · Dalamud SDK15.0.0 · x64/net10.0-windows |
 | 정규 개발 DLL | DUCKBILL_ROOT/src/DuckbillFisher.Plugin/bin/Debug/DuckbillFisher.dll |
 | 최근 별도 Debug | .cache/recommendation-build/DuckbillFisher.dll |
 | 0.6.0.1 고정 Release 추출본 | .cache/release-validation/0.6.0.1/DuckbillFisher.dll · Release429963828 게시 |

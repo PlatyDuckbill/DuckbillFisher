@@ -4,7 +4,7 @@
 
 ## 도구와 소스
 
-1. Windows x64에서 global.json에 고정한 .NET SDK, Git for Windows, PowerShell 7을 준비한다. Runtime만 설치하면 빌드할 수 없다.
+1. Windows x64에서 global.json 조건(10.0.101 이상, 같은 10.0 안의 최신 기능 대역)을 만족하는 .NET SDK, Git for Windows, PowerShell 7을 준비한다. Runtime만 설치하면 빌드할 수 없다.
 2. PowerShell에서 git --version, dotnet --list-sdks, pwsh --version으로 설치를 확인한다.
 3. 공개 저장소를 clone한다. SDK·게임 DLL·다른 PC의 캐시/자격 증명은 저장소에 복사하지 않는다.
 

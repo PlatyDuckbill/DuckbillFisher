@@ -111,3 +111,38 @@ raw 캐시가 잠시 이전 JSON을 제공할 수 있다. 실제 공유 URL이 �
 수정 또는 이전 코드 복원도 **더 높은 버전**으로 새 ZIP·태그를 만든다. JSON 버전만 낮춰 자동 다운그레이드된다고 가정하지 않는다. 공식 제출은 대상/최신 정책을 별도 확인하고 사람 작성이 필요한 제출문은 사람이 작성한다.
 
 규격의 기존 조사 출처: [Dalamud 커스텀 저장소](https://dalamud.dev/plugin-publishing/custom-repositories/), [이미지/제출 안내](https://dalamud.dev/plugin-publishing/submission/), [GitHub CI 생략](https://docs.github.com/en/actions/how-tos/manage-workflow-runs/skip-workflow-runs). 이 문서 정리는 해당 외부 정책의 최신 재검증을 의미하지 않는다.
+
+## 공식 저장소 제출 준비
+
+진행 상태와 결정은 [글로벌·공식 저장소 계획](../product/GLOBAL-AND-OFFICIAL-REPO.md)을 따른다. 이 절은 기술 요건과 점검 절차만 담는다(조사 2026-11-04, Plogon `2b0e54d`).
+
+### 공식 빌드 환경 (Plogon)
+
+- 컨테이너는 `mcr.microsoft.com/dotnet/sdk:10.0.101`이다. 네트워크를 차단한 상태에서 커밋된 `packages.lock.json`만으로 패키지를 복원한다.
+- 빌드 명령은 `project_path`에서 `dotnet build -c Release -o /output -p:DalamudLibPath=/work/dalamud/ -p:IsPlogonBuild=True`다. 매니페스트에 `version`이 있으면 `-p:Version`도 넘긴다.
+- 저장소 루트의 `global.json`이 컨테이너에서도 적용된다. 그래서 최소 10.0.101에 `rollForward: latestFeature`로 둔다. 이 PC는 그대로 10.0.402를 쓴다. 정확한 버전 고정(`disable`)은 공식 빌드를 실패시키므로 쓰지 않는다.
+- 아이콘은 **우리 저장소가 아니라 제출 PR의 매니페스트 옆** `testing/live/DuckbillFisher/images/icon.png`에 둔다.
+  - Plogon은 PNG, 정사각형, 64~512px를 검사한다.
+  - 원본은 `assets/duckbillfisher-icon.png`(512×512 PNG)다.
+  - AI 생성 아이콘이므로 플러그인 설명에 공개한다.
+- 신규 플러그인은 `testing/live` 채널로 제출한다. PR 본문과 AI 사용 공개는 사람이 작성한다.
+
+### 제출 전 점검
+
+1. KR·글로벌 참조 Release 빌드와 locked restore를 확인한다.
+   ```powershell
+   dotnet build src/DuckbillFisher.Plugin/DuckbillFisher.Plugin.csproj -c Release "-p:DalamudLibPath=<글로벌 Hooks/dev>" "-p:OutputPath=.cache/plogon-like-release/"
+   dotnet restore src/DuckbillFisher.Plugin/DuckbillFisher.Plugin.csproj --locked-mode "-p:DalamudLibPath=<글로벌 Hooks/dev>"
+   ```
+2. 커밋을 push한 뒤 GitHub Actions의 **Official build check (Plogon)**(`.github/workflows/plogon-check.yml`)를 수동 실행한다. 이 워크플로는 고정 Plogon이 실제 공식 절차대로 빌드한다(컨테이너, 오프라인, 아이콘 검사). 자동 실행되지 않으며 테스트를 돌리지 않는다.
+3. 매니페스트 형식은 다음과 같다. `commit`은 push된 전체 SHA다.
+   ```toml
+   [plugin]
+   repository = "https://github.com/PlatyDuckbill/DuckbillFisher.git"
+   commit = "<전체 SHA>"
+   owners = [ "PlatyDuckbill" ]
+   project_path = "src/DuckbillFisher.Plugin"
+   changelog = """
+   <사용자 관점의 변경 내역>
+   """
+   ```

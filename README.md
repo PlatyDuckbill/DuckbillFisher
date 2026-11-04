@@ -58,7 +58,7 @@ DuckbillFisher is licensed under the [GNU Affero General Public License v3.0](LI
 
 Start with the [documentation map](docs/README.md). Repository skills live in [.agents/skills](.agents/skills) and share the maintained build and KR compatibility procedures.
 
-Windows, PowerShell 7, .NET SDK **10.0.402**, and the supported KR Dalamud references are used for development. Dependencies are pinned by `global.json` and lock files.
+Windows, PowerShell 7, .NET SDK **10.0.101 or later in the 10.0 band** (10.0.402 on the main development PC), and KR or global Dalamud references are used for development. `global.json` sets the SDK floor to match the official build container, and lock files pin dependencies.
 
 Initialize the current PowerShell session with `. ./scripts/enter-dev.ps1`. It sets the checkout root and `DALAMUD_HOME`; use `-DalamudPath` for a different reference distribution. See [environment setup](docs/development/WINDOWS-SETUP.md#개발-환경-변수). Compilation against pinned upstream references does not establish global-client runtime support.
 
