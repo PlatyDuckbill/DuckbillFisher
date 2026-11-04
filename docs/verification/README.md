@@ -25,6 +25,7 @@
 - [ENV-03 수첩 열림·어종 매핑 진단](native/FISH-WIN.md)
 - [KR Dalamud 15.0.3.7 호환성: 0.2.5.0](native/NATIVE-RUNTIME-15.0.3.7.md)
 - [0.2.6.0 이후 배포판별 KR 런타임 지원(dal4kr·15.0.3.9 포함)](native/NATIVE-RUNTIME-DAL4KR.md)
+- [글로벌·공식 저장소 호환성 조사(2026-11-04)](native/GLOBAL-COMPAT.md)
 
 ## 구조·설정
 
