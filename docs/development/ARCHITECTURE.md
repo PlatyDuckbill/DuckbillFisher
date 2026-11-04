@@ -40,7 +40,10 @@
 
 ### 상수의 소유권
 
-- Game/Contracts/FishingGameIds는 이미 사용하던 직업·상태·액션 시트 ID만 관리한다. 이 ID들은 KR과 글로벌 시트에서 같은 의미임을 확인했다([근거](../verification/native/GLOBAL-COMPAT.md#p2-사전-확인-고정-id와-시트-규모)). 네이티브 오프셋·해시는 각 검증 계약에 남긴다.
+- Game/Contracts/FishingGameIds는 플러그인이 고정해 쓰는 시트 ID를 한곳에서 관리한다: 직업, 상태, 액션, 미지의 낚시터 PlaceName 950, 미끼 분류 33, 주거 구역 확장팩 보정.
+  - 이 ID들은 KR과 글로벌 시트에서 같은 의미임을 확인했다([근거](../verification/native/GLOBAL-COMPAT.md#p2-사전-확인-고정-id와-시트-규모)).
+  - 의존성이 없는 파일이라 FishingDataImport가 링크해 `--data-references`로 패치 때 같은 값을 점검한다.
+- 게임 이름 정렬은 `ClientNameOrder`가 클라이언트 시트 언어의 문화권 규칙으로 한다. UI 언어와는 무관하다.
 - LogMessage 계약은 Core/Fishing/FishingLogBindings가 소유한다. 판정 기준은 ID별 매개변수-시트 결합 집합이다. Plugin의 FishingLogContracts는 실행 중인 클라이언트 언어 시트로 판정하며, 번역 문장은 비교하지 않는다. 결합이 없는 ID의 의미 변경은 패치 때 개발 점검(`FishingDataImport --log-contracts`)으로 확인한다.
 - 예측 기간/직감 가정/기록 상한은 해당 Core 기능, 설정 허용 범위는 해당 설정 타입, 표본 주기/유효기간은 관찰기에 둔다. UI 배율 선택/정규화는 Configuration/UiScaleSettings를 UI/UiScale과 공유한다.
 - 숫자가 같아도 의미가 다르면 합치지 않는다. ET 시간 환산의175초와 미확인 직감 지속 시간 가정175초는 각각 유지한다. 화면 전용 색/간격을 전역 상수로 옮기지 않는다.

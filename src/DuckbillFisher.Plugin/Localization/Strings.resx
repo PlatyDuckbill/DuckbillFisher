@@ -266,7 +266,7 @@
   <data name="RelatedDetailBack" xml:space="preserve"><value>Back</value></data>
   <data name="DurationShort" xml:space="preserve"><value>{0:0}h {1:00}m {2:00}s</value></data>
   <data name="DataSourceLabel" xml:space="preserve"><value>Data source and license</value></data>
-  <data name="DataSourceInfo" xml:space="preserve"><value>Carbuncle Plushy / FFX|V Fish Tracker (MIT) · {0} · revision {1}. Names, spots, and maps come from the KR client.</value></data>
+  <data name="DataSourceInfo" xml:space="preserve"><value>Carbuncle Plushy / FFX|V Fish Tracker (MIT) · {0} · revision {1}. Names, spots, and maps are read from your game client.</value></data>
   <data name="CopyDataLicense" xml:space="preserve"><value>Copy license</value></data>
   <data name="CatalogSortFavorite" xml:space="preserve"><value>Favorites first</value></data>
   <data name="CatalogFavoritesOnly" xml:space="preserve"><value>Favorites only</value></data>
@@ -594,7 +594,7 @@ In fish log only: {5}</value></data>
   <data name="PresetDelete" xml:space="preserve"><value>Delete</value></data>
   <data name="PresetDeleteQuestion" xml:space="preserve"><value>Delete the preset “{0}”?</value></data>
   <data name="Cancel" xml:space="preserve"><value>Cancel</value></data>
-  <data name="CastingProbeIntro" xml:space="preserve"><value>KR casting observation: records raw fishing phases, equipped bait, and selected game log events. Start before fishing and stop after folding the rod. No automatic cast or catch result is established yet. Recording stops on logout, travel, a long observation gap, or disabling developer tools.</value></data>
+  <data name="CastingProbeIntro" xml:space="preserve"><value>Casting observation: records raw fishing phases, equipped bait, and selected game log events. Start before fishing and stop after folding the rod. No automatic cast or catch result is established yet. Recording stops on logout, travel, a long observation gap, or disabling developer tools.</value></data>
   <data name="CastingProbeCounters" xml:space="preserve"><value>Log contracts {0}/{1} · Events {2} · Queue drops {3} · Last read state: {4}</value></data>
   <data name="CastingTimerTitle" xml:space="preserve"><value>Casting timer</value></data>
   <data name="TabHistory" xml:space="preserve"><value>Fishing history</value></data>
@@ -781,7 +781,7 @@ Main inventory only. An unknown quantity is not zero.</value></data>
   <data name="ChangelogCollectionBadges" xml:space="preserve"><value>Fishing-spot lists highlight collection status with green caught, red uncaught, and gray unknown badges.</value></data>
   <data name="ChangelogUnknownSpot" xml:space="preserve"><value>New casts clear the previous fishing spot. Undiscovered spots are labeled, and the name and fish list update when discovery and your catch are confirmed.</value></data>
   <data name="ChangelogSpotToggle" xml:space="preserve"><value>Click View fish again to close the fishing-spot list.</value></data>
-  <data name="ChangelogPublishedAt" xml:space="preserve"><value>Released: {0:MMM d, yyyy h tt} KST</value></data>
+  <data name="ChangelogPublishedAt" xml:space="preserve"><value>Released: {0:MMM d, yyyy h tt} (local time)</value></data>
   <data name="ChangelogReleaseTimeUnknown" xml:space="preserve"><value>Release time not recorded</value></data>
   <data name="TabCollectionProgress" xml:space="preserve"><value>Collection progress</value></data>
   <data name="CollectionProgressWaiting" xml:space="preserve"><value>Preparing collection progress for the current character.</value></data>

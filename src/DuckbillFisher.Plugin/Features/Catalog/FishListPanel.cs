@@ -16,7 +16,6 @@ internal sealed class FishListPanel(FishCatalog catalog, ITextureProvider textur
     FishPreferences preferences, FishCollectionObserver collection, FishingRegionObserver region, FishingMapService maps,
     CatalogQueryState preparationQuery, Action showBaitPreparation, Action<FishGuideRow> showDetail)
 {
-    private static readonly StringComparer NameComparer = StringComparer.Create(CultureInfo.GetCultureInfo("ko-KR"), true);
     private static readonly CollectionVisibility[] CollectionChoices =
         [CollectionVisibility.All, CollectionVisibility.HideCaught, CollectionVisibility.CaughtOnly, CollectionVisibility.UnknownOnly];
     private static readonly FishGradeVisibility[] GradeChoices =
@@ -367,11 +366,11 @@ internal sealed class FishListPanel(FishCatalog catalog, ITextureProvider textur
         nextWindowFilterUpdate = CatalogWindowFilter.NextChange(query.Settings, view.Windows.Values, now);
         matches = (sort switch
         {
-            0 => filtered.OrderBy(row => row.Name, NameComparer).ThenBy(row => row.FishParameterId),
+            0 => filtered.OrderBy(row => row.Name, ClientNameOrder.Comparer).ThenBy(row => row.FishParameterId),
             2 => filtered.OrderBy(row => WindowSortKey(view, row.FishParameterId))
-                .ThenBy(row => row.Name, NameComparer).ThenBy(row => row.FishParameterId),
+                .ThenBy(row => row.Name, ClientNameOrder.Comparer).ThenBy(row => row.FishParameterId),
             3 => filtered.OrderByDescending(row => personal.Favorites.Contains(row.FishParameterId))
-                .ThenBy(row => row.Name, NameComparer).ThenBy(row => row.FishParameterId),
+                .ThenBy(row => row.Name, ClientNameOrder.Comparer).ThenBy(row => row.FishParameterId),
             _ => filtered.OrderBy(row => row.FishParameterId),
         }).ToArray();
         upcomingIndex = Array.FindIndex(matches, row => view.Windows.GetValueOrDefault(row.FishParameterId)?.Kind == FishingWindowKind.Upcoming);

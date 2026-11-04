@@ -69,10 +69,13 @@ pwsh -NoLogo -NoProfile -File scripts/compare-native-runtime.ps1 `
 
 같은 시점에 내장 조건 자료의 참조도 점검한다.
 - 클라이언트별로 아이템, FishParameter↔Item 짝, 낚시터(어종 목록·날씨 확률표), 날씨, 작살 행이 같은 사실을 가리키는지 비교한다.
+- 플러그인의 고정 시트 ID(`FishingGameIds`: 어부, 상태, 액션, 미지의 낚시터, 미끼 분류, 주거 구역)도 같은 파일을 링크해 함께 비교한다.
+- `--baseline`의 `Review` 줄은 기준선 이후 바뀐 범주다. 사람이 의미를 확인한 뒤 새 출력의 `digests`로 기준선을 갱신한다.
 - 누락이나 차이가 있으면 실패한다.
 
 ```powershell
 dotnet run --project tools/FishingDataImport -- --data-references data/fishing.kr.v2.json .cache/data-references.json `
+    --baseline docs/verification/native/reports/data-references-2026-11-04.json `
     "$env:FFXIV_GAME_PATH" Korean "<글로벌 game 폴더>" English
 dotnet run --project tools/FishingDataImport -- --log-contracts .cache/log-contracts.json `
     --baseline docs/verification/native/reports/log-contracts-2026-11-04.json `

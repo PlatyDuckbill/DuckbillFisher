@@ -15,6 +15,8 @@
 - 글로벌 Dalamud에는 `ClientLanguage.Korean` 값이 없으므로, 기호 대신 실행 중 enum 이름으로 판정한다.
 - 저장된 선택은 항상 우선한다.
 
+게임 이름(어종 등)의 정렬은 클라이언트 언어의 문화권을 따른다(`ClientNameOrder`). 시각은 사용자 PC의 현지 시간으로 표시하며 특정 지역 시간대로 고정하지 않는다.
+
 호스트 CurrentCulture/CurrentUICulture를 바꾸지 않는다. ko-KR은 ko, 미지원 언어/누락 번역은 기본 리소스로 돌아간다. 게임 이름·아이템·지역은 실제 클라이언트 시트 언어를 유지하며 UI 언어와 구분한다.
 
 ```csharp

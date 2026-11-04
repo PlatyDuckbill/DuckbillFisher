@@ -8,9 +8,6 @@ namespace DuckbillFisher.Plugin;
 /// <summary>Language-independent LogMessage contracts checked against the running client's sheet.</summary>
 internal static class FishingLogContracts
 {
-    // PlaceName 950 is the unknown fishing hole in KR and global clients; never compare translated names.
-    public const uint UnknownSpotPlaceName = 950;
-
     public static int Count => FishingLogBindings.Expected.Count;
 
     public static FishingLogActor Actor(ILogMessage message, string localName, ushort homeWorld)

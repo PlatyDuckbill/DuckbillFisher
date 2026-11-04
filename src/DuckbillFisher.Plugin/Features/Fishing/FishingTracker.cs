@@ -312,7 +312,7 @@ internal sealed class FishingTracker : IDisposable
                 moochSpotContinuation = null;
                 pendingSpotAt = fact.At;
                 pendingSpot = byPlace.TryGetValue((territory, fact.Value), out var candidates) && candidates.Length == 1 ? candidates[0] : null;
-                pendingSpotState = fact.Value == FishingLogContracts.UnknownSpotPlaceName ? FishingSpotState.Unknown
+                pendingSpotState = fact.Value == FishingGameIds.UnknownSpotPlaceName ? FishingSpotState.Unknown
                     : pendingSpot is not null ? FishingSpotState.Known : FishingSpotState.AwaitingIdentification;
                 if (pendingSpotState != FishingSpotState.Known) pendingSpot = null;
                 lastConfirmedSpot = pendingSpot;
@@ -386,7 +386,7 @@ internal sealed class FishingTracker : IDisposable
             native?.Phase is not (2 or 4)) return;
         pendingDiscovery = null;
         if (!byPlace.TryGetValue((territory, fact.Value), out var candidates) || candidates.Length != 1 ||
-            fact.Value == FishingLogContracts.UnknownSpotPlaceName) return;
+            fact.Value == FishingGameIds.UnknownSpotPlaceName) return;
         spot = lastConfirmedSpot = candidates[0];
         spotState = FishingSpotState.Known;
         if (lastLocalCatchId is { } attempt && history.SetSpot(attempt, territory, spot.Id)) recordedSpotUpdates++;

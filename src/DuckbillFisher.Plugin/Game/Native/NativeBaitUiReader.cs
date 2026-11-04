@@ -15,8 +15,6 @@ internal sealed record BaitUiReading(BaitUiState State, Vector2 Position = defau
 /// <summary>Borrowed UI pointers stay inside one Framework callback. No native function calls or writes.</summary>
 internal sealed class NativeBaitUiReader(IGameGui gui, IFramework framework, IDataManager data)
 {
-    // ItemUICategory 33 is fishing bait in the KR and global sheets (docs/verification/native/GLOBAL-COMPAT.md).
-    private const uint BaitCategory = 33;
     private readonly Dictionary<uint, bool> baitItems = [];
 
     private bool IsBait(uint item)
@@ -24,7 +22,7 @@ internal sealed class NativeBaitUiReader(IGameGui gui, IFramework framework, IDa
         if (baitItems.TryGetValue(item, out var known)) return known;
         var sheet = data.GetExcelSheet<Item>();
         if (sheet is null) return false;
-        known = sheet.TryGetRow(item, out var row) && row.ItemUICategory.RowId == BaitCategory;
+        known = sheet.TryGetRow(item, out var row) && row.ItemUICategory.RowId == FishingGameIds.BaitCategory;
         baitItems[item] = known;
         return known;
     }

@@ -60,6 +60,7 @@ public sealed class Plugin : IDalamudPlugin
         this.commandManager = commandManager;
         var defaultLanguage = UiText.DefaultFor(dataManager.Language, pluginInterface.UiLanguage);
         UiText.SetLanguage(defaultLanguage);
+        ClientNameOrder.Initialize(dataManager.Language);
 
         commandInfo = new CommandInfo(OnCommand) { HelpMessage = UiText.Get(TextKey.CommandHelp) };
         if (!commandManager.AddHandler(Command, commandInfo))

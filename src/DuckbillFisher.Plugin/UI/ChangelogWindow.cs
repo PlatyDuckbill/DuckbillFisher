@@ -192,7 +192,7 @@ internal sealed class ChangelogWindow : Window
                 var label = $"{UiText.Get(T.ChangelogRelease, release.Version)}###ReleaseNotes.{release.Version}";
                 if (!ImGui.CollapsingHeader(label, i == 0 ? ImGuiTreeNodeFlags.DefaultOpen : ImGuiTreeNodeFlags.None)) continue;
                 if (release.PublishedAtUtc is { } publishedAt)
-                    ImGui.TextDisabled(UiText.Get(T.ChangelogPublishedAt, publishedAt.ToOffset(TimeSpan.FromHours(9))));
+                    ImGui.TextDisabled(UiText.Get(T.ChangelogPublishedAt, publishedAt.ToLocalTime()));
                 ImGui.Spacing();
                 if (release.FeatureTitle is { } title)
                 {

@@ -16,7 +16,6 @@ internal sealed record CompactFishView(CompactFishEntry[] Open, CompactFishEntry
 /// <summary>Filters existing forecasts on Framework.Update. No sheet access or forecasts in Draw.</summary>
 internal sealed class CompactFishObserver : IDisposable
 {
-    private static readonly StringComparer Names = StringComparer.Create(CultureInfo.GetCultureInfo("ko-KR"), true);
     private readonly FishCatalog catalog;
     private readonly FishPreferences preferences;
     private readonly IFramework framework;
@@ -76,8 +75,8 @@ internal sealed class CompactFishObserver : IDisposable
                 upcoming.Add(new(fish, window, spot, usesOtherRegion));
         }
         Volatile.Write(ref view, new(open.OrderBy(entry => entry.Window.End ?? DateTimeOffset.MaxValue)
-                .ThenBy(entry => entry.Fish.Name, Names).ThenBy(entry => entry.Fish.FishParameterId).ToArray(),
-            upcoming.OrderBy(entry => entry.Window.Start).ThenBy(entry => entry.Fish.Name, Names)
+                .ThenBy(entry => entry.Fish.Name, ClientNameOrder.Comparer).ThenBy(entry => entry.Fish.FishParameterId).ToArray(),
+            upcoming.OrderBy(entry => entry.Window.Start).ThenBy(entry => entry.Fish.Name, ClientNameOrder.Comparer)
                 .ThenBy(entry => entry.Fish.FishParameterId).ToArray(), source.Status));
     }
 

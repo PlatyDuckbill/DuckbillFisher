@@ -9,6 +9,8 @@
     <Reference Include="Lumina"><HintPath>$(DalamudLibPath)/Lumina.dll</HintPath></Reference>
     <Reference Include="Lumina.Excel"><HintPath>$(DalamudLibPath)/Lumina.Excel.dll</HintPath></Reference>
     <ProjectReference Include="../../src/DuckbillFisher.Core/DuckbillFisher.Core.csproj" />
+    <!-- Dependency-free sheet IDs shared with the plugin; checked by the data-references mode at patch time. -->
+    <Compile Include="../../src/DuckbillFisher.Plugin/Game/Contracts/FishingGameIds.cs" Link="Linked/FishingGameIds.cs" />
   </ItemGroup>
   <Import Project="../../build/DalamudReferences.targets" />
 </Project>

@@ -205,11 +205,28 @@ dal4kr 15.0.3.9는 DuckbillTweak 조사 캐시의 고정 Release.zip 추출본�
 | 하 | `Strings.*` `CastingProbeIntro` | 개발자 도구 안내가 "KR casting observation" | 개발자 모드에서만 보임 |
 | 하(개발) | `FishingDatasetReader.cs:49` `region == "KR"`, `FishingDataImport` 가져오기의 `Language.Korean`·KR 빌드 요구 | 자료 재생성은 KR 클라이언트 전제 | 실행 중 영향 없음. 글로벌 신규 어종 자료를 만들 때(P2) 필요 |
 
+### 수정 결과 (2026-11-04)
+
+사용자가 게시 시각의 현지 시간 표시(1번)를 선택했다. 이에 따라 P3 대상을 뺀 수정 후보를 모두 반영했다.
+
+- **`DataSourceInfo`**: "your game client" / "현재 게임 클라이언트"로 바꿨다.
+- **게시 시각**: `ToLocalTime()`으로 바꾸고, 문구를 "(local time)" / "(현지 시간)"으로 했다. DISTRIBUTION의 표시 규칙도 고쳤다.
+- **이름 정렬**: `ClientNameOrder`로 바꿨다. 클라이언트 언어(ja/en/de/fr, KR은 실행 중 enum 이름 `Korean`)의 문화권을 쓰며, 목록과 간이 목록에 적용했다.
+- **`CastingProbeIntro`**: 지역 표현을 뺐다.
+- **고정 시트 ID**
+  - `FishingGameIds`로 모았다: PlaceName 950, 미끼 분류 33, 주거 641/979 보정.
+  - FishingDataImport가 이 파일을 링크해 `--data-references`로 점검한다.
+  - 참조는 **3,410개**(자료 3,398 + 고정 ID 12)이고, KR·글로벌 실패 0이다.
+  - 범주별 digest 기준선 [`reports/data-references-2026-11-04.json`](reports/data-references-2026-11-04.json)을 추가했다. 자기 비교 결과는 24범주 중 변경 0이다.
+- **빌드**: KR, 글로벌, 최소 Release, 정규 Debug, 데이터 도구 모두 경고 0, 오류 0이다. 한영 1,250키 검사를 통과했다.
+- **남은 것**: 설명·태그·README(P3), 자료 재생성 도구의 KR 전제(P2).
+- **미확인**: 인게임 표시. 데이터 출처 문구, 업데이트 내역 시각, 글로벌 이름 정렬 순서를 확인해야 한다.
+
 ### 패치 감시 대상 (실패 시 해당 기능만 꺼짐)
 
 | 대상 | 값 | 실행 중 보호 | 패치 때 확인 |
 |---|---|---|---|
-| 시트 ID | 어부 18, 상태 850/568/3972/3973, 액션 4105/37594/37595, PlaceName 950, 미끼 분류 33, 주거 641/979 | 없음(의미가 바뀌면 표시가 잘못될 수 있음) | 지금은 일회성 대조뿐이다. `--data-references`에 포함하는 것을 권장 |
+| 시트 ID | 어부 18, 상태 850/568/3972/3973, 액션 4105/37594/37595, PlaceName 950, 미끼 분류 33, 주거 641/979 | 없음(의미가 바뀌면 표시가 잘못될 수 있음) | `--data-references`(FishingGameIds 링크, digest 기준선) |
 | 로그 ID 29개 | 결합 계약 | 결합 충돌 시 해당 ID 거부 | `--log-contracts` |
 | 미끼 UI 형태 | 노드 17~41(1005, 44×48), 페이지 노드 6~14(1010)·15/45, AtkValues 8개·[6] 벡터, 페이지당 25·5열, 노드 수 42~64 | 형태가 다르면 UnsupportedShape, 미끼 찾기만 꺼짐 | 인게임 미끼 찾기 |
 | 낚시 상태 의미 | Phase 0~12(1·2·4·5·6·12 사용), 미끼 플래그 0x10/0x20, 보관 생미끼 −1~2 | 범위 밖이면 InvalidState | 인게임 시전 1회 |
