@@ -146,7 +146,10 @@
 - ⏳ 수동 워크플로 **Official build check (Plogon)** 실행. push 후 사용자가 실행한다. 실제 Plogon 컨테이너 빌드 결과를 확인하는 단계다.
 - ✅ LICENSE 추가 (2026-11-04)
 - ✅ 아이콘 위치 정리: 우리 저장소가 아니라 제출 PR의 `testing/live/DuckbillFisher/images/icon.png`에 둔다. 원본은 기존 512px PNG다.
-- 🔄 설명·태그 일반화와 AI 생성 아이콘 공개. 초안을 사용자 승인 대기 중이다.
+- ✅ 설명·태그 일반화와 AI 생성 아이콘 공개 (2026-11-04, 사용자 승인)
+  - 소개를 "터주작 도우미"로 바꾸고 지역 한정 문구를 지웠다. 마지막 줄에 "The plugin icon was created with AI assistance."를 넣었다.
+  - 태그는 `fishing;fish;big fish;collection;timer;alerts;한국어`다.
+  - 빌드 산출 매니페스트에 반영된 것을 확인했다. 공개 설치 목록(repo/release.json)은 다음 배포 때 갱신된다.
 - ⏳ README의 지원 환경·소개 문구는 다음 공개판 배포 때 함께 바꾼다. 현재 공개판 0.6.0.1의 사실과 맞춰야 하기 때문이다.
 - ⏳ 공식 manifest의 changelog와 내장 업데이트 안내의 관계 정리
 
