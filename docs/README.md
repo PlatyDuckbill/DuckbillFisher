@@ -39,8 +39,8 @@ docs/
 | UI 구성·UX 조사 | [UI-UX-REDESIGN](product/UI-UX-REDESIGN.md) | [UI 확인 요약](verification/catalog/UI.md) |
 | 데이터 출처/판정 | [DATA-SOURCES](development/DATA-SOURCES.md), [data/README](../data/README.md) | [보완 검사](verification/data/DATA-COMPLETION-2026-10-18.md), [잔여 목록](verification/data/reports/fishing-data-2026-10-17/remaining.md) |
 | 터주작 아이디어 | [TROPHY-FISHING-PROPOSALS](product/TROPHY-FISHING-PROPOSALS.md) | 후보 기록은 착수 승인과 다름 |
-| 지금 시작할 터주작 추천 | [일정·조건 중심 추천](product/NEXT-FISH-RECOMMENDATION.md) | 공개0.6.0.0의 세 탭·수동 갱신·생미끼 경로/직감 요구량/일정. [검사/대표 확인 대기](verification/forecast/RECOMMENDATIONS.md) |
-| 출현 일정표 | [동작·구조](product/SPAWN-SCHEDULE.md), [가상 HTML 시안](product/mockups/spawn-schedule.html) | 공개0.5.0.0 시간축/월 달력·고정 Release 대표 확인 완료. [확인 순서](verification/catalog/UI.md#0500-r7-옵션-제거와-단일-대상-전환-2026-10-21) |
+| 지금 시작할 터주작 추천 | [일정·조건 중심 추천](product/NEXT-FISH-RECOMMENDATION.md) | [검사·대표 확인](verification/forecast/RECOMMENDATIONS.md) |
+| 출현 일정표 | [동작·구조](product/SPAWN-SCHEDULE.md), [가상 HTML 시안](product/mockups/spawn-schedule.html) | [확인 순서](verification/catalog/UI.md#0500-r7-옵션-제거와-단일-대상-전환-2026-10-21) |
 | 설정 백업·전용 WAV | [포함 범위·형식·호환성](product/SETTINGS-BACKUP.md) | [빌드·실기 확인 절차](verification/configuration/SETTINGS-BACKUP.md) |
 | 어종별 개인 기록 | [메모·수동 횟수·프리셋 연결](product/FISH-PERSONAL.md) | [검수 순서·백업 확인](verification/configuration/FISH-PERSONAL.md) |
 | 글로벌 지원·공식 저장소 등록 | [전략·단계·진행도](product/GLOBAL-AND-OFFICIAL-REPO.md), [범용 실행 계약 재설계안](development/RUNTIME-CONTRACT-REDESIGN.md) | [호환성 조사](verification/native/GLOBAL-COMPAT.md) |
@@ -55,4 +55,4 @@ docs/
 - [duckbill-release](../.agents/skills/duckbill-release/SKILL.md): 빌드·패키지·커스텀 저장소 배포 작업.
 - [duckbill-native](../.agents/skills/duckbill-native/SKILL.md): KR·글로벌 공통 API/네이티브 실행 계약 조사 작업.
 
-2026-10-18 정리에서는 핵심 문서의 버전별 회고를 제거하고 현재 계약으로 통합했다. 이번에는 제품/개발/검증/과거 기록으로 실제 경로를 나누고 UI 기록 12개를 원문 구역 단위로 통합했다. 저장소 내부 링크는 새 경로로 갱신했다. 이전 공개 커밋/태그의 경로는 당시 이력에서 조회한다. 정리 전 원문은 Git b33f4eb2faa50503dd514a76c3a1e2a23d2e2df8에 있다. 파일 생성·갱신 기준은 [문서 관리](development/WORKFLOW.md#문서-관리)를 따른다.
+파일 생성·갱신 기준과 과거 정리 이력은 [문서 관리](development/WORKFLOW.md#문서-관리)를 따른다. 이전 공개 커밋/태그의 문서 경로는 당시 Git 이력에서 조회한다.

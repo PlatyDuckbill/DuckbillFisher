@@ -18,7 +18,7 @@
 | 터주작 추천 | Core FishRecommendations/FishRecommendationSelection, Plugin FishRecommendationService/RecommendationText/FishRecommendationPanel | 일정·요구량/빈도 snapshot 수집과 탭별 선별·정렬 분리. 단일 취소 작업자·UTC 캐시·요청 세대. UI는 표시/명시 요청만 담당 |
 | 시전 관찰 | FishingTracker, NativeFishingActivityReader, FishingLogContracts | 본인 로그·시전 단계·시간 상관관계, 미검증 결과 Unknown |
 | 시전 알림 | Core CastTimerAlerts, CastingTimerNotifications, CastingTimerSettingsWindow | 단조 시간 교차·시전별 알림ID 중복 방지. Framework에서 기존 추적기만 소비하고 선택SE/로컬 채팅 재사용, 화면 닫힘과 독립 |
-| 낚시 효과 | FishingBuffObserver | 타이머가 열렸을 때 Framework에서 공개 LocalPlayer.StatusList의850/568·루어3972/3973의Param을200ms 주기로 복사. 루어는 같은 시전의 새1~3중첩만 시작 시각을 알 수 있다. 기존 KR 조합 가드·로그인/캐릭터·어부/이동 확인, 단조 만료·1초 신선도. Draw는 관리 값만 표시 |
+| 낚시 효과 | FishingBuffObserver | 타이머가 열렸을 때 Framework에서 공개 LocalPlayer.StatusList의850/568·루어3972/3973의Param을200ms 주기로 복사. 루어는 같은 시전의 새1~3중첩만 시작 시각을 알 수 있다. 공개 API만 쓰며 네이티브 판정과 묶지 않는다. 로그인/캐릭터·어부/이동 확인, 단조 만료·1초 신선도. Draw는 관리 값만 표시 |
 | 기록 저장 | FishingHistoryStore, FishingHistoryBrowser | 묶음 파일·원자 교체·요약/상세 지연 읽기·삭제/재시도. schema2 선택 필드로 단조 총 시간/검증된 생미끼 연결 ID 저장 |
 | 미끼 준비/찾기 | BaitPreparation, BaitStockObserver, BaitFinder, NativeBaitUiReader, NativeBaitPageReader | 첫 미끼/공개 소지품 조회와 네이티브 UI 읽기 분리 |
 | 공통 표시 | FishRowRenderer, FishDetailPanel, FishingConditionPanel, UiWidgets | 표시·선택 전달, 게임 조회/예측을 가져오지 않음 |
@@ -91,7 +91,7 @@
 
 ## 저장·수집·알림
 
-- FishPreferences schema23: 공통 즐겨찾기/필터/언어/UI 배율/간이 목록 전용 즐겨찾기 필터/알림 설정·커스텀 WAV 원본 경로·일정표/업데이트 내역 확인 버전(LastSeenChangelogVersion)·시전 알림/이름 있는 프리셋·입질/터주/터주왕 효과음·낚시터 목록 수집 필터, 캐릭터별 수동 수집/자동 관찰 백업(UTC·상태)/알림 중복 방지 기록. schema1~22 변환과 손상/미지원 원본 보존을 유지한다. 이전 설정은 새 효과음 없음·최초 습득만 켜짐·낚시터 수집 숨김을 기본 적용하고 기존 알림/프리셋을 보존한다. 이전 설정은 간이 목록의 즐겨찾기 선택을 당시 메인 필터에서 한 번 이어받는다. 선택적인 확인 버전만 잘못되면 확인 전으로, 배율이 누락/선택 범위 밖이면100%로 정규화하며 다른 설정을 버리지 않는다.
+- FishPreferences schema24: 공통 즐겨찾기/필터/언어/UI 배율/간이 목록 전용 즐겨찾기 필터/알림 설정·현재 낚시터 알림 켜기(CurrentSpotAlertsEnabled)·커스텀 WAV 원본 경로·일정표/업데이트 내역 확인 버전(LastSeenChangelogVersion)·시전 알림/이름 있는 프리셋·입질/터주/터주왕 효과음·낚시터 목록 수집 필터, 캐릭터별 수동 수집/자동 관찰 백업(UTC·상태)/알림 중복 방지 기록/출현 시작 알림 회차(OpeningAlertWindows). schema1~23 변환과 손상/미지원 원본 보존을 유지한다. 이전 설정은 새 효과음 없음·최초 습득만 켜짐·낚시터 수집 숨김을 기본 적용하고 기존 알림/프리셋을 보존한다. 이전 설정은 간이 목록의 즐겨찾기 선택을 당시 메인 필터에서 한 번 이어받는다. 선택적인 확인 버전만 잘못되면 확인 전으로, 배율이 누락/선택 범위 밖이면100%로 정규화하며 다른 설정을 버리지 않는다.
 - PersonalRecords는 최대4,096종의 불변 값이며 필드별 요청을 Framework에서 현재 저장본에 적용한다. 메모/횟수 편집만으로 CatalogRevision을 올리지 않고 같은 snapshot 맵을 재사용한다. 타이머 프리셋 삭제는 연결만 정리하고 명시적 적용은 기존 알림ID/채널/효과음 보존 계약을 따른다. CommonSettingsBackup의 선택 필드로 JSON/ZIP에 포함하며 미저장 초안은 제외한다.
 - 캐스팅 알림의 로컬 채팅 채널은 Timer.AlertChannelId로 출현 알림 채널과 분리한다.21 이하 로딩/백업은 종전 채널을 한 번 이어받고 이후 독립 저장한다. 즐겨찾기 관리의 가운데 출현 알림 설정 탭이 기존 메인 설정의 옵션을 담당한다.
 - 업데이트 내역을 표시한 뒤 사용자가 닫으면 확인 버전을 저장한다. 저장 실패 시 이전 상태를 유지하고 재로드 때 다시 표시할 수 있다. 캐릭터/언어 전환은 확인 버전을 초기화하지 않고, 더 최신 확인값을 이전 DLL로 낮추지 않는다. 내역 저장만으로 CatalogRevision을 올리지 않는다.
@@ -118,7 +118,7 @@
 - FishingAvailability는 기본 시간/날씨 구간을 계산하고 FishingForecast는 전체 일반 어종의 관리 값 인덱스에서 직감 선행 조건을 적용한다. 출처 순서의 교집합·인접 연결·지속 시간 연장을 사용한다. 선행 자료 누락/유효성 실패·미지원 중첩은 타입 코드로 Unknown이다. 지속 시간 null은 사용자 요청에 따라175초를 가정하며, 원본은 그대로 둔다. 모든 선행 어종이 상시이면 지속 시간 없이 기본 구간을 사용한다. 현재 자료에는 중첩 직감이 없다.
 - FishCatalog가 로드 시 예측 입력을 만들고 Framework.Update에서 일반/물고기의 눈 UTC 구간을 각각 캐시한다. 선택 전환은 캐시 참조와 revision만 바꾸며 예측을 Draw에서 수행하지 않는다. 알림 후속 검색은 같은 FishingForecast의 일반 기준으로 고정한다. 시간제 분류는 원본 기준을 유지한다. 물고기의 눈은 명시적 true인 어종의 ET만 해제하고 날씨·직감 제약과 원본 유효성 검증을 유지한다. [근거](../verification/forecast/FORECAST.md#0340-물고기의-눈과-상세-탐색-2026-10-19).
 - 예측 맵은 첫 값 변경 때 한 번 복사하고 변화가 없으면 기존 맵을 재사용한다. ForecastAt은 맵 참조 변경과 무관하게 갱신한다. 카탈로그 재로드는 빈 맵에서 시작하여 이전 키가 남지 않는다. 미끼 준비의 어종 ID 집합도 카탈로그 행 수명에 맞춰 유지한다. [반복 생성 개선](../verification/catalog/UI.md#0370-변경-없는-데이터의-재사용-2026-10-19).
-- FishingWindow의 Basis/Issue와 직감 Breakdown은 관리 값이다. 대상/선행 어종의 절대 구간·계산 지속 시간·DurationAssumed를 보관하고 표시 시 번역한다. 기본 접힘 표는 이 값만 렌더링한다. 진단 catalog/v9·summary/v10은 원본/계산 지속 시간과 가정 여부를 구분한다. 기존 실패 코드와 물고기의 눈 지원 미확인 코드는 유지한다.
+- FishingWindow의 Basis/Issue와 직감 Breakdown은 관리 값이다. 대상/선행 어종의 절대 구간·계산 지속 시간·DurationAssumed를 보관하고 표시 시 번역한다. 기본 접힘 표는 이 값만 렌더링한다. 진단 catalog·summary 보고서(현재 v10·v11)는 원본/계산 지속 시간과 가정 여부를 구분한다. 기존 실패 코드와 물고기의 눈 지원 미확인 코드는 유지한다.
 - 조건 자료의 원본 revision/해시·라이선스·가공은 [data/README](../../data/README.md), 표시와 번역은 [LOCALIZATION](LOCALIZATION.md)을 따른다.
 
 테스트는 명시 요청 때 실행한다. Core.Tests는 Core 프로젝트를 참조하고, 게임 의존성이 없는 Plugin 정책/저장 파일만 소스 링크로 함께 컴파일한다. 실제 구현을 검사하며 가짜 Dalamud 타입이나 구현 복사본을 만들지 않는다. 네이티브·게임 관찰·렌더링과 Dalamud 설정 직렬화는 별도 빌드/실기로 확인한다. [범위와 결과](../verification/ARCHITECTURE-TESTS.md)·[실행 절차](WORKFLOW.md#요청한-테스트-실행)를 따른다.

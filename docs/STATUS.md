@@ -30,9 +30,9 @@
 | 타이머·기록 | 낚아채기 정지·완전 접기 후 현재 기록 비움, 요약/상세/삭제·복원·최신순·재등장 방지 | [저장](verification/fishing/HISTORY-STABILITY.md), [최근 타이머](verification/fishing/TIMER-HISTORY.md) |
 | 미끼 | 일반 생미끼·실패/빈 결과, 보관 생미끼 첫 칸, 준비/수량·찾기 표식/강조 | [생미끼](verification/fishing/MOOCH-FAILURE.md), [보관](verification/fishing/SWIMBAIT.md), [준비](verification/bait/BAIT-PREPARATION.md) |
 | 추천·개인 기록·백업 | 고정 Release 대표 정상 보고 | [추천](verification/forecast/RECOMMENDATIONS.md), [개인 기록](verification/configuration/FISH-PERSONAL.md), [백업](verification/configuration/SETTINGS-BACKUP.md) |
-| KR 지원 | 정확한 wasdcxz/dal4kr 모듈 조합 가드, 같은 숫자 버전도 배포판별 대조 | [런타임](verification/native/NATIVE-RUNTIME-DAL4KR.md) |
+| KR·글로벌 지원 | 공개0.6.0.1은 정확한 wasdcxz/dal4kr 모듈 조합 가드를 쓴다. 미배포 개발본은 가드를 없애고 기능별 실행 계약으로 바꿨으며, 글로벌 대표 확인과 KR 회귀 대표 확인을 마쳤다(2026-11-04) | [공개판 런타임](verification/native/NATIVE-RUNTIME-DAL4KR.md), [개발본](verification/native/GLOBAL-COMPAT.md#글로벌-인게임-대표-확인-2026-11-04-사용자-보고) |
 
-대표 정상 보고를 모든 어종/테마/언어·폭/캐릭터/장애·재로드·저장 실패 조합의 전수 확인으로 확대하지 않는다. 관리 코드 테스트는 게임·네이티브·UI 실기를 대신하지 않는다. 공개 API 우선·네이티브 최소화·정확한 KR 조합 검사 방침은 [ARCHITECTURE](development/ARCHITECTURE.md#호환성과-실패)를 따른다.
+대표 정상 보고를 모든 어종/테마/언어·폭/캐릭터/장애·재로드·저장 실패 조합의 전수 확인으로 확대하지 않는다. 관리 코드 테스트는 게임·네이티브·UI 실기를 대신하지 않는다. 공개 API 우선·네이티브 최소화·기능별 실행 계약 방침은 [ARCHITECTURE](development/ARCHITECTURE.md#호환성과-실패)를 따른다.
 
 ## 데이터와 예측 현황
 
@@ -45,10 +45,10 @@
 
 다음 한 작업: **0.6.0.1의 실제 Dalamud 저장소 업데이트와 정상 로드/설정 유지를 확인한다.** 공용 저장소 동기화는 완료했다.
 
-진행 중 장기 작업: KR·글로벌 범용 지원과 공식 저장소 등록. 단계와 진행도는 [계획](product/GLOBAL-AND-OFFICIAL-REPO.md)에서만 관리한다.
+진행 중 장기 작업: KR·글로벌 범용 지원과 공식 저장소 등록. 공식 저장소 제출 준비는 사용자 결정으로 후순위다(2026-11-04). 지금은 우리 작업용 문서 정리를 먼저 한다. 단계와 진행도는 [계획](product/GLOBAL-AND-OFFICIAL-REPO.md)에서만 관리한다.
 
 1. 0.6.0.0·0.5.4.0·0.5.2.0·0.5.1.0·0.5.0.0·0.3.9.0의 실제 저장소 업데이트 확인은 대기다. 새 버전 확인으로 이전 버전 확인을 대체하지 않는다.
 2. 추천 활용·첫 투척/반복·다음 회차/0분 중복, 알림 채널/링크/음원 조합, 백업·개인 기록의 장애/경계는 실기 대기다. [UI](verification/catalog/UI.md)·[알림](verification/alerts/SPAWN-ALERTS.md#0600-알림-경계-점검-2026-10-26)·[백업](verification/configuration/SETTINGS-BACKUP.md).
-3. 친구 PC·다른 캐릭터 격리·글로벌 런타임은 미확인이다. 다른 캐릭터는 사용할 캐릭터가 없어 보류했다.
+3. 친구 PC·다른 캐릭터 격리는 미확인이다. 다른 캐릭터는 사용할 캐릭터가 없어 보류했다. 글로벌은 개발본 대표 확인만 했고, 공개판으로 배포한 뒤의 확인은 아직이다.
 4. 모든 테마·보관 생미끼 다른 칸·좁은 폭/한영·저장 장애/절전/상한, 데이터 대표 화면과 외부 좌표 차이4곳은 별도 확인 대상이다. 커스텀 WAV 범위는 [기록](verification/alerts/CUSTOM-SOUND.md)을 따른다.
 5. 사용자 보류: 복수 어획·수량, 입질 초 통계. 직감 반영 구간의 실제 어획·나미타로 자체 날씨 조건은 게임 근거가 필요하다. 후속 후보는 [ROADMAP](product/ROADMAP.md)을 따른다.

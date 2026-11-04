@@ -54,6 +54,6 @@ dotnet restore src/DuckbillFisher.Plugin/DuckbillFisher.Plugin.csproj --locked-m
 1. 출력 DuckbillFisher.dll의 절대 경로를 Dalamud의 Dev Plugin Locations에 등록한다. 이전 개발/배포 플러그인과 중복 로드하지 않는다.
 2. 개발 플러그인 목록을 새로 검색해 로드하고 /duckbillfisher를 직접 입력한다.
 3. 닫기/재열기·설정 UI·언로드/재로드와 이번 변경 기능을 확인한다. 결과는 빌드 성공과 별도로 기록한다.
-4. 실패하면 짧은 로그와 실제 게임/배포판·버전·DLL 경로를 확인한다. 호환성 가드를 우회하지 않는다.
+4. 실패하면 짧은 로그와 실제 게임/배포판·버전·DLL 경로를 확인한다. 기능별 실행 계약 검사를 우회하지 않는다.
 
 원격 소스 갱신은 로컬 수정 보존 후 git pull --ff-only를 사용한다. 자동 복사 도구나 소스 ZIP 전달을 기본 작업으로 만들지 않는다. 이 PC에서 확인한 경로/지원 근거는 HANDOFF에 갱신한다.
