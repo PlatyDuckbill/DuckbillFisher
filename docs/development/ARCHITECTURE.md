@@ -75,6 +75,11 @@
   - 미끼 화면: `AtkStage.Instance()`와 노드·AtkValues 형태.
   - SE: PlaySoundEffect 함수 포인터 해석 여부.
   - 미끼 수량·버프: 공개 API만 사용하며 네이티브 상태와 묶지 않는다.
+- 내장 조건 자료는 클라이언트 빌드와 무관하게 적용한다(2026-11-04, 이전에는 빌드 문자열 일치가 필요했다).
+  - 행마다 FishParameter↔Item 짝과 낚시터의 어종 목록이 실행 중 시트와 맞을 때만 연결한다.
+  - 패치나 새 클라이언트에서는 `FishingDataImport --data-references`로 참조 3,398개가 같은 사실을 가리키는지 개발 점검한다.
+  - 주거 구역 확장팩 보정(641→2, 979→4)은 시트 ExVersion이 아직 0일 때만 적용한다.
+  - [근거](../verification/native/GLOBAL-COMPAT.md#p2-자료-적용-범위-2026-11-04)
 - 하드코딩 오프셋과 자체 시그니처를 쓰지 않는다. 주소와 함수는 ClientStructs가 실행 중인 게임에서 해석한 것만 사용한다. 무효 포인터를 try/catch로 회복하지 않는다.
 - 빌드 참조는 `DALAMUD_HOME` 또는 명시한 `DalamudLibPath`로 선택하며, 공통 `build/DalamudReferences.targets`가 누락 DLL/API 세대 차이를 검출한다. 공식 CI는 글로벌 최신 참조로 빌드하므로, KR과 글로벌 참조 양쪽 빌드 통과를 개발 검사로 유지한다.
 - 실패는 해당 기능의 실제 사유를 표시한다. 정적 자료·수동 상태를 미수집으로 바꾸지 않는다. 미끼 페이지 연결이 실패하면 페이지 표식만 생략하고 다른 기능은 막지 않는다.

@@ -14,6 +14,15 @@ internal static class UiText
     public static CultureInfo Culture => Volatile.Read(ref culture);
     public static UiLanguage Language => Culture.TwoLetterISOLanguageName == "ko" ? UiLanguage.Korean : UiLanguage.English;
 
+    /// <summary>
+    /// Interface language for a first run without saved settings. Korean on the KR client or a Korean Dalamud UI,
+    /// English otherwise. The Korean ClientLanguage value exists only in KR Dalamud builds, so the build compiled
+    /// against global references compares the runtime enum name, not a symbol. Saved settings always win.
+    /// </summary>
+    public static UiLanguage DefaultFor(Dalamud.Game.ClientLanguage client, string? dalamudUiLanguage) =>
+        client.ToString() == "Korean" || string.Equals(dalamudUiLanguage, "ko", StringComparison.OrdinalIgnoreCase)
+            ? UiLanguage.Korean : UiLanguage.English;
+
     public static void SetLanguage(UiLanguage language) =>
         Volatile.Write(ref culture, CultureInfo.GetCultureInfo(language == UiLanguage.Korean ? "ko" : "en"));
 

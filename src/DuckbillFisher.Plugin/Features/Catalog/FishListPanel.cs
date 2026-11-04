@@ -431,9 +431,9 @@ internal sealed class FishListPanel(FishCatalog catalog, ITextureProvider textur
         else
         {
             var view = catalog.View;
-            report.AppendLine("DuckbillFisher summary/v10");
+            report.AppendLine("DuckbillFisher summary/v11");
             Append($"Plugin={typeof(Plugin).Assembly.GetName().Version}; Rows={view.Rows.Count}; Status={view.Status.Key}");
-            Append($"Dataset={FishingData.Dataset.DataVersion}; Details={view.Rows.Count(row => row.Details is not null)}/{FishingData.Dataset.Fish.Length}; BuildMatch={catalog.ConditionBuildMatches}");
+            Append($"Dataset={FishingData.Dataset.DataVersion}; Details={view.Rows.Count(row => row.Details is not null)}/{FishingData.Dataset.Fish.Length}; DatasetBuild={FishingData.Dataset.GameBuild}; ClientBuild={catalog.ClientBuild}; ConditionsApplied={catalog.ConditionDataAvailable}");
             Append($"Forecasts={view.Windows.Count}; OceanAreas={view.Rows.Count(row => row.Ocean is not null)}; SpearStored={FishingData.Dataset.Spearfishing.Length}; SpearUnknown={FishingData.SpearUnknown}");
             Append($"Classification={FishClassificationData.Dataset.DataVersion}; Big={view.Rows.Count(row => row.Grade is FishGrade.Big or FishGrade.Legendary)}; Legendary={view.Rows.Count(row => row.Grade == FishGrade.Legendary)}; Restricted={view.Rows.Count(row => row.TimeRestriction == FishTimeRestriction.Restricted)}");
             if (selectedFish is { } selected)

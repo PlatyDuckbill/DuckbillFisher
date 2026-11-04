@@ -44,7 +44,8 @@
 | 하드코딩 오프셋 | `Game/Native/NativeBaitUiReader.cs` (`0xD2690`) | 패치에 취약 | ✅ `AtkStage.Instance()`로 대체 |
 | 수집 비트 상한 | `Game/Native/NativeFishCollectionReader.cs` (`1522`) | 패치에 취약 | ✅ 로드된 ClientStructs 값으로 대체 |
 | 시트 ID | `Game/Contracts/FishingGameIds.cs`, PlaceName 950, 미끼 분류 33 | KR 시트로만 확인함 | 글로벌 시트로 대조 |
-| 낚시 자료 | `data/fishing.kr.v2.json`, `fish-classifications.kr.v1.json` | KR 클라이언트 기준 | 글로벌로 재생성해 차이 확인 |
+| 낚시 자료 | `data/fishing.kr.v2.json`, `fish-classifications.kr.v1.json` | 자료 빌드 문자열 일치가 필요해 글로벌에서 전부 미연결 | ✅ 빌드 판정 제거, 행 단위 ID 검사. 참조 3,398개 KR·글로벌 일치 |
+| 기본 UI 언어 | `Plugin.cs`, `FishPreferences.cs` | 첫 실행이 항상 한국어 | ✅ 클라이언트·Dalamud 언어로 감지 |
 | 컴파일 참조 | `build/DalamudReferences.targets` (`DALAMUD_HOME` 필수) | 공식 CI(Plogon) 빌드 방식과 다를 수 있음 | Plogon 방식 빌드 확인 |
 | 설명·태그 | `DuckbillFisher.Plugin.csproj`의 Description/Tags, README | "FFXIV Korea", "Korean client only" | 지역 중립 문구 |
 
@@ -127,9 +128,11 @@
 - ⏳ **KR·글로벌 인게임 확인**(사용자). 이 확인이 끝나면 P1이 완료된다.
 - ⏳ `compare-native-runtime.ps1`이 쓰지 않는 메서드의 차이를 경고로만 보고하도록 개선(선택)
 
-### P2 자료 범용화 — ⏳
+### P2 자료 범용화 — 🔄
 
-- ⏳ 글로벌 클라이언트로 자료 재생성과 KR 대비 차이 보고
+- ✅ 글로벌 첫 실기에서 조건이 전부 미연결로 표시된 원인을 찾아 수정 (2026-11-04). 원인은 자료 빌드 문자열 일치 판정이었다. 참조 3,398개가 KR·글로벌에서 전부 같은 사실을 가리켜, 빌드 판정을 없애고 행 단위 ID 검사만 남겼다. 패치 점검 도구 `--data-references`를 추가했다. [근거](../verification/native/GLOBAL-COMPAT.md#p2-자료-적용-범위-2026-11-04)
+- ✅ 첫 실행 기본 UI 언어를 클라이언트·Dalamud 언어로 감지 (2026-11-04)
+- ⏳ 글로벌에만 있는 신규 어종 처리(자료 재생성). 현재 두 클라이언트의 FishParameter 행 수가 같아 당장 필요하지는 않다.
 - ✅ 상태·액션·PlaceName·미끼 분류 ID 대조 (2026-11-04). 8종 모두 같은 의미다. FishParameter·FishingSpot·LogMessage 행 수도 같다. [근거](../verification/native/GLOBAL-COMPAT.md#p2-사전-확인-고정-id와-시트-규모)
 - ⏳ 단일 자료 통합 여부 결정
 

@@ -63,7 +63,8 @@ internal sealed class FishCatalog : IDisposable
     private bool requested;
     private bool forceReload;
     private bool disposed;
-    private readonly bool conditionBuildMatches;
+    private readonly bool conditionDataAvailable;
+    private readonly string clientBuild = "unknown";
     private DateTimeOffset nextForecast;
     private DateTimeOffset lastForecast;
 
@@ -71,22 +72,20 @@ internal sealed class FishCatalog : IDisposable
     {
         this.dataManager = dataManager;
         this.framework = framework;
-        // Static resource/version reads occur at construction, outside Draw.
-        try
-        {
-            var directory = Path.GetDirectoryName(Environment.ProcessPath)!;
-            conditionBuildMatches = FishingData.Failure is null &&
-                File.ReadAllText(Path.Combine(directory, "ffxivgame.ver")).Trim() == FishingData.Dataset.GameBuild;
-        }
-        catch (IOException) { conditionBuildMatches = false; }
-        catch (UnauthorizedAccessException) { conditionBuildMatches = false; }
+        // Conditions apply on any client build; each row must still match the client by FishParameter/Item/spot IDs
+        // (see Read). KR and global sheets resolve every dataset reference identically (GLOBAL-COMPAT.md).
+        conditionDataAvailable = FishingData.Failure is null;
+        // Static version read at construction, outside Draw; diagnostic only.
+        try { clientBuild = File.ReadAllText(Path.Combine(Path.GetDirectoryName(Environment.ProcessPath)!, "ffxivgame.ver")).Trim(); }
+        catch (Exception ex) when (ex is IOException or UnauthorizedAccessException) { clientBuild = $"unknown({ex.GetType().Name})"; }
         _ = FishingData.Notices;
         _ = FishClassificationData.ByFishId;
         framework.Update += OnUpdate;
     }
 
     public FishCatalogView View { get { lock (gate) return view; } }
-    public bool ConditionBuildMatches => conditionBuildMatches;
+    public bool ConditionDataAvailable => conditionDataAvailable;
+    public string ClientBuild => clientBuild;
 
     public void SetFishEyes(bool enabled)
     {
@@ -218,7 +217,7 @@ internal sealed class FishCatalog : IDisposable
                     var fishSpots = spots.Values.Where(spot => spot.Items.Contains(item.RowId) ||
                         spot.View.Id == fish.FishingSpot.RowId).Select(spot => spot.View).ToArray();
                     FishingDetailView? details = null;
-                    if (conditionBuildMatches && rules.TryGetValue(item.RowId, out var rule) && rule.FishParameterId == fish.RowId &&
+                    if (conditionDataAvailable && rules.TryGetValue(item.RowId, out var rule) && rule.FishParameterId == fish.RowId &&
                         (rule.FishingSpotId == 0 || (spots.TryGetValue(rule.FishingSpotId, out var candidate) &&
                          (candidate.Items.Contains(item.RowId) || fish.FishingSpot.RowId == rule.FishingSpotId))))
                     {
@@ -260,7 +259,7 @@ internal sealed class FishCatalog : IDisposable
                     }
                     var grade = FishGrade.Unknown;
                     var timing = FishTimeRestriction.Unknown;
-                    if (conditionBuildMatches && fish.RowId > 0 && fish.IsInLog &&
+                    if (conditionDataAvailable && fish.RowId > 0 && fish.IsInLog &&
                         item.Is<Item>() && resolution == FishRowResolution.Resolved)
                     {
                         if (FishClassificationData.Dataset.GameBuild == FishingData.Dataset.GameBuild &&
@@ -358,7 +357,7 @@ internal sealed class FishCatalog : IDisposable
             var territory = spot.TerritoryType.Value;
             // ExVersion row 0 is valid; inspected later housing districts need an explicit build-scoped correction.
             var expansion = expansions?.GetRowOrDefault(FishingGeography.ExpansionId(territory.RowId,
-                territory.ExVersion.RowId, conditionBuildMatches));
+                territory.ExVersion.RowId));
             if (territory.Map.RowId == 0)
                 continue;
             var map = territory.Map.Value;
@@ -385,11 +384,11 @@ internal sealed class FishCatalog : IDisposable
         var unresolved = snapshot.Rows.Where(row => !row.IsDisplayable).ToArray();
         var report = new StringBuilder();
         void Append(FormattableString line) => report.AppendLine(FormattableString.Invariant(line));
-        report.AppendLine("DuckbillFisher MVP-01/catalog/v9");
+        report.AppendLine("DuckbillFisher MVP-01/catalog/v10");
         Append($"Plugin: {typeof(Plugin).Assembly.GetName().Version}");
         Append($"Rows: {snapshot.Rows.Count}; displayable: {snapshot.Rows.Count - unresolved.Length}; unresolved: {unresolved.Length}; unresolved in log: {unresolved.Count(row => row.IsInLog)}");
         report.AppendLine($"Status: [{snapshot.Status.Key}] {snapshot.Status.Diagnostic}");
-        Append($"Dataset: {FishingData.Dataset.DataVersion}; buildMatch={conditionBuildMatches}; detailRows={snapshot.Rows.Count(row => row.Details is not null)}; rowsWithSpots={snapshot.Rows.Count(row => row.Spots.Count > 0)}");
+        Append($"Dataset: {FishingData.Dataset.DataVersion}; datasetBuild={FishingData.Dataset.GameBuild}; clientBuild={clientBuild}; conditionsApplied={conditionDataAvailable}; detailRows={snapshot.Rows.Count(row => row.Details is not null)}; rowsWithSpots={snapshot.Rows.Count(row => row.Spots.Count > 0)}");
         report.AppendLine($"DataValidation: conditions={FishingData.Failure?.Code.ToString() ?? "Valid"}; conditionPath={FishingData.Failure?.Path ?? "none"}; grades={FishClassificationData.Failure?.Code.ToString() ?? "Valid"}; gradePath={FishClassificationData.Failure?.Path ?? "none"}");
         Append($"Coverage: oceanAreas={snapshot.Rows.Count(row => row.Ocean is not null)}; spearStored={FishingData.Dataset.Spearfishing.Length}; spearConditionsUnknown={FishingData.SpearUnknown}");
         Append($"Classification: dataset={FishClassificationData.Dataset.DataVersion}; bigIncludingLegendary={snapshot.Rows.Count(row => row.Grade is FishGrade.Big or FishGrade.Legendary)}; legendary={snapshot.Rows.Count(row => row.Grade == FishGrade.Legendary)}; restricted={snapshot.Rows.Count(row => row.TimeRestriction == FishTimeRestriction.Restricted)}");

@@ -58,7 +58,8 @@ public sealed class Plugin : IDalamudPlugin
     {
         this.pluginInterface = pluginInterface;
         this.commandManager = commandManager;
-        UiText.SetLanguage(UiLanguage.Korean);
+        var defaultLanguage = UiText.DefaultFor(dataManager.Language, pluginInterface.UiLanguage);
+        UiText.SetLanguage(defaultLanguage);
 
         commandInfo = new CommandInfo(OnCommand) { HelpMessage = UiText.Get(TextKey.CommandHelp) };
         if (!commandManager.AddHandler(Command, commandInfo))
@@ -68,7 +69,7 @@ public sealed class Plugin : IDalamudPlugin
         var collectionReader = new NativeFishCollectionReader(framework, dataManager.Language);
         fishGuide = new FishGuideDiagnostics(clientState, playerState, fishCatalog, gameGui, framework, collectionReader);
         fishingMap = new FishingMapService(gameGui, clientState, framework);
-        fishPreferences = new FishPreferences(pluginInterface, clientState, playerState, framework, log);
+        fishPreferences = new FishPreferences(pluginInterface, clientState, playerState, framework, log, defaultLanguage);
         var managedSounds = new ManagedSoundFiles(pluginInterface.GetPluginConfigDirectory());
         soundLibrary = new ManagedSoundLibrary(fishPreferences, managedSounds, framework);
         settingsBackup = new SettingsBackup(fishPreferences, managedSounds, soundLibrary, framework);

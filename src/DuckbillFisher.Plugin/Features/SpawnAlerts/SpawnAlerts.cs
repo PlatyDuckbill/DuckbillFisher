@@ -113,7 +113,7 @@ internal sealed class SpawnAlerts : IDisposable
         }
         var status = !personal.SpawnAlertsEnabled ? T.AlertsDisabled : !personal.HasCharacter ? T.AlertsWaitingCharacter :
             !personal.CanEdit || personal.Error is not null ? T.AlertsStorageUnavailable :
-            !catalog.ConditionBuildMatches || data.ForecastAt is not { } forecastAt ||
+            !catalog.ConditionDataAvailable || data.ForecastAt is not { } forecastAt ||
                 (now - forecastAt).TotalSeconds is < 0 or > 5 ? T.AlertsForecastUnavailable : T.AlertsWatching;
         var active = status == T.AlertsWatching;
         if (scheduler.RequiresRebase(now, elapsed, personal.Session, active))

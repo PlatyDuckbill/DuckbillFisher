@@ -67,7 +67,13 @@ pwsh -NoLogo -NoProfile -File scripts/compare-native-runtime.ps1 `
 - 의미가 그대로면 새 출력을 해시만 남긴 기준선으로 갱신한다. 게임 문장 원문은 커밋하지 않는다.
 - 근거는 [로그 계약](../verification/native/GLOBAL-COMPAT.md#p1-구현-1단계-로그-결합-계약-2026-11-04)을 따른다.
 
+같은 시점에 내장 조건 자료의 참조도 점검한다.
+- 클라이언트별로 아이템, FishParameter↔Item 짝, 낚시터(어종 목록·날씨 확률표), 날씨, 작살 행이 같은 사실을 가리키는지 비교한다.
+- 누락이나 차이가 있으면 실패한다.
+
 ```powershell
+dotnet run --project tools/FishingDataImport -- --data-references data/fishing.kr.v2.json .cache/data-references.json `
+    "$env:FFXIV_GAME_PATH" Korean "<글로벌 game 폴더>" English
 dotnet run --project tools/FishingDataImport -- --log-contracts .cache/log-contracts.json `
     --baseline docs/verification/native/reports/log-contracts-2026-11-04.json `
     "$env:FFXIV_GAME_PATH" Korean `

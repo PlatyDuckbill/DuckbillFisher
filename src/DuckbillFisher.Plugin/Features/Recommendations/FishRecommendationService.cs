@@ -84,7 +84,7 @@ internal sealed class FishRecommendationService : IDisposable
             catalog.RequestLoad();
             var data = catalog.View;
             if (data.Rows.Count == 0 || !personal.HasCharacter) return;
-            if (!catalog.ConditionBuildMatches)
+            if (!catalog.ConditionDataAvailable)
             { cancellation?.Cancel(); view = view with { State = RecommendationState.Unsupported }; return; }
             var observed = collection.View;
             var now = clock.GetUtcNow();

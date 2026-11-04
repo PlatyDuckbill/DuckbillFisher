@@ -35,6 +35,11 @@ if (args.Length > 0 && args[0] == "--classifications")
     FishClassificationImport.Run(args.Skip(1).ToArray());
     return;
 }
+if (args.Length > 0 && args[0] == "--data-references")
+{
+    DataReferenceAudit.Run(args.Skip(1).ToArray());
+    return;
+}
 if (args.Length > 0 && args[0] == "--log-contracts")
 {
     LogContractAudit.Run(args.Skip(1).ToArray());

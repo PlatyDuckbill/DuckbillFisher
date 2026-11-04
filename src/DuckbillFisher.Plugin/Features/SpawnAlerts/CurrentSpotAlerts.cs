@@ -55,7 +55,7 @@ internal sealed class CurrentSpotAlerts : IDisposable
         { windows.Clear(); session = personal.Session; rows = data.Rows; }
         lastUtc = now;
         if (!personal.CurrentSpotAlertsEnabled || !personal.HasCharacter || !personal.CanEdit || personal.Error is not null ||
-            !catalog.ConditionBuildMatches || current.Session != session || !current.HasSession || current.IsLastSpot ||
+            !catalog.ConditionDataAvailable || current.Session != session || !current.HasSession || current.IsLastSpot ||
             current.State != FishingTrackerState.Ready || current.SpotState != FishingSpotState.Known ||
             current.Native?.Availability != FishingReadState.Ready || current.Spot is not { } spot)
         { spotId = 0; windows.Clear(); return; }

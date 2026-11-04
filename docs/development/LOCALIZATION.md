@@ -10,7 +10,12 @@
 - UiText: ResourceManager 조회·형식 인자·언어 선택·고정 ImGui ID.
 - UiMessage: 번역 결과 대신 키/인자를 보관하는 표시 메시지.
 
-언어 선택은 설정에 저장한다. 호스트 CurrentCulture/CurrentUICulture를 바꾸지 않는다. ko-KR은 ko, 미지원 언어/누락 번역은 기본 리소스로 돌아간다. 게임 이름·아이템·지역은 실제 클라이언트 시트 언어를 유지하며 UI 언어와 구분한다.
+언어 선택은 설정에 저장한다. 저장된 설정이 없는 첫 실행만 기본값을 감지한다(`UiText.DefaultFor`).
+- KR 클라이언트이거나 Dalamud UI 언어가 `ko`이면 한국어, 그 밖에는 영어다.
+- 글로벌 Dalamud에는 `ClientLanguage.Korean` 값이 없으므로, 기호 대신 실행 중 enum 이름으로 판정한다.
+- 저장된 선택은 항상 우선한다.
+
+호스트 CurrentCulture/CurrentUICulture를 바꾸지 않는다. ko-KR은 ko, 미지원 언어/누락 번역은 기본 리소스로 돌아간다. 게임 이름·아이템·지역은 실제 클라이언트 시트 언어를 유지하며 UI 언어와 구분한다.
 
 ```csharp
 UiText.Get(TextKey.GuideRows, total, inLog, maxId);

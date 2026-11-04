@@ -49,6 +49,6 @@
 
 - 일반 자료의 남은 이름/ID/이유는 [잔여 보고서](verification/data/reports/fishing-data-2026-10-17/remaining.md), 재생성은 [data/README](../data/README.md)를 따른다. 완성 자료를 보완 단계 baseline으로 다시 넣지 않는다.
 - 초기 예측 고정 기대값은10종이며 보존 v1 입력은140종이다. [fixture 설명](../tests/DuckbillFisher.Core.Tests/Fixtures/README.md)을 확인하고 자동 덮어쓰지 않는다. 제품은 v2 조건/v1 등급을 내장한다.
-- 진단은 필요한 짧은 구역부터 요청한다. 자료는 catalog/v9의 DataValidation/IntuitionForecast, 예측은 summary/v10의 SelectedForecast/ForecastComparison/SelectedConditions/SelectedIntuition, 음원은 alerts/v8의 CustomSoundState/Code, 미끼는 bait-ui/v7의 Pages를 사용한다.
+- 진단은 필요한 짧은 구역부터 요청한다. 자료는 catalog/v10의 DataValidation/IntuitionForecast, 예측은 summary/v11의 SelectedForecast/ForecastComparison/SelectedConditions/SelectedIntuition, 음원은 alerts/v8의 CustomSoundState/Code, 미끼는 bait-ui/v7의 Pages를 사용한다.
 - 타이머 상태 API의 정적 근거는 .cache/timer-status-api.json, 시트 도우미는 .cache/timer-status-audit/다. 기존 공개판 근거는 [타이머 기록](verification/fishing/TIMER-HISTORY.md)에 있다.
 - 예측 정적 자료 도우미/UTC·CSV와 비교 한계는 [FORECAST](verification/forecast/FORECAST.md)에, 과거 소스/문서 경로는 Git 이력에 보존된다. 문서 전체 사본이나 새로운 재개 상태 사본을 반복 생성하지 않는다.

@@ -5,11 +5,11 @@ internal sealed record FishingExpansionOption(uint Id, string Name);
 
 internal sealed record FishingGeography(FishingRegionOption[] Regions, FishingExpansionOption[] Expansions)
 {
-    // KR 2026.10.06 housing TerritoryType.ExVersion is 0 even for later residential districts.
+    // Housing TerritoryType.ExVersion is 0 even for later residential districts (KR 2026.10.06 and global
+    // 2026.10.16). Correct only while the sheet still shows that quirk, so a fixed sheet value wins.
     // Local sheet IDs + official 4.0/6.0 notes: see DATA-SOURCES, collection geography audit.
-    public static uint ExpansionId(uint territoryId, uint sheetExpansionId, bool supportedBuild) => supportedBuild
-        ? territoryId switch { 641 => 2, 979 => 4, _ => sheetExpansionId }
-        : sheetExpansionId;
+    public static uint ExpansionId(uint territoryId, uint sheetExpansionId) => sheetExpansionId != 0 ? sheetExpansionId
+        : territoryId switch { 641 => 2, 979 => 4, _ => sheetExpansionId };
 
     public static FishingGeography FromRows(IEnumerable<FishGuideRow> rows)
     {

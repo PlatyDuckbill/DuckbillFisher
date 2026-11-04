@@ -91,13 +91,15 @@ internal sealed class FishPreferences : IDisposable
     private bool disposed;
 
     public FishPreferences(IDalamudPluginInterface pluginInterface, IClientState clientState,
-        IPlayerState playerState, IFramework framework, IPluginLog log)
+        IPlayerState playerState, IFramework framework, IPluginLog log, UiLanguage defaultLanguage)
     {
         this.pluginInterface = pluginInterface;
         this.clientState = clientState;
         this.playerState = playerState;
         this.framework = framework;
         this.log = log;
+        // Only a first run (or an unreadable file that is never overwritten) uses the detected language.
+        configuration.Language = defaultLanguage;
         try
         {
             var saved = pluginInterface.GetPluginConfig();
