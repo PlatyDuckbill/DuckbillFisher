@@ -117,7 +117,7 @@
 - ⏳ AI 공개 수준 판단과 문구 작성(사용자 직접). 사용자 요청으로 뒤로 미뤘으며, 제출 전에는 반드시 완료해야 한다.
 - ⏳ goatcorp 사전 문의 여부. 기존 플러그인과의 기능 중복은 아래 절을 참고한다.
 
-### P1 범용 실행 계약 — 🔄
+### P1 범용 실행 계약 — ✅
 
 - ✅ 글로벌 클라이언트 LogMessage 28개 읽기 전용 대조 (2026-11-04). 현재 지문은 글로벌 0/28이다. 매개변수-시트 결합은 27/28이 5개 언어에서 같고, 1121은 영어 문장만 이름을 표시하지 않을 뿐 충돌이 없다. 결합 없는 13개 ID는 문장으로 검증할 수 없다. [근거](../verification/native/GLOBAL-COMPAT.md#p1-낚시-로그-계약의-언어-의존성)
 - ✅ 재설계안 승인 (2026-11-04). 위험 수용, 끄기 설정 없음, 버전·MVID 기록, 결합 없는 ID는 B안(패치 때 개발 점검)으로 정했다. [재설계안](../development/RUNTIME-CONTRACT-REDESIGN.md)
@@ -139,7 +139,7 @@
 - ✅ 상태·액션·PlaceName·미끼 분류 ID 대조 (2026-11-04). 8종 모두 같은 의미다. FishParameter·FishingSpot·LogMessage 행 수도 같다. [근거](../verification/native/GLOBAL-COMPAT.md#p2-사전-확인-고정-id와-시트-규모)
 - ⏳ 단일 자료 통합 여부 결정
 
-### P3 공식 빌드와 패키지 요건 — ⏳
+### P3 공식 빌드와 패키지 요건 — 🔄
 
 - ✅ Plogon 빌드 환경 조사 (2026-11-04). 컨테이너 SDK 10.0.101, 네트워크 차단, lock 파일 복원 방식이다. `global.json`의 정확한 10.0.402 고정이 공식 빌드를 실패시키므로, 최소 10.0.101과 `latestFeature`로 바꿨다. `DalamudReferences.targets`는 조정할 필요가 없다. [절차](../development/DISTRIBUTION.md#공식-저장소-제출-준비)
 - ✅ 로컬 Plogon식 Release 빌드(글로벌 참조)와 locked restore 통과 (2026-11-04)
