@@ -17,6 +17,8 @@
 
 기능·기본값·저장 정책은 [PRODUCT](product/PRODUCT.md), 구조는 [ARCHITECTURE](development/ARCHITECTURE.md)가 담당한다.
 
+- 전체 디자인 V2는 [클래식/항해 도구/도감 노트 비교 시안](product/UI-UX-REDESIGN.md#ui-v2-디자인-방향-비교-2026-11-06--미승인)만 작성했다. 방향/구조는 미승인이며 V1/V2 전환·실제 Plugin UI는 변경하지 않았다.
+
 - 메인 메뉴: 어종 목록/즐겨찾기 관리/추천/출현 일정표/수집 현황/낚시 기록/설정. 개발본에는 출현 일정표 뒤 `먼바다 · Beta`를 추가했다. 모든 메인 탭에 공통 도감 미대조 경고를 표시한다.
 - 추천(0.6.0.0): **지금 노릴 어종 / 밑작업 / 출현 드문 순**, 기간1~24시간·수동 갱신. 준비 완료·어획 가능 여부와 준비 시간·점수·보관 최적화는 범위 밖이다. [계약](product/NEXT-FISH-RECOMMENDATION.md#0600-구현-계약)·[검사](verification/forecast/RECOMMENDATIONS.md).
 - 현재 낚시터 알림(0.6.0.0): 기본ON, 첫 투척 뒤 출현 중 대상 포함, 같은 회차 중복 방지·즐겨찾기0분과 중복 방지. 세 경로의 로컬 채팅 형식을 통일했다. [계약](verification/alerts/SPAWN-ALERTS.md#현재-낚시터-출현-알림-0600-2026-10-25).

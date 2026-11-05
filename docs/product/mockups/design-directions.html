@@ -1,0 +1,174 @@
+<div id="duckbill-design-directions" aria-label="DuckbillFisher 새 디자인 방향 비교">
+  <div class="viz-carousel" aria-label="디자인 방향" data-previous-label="이전 디자인" data-next-label="다음 디자인">
+    <section data-variant="정돈된 클래식" aria-label="정돈된 클래식"></section>
+    <section data-variant="항해 도구" aria-label="항해 도구" hidden></section>
+    <section data-variant="도감 노트" aria-label="도감 노트" hidden></section>
+  </div>
+</div>
+<style>
+#duckbill-design-directions { width:100%; max-width:1024px; margin:0 auto; container-type:inline-size; }
+#duckbill-design-directions section[data-variant] { min-height:980px; }
+#duckbill-design-directions .dv-app { --dv-bg:light-dark(#f3f1ec,#232624); --dv-panel:light-dark(#eae7df,#2b302b); --dv-chrome:light-dark(#e2dfd6,#30352f); --dv-text:light-dark(#30342f,#e8e8dc); --dv-muted:light-dark(#62685f,#b0b6a8); --dv-line:light-dark(#cbcbbf,#454b42); --dv-accent:light-dark(#766025,#d1bb84); --dv-selection:light-dark(#e3e8dc,#343d30); --dv-good:light-dark(#346746,#abd1ae); --dv-good-bg:light-dark(#e4eee5,#2a3c2e); --dv-wait:light-dark(#785d25,#dfc38b); --dv-radius:5px; --dv-row:68px; box-sizing:border-box; background:var(--dv-bg); color:var(--dv-text); border:1px solid var(--dv-line); border-radius:var(--dv-radius); font:13px/1.5 "Segoe UI","Malgun Gothic",sans-serif; min-height:830px; max-width:1024px; width:100%; margin:0 auto; overflow-wrap:anywhere; }
+#duckbill-design-directions .dv-app * { box-sizing:border-box; }
+#duckbill-design-directions .dv-app h2,#duckbill-design-directions .dv-app h3,#duckbill-design-directions .dv-app p { margin:0; }
+#duckbill-design-directions .dv-app h2 { font-size:20px; font-weight:500; }
+#duckbill-design-directions .dv-app h3 { font-size:14px; font-weight:500; }
+#duckbill-design-directions .dv-app button,#duckbill-design-directions .dv-app input,#duckbill-design-directions .dv-app select { font:inherit; color:var(--dv-text); max-width:100%; border:1px solid var(--dv-line); border-radius:var(--dv-radius); background:var(--dv-panel); }
+#duckbill-design-directions .dv-app button { padding:5px 10px; cursor:inherit; }
+#duckbill-design-directions .dv-app input { padding:7px 10px; width:100%; min-width:0; }
+#duckbill-design-directions .dv-app select { padding:6px 8px; min-width:0; }
+#duckbill-design-directions .dv-app button:disabled { opacity:.5; }
+#duckbill-design-directions .dv-chrome { display:flex; justify-content:space-between; align-items:center; gap:12px; padding:11px 17px; background:var(--dv-chrome); border-bottom:1px solid var(--dv-line); border-radius:var(--dv-radius) var(--dv-radius) 0 0; }
+#duckbill-design-directions .dv-brand { display:flex; align-items:center; gap:9px; font-weight:500; letter-spacing:.1px; }
+#duckbill-design-directions .dv-brand i { color:var(--dv-accent); }
+#duckbill-design-directions .dv-design-label { color:var(--dv-muted); font-size:12px; text-align:right; }
+#duckbill-design-directions .dv-shell { display:grid; grid-template-columns:minmax(0,1fr); }
+#duckbill-design-directions .dv-nav { display:flex; flex-wrap:wrap; gap:5px 18px; align-items:center; padding:12px 17px; border-bottom:1px solid var(--dv-line); color:var(--dv-muted); }
+#duckbill-design-directions .dv-nav span { display:flex; align-items:center; gap:6px; padding:4px 0; }
+#duckbill-design-directions .dv-nav span[aria-current] { color:var(--dv-accent); box-shadow:0 2px var(--dv-accent); }
+#duckbill-design-directions .dv-nav i { display:none; }
+#duckbill-design-directions .dv-workspace { min-width:0; }
+#duckbill-design-directions .dv-toolbar { display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:10px; padding:15px 17px 11px; }
+#duckbill-design-directions .dv-tool-title { display:flex; align-items:center; gap:10px; }
+#duckbill-design-directions .dv-shortcuts { display:flex; flex-wrap:wrap; gap:6px; }
+#duckbill-design-directions .dv-filter { display:grid; grid-template-columns:minmax(140px,1fr) auto auto; align-items:center; gap:8px; padding:0 17px 14px; }
+#duckbill-design-directions .dv-filter label { display:flex; align-items:center; gap:5px; white-space:nowrap; color:var(--dv-muted); }
+#duckbill-design-directions .dv-filter input[type=checkbox] { width:auto; margin:0; accent-color:var(--dv-accent); }
+#duckbill-design-directions .dv-layout { display:grid; grid-template-columns:minmax(0,1.2fr) minmax(0,1fr); border-top:1px solid var(--dv-line); min-height:620px; }
+#duckbill-design-directions .dv-results { padding:0 10px 12px; min-width:0; }
+#duckbill-design-directions .dv-result-heading { display:flex; justify-content:space-between; gap:8px; color:var(--dv-muted); padding:11px 7px; font-size:12px; }
+#duckbill-design-directions .dv-fish-list { display:grid; gap:2px; }
+#duckbill-design-directions .dv-fish-row { display:grid; grid-template-columns:minmax(0,1fr) auto; align-items:stretch; border-bottom:1px solid var(--dv-line); border-radius:var(--dv-radius); }
+#duckbill-design-directions .dv-fish-row[aria-current] { background:var(--dv-selection); box-shadow:inset 3px 0 var(--dv-accent); }
+#duckbill-design-directions .dv-app .dv-choose { display:grid; grid-template-columns:36px minmax(0,1fr); align-items:center; gap:10px; text-align:left; background:transparent; border:0; padding:11px 9px; min-height:var(--dv-row); border-radius:0; }
+#duckbill-design-directions .dv-fish-icon { width:35px; height:35px; display:grid; place-items:center; background:var(--dv-panel); border:1px solid var(--dv-line); border-radius:4px; color:var(--dv-accent); flex-shrink:0; }
+#duckbill-design-directions .dv-fish-icon i { font-style:normal; }
+#duckbill-design-directions .dv-fish-name { display:flex; flex-wrap:wrap; gap:3px 7px; align-items:center; font-weight:500; }
+#duckbill-design-directions .dv-fish-secondary { display:flex; flex-wrap:wrap; gap:4px 8px; color:var(--dv-muted); font-size:12px; margin-top:3px; }
+#duckbill-design-directions .dv-fish-state { font-weight:400; font-size:12px; color:var(--dv-muted); }
+#duckbill-design-directions .dv-fish-time { color:var(--dv-good); }
+#duckbill-design-directions .dv-fish-time[data-state=soon] { color:var(--dv-wait); }
+#duckbill-design-directions .dv-fish-time[data-state=unknown] { color:var(--dv-muted); }
+#duckbill-design-directions .dv-app .dv-favorite { background:transparent; border:0; color:var(--dv-muted); align-self:center; padding:8px; font-size:18px; }
+#duckbill-design-directions .dv-app .dv-favorite[aria-pressed=true] { color:var(--dv-accent); }
+#duckbill-design-directions .dv-detail { padding:21px; border-left:1px solid var(--dv-line); min-width:0; }
+#duckbill-design-directions .dv-detail-top { display:flex; align-items:center; gap:12px; }
+#duckbill-design-directions .dv-detail-top .dv-fish-icon { width:49px; height:49px; }
+#duckbill-design-directions .dv-detail-title { min-width:0; }
+#duckbill-design-directions .dv-detail-meta { display:flex; flex-wrap:wrap; gap:5px 10px; color:var(--dv-muted); font-size:12px; margin-top:4px; }
+#duckbill-design-directions .dv-state-line { display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:6px; padding:10px 12px; margin-top:18px; background:var(--dv-good-bg); color:var(--dv-good); border-left:3px solid var(--dv-good); }
+#duckbill-design-directions .dv-state-line[data-state=soon] { color:var(--dv-wait); border-left-color:var(--dv-wait); background:var(--dv-panel); }
+#duckbill-design-directions .dv-state-line[data-state=unknown] { color:var(--dv-muted); border-left-color:var(--dv-line); background:var(--dv-panel); }
+#duckbill-design-directions .dv-clock { font-variant-numeric:tabular-nums; font-weight:500; }
+#duckbill-design-directions .dv-actions { display:flex; flex-wrap:wrap; gap:7px; margin:13px 0 20px; }
+#duckbill-design-directions .dv-subheading { display:flex; justify-content:space-between; gap:8px; color:var(--dv-accent); padding-bottom:7px; border-bottom:1px solid var(--dv-line); margin-bottom:12px; }
+#duckbill-design-directions .dv-kv { display:grid; grid-template-columns:96px minmax(0,1fr); gap:9px 12px; margin:0; }
+#duckbill-design-directions .dv-kv dt { color:var(--dv-muted); }
+#duckbill-design-directions .dv-kv dd { margin:0; }
+#duckbill-design-directions .dv-condition { margin-top:20px; }
+#duckbill-design-directions .dv-condition p { margin-top:8px; color:var(--dv-muted); }
+#duckbill-design-directions .dv-condition strong { color:var(--dv-text); font-weight:500; }
+#duckbill-design-directions .dv-delivery { margin-top:18px; padding-top:11px; border-top:1px solid var(--dv-line); }
+#duckbill-design-directions .dv-app details { margin-top:20px; padding-top:11px; border-top:1px solid var(--dv-line); }
+#duckbill-design-directions .dv-app summary { cursor:inherit; color:var(--dv-muted); }
+#duckbill-design-directions .dv-app details p { margin-top:8px; color:var(--dv-muted); }
+#duckbill-design-directions .dv-feedback { margin-top:12px !important; color:var(--dv-accent); font-size:12px; }
+#duckbill-design-directions .dv-feedback:empty { display:none; }
+#duckbill-design-directions .dv-footer { display:flex; flex-wrap:wrap; justify-content:space-between; gap:6px; padding:10px 17px; border-top:1px solid var(--dv-line); color:var(--dv-muted); font-size:12px; }
+#duckbill-design-directions .dv-empty { padding:22px 10px; color:var(--dv-muted); }
+#duckbill-design-directions .dv-app svg { width:17px; height:17px; vertical-align:middle; }
+#duckbill-design-directions .dv-fish-icon svg { width:25px; height:25px; }
+#duckbill-design-directions .dv-app.dv-workbench { --dv-bg:light-dark(#edf3f5,#18232b); --dv-panel:light-dark(#e0eaef,#22313b); --dv-chrome:light-dark(#e5edf1,#1c2b35); --dv-text:light-dark(#213840,#e1eaef); --dv-muted:light-dark(#526a75,#a0b4bf); --dv-line:light-dark(#bacdd5,#354a55); --dv-accent:light-dark(#176275,#88c7d2); --dv-selection:light-dark(#d7e8ed,#29424c); --dv-good:light-dark(#285f57,#9cd5c4); --dv-good-bg:light-dark(#dcece7,#223c38); --dv-wait:light-dark(#806126,#dfc18b); --dv-radius:8px; }
+#duckbill-design-directions .dv-workbench .dv-shell { grid-template-columns:145px minmax(0,1fr); }
+#duckbill-design-directions .dv-workbench .dv-nav { flex-direction:column; align-items:stretch; justify-content:flex-start; gap:7px; padding:17px 11px; border-bottom:0; border-right:1px solid var(--dv-line); background:var(--dv-chrome); }
+#duckbill-design-directions .dv-workbench .dv-nav span { padding:8px 10px; border-radius:5px; }
+#duckbill-design-directions .dv-workbench .dv-nav span[aria-current] { box-shadow:none; background:var(--dv-selection); }
+#duckbill-design-directions .dv-workbench .dv-nav i { display:inline; }
+#duckbill-design-directions .dv-workbench .dv-layout { grid-template-columns:minmax(0,.95fr) minmax(0,1.15fr); min-height:676px; }
+#duckbill-design-directions .dv-workbench .dv-filter { grid-template-columns:minmax(120px,1fr) auto; }
+#duckbill-design-directions .dv-workbench .dv-filter label { grid-column:1 / -1; }
+#duckbill-design-directions .dv-workbench .dv-fish-row { border:0; background:var(--dv-panel); margin-bottom:5px; }
+#duckbill-design-directions .dv-workbench .dv-fish-row[aria-current] { background:var(--dv-selection); }
+#duckbill-design-directions .dv-workbench .dv-detail { padding:18px; }
+#duckbill-design-directions .dv-workbench .dv-state-line { border-left:0; border-radius:5px; }
+#duckbill-design-directions .dv-workbench .dv-detail-top { flex-wrap:wrap; }
+#duckbill-design-directions .dv-app.dv-notebook { --dv-bg:light-dark(#f6f2e8,#292a24); --dv-panel:light-dark(#ede9dd,#34362d); --dv-chrome:light-dark(#f0ebde,#303128); --dv-text:light-dark(#3c4235,#e4e5d7); --dv-muted:light-dark(#6b715f,#b1b59e); --dv-line:light-dark(#d1cfbc,#4c503f); --dv-accent:light-dark(#536943,#bdc99d); --dv-selection:light-dark(#e4eadb,#3b4532); --dv-good:light-dark(#416147,#bdcfa9); --dv-good-bg:light-dark(#e6ebdd,#36412e); --dv-wait:light-dark(#80612a,#d7c08c); --dv-radius:3px; }
+#duckbill-design-directions .dv-notebook .dv-brand { letter-spacing:.8px; }
+#duckbill-design-directions .dv-notebook .dv-layout { grid-template-columns:minmax(0,1fr) minmax(0,1.05fr); }
+#duckbill-design-directions .dv-notebook .dv-fish-list { grid-template-columns:repeat(2,minmax(0,1fr)); gap:10px; }
+#duckbill-design-directions .dv-notebook .dv-results { padding:0 16px 18px; }
+#duckbill-design-directions .dv-notebook .dv-fish-row { position:relative; border:1px solid var(--dv-line); }
+#duckbill-design-directions .dv-notebook .dv-choose { display:flex; flex-direction:column; align-items:flex-start; gap:13px; min-height:158px; padding:15px 10px 12px 15px; }
+#duckbill-design-directions .dv-notebook .dv-fish-row[aria-current] { box-shadow:inset 0 3px var(--dv-accent); }
+#duckbill-design-directions .dv-notebook .dv-favorite { align-self:start; padding:6px; }
+#duckbill-design-directions .dv-notebook .dv-detail { padding:26px; }
+#duckbill-design-directions .dv-notebook .dv-detail h2 { font-family:Georgia,"Malgun Gothic",serif; font-size:22px; }
+#duckbill-design-directions .dv-notebook .dv-state-line { background:transparent; padding-left:10px; }
+@container(max-width:800px) { #duckbill-design-directions .dv-workbench .dv-shell { grid-template-columns:minmax(0,1fr); } #duckbill-design-directions .dv-workbench .dv-nav { flex-direction:row; flex-wrap:wrap; gap:3px 10px; padding:8px 12px; border-bottom:1px solid var(--dv-line); border-right:0; } #duckbill-design-directions .dv-workbench .dv-nav span { padding:5px; } #duckbill-design-directions .dv-workbench .dv-nav i { display:none; } #duckbill-design-directions .dv-workbench .dv-filter { grid-template-columns:minmax(140px,1fr) auto auto; } #duckbill-design-directions .dv-workbench .dv-filter label { grid-column:auto; } }
+@container(max-width:650px) { #duckbill-design-directions section[data-variant] { min-height:1470px; } #duckbill-design-directions .dv-app { min-height:0; } #duckbill-design-directions .dv-layout,#duckbill-design-directions .dv-workbench .dv-layout,#duckbill-design-directions .dv-notebook .dv-layout { grid-template-columns:minmax(0,1fr); min-height:0; } #duckbill-design-directions .dv-detail,#duckbill-design-directions .dv-workbench .dv-detail,#duckbill-design-directions .dv-notebook .dv-detail { border-left:0; border-top:1px solid var(--dv-line); padding:18px; } #duckbill-design-directions .dv-filter,#duckbill-design-directions .dv-workbench .dv-filter { grid-template-columns:minmax(0,1fr) auto; } #duckbill-design-directions .dv-filter label,#duckbill-design-directions .dv-workbench .dv-filter label { grid-column:1 / -1; } #duckbill-design-directions .dv-notebook .dv-fish-list { grid-template-columns:minmax(0,1fr); gap:2px; } #duckbill-design-directions .dv-notebook .dv-choose { display:grid; grid-template-columns:36px minmax(0,1fr); align-items:center; gap:10px; min-height:var(--dv-row); padding:11px 9px; } #duckbill-design-directions .dv-notebook .dv-favorite { align-self:center; } #duckbill-design-directions .dv-notebook .dv-fish-row { border:0; border-bottom:1px solid var(--dv-line); } #duckbill-design-directions .dv-notebook .dv-fish-row[aria-current] { box-shadow:inset 3px 0 var(--dv-accent); } }
+@container(max-width:380px) { #duckbill-design-directions .dv-chrome { padding:10px 12px; } #duckbill-design-directions .dv-toolbar { padding:12px; } #duckbill-design-directions .dv-filter { padding:0 12px 12px; } #duckbill-design-directions .dv-nav { gap:4px 12px; padding:9px 12px; } #duckbill-design-directions .dv-kv { grid-template-columns:94px minmax(0,1fr); gap:8px; } #duckbill-design-directions .dv-design-label { max-width:88px; } }
+@media(pointer:coarse) { #duckbill-design-directions .dv-app button,#duckbill-design-directions .dv-app select { min-height:44px; } #duckbill-design-directions .dv-app input { min-height:44px; font-size:16px; } }
+</style>
+<script>
+(() => {
+  const root=document.getElementById('duckbill-design-directions');
+  const variants=[{name:'정돈된 클래식',className:'dv-classic',tag:'기존 감각 · 선명한 정보 구분'},{name:'항해 도구',className:'dv-workbench',tag:'남청색 · 도구 중심 작업 화면'},{name:'도감 노트',className:'dv-notebook',tag:'따뜻한 중성색 · 수집 중심'}];
+  const fish=[
+    {id:'crown',name:'깊은물 왕관고기',kind:'터주왕 · 직감',collected:'미수집',state:'soon',status:'출현 예정',clock:'00:08:42 후',place:'호수 C',time:'ET 14:00–16:00',weather:'맑음 → 비',bait:'은빛 루어',tug:'!!! · 강력',yield:'이중 1마리 · 삼중 1마리',intuition:'선행 어종 A × 3 · 선행 어종 B × 2',duration:'180초'},
+    {id:'dawn',name:'여명 날개고기',kind:'터주 · 생미끼',collected:'미수집',state:'now',status:'출현 중',clock:'00:05:18 남음',place:'호수 B',time:'ET 06:00–08:00',weather:'안개 → 맑음',bait:'강물 지렁이 → 푸른등 멸치',tug:'!! · 강력',yield:'이중 1마리 · 삼중 1마리'},
+    {id:'silver',name:'은빛 강고기',kind:'일반 낚시',collected:'수집됨',state:'now',status:'상시 출현',clock:'시간 제한 없음',place:'강 A',time:'제한 없음',weather:'제한 없음',bait:'강물 지렁이',tug:'! · 섬세',yield:'이중 2마리 · 삼중 3마리'},
+    {id:'glass',name:'유리 지느러미',kind:'일반 · 소장품',collected:'미수집',state:'now',status:'상시 출현',clock:'시간 제한 없음',place:'강 D',time:'제한 없음',weather:'제한 없음',bait:'강물 지렁이',tug:'! · 섬세',yield:'이중 2마리 · 삼중 3마리',delivery:'소장품 납품원 · 소장가치 300 / 450 / 600+'},
+    {id:'silk',name:'비단꼬리 고기',kind:'일반 · 단골거래',collected:'미확인',state:'unknown',status:'출현 조건 미확인',clock:'자료 미수집',place:'연안 E',time:'미확인',weather:'미확인',bait:'바닷물 새우',tug:'!! · 강력',yield:'이중 미확인 · 삼중 미확인',delivery:'단골 NPC A · 소장가치 300 / 450 / 600+'},
+    {id:'anchovy',name:'푸른등 멸치',kind:'일반 · 생미끼 대상',collected:'수집됨',state:'now',status:'상시 출현',clock:'시간 제한 없음',place:'호수 B',time:'제한 없음',weather:'제한 없음',bait:'강물 지렁이',tug:'! · 섬세',yield:'이중 3마리 · 삼중 5마리'}
+  ];
+  const nav=[['fish','어종 목록'],['star','즐겨찾기'],['compass','추천'],['calendar-days','출현 일정표'],['ship','먼바다 Beta'],['book-open','수집 현황'],['history','낚시 기록'],['settings','설정']];
+  const design={width:1024,compact:false};
+  const models=variants.map(()=>({selected:'crown',query:'',collection:'all',favoritesOnly:false,favorites:['crown','dawn']}));
+  function icon(name){return `<i data-lucide="${name}" aria-hidden="true">◈</i>`;}
+  function icons(){if(globalThis.lucide)lucide.createIcons({attrs:{width:17,height:17}});}
+  function rows(section,index){
+    const m=models[index];
+    const shown=fish.filter(f=>(!m.query||f.name.includes(m.query))&&(m.collection==='all'||f.collected!=='수집됨')&&(!m.favoritesOnly||m.favorites.includes(f.id)));
+    section.querySelector('[data-count]').textContent=`${shown.length}종`;
+    section.querySelector('[data-list]').innerHTML=shown.map(f=>`<div class="dv-fish-row" ${m.selected===f.id?'aria-current="true"':''}><button type="button" class="dv-choose cursor-interaction" data-fish="${f.id}" aria-label="${f.name} 상세 보기"><span class="dv-fish-icon">${icon('fish')}</span><span><span class="dv-fish-name">${f.name}<span class="dv-fish-state">${f.collected}</span></span><span class="dv-fish-secondary"><span class="dv-fish-time" data-state="${f.state}">${f.status}</span><span>${f.place}</span></span></span></button><button type="button" class="dv-favorite cursor-interaction" data-favorite="${f.id}" aria-label="${f.name} 즐겨찾기" aria-pressed="${m.favorites.includes(f.id)}">${m.favorites.includes(f.id)?'★':'☆'}</button></div>`).join('')||'<p class="dv-empty">조건에 맞는 어종이 없습니다.</p>';
+    icons();
+  }
+  function detail(section,index){
+    const f=fish.find(f=>f.id===models[index].selected)||fish[0];
+    section.querySelector('[data-detail]').innerHTML=`<div class="dv-detail-top"><span class="dv-fish-icon">${icon('fish')}</span><div class="dv-detail-title"><h2>${f.name}</h2><div class="dv-detail-meta"><span>${f.kind}</span><span>${f.collected}</span></div></div></div><div class="dv-state-line" data-state="${f.state}"><span>${f.status}</span><span class="dv-clock">${f.clock}</span></div><div class="dv-actions"><button type="button" data-action="bait" class="cursor-interaction">미끼 찾기</button><button type="button" data-action="map" class="cursor-interaction">지도 보기</button></div><div class="dv-subheading"><h3>낚시 조건</h3><span>${f.place}</span></div><dl class="dv-kv"><dt>미끼</dt><dd>${f.bait}</dd><dt>시간</dt><dd>${f.time}</dd><dt>날씨</dt><dd>${f.weather}</dd><dt>입질·낚아채기</dt><dd>${f.tug}</dd><dt>복수 어획</dt><dd>${f.yield}</dd><dt>최소 획득력</dt><dd>미확인</dd></dl>${f.intuition?`<section class="dv-condition"><div class="dv-subheading"><h3>직감 조건</h3><span>${f.duration}</span></div><p><strong>${f.intuition}</strong></p></section>`:''}${f.delivery?`<div class="dv-delivery">${f.delivery}</div>`:''}<details><summary>메모·캐스팅 타이머 관리</summary><p>메모 저장과 프리셋 연결은 기존 기능을 사용합니다.</p></details><p class="dv-feedback" data-feedback aria-live="polite"></p>`;
+    icons();
+  }
+  function save(index){if(window.openai?.setWidgetState)window.openai.setWidgetState({modelContent:{lastInteractedDesign:variants[index]?.name,selectedFish:fish.find(f=>f.id===models[index]?.selected)?.name},privateContent:{models,design}}).catch(()=>{});}
+  function applyDesign(){root.style.maxWidth=`${design.width}px`;root.querySelectorAll('.dv-app').forEach(app=>{app.style.maxWidth=`${design.width}px`;app.style.setProperty('--dv-row',design.compact?'54px':'68px');});}
+  function mount(){
+    variants.forEach((v,index)=>{
+      const section=root.querySelector(`[data-variant="${v.name}"]`);
+      const m=models[index];
+      section.innerHTML=`<article class="dv-app ${v.className}" aria-label="${v.name} 메인 화면"><header class="dv-chrome"><div class="dv-brand">${icon('fish')}<span>DuckbillFisher</span></div><span class="dv-design-label">V2 디자인 제안</span></header><div class="dv-shell"><nav class="dv-nav" aria-label="메인 메뉴">${nav.map(([i,label],n)=>`<span ${n===0?'aria-current="page"':''}>${icon(i)}${label}</span>`).join('')}</nav><main class="dv-workspace"><div class="dv-toolbar"><div class="dv-tool-title"><h3>어종 목록</h3><span class="dv-fish-state" data-count></span></div><div class="dv-shortcuts"><button type="button" data-shortcut="간이 목록" class="cursor-interaction">간이 목록</button><button type="button" data-shortcut="캐스팅 타이머" class="cursor-interaction">캐스팅 타이머</button></div></div><div class="dv-filter"><input type="search" data-search aria-label="어종 이름 검색" placeholder="어종 이름 검색" autocomplete="off"><select data-collection aria-label="수집 필터"><option value="all">전체 어종</option><option value="uncaught">수집 숨김</option></select><label><input type="checkbox" data-favorites-only>즐겨찾기만</label></div><div class="dv-layout"><section class="dv-results" aria-label="어종 목록"><div class="dv-result-heading"><span>어종 · 수집 상태</span></div><div class="dv-fish-list" data-list></div></section><aside class="dv-detail" data-detail aria-label="선택한 어종 상세"></aside></div></main></div><footer class="dv-footer"><span>${v.tag}</span><span>가상 어종·수치 · 디자인 검토용</span></footer></article>`;
+      section.querySelector('[data-search]').value=m.query;
+      section.querySelector('[data-collection]').value=m.collection;
+      section.querySelector('[data-favorites-only]').checked=m.favoritesOnly;
+      rows(section,index);detail(section,index);
+      section.addEventListener('input',e=>{if(e.target.matches('[data-search]')){m.query=e.target.value;rows(section,index);save(index);}});
+      section.addEventListener('change',e=>{if(e.target.matches('[data-collection]'))m.collection=e.target.value;if(e.target.matches('[data-favorites-only]'))m.favoritesOnly=e.target.checked;rows(section,index);save(index);});
+      section.addEventListener('click',e=>{
+        const b=e.target.closest('button');if(!b)return;
+        if(b.dataset.fish){m.selected=b.dataset.fish;rows(section,index);detail(section,index);save(index);}
+        if(b.dataset.favorite){const id=b.dataset.favorite;m.favorites=m.favorites.includes(id)?m.favorites.filter(v=>v!==id):[...m.favorites,id];rows(section,index);save(index);}
+        if(b.dataset.action)section.querySelector('[data-feedback]').textContent=b.dataset.action==='bait'?'미끼 찾기 · 실제 플러그인에서 게임 미끼 칸을 강조합니다.':'지도 보기 · 실제 플러그인에서 해당 낚시터 지도를 엽니다.';
+        if(b.dataset.shortcut)section.querySelector('[data-feedback]').textContent=`${b.dataset.shortcut}는 기존 독립 화면을 사용합니다. 이 시안은 메인 화면 비교용입니다.`;
+      });
+    });
+    applyDesign();icons();
+  }
+  function restore(snapshot){
+    const p=snapshot?.privateContent;
+    if(Array.isArray(p?.models))p.models.slice(0,3).forEach((m,i)=>{if(fish.some(f=>f.id===m?.selected))models[i].selected=m.selected;if(typeof m?.query==='string')models[i].query=m.query.slice(0,80);if(['all','uncaught'].includes(m?.collection))models[i].collection=m.collection;if(typeof m?.favoritesOnly==='boolean')models[i].favoritesOnly=m.favoritesOnly;if(Array.isArray(m?.favorites))models[i].favorites=m.favorites.filter(id=>fish.some(f=>f.id===id));});
+    if(Number.isFinite(p?.design?.width))design.width=Math.max(320,Math.min(1024,p.design.width));
+    if(typeof p?.design?.compact==='boolean')design.compact=p.design.compact;
+  }
+  restore(window.openai?.widgetState);mount();
+  window.addEventListener('openai:set_globals',e=>{const snapshot=e.detail?.globals?.widgetState;if(!snapshot)return;restore(snapshot);variants.forEach((v,i)=>{const section=root.querySelector(`[data-variant="${v.name}"]`);section.querySelector('[data-search]').value=models[i].query;section.querySelector('[data-collection]').value=models[i].collection;section.querySelector('[data-favorites-only]').checked=models[i].favoritesOnly;rows(section,i);detail(section,i);});applyDesign();});
+  if(globalThis.Tweak){const tweak=new Tweak({container:root,onChange:()=>{applyDesign();save(0);}});tweak.addSlider(design,'width',{label:'화면 폭',min:320,max:1024,step:16,unit:'px'});tweak.addToggle(design,'compact',{label:'목록 간격 좁히기'});}
+})();
+</script>
