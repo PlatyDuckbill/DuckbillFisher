@@ -1,122 +1,155 @@
-<div id="df-ocean-proposal">
-  <article class="do-app" aria-label="먼바다 메인 메뉴 추가 시안">
-    <header class="do-chrome"><span>DuckbillFisher</span><span>메인 메뉴 추가 제안</span></header>
-    <nav class="do-navigation" aria-label="메인 메뉴 배치 예시">
-      <span>어종 목록</span><span>즐겨찾기 관리</span><span>추천</span><span>출현 일정표</span><strong>먼바다</strong><span>수집 현황</span><span>낚시 기록</span><span>설정</span>
+<div id="duckbill-ocean-beta" aria-label="먼바다 Beta 화면 시안">
+  <div class="viz-controls">
+    <label class="form-label">미리볼 상황
+      <select class="form-select" id="ob-scene" aria-label="승선 상황 미리보기">
+        <option value="shore">승선 전 · 일정과 준비</option>
+        <option value="boarding">접수 중 · 접수 종료까지</option>
+        <option value="fishing" selected>승선 중 · 일반 해역</option>
+        <option value="spectral">승선 중 · 환해류</option>
+        <option value="travel">다음 해역으로 이동 중</option>
+        <option value="unknown">승선 정보 확인 불가</option>
+      </select>
+    </label>
+  </div>
+  <article class="ob-app" aria-label="DuckbillFisher 메인 먼바다 Beta">
+    <header class="ob-chrome"><span>DuckbillFisher</span><span>화면 시안</span></header>
+    <nav class="ob-nav" aria-label="메인 메뉴 배치">
+      <span>어종 목록</span><span>즐겨찾기 관리</span><span>추천</span><span>출현 일정표</span><span class="ob-nav-current" aria-current="page">먼바다 <small>Beta</small></span><span>수집 현황</span><span>낚시 기록</span><span>설정</span>
     </nav>
-    <div class="do-content">
-      <div class="do-route-head"><div><h2>항로 A</h2><p>기항지 A · 낮 → 기항지 B · 저녁 → 기항지 C · 밤</p></div><span class="do-label">수동 미리보기</span></div>
-      <div class="do-controls">
-        <div class="do-buttons" role="group" aria-label="기항지 선택"><button type="button" data-stop="0" aria-pressed="true">기항지 A · 낮</button><button type="button" data-stop="1" aria-pressed="false">기항지 B · 저녁</button><button type="button" data-stop="2" aria-pressed="false">기항지 C · 밤</button></div>
-        <div class="do-buttons" role="group" aria-label="해역 구분"><button type="button" data-spectral="0" aria-pressed="false">일반 해역</button><button type="button" data-spectral="1" aria-pressed="true">환해류</button></div>
-      </div>
-      <div class="do-split">
-        <section class="do-fish-list" aria-label="기항지 전체 어종">
-          <div class="do-list-head"><h3 id="do-stop-heading">기항지 A · 환해류</h3><label>목적 <select aria-label="보기 목적" id="do-goal"><option value="points">점수</option><option value="mission">임무·칭호</option><option value="guide">도감</option></select></label></div>
-          <p class="do-note" id="do-context">기준점수 순 · 보너스와 성공률을 반영한 추천 아님</p>
-          <table aria-label="먼바다 어종 비교"><thead><tr><th>어종 · 미끼</th><th>입질</th><th class="do-end">점수</th><th class="do-end">이중 / 삼중</th></tr></thead><tbody id="do-fish-rows"></tbody></table>
-          <div class="do-conditions"><h3>이 기항지에서 확인할 조건</h3><div id="do-conditions"></div></div>
-        </section>
-        <aside class="do-detail" aria-label="선택한 어종의 공통 상세보기">
-          <div class="do-detail-head"><span>어종 상세</span><span class="do-note">기존 상세 영역 재사용</span></div>
-          <div id="do-selected" aria-live="polite"></div>
-        </aside>
-      </div>
-      <footer class="do-footer">가상 항로·가상 어종·가상 수치입니다. 항해 상태는 조회하지 않습니다.</footer>
-    </div>
+    <div class="ob-content" id="ob-content"></div>
   </article>
 </div>
 <style>
-#df-ocean-proposal { --do-bg:light-dark(#f4f1e9,#242625); --do-panel:light-dark(#eae6dc,#303330); --do-text:light-dark(#292d2c,#e7e6df); --do-muted:light-dark(#5c625e,#b5b9af); --do-line:light-dark(#c9c8bc,#51574f); --do-accent:light-dark(#655223,#dbc28d); --do-good:light-dark(#235a4a,#a3d3b9); --do-spot:light-dark(#e0ebe3,#303e36); --do-button:light-dark(#e2dfd5,#3b403b); --do-highlight:light-dark(#ede5d5,#403b30); }
-#df-ocean-proposal .do-app { background:var(--do-bg); color:var(--do-text); border:1px solid var(--do-line); border-radius:4px; font:13px/1.5 "Segoe UI","Malgun Gothic",sans-serif; }
-#df-ocean-proposal .do-app * { box-sizing:border-box; }
-#df-ocean-proposal .do-chrome { display:flex; justify-content:space-between; gap:12px; padding:8px 14px; background:var(--do-panel); color:var(--do-accent); border-bottom:1px solid var(--do-line); }
-#df-ocean-proposal .do-navigation { display:flex; flex-wrap:wrap; gap:3px 16px; padding:10px 14px; border-bottom:1px solid var(--do-line); color:var(--do-muted); }
-#df-ocean-proposal .do-navigation strong { font-weight:500; color:var(--do-accent); border-bottom:2px solid var(--do-accent); }
-#df-ocean-proposal .do-content { padding:16px; }
-#df-ocean-proposal .do-route-head { display:flex; align-items:center; justify-content:space-between; gap:12px; flex-wrap:wrap; }
-#df-ocean-proposal .do-app h2 { font-size:18px; font-weight:500; margin:0 0 3px; line-height:1.4; }
-#df-ocean-proposal .do-app h3 { font-size:13px; font-weight:500; margin:0; color:var(--do-accent); }
-#df-ocean-proposal .do-app p { margin:0; }
-#df-ocean-proposal .do-route-head p { font-size:12px; color:var(--do-muted); }
-#df-ocean-proposal .do-label { color:var(--do-accent); background:var(--do-highlight); padding:3px 8px; border-radius:2px; font-size:12px; }
-#df-ocean-proposal .do-controls { display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px; padding:14px 0; }
-#df-ocean-proposal .do-buttons { display:flex; gap:5px; flex-wrap:wrap; }
-#df-ocean-proposal .do-app button, #df-ocean-proposal .do-app select { color:var(--do-text); background:var(--do-button); border:1px solid var(--do-line); border-radius:3px; font:inherit; padding:5px 8px; cursor:inherit; max-width:100%; }
-#df-ocean-proposal .do-app button[aria-pressed="true"] { background:var(--do-highlight); color:var(--do-accent); border-color:var(--do-accent); }
-#df-ocean-proposal .do-split { display:grid; grid-template-columns:minmax(0,1fr) 290px; gap:18px; align-items:start; }
-#df-ocean-proposal .do-fish-list { min-width:0; }
-#df-ocean-proposal .do-list-head { display:flex; flex-wrap:wrap; justify-content:space-between; align-items:center; gap:8px; }
-#df-ocean-proposal .do-list-head label { display:flex; align-items:center; gap:6px; color:var(--do-muted); font-size:12px; }
-#df-ocean-proposal .do-note { color:var(--do-muted); font-size:12px; }
-#df-ocean-proposal #do-context { margin:7px 0; }
-#df-ocean-proposal .do-app table { width:100%; table-layout:fixed; border-collapse:collapse; font-size:12px; }
-#df-ocean-proposal .do-app th { color:var(--do-muted); font-weight:400; text-align:left; padding:7px 5px; border-bottom:1px solid var(--do-line); }
-#df-ocean-proposal .do-app th:first-child { width:45%; }
-#df-ocean-proposal .do-app th:nth-child(2) { width:12%; }
-#df-ocean-proposal .do-app th:nth-child(3) { width:15%; }
-#df-ocean-proposal .do-app td { padding:9px 5px; vertical-align:top; border-bottom:1px solid var(--do-line); overflow-wrap:anywhere; }
-#df-ocean-proposal .do-app tr.do-selected { background:var(--do-spot); }
-#df-ocean-proposal .do-app td button { border:0; background:transparent; padding:0; text-align:left; font-weight:500; text-decoration:underline; text-underline-offset:3px; }
-#df-ocean-proposal .do-end { text-align:right !important; font-variant-numeric:tabular-nums; }
-#df-ocean-proposal .do-conditions { margin-top:17px; }
-#df-ocean-proposal .do-conditions p { padding-top:7px; }
-#df-ocean-proposal .do-detail { border:1px solid var(--do-line); background:var(--do-panel); padding:12px; border-radius:3px; }
-#df-ocean-proposal .do-detail-head { display:flex; flex-wrap:wrap; justify-content:space-between; gap:5px; color:var(--do-accent); padding-bottom:9px; border-bottom:1px solid var(--do-line); }
-#df-ocean-proposal .do-detail h2 { font-size:17px; margin:12px 0 3px; }
-#df-ocean-proposal .do-detail h3 { margin:15px 0 7px; }
-#df-ocean-proposal .do-detail dl { display:grid; grid-template-columns:70px minmax(0,1fr); gap:6px 10px; margin:10px 0; }
-#df-ocean-proposal .do-detail dt { color:var(--do-muted); }
-#df-ocean-proposal .do-detail dd { margin:0; overflow-wrap:anywhere; }
-#df-ocean-proposal .do-detail .do-state { padding:8px; margin-top:12px; background:var(--do-highlight); color:var(--do-accent); }
-#df-ocean-proposal .do-detail details { border-top:1px solid var(--do-line); margin-top:12px; padding-top:7px; }
-#df-ocean-proposal .do-detail summary { color:var(--do-muted); cursor:inherit; }
-#df-ocean-proposal .do-detail details p { padding-top:6px; }
-#df-ocean-proposal .do-footer { margin-top:18px; padding-top:8px; border-top:1px solid var(--do-line); color:var(--do-muted); font-size:12px; }
-@media(max-width:750px) { #df-ocean-proposal .do-split { grid-template-columns:minmax(0,1fr); } }
-@media(max-width:380px) { #df-ocean-proposal .do-content { padding:10px; } #df-ocean-proposal .do-navigation { gap:6px 12px; padding:10px; } }
-@media(pointer:coarse) { #df-ocean-proposal .do-app button, #df-ocean-proposal .do-app select, #df-ocean-proposal .do-app summary { min-height:44px; } }
+#duckbill-ocean-beta { --ob-bg:light-dark(#f4f1e9,#242625); --ob-panel:light-dark(#eae6dc,#303330); --ob-text:light-dark(#292d2c,#e7e6df); --ob-muted:light-dark(#5c625e,#b5b9af); --ob-line:light-dark(#c9c8bc,#51574f); --ob-gold:light-dark(#655223,#dbc28d); --ob-good:light-dark(#235a4a,#a3d3b9); --ob-active:light-dark(#e0ebe3,#303e36); --ob-button:light-dark(#e2dfd5,#3b403b); --ob-preview:light-dark(#ede5d5,#403b30); --ob-warning:light-dark(#7a451a,#ebc399); }
+#duckbill-ocean-beta .ob-app { box-sizing:border-box; width:100%; margin:0 auto; color:var(--ob-text); background:var(--ob-bg); border:1px solid var(--ob-line); border-radius:4px; font:13px/1.5 "Segoe UI","Malgun Gothic",sans-serif; }
+#duckbill-ocean-beta .ob-app * { box-sizing:border-box; }
+#duckbill-ocean-beta .ob-chrome { display:flex; justify-content:space-between; gap:12px; padding:8px 14px; color:var(--ob-gold); background:var(--ob-panel); border-bottom:1px solid var(--ob-line); }
+#duckbill-ocean-beta .ob-nav { display:flex; align-items:center; gap:6px 18px; flex-wrap:wrap; padding:11px 16px; border-bottom:1px solid var(--ob-line); color:var(--ob-muted); }
+#duckbill-ocean-beta .ob-nav-current { color:var(--ob-gold); border-bottom:2px solid var(--ob-gold); padding-bottom:3px; }
+#duckbill-ocean-beta .ob-nav small { font-size:11px; padding:1px 4px; background:var(--ob-preview); border-radius:2px; }
+#duckbill-ocean-beta .ob-content { padding:20px; }
+#duckbill-ocean-beta .ob-app h2 { font-size:18px; line-height:1.4; font-weight:500; margin:0; }
+#duckbill-ocean-beta .ob-app h3 { font-size:13px; line-height:1.5; font-weight:500; color:var(--ob-gold); margin:0; }
+#duckbill-ocean-beta .ob-app p { margin:0; }
+#duckbill-ocean-beta .ob-app button { font:inherit; color:var(--ob-text); border:1px solid var(--ob-line); border-radius:3px; padding:4px 9px; background:var(--ob-button); cursor:inherit; max-width:100%; }
+#duckbill-ocean-beta .ob-app button:disabled { opacity:.5; }
+#duckbill-ocean-beta .ob-app button[aria-pressed="true"] { color:var(--ob-gold); border-color:var(--ob-gold); background:var(--ob-preview); }
+#duckbill-ocean-beta .ob-heading { display:flex; justify-content:space-between; align-items:flex-start; flex-wrap:wrap; gap:12px; }
+#duckbill-ocean-beta .ob-muted { color:var(--ob-muted); font-size:12px; }
+#duckbill-ocean-beta .ob-state { display:inline-block; padding:2px 7px; color:var(--ob-good); background:var(--ob-active); font-size:12px; border-radius:2px; margin-bottom:5px; }
+#duckbill-ocean-beta .ob-state-preview { color:var(--ob-gold); background:var(--ob-preview); }
+#duckbill-ocean-beta .ob-clock { text-align:right; margin-left:auto; }
+#duckbill-ocean-beta .ob-clock-value { font-size:23px; font-variant-numeric:tabular-nums; color:var(--ob-gold); line-height:1.5; }
+#duckbill-ocean-beta .ob-route { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:0; list-style:none; padding:0; margin:18px 0 0; }
+#duckbill-ocean-beta .ob-stop { position:relative; padding:9px 14px; border-bottom:2px solid var(--ob-line); min-width:0; overflow-wrap:anywhere; }
+#duckbill-ocean-beta .ob-stop:first-child { padding-left:0; }
+#duckbill-ocean-beta .ob-stop:not(:last-child)::after { content:'→'; position:absolute; right:0; top:26px; color:var(--ob-muted); }
+#duckbill-ocean-beta .ob-stop-state { font-size:12px; color:var(--ob-muted); }
+#duckbill-ocean-beta .ob-stop-name { margin-top:4px; font-weight:500; }
+#duckbill-ocean-beta .ob-stop-current { border-bottom-color:var(--ob-good); }
+#duckbill-ocean-beta .ob-stop-current .ob-stop-state { color:var(--ob-good); }
+#duckbill-ocean-beta .ob-section { margin-top:23px; }
+#duckbill-ocean-beta .ob-section-heading { display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:8px; margin-bottom:8px; }
+#duckbill-ocean-beta .ob-bait-row { display:grid; grid-template-columns:116px minmax(0,1fr) auto auto; align-items:center; gap:12px; padding:10px 12px; border-bottom:1px solid var(--ob-line); }
+#duckbill-ocean-beta .ob-bait-current { background:var(--ob-active); }
+#duckbill-ocean-beta .ob-bait-label { color:var(--ob-muted); }
+#duckbill-ocean-beta .ob-bait-current .ob-bait-label { color:var(--ob-good); }
+#duckbill-ocean-beta .ob-bait-name { font-weight:500; }
+#duckbill-ocean-beta .ob-target { padding:10px 12px; color:var(--ob-muted); font-size:12px; }
+#duckbill-ocean-beta .ob-target strong { color:var(--ob-text); font-weight:400; }
+#duckbill-ocean-beta .ob-feedback { color:var(--ob-gold); font-size:12px; margin-top:9px !important; }
+#duckbill-ocean-beta .ob-feedback:empty { display:none; }
+#duckbill-ocean-beta .ob-app details { margin-top:22px; }
+#duckbill-ocean-beta .ob-app summary { color:var(--ob-muted); cursor:inherit; padding:5px 0; }
+#duckbill-ocean-beta .ob-app details[open] summary { color:var(--ob-gold); margin-bottom:9px; }
+#duckbill-ocean-beta .ob-schedule-head, #duckbill-ocean-beta .ob-schedule-row { display:grid; grid-template-columns:120px minmax(0,1fr) 130px; gap:14px; }
+#duckbill-ocean-beta .ob-schedule-head { padding:7px 12px; color:var(--ob-muted); font-size:12px; border-bottom:1px solid var(--ob-line); }
+#duckbill-ocean-beta .ob-app .ob-schedule-row { width:100%; text-align:left; padding:10px 12px; border-radius:0; border:0; border-bottom:1px solid var(--ob-line); background:transparent; }
+#duckbill-ocean-beta .ob-app .ob-schedule-row[aria-pressed="true"] { background:var(--ob-preview); color:var(--ob-text); }
+#duckbill-ocean-beta .ob-schedule-time { font-variant-numeric:tabular-nums; }
+#duckbill-ocean-beta .ob-schedule-until { text-align:right; color:var(--ob-muted); }
+#duckbill-ocean-beta .ob-preview-area { margin-top:17px; padding-top:12px; }
+#duckbill-ocean-beta .ob-warning { border-left:3px solid var(--ob-warning); padding:9px 12px; background:var(--ob-preview); margin-bottom:18px; }
+#duckbill-ocean-beta .ob-warning strong { color:var(--ob-warning); font-weight:500; }
+#duckbill-ocean-beta .ob-footer { margin-top:23px; padding-top:9px; border-top:1px solid var(--ob-line); color:var(--ob-muted); font-size:12px; }
+@media(max-width:620px) { #duckbill-ocean-beta .ob-content { padding:14px; } #duckbill-ocean-beta .ob-bait-row { grid-template-columns:92px minmax(0,1fr) auto; gap:8px; } #duckbill-ocean-beta .ob-bait-stock { grid-column:2; grid-row:2; } #duckbill-ocean-beta .ob-bait-row button { grid-column:3; grid-row:1 / 3; } #duckbill-ocean-beta .ob-schedule-head, #duckbill-ocean-beta .ob-schedule-row { grid-template-columns:86px minmax(0,1fr) 88px; gap:8px; } }
+@media(max-width:380px) { #duckbill-ocean-beta .ob-content { padding:11px; } #duckbill-ocean-beta .ob-nav { gap:7px 12px; padding:10px 11px; } #duckbill-ocean-beta .ob-bait-row { grid-template-columns:75px minmax(0,1fr) auto; padding:9px 6px; gap:6px; } #duckbill-ocean-beta .ob-stop { padding:7px 8px; } #duckbill-ocean-beta .ob-stop-name { font-size:12px; } #duckbill-ocean-beta .ob-clock-value { font-size:20px; } #duckbill-ocean-beta .ob-schedule-head, #duckbill-ocean-beta .ob-schedule-row { grid-template-columns:70px minmax(0,1fr) 76px; gap:6px; } #duckbill-ocean-beta .ob-schedule-head { padding:7px 6px; } #duckbill-ocean-beta .ob-app .ob-schedule-row { padding:10px 6px; } }
+@media(pointer:coarse) { #duckbill-ocean-beta .ob-app button, #duckbill-ocean-beta .ob-app summary { min-height:44px; } }
 </style>
 <script>
 (() => {
-  const root=document.getElementById('df-ocean-proposal');
-  const state={stop:2,spectral:true,goal:'points',selected:'blue'};
-  const fish=[
-    {id:'blue',name:'심해 푸른왕관',bait:'특수 미끼 A',tug:'!!!',points:500,dh:'1',th:'1',mission:'해당 없음',spectral:true,intuition:true,caught:false},
-    {id:'stripe',name:'환해 줄무늬고기',bait:'바닷물 새우',tug:'!!',points:200,dh:'4',th:'7',mission:'상어류',spectral:true,caught:true},
-    {id:'silver',name:'먼바다 은줄고기',bait:'바닷물 새우',tug:'!!',points:100,dh:'3–4',th:'5–7',mission:'상어류',spectral:false,caught:false},
-    {id:'shell',name:'밤빛 조개',bait:'바다 지렁이',tug:'!',points:80,dh:'3',th:'5',mission:'조개류',spectral:true,caught:false},
-    {id:'ray',name:'먼바다 가오리',bait:'바다 지렁이',tug:'!!',points:50,dh:'2',th:'3',mission:'가오리류',spectral:false,caught:true},
-    {id:'trigger',name:'푸른 환해류어',bait:'바닷물 새우',tug:'!!!',points:100,dh:'1',th:'1',mission:'해당 없음',spectral:false,trigger:true,caught:true}
+  const root=document.getElementById('duckbill-ocean-beta');
+  const content=root.querySelector('#ob-content');
+  const scene=root.querySelector('#ob-scene');
+  const app=root.querySelector('.ob-app');
+  const design={width:1024,stock:true};
+  const state={preview:0,scheduleOpen:false};
+  const departures=[
+    {time:'20:00',route:'항로 A',until:'12분 후',places:['해역 A','해역 B','해역 C'],times:['낮','저녁','밤']},
+    {time:'22:00',route:'항로 B',until:'2시간 12분 후',places:['해역 D','해역 E','해역 F'],times:['저녁','밤','낮']},
+    {time:'내일 00:00',route:'항로 C',until:'4시간 12분 후',places:['해역 G','해역 H','해역 I'],times:['밤','낮','저녁']}
   ];
-  function render(){
-    root.querySelectorAll('[data-stop]').forEach(b=>b.setAttribute('aria-pressed',String(+b.dataset.stop===state.stop)));
-    root.querySelectorAll('[data-spectral]').forEach(b=>b.setAttribute('aria-pressed',String(Boolean(+b.dataset.spectral)===state.spectral)));
-    root.querySelector('#do-goal').value=state.goal;
-    const availableAtStop=f=>!f.intuition||state.stop===2;
-    const visible=fish.filter(f=>f.spectral===state.spectral).sort((a,b)=>Number(availableAtStop(b))-Number(availableAtStop(a))||(state.goal==='points'?b.points-a.points:state.goal==='guide'?Number(a.caught)-Number(b.caught):a.mission.localeCompare(b.mission,'ko')));
-    if(!visible.some(f=>f.id===state.selected))state.selected=visible[0].id;
-    const stop=['기항지 A · 낮','기항지 B · 저녁','기항지 C · 밤'][state.stop];
-    root.querySelector('#do-stop-heading').textContent=`${stop} · ${state.spectral?'환해류':'일반 해역'}`;
-    root.querySelector('#do-context').textContent={points:'기준점수 순 · 보너스와 성공률을 반영한 추천 아님',mission:'임무 분류 순 · 어종명 아래 분류 표시',guide:'미수집 우선 · 수집 상태는 시안용'}[state.goal];
-    root.querySelector('#do-fish-rows').innerHTML=visible.map(f=>`<tr class="${f.id===state.selected?'do-selected':''}"><td><button type="button" class="cursor-interaction" data-fish="${f.id}">${f.name}</button><div class="do-note">${f.bait}</div><div class="do-note">${availableAtStop(f)?(state.goal==='guide'?(f.caught?'수집됨':'미수집'):f.mission):'출현 제외 · 밤에만 출현'}${f.intuition?' · 직감 필요':''}${f.trigger?' · 환해류 유발':''}</div></td><td>${f.tug}</td><td class="do-end">${f.points}</td><td class="do-end">${f.dh} / ${f.th}</td></tr>`).join('');
-    root.querySelector('#do-conditions').innerHTML=state.spectral?'<p>직감 어종: 선행 A × 2 + 선행 B × 1</p><p class="do-note">심해 푸른왕관은 밤에만 출현 · 낮·저녁 기항에는 대상에서 제외</p>':'<p>환해류 유발 대상: 푸른 환해류어</p><p class="do-note">어종별 출현과 환해류 발생은 구분</p>';
-    const f=visible.find(x=>x.id===state.selected);
-    const available=!f.intuition||state.stop===2;
-    root.querySelector('#do-selected').innerHTML=`<h2>${f.name}</h2><p class="do-note">가상 어종 · ${state.spectral?'환해류 안':'일반 해역'}</p><div class="do-state">${available?(f.intuition?'밤·직감 필요':'이 기항 시간대의 출현 대상'):'이 기항 시간대에는 출현하지 않음'}</div><h3>잡는 방법</h3><dl><dt>미끼</dt><dd>${f.bait}</dd><dt>입질</dt><dd>${f.tug} · ${f.tug==='!'?'섬세':'강력'}</dd><dt>기준점수</dt><dd>${f.points}점</dd><dt>이중</dt><dd>${f.dh}마리</dd><dt>삼중</dt><dd>${f.th}마리</dd><dt>임무 분류</dt><dd>${f.mission}</dd><dt>환해류 유발</dt><dd>${f.trigger?'대상':'해당 없음'}</dd></dl>${f.intuition?'<h3>직감 준비</h3><p>선행 어종 A × 2</p><p>선행 어종 B × 1</p><p class="do-note">둘 다 필요 · 직감 20초 · 진행도 미확인</p>':''}<details><summary>해역·항로·개인 기록·출처</summary><p>시안용 해역 · 항로 A / B</p><p class="do-note">공통 상세의 동일한 접힘 영역 사용</p></details>`;
-    if(!available)root.querySelector('#do-context').textContent+=' · 출현 제외 어종은 조건 비교용으로 표시';
+  function routeStrip(voyage,current=-1,moving=false){
+    return `<ol class="ob-route" aria-label="기항 순서">${voyage.places.map((place,index)=>{
+      const label=current<0?`${index+1}번째`:moving?(index===2?'다음':index===1?'출발한 해역':'지남'):index<current?'지남':index===current?'현재':'다음';
+      return `<li class="ob-stop ${index===current&&!moving?'ob-stop-current':''}"><div class="ob-stop-state">${label}</div><div class="ob-stop-name">${place} · ${voyage.times[index]}</div></li>`;
+    }).join('')}</ol>`;
   }
-  function save(){if(window.openai?.setWidgetState)window.openai.setWidgetState({modelContent:{oceanView:state},privateContent:null}).catch(()=>{});}
-  root.addEventListener('click',e=>{
+  function baitRow(label,name,active=false){
+    return `<div class="ob-bait-row ${active?'ob-bait-current':''}"><span class="ob-bait-label">${label}</span><span class="ob-bait-name">${name}</span><span class="ob-muted ob-bait-stock">소지 ${design.stock?99:0}개</span><button type="button" data-bait="${name}" ${design.stock?'':'disabled'}>미끼 찾기</button></div>`;
+  }
+  function schedule(){
+    return `<div class="ob-schedule-head"><span>접수 시작 · LT</span><span>출항편</span><span class="ob-schedule-until">접수 상태</span></div>${departures.map((d,i)=>`<button type="button" class="ob-schedule-row" data-departure="${i}" aria-pressed="${state.preview===i}"><span class="ob-schedule-time">${d.time}</span><span>${d.route} · ${d.places[2]}행</span><span class="ob-schedule-until">${scene.value==='boarding'?['접수 중','1시간 54분 후','3시간 54분 후'][i]:d.until}</span></button>`).join('')}`;
+  }
+  function preview(){
+    const d=departures[state.preview];
+    return `<section class="ob-preview-area" aria-label="선택한 편 미리보기"><div class="ob-section-heading"><h3>${d.route} · ${d.places[2]}행</h3><span class="ob-state ob-state-preview">미리보기</span></div>${routeStrip(d)}<section class="ob-section"><div class="ob-section-heading"><h3>준비 미끼</h3></div>${baitRow('기본 미끼','미끼 A')}${baitRow('기본 미끼','미끼 B')}${baitRow('기본 미끼','미끼 C')}</section></section>`;
+  }
+  function render(){
+    app.style.maxWidth=`${design.width}px`;
+    const value=scene.value;
+    const atSea=['fishing','spectral','travel'].includes(value);
+    let html='';
+    if(atSea){
+      const spectral=value==='spectral';
+      const moving=value==='travel';
+      html=`<div class="ob-heading"><div><span class="ob-state">승선 중 · ${moving?'이동 중':spectral?'환해류':'일반 해역'}</span><h2>항로 A · 해역 C행</h2></div><div class="ob-clock"><div class="ob-muted">${moving?'다음 해역으로 이동':'현재 해역 낚시 종료까지'}</div><div class="ob-clock-value">${moving?'이동 중':'03:12'}</div></div></div>${routeStrip(departures[0],1,moving)}`;
+      html+=`<section class="ob-section"><div class="ob-section-heading"><h3>${moving?'다음 해역 준비':'기본 낚시 안내'}</h3>${moving?'<span class="ob-muted">해역 C 기준</span>':''}</div>`;
+      if(moving)html+=baitRow('다음 추천','미끼 C');
+      else {
+        html+=baitRow(spectral?'일반 해역':'지금 추천','미끼 A',!spectral)+baitRow(spectral?'지금 추천':'환해류 때','미끼 B',spectral);
+        html+=`<p class="ob-target">${spectral?'점수용 목표':'환해류 유발 대상'} <strong>어종 ${spectral?'B':'A'}</strong> · ${spectral?'!!':'!!!'} · 이중 ${spectral?'4':'1'}마리 · 삼중 ${spectral?'7':'1'}마리</p>`;
+      }
+      html+='</section>';
+      html+=`<details data-schedule ${state.scheduleOpen?'open':''}><summary>출항 일정 미리보기</summary>${schedule()}${preview()}</details>`;
+    }else{
+      if(value==='unknown')html+='<div class="ob-warning"><strong>승선 정보를 확인할 수 없습니다.</strong><p class="ob-muted">항해 시간과 추천 미끼 확인 불가 · 아래 일정은 수동 미리보기입니다.</p></div>';
+      const boarding=value==='boarding';
+      html+=`<div class="ob-heading"><div><span class="ob-state ob-state-preview">${boarding?'접수 중':'출항 일정'}</span><h2>${boarding?'현재 접수 · 20:00편':'다음 접수 20:00'}</h2></div><div class="ob-clock"><div class="ob-muted">${boarding?'접수 종료까지':'다음 접수까지'}</div><div class="ob-clock-value">${boarding?'08:40':'12분'}</div></div></div><section class="ob-section">`+schedule()+preview()+'</section>';
+    }
+    html+='<p class="ob-feedback" data-feedback aria-live="polite"></p><footer class="ob-footer">배치용 가상 일정·항로·미끼·수치입니다. 실제 추천 자료는 검수 전입니다.</footer>';
+    content.innerHTML=html;
+    const details=content.querySelector('[data-schedule]');
+    if(details)details.addEventListener('toggle',()=>{state.scheduleOpen=details.open;});
+  }
+  function save(){if(window.openai?.setWidgetState)window.openai.setWidgetState({modelContent:{oceanBetaScene:scene.value,previewDeparture:state.preview},privateContent:{scheduleOpen:state.scheduleOpen,stock:design.stock,width:design.width}}).catch(()=>{});}
+  scene.addEventListener('change',()=>{state.scheduleOpen=false;render();save();});
+  content.addEventListener('click',e=>{
     const b=e.target.closest('button');if(!b)return;
-    if(b.dataset.stop!==undefined)state.stop=+b.dataset.stop;
-    if(b.dataset.spectral!==undefined)state.spectral=Boolean(+b.dataset.spectral);
-    if(b.dataset.fish)state.selected=b.dataset.fish;
-    render();save();
+    if(b.dataset.departure!==undefined){state.preview=Number(b.dataset.departure);if(['fishing','spectral','travel'].includes(scene.value))state.scheduleOpen=true;render();save();}
+    if(b.dataset.bait){content.querySelector('[data-feedback]').textContent=`${b.dataset.bait} 찾기 · 게임 미끼 선택 화면을 열면 해당 칸과 페이지를 강조합니다. (시안)`;}
   });
-  root.querySelector('#do-goal').addEventListener('change',e=>{state.goal=e.target.value;render();save();});
-  function restore(snapshot){const s=snapshot?.modelContent?.oceanView;if(s){if([0,1,2].includes(s.stop))state.stop=s.stop;if(typeof s.spectral==='boolean')state.spectral=s.spectral;if(['points','mission','guide'].includes(s.goal))state.goal=s.goal;if(fish.some(f=>f.id===s.selected))state.selected=s.selected;}render();}
+  function restore(snapshot){
+    const m=snapshot?.modelContent,p=snapshot?.privateContent;
+    if(['shore','boarding','fishing','spectral','travel','unknown'].includes(m?.oceanBetaScene))scene.value=m.oceanBetaScene;
+    if([0,1,2].includes(m?.previewDeparture))state.preview=m.previewDeparture;
+    if(typeof p?.scheduleOpen==='boolean')state.scheduleOpen=p.scheduleOpen;
+    if(typeof p?.stock==='boolean')design.stock=p.stock;
+    if(Number.isFinite(p?.width))design.width=Math.max(320,Math.min(1024,p.width));
+    render();
+  }
   restore(window.openai?.widgetState);
   window.addEventListener('openai:set_globals',e=>{if(e.detail?.globals?.widgetState)restore(e.detail.globals.widgetState);});
+  if(globalThis.Tweak){const tweak=new Tweak({container:root,onChange:()=>{render();save();}});tweak.addSlider(design,'width',{label:'메인 화면 폭',min:320,max:1024,step:16,unit:'px'});tweak.addToggle(design,'stock',{label:'미끼 소지 중'});}
 })();
 </script>
