@@ -104,7 +104,7 @@
     return section('직감 조건',`<div class="df-inline"><span>${related('선행 어종 A')} × ${ocean?2:3}</span><span>+</span><span>${related('선행 어종 B')} × ${ocean?1:2}</span><span class="df-sub">· ${duration}</span></div>`);
   }
   function delivery(v) {
-    const destination=v.reward==='custom'?'단골 NPC A · 마을 B':'소장품 납품원 · 도시 A';
+    const destination=v.reward==='custom'?'단골 NPC A':'소장품 납품원';
     return `<p class="df-delivery">${destination} · 소장가치 300 / 450 / 600+</p>`;
   }
   function ocean(v) {
