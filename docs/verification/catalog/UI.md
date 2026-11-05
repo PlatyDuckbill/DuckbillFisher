@@ -1,5 +1,14 @@
 # 목록·상세·화면 검증 요약
 
+## 채팅 물고기 링크 우클릭 누락 보완 (2026-11-05)
+
+- 사용자 확인: `/dbfs 어종 이름` 검색은 정상이다. 우클릭 누락은 **채팅 링크**에서 발생했다.093eaf0은 MenuTargetInventory.TargetItem만 처리해 이 경로를 빠뜨렸다. 소지품 외 UI 전체를 지원한 상태는 아니었다.
+- NativeChatItemContextReader로 현재 Default 메뉴의 ChatLog 소유 이벤트 인터페이스와 AgentChatLog.ContextItemId를 확인한다. 다른 소유자·플레이어 대상·상태 링크·0 ID는 제외하고 공개 ItemUtil.GetBaseId로 품질/소장품 표시 ID를 정규화한 뒤 기존 물고기 인덱스에 대조한다. HoveredItem/아이템명 추측은 사용하지 않는다.
+- KR·글로벌 설치 ClientStructs의 Framework.UIModule, UIModule.GetAgentModule, AgentModule.Agents/AgentId.ChatLog, AgentInterface, AgentChatLog.ContextItemId/ContextStatusId 형태와 IL을 대조했다. Framework 메뉴 콜백 안에서만 읽고 주소 해석·UI 모듈/Agent 소속·메뉴 이벤트 소유자를 검사한다. 포인터/게임 객체를 저장하지 않고 관리 Item ID만 전달한다. 실패는 이 메뉴만 생략한다.
+- 짧은 진단은 `FishDetailContext/v1: State=...; FishMatch=...`다. 상태가 바뀔 때만 Debug로 남기며 이름/채팅 내용/캐릭터 정보는 기록하지 않는다. DLL/빌드 해시 전역 가드는 없다.
+- 실기 대기: 채팅 물고기 링크의 메뉴→상세 연결, HQ/소장품 링크 정규화, 일반 재료/장비·플레이어 이름·상태 링크에 메뉴 없음, 소지품 기존 경로와 재로드 중복 없음. 구조/컴파일 검사는 이 결과를 대신하지 않는다.
+- KR 별도·글로벌·최소15.0.3.6·KR 정규 Debug 빌드 경고0/오류0, 한영1,036키·문서/링크·diff 검사 통과. 메타데이터63루트/사용 멤버250의 Breaking0·Uncovered0이며 기존 UI 모듈 크기 Review3건/비사용 멤버 경고82건은 남는다. 테스트는 추가·실행하지 않았고 푸시/배포하지 않았다.
+
 ## 이름 명령·물고기 전용 우클릭 상세 (개발본 2026-11-05)
 
 - `/dbfs 어종 이름`의 정확 일치 한 종은 기존 상세로, 부분 일치/동명 복수는 후보 선택으로 연결했다. 공백/따옴표·0건 안내와 기존 cl/ct 명령을 유지한다. 후보 계산은 Framework이며 Draw는 결과만 표시한다.

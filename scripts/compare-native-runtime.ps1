@@ -185,10 +185,16 @@ $groups = [ordered]@{
         'Dalamud.Plugin.Services.IContextMenu', 'Dalamud.Game.Gui.ContextMenu.IMenuArgs',
         'Dalamud.Game.Gui.ContextMenu.IMenuOpenedArgs', 'Dalamud.Game.Gui.ContextMenu.MenuItem',
         'Dalamud.Game.Gui.ContextMenu.MenuTargetInventory', 'Dalamud.Game.Inventory.GameInventoryItem',
+        'Dalamud.Game.Gui.ContextMenu.MenuTargetDefault', 'Dalamud.Utility.ItemUtil',
         'Dalamud.Game.ClientState.Statuses.Status', 'Dalamud.Game.ClientState.Statuses.StatusList',
         'Dalamud.Game.ClientState.Objects.Types.BattleChara'
     )
     'FFXIVClientStructs.dll' = @(
+        'FFXIVClientStructs.FFXIV.Client.System.Framework.Framework',
+        'FFXIVClientStructs.FFXIV.Client.UI.Agent.AgentModule',
+        'FFXIVClientStructs.FFXIV.Client.UI.Agent.AgentInterface',
+        'FFXIVClientStructs.FFXIV.Client.UI.Agent.AgentChatLog',
+        'FFXIVClientStructs.FFXIV.Client.UI.Agent.AgentId',
         'FFXIVClientStructs.FFXIV.Client.Game.UI.PlayerState',
         'FFXIVClientStructs.FFXIV.Client.Game.Status',
         'FFXIVClientStructs.FFXIV.Client.UI.Agent.AgentFishGuide',

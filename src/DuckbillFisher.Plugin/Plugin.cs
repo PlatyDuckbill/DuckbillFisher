@@ -124,7 +124,7 @@ public sealed class Plugin : IDalamudPlugin
         var preparationWindow = new BaitPreparationWindow(preparationPanel);
         var detailPanel = new FishDetailPanel(fishPreferences, textureProvider, fishingMap, new FishingConditionPanel(textureProvider, itemLinks, baitStock, baitFinder));
         detailWindow = new FishDetailWindow(fishCatalog, fishPreferences, fishCollection, detailPanel, guideOpener);
-        detailAccess = new(fishCatalog, fishPreferences, contextMenu, framework, detailWindow.Show);
+        detailAccess = new(fishCatalog, fishPreferences, contextMenu, framework, log, detailWindow.Show);
         compareDetailWindow = new FishDetailWindow(fishCatalog, fishPreferences, fishCollection, detailPanel, guideOpener, comparison: true);
         detailPanel.OpenRelated = (origin, itemId) =>
         {

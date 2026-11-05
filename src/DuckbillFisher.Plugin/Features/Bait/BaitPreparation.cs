@@ -68,7 +68,7 @@ internal sealed class BaitPreparation : IDisposable
                 fishItems = data.Rows.Where(row => row.ItemType == "Item").Select(row => row.ItemId).ToHashSet();
             lastSession = personal.Session; lastPreference = personal.CatalogRevision; lastCollection = observed.Revision;
             lastRows = data.Rows; lastRegion = location; lastQuery = current; lastSource = source;
-            if (!personal.HasCharacter) { view = new(personal.Session, 0, [], []); return; }
+            if (!personal.HasCharacter) { view = new(personal.Session, 0, [], []) { Source = source }; return; }
             var filter = new CatalogFilter(current.Settings);
             var targets = data.Rows.Where(row => source == BaitPreparationSource.Favorites
                 ? personal.Favorites.Contains(row.FishParameterId)

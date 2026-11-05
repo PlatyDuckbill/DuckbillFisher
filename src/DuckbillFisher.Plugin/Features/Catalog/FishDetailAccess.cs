@@ -4,6 +4,7 @@ using Dalamud.Game.Gui.ContextMenu;
 using Dalamud.Game.Text.SeStringHandling;
 using Dalamud.Interface.Windowing;
 using Dalamud.Plugin.Services;
+using Dalamud.Utility;
 using DuckbillFisher.Plugin.Localization;
 using T = DuckbillFisher.Plugin.Localization.TextKey;
 
@@ -17,6 +18,9 @@ internal sealed class FishDetailAccess : Window, IDisposable
     private readonly IContextMenu menus;
     private readonly IFramework framework;
     private readonly Action<FishGuideRow> show;
+    private readonly NativeChatItemContextReader chatItems;
+    private readonly IPluginLog log;
+    private (ChatItemContextState State, bool Fish)? lastChatResult;
     private IReadOnlyList<FishGuideRow>? rows;
     private IReadOnlyDictionary<uint, FishGuideRow> byItem = new Dictionary<uint, FishGuideRow>();
     private FishGuideRow[] candidates = [];
@@ -27,9 +31,10 @@ internal sealed class FishDetailAccess : Window, IDisposable
     private string search = "";
 
     public FishDetailAccess(FishCatalog catalog, FishPreferences preferences, IContextMenu menus,
-        IFramework framework, Action<FishGuideRow> show) : base("DuckbillFisher###DuckbillFisher.DetailSearch")
+        IFramework framework, IPluginLog log, Action<FishGuideRow> show) : base("DuckbillFisher###DuckbillFisher.DetailSearch")
     {
         this.catalog = catalog; this.preferences = preferences; this.menus = menus; this.framework = framework; this.show = show;
+        this.log = log; chatItems = new(framework);
         Size = new(420, 320); SizeCondition = ImGuiCond.FirstUseEver;
         SizeConstraints = new() { MinimumSize = new(280, 160), MaximumSize = new(float.MaxValue) };
         BgAlpha = UiWidgets.BackgroundAlpha;
@@ -45,8 +50,23 @@ internal sealed class FishDetailAccess : Window, IDisposable
 
     private void OnMenuOpened(IMenuOpenedArgs args)
     {
-        if (args.Target is not MenuTargetInventory { TargetItem: { } item } ||
-            !byItem.TryGetValue(item.BaseItemId, out var fish)) return;
+        uint itemId;
+        if (args.Target is MenuTargetInventory { TargetItem: { } item }) itemId = item.BaseItemId;
+        else
+        {
+            var context = chatItems.Read(args);
+            var baseId = ItemUtil.GetBaseId(context.RawItemId).Item1;
+            var result = (context.State, context.State == ChatItemContextState.Ready && ItemUtil.IsNormalItem(baseId) && byItem.ContainsKey(baseId));
+            var chatAddon = args.AddonName?.StartsWith("ChatLog", StringComparison.Ordinal) == true;
+            if ((chatAddon || context.State is not (ChatItemContextState.NotDefaultMenu or ChatItemContextState.OtherOwner)) && lastChatResult != result)
+            {
+                lastChatResult = result;
+                log.Debug("FishDetailContext/v1: State={State}; FishMatch={FishMatch}", result.State, result.Item2);
+            }
+            if (!result.Item2) return;
+            itemId = baseId;
+        }
+        if (!byItem.TryGetValue(itemId, out var fish)) return;
         var expectedSession = preferences.View.Session;
         var id = fish.FishParameterId;
         args.AddMenuItem(new MenuItem
