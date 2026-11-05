@@ -1,4 +1,5 @@
 using System.Diagnostics;
+using System.Numerics;
 using Dalamud.Bindings.ImGui;
 using Dalamud.Plugin.Services;
 using DuckbillFisher.Core;
@@ -164,23 +165,27 @@ internal sealed class OceanFishingPanel(OceanFishing ocean, FishPreferences pref
         if (ImGui.BeginTable("OceanDepartures", 3, ImGuiTableFlags.RowBg | ImGuiTableFlags.SizingFixedFit))
         {
             ImGui.TableSetupColumn(UiText.Label(T.OceanRegistrationLocal, "RegistrationTime"), ImGuiTableColumnFlags.WidthFixed, ImGui.GetFontSize() * 9);
-            ImGui.TableSetupColumn(UiText.Label(T.OceanDepartureColumn, "DepartureRoute"), ImGuiTableColumnFlags.WidthStretch);
-            ImGui.TableSetupColumn(UiText.Label(T.OceanRegistrationStatus, "RegistrationStatus"), ImGuiTableColumnFlags.WidthFixed, ImGui.GetFontSize() * 6);
+            ImGui.TableSetupColumn(UiText.Label(T.OceanIndigo, "IndigoRoute"), ImGuiTableColumnFlags.WidthStretch);
+            ImGui.TableSetupColumn(UiText.Label(T.OceanRuby, "RubyRoute"), ImGuiTableColumnFlags.WidthStretch);
             ImGui.TableHeadersRow();
-            for (var i = 0; i < view.Departures.Length; i++)
+            var now = DateTimeOffset.UtcNow;
+            foreach (var group in view.Departures.GroupBy(d => d.Starts))
             {
-                var departure = view.Departures[i];
-                ImGui.PushID(i);
+                ImGui.PushID(group.Key.ToUnixTimeSeconds().ToString(System.Globalization.CultureInfo.InvariantCulture));
                 ImGui.TableNextRow(); ImGui.TableNextColumn();
-                var label = departure.Starts.ToLocalTime().ToString("MM/dd HH:mm");
-                if (ImGui.Selectable($"{label}###Departure", departure.Starts == selectedStart && departure.Ruby == selectedRuby,
-                    ImGuiSelectableFlags.SpanAllColumns))
-                { selected = departure; selectedStart = departure.Starts; selectedRuby = departure.Ruby; }
-                ImGui.TableNextColumn(); ImGui.TextWrapped(RouteName(departure));
-                ImGui.TableNextColumn();
-                var now = DateTimeOffset.UtcNow;
-                ImGui.TextUnformatted(now >= departure.Starts && now < departure.Starts + OceanSchedule.RegistrationDuration
-                    ? UiText.Get(T.OceanRegistrationOpen) : Countdown((departure.Starts - now).TotalSeconds));
+                ImGui.TextUnformatted(group.Key.ToLocalTime().ToString("MM/dd HH:mm"));
+                ImGui.TextDisabled(now >= group.Key && now < group.Key + OceanSchedule.RegistrationDuration
+                    ? UiText.Get(T.OceanRegistrationOpen) : Countdown((group.Key - now).TotalSeconds));
+                foreach (var ruby in new[] { false, true })
+                {
+                    ImGui.TableNextColumn();
+                    var departure = group.FirstOrDefault(d => d.Ruby == ruby);
+                    if (departure is null) { ImGui.TextUnformatted("—"); continue; }
+                    ImGui.PushID(ruby ? "Ruby" : "Indigo");
+                    if (DepartureChoice(departure.Route.Name, departure.Starts == selectedStart && departure.Ruby == selectedRuby))
+                    { selected = departure; selectedStart = departure.Starts; selectedRuby = departure.Ruby; }
+                    ImGui.PopID();
+                }
                 ImGui.PopID();
             }
             ImGui.EndTable();
@@ -198,6 +203,21 @@ internal sealed class OceanFishingPanel(OceanFishing ocean, FishPreferences pref
         }).Where(b => b is not null).Cast<FishingItemView>().DistinctBy(b => b.Id).ToArray();
         foreach (var bait in baits) DrawBait(bait, T.OceanBasicBait, false, $"Prep{bait.Id}");
         if (baits.Length == 0) ImGui.TextWrapped(UiText.Get(T.OceanGuidanceMissing));
+    }
+
+    private static bool DepartureChoice(string label, bool selected)
+    {
+        var origin = ImGui.GetCursorPos();
+        var width = Math.Max(1, ImGui.GetContentRegionAvail().X);
+        var height = Math.Max(ImGui.GetTextLineHeightWithSpacing() + ImGui.GetTextLineHeight(),
+            ImGui.CalcTextSize(label, false, width).Y);
+        var clicked = ImGui.Selectable("###Departure", selected, ImGuiSelectableFlags.None, new Vector2(0, height));
+        var next = ImGui.GetCursorPos();
+        // Keep the native selectable hit area/keyboard behavior while wrapping long client names.
+        ImGui.SetCursorPos(origin);
+        ImGui.TextWrapped(label);
+        ImGui.SetCursorPos(next);
+        return clicked;
     }
 
     private void DrawBait(FishingItemView? bait, T label, bool active, string id)
