@@ -6,8 +6,8 @@
   <data name="OceanBetaTitle" xml:space="preserve"><value>Ocean Fishing · Beta</value></data>
   <data name="OceanBetaHint" xml:space="preserve"><value>Beta · Check the in-game schedule and voyage timer.</value></data>
   <data name="OceanDataUnavailable" xml:space="preserve"><value>Ocean Fishing data is not available.</value></data>
-  <data name="OceanStateUnavailable" xml:space="preserve"><value>Voyage information is unavailable. The schedule below is a manual preview.</value></data>
-  <data name="OceanSchedulePreview" xml:space="preserve"><value>Preview departure schedule</value></data>
+  <data name="OceanStateUnavailable" xml:space="preserve"><value>Voyage information is unavailable. Select a departure below to view its details.</value></data>
+  <data name="OceanSchedulePreview" xml:space="preserve"><value>Departure schedule</value></data>
   <data name="OceanSchedule" xml:space="preserve"><value>Departure schedule</value></data>
   <data name="OceanIndigo" xml:space="preserve"><value>Indigo</value></data>
   <data name="OceanRuby" xml:space="preserve"><value>Ruby</value></data>
@@ -38,7 +38,7 @@
   <data name="OceanRegistrationLocal" xml:space="preserve"><value>Registration · LT</value></data>
   <data name="OceanDepartureColumn" xml:space="preserve"><value>Voyage</value></data>
   <data name="OceanRegistrationStatus" xml:space="preserve"><value>Registration</value></data>
-  <data name="OceanPreview" xml:space="preserve"><value>Preview</value></data>
+  <data name="OceanPreview" xml:space="preserve"><value>Departure details</value></data>
   <data name="OceanPreparationBaits" xml:space="preserve"><value>Baits to bring</value></data>
   <data name="OceanBasicBait" xml:space="preserve"><value>Basic bait</value></data>
   <data name="OceanGuidanceMissing" xml:space="preserve"><value>Guidance not collected</value></data>

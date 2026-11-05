@@ -6,8 +6,8 @@
   <data name="OceanBetaTitle" xml:space="preserve"><value>먼바다 · Beta</value></data>
   <data name="OceanBetaHint" xml:space="preserve"><value>Beta · 실제 게임 편성표와 항해 타이머를 함께 확인해 주세요.</value></data>
   <data name="OceanDataUnavailable" xml:space="preserve"><value>먼바다 자료를 불러올 수 없습니다.</value></data>
-  <data name="OceanStateUnavailable" xml:space="preserve"><value>승선 정보를 확인할 수 없습니다. 아래 일정은 수동 미리보기입니다.</value></data>
-  <data name="OceanSchedulePreview" xml:space="preserve"><value>출항 일정 미리보기</value></data>
+  <data name="OceanStateUnavailable" xml:space="preserve"><value>승선 정보를 확인할 수 없습니다. 아래에서 출항편을 직접 선택해 상세 정보를 확인할 수 있습니다.</value></data>
+  <data name="OceanSchedulePreview" xml:space="preserve"><value>출항 일정</value></data>
   <data name="OceanSchedule" xml:space="preserve"><value>출항 일정</value></data>
   <data name="OceanIndigo" xml:space="preserve"><value>남색 항로</value></data>
   <data name="OceanRuby" xml:space="preserve"><value>홍옥 항로</value></data>
@@ -38,7 +38,7 @@
   <data name="OceanRegistrationLocal" xml:space="preserve"><value>접수 시작 · LT</value></data>
   <data name="OceanDepartureColumn" xml:space="preserve"><value>출항편</value></data>
   <data name="OceanRegistrationStatus" xml:space="preserve"><value>접수 상태</value></data>
-  <data name="OceanPreview" xml:space="preserve"><value>미리보기</value></data>
+  <data name="OceanPreview" xml:space="preserve"><value>출항편 상세</value></data>
   <data name="OceanPreparationBaits" xml:space="preserve"><value>준비 미끼</value></data>
   <data name="OceanBasicBait" xml:space="preserve"><value>기본 미끼</value></data>
   <data name="OceanGuidanceMissing" xml:space="preserve"><value>안내 자료 미수집</value></data>
