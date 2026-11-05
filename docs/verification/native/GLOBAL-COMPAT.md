@@ -282,6 +282,26 @@ dal4kr 15.0.3.9는 DuckbillTweak 조사 캐시의 고정 Release.zip 추출본�
 
 Review의 크기 차이가 난 세 타입은 Fisher 소스가 직접 쓰지 않는다. 비교 목록에만 남아 있는 타입이다. 인게임 확인은 위 [대표 확인](#글로벌-인게임-대표-확인-2026-11-04-사용자-보고)에 있다.
 
+## 먼바다 항로·기항지·남은 시간 정적 조사 (2026-11-06)
+
+먼바다 Beta의 현재 목적지·일정·해역 남은 시간을 메인에서 제공할 수 있는지 조사했다. **설치 DLL 메타데이터/IL과 고정 소스를 읽은 결과이며, 게임 메모리 읽기·새 기능 구현·빌드·테스트·승선 실기는 하지 않았다.**
+
+- 공개 `IClientState`/`IDutyState`를 먼저 대조했다. 지역/콘텐츠/시작·종료 정보는 있으나 확인한 두 인터페이스에 먼바다 항로/기항지/해역 남은 시간의 직접 멤버는 없다. 정적 항로/기항지 순서/기항 시간대는 기존 `FishCatalog.LoadOceanSpots`의 실행 클라이언트 `IKDRoute`/`IKDSpot` 시트를 재사용할 수 있다. 실제 출항편 순환과 UTC 계산은 별도 자료·게임 편성표 대조가 필요하다.
+- KR wasdcxz15.0.3.9의 ClientStructs7.57.0.9415(revision `479ea936b7ecbf6436c16941ece9c9ee83cba494`)와 글로벌15.0.3.9의7.57.0.9414(`dd57986b8287e7c6ed9c27198f8c76cb04a81dfe`)를 직접 대조했다. 두 `InstanceContentOceanFishing`의 크기·아래 후보 필드의 타입/배치, 상태 enum, `EventFramework.GetInstanceContentOceanFishing` IL이 같았다. 버전/revision은 조사 식별자이며 허용 목록이나 실행 가드로 도입하지 않는다. 로컬 근거는 `.cache/ocean-state-review/contract-summary.json`과 `members.json`이다.
+
+| 후보 멤버 | 소스에서 설명하는 의미와 남은 확인 |
+|---|---|
+| `CurrentRoute` | `IKDRoute` 행 ID. 시트 존재·현재 콘텐츠/기항지와 교차 일치 필요 |
+| `CurrentZone` | 기항지0~2. 항로의 실제 기항지와 대조 필요 |
+| `Status` | WaitingForPlayers/SwitchingZone/Fishing/NewZone/Finished. 대기·이동·낚시·종료 전이와 게임 표시 대조 필요 |
+| `Duration` / `TimeOffset` / `ContentTimeLeft` | 소스의 해역 남은 시간 후보는 `ContentTimeLeft - TimeOffset`. 이동 중에는 독립적으로 감소하다 보정될 수 있다는 주석이 있어 낚시 단계에서만 유효성/범위/UI를 확인해야 한다. 귀항 시각으로 해석하지 않는다 |
+| `SpectralCurrentActive` | 일반/환해류 기본 미끼 안내 전환 후보. 환해류 자체의 남은 시간을 제공하는 값은 아니다 |
+
+- 실행 중에는 배포 ClientStructs가 해석한 `EventFramework.Instance`/해당 함수 주소를 확인하고, `GetInstanceContentOceanFishing()`의 콘텐츠 종류/널 검사를 거친 경로만 후보로 삼는다. 자체 시그니처·하드코딩 오프셋을 추가하지 않는다. 값의 범위만으로 잘못된 포인터를 안전하게 만든다고 가정하지 않는다.
+- 향후 읽기는 Framework 유효 수명 안에서 수행하고 관리 값만 UI에 전달한다. 승선/하선·콘텐츠/캐릭터 전환·재로드·오래된 표본을 분리하며 실패는 이 관찰만 Unknown으로 두는 계약이 필요하다. 이동/대기/종료에는 지난 해역 카운트다운을 유지하지 않는다. 현재 상태가 미확인이면 시각표만으로 승선편을 정하지 않는다.
+- KR [구조 소스](https://github.com/aers/FFXIVClientStructs/blob/479ea936b7ecbf6436c16941ece9c9ee83cba494/FFXIVClientStructs/FFXIV/Client/Game/InstanceContent/InstanceContentOceanFishing.cs)·[EventFramework](https://github.com/aers/FFXIVClientStructs/blob/479ea936b7ecbf6436c16941ece9c9ee83cba494/FFXIVClientStructs/FFXIV/Client/Game/Event/EventFramework.cs), 글로벌 [구조 소스](https://github.com/aers/FFXIVClientStructs/blob/dd57986b8287e7c6ed9c27198f8c76cb04a81dfe/FFXIVClientStructs/FFXIV/Client/Game/InstanceContent/InstanceContentOceanFishing.cs)·[EventFramework](https://github.com/aers/FFXIVClientStructs/blob/dd57986b8287e7c6ed9c27198f8c76cb04a81dfe/FFXIVClientStructs/FFXIV/Client/Game/Event/EventFramework.cs)를 각각 직접 읽었다. 배포 DLL의 informational revision과 소스를 대응했고 소스 링크만으로 런타임을 확인했다고 확대하지 않는다.
+- 독립 사용 사례로 DistantSeas 고정 `4242f47e5b2c2ffa0bea8f94696f94c0db2fb18a`의 [NormalStateTracker](https://github.com/NotNite/DistantSeas/blob/4242f47e5b2c2ffa0bea8f94696f94c0db2fb18a/DistantSeas/Fishing/NormalStateTracker.cs)에서 같은 항로/기항지/남은 시간 후보를 Framework에서 읽는 것을 확인했다. AGPL-3.0 코드는 복제/도입하지 않았으며 그 플러그인의 동작을 DuckbillFisher 검증으로 대신하지 않는다. 원본의 게임 UI 숨김·다른 기능도 도입하지 않는다.
+
 ## 미확인 범위
 
 - 글로벌 인게임 동작: 개발본 대표 확인은 마쳤다. 공개판으로 배포한 뒤의 확인은 아직이다.
