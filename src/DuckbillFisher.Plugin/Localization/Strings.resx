@@ -599,6 +599,7 @@ In fish log only: {5}</value></data>
   <data name="TimerRodReady" xml:space="preserve"><value>Ready to cast</value></data>
   <data name="TimerIdle" xml:space="preserve"><value>Not fishing</value></data>
   <data name="TimerObserving" xml:space="preserve"><value>Observing</value></data>
+  <data name="TimerCollectablePending" xml:space="preserve"><value>Awaiting collectable choice</value></data>
   <data name="TimerHideCaught" xml:space="preserve"><value>Hide caught</value></data>
   <data name="TimerAllFish" xml:space="preserve"><value>All collection states</value></data>
   <data name="TimerFishCount" xml:space="preserve"><value>{0} fish</value></data>

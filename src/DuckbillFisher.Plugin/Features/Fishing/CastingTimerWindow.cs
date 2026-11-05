@@ -88,6 +88,7 @@ internal sealed class CastingTimerWindow : Window
             _ => phase switch { 1 => T.TimerCasting, 12 => T.TimerWaiting, 5 => T.TimerBite, 6 => T.TimerHook,
                 2 => T.TimerReturning, 3 => T.TimerStopping, 4 => T.TimerRodReady, 0 => T.TimerIdle, _ => T.TimerObserving },
         };
+        if (view.Native?.IsCollectableConfirmation == true) label = T.TimerCollectablePending;
         if (retained) label = T.TimerRecentCast;
         var elapsed = timed is not null && FishingTimeText.DisplaySeconds(timed, view, tracker.Now) is { } seconds
             ? FishingTimeText.Elapsed(TimeSpan.FromSeconds(seconds)) : "—";

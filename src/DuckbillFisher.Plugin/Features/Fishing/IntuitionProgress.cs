@@ -38,6 +38,8 @@ internal sealed class IntuitionProgress : IDisposable
     private int observationLost;
     private long lastUpdate;
     private long lastStatusSample;
+    private long awaitingSince;
+    private bool publishedSuspended;
     private (uint Id, int Session)? requested;
 
     public IntuitionProgress(FishingTracker tracker, FishCatalog catalog, FishPreferences preferences,
@@ -84,9 +86,13 @@ internal sealed class IntuitionProgress : IDisposable
         pending.Enqueue(caught);
     }
 
-    private void ApplyCatch(FishingCatchObservation caught)
+    private void ApplyCatch(FishingCatchObservation caught, FishingTrackerView current)
     {
         if (caught.Session != session || caught.TerritoryId != territory || caught.CastId == lastCatch) return;
+        // A first local catch can identify the fishing hole after CatchRecorded was emitted.
+        if (caught.SpotId is null && current.SpotState == FishingSpotState.Known &&
+            current.CurrentRecords.FirstOrDefault(c => c.Id == caught.CastId && c.Outcome == FishingOutcome.Caught) is { SpotId: { } resolved })
+            caught = caught with { SpotId = resolved };
         lastCatch = caught.CastId;
         if (caught.SpotId != spotId || spotId == 0) { counter.Reset(); return; }
         if (preyItems.Contains(caught.ItemId))
@@ -106,6 +112,7 @@ internal sealed class IntuitionProgress : IDisposable
             counter.Reset(); spotId = territory = selected = 0; targets = []; preyItems = FrozenSet<uint>.Empty;
             rows = null; lastCatch = null; requested = null; changed = true;
             pending.Clear(); lastStatusSample = 0;
+            awaitingSince = 0; publishedSuspended = false;
             receipts.Reset(session, client.TerritoryType);
         }
         if (lastUpdate != 0 && Stopwatch.GetElapsedTime(lastUpdate).TotalSeconds > 1)
@@ -117,11 +124,14 @@ internal sealed class IntuitionProgress : IDisposable
         {
             counter.Reset(territory != 0); territory = client.TerritoryType;
             spotId = selected = 0; targets = []; preyItems = FrozenSet<uint>.Empty; changed = true;
+            awaitingSince = 0;
             receipts.Reset(session, territory);
         }
         // A different, verified cast resets game preparation. Folding the rod or closing the timer does not.
+        var latestCast = current.Active ?? current.CurrentRecords.FirstOrDefault();
         var verifiedSpot = current.Session == session && current.State == FishingTrackerState.Ready && !current.IsLastSpot &&
-            current.Active is { StartedUtc: not null } && current.SpotState == FishingSpotState.Known ? current.Spot?.Id : null;
+            latestCast is { StartedUtc: not null, SpotId: { } observedSpot } && current.SpotState == FishingSpotState.Known &&
+            observedSpot == current.Spot?.Id ? current.Spot?.Id : null;
         if (verifiedSpot is { } nextSpot && nextSpot != spotId)
         {
             counter.Reset(spotId != 0 || counter.Exact); spotId = nextSpot; rows = null; changed = true;
@@ -136,9 +146,16 @@ internal sealed class IntuitionProgress : IDisposable
             if (!targets.Any(f => f.FishParameterId == selected)) selected = targets.FirstOrDefault()?.FishParameterId ?? 0;
             changed = true;
         }
-        if (current.Active is not null && current.SpotState != FishingSpotState.Known)
+        var suspended = current.Session == session && current.State == FishingTrackerState.Ready && !current.IsLastSpot &&
+            latestCast is { StartedUtc: not null } && current.SpotState == FishingSpotState.AwaitingIdentification;
+        if (suspended && awaitingSince == 0) awaitingSince = now;
+        if (!suspended) awaitingSince = 0;
+        if ((current.Active is not null || suspended) && current.SpotState != FishingSpotState.Known &&
+            (!suspended || Stopwatch.GetElapsedTime(awaitingSince).TotalSeconds > 2))
         {
             counter.ObserveBuff(null, false); pending.Clear(); receipts.Reset(session, territory);
+            spotId = selected = 0; targets = []; preyItems = FrozenSet<uint>.Empty; rows = data.Rows;
+            publishedRevision = -1;
             Volatile.Write(ref view, IntuitionProgressView.Empty); return;
         }
         if (requested is { } choose)
@@ -148,22 +165,23 @@ internal sealed class IntuitionProgress : IDisposable
         }
         receipts.Update(current);
         if (Interlocked.Exchange(ref observationLost, 0) != 0) counter.Reset();
-        while (pending.TryDequeue(out var caught))
-            if (current.MultipleCatchSupported) ApplyCatch(caught);
+        while (!suspended && pending.TryDequeue(out var caught))
+            if (current.MultipleCatchSupported) ApplyCatch(caught, current);
         if (!current.MultipleCatchSupported) counter.ObserveBuff(null, false);
         if (targets.Length > 0 && (lastStatusSample == 0 || Stopwatch.GetElapsedTime(lastStatusSample).TotalMilliseconds >= 200 || changed))
         {
             lastStatusSample = now;
             var presence = current.Session == session && current.State == FishingTrackerState.Ready && current.MultipleCatchSupported ? ReadIntuition() : null;
-            counter.ObserveBuff(presence, targets.Length == 1);
+            counter.ObserveBuff(presence, targets.Length == 1 && !suspended);
         }
-        if (!changed && publishedRevision == counter.Revision) return;
+        if (!changed && publishedRevision == counter.Revision && publishedSuspended == suspended) return;
         publishedRevision = counter.Revision;
+        publishedSuspended = suspended;
         var target = targets.FirstOrDefault(f => f.FishParameterId == selected)?.Details;
         var prey = target is null ? [] : target.Predators.Select((item, index) => new IntuitionPreyProgress(item,
             counter.Counts.GetValueOrDefault(item.Id), target.Rule.Predators[index].Count))
             .OrderBy(p => p.Observed >= p.Required).ToArray();
-        Volatile.Write(ref view, new(session, targets, selected, prey, counter.Active, counter.Exact));
+        Volatile.Write(ref view, new(session, targets, selected, prey, suspended ? null : counter.Active, !suspended && counter.Exact));
     }
 
     public void Dispose()

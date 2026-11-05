@@ -17,6 +17,9 @@ internal sealed class IntuitionCatchReceipt : IDisposable
     private readonly Action<FishingCatchObservation> received;
     private readonly System.Action lost;
     private readonly Dictionary<(Guid Cast, uint Item), Receipt> receipts = [];
+    private IReadOnlyList<FishGuideRow>? indexedRows;
+    private Dictionary<uint, HashSet<uint>> preyBySpot = [];
+    private HashSet<uint> allPrey = [];
     private FishingCatchObservation? waiting;
     private Guid? completed;
     private int session = -1;
@@ -39,7 +42,8 @@ internal sealed class IntuitionCatchReceipt : IDisposable
 
     public void Catch(FishingCatchObservation caught)
     {
-        if (!catalog.View.CollectableItems.Contains(caught.ItemId)) { received(caught); return; }
+        if (!catalog.View.CollectableItems.Contains(caught.ItemId) || !IsPrey(caught.ItemId, caught.SpotId))
+        { received(caught); return; }
         if (caught.Session != session || caught.TerritoryId != territory || caught.CastId == completed) return;
         if (waiting is { } previous && previous.CastId != caught.CastId) lost();
         waiting = caught; waitingAt = Stopwatch.GetTimestamp();
@@ -64,6 +68,20 @@ internal sealed class IntuitionCatchReceipt : IDisposable
     private static bool IsBag(GameInventoryType bag) => bag is GameInventoryType.Inventory1 or
         GameInventoryType.Inventory2 or GameInventoryType.Inventory3 or GameInventoryType.Inventory4;
 
+    private bool IsPrey(uint itemId, uint? spotId)
+    {
+        var rows = catalog.View.Rows;
+        if (!ReferenceEquals(indexedRows, rows))
+        {
+            indexedRows = rows;
+            preyBySpot = rows.Where(f => !f.IsOceanFishing && f.Details is { Spot: not null, Rule.Predators.Length: > 0 })
+                .GroupBy(f => f.Details!.Spot!.Id).ToDictionary(group => group.Key,
+                    group => group.SelectMany(f => f.Details!.Rule.Predators).Select(p => p.ItemId).ToHashSet());
+            allPrey = preyBySpot.Values.SelectMany(ids => ids).ToHashSet();
+        }
+        return spotId is { } spot ? preyBySpot.TryGetValue(spot, out var prey) && prey.Contains(itemId) : allPrey.Contains(itemId);
+    }
+
     private void Changed(IReadOnlyCollection<InventoryEventArgs> changes)
     {
         if (!framework.IsInFrameworkUpdateThread) { lost(); return; }
@@ -72,13 +90,14 @@ internal sealed class IntuitionCatchReceipt : IDisposable
         // Inventory receipts can precede the validated log by one Framework update.
         var candidate = current.Active is { HookSeconds: not null } active ? active.Id : waiting?.CastId;
         if (candidate is null || candidate == completed) return;
+        var candidateSpot = current.Active?.Id == candidate ? current.Active.SpotId : waiting?.SpotId;
         var presence = readIntuition();
         if (presence is null) { lost(); return; }
         var deltas = new Dictionary<(uint Item, bool Collectable), long>();
         var otherContainers = new HashSet<uint>();
         void Add(in GameInventoryItem item, int direction)
         {
-            if (item.IsEmpty || !catalog.View.CollectableItems.Contains(item.BaseItemId) ||
+            if (item.IsEmpty || !catalog.View.CollectableItems.Contains(item.BaseItemId) || !IsPrey(item.BaseItemId, candidateSpot) ||
                 tracker.FishForItem(item.BaseItemId) is null) return;
             if (!IsBag(item.ContainerType)) { otherContainers.Add(item.BaseItemId); return; }
             if (item.Quantity is < 1 or > 999) { lost(); return; }

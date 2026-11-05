@@ -43,7 +43,7 @@ internal sealed class SpawnAttemptObserver : IDisposable
         if (!personal.HasCharacter || !personal.CanEdit || !catalog.ConditionDataAvailable || current.Session != session ||
             current.State != FishingTrackerState.Ready || current.IsLastSpot || current.SpotState != FishingSpotState.Known ||
             current.Active is not { Outcome: FishingOutcome.Pending, StartedUtc: not null } ||
-            current.Native?.Availability != FishingReadState.Ready || current.Spot is not { } spot) return;
+            current.Native?.IsLineActive != true || current.Spot is not { } spot) return;
         if (lastSaveFailure != 0 && clock.GetElapsedTime(lastSaveFailure) < TimeSpan.FromSeconds(5)) return;
         var batch = new List<(uint, DateTimeOffset)>();
         foreach (var fish in current.AllSpotFish)

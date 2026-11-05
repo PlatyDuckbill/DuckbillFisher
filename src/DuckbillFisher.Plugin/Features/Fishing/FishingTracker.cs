@@ -362,7 +362,7 @@ internal sealed class FishingTracker : IDisposable
             else if (fact.Id == 1116 && history.Active is not null && native?.Phase is 5 or 6 &&
                 history.CastStartedAt is { } hookStart && fact.At >= hookStart)
                 history.Hook(fact.At);
-            else if (fact.Id is 3512 or 3559 && history.Active is { HookSeconds: not null } && native?.Phase is 2 or 4 &&
+            else if (fact.Id is 3512 or 3559 && history.Active is { HookSeconds: not null } && IsCatchResultPhase(fact.Value) &&
                 history.CastStartedAt is { } catchStart && fact.At >= catchStart)
             {
                 lastLocalCatchId = history.Active.Id;
@@ -397,6 +397,9 @@ internal sealed class FishingTracker : IDisposable
 
     private static bool IsSpotDiscovery(uint id) => id is 1115 or 1130 or 3513;
 
+    private bool IsCatchResultPhase(uint itemId) => native?.Phase is 2 or 4 ||
+        native?.IsCollectableConfirmation == true && catalog.View.CollectableItems.Contains(itemId);
+
     private FishingSpotView? BrowsingSpot => spotState is FishingSpotState.Known or FishingSpotState.LastKnown
         ? spot ?? lastConfirmedSpot : null;
     private bool TimerVisible => history.Trip is { } trip && !deletedTrips.Contains(trip.Id) &&
@@ -410,7 +413,7 @@ internal sealed class FishingTracker : IDisposable
         if (now - fact.At > TimeSpan.FromSeconds(2)) { pendingDiscovery = null; return; }
         if (spotState is not (FishingSpotState.Unknown or FishingSpotState.AwaitingIdentification) ||
             lastLocalCatchAt is not { } caughtAt || Math.Abs((caughtAt - fact.At).TotalSeconds) > 2 ||
-            native?.Phase is not (2 or 4)) return;
+            !IsCatchResultPhase(history.Records.FirstOrDefault(r => r.Id == lastLocalCatchId)?.FishItemId ?? 0)) return;
         pendingDiscovery = null;
         if (!byPlace.TryGetValue((territory, fact.Value), out var candidates) || candidates.Length != 1 ||
             fact.Value == FishingGameIds.UnknownSpotPlaceName) return;

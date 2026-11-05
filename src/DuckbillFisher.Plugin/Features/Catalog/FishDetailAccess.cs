@@ -29,6 +29,8 @@ internal sealed class FishDetailAccess : Window, IDisposable
     private (uint Id, int Session)? selection;
     private int session = -1;
     private string search = "";
+    private bool waitingForCatalog;
+    private UiMessage? searchStatus;
 
     public FishDetailAccess(FishCatalog catalog, FishPreferences preferences, IContextMenu menus,
         IFramework framework, IPluginLog log, Action<FishGuideRow> show) : base("DuckbillFisher###DuckbillFisher.DetailSearch")
@@ -44,7 +46,11 @@ internal sealed class FishDetailAccess : Window, IDisposable
 
     public void Search(string value)
     {
-        lock (gate) request = (value.Trim().Trim('"').Trim(), preferences.View.Session);
+        lock (gate)
+        {
+            request = (value.Trim().Trim('"').Trim(), preferences.View.Session);
+            waitingForCatalog = false;
+        }
         catalog.RequestLoad();
     }
 
@@ -88,6 +94,7 @@ internal sealed class FishDetailAccess : Window, IDisposable
         if (session != personal.Session)
         {
             session = personal.Session; selection = null; candidates = []; IsOpen = false;
+            waitingForCatalog = false; searchStatus = null;
         }
         if (!ReferenceEquals(rows, current.Rows))
         {
@@ -100,9 +107,16 @@ internal sealed class FishDetailAccess : Window, IDisposable
             selection = null;
             if (chosen.Session == session && current.RowsById.TryGetValue(chosen.Id, out var fish)) show(fish);
         }
-        if (request is not { } query || rows.Count == 0) return;
-        request = null;
-        if (query.Session != session) return;
+        if (request is not { } query) return;
+        if (query.Session != session) { request = null; return; }
+        if (rows.Count == 0)
+        {
+            search = query.Text; candidates = []; searchStatus = current.Status;
+            if (!waitingForCatalog) IsOpen = true;
+            waitingForCatalog = true;
+            return;
+        }
+        request = null; waitingForCatalog = false; searchStatus = null;
         var text = query.Text;
         search = text;
         var exact = rows.Where(f => f.IsDisplayable && f.Name.Equals(text, StringComparison.OrdinalIgnoreCase)).ToArray();
@@ -113,8 +127,13 @@ internal sealed class FishDetailAccess : Window, IDisposable
     }
 
     public override void PreDraw() => WindowName = $"{UiText.Get(T.FishSearchTitle)}###DuckbillFisher.DetailSearch";
+    public override void OnClose()
+    {
+        lock (gate) { request = null; waitingForCatalog = false; searchStatus = null; }
+    }
     public override void Draw()
     {
+        if (searchStatus is { } status) { ImGui.TextWrapped(status.Display); return; }
         ImGui.TextWrapped(UiText.Get(T.FishSearchResults, search, candidates.Length));
         if (ImGui.BeginChild("DetailSearchResults", Vector2.Zero))
             foreach (var fish in candidates)

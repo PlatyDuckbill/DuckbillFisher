@@ -1,6 +1,7 @@
 using Dalamud.Plugin.Services;
 using NativeEvents = FFXIVClientStructs.FFXIV.Client.Game.Event.EventFramework;
 using NativePlayer = FFXIVClientStructs.FFXIV.Client.Game.UI.PlayerState;
+using NativeFishingState = FFXIVClientStructs.FFXIV.Client.Game.Event.FishingState;
 
 namespace DuckbillFisher.Plugin;
 
@@ -11,7 +12,14 @@ internal enum FishingReadState
 
 internal sealed record FishingNativeSample(FishingReadState Availability, int? Phase = null,
     uint? EquippedBait = null, int? BaitFlags = null, int? SelectedSwimbait = null,
-    uint? Swimbait0 = null, uint? Swimbait1 = null, uint? Swimbait2 = null, bool? AtFishingHole = null);
+    uint? Swimbait0 = null, uint? Swimbait1 = null, uint? Swimbait2 = null, bool? AtFishingHole = null)
+{
+    // Enum identities compared in both installed KR/global ClientStructs; these flags never identify a fish.
+    public bool IsCollectableConfirmation => Availability == FishingReadState.Ready && Phase == (int)NativeFishingState.ConfirmingCollectable;
+    public bool IsLineActive => Availability == FishingReadState.Ready && Phase is
+        (int)NativeFishingState.CastingOut or (int)NativeFishingState.LineInWater or (int)NativeFishingState.Bite or
+        (int)NativeFishingState.Hooking or (int)NativeFishingState.AmbitiousLure or (int)NativeFishingState.ModestLure;
+}
 
 /// <summary>Read-only ClientStructs layouts of the running client. No pointer or borrowed span escapes a Framework call.</summary>
 internal sealed class NativeFishingActivityReader(IFramework framework)

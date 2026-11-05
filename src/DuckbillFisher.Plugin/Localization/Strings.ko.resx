@@ -599,6 +599,7 @@
   <data name="TimerRodReady" xml:space="preserve"><value>시전 준비</value></data>
   <data name="TimerIdle" xml:space="preserve"><value>낚시 대기</value></data>
   <data name="TimerObserving" xml:space="preserve"><value>관찰 중</value></data>
+  <data name="TimerCollectablePending" xml:space="preserve"><value>소장품 수령 대기</value></data>
   <data name="TimerHideCaught" xml:space="preserve"><value>수집한 어종 숨기기</value></data>
   <data name="TimerAllFish" xml:space="preserve"><value>전체</value></data>
   <data name="TimerFishCount" xml:space="preserve"><value>{0}종</value></data>

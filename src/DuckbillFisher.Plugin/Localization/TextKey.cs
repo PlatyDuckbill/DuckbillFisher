@@ -590,6 +590,7 @@ internal enum TextKey
     TimerRodReady,
     TimerIdle,
     TimerObserving,
+    TimerCollectablePending,
     TimerHideCaught,
     TimerAllFish,
     TimerFishCount,

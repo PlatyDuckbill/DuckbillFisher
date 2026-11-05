@@ -207,6 +207,7 @@ $groups = [ordered]@{
         'FFXIVClientStructs.FFXIV.Client.Game.Event.EventFramework',
         'FFXIVClientStructs.FFXIV.Client.Game.Event.EventHandlerModule',
         'FFXIVClientStructs.FFXIV.Client.Game.Event.FishingEventHandler',
+        'FFXIVClientStructs.FFXIV.Client.Game.Event.FishingState',
         'FFXIVClientStructs.FFXIV.Client.UI.UIGlobals',
         'FFXIVClientStructs.FFXIV.Client.UI.UIModule',
         'FFXIVClientStructs.FFXIV.Client.UI.RaptureAtkModule',
