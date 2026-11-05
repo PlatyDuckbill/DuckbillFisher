@@ -90,6 +90,7 @@ dotnet run --no-restore --project tools/FishingDataImport -- --validate data/fis
 - `patchVersion`은 3.55b 같은 접미사를 보존한다. 기존 숫자 `patch`도 유지하며 기존 903종은 숫자 표시를 사용한다. 전승록은 KR GatheringSubCategory.Item으로 연결한다.
 - `snaggingRequired`는 갈고리 낚시, `lure`는 Modest/Ambitious 요구다. 직감 선행 어종/마릿수는 지속 시간 누락과 별개로 안내한다.
 - 먼바다 259종의 기본 해역·일반/환해류 장소·항로 방문 시간은 IKD 시트에서 제공한다. 어종별 미끼·특수 조건은 별도 연동이 남았다. 작살 203건 중 `conditionsKnown=false` 115건과 전용 UI·수집 연동도 후속이다. [전체 ID/이름/이유](../docs/verification/data/reports/fishing-data-2026-10-17/remaining.md)에 분리했다.
+- 개발본 먼바다 Beta는 [ocean-guidance.v1.json](ocean-guidance.v1.json)의 별도52행만 사용한다.13해역×일반1/환해류 시간대3이며 일반 상세 자료를 덮어쓰지 않는다. 원저자 CSV의 개별 사실→유일한 게임 Item ID→KR/글로벌 FishParameter 낚시터로 대조했다. 갱신 시 JSON의 URL/스냅샷 SHA256과 [가공 기준](../docs/development/DATA-SOURCES.md#먼바다-beta-기본-안내와-일정-2026-11-06)에 따라52조합의 미끼·시간대·입질·수량·장소를 다시 확인한다. 실행 중 이름 매칭이나 HTTP를 하지 않는다.
 - 모든 선택 낚시터는 한섭 지도 시트와 대응한다. 외부 좌표와 다른 294/295/296/327번은 한섭 좌표를 쓰며 실기 차이 확인은 대기다.
 
 빌드/자료 검사와 인게임 확인은 구분한다. [이번 실행 근거와 남은 확인](../docs/verification/data/DATA-COMPLETION-2026-10-18.md)을 따른다.

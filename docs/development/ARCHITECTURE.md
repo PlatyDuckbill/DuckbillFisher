@@ -4,6 +4,8 @@
 
 ## 코드 탐색
 
+먼바다 Beta는 Core `OceanSchedule`이 UTC 접수 구간/순환 인덱스를 계산하고, Plugin `OceanFishing`이 Framework에서 클라이언트 IKD 시트·내장 기본 미끼 자료를 한 번 읽고 관리 snapshot을 발행한다. `NativeOceanFishingReader`만 실제 승선 정보를 읽는다. `OceanFishingPanel`은 수동 일정 선택을 관찰 상태와 분리하며 Draw에서는 시트/파일/포인터를 읽지 않는다. 미끼 찾기는 기존 `BaitFinder`를 재사용한다. [실행 계약·실기 대기](../verification/native/GLOBAL-COMPAT.md#먼바다-beta-개발본-구현-2026-11-06).
+
 | 책임 | 주요 구현 | 경계 |
 |---|---|---|
 | 시간/날씨·정렬 | Core FishingAvailability, FishingWindowOrdering | UTC/조건/확률 입력, 게임 API 없음 |

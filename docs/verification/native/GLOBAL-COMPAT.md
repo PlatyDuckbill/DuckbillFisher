@@ -302,6 +302,24 @@ Review의 크기 차이가 난 세 타입은 Fisher 소스가 직접 쓰지 않�
 - KR [구조 소스](https://github.com/aers/FFXIVClientStructs/blob/479ea936b7ecbf6436c16941ece9c9ee83cba494/FFXIVClientStructs/FFXIV/Client/Game/InstanceContent/InstanceContentOceanFishing.cs)·[EventFramework](https://github.com/aers/FFXIVClientStructs/blob/479ea936b7ecbf6436c16941ece9c9ee83cba494/FFXIVClientStructs/FFXIV/Client/Game/Event/EventFramework.cs), 글로벌 [구조 소스](https://github.com/aers/FFXIVClientStructs/blob/dd57986b8287e7c6ed9c27198f8c76cb04a81dfe/FFXIVClientStructs/FFXIV/Client/Game/InstanceContent/InstanceContentOceanFishing.cs)·[EventFramework](https://github.com/aers/FFXIVClientStructs/blob/dd57986b8287e7c6ed9c27198f8c76cb04a81dfe/FFXIVClientStructs/FFXIV/Client/Game/Event/EventFramework.cs)를 각각 직접 읽었다. 배포 DLL의 informational revision과 소스를 대응했고 소스 링크만으로 런타임을 확인했다고 확대하지 않는다.
 - 독립 사용 사례로 DistantSeas 고정 `4242f47e5b2c2ffa0bea8f94696f94c0db2fb18a`의 [NormalStateTracker](https://github.com/NotNite/DistantSeas/blob/4242f47e5b2c2ffa0bea8f94696f94c0db2fb18a/DistantSeas/Fishing/NormalStateTracker.cs)에서 같은 항로/기항지/남은 시간 후보를 Framework에서 읽는 것을 확인했다. AGPL-3.0 코드는 복제/도입하지 않았으며 그 플러그인의 동작을 DuckbillFisher 검증으로 대신하지 않는다. 원본의 게임 UI 숨김·다른 기능도 도입하지 않는다.
 
+## 먼바다 Beta 개발본 구현 (2026-11-06)
+
+- 사용자 승인한 메인 시안 범위로 `OceanFishingPanel`·`OceanFishing`·`NativeOceanFishingReader`와 Core `OceanSchedule`을 추가했다. 순환표·기항지·이름은 실행 클라이언트 IKD 시트, 기본 미끼는 [별도52행 사실 자료](../../development/DATA-SOURCES.md#먼바다-beta-기본-안내와-일정-2026-11-06)를 사용한다. 게임 조작·장착 미끼 변경·HTTP·일반 먼바다 시전/어획/직감 추적은 추가하지 않았다. 공개0.8.0.0과 구분하는 개발본이다.
+- `IClientState`/`IDutyState`에 항로/해역 타이머가 없는 기존 조사에 따라 ClientStructs의 접근자를 사용했다. Framework에서만 캐릭터의 로드/ContentId를 대조하고, 현재 Territory가 IKDRoute의 콘텐츠 Territory에 속할 때만 이벤트 루트/`GetInstanceContentDirector` 함수 포인터의 주소 해석을 검사한다. `GetInstanceContentOceanFishing`이 콘텐츠 종류를 확인한 뒤 반환한 포인터만 해당 콜백 안에서 읽는다. route ID→시트, director ContentId→ContentFinderCondition.Content, territory, zone0~2/status0~4를 교차 검사한다. 자체 시그니처·오프셋·모듈 해시 가드는 없다.
+- 낚시 단계에서만 Duration420·유한한 전체 시간0~3600초·`ContentTimeLeft-TimeOffset`0~420초를 검사해 해역 시간을 제공한다. 시간만 무효이면 항로/기항지는 유지하고 시간만 미확인이다. 낚시 이외에는 지난 해역 시간을 표시하지 않는다. 이동/도착의 zone값을 다음 기항지로 해석하지 않는다. 현재 환해류 표시는 낚시 단계에서만 사용한다. 수치 범위 검사는 포인터 유효성을 대신하지 않으며 기존 접근자의 현재 객체 수명에 의존한다.
+- Framework200ms 표본을 관리 레코드로 복사하고 화면에서는 단조 시계로 경과를 차감한다.3초 이상 된 표본·캐릭터 세션 불일치·지역 이동에는 Unknown을 표시한다. 닫힌 탭은 관찰을 멈추며 재접속/캐릭터 전환으로 과거 표본이 현재 값이 되지 않는다. 일정 미리보기 선택은 관찰 결과와 별개다. Dispose에서 Framework 구독을 해제한다. 원시 포인터·이름으로 상태 판정·try/catch에 의존한 접근은 없다.
+- 추가 확인: KR/글로벌 설치 시트21항로/13해역/144쌍 편성표가 같은 ID/순서를 가리킨다.52행의 대상/미끼와 일반·환해류 FishingSpot 연결을 양쪽 시트에서 대조했다. 두 원저자144회 편성표를 게임 표에 대응해 UTC 위상40을 확인했다. 자료 조회/대조는 제품 테스트가 아니다. 클라이언트의 최신 날짜/모듈 revision은 위 정적 조사의 환경을 그대로 사용했다.
+- KR 별도→글로벌 별도→KR 정규 Debug 빌드 모두 경고0/오류0, 한영 리소스1,077키 일치. 사용 멤버 대조는279개, Breaking0/Uncovered0, 기존 UI 계층 크기 Review3·미사용 멤버 Warnings82다. 새 Ocean/Instance/Content 타입과 실제 사용 멤버에서 차이는 없었다. 이후 자료 상태/미끼 분류 검사를 보완해 재빌드했으며 새 네이티브 멤버 참조는 추가하지 않았다. 로컬 보고서는 `.cache/ocean-beta-research/native-comparison.json`이다. 테스트·게임 실기·패키징·원격 게시를 하지 않았다.
+
+### 대표 실기 순서와 기대 결과
+
+1. 정규 개발 DLL을 로드하고 메인 `먼바다 · Beta`에서 NPC 편성표의 현재/다음 남색·홍옥 항로, 접수 시작/종료 시각과3기항지·시간대를 대조한다. 다른 편을 선택하면 미리보기/준비 미끼만 바뀌어야 한다.
+2. 직접 승선해 낚시 시작 뒤 실제 목적지·현재/다음 해역·게임 해역 타이머를 대조한다. 일반 해역/환해류 전환에서 추천 미끼만 바뀌며 사용자가 직접 미끼를 선택해야 한다. 소지 미끼의 찾기 요청 후 게임 미끼 UI를 직접 열면 기존 페이지/칸 강조가 나와야 한다.
+3. 해역 이동에는 ‘이동 중’과 전체 항로만 남고 이전 카운트다운/추천은 사라져야 한다. 다음 해역에서 낚시 상태가 확인되면 현재 위치/시간/미끼가 다시 나타나야 한다. 하선하면 승선 정보가 사라지고 일정으로 돌아와야 한다.
+4. 메인 닫기/재열기·다른 탭·언어 전환·재로그인/언로드로 오래된 승선 정보나 중복 구독이 남지 않아야 한다. 실패하면 개발자 모드 → 먼바다 → ‘먼바다 진단’의 짧은 `ocean-beta/v1`만 복사한다. 주소·캐릭터 식별자는 포함하지 않는다.
+
+위 인게임 확인은 전부 대기다. 기존0.8.0.0 직감/수량 실기 확인 대기를 대체하지 않는다.
+
 ## 미확인 범위
 
 - 글로벌 인게임 동작: 개발본 대표 확인은 마쳤다. 공개판으로 배포한 뒤의 확인은 아직이다.

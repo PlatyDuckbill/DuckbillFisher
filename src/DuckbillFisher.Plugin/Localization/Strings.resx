@@ -1,5 +1,48 @@
 <?xml version="1.0" encoding="utf-8"?>
 <root>
+  <data name="OceanDataLoading" xml:space="preserve"><value>Loading Ocean Fishing data…</value></data>
+  <data name="OceanDiagnostics" xml:space="preserve"><value>Ocean Fishing diagnostics</value></data>
+  <data name="OceanCopyDiagnostics" xml:space="preserve"><value>Copy voyage diagnostics</value></data>
+  <data name="OceanBetaTitle" xml:space="preserve"><value>Ocean Fishing · Beta</value></data>
+  <data name="OceanBetaHint" xml:space="preserve"><value>Beta · Check the in-game schedule and voyage timer.</value></data>
+  <data name="OceanDataUnavailable" xml:space="preserve"><value>Ocean Fishing data is not available.</value></data>
+  <data name="OceanStateUnavailable" xml:space="preserve"><value>Voyage information is unavailable. The schedule below is a manual preview.</value></data>
+  <data name="OceanSchedulePreview" xml:space="preserve"><value>Preview departure schedule</value></data>
+  <data name="OceanSchedule" xml:space="preserve"><value>Departure schedule</value></data>
+  <data name="OceanIndigo" xml:space="preserve"><value>Indigo</value></data>
+  <data name="OceanRuby" xml:space="preserve"><value>Ruby</value></data>
+  <data name="OceanDepartureName" xml:space="preserve"><value>{0} · {1}</value></data>
+  <data name="OceanStopOrdinal" xml:space="preserve"><value>Stop {0}</value></data>
+  <data name="OceanStopName" xml:space="preserve"><value>{0} · {1}</value></data>
+  <data name="OceanPassed" xml:space="preserve"><value>Passed</value></data>
+  <data name="OceanCurrent" xml:space="preserve"><value>Current</value></data>
+  <data name="OceanNext" xml:space="preserve"><value>Next</value></data>
+  <data name="OceanAboardState" xml:space="preserve"><value>Aboard · {0}</value></data>
+  <data name="OceanNormal" xml:space="preserve"><value>Normal zone</value></data>
+  <data name="OceanSpectral" xml:space="preserve"><value>Spectral current</value></data>
+  <data name="OceanWaiting" xml:space="preserve"><value>Waiting for departure</value></data>
+  <data name="OceanMoving" xml:space="preserve"><value>Moving between stops</value></data>
+  <data name="OceanFinished" xml:space="preserve"><value>Voyage finished</value></data>
+  <data name="OceanZoneRemaining" xml:space="preserve"><value>Fishing time left at this stop</value></data>
+  <data name="OceanBasicGuide" xml:space="preserve"><value>Basic fishing guide</value></data>
+  <data name="OceanRecommended" xml:space="preserve"><value>Recommended now</value></data>
+  <data name="OceanSpectralBait" xml:space="preserve"><value>During spectral</value></data>
+  <data name="OceanScoreTarget" xml:space="preserve"><value>Basic target: {0} · {1} · Double {2} / Triple {3}</value></data>
+  <data name="OceanTriggerTarget" xml:space="preserve"><value>Spectral trigger: {0} · {1} · Double {2} / Triple {3}</value></data>
+  <data name="OceanTargetHint" xml:space="preserve"><value>A simple target using direct bait, without Intuition preparation. The tug does not identify the hooked fish or guarantee a spectral current. This is not an optimal-score strategy.</value></data>
+  <data name="OceanRegistrationOpen" xml:space="preserve"><value>Registration open</value></data>
+  <data name="OceanCurrentRegistration" xml:space="preserve"><value>Register now · {0}</value></data>
+  <data name="OceanNextRegistration" xml:space="preserve"><value>Next registration · {0}</value></data>
+  <data name="OceanRegistrationEnds" xml:space="preserve"><value>Registration closes in</value></data>
+  <data name="OceanRegistrationStarts" xml:space="preserve"><value>Registration opens in</value></data>
+  <data name="OceanRegistrationLocal" xml:space="preserve"><value>Registration · LT</value></data>
+  <data name="OceanDepartureColumn" xml:space="preserve"><value>Voyage</value></data>
+  <data name="OceanRegistrationStatus" xml:space="preserve"><value>Registration</value></data>
+  <data name="OceanPreview" xml:space="preserve"><value>Preview</value></data>
+  <data name="OceanPreparationBaits" xml:space="preserve"><value>Baits to bring</value></data>
+  <data name="OceanBasicBait" xml:space="preserve"><value>Basic bait</value></data>
+  <data name="OceanGuidanceMissing" xml:space="preserve"><value>Guidance not collected</value></data>
+  <data name="OceanBaitStock" xml:space="preserve"><value>Carried: {0}</value></data>
   <data name="ChangelogPersonalFeatureTitle" xml:space="preserve"><value>Fish notes and settings backups</value></data>
   <data name="ChangelogPersonalFeatureSummary" xml:space="preserve"><value>Keep personal fish records and back up your settings and sounds.</value></data>
   <data name="ChangelogFishNotes" xml:space="preserve"><value>Save a personal note for each fish.</value></data>

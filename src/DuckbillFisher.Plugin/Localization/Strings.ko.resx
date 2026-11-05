@@ -1,5 +1,48 @@
 <?xml version="1.0" encoding="utf-8"?>
 <root>
+  <data name="OceanDataLoading" xml:space="preserve"><value>먼바다 자료를 불러오는 중입니다…</value></data>
+  <data name="OceanDiagnostics" xml:space="preserve"><value>먼바다 진단</value></data>
+  <data name="OceanCopyDiagnostics" xml:space="preserve"><value>항해 진단 복사</value></data>
+  <data name="OceanBetaTitle" xml:space="preserve"><value>먼바다 · Beta</value></data>
+  <data name="OceanBetaHint" xml:space="preserve"><value>Beta · 실제 게임 편성표와 항해 타이머를 함께 확인해 주세요.</value></data>
+  <data name="OceanDataUnavailable" xml:space="preserve"><value>먼바다 자료를 불러올 수 없습니다.</value></data>
+  <data name="OceanStateUnavailable" xml:space="preserve"><value>승선 정보를 확인할 수 없습니다. 아래 일정은 수동 미리보기입니다.</value></data>
+  <data name="OceanSchedulePreview" xml:space="preserve"><value>출항 일정 미리보기</value></data>
+  <data name="OceanSchedule" xml:space="preserve"><value>출항 일정</value></data>
+  <data name="OceanIndigo" xml:space="preserve"><value>남색 항로</value></data>
+  <data name="OceanRuby" xml:space="preserve"><value>홍옥 항로</value></data>
+  <data name="OceanDepartureName" xml:space="preserve"><value>{0} · {1}행</value></data>
+  <data name="OceanStopOrdinal" xml:space="preserve"><value>{0}번째</value></data>
+  <data name="OceanStopName" xml:space="preserve"><value>{0} · {1}</value></data>
+  <data name="OceanPassed" xml:space="preserve"><value>지남</value></data>
+  <data name="OceanCurrent" xml:space="preserve"><value>현재</value></data>
+  <data name="OceanNext" xml:space="preserve"><value>다음</value></data>
+  <data name="OceanAboardState" xml:space="preserve"><value>승선 중 · {0}</value></data>
+  <data name="OceanNormal" xml:space="preserve"><value>일반 해역</value></data>
+  <data name="OceanSpectral" xml:space="preserve"><value>환해류</value></data>
+  <data name="OceanWaiting" xml:space="preserve"><value>출항 대기</value></data>
+  <data name="OceanMoving" xml:space="preserve"><value>다음 해역으로 이동 중</value></data>
+  <data name="OceanFinished" xml:space="preserve"><value>항해 종료</value></data>
+  <data name="OceanZoneRemaining" xml:space="preserve"><value>현재 해역 낚시 종료까지</value></data>
+  <data name="OceanBasicGuide" xml:space="preserve"><value>기본 낚시 안내</value></data>
+  <data name="OceanRecommended" xml:space="preserve"><value>지금 추천</value></data>
+  <data name="OceanSpectralBait" xml:space="preserve"><value>환해류 때</value></data>
+  <data name="OceanScoreTarget" xml:space="preserve"><value>기본 목표 {0} · {1} · 이중 {2}마리 · 삼중 {3}마리</value></data>
+  <data name="OceanTriggerTarget" xml:space="preserve"><value>환해류 유발 대상 {0} · {1} · 이중 {2}마리 · 삼중 {3}마리</value></data>
+  <data name="OceanTargetHint" xml:space="preserve"><value>직감 준비 없이 일반 미끼로 노리는 기본 대상입니다. 입질만으로 걸린 어종이나 환해류 발생을 확정하지 않으며, 최고 점수 전략은 아닙니다.</value></data>
+  <data name="OceanRegistrationOpen" xml:space="preserve"><value>접수 중</value></data>
+  <data name="OceanCurrentRegistration" xml:space="preserve"><value>현재 접수 · {0}편</value></data>
+  <data name="OceanNextRegistration" xml:space="preserve"><value>다음 접수 {0}</value></data>
+  <data name="OceanRegistrationEnds" xml:space="preserve"><value>접수 종료까지</value></data>
+  <data name="OceanRegistrationStarts" xml:space="preserve"><value>다음 접수까지</value></data>
+  <data name="OceanRegistrationLocal" xml:space="preserve"><value>접수 시작 · LT</value></data>
+  <data name="OceanDepartureColumn" xml:space="preserve"><value>출항편</value></data>
+  <data name="OceanRegistrationStatus" xml:space="preserve"><value>접수 상태</value></data>
+  <data name="OceanPreview" xml:space="preserve"><value>미리보기</value></data>
+  <data name="OceanPreparationBaits" xml:space="preserve"><value>준비 미끼</value></data>
+  <data name="OceanBasicBait" xml:space="preserve"><value>기본 미끼</value></data>
+  <data name="OceanGuidanceMissing" xml:space="preserve"><value>안내 자료 미수집</value></data>
+  <data name="OceanBaitStock" xml:space="preserve"><value>소지 {0}개</value></data>
   <data name="ChangelogPersonalFeatureTitle" xml:space="preserve"><value>어종별 기록과 설정 백업</value></data>
   <data name="ChangelogPersonalFeatureSummary" xml:space="preserve"><value>어종별 기록을 남기고 설정과 음원을 함께 백업하세요.</value></data>
   <data name="ChangelogFishNotes" xml:space="preserve"><value>어종마다 개인 메모를 저장할 수 있습니다.</value></data>

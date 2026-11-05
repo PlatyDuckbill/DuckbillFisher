@@ -1,0 +1,507 @@
+{
+  "schemaVersion": 1,
+  "dataVersion": "ocean-beta-2026-11-06",
+  "author": "Tyo'to Tayuun",
+  "sources": [
+    {
+      "url": "https://ffxiv.oceanfishing.boats/fishdata/indigo-EN.csv",
+      "sha256": "8f8fb4eb0911ba670093eeca7650689c24a3d0476097514e63a7a0b0f3010e92",
+      "retrieved": "2026-11-06",
+      "license": "No public reuse license identified; individual factual observations only; no code or prose copied."
+    },
+    {
+      "url": "https://ffxiv.oceanfishing.boats/fishdata/ruby-EN.csv",
+      "sha256": "efed3c3d8fdf925e6886c83cca94bc1be538ddf45253693699233a8d7a6ceb1e",
+      "retrieved": "2026-11-06",
+      "license": "No public reuse license identified; individual factual observations only; no code or prose copied."
+    },
+    {
+      "url": "https://ffxiv.oceanfishing.boats/scripts/indigooceancalculator.js",
+      "sha256": "712c5ffb85a75c3777358a9db22caf22cad8c0ef6bd7e7b983404418429b7711",
+      "retrieved": "2026-11-06",
+      "license": "No public reuse license identified; individual factual observations only; no code or prose copied."
+    },
+    {
+      "url": "https://ffxiv.oceanfishing.boats/scripts/rubyoceancalculator.js",
+      "sha256": "4f413bc9ded6d24a71bdfec564df8ac5d87c689f1b966a84e018b5ce0c0cf960",
+      "retrieved": "2026-11-06",
+      "license": "No public reuse license identified; individual factual observations only; no code or prose copied."
+    },
+    {
+      "url": "https://ffxiv.oceanfishing.boats/scripts/displayStops.js",
+      "sha256": "2906f0b19c0d661e35c1ffc7f250bf0e9fa6882b5237db3cbbf95586b4df3a50",
+      "retrieved": "2026-11-06",
+      "license": "No public reuse license identified; individual factual observations only; no code or prose copied."
+    }
+  ],
+  "entries": [
+    {
+      "spotId": 1,
+      "time": 0,
+      "fishItemId": 29784,
+      "baitItemId": 29715,
+      "tug": "!!!",
+      "double": 1,
+      "triple": 1
+    },
+    {
+      "spotId": 1,
+      "time": 1,
+      "fishItemId": 29766,
+      "baitItemId": 29715,
+      "tug": "!!",
+      "double": 4,
+      "triple": 7
+    },
+    {
+      "spotId": 1,
+      "time": 2,
+      "fishItemId": 29766,
+      "baitItemId": 29715,
+      "tug": "!!",
+      "double": 4,
+      "triple": 7
+    },
+    {
+      "spotId": 1,
+      "time": 3,
+      "fishItemId": 29766,
+      "baitItemId": 29715,
+      "tug": "!!",
+      "double": 4,
+      "triple": 7
+    },
+    {
+      "spotId": 2,
+      "time": 0,
+      "fishItemId": 29785,
+      "baitItemId": 29715,
+      "tug": "!!!",
+      "double": 1,
+      "triple": 1
+    },
+    {
+      "spotId": 2,
+      "time": 1,
+      "fishItemId": 29759,
+      "baitItemId": 29716,
+      "tug": "!!",
+      "double": 2,
+      "triple": 3
+    },
+    {
+      "spotId": 2,
+      "time": 2,
+      "fishItemId": 29759,
+      "baitItemId": 29716,
+      "tug": "!!",
+      "double": 2,
+      "triple": 3
+    },
+    {
+      "spotId": 2,
+      "time": 3,
+      "fishItemId": 29757,
+      "baitItemId": 29714,
+      "tug": "!",
+      "double": 4,
+      "triple": 7
+    },
+    {
+      "spotId": 3,
+      "time": 0,
+      "fishItemId": 29786,
+      "baitItemId": 29714,
+      "tug": "!!!",
+      "double": 1,
+      "triple": 1
+    },
+    {
+      "spotId": 3,
+      "time": 1,
+      "fishItemId": 29777,
+      "baitItemId": 29714,
+      "tug": "!",
+      "double": 4,
+      "triple": 7
+    },
+    {
+      "spotId": 3,
+      "time": 2,
+      "fishItemId": 29748,
+      "baitItemId": 29715,
+      "tug": "!",
+      "double": 2,
+      "triple": 3
+    },
+    {
+      "spotId": 3,
+      "time": 3,
+      "fishItemId": 29764,
+      "baitItemId": 29714,
+      "tug": "!",
+      "double": 4,
+      "triple": 7
+    },
+    {
+      "spotId": 4,
+      "time": 0,
+      "fishItemId": 29787,
+      "baitItemId": 29716,
+      "tug": "!!!",
+      "double": 1,
+      "triple": 1
+    },
+    {
+      "spotId": 4,
+      "time": 1,
+      "fishItemId": 29768,
+      "baitItemId": 29714,
+      "tug": "!",
+      "double": 4,
+      "triple": 7
+    },
+    {
+      "spotId": 4,
+      "time": 2,
+      "fishItemId": 29768,
+      "baitItemId": 29714,
+      "tug": "!",
+      "double": 4,
+      "triple": 7
+    },
+    {
+      "spotId": 4,
+      "time": 3,
+      "fishItemId": 29768,
+      "baitItemId": 29714,
+      "tug": "!",
+      "double": 4,
+      "triple": 7
+    },
+    {
+      "spotId": 5,
+      "time": 0,
+      "fishItemId": 32063,
+      "baitItemId": 29714,
+      "tug": "!!!",
+      "double": 1,
+      "triple": 1
+    },
+    {
+      "spotId": 5,
+      "time": 1,
+      "fishItemId": 32065,
+      "baitItemId": 29715,
+      "tug": "!!",
+      "double": 4,
+      "triple": 7
+    },
+    {
+      "spotId": 5,
+      "time": 2,
+      "fishItemId": 32065,
+      "baitItemId": 29715,
+      "tug": "!!",
+      "double": 4,
+      "triple": 7
+    },
+    {
+      "spotId": 5,
+      "time": 3,
+      "fishItemId": 32065,
+      "baitItemId": 29715,
+      "tug": "!!",
+      "double": 4,
+      "triple": 7
+    },
+    {
+      "spotId": 6,
+      "time": 0,
+      "fishItemId": 32083,
+      "baitItemId": 29715,
+      "tug": "!!!",
+      "double": 1,
+      "triple": 1
+    },
+    {
+      "spotId": 6,
+      "time": 1,
+      "fishItemId": 32087,
+      "baitItemId": 29715,
+      "tug": "!!",
+      "double": 4,
+      "triple": 7
+    },
+    {
+      "spotId": 6,
+      "time": 2,
+      "fishItemId": 32085,
+      "baitItemId": 29714,
+      "tug": "!",
+      "double": 4,
+      "triple": 7
+    },
+    {
+      "spotId": 6,
+      "time": 3,
+      "fishItemId": 32086,
+      "baitItemId": 29715,
+      "tug": "!",
+      "double": 2,
+      "triple": 3
+    },
+    {
+      "spotId": 7,
+      "time": 0,
+      "fishItemId": 32103,
+      "baitItemId": 29716,
+      "tug": "!!!",
+      "double": 1,
+      "triple": 1
+    },
+    {
+      "spotId": 7,
+      "time": 1,
+      "fishItemId": 32105,
+      "baitItemId": 29714,
+      "tug": "!",
+      "double": 4,
+      "triple": 7
+    },
+    {
+      "spotId": 7,
+      "time": 2,
+      "fishItemId": 32105,
+      "baitItemId": 29714,
+      "tug": "!",
+      "double": 4,
+      "triple": 7
+    },
+    {
+      "spotId": 7,
+      "time": 3,
+      "fishItemId": 32106,
+      "baitItemId": 29716,
+      "tug": "!!",
+      "double": 2,
+      "triple": 3
+    },
+    {
+      "spotId": 8,
+      "time": 0,
+      "fishItemId": 40529,
+      "baitItemId": 29716,
+      "tug": "!!!",
+      "double": 1,
+      "triple": 1
+    },
+    {
+      "spotId": 8,
+      "time": 1,
+      "fishItemId": 40531,
+      "baitItemId": 29714,
+      "tug": "!",
+      "double": 4,
+      "triple": 7
+    },
+    {
+      "spotId": 8,
+      "time": 2,
+      "fishItemId": 40531,
+      "baitItemId": 29714,
+      "tug": "!",
+      "double": 4,
+      "triple": 7
+    },
+    {
+      "spotId": 8,
+      "time": 3,
+      "fishItemId": 40531,
+      "baitItemId": 29714,
+      "tug": "!",
+      "double": 4,
+      "triple": 7
+    },
+    {
+      "spotId": 9,
+      "time": 0,
+      "fishItemId": 40549,
+      "baitItemId": 29715,
+      "tug": "!!!",
+      "double": 1,
+      "triple": 1
+    },
+    {
+      "spotId": 9,
+      "time": 1,
+      "fishItemId": 40552,
+      "baitItemId": 29714,
+      "tug": "!",
+      "double": 4,
+      "triple": 7
+    },
+    {
+      "spotId": 9,
+      "time": 2,
+      "fishItemId": 40552,
+      "baitItemId": 29714,
+      "tug": "!",
+      "double": 4,
+      "triple": 7
+    },
+    {
+      "spotId": 9,
+      "time": 3,
+      "fishItemId": 40552,
+      "baitItemId": 29714,
+      "tug": "!",
+      "double": 4,
+      "triple": 7
+    },
+    {
+      "spotId": 10,
+      "time": 0,
+      "fishItemId": 40569,
+      "baitItemId": 29715,
+      "tug": "!!!",
+      "double": 1,
+      "triple": 1
+    },
+    {
+      "spotId": 10,
+      "time": 1,
+      "fishItemId": 40571,
+      "baitItemId": 29715,
+      "tug": "!!",
+      "double": 4,
+      "triple": 7
+    },
+    {
+      "spotId": 10,
+      "time": 2,
+      "fishItemId": 40571,
+      "baitItemId": 29715,
+      "tug": "!!",
+      "double": 4,
+      "triple": 7
+    },
+    {
+      "spotId": 10,
+      "time": 3,
+      "fishItemId": 40571,
+      "baitItemId": 29715,
+      "tug": "!!",
+      "double": 4,
+      "triple": 7
+    },
+    {
+      "spotId": 11,
+      "time": 0,
+      "fishItemId": 40589,
+      "baitItemId": 29715,
+      "tug": "!!!",
+      "double": 1,
+      "triple": 1
+    },
+    {
+      "spotId": 11,
+      "time": 1,
+      "fishItemId": 40591,
+      "baitItemId": 29714,
+      "tug": "!",
+      "double": 4,
+      "triple": 7
+    },
+    {
+      "spotId": 11,
+      "time": 2,
+      "fishItemId": 40591,
+      "baitItemId": 29714,
+      "tug": "!",
+      "double": 4,
+      "triple": 7
+    },
+    {
+      "spotId": 11,
+      "time": 3,
+      "fishItemId": 40591,
+      "baitItemId": 29714,
+      "tug": "!",
+      "double": 4,
+      "triple": 7
+    },
+    {
+      "spotId": 12,
+      "time": 0,
+      "fishItemId": 51217,
+      "baitItemId": 29714,
+      "tug": "!!!",
+      "double": 1,
+      "triple": 1
+    },
+    {
+      "spotId": 12,
+      "time": 1,
+      "fishItemId": 51219,
+      "baitItemId": 29714,
+      "tug": "!",
+      "double": 4,
+      "triple": 7
+    },
+    {
+      "spotId": 12,
+      "time": 2,
+      "fishItemId": 51219,
+      "baitItemId": 29714,
+      "tug": "!",
+      "double": 4,
+      "triple": 7
+    },
+    {
+      "spotId": 12,
+      "time": 3,
+      "fishItemId": 51219,
+      "baitItemId": 29714,
+      "tug": "!",
+      "double": 4,
+      "triple": 7
+    },
+    {
+      "spotId": 13,
+      "time": 0,
+      "fishItemId": 51237,
+      "baitItemId": 29715,
+      "tug": "!!!",
+      "double": 1,
+      "triple": 1
+    },
+    {
+      "spotId": 13,
+      "time": 1,
+      "fishItemId": 51244,
+      "baitItemId": 29714,
+      "tug": "!",
+      "double": 4,
+      "triple": 7
+    },
+    {
+      "spotId": 13,
+      "time": 2,
+      "fishItemId": 51246,
+      "baitItemId": 29716,
+      "tug": "!!!",
+      "double": 4,
+      "triple": 7
+    },
+    {
+      "spotId": 13,
+      "time": 3,
+      "fishItemId": 51244,
+      "baitItemId": 29714,
+      "tug": "!",
+      "double": 4,
+      "triple": 7
+    }
+  ]
+}

@@ -104,3 +104,18 @@ are recorded. No cross-action yield conversion or Gathering breakpoints inferred
 No guide prose, code, images or video is redistributed. No public reuse license
 was identified; rights to the guides remain with their authors. These observations
 are not represented as MIT-licensed or Apache-licensed upstream data.
+
+Ocean Fishing basic-bait observations (13 stops, 52 guidance rows)
+Observer: Tyo'to Tayuun, checked 2026-11-06
+https://ffxiv.oceanfishing.boats/indigo/
+https://ffxiv.oceanfishing.boats/ruby/
+Source URLs and fixed SHA256 snapshots: data/ocean-guidance.v1.json
+Only individual bait, tug, catch-quantity and time-of-day facts are recorded,
+linked to IDs verified against the installed KR and global client sheets.
+Basic targets were selected for direct bait without Intuition preparation;
+they are not represented as an optimal-score strategy. The departure-cycle
+phase was compared with both complete author schedules, using client sheet
+IKDRouteTable for the actual route sequence. No website code, prose, images,
+full fish table or bite-time observations are redistributed. No public reuse
+license was identified; rights remain with their authors. These facts are not
+represented as MIT-licensed or Apache-licensed upstream data.

@@ -21,6 +21,7 @@ internal sealed class MainWindow : Window
     private readonly CollectionProgressPanel collectionProgress;
     private readonly SpawnSchedulePanel schedule;
     private readonly FishRecommendationPanel recommendations;
+    private readonly OceanFishingPanel ocean;
     private readonly SettingsBackupPanel backup;
     private readonly FishCollectionObserver collection;
     private readonly FishGuideOpenService guideOpener;
@@ -37,13 +38,13 @@ internal sealed class MainWindow : Window
     private int selectedMarker;
     private bool selectSettings;
     private MainPage selectedPage;
-    private enum MainPage { Catalog, Recommendations, Collection, Schedule, Alerts, History, Settings, Guide, Fishing }
+    private enum MainPage { Catalog, Recommendations, Collection, Schedule, Ocean, Alerts, History, Settings, Guide, Fishing }
 
     public MainWindow(FishingActivityProbe observer, FishGuideDiagnostics fishGuide, FishListPanel fishList,
         SpawnAlertsPanel spawnAlerts, FishPreferences preferences, Action languageChanged,
         FishingHistoryBrowser fishingHistory, CollectionProgressPanel collectionProgress, SpawnSchedulePanel schedule,
         SettingsBackupPanel backup, FishRecommendationPanel recommendations, FishCollectionObserver collection,
-        FishGuideOpenService guideOpener) : base("DuckbillFisher###DuckbillFisher.Main")
+        FishGuideOpenService guideOpener, OceanFishingPanel ocean) : base("DuckbillFisher###DuckbillFisher.Main")
     {
         this.observer = observer;
         this.fishGuide = fishGuide;
@@ -58,6 +59,7 @@ internal sealed class MainWindow : Window
         this.backup = backup;
         this.collection = collection;
         this.guideOpener = guideOpener;
+        this.ocean = ocean;
         UiText.SetLanguage(preferences.View.Language);
         markerLabels = Markers.Select(key => UiText.Get(key)).ToArray();
         languageChanged();
@@ -75,7 +77,7 @@ internal sealed class MainWindow : Window
     }
 
     public override void OnOpen() => ShowUnreadChangelog?.Invoke();
-    public override void OnClose() { schedule.SetActive(false); recommendations.SetActive(false); backup.CloseDialogs(); }
+    public override void OnClose() { schedule.SetActive(false); recommendations.SetActive(false); ocean.SetActive(false); backup.CloseDialogs(); }
 
     public override void Draw()
     {
@@ -92,6 +94,7 @@ internal sealed class MainWindow : Window
         UiWidgets.GuideWarning(collection.View, settings, guideOpener);
         schedule.SetActive(selectedPage == MainPage.Schedule);
         recommendations.SetActive(selectedPage == MainPage.Recommendations);
+        ocean.SetActive(selectedPage == MainPage.Ocean);
         ImGui.PushID(selectedPage.ToString());
         switch (selectedPage)
         {
@@ -99,6 +102,7 @@ internal sealed class MainWindow : Window
             case MainPage.Recommendations: recommendations.Draw(); break;
             case MainPage.Collection: collectionProgress.Draw(); break;
             case MainPage.Schedule: schedule.Draw(); break;
+            case MainPage.Ocean: ocean.Draw(); break;
             case MainPage.Alerts: spawnAlerts.Draw(); break;
             case MainPage.History: fishingHistory.Draw(settings.DeveloperMode, ShowTimer); break;
             case MainPage.Settings:
@@ -136,12 +140,13 @@ internal sealed class MainWindow : Window
         {
             // A live ImGui context can retain the previous tab order across plugin reloads.
             // Use a stable ID for this menu order instead of reusing the old tab-bar state.
-            if (ImGui.BeginTabBar("MainNavigation.ScheduleBeforeCollection", ImGuiTabBarFlags.FittingPolicyScroll))
+            if (ImGui.BeginTabBar("MainNavigation.OceanBeta", ImGuiTabBarFlags.FittingPolicyScroll))
             {
                 NavigationTab(MainPage.Catalog, T.TabCatalog, "CatalogTab", FontAwesomeIcon.Fish);
                 NavigationTab(MainPage.Alerts, T.TabAlerts, "SpawnAlertsTab", FontAwesomeIcon.Star);
                 NavigationTab(MainPage.Recommendations, T.RecommendationTitle, "RecommendationsTab", FontAwesomeIcon.Compass);
                 NavigationTab(MainPage.Schedule, T.ScheduleTitle, "SpawnScheduleTab", FontAwesomeIcon.CalendarAlt);
+                NavigationTab(MainPage.Ocean, T.OceanBetaTitle, "OceanBetaTab", FontAwesomeIcon.Ship);
                 NavigationTab(MainPage.Collection, T.TabCollectionProgress, "CollectionProgressTab", FontAwesomeIcon.ChartBar);
                 NavigationTab(MainPage.History, T.TabHistory, "FishingHistoryTab", FontAwesomeIcon.History);
                 NavigationTab(MainPage.Settings, T.TabSettings, "SettingsTab", FontAwesomeIcon.Cog, selectSettings);

@@ -52,6 +52,7 @@ public sealed class Plugin : IDalamudPlugin
     private readonly SpawnAttemptObserver spawnAttempts;
     private readonly FishDetailAccess detailAccess;
     private readonly IntuitionProgress intuitionProgress;
+    private readonly OceanFishing ocean;
     private bool disposed;
 
     public Plugin(IDalamudPluginInterface pluginInterface, ICommandManager commandManager, ICondition conditions,
@@ -148,6 +149,7 @@ public sealed class Plugin : IDalamudPlugin
         schedule = new SpawnSchedule(fishCatalog, fishPreferences, fishCollection, fishingRegion, preparationQuery, framework, log);
         recommendations = new(fishCatalog, fishPreferences, fishCollection, framework, log);
         currentSpotAlerts = new(fishingTracker, fishCatalog, fishPreferences, fishCollection, alertOutput, framework, log);
+        ocean = new(dataManager, clientState, playerState, conditions, framework, fishPreferences, log);
         spawnAttempts = new(fishingTracker, fishCatalog, fishPreferences, fishCollection, framework);
         alertOutput.ShowDetail = id =>
         {
@@ -163,7 +165,7 @@ public sealed class Plugin : IDalamudPlugin
             new CollectionProgressPanel(collectionProgress, fishCatalog, fishPreferences, collectionFishWindow.Show),
             new SpawnSchedulePanel(schedule, fishCatalog, fishPreferences, textureProvider, detailWindow.Show, fishingMap), backupPanel,
             new FishRecommendationPanel(recommendations, fishCatalog, fishPreferences, fishCollection, detailWindow.Show, fishingMap, textureProvider),
-            fishCollection, guideOpener);
+            fishCollection, guideOpener, new OceanFishingPanel(ocean, fishPreferences, baitStock, baitFinder, textureProvider));
         mainWindow.ShowCompact = compactWindow.Toggle;
         mainWindow.ShowTimer = timerWindow.Toggle;
         var changelogWindow = new ChangelogWindow(fishPreferences);
@@ -222,6 +224,7 @@ public sealed class Plugin : IDalamudPlugin
         collectionProgress.Dispose();
         schedule.Dispose();
         recommendations.Dispose();
+        ocean.Dispose();
         baitPreparation.Dispose();
         baitStock.Dispose();
         baitUiProbe.Dispose();
