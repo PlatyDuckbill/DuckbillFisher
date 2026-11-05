@@ -14,6 +14,8 @@ A Dalamud big-fish hunting companion for **FFXIV on the Korean and global client
 - Track favorites with local chat alerts, game sound effects, or a custom local WAV with preview controls.
 - Use the quick list for fish available now or coming up soon.
 - Follow your casts with a timer, bait snapshots, and character-specific fishing records.
+- Track Intuition preparation, record big-fish attempts by appearance, and check unused carried baits.
+- Open fish details with `/dbfs fish name` or fish-item context menus; view available Double/Triple Hook yields.
 - Read installer release notes and browse the latest ten releases in Korean or English from Settings → What's new.
 
 Korean and English interface options are available. Fish, item, and location names come from your game client. Collection status is confirmed against the game fish guide; unread data stays unknown, and manual overrides take priority.
@@ -36,7 +38,7 @@ Open with `/dbfs` or `/duckbillfisher`. Use `/dbfs cl` for the compact list and 
 
 ## Supported environment and limits
 
-- Current release: **[0.7.0.0](https://github.com/PlatyDuckbill/DuckbillFisher/releases/tag/v0.7.0.0)**, built for **Dalamud API 15**. It adds global client support. See the [release notes](docs/releases/0.7.0.0.md).
+- Current release: **[0.8.0.0](https://github.com/PlatyDuckbill/DuckbillFisher/releases/tag/v0.8.0.0)**, built for **Dalamud API 15**. It adds Intuition preparation, automatic appearance attempts, and fish detail shortcuts. See the [release notes](docs/releases/0.8.0.0.md).
 - Supported clients: the Korean client with KR Dalamud (wasdcxz or dal4kr) and the global client with Dalamud. Representative checks were done on Korean client 2026.10.06 and global client 2026.10.16.
 - Game features use the structures provided by the running Dalamud, so Dalamud updates do not need a plugin release. Each feature checks what it reads; if a game patch changes it, only that feature turns off and manual settings are kept.
 - Forecasts model time/weather and Intuition preparation opportunities. They do not establish the character's actual catches or active Intuition buff and do not guarantee a catch. Unknown Intuition durations use a marked 175-second assumption. Some conditions, ocean fishing, and spearfishing have incomplete coverage.

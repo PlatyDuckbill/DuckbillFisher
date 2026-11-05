@@ -18,5 +18,6 @@
 - 소스 push와 Plogon run **42029321554** 성공을 확인한 뒤 같은 소스에 태그v0.8.0.0을 만들었다. 태그/기존 자산 덮어쓰기는 없다.
 - [공개 Release](https://github.com/PlatyDuckbill/DuckbillFisher/releases/tag/v0.8.0.0) ID **435190222**, 공개 **2026-11-05T12:43:24Z**. 초안의 ZIP/체크섬 서버 크기·digest가 로컬과 같음을 확인한 뒤 공개했다.
 - 인증 없는 ZIP·체크섬·태그 아이콘 요청은 모두HTTP200/로컬 SHA256 일치다. 결과는 `.cache/release-remote-check/0.8.0.0/`. 이 확인 뒤 후보release.json을 설치 목록 원본에 반영한다.
-- 설치 JSON push·DuckbillRepo 공용 목록 동기화/실제 raw URL 확인은 진행 중이다.
+- 설치 JSON 커밋 `30edc9e` push 후 빌드 점검 run **42029779184**도 성공했다. DuckbillRepo `sync.yml` run **42029780713**을 수동 실행해 성공했으며 공용 저장소 커밋은 `1ddf750145ae2d1394bd370247c115af734e6fd3`이다.
+- **2026-11-05T12:48:19Z**, 실제 공유 URL `https://raw.githubusercontent.com/PlatyDuckbill/DuckbillRepo/main/pluginmaster.json`의HTTP200 응답에서0.8.0.0/API15·설치/업데이트 ZIP·태그 아이콘·6개 업데이트 문장을 대조했다. 캐시 우회 URL만으로 완료 처리하지 않았다. 동기화 직후에는 이전0.7.0.0 캐시가 있었으며 실제 URL의 새 응답까지 기다렸다. DuckbillTweak 항목은 동기화 전과 전체 필드가 같다.
 - 실제 Dalamud 업데이트·새 기능 인게임 확인: 배포 후 사용자 확인 예정.
