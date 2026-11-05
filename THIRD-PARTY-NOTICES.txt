@@ -83,9 +83,9 @@ or third-party implementation is copied. These observations do not establish
 complete time/weather conditions or a hookset. They are not represented as
 MIT-licensed Teamcraft records.
 
-Regular-fishing multi-hook numeric observations (12 fish)
+Regular-fishing multi-hook numeric observations (21 fish)
 Observer: Fruity Snacks, checked 2026-11-05
-Sources, fixed video IDs and description SHA256: data/hook-yields.v1.json
+Sources, fixed video IDs and description/content SHA256: data/hook-yields.v1.json
 https://www.youtube.com/watch?v=_tSbRKjum54
 https://www.youtube.com/watch?v=N9CAsGXVBvU
 https://www.youtube.com/watch?v=R4-BVctjX3g
@@ -96,6 +96,9 @@ https://www.youtube.com/watch?v=xOPwUALAImQ
 https://www.youtube.com/watch?v=AGL8XN87a5U
 https://www.youtube.com/watch?v=EyneCL9gcvM
 https://www.youtube.com/watch?v=X5DJDS5Iy1g
+https://docs.google.com/document/d/1B7wjAtw5uCiARS9tXsozYAX8l6JZOzl2YtJSjejqchk/edit
+The document is A Fisher's Guide to Eorzea by Fruity Snacks. Its plain-text
+export snapshot is identified by date and content SHA256 in the data file.
 Only numerical single-action yields, explicit ranges or documented lower bounds
 are recorded. No cross-action yield conversion or Gathering breakpoints inferred.
 No guide prose, code, images or video is redistributed. No public reuse license

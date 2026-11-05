@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "dataVersion": "regular-hook-yields-2026-11-05",
   "checkedUtc": "2026-11-05",
-  "rights": "Fruity Snacks gameplay observations. No public reuse license identified. Numeric facts only; no guide prose, code, images or video redistributed.",
+  "rights": "Fruity Snacks gameplay observations from video descriptions and A Fisher's Guide to Eorzea. No public reuse license identified. Numeric facts only; no guide prose, code, images or video redistributed.",
   "processing": "Linked to existing FishParameter/Item identities. Single-action values only. Null means unconfirmed. Null maximum means the guide only establishes a lower bound; no upper bound or cross-action conversion is inferred. Gathering breakpoints not inferred.",
   "sources": [
     {
@@ -54,6 +54,13 @@
       "id": "X5DJDS5Iy1g",
       "url": "https://www.youtube.com/watch?v=X5DJDS5Iy1g",
       "descriptionSha256": "DF9D2620A63DE6A182539840964DEF63DD9E3D8B1C991262024C0950169D141A"
+    },
+    {
+      "id": "fruity-guide-2026-11-05",
+      "url": "https://docs.google.com/document/d/1B7wjAtw5uCiARS9tXsozYAX8l6JZOzl2YtJSjejqchk/edit",
+      "contentSha256": "4CD82A004E2B11BAD2442FD07FCFD066EE9DC13FE38701DF26CBC2A9751486A0",
+      "snapshotFormat": "Google Docs plain text export, UTF-8 without BOM",
+      "checkedUtc": "2026-11-05"
     }
   ],
   "entries": [
@@ -64,6 +71,29 @@
       "doubleHook": {
         "minimum": 2,
         "maximum": null
+      },
+      "tripleHook": null
+    },
+    {
+      "itemId": 4924,
+      "fishParameterId": 180,
+      "source": "fruity-guide-2026-11-05",
+      "doubleHook": {
+        "minimum": 4,
+        "maximum": 4
+      },
+      "tripleHook": {
+        "minimum": 7,
+        "maximum": 7
+      }
+    },
+    {
+      "itemId": 12754,
+      "fishParameterId": 340,
+      "source": "fruity-guide-2026-11-05",
+      "doubleHook": {
+        "minimum": 3,
+        "maximum": 4
       },
       "tripleHook": null
     },
@@ -94,6 +124,16 @@
       "doubleHook": {
         "minimum": 3,
         "maximum": 4
+      },
+      "tripleHook": null
+    },
+    {
+      "itemId": 20040,
+      "fishParameterId": 603,
+      "source": "fruity-guide-2026-11-05",
+      "doubleHook": {
+        "minimum": 2,
+        "maximum": 2
       },
       "tripleHook": null
     },
@@ -134,9 +174,42 @@
       "tripleHook": null
     },
     {
+      "itemId": 26746,
+      "fishParameterId": 698,
+      "source": "fruity-guide-2026-11-05",
+      "doubleHook": {
+        "minimum": 1,
+        "maximum": 1
+      },
+      "tripleHook": null
+    },
+    {
+      "itemId": 26749,
+      "fishParameterId": 782,
+      "source": "fruity-guide-2026-11-05",
+      "doubleHook": {
+        "minimum": 1,
+        "maximum": 1
+      },
+      "tripleHook": null
+    },
+    {
       "itemId": 27462,
       "fishParameterId": 718,
-      "source": "2S1OHYIcZrk",
+      "source": "fruity-guide-2026-11-05",
+      "doubleHook": {
+        "minimum": 2,
+        "maximum": 2
+      },
+      "tripleHook": {
+        "minimum": 3,
+        "maximum": 3
+      }
+    },
+    {
+      "itemId": 36395,
+      "fishParameterId": 1026,
+      "source": "fruity-guide-2026-11-05",
       "doubleHook": {
         "minimum": 2,
         "maximum": 2
@@ -146,8 +219,24 @@
     {
       "itemId": 36412,
       "fishParameterId": 1042,
-      "source": "6BpB8Mu9HC0",
-      "doubleHook": null,
+      "source": "fruity-guide-2026-11-05",
+      "doubleHook": {
+        "minimum": 2,
+        "maximum": null
+      },
+      "tripleHook": {
+        "minimum": 3,
+        "maximum": 3
+      }
+    },
+    {
+      "itemId": 36449,
+      "fishParameterId": 1072,
+      "source": "fruity-guide-2026-11-05",
+      "doubleHook": {
+        "minimum": 2,
+        "maximum": 2
+      },
       "tripleHook": {
         "minimum": 3,
         "maximum": 3
@@ -188,6 +277,32 @@
         "maximum": null
       },
       "tripleHook": null
+    },
+    {
+      "itemId": 36686,
+      "fishParameterId": 1142,
+      "source": "fruity-guide-2026-11-05",
+      "doubleHook": {
+        "minimum": 2,
+        "maximum": 2
+      },
+      "tripleHook": {
+        "minimum": 3,
+        "maximum": 3
+      }
+    },
+    {
+      "itemId": 38935,
+      "fishParameterId": 1166,
+      "source": "fruity-guide-2026-11-05",
+      "doubleHook": {
+        "minimum": 2,
+        "maximum": 2
+      },
+      "tripleHook": {
+        "minimum": 3,
+        "maximum": 3
+      }
     }
   ]
 }

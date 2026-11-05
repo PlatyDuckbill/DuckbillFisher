@@ -31,7 +31,8 @@ internal static class HookYieldData
                 throw new InvalidDataException("HookYieldSchema");
             var sources = data.Sources.ToDictionary(s => s.Id);
             if (sources.Values.Any(s => !Uri.TryCreate(s.Url, UriKind.Absolute, out var uri) || uri.Scheme != "https" ||
-                s.DescriptionSha256 is not { Length: 64 } || !s.DescriptionSha256.All(Uri.IsHexDigit))) throw new InvalidDataException("HookYieldSource");
+                (s.ContentSha256 ?? s.DescriptionSha256) is not { Length: 64 } hash || !hash.All(Uri.IsHexDigit)))
+                throw new InvalidDataException("HookYieldSource");
             var rules = FishingData.Dataset.Fish.ToDictionary(f => f.ItemId);
             foreach (var entry in data.Entries)
                 if (!sources.ContainsKey(entry.Source) || !rules.TryGetValue(entry.ItemId, out var fish) || fish.FishParameterId != entry.FishParameterId ||
@@ -42,7 +43,7 @@ internal static class HookYieldData
         catch (Exception ex) when (ex is JsonException or IOException or ArgumentException or InvalidOperationException)
         { Invalid = true; ByItem = FrozenDictionary<uint, HookYieldEntry>.Empty; }
     }
-    private sealed record Source(string Id, string Url, string DescriptionSha256);
+    private sealed record Source(string Id, string Url, string? DescriptionSha256 = null, string? ContentSha256 = null);
     private sealed record Dataset(int SchemaVersion, Source[] Sources, HookYieldEntry[] Entries);
 }
 

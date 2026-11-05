@@ -75,10 +75,12 @@ internal sealed class IntuitionCatchReceipt : IDisposable
         var presence = readIntuition();
         if (presence is null) { lost(); return; }
         var deltas = new Dictionary<(uint Item, bool Collectable), long>();
+        var otherContainers = new HashSet<uint>();
         void Add(in GameInventoryItem item, int direction)
         {
-            if (item.IsEmpty || !IsBag(item.ContainerType) || !catalog.View.CollectableItems.Contains(item.BaseItemId) ||
+            if (item.IsEmpty || !catalog.View.CollectableItems.Contains(item.BaseItemId) ||
                 tracker.FishForItem(item.BaseItemId) is null) return;
+            if (!IsBag(item.ContainerType)) { otherContainers.Add(item.BaseItemId); return; }
             if (item.Quantity is < 1 or > 999) { lost(); return; }
             var key = (item.BaseItemId, item.IsCollectable);
             deltas[key] = deltas.GetValueOrDefault(key) + direction * (long)item.Quantity;
@@ -97,7 +99,7 @@ internal sealed class IntuitionCatchReceipt : IDisposable
         var rejected = deltas.Where(pair => pair.Value < 0).Select(pair => pair.Key.Item).ToHashSet();
         foreach (var (item, quantity) in deltas)
         {
-            if (quantity <= 0 || rejected.Contains(item.Item)) continue;
+            if (quantity <= 0 || rejected.Contains(item.Item) || otherContainers.Contains(item.Item)) continue;
             if (quantity > 999 || receipts.Count >= 64) { lost(); continue; }
             var key = (candidate.Value, item.Item);
             if (receipts.ContainsKey(key)) { receipts.Remove(key); lost(); continue; }

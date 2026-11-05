@@ -4,7 +4,9 @@
 
 ## 일반 낚시 이중·삼중 수량 안내 (2026-11-05)
 
-- 별도 자료 [hook-yields.v1.json](../../data/hook-yields.v1.json)의12종은 Fruity Snacks 본인 가이드10개의 수량 설명만 숫자로 추출했다. 영상ID를 고정 식별자로 쓰고 확인 당시 설명 UTF-8의 SHA256을 원본별로 남겼다. 기존 FishParameter↔Item 짝과 연결하며 원본에 없는 이름/ID/수량은 채우지 않는다.
+- 별도 자료 [hook-yields.v1.json](../../data/hook-yields.v1.json)는 일반21종/이중21·삼중10종이다. 최초12종은 Fruity Snacks 본인 영상10개만 확인한 제한된 조사였으며, 전체 자료가 없다고 결론 내린 결과가 아니다. 재조사에서 [A Fisher's Guide to Eorzea](https://docs.google.com/document/d/1B7wjAtw5uCiARS9tXsozYAX8l6JZOzl2YtJSjejqchk/edit)의 숫자 설명으로9종과 기존2종의 누락 기술을 보강했다. 일반 직감 선행43종 중15종의 이중,7종의 삼중만 포함하므로 나머지는 여전히 미확인이다.
+- 영상ID와 설명 SHA256, 문서의2026-11-05 UTF-8 텍스트 내보내기 스냅샷 SHA256(4CD82A004E2B11BAD2442FD07FCFD066EE9DC13FE38701DF26CBC2A9751486A0)을 기록한다. 문서 URL은 내용이 바뀔 수 있어 고정 revision으로 취급하지 않는다. 형식1의 source는 기존descriptionSha256과 추가contentSha256 중 유효한 해시를 요구한다. 기존 FishParameter↔Item 짝과 연결하며 원본에 없는 이름/ID/수량은 채우지 않는다.
+- 보강한 수량(이중/삼중, 빈 기술은 미확인): Titanic Sawfish4/7, Granite Crab3~4/미확인, Sculptor2/미확인, Eighteyes Eel1/미확인, Amber Monkfish1/미확인, Ponderer2/미확인, Thavnairian Caiman2/3, Thavnairian Calamari2/3, Jhinga2/3. 기존 Sand Egg의 삼중3, Astacus Aetherius의 이중2이상도 보완했다. 가이드의 해당 어종·직감 준비/재준비 절을 읽어 개별 기술의 숫자만 옮겼다. Green Prismfish의 복합 준비 순서 등 모호한 설명은 수량으로 환산하지 않았다.
 - 출처의 수량은 캐릭터 현재 획득력에서의 보장 수량이 아니다. ‘단일 어획+이중으로 직감 조건 충족’처럼 최소량만 확인되는 설명은 하한으로만 기록하고 상한은 null이다. 3~4처럼 명시한 범위와 구분한다. 삼중 설명이 없으면 null이며 이중 수량으로 변환하지 않는다. 일반 어종 전수·획득력별 임계값·소장품 실제 수령 계약은 미확인이다.
 - 공개 재사용 라이선스는 확인하지 못했다. 저작권은 원저작자에게 있으며 소수의 숫자 사실만 기록한다. 원문 문장·코드·이미지·영상은 도입하지 않고 MIT/Apache 자료로 표시하지 않는다. URL/고정ID/해시/가공 범위는 JSON과 THIRD-PARTY-NOTICES에 남긴다. 개발 중 수집과 DLL 내장은 런타임 통신과 구분한다.
 
