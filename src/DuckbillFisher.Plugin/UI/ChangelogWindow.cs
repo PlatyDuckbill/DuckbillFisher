@@ -15,6 +15,15 @@ internal sealed class ChangelogWindow : Window
     // Keep the confirmed candidate unchanged when it is published.
     private static readonly ReleaseNotes[] PublishedReleases =
     [
+        new(new(0, 8, 0, 0),
+        [
+            (FontAwesomeIcon.Fish, T.ChangelogIntuitionProgress),
+            (FontAwesomeIcon.PlusCircle, T.ChangelogSpawnAttemptsAuto),
+            (FontAwesomeIcon.Filter, T.ChangelogUnusedBaits),
+            (FontAwesomeIcon.BookOpen, T.ChangelogFishLookup),
+            (FontAwesomeIcon.List, T.ChangelogHookYieldGuide),
+            (FontAwesomeIcon.History, T.ChangelogMultipleCatchQuantity),
+        ], new DateTimeOffset(2026, 11, 5, 12, 37, 34, TimeSpan.Zero)),
         new(new(0, 7, 0, 0),
         [
             (FontAwesomeIcon.SyncAlt, T.ChangelogDalamudUpdates),
@@ -91,19 +100,6 @@ internal sealed class ChangelogWindow : Window
             (FontAwesomeIcon.Clock, T.ChangelogTimerRetention),
         ], new DateTimeOffset(2026, 10, 20, 11, 50, 52, TimeSpan.Zero),
             OtherEntries: [(FontAwesomeIcon.ChartBar, T.ChangelogProgressPalette)]),
-        new(new(0, 4, 0, 0),
-        [
-            (FontAwesomeIcon.ChartBar, T.ChangelogCollectionProgress),
-            (FontAwesomeIcon.Filter, T.ChangelogProgressFilters),
-            (FontAwesomeIcon.ChartBar, T.ChangelogProgressBars),
-            (FontAwesomeIcon.Fish, T.ChangelogProgressList),
-            (FontAwesomeIcon.Check, T.ChangelogProgressCollection),
-        ], new DateTimeOffset(2026, 10, 20, 8, 43, 34, TimeSpan.Zero),
-            T.ChangelogProgressFeatureTitle, T.ChangelogProgressFeatureSummary,
-        [
-            (FontAwesomeIcon.List, T.ChangelogCompactToggle),
-            (FontAwesomeIcon.Star, T.ChangelogNavigationIcons),
-        ]),
     ];
     private readonly ReleaseNotes[] releases = PublishedReleases.Where(release => release.Version <= CurrentVersion).Take(10).ToArray();
     private readonly FishPreferences preferences;

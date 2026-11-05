@@ -734,8 +734,6 @@ Uncaught: {1:N0}
 Unknown: {2:N0}
 Manual settings included: {3:N0}</value></data>
   <data name="CollectionProgressUnknownCount" xml:space="preserve"><value>{0:N0} unknown</value></data>
-  <data name="ChangelogCollectionProgress" xml:space="preserve"><value>Open Collection progress in the main view to see a large regular-fishing summary and ocean-fishing progress by sea area.</value></data>
-  <data name="ChangelogCompactToggle" xml:space="preserve"><value>The compact-list button in the main view now toggles the list open and closed.</value></data>
   <data name="CollectionProgressScopeName" xml:space="preserve"><value>{0}</value></data>
   <data name="CollectionProgressRegionName" xml:space="preserve"><value>{0} / {1}</value></data>
   <data name="CollectionProgressFishTitle" xml:space="preserve"><value>Collection progress · Fish</value></data>
@@ -743,13 +741,6 @@ Manual settings included: {3:N0}</value></data>
   <data name="CollectionProgressListHint" xml:space="preserve"><value>Switch between all fish and hiding caught fish. Unknown fish remain visible. This list stays open until you close it and is reused when you click another area bar.</value></data>
   <data name="CollectionProgressCompactRatio" xml:space="preserve"><value>{0:N0}/{1:N0}</value></data>
   <data name="CollectionProgressClickHint" xml:space="preserve"><value>Click to view fish in this scope.</value></data>
-  <data name="ChangelogProgressFilters" xml:space="preserve"><value>Expand expansions into regions and switch between all fish, big fish including legendary fish, and legendary fish.</value></data>
-  <data name="ChangelogProgressBars" xml:space="preserve"><value>Progress bars adapt to the view width. Hover for full counts, percentages, and unknown states.</value></data>
-  <data name="ChangelogProgressList" xml:space="preserve"><value>Click an expansion, region, or sea-area bar to open a fish list that stays open until you close it. Clicking another area reuses that list.</value></data>
-  <data name="ChangelogProgressCollection" xml:space="preserve"><value>Switch the list between all fish and hiding caught fish. Manual collection settings take priority, and unknown fish remain visible.</value></data>
-  <data name="ChangelogProgressFeatureTitle" xml:space="preserve"><value>New feature · Collection progress</value></data>
-  <data name="ChangelogProgressFeatureSummary" xml:space="preserve"><value>Your fishing log progress, from the overall picture to each region. Explore the new Collection progress page from the main view.</value></data>
-  <data name="ChangelogNavigationIcons" xml:space="preserve"><value>Added icons to the main navigation tabs.</value></data>
   <data name="ChangelogOtherImprovements" xml:space="preserve"><value>Other improvements</value></data>
   <data name="CollectionProgressRules" xml:space="preserve"><value>Collection rules</value></data>
   <data name="CollectionProgressAreaClickHint" xml:space="preserve"><value>Click an expansion, region, or sea-area bar to view fish.</value></data>
@@ -1112,4 +1103,10 @@ Shares duplicate prevention with zero-minute favorite alerts and uses the channe
   <data name="HookYieldAtLeast" xml:space="preserve"><value>{0}+</value></data>
   <data name="HookYieldUnavailable" xml:space="preserve"><value>Hook yield data could not be read. Other fishing conditions are unaffected.</value></data>
   <data name="IntuitionActiveSummary" xml:space="preserve"><value>Intuition active</value></data>
+  <data name="ChangelogIntuitionProgress" xml:space="preserve"><value>Track Intuition preparation in the casting timer, including a new count after Intuition ends.</value></data>
+  <data name="ChangelogSpawnAttemptsAuto" xml:space="preserve"><value>Automatically record one attempt per appearance of an uncaught big fish while fishing at its hole.</value></data>
+  <data name="ChangelogUnusedBaits" xml:space="preserve"><value>Find carried baits unrelated to the current fish filters and their Intuition prerequisites.</value></data>
+  <data name="ChangelogFishLookup" xml:space="preserve"><value>Open fish details by name with /dbfs or from fish-item context menus.</value></data>
+  <data name="ChangelogHookYieldGuide" xml:space="preserve"><value>View Double Hook and Triple Hook yield guidance for regular fish where data is available.</value></data>
+  <data name="ChangelogMultipleCatchQuantity" xml:space="preserve"><value>See actual multiple-catch quantities in fishing history.</value></data>
 </root>
