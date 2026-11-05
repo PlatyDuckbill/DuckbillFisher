@@ -73,6 +73,8 @@ internal sealed class FishingConditionPanel(ITextureProvider textures, FishingIt
                 { "Precision" => T.HooksetPrecision, "Powerful" => T.HooksetPowerful, _ => T.ConditionUnknown }));
             Label(T.DetailTug);
             ImGui.TextUnformatted(rule.Tug switch { "light" => "!", "medium" => "!!", "heavy" => "!!!", _ => UiText.Get(T.ConditionUnknown) });
+            Label(T.HookYieldLabel);
+            HookYieldText.Draw(rule.ItemId);
             Label(T.DetailTime);
             ImGui.TextWrapped(!rule.ConditionsKnown ? UiText.Get(T.ConditionUnknown)
                 : rule.StartHour == 0 && rule.EndHour == 24 ? UiText.Get(T.TimeAllDay)
@@ -125,6 +127,7 @@ internal sealed class FishingConditionPanel(ITextureProvider textures, FishingIt
                 related.TryGetValue(item.Id, out var prey);
                 StepItem(item, UiText.Get(T.PredatorLabel, item.Name, details.Rule.Predators[index].Count),
                     $"Predator{index}", personal, prey, true, openDetail: openDetail);
+                HookYieldText.Draw(item.Id);
             }
             if (details.Rule.IntuitionSeconds is { } seconds)
                 ImGui.TextWrapped(UiText.Get(T.IntuitionDuration, seconds));

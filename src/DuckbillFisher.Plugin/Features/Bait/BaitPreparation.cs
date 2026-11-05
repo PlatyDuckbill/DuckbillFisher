@@ -2,9 +2,13 @@ using Dalamud.Plugin.Services;
 
 namespace DuckbillFisher.Plugin;
 
-internal enum BaitPreparationSource { Favorites, Catalog }
+internal enum BaitPreparationSource { Favorites, Catalog, Unused }
 internal sealed record BaitPreparationEntry(FishingItemView Item, FishGuideRow[] Targets);
-internal sealed record BaitPreparationView(int Session, int TargetCount, BaitPreparationEntry[] Entries, FishGuideRow[] Missing);
+internal sealed record BaitPreparationView(int Session, int TargetCount, BaitPreparationEntry[] Entries, FishGuideRow[] Missing)
+{
+    public BaitPreparationSource Source { get; init; }
+    public FishingItemView[] UnusedBaits { get; init; } = [];
+}
 
 /// <summary>Aggregates first baits outside Draw. Favorites and the full main query are independent scopes.</summary>
 internal sealed class BaitPreparation : IDisposable
@@ -53,7 +57,7 @@ internal sealed class BaitPreparation : IDisposable
             var location = region.View;
             var current = query.Current;
             var now = DateTimeOffset.UtcNow;
-            var timedFilterChanged = source == BaitPreparationSource.Catalog && CatalogWindowFilter.Enabled(current.Settings) &&
+            var timedFilterChanged = source != BaitPreparationSource.Favorites && CatalogWindowFilter.Enabled(current.Settings) &&
                 (lastForecast != data.ForecastRevision || now >= nextWindowFilterUpdate || now < lastClock);
             lastClock = now;
             if (lastSession == personal.Session && lastPreference == personal.CatalogRevision && lastCollection == observed.Revision &&
@@ -73,19 +77,35 @@ internal sealed class BaitPreparation : IDisposable
             var missing = new List<FishGuideRow>();
             foreach (var row in targets)
             {
-                var first = row.Details?.BaitSteps.FirstOrDefault();
-                if (first is null || first.Length == 0 || first.Any(item => item.Id == 0 || fishItems.Contains(item.Id)))
-                { missing.Add(row); continue; }
-                foreach (var item in first.DistinctBy(item => item.Id))
+                var visited = new HashSet<uint>();
+                var unresolved = false;
+                AddRequirements(row.Details);
+                if (unresolved) missing.Add(row);
+
+                void AddRequirements(FishingDetailView? details)
                 {
-                    if (!entries.TryGetValue(item.Id, out var entry)) entry = (item, []);
-                    entry.Targets.Add(row);
-                    entries[item.Id] = entry;
+                    if (details is null) { unresolved = true; return; }
+                    if (!visited.Add(details.Rule.ItemId)) return;
+                    var first = details.BaitSteps.FirstOrDefault();
+                    if (first is null || first.Length == 0 || first.Any(item => item.Id == 0 || fishItems.Contains(item.Id)))
+                        unresolved = true;
+                    else foreach (var item in first.DistinctBy(item => item.Id))
+                    {
+                        if (!entries.TryGetValue(item.Id, out var entry)) entry = (item, []);
+                        if (!entry.Targets.Contains(row)) entry.Targets.Add(row);
+                        entries[item.Id] = entry;
+                    }
+                    foreach (var prey in details.Rule.Predators)
+                        AddRequirements(data.RelatedDetails.GetValueOrDefault(prey.ItemId));
                 }
             }
             view = new(personal.Session, targets.Length, entries.Values.OrderBy(entry => entry.Item.Name, StringComparer.OrdinalIgnoreCase)
                 .Select(entry => new BaitPreparationEntry(entry.Item, entry.Targets.ToArray())).ToArray(), missing.OrderBy(fish => fish.DisplayName,
-                        StringComparer.OrdinalIgnoreCase).ToArray());
+                        StringComparer.OrdinalIgnoreCase).ToArray())
+            {
+                Source = source,
+                UnusedBaits = data.Baits.Where(item => !entries.ContainsKey(item.Id)).ToArray(),
+            };
         }
     }
 

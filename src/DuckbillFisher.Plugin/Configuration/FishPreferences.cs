@@ -401,6 +401,39 @@ internal sealed class FishPreferences : IDisposable
         }
     }
 
+    // Save the count and its occurrence key together. Failed writes leave both unchanged for retry.
+    public bool RecordSpawnAttempts(int expectedSession, int restoreRevision,
+        IReadOnlyList<(uint FishId, DateTimeOffset End)> occurrences)
+    {
+        if (!framework.IsInFrameworkUpdateThread)
+            throw new InvalidOperationException("Spawn attempts must run on Framework.Update.");
+        lock (gate)
+        {
+            if (disposed || !writable || characterId == 0 || expectedSession != view.Session ||
+                restoreRevision != view.SettingsRestoreRevision || pendingRestore is not null) return false;
+            var candidate = CopyConfiguration();
+            var changed = false;
+            foreach (var (id, end) in occurrences)
+            {
+                if (id == 0) continue;
+                var record = candidate.PersonalRecords.GetValueOrDefault(id) ?? new();
+                var key = end.ToUnixTimeMilliseconds();
+                if (key <= record.LastAttemptOccurrenceEnd || key > 253402300799999 ||
+                    !candidate.PersonalRecords.ContainsKey(id) && candidate.PersonalRecords.Count >= FishPersonalRecord.MaxEntries) continue;
+                candidate.PersonalRecords[id] = record with
+                {
+                    Attempts = Math.Min(record.Attempts + 1, FishPersonalRecord.MaxAttempts),
+                    LastAttemptOccurrenceEnd = key,
+                };
+                changed = true;
+            }
+            if (!changed) return true;
+            var saved = Save(candidate);
+            Publish();
+            return saved;
+        }
+    }
+
     private void OnUpdate(IFramework _)
     {
         lock (gate)

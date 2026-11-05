@@ -16,13 +16,15 @@ internal sealed class CastingTimerWindow : Window
     private readonly Action toggleSpotFish;
     private readonly FishingHistoryPanel history;
     private readonly FishingBuffObserver buffs;
+    private readonly IntuitionProgressPanel intuition;
     public Action? ShowSettings { get; set; }
 
-    public CastingTimerWindow(FishingTracker tracker, FishingBuffObserver buffs, ITextureProvider textures, Action<FishGuideRow> showDetail, Action toggleSpotFish)
+    public CastingTimerWindow(FishingTracker tracker, FishingBuffObserver buffs, IntuitionProgress progress, ITextureProvider textures, Action<FishGuideRow> showDetail, Action toggleSpotFish)
         : base("DuckbillFisher###DuckbillFisher.Timer")
     {
         this.tracker = tracker; this.textures = textures; this.toggleSpotFish = toggleSpotFish;
         this.buffs = buffs;
+        intuition = new(progress, textures, showDetail);
         history = new(tracker, textures, showDetail);
         Size = new Vector2(440, 560);
         SizeCondition = ImGuiCond.FirstUseEver;
@@ -94,6 +96,7 @@ internal sealed class CastingTimerWindow : Window
         var et = timed?.StartedUtc is { } utc ? FishingTimeText.Et(utc) : "—";
         ImGui.TextDisabled(UiText.Get(T.TimerCastEt, et));
         DrawBuffs();
+        intuition.Draw();
         var sessionTime = (view.CurrentTrip?.FirstCastUtc ?? view.SessionStartedUtc)?.ToLocalTime().ToString("HH:mm:ss", UiText.Culture) ?? "—";
         var sessionElapsed = view.CurrentTrip is { } trip ? FishingTimeText.TripDuration(trip, view, tracker.Now) : "—";
         ImGui.TextUnformatted(UiText.Get(retained ? T.TimerCompletedSessionLine : T.TimerSessionLine, sessionTime, sessionElapsed));

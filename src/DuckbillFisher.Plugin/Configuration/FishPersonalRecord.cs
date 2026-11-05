@@ -1,6 +1,6 @@
 namespace DuckbillFisher.Plugin;
 
-/// <summary>Manual, character-shared annotations. Never inferred from casts, catches or collection.</summary>
+/// <summary>Character-shared annotations and a durable high-water mark for automatic spawn participation.</summary>
 public sealed record FishPersonalRecord
 {
     public const int MaxNoteLength = 1000;
@@ -8,12 +8,14 @@ public sealed record FishPersonalRecord
     public const int MaxEntries = 4096;
     public string Note { get; init; } = "";
     public int Attempts { get; init; }
+    public long LastAttemptOccurrenceEnd { get; init; }
     public Guid? TimerPresetId { get; init; }
 
     public static bool ValidNote(string? note) => note is not null && note.Length <= MaxNoteLength &&
         !note.Any(character => char.IsControl(character) && character is not ('\n' or '\r' or '\t'));
-    public bool IsValid() => ValidNote(Note) && Attempts is >= 0 and <= MaxAttempts && TimerPresetId != Guid.Empty;
-    public bool IsEmpty() => Note.Length == 0 && Attempts == 0 && TimerPresetId is null;
+    public bool IsValid() => ValidNote(Note) && Attempts is >= 0 and <= MaxAttempts && TimerPresetId != Guid.Empty &&
+        LastAttemptOccurrenceEnd is >= 0 and <= 253402300799999;
+    public bool IsEmpty() => Note.Length == 0 && Attempts == 0 && TimerPresetId is null && LastAttemptOccurrenceEnd == 0;
     public static bool ValidEntries(Dictionary<uint, FishPersonalRecord>? entries) =>
         entries is { Count: <= MaxEntries } && entries.All(pair => pair.Key != 0 && pair.Value is not null && pair.Value.IsValid());
 

@@ -36,6 +36,8 @@ internal sealed record FishGuideRow(uint FishParameterId, uint ItemId, string It
 
 internal sealed record FishCatalogView(IReadOnlyList<FishGuideRow> Rows, UiMessage Status)
 {
+    public IReadOnlyList<FishingItemView> Baits { get; init; } = [];
+    public IReadOnlySet<uint> CollectableItems { get; init; } = FrozenSet<uint>.Empty;
     public IReadOnlyDictionary<uint, FishGuideRow> RowsById { get; init; } = FrozenDictionary<uint, FishGuideRow>.Empty;
     public IReadOnlyDictionary<uint, FishGuideRow> RelatedRows { get; init; } = FrozenDictionary<uint, FishGuideRow>.Empty;
     public IReadOnlyDictionary<uint, FishingSpotView> Spots { get; init; } = new Dictionary<uint, FishingSpotView>();
@@ -80,6 +82,7 @@ internal sealed class FishCatalog : IDisposable
         catch (Exception ex) when (ex is IOException or UnauthorizedAccessException) { clientBuild = $"unknown({ex.GetType().Name})"; }
         _ = FishingData.Notices;
         _ = FishClassificationData.ByFishId;
+        _ = HookYieldData.ByItem;
         framework.Update += OnUpdate;
     }
 
@@ -299,6 +302,10 @@ internal sealed class FishCatalog : IDisposable
                         ? new UiMessage(T.GradeDataInvalid, gradeFailure.Code, gradeFailure.Path)
                         : new UiMessage(T.CatalogLoaded);
                 view = new(rows.ToArray(), dataStatus) {
+                    Baits = items.Where(item => item.RowId != 0 && item.ItemUICategory.RowId == FishingGameIds.BaitCategory)
+                        .Select(item => new FishingItemView(item.RowId, item.Name.ExtractText(), item.Icon))
+                        .OrderBy(item => item.Name, ClientNameOrder.Comparer).ToArray(),
+                    CollectableItems = items.Where(item => item.IsCollectable || item.AlwaysCollectable).Select(item => item.RowId).ToFrozenSet(),
                     RowsById = rows.ToFrozenDictionary(row => row.FishParameterId),
                     RelatedRows = rows.Where(row => row.Details is not null).ToFrozenDictionary(row => row.ItemId),
                     Forecast = forecast,

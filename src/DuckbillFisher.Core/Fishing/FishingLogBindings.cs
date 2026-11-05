@@ -46,7 +46,8 @@ public static partial class FishingLogBindings
         var found = Extract(macro);
         var text = string.Join('+', found.Order(StringComparer.Ordinal));
         var parameters = found.Select(binding => binding[(binding.IndexOf(':') + 1)..]).ToArray();
-        var conflict = found.Any(binding => !expected.Contains(binding)) || parameters.Distinct(StringComparer.Ordinal).Count() != parameters.Length;
+        var conflict = found.Any(binding => !expected.Contains(binding)) || parameters.Distinct(StringComparer.Ordinal).Count() != parameters.Length ||
+            id == 3559 && !macro.Contains("num(lnum4)", StringComparison.Ordinal);
         return new(id, conflict ? FishingLogContractState.Conflict : FishingLogContractState.Valid, text);
     }
 }

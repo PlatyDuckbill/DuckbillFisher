@@ -1,0 +1,193 @@
+{
+  "schemaVersion": 1,
+  "dataVersion": "regular-hook-yields-2026-11-05",
+  "checkedUtc": "2026-11-05",
+  "rights": "Fruity Snacks gameplay observations. No public reuse license identified. Numeric facts only; no guide prose, code, images or video redistributed.",
+  "processing": "Linked to existing FishParameter/Item identities. Single-action values only. Null means unconfirmed. Null maximum means the guide only establishes a lower bound; no upper bound or cross-action conversion is inferred. Gathering breakpoints not inferred.",
+  "sources": [
+    {
+      "id": "_tSbRKjum54",
+      "url": "https://www.youtube.com/watch?v=_tSbRKjum54",
+      "descriptionSha256": "CDB6284EAC306C72BFCB04B2C97C604B61C0264B101F4AD1635A72ECD42857DD"
+    },
+    {
+      "id": "N9CAsGXVBvU",
+      "url": "https://www.youtube.com/watch?v=N9CAsGXVBvU",
+      "descriptionSha256": "4D07A8C565DB1D5FFB8DAAA7BC21C20B5C1318542F2F3C2E88D1194ACBC7044D"
+    },
+    {
+      "id": "R4-BVctjX3g",
+      "url": "https://www.youtube.com/watch?v=R4-BVctjX3g",
+      "descriptionSha256": "ED7A7641C39440E993873BC79983E776294F4A85A552725189ED439E896132AC"
+    },
+    {
+      "id": "pWQbh47dThg",
+      "url": "https://www.youtube.com/watch?v=pWQbh47dThg",
+      "descriptionSha256": "2DBAAFD82E928C8B849596A251972FD7B0A09232A17336DB2747370E51D4354B"
+    },
+    {
+      "id": "2S1OHYIcZrk",
+      "url": "https://www.youtube.com/watch?v=2S1OHYIcZrk",
+      "descriptionSha256": "5B074DBF3923E12ED157526990CE10658051D9DAC732ECF2AA4444A06351BFF9"
+    },
+    {
+      "id": "6BpB8Mu9HC0",
+      "url": "https://www.youtube.com/watch?v=6BpB8Mu9HC0",
+      "descriptionSha256": "F38FA0F74C923D2536843D977408A188503DCEAABC1759B888AC71AC685AEBAD"
+    },
+    {
+      "id": "xOPwUALAImQ",
+      "url": "https://www.youtube.com/watch?v=xOPwUALAImQ",
+      "descriptionSha256": "C742E2F7B80F03D5E4E2D8B0E691C8B1D5B5577EEBD76B4F87C19BAB8D131ED8"
+    },
+    {
+      "id": "AGL8XN87a5U",
+      "url": "https://www.youtube.com/watch?v=AGL8XN87a5U",
+      "descriptionSha256": "7D83FA14DDC741F9A5EB5FAFCD0EA50B550290FB20FF5F152B12B30A4C05C675"
+    },
+    {
+      "id": "EyneCL9gcvM",
+      "url": "https://www.youtube.com/watch?v=EyneCL9gcvM",
+      "descriptionSha256": "7AEAE1F520E694FB96CD5598E9E02745F451349D8C5593D4ABC645171C07639B"
+    },
+    {
+      "id": "X5DJDS5Iy1g",
+      "url": "https://www.youtube.com/watch?v=X5DJDS5Iy1g",
+      "descriptionSha256": "DF9D2620A63DE6A182539840964DEF63DD9E3D8B1C991262024C0950169D141A"
+    }
+  ],
+  "entries": [
+    {
+      "itemId": 4913,
+      "fishParameterId": 155,
+      "source": "AGL8XN87a5U",
+      "doubleHook": {
+        "minimum": 2,
+        "maximum": null
+      },
+      "tripleHook": null
+    },
+    {
+      "itemId": 12800,
+      "fishParameterId": 386,
+      "source": "pWQbh47dThg",
+      "doubleHook": {
+        "minimum": 3,
+        "maximum": null
+      },
+      "tripleHook": null
+    },
+    {
+      "itemId": 12805,
+      "fishParameterId": 391,
+      "source": "N9CAsGXVBvU",
+      "doubleHook": {
+        "minimum": 3,
+        "maximum": 4
+      },
+      "tripleHook": null
+    },
+    {
+      "itemId": 13727,
+      "fishParameterId": 424,
+      "source": "R4-BVctjX3g",
+      "doubleHook": {
+        "minimum": 3,
+        "maximum": 4
+      },
+      "tripleHook": null
+    },
+    {
+      "itemId": 23056,
+      "fishParameterId": 638,
+      "source": "_tSbRKjum54",
+      "doubleHook": {
+        "minimum": 2,
+        "maximum": null
+      },
+      "tripleHook": {
+        "minimum": 3,
+        "maximum": 3
+      }
+    },
+    {
+      "itemId": 24203,
+      "fishParameterId": 658,
+      "source": "_tSbRKjum54",
+      "doubleHook": {
+        "minimum": 2,
+        "maximum": null
+      },
+      "tripleHook": {
+        "minimum": 3,
+        "maximum": 3
+      }
+    },
+    {
+      "itemId": 24204,
+      "fishParameterId": 659,
+      "source": "_tSbRKjum54",
+      "doubleHook": {
+        "minimum": 2,
+        "maximum": 2
+      },
+      "tripleHook": null
+    },
+    {
+      "itemId": 27462,
+      "fishParameterId": 718,
+      "source": "2S1OHYIcZrk",
+      "doubleHook": {
+        "minimum": 2,
+        "maximum": 2
+      },
+      "tripleHook": null
+    },
+    {
+      "itemId": 36412,
+      "fishParameterId": 1042,
+      "source": "6BpB8Mu9HC0",
+      "doubleHook": null,
+      "tripleHook": {
+        "minimum": 3,
+        "maximum": 3
+      }
+    },
+    {
+      "itemId": 36454,
+      "fishParameterId": 1077,
+      "source": "xOPwUALAImQ",
+      "doubleHook": {
+        "minimum": 2,
+        "maximum": 2
+      },
+      "tripleHook": {
+        "minimum": 3,
+        "maximum": 3
+      }
+    },
+    {
+      "itemId": 36458,
+      "fishParameterId": 1081,
+      "source": "EyneCL9gcvM",
+      "doubleHook": {
+        "minimum": 2,
+        "maximum": null
+      },
+      "tripleHook": {
+        "minimum": 3,
+        "maximum": null
+      }
+    },
+    {
+      "itemId": 36520,
+      "fishParameterId": 1133,
+      "source": "X5DJDS5Iy1g",
+      "doubleHook": {
+        "minimum": 2,
+        "maximum": null
+      },
+      "tripleHook": null
+    }
+  ]
+}

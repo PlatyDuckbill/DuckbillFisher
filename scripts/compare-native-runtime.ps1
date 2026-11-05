@@ -182,6 +182,9 @@ $groups = [ordered]@{
         'Dalamud.Game.Chat.ILogMessage', 'Dalamud.Game.Chat.LogMessage',
         'Dalamud.Game.Chat.LogMessageParameterList', 'Dalamud.Game.Chat.ILogMessageEntity',
         'Dalamud.Game.Chat.LogMessageEntity', 'Dalamud.Game.ChatHandlers',
+        'Dalamud.Plugin.Services.IContextMenu', 'Dalamud.Game.Gui.ContextMenu.IMenuArgs',
+        'Dalamud.Game.Gui.ContextMenu.IMenuOpenedArgs', 'Dalamud.Game.Gui.ContextMenu.MenuItem',
+        'Dalamud.Game.Gui.ContextMenu.MenuTargetInventory', 'Dalamud.Game.Inventory.GameInventoryItem',
         'Dalamud.Game.ClientState.Statuses.Status', 'Dalamud.Game.ClientState.Statuses.StatusList',
         'Dalamud.Game.ClientState.Objects.Types.BattleChara'
     )

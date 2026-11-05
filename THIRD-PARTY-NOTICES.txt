@@ -82,3 +82,22 @@ with their KR client location references. No comment text, images, bite seconds,
 or third-party implementation is copied. These observations do not establish
 complete time/weather conditions or a hookset. They are not represented as
 MIT-licensed Teamcraft records.
+
+Regular-fishing multi-hook numeric observations (12 fish)
+Observer: Fruity Snacks, checked 2026-11-05
+Sources, fixed video IDs and description SHA256: data/hook-yields.v1.json
+https://www.youtube.com/watch?v=_tSbRKjum54
+https://www.youtube.com/watch?v=N9CAsGXVBvU
+https://www.youtube.com/watch?v=R4-BVctjX3g
+https://www.youtube.com/watch?v=pWQbh47dThg
+https://www.youtube.com/watch?v=2S1OHYIcZrk
+https://www.youtube.com/watch?v=6BpB8Mu9HC0
+https://www.youtube.com/watch?v=xOPwUALAImQ
+https://www.youtube.com/watch?v=AGL8XN87a5U
+https://www.youtube.com/watch?v=EyneCL9gcvM
+https://www.youtube.com/watch?v=X5DJDS5Iy1g
+Only numerical single-action yields, explicit ranges or documented lower bounds
+are recorded. No cross-action yield conversion or Gathering breakpoints inferred.
+No guide prose, code, images or video is redistributed. No public reuse license
+was identified; rights to the guides remain with their authors. These observations
+are not represented as MIT-licensed or Apache-licensed upstream data.

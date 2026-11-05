@@ -15,28 +15,43 @@ internal sealed class BaitPreparationPanel(BaitPreparation preparation, BaitStoc
     {
         var personal = preferences.View;
         var source = (int)preparation.Source;
-        string[] choices = [UiText.Get(T.BaitSourceFavorites), UiText.Get(T.BaitSourceCatalog)];
+        string[] choices = [UiText.Get(T.BaitSourceFavorites), UiText.Get(T.BaitSourceCatalog), UiText.Get(T.BaitSourceUnused)];
         ImGui.SetNextItemWidth(ImGui.GetFontSize() * 19);
         if (ImGui.Combo(UiText.Label(T.BaitSource, "BaitSource"), ref source, choices, choices.Length))
             preparation.SetSource((BaitPreparationSource)source);
-        UiWidgets.Tooltip(UiText.Get(source == 0 ? T.BaitSourceFavoritesHint : T.BaitSourceCatalogHint));
+        UiWidgets.Tooltip(UiText.Get(source == 0 ? T.BaitSourceFavoritesHint : source == 1 ? T.BaitSourceCatalogHint : T.BaitUnusedHint));
         var inventory = stock.View;
         var ready = personal.HasCharacter && inventory.Session == personal.Session && inventory.State == BaitStockState.Ready;
         ImGui.TextDisabled(UiText.Get(T.BaitBagScope));
         if (!ready) ImGui.TextWrapped(UiText.Get(StockReason(inventory.State)));
-        ImGui.BeginDisabled(!ready);
+        var unused = source == (int)BaitPreparationSource.Unused;
+        ImGui.BeginDisabled(!ready || unused);
         ImGui.Checkbox(UiText.Label(T.BaitMissingOnly, "BaitMissingOnly"), ref missingOnly);
         ImGui.EndDisabled();
         var view = preparation.View;
-        if (view.Session != personal.Session) view = new(personal.Session, 0, [], []);
+        if (view.Session != personal.Session || view.Source != (BaitPreparationSource)source)
+        { ImGui.TextWrapped(UiText.Get(T.HistoryLoading)); return; }
         ImGui.TextDisabled(UiText.Get(T.BaitPreparationCounts, view.TargetCount, view.Entries.Length, view.Missing.Length));
-        ImGui.TextWrapped(UiText.Get(T.BaitPreparationOverlapHint));
+        ImGui.TextWrapped(UiText.Get(unused ? T.BaitUnusedHint : T.BaitPreparationOverlapHint));
+        if (unused && view.Missing.Length > 0) ImGui.TextWrapped(UiText.Get(T.BaitUnusedIncomplete));
         var footer = personal.DeveloperMode ? ImGui.GetTextLineHeightWithSpacing() * 5 : 0;
         var height = Math.Max(ImGui.GetTextLineHeight() * 3, ImGui.GetContentRegionAvail().Y - footer);
         if (ImGui.BeginChild("BaitPreparationItems", new Vector2(0, height)))
         {
-            if (view.Entries.Length == 0 && view.Missing.Length == 0) ImGui.TextWrapped(UiText.Get(T.BaitPreparationEmpty));
-            foreach (var entry in view.Entries)
+            if (unused)
+            {
+                var shown = 0;
+                if (ready) foreach (var item in view.UnusedBaits)
+                {
+                    if (inventory.Quantity(item.Id) is not > 0) continue;
+                    ImGui.PushID((int)item.Id);
+                    DrawBait(item, inventory.Quantity(item.Id), personal);
+                    ImGui.PopID(); shown++;
+                }
+                if (ready && shown == 0) ImGui.TextWrapped(UiText.Get(T.BaitUnusedEmpty));
+            }
+            else if (view.Entries.Length == 0 && view.Missing.Length == 0) ImGui.TextWrapped(UiText.Get(T.BaitPreparationEmpty));
+            foreach (var entry in unused ? [] : view.Entries)
             {
                 var count = ready ? inventory.Quantity(entry.Item.Id) : null;
                 if (missingOnly && ready && count != 0) continue;

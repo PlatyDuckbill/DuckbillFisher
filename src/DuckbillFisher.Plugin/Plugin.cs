@@ -49,12 +49,15 @@ public sealed class Plugin : IDalamudPlugin
     private readonly CollectionProgress collectionProgress;
     private readonly SpawnSchedule schedule;
     private readonly FishRecommendationService recommendations;
+    private readonly SpawnAttemptObserver spawnAttempts;
+    private readonly FishDetailAccess detailAccess;
+    private readonly IntuitionProgress intuitionProgress;
     private bool disposed;
 
     public Plugin(IDalamudPluginInterface pluginInterface, ICommandManager commandManager, ICondition conditions,
         IClientState clientState, IPlayerState playerState, IDataManager dataManager, IGameGui gameGui, IFramework framework,
         ITextureProvider textureProvider, IPluginLog log, IChatGui chat, IGameInventory inventory, IAddonLifecycle addonLifecycle,
-        IObjectTable objectTable)
+        IObjectTable objectTable, IContextMenu contextMenu)
     {
         this.pluginInterface = pluginInterface;
         this.commandManager = commandManager;
@@ -121,6 +124,7 @@ public sealed class Plugin : IDalamudPlugin
         var preparationWindow = new BaitPreparationWindow(preparationPanel);
         var detailPanel = new FishDetailPanel(fishPreferences, textureProvider, fishingMap, new FishingConditionPanel(textureProvider, itemLinks, baitStock, baitFinder));
         detailWindow = new FishDetailWindow(fishCatalog, fishPreferences, fishCollection, detailPanel, guideOpener);
+        detailAccess = new(fishCatalog, fishPreferences, contextMenu, framework, detailWindow.Show);
         compareDetailWindow = new FishDetailWindow(fishCatalog, fishPreferences, fishCollection, detailPanel, guideOpener, comparison: true);
         detailPanel.OpenRelated = (origin, itemId) =>
         {
@@ -131,7 +135,8 @@ public sealed class Plugin : IDalamudPlugin
         var spotFishWindow = new SpotFishWindow(fishingTracker, fishCatalog, fishPreferences, fishCollection, textureProvider, fishingMap, detailWindow.Show);
         fishingBuffs = new FishingBuffObserver(objectTable, clientState, playerState, conditions, framework, dataManager,
             fishPreferences, fishingTracker);
-        timerWindow = new CastingTimerWindow(fishingTracker, fishingBuffs, textureProvider, detailWindow.Show, spotFishWindow.Toggle);
+        intuitionProgress = new(fishingTracker, fishCatalog, fishPreferences, objectTable, clientState, playerState, conditions, framework);
+        timerWindow = new CastingTimerWindow(fishingTracker, fishingBuffs, intuitionProgress, textureProvider, detailWindow.Show, spotFishWindow.Toggle);
         timerSettings = new CastingTimerSettingsWindow(fishPreferences, alertOutput, fishingSounds, soundLibrary);
         detailPanel.ShowTimerPresets = timerSettings.OpenPresets;
         timerWindow.ShowSettings = () => timerSettings.IsOpen = true;
@@ -143,6 +148,7 @@ public sealed class Plugin : IDalamudPlugin
         schedule = new SpawnSchedule(fishCatalog, fishPreferences, fishCollection, fishingRegion, preparationQuery, framework, log);
         recommendations = new(fishCatalog, fishPreferences, fishCollection, framework, log);
         currentSpotAlerts = new(fishingTracker, fishCatalog, fishPreferences, fishCollection, alertOutput, framework, log);
+        spawnAttempts = new(fishingTracker, fishCatalog, fishPreferences, fishCollection, framework);
         alertOutput.ShowDetail = id =>
         {
             if (fishCatalog.View.RowsById.TryGetValue(id, out var fish)) detailWindow.Show(fish);
@@ -167,6 +173,7 @@ public sealed class Plugin : IDalamudPlugin
         windows.AddWindow(mainWindow);
         windows.AddWindow(compactWindow);
         windows.AddWindow(detailWindow);
+        windows.AddWindow(detailAccess);
         windows.AddWindow(compareDetailWindow);
         windows.AddWindow(timerWindow);
         windows.AddWindow(timerSettings);
@@ -188,6 +195,7 @@ public sealed class Plugin : IDalamudPlugin
         var action = arguments.Trim();
         if (action.Equals("compact", StringComparison.OrdinalIgnoreCase) || action.Equals("cl", StringComparison.OrdinalIgnoreCase)) compactWindow.Toggle();
         else if (action.Equals("timer", StringComparison.OrdinalIgnoreCase) || action.Equals("ct", StringComparison.OrdinalIgnoreCase)) timerWindow.Toggle();
+        else if (action.Length > 0) detailAccess.Search(action);
         else mainWindow.Toggle();
     }
 
@@ -220,6 +228,9 @@ public sealed class Plugin : IDalamudPlugin
         baitFinder.Dispose();
         spawnAlerts.Dispose();
         currentSpotAlerts.Dispose();
+        spawnAttempts.Dispose();
+        detailAccess.Dispose();
+        intuitionProgress.Dispose();
         timerNotifications.Dispose();
         timerSettings.Dispose();
         fishingSounds.Dispose();
