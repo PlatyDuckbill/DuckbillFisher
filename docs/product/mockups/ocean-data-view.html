@@ -1,0 +1,122 @@
+<div id="df-ocean-proposal">
+  <article class="do-app" aria-label="먼바다 메인 메뉴 추가 시안">
+    <header class="do-chrome"><span>DuckbillFisher</span><span>메인 메뉴 추가 제안</span></header>
+    <nav class="do-navigation" aria-label="메인 메뉴 배치 예시">
+      <span>어종 목록</span><span>즐겨찾기 관리</span><span>추천</span><span>출현 일정표</span><strong>먼바다</strong><span>수집 현황</span><span>낚시 기록</span><span>설정</span>
+    </nav>
+    <div class="do-content">
+      <div class="do-route-head"><div><h2>항로 A</h2><p>기항지 A · 낮 → 기항지 B · 저녁 → 기항지 C · 밤</p></div><span class="do-label">수동 미리보기</span></div>
+      <div class="do-controls">
+        <div class="do-buttons" role="group" aria-label="기항지 선택"><button type="button" data-stop="0" aria-pressed="true">기항지 A · 낮</button><button type="button" data-stop="1" aria-pressed="false">기항지 B · 저녁</button><button type="button" data-stop="2" aria-pressed="false">기항지 C · 밤</button></div>
+        <div class="do-buttons" role="group" aria-label="해역 구분"><button type="button" data-spectral="0" aria-pressed="false">일반 해역</button><button type="button" data-spectral="1" aria-pressed="true">환해류</button></div>
+      </div>
+      <div class="do-split">
+        <section class="do-fish-list" aria-label="기항지 전체 어종">
+          <div class="do-list-head"><h3 id="do-stop-heading">기항지 A · 환해류</h3><label>목적 <select aria-label="보기 목적" id="do-goal"><option value="points">점수</option><option value="mission">임무·칭호</option><option value="guide">도감</option></select></label></div>
+          <p class="do-note" id="do-context">기준점수 순 · 보너스와 성공률을 반영한 추천 아님</p>
+          <table aria-label="먼바다 어종 비교"><thead><tr><th>어종 · 미끼</th><th>입질</th><th class="do-end">점수</th><th class="do-end">이중 / 삼중</th></tr></thead><tbody id="do-fish-rows"></tbody></table>
+          <div class="do-conditions"><h3>이 기항지에서 확인할 조건</h3><div id="do-conditions"></div></div>
+        </section>
+        <aside class="do-detail" aria-label="선택한 어종의 공통 상세보기">
+          <div class="do-detail-head"><span>어종 상세</span><span class="do-note">기존 상세 영역 재사용</span></div>
+          <div id="do-selected" aria-live="polite"></div>
+        </aside>
+      </div>
+      <footer class="do-footer">가상 항로·가상 어종·가상 수치입니다. 항해 상태는 조회하지 않습니다.</footer>
+    </div>
+  </article>
+</div>
+<style>
+#df-ocean-proposal { --do-bg:light-dark(#f4f1e9,#242625); --do-panel:light-dark(#eae6dc,#303330); --do-text:light-dark(#292d2c,#e7e6df); --do-muted:light-dark(#5c625e,#b5b9af); --do-line:light-dark(#c9c8bc,#51574f); --do-accent:light-dark(#655223,#dbc28d); --do-good:light-dark(#235a4a,#a3d3b9); --do-spot:light-dark(#e0ebe3,#303e36); --do-button:light-dark(#e2dfd5,#3b403b); --do-highlight:light-dark(#ede5d5,#403b30); }
+#df-ocean-proposal .do-app { background:var(--do-bg); color:var(--do-text); border:1px solid var(--do-line); border-radius:4px; font:13px/1.5 "Segoe UI","Malgun Gothic",sans-serif; }
+#df-ocean-proposal .do-app * { box-sizing:border-box; }
+#df-ocean-proposal .do-chrome { display:flex; justify-content:space-between; gap:12px; padding:8px 14px; background:var(--do-panel); color:var(--do-accent); border-bottom:1px solid var(--do-line); }
+#df-ocean-proposal .do-navigation { display:flex; flex-wrap:wrap; gap:3px 16px; padding:10px 14px; border-bottom:1px solid var(--do-line); color:var(--do-muted); }
+#df-ocean-proposal .do-navigation strong { font-weight:500; color:var(--do-accent); border-bottom:2px solid var(--do-accent); }
+#df-ocean-proposal .do-content { padding:16px; }
+#df-ocean-proposal .do-route-head { display:flex; align-items:center; justify-content:space-between; gap:12px; flex-wrap:wrap; }
+#df-ocean-proposal .do-app h2 { font-size:18px; font-weight:500; margin:0 0 3px; line-height:1.4; }
+#df-ocean-proposal .do-app h3 { font-size:13px; font-weight:500; margin:0; color:var(--do-accent); }
+#df-ocean-proposal .do-app p { margin:0; }
+#df-ocean-proposal .do-route-head p { font-size:12px; color:var(--do-muted); }
+#df-ocean-proposal .do-label { color:var(--do-accent); background:var(--do-highlight); padding:3px 8px; border-radius:2px; font-size:12px; }
+#df-ocean-proposal .do-controls { display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px; padding:14px 0; }
+#df-ocean-proposal .do-buttons { display:flex; gap:5px; flex-wrap:wrap; }
+#df-ocean-proposal .do-app button, #df-ocean-proposal .do-app select { color:var(--do-text); background:var(--do-button); border:1px solid var(--do-line); border-radius:3px; font:inherit; padding:5px 8px; cursor:inherit; max-width:100%; }
+#df-ocean-proposal .do-app button[aria-pressed="true"] { background:var(--do-highlight); color:var(--do-accent); border-color:var(--do-accent); }
+#df-ocean-proposal .do-split { display:grid; grid-template-columns:minmax(0,1fr) 290px; gap:18px; align-items:start; }
+#df-ocean-proposal .do-fish-list { min-width:0; }
+#df-ocean-proposal .do-list-head { display:flex; flex-wrap:wrap; justify-content:space-between; align-items:center; gap:8px; }
+#df-ocean-proposal .do-list-head label { display:flex; align-items:center; gap:6px; color:var(--do-muted); font-size:12px; }
+#df-ocean-proposal .do-note { color:var(--do-muted); font-size:12px; }
+#df-ocean-proposal #do-context { margin:7px 0; }
+#df-ocean-proposal .do-app table { width:100%; table-layout:fixed; border-collapse:collapse; font-size:12px; }
+#df-ocean-proposal .do-app th { color:var(--do-muted); font-weight:400; text-align:left; padding:7px 5px; border-bottom:1px solid var(--do-line); }
+#df-ocean-proposal .do-app th:first-child { width:45%; }
+#df-ocean-proposal .do-app th:nth-child(2) { width:12%; }
+#df-ocean-proposal .do-app th:nth-child(3) { width:15%; }
+#df-ocean-proposal .do-app td { padding:9px 5px; vertical-align:top; border-bottom:1px solid var(--do-line); overflow-wrap:anywhere; }
+#df-ocean-proposal .do-app tr.do-selected { background:var(--do-spot); }
+#df-ocean-proposal .do-app td button { border:0; background:transparent; padding:0; text-align:left; font-weight:500; text-decoration:underline; text-underline-offset:3px; }
+#df-ocean-proposal .do-end { text-align:right !important; font-variant-numeric:tabular-nums; }
+#df-ocean-proposal .do-conditions { margin-top:17px; }
+#df-ocean-proposal .do-conditions p { padding-top:7px; }
+#df-ocean-proposal .do-detail { border:1px solid var(--do-line); background:var(--do-panel); padding:12px; border-radius:3px; }
+#df-ocean-proposal .do-detail-head { display:flex; flex-wrap:wrap; justify-content:space-between; gap:5px; color:var(--do-accent); padding-bottom:9px; border-bottom:1px solid var(--do-line); }
+#df-ocean-proposal .do-detail h2 { font-size:17px; margin:12px 0 3px; }
+#df-ocean-proposal .do-detail h3 { margin:15px 0 7px; }
+#df-ocean-proposal .do-detail dl { display:grid; grid-template-columns:70px minmax(0,1fr); gap:6px 10px; margin:10px 0; }
+#df-ocean-proposal .do-detail dt { color:var(--do-muted); }
+#df-ocean-proposal .do-detail dd { margin:0; overflow-wrap:anywhere; }
+#df-ocean-proposal .do-detail .do-state { padding:8px; margin-top:12px; background:var(--do-highlight); color:var(--do-accent); }
+#df-ocean-proposal .do-detail details { border-top:1px solid var(--do-line); margin-top:12px; padding-top:7px; }
+#df-ocean-proposal .do-detail summary { color:var(--do-muted); cursor:inherit; }
+#df-ocean-proposal .do-detail details p { padding-top:6px; }
+#df-ocean-proposal .do-footer { margin-top:18px; padding-top:8px; border-top:1px solid var(--do-line); color:var(--do-muted); font-size:12px; }
+@media(max-width:750px) { #df-ocean-proposal .do-split { grid-template-columns:minmax(0,1fr); } }
+@media(max-width:380px) { #df-ocean-proposal .do-content { padding:10px; } #df-ocean-proposal .do-navigation { gap:6px 12px; padding:10px; } }
+@media(pointer:coarse) { #df-ocean-proposal .do-app button, #df-ocean-proposal .do-app select, #df-ocean-proposal .do-app summary { min-height:44px; } }
+</style>
+<script>
+(() => {
+  const root=document.getElementById('df-ocean-proposal');
+  const state={stop:2,spectral:true,goal:'points',selected:'blue'};
+  const fish=[
+    {id:'blue',name:'심해 푸른왕관',bait:'특수 미끼 A',tug:'!!!',points:500,dh:'1',th:'1',mission:'해당 없음',spectral:true,intuition:true,caught:false},
+    {id:'stripe',name:'환해 줄무늬고기',bait:'바닷물 새우',tug:'!!',points:200,dh:'4',th:'7',mission:'상어류',spectral:true,caught:true},
+    {id:'silver',name:'먼바다 은줄고기',bait:'바닷물 새우',tug:'!!',points:100,dh:'3–4',th:'5–7',mission:'상어류',spectral:false,caught:false},
+    {id:'shell',name:'밤빛 조개',bait:'바다 지렁이',tug:'!',points:80,dh:'3',th:'5',mission:'조개류',spectral:true,caught:false},
+    {id:'ray',name:'먼바다 가오리',bait:'바다 지렁이',tug:'!!',points:50,dh:'2',th:'3',mission:'가오리류',spectral:false,caught:true},
+    {id:'trigger',name:'푸른 환해류어',bait:'바닷물 새우',tug:'!!!',points:100,dh:'1',th:'1',mission:'해당 없음',spectral:false,trigger:true,caught:true}
+  ];
+  function render(){
+    root.querySelectorAll('[data-stop]').forEach(b=>b.setAttribute('aria-pressed',String(+b.dataset.stop===state.stop)));
+    root.querySelectorAll('[data-spectral]').forEach(b=>b.setAttribute('aria-pressed',String(Boolean(+b.dataset.spectral)===state.spectral)));
+    root.querySelector('#do-goal').value=state.goal;
+    const availableAtStop=f=>!f.intuition||state.stop===2;
+    const visible=fish.filter(f=>f.spectral===state.spectral).sort((a,b)=>Number(availableAtStop(b))-Number(availableAtStop(a))||(state.goal==='points'?b.points-a.points:state.goal==='guide'?Number(a.caught)-Number(b.caught):a.mission.localeCompare(b.mission,'ko')));
+    if(!visible.some(f=>f.id===state.selected))state.selected=visible[0].id;
+    const stop=['기항지 A · 낮','기항지 B · 저녁','기항지 C · 밤'][state.stop];
+    root.querySelector('#do-stop-heading').textContent=`${stop} · ${state.spectral?'환해류':'일반 해역'}`;
+    root.querySelector('#do-context').textContent={points:'기준점수 순 · 보너스와 성공률을 반영한 추천 아님',mission:'임무 분류 순 · 어종명 아래 분류 표시',guide:'미수집 우선 · 수집 상태는 시안용'}[state.goal];
+    root.querySelector('#do-fish-rows').innerHTML=visible.map(f=>`<tr class="${f.id===state.selected?'do-selected':''}"><td><button type="button" class="cursor-interaction" data-fish="${f.id}">${f.name}</button><div class="do-note">${f.bait}</div><div class="do-note">${availableAtStop(f)?(state.goal==='guide'?(f.caught?'수집됨':'미수집'):f.mission):'출현 제외 · 밤에만 출현'}${f.intuition?' · 직감 필요':''}${f.trigger?' · 환해류 유발':''}</div></td><td>${f.tug}</td><td class="do-end">${f.points}</td><td class="do-end">${f.dh} / ${f.th}</td></tr>`).join('');
+    root.querySelector('#do-conditions').innerHTML=state.spectral?'<p>직감 어종: 선행 A × 2 + 선행 B × 1</p><p class="do-note">심해 푸른왕관은 밤에만 출현 · 낮·저녁 기항에는 대상에서 제외</p>':'<p>환해류 유발 대상: 푸른 환해류어</p><p class="do-note">어종별 출현과 환해류 발생은 구분</p>';
+    const f=visible.find(x=>x.id===state.selected);
+    const available=!f.intuition||state.stop===2;
+    root.querySelector('#do-selected').innerHTML=`<h2>${f.name}</h2><p class="do-note">가상 어종 · ${state.spectral?'환해류 안':'일반 해역'}</p><div class="do-state">${available?(f.intuition?'밤·직감 필요':'이 기항 시간대의 출현 대상'):'이 기항 시간대에는 출현하지 않음'}</div><h3>잡는 방법</h3><dl><dt>미끼</dt><dd>${f.bait}</dd><dt>입질</dt><dd>${f.tug} · ${f.tug==='!'?'섬세':'강력'}</dd><dt>기준점수</dt><dd>${f.points}점</dd><dt>이중</dt><dd>${f.dh}마리</dd><dt>삼중</dt><dd>${f.th}마리</dd><dt>임무 분류</dt><dd>${f.mission}</dd><dt>환해류 유발</dt><dd>${f.trigger?'대상':'해당 없음'}</dd></dl>${f.intuition?'<h3>직감 준비</h3><p>선행 어종 A × 2</p><p>선행 어종 B × 1</p><p class="do-note">둘 다 필요 · 직감 20초 · 진행도 미확인</p>':''}<details><summary>해역·항로·개인 기록·출처</summary><p>시안용 해역 · 항로 A / B</p><p class="do-note">공통 상세의 동일한 접힘 영역 사용</p></details>`;
+    if(!available)root.querySelector('#do-context').textContent+=' · 출현 제외 어종은 조건 비교용으로 표시';
+  }
+  function save(){if(window.openai?.setWidgetState)window.openai.setWidgetState({modelContent:{oceanView:state},privateContent:null}).catch(()=>{});}
+  root.addEventListener('click',e=>{
+    const b=e.target.closest('button');if(!b)return;
+    if(b.dataset.stop!==undefined)state.stop=+b.dataset.stop;
+    if(b.dataset.spectral!==undefined)state.spectral=Boolean(+b.dataset.spectral);
+    if(b.dataset.fish)state.selected=b.dataset.fish;
+    render();save();
+  });
+  root.querySelector('#do-goal').addEventListener('change',e=>{state.goal=e.target.value;render();save();});
+  function restore(snapshot){const s=snapshot?.modelContent?.oceanView;if(s){if([0,1,2].includes(s.stop))state.stop=s.stop;if(typeof s.spectral==='boolean')state.spectral=s.spectral;if(['points','mission','guide'].includes(s.goal))state.goal=s.goal;if(fish.some(f=>f.id===s.selected))state.selected=s.selected;}render();}
+  restore(window.openai?.widgetState);
+  window.addEventListener('openai:set_globals',e=>{if(e.detail?.globals?.widgetState)restore(e.detail.globals.widgetState);});
+})();
+</script>

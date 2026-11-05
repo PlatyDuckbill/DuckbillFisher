@@ -1,0 +1,226 @@
+<div id="df-detail-proposal" aria-label="상세보기 시안">
+  <div class="viz-controls">
+    <label class="form-label">미리볼 상황
+      <select class="form-select" id="df-detail-case" aria-label="상세보기 상황">
+        <option value="regular">일반 낚시 · 기본</option>
+        <option value="mooch">일반 낚시 · 생미끼 연쇄</option>
+        <option value="intuition" selected>일반 낚시 · 직감 준비</option>
+        <option value="appraiser">소장품 · 납품원</option>
+        <option value="custom">소장품 · 단골거래</option>
+        <option value="spear">작살 · 숨은 어장</option>
+        <option value="ocean">먼바다 · 일반 어종</option>
+        <option value="oceanIntuition">먼바다 · 환해류 속 직감 어종</option>
+        <option value="combined">복합 · 생미끼 + 직감 + 소장품</option>
+      </select>
+    </label>
+  </div>
+  <div class="viz-dotted-background df-preview">
+    <article class="df-product" aria-label="어종 상세보기 시안">
+      <div class="df-titlebar"><span>DuckbillFisher · 어종 상세</span><span>배치 시안</span></div>
+      <div class="df-body" id="df-detail-body"></div>
+    </article>
+  </div>
+</div>
+<style>
+#df-detail-proposal { --df-bg:light-dark(#f4f1e9,#242625); --df-panel:light-dark(#eae6dc,#303330); --df-text:light-dark(#292d2c,#e7e6df); --df-muted:light-dark(#5c625e,#b5b9af); --df-line:light-dark(#c9c8bc,#51574f); --df-accent:light-dark(#655223,#dbc28d); --df-good:light-dark(#235a4a,#a3d3b9); --df-warning:light-dark(#7a451a,#ebc399); --df-spot:light-dark(#e0ebe3,#303e36); --df-attention:light-dark(#ede5d5,#403b30); --df-button:light-dark(#e2dfd5,#3b403b); --df-link:light-dark(#235f70,#acd3df); }
+#df-detail-proposal .df-preview { padding:20px 0; }
+#df-detail-proposal .df-product { box-sizing:border-box; width:100%; max-width:420px; margin:0 auto; color:var(--df-text); background:var(--df-bg); border:1px solid var(--df-line); border-radius:4px; font:13px/1.5 "Segoe UI","Malgun Gothic",sans-serif; }
+#df-detail-proposal .df-titlebar { display:flex; justify-content:space-between; gap:12px; padding:7px 12px; color:var(--df-accent); background:var(--df-panel); border-bottom:1px solid var(--df-line); font-size:12px; }
+#df-detail-proposal .df-body { padding:15px; }
+#df-detail-proposal .df-product * { box-sizing:border-box; }
+#df-detail-proposal .df-product h2 { font-size:19px; font-weight:500; line-height:1.35; margin:0 0 5px; }
+#df-detail-proposal .df-product h3 { font-size:13px; font-weight:500; line-height:1.5; color:var(--df-accent); margin:0; }
+#df-detail-proposal .df-product p { margin:0; }
+#df-detail-proposal .df-product button, #df-detail-proposal .df-product select, #df-detail-proposal .df-product input { font:inherit; color:var(--df-text); border:1px solid var(--df-line); border-radius:3px; background:var(--df-button); padding:4px 7px; max-width:100%; }
+#df-detail-proposal .df-product button { cursor:inherit; }
+#df-detail-proposal .df-product button[aria-pressed="true"] { color:var(--df-accent); background:var(--df-attention); }
+#df-detail-proposal .df-product button:disabled { opacity:.55; }
+#df-detail-proposal .df-product .df-icon { display:grid; place-items:center; width:45px; height:45px; background:var(--df-panel); color:var(--df-accent); border:1px solid var(--df-line); border-radius:3px; flex:0 0 auto; }
+#df-detail-proposal .df-top { display:flex; align-items:center; gap:11px; }
+#df-detail-proposal .df-name { min-width:0; flex:1; }
+#df-detail-proposal .df-meta { color:var(--df-muted); font-size:12px; display:flex; gap:9px; flex-wrap:wrap; }
+#df-detail-proposal .df-actions { display:flex; align-items:center; gap:6px; flex-wrap:wrap; margin:12px 0; }
+#df-detail-proposal .df-section { margin-top:16px; }
+#df-detail-proposal .df-section-heading { display:flex; align-items:center; justify-content:space-between; gap:8px; flex-wrap:wrap; margin-bottom:8px; padding-bottom:5px; border-bottom:1px solid var(--df-line); }
+#df-detail-proposal .df-status { padding:9px 11px; background:var(--df-spot); border-left:3px solid var(--df-good); margin-top:12px; }
+#df-detail-proposal .df-status.df-wait { background:var(--df-attention); border-left-color:var(--df-accent); }
+#df-detail-proposal .df-status strong { font-weight:500; }
+#df-detail-proposal .df-sub { font-size:12px; color:var(--df-muted); }
+#df-detail-proposal .df-kv { display:grid; grid-template-columns:82px minmax(0,1fr); gap:6px 12px; margin:0; }
+#df-detail-proposal .df-kv dt { color:var(--df-muted); }
+#df-detail-proposal .df-kv dd { margin:0; min-width:0; overflow-wrap:anywhere; }
+#df-detail-proposal .df-inline { display:flex; gap:7px; align-items:center; flex-wrap:wrap; }
+#df-detail-proposal .df-note { margin-top:7px !important; font-size:12px; color:var(--df-muted); }
+#df-detail-proposal .df-location { display:flex; justify-content:space-between; align-items:center; gap:8px; flex-wrap:wrap; margin-top:9px; color:var(--df-muted); font-size:12px; }
+#df-detail-proposal .df-caution { margin-top:8px !important; color:var(--df-warning); font-size:12px; }
+#df-detail-proposal .df-bait { display:flex; gap:8px; flex-wrap:wrap; align-items:center; padding:7px 0; }
+#df-detail-proposal .df-link { background:transparent !important; border:0 !important; padding:0 !important; color:var(--df-link) !important; text-align:left; text-decoration:underline; text-underline-offset:3px; }
+#df-detail-proposal .df-steps { margin:0; padding-left:23px; }
+#df-detail-proposal .df-steps li { padding:0 0 8px 3px; }
+#df-detail-proposal .df-steps li:last-child { padding-bottom:0; }
+#df-detail-proposal .df-chain { display:flex; flex-wrap:wrap; gap:10px 14px; margin:5px 0 11px; }
+#df-detail-proposal .df-chain-stage { display:flex; align-items:flex-start; gap:7px; min-width:0; }
+#df-detail-proposal .df-chain-stage > div { min-width:0; }
+#df-detail-proposal .df-panes { display:flex; gap:6px; margin-top:14px; flex-wrap:wrap; }
+#df-detail-proposal .df-prey { display:grid; gap:10px; }
+#df-detail-proposal .df-preyrow { display:grid; grid-template-columns:minmax(0,1fr) auto; gap:4px 12px; padding:7px 0; border-bottom:1px solid var(--df-line); }
+#df-detail-proposal .df-preyrow:last-child { border:0; }
+#df-detail-proposal .df-preyrow .df-sub { grid-column:1/-1; }
+#df-detail-proposal .df-track { grid-column:1/-1; height:4px; background:var(--df-panel); }
+#df-detail-proposal .df-track span { display:block; height:100%; background:var(--df-good); }
+#df-detail-proposal .df-mini { font-size:12px; color:var(--df-good); }
+#df-detail-proposal .df-product details { margin-top:11px; }
+#df-detail-proposal .df-product summary { color:var(--df-muted); padding:5px 0; cursor:inherit; }
+#df-detail-proposal .df-product details[open] summary { color:var(--df-accent); margin-bottom:5px; }
+#df-detail-proposal .df-product table { width:100%; border-collapse:collapse; font-size:12px; table-layout:fixed; }
+#df-detail-proposal .df-product th { color:var(--df-muted); font-weight:400; text-align:left; padding:6px; border-bottom:1px solid var(--df-line); }
+#df-detail-proposal .df-product td { padding:7px 6px; border-bottom:1px solid var(--df-line); vertical-align:top; overflow-wrap:anywhere; }
+#df-detail-proposal .df-product tr.df-selected { background:var(--df-spot); }
+#df-detail-proposal .df-numeric { font-variant-numeric:tabular-nums; }
+#df-detail-proposal .df-end { text-align:right !important; }
+#df-detail-proposal .df-reward-controls { display:flex; flex-wrap:wrap; gap:8px 12px; align-items:center; margin:9px 0; }
+#df-detail-proposal .df-reward-controls label { display:flex; gap:6px; align-items:center; flex-wrap:wrap; font-size:12px; }
+#df-detail-proposal .df-reward-controls input { width:74px; }
+#df-detail-proposal .df-reward-controls select { width:110px; }
+#df-detail-proposal .df-badge { display:inline-block; padding:1px 6px; color:var(--df-accent); background:var(--df-attention); border-radius:2px; font-size:12px; }
+#df-detail-proposal .df-footer { margin-top:17px; padding-top:8px; border-top:1px solid var(--df-line); color:var(--df-muted); font-size:12px; }
+#df-detail-proposal .df-compare { padding:10px; border:1px solid var(--df-line); background:var(--df-panel); margin-top:10px; }
+#df-detail-proposal .df-compare[hidden] { display:none; }
+#df-detail-proposal .df-good { color:var(--df-good); }
+@media(max-width:380px) { #df-detail-proposal .df-body { padding:11px; } #df-detail-proposal .df-kv { grid-template-columns:72px minmax(0,1fr); gap:6px 8px; } }
+@media(pointer:coarse) { #df-detail-proposal .df-product button, #df-detail-proposal .df-product select, #df-detail-proposal .df-product summary { min-height:44px; } #df-detail-proposal .df-product .df-link { padding:8px 0 !important; } }
+</style>
+<script>
+(() => {
+  const root = document.getElementById('df-detail-proposal');
+  const body = root.querySelector('#df-detail-body');
+  const picker = root.querySelector('#df-detail-case');
+  const product = root.querySelector('.df-product');
+  const design = { width:420, incomplete:false };
+  const panes = {appraiser:'reward',custom:'reward',combined:'fishing'};
+  const rewardInputs = {appraiser:{quality:500,bonus:false},custom:{quality:500,bonus:false},combined:{quality:500,bonus:false}};
+  const views = {
+    regular:{name:'은빛 강고기',kind:'일반 낚시',status:'상시 출현',time:'시간·날씨 제한 없음',bait:'강물 지렁이',hook:'섬세한 낚아채기',tug:'!',yield:['2마리','3마리'],minimum:'4,000',place:'시안용 강 · 낚시터 A'},
+    mooch:{name:'여명 날개고기',kind:'생미끼 연쇄',status:'출현 예정 · 00:12:30 후',time:'ET 14:00–16:00 · 맑음 → 흐림',bait:'강물 지렁이',hook:'강력한 낚아채기',tug:'!!!',yield:['증가 없음 · 1마리','증가 없음 · 1마리'],minimum:'4,100',place:'시안용 호수 · 낚시터 B',mooch:true},
+    intuition:{name:'깊은물 왕관고기',kind:'터주왕 · 직감 필요',status:'출현 예정 · 00:12:30 후',time:'ET 14:00–16:00 · 맑음 → 비',bait:'은빛 루어',hook:'강력한 낚아채기',tug:'!!!',yield:['증가 없음 · 1마리','증가 없음 · 1마리'],minimum:'4,200',place:'시안용 호수 · 낚시터 C',intuition:true},
+    appraiser:{name:'유리 지느러미',kind:'일반 낚시 · 소장품',status:'상시 출현',time:'시간·날씨 제한 없음',bait:'강물 지렁이',hook:'섬세한 낚아채기',tug:'!',yield:['2마리','3마리'],minimum:'4,000',place:'시안용 강 · 낚시터 D',reward:'appraiser'},
+    custom:{name:'비단꼬리 고기',kind:'일반 낚시 · 단골거래',status:'상시 출현',time:'시간·날씨 제한 없음',bait:'바닷물 새우',hook:'강력한 낚아채기',tug:'!!',yield:['증가 없음 · 1마리','증가 없음 · 1마리'],minimum:'3,000',place:'시안용 연안 · 낚시터 E',reward:'custom'},
+    spear:{name:'푸른별 작살고기',kind:'작살낚시 · 숨은 어장',status:'어장 출현 조건 있음',time:'선행 어획 후 숨은 어장 출현',minimum:'4,000',place:'시안용 바다 · 숨은 어장 F',spear:true},
+    ocean:{name:'먼바다 은줄고기',kind:'먼바다 낚시 · 일반 해역',status:'일반 해역에서 출현',time:'기항 시간대 낮 · 환해류 밖',bait:'바닷물 새우',hook:'강력한 낚아채기',tug:'!!',yield:['3–4마리','5–7마리'],place:'시안용 해역 · 기항지 G',ocean:true},
+    oceanIntuition:{name:'심해 푸른왕관',kind:'먼바다 낚시 · 직감 필요',status:'환해류 · 밤 · 직감 필요',time:'세 조건을 모두 충족해야 출현',bait:'특수 미끼 A',hook:'강력한 낚아채기',tug:'!!!',yield:['증가 없음 · 1마리','증가 없음 · 1마리'],place:'시안용 해역 · 기항지 G',ocean:true,intuition:true},
+    combined:{name:'새벽 유리왕관',kind:'생미끼 · 직감 · 소장품',status:'출현 예정 · 00:12:30 후',time:'ET 14:00–16:00 · 맑음 → 비',bait:'강물 지렁이',hook:'강력한 낚아채기',tug:'!!!',yield:['증가 없음 · 1마리','증가 없음 · 1마리'],minimum:'4,200',place:'시안용 호수 · 낚시터 H',mooch:true,intuition:true,reward:'appraiser'}
+  };
+  const section = (title,content,action='') => `<section class="df-section"><div class="df-section-heading"><h3>${title}</h3>${action}</div>${content}</section>`;
+  const kv = pairs => `<dl class="df-kv">${pairs.map(([k,v])=>`<dt>${k}</dt><dd>${v}</dd>`).join('')}</dl>`;
+  const yields = (v) => `이중 ${v.yield[0]}<br>삼중 ${design.incomplete?'미확인':v.yield[1]}`;
+  const related = (name) => `<button type="button" class="df-link cursor-interaction" data-related="${name}">${name}</button>`;
+  function setup(v) {
+    if (v.spear) return section('어종 식별',kv([['어체 크기','중형 · ●●○'],['이동 속도','빠름 · ››››'],['최소 획득력',design.incomplete?'미확인':`${v.minimum} <span class="df-mini">· 내 수치 4,300</span>`]]) + '<p class="df-note">직접 보고 구별하는 정적 어종 정보</p>');
+    const path = v.mooch ? `<div class="df-chain"><div class="df-chain-stage"><div>${v.bait}<div class="df-sub">직접 낚시 · 소지 99개</div></div></div><div class="df-chain-stage"><span>→</span><div>${related('은빛 생미끼 A')}<div class="df-sub">! · 섬세 · 보관 가능<br>시간 제한 없음</div></div></div><div class="df-chain-stage"><span>→</span><div>${related('긴꼬리 생미끼 B')}<div class="df-sub">!! · 강력 · 보관 가능<br>ET 12:00–16:00</div></div></div><div class="df-chain-stage"><span>→</span><div>${v.name}</div></div></div>` : `<div class="df-bait"><i data-lucide="fish-symbol" aria-hidden="true"></i><span>${v.bait}</span><span class="df-sub">소지 99개</span></div>`;
+    const fields=[['입질',v.tug],['낚아채기',v.hook],['이중 / 삼중',yields(v)]];
+    if (!v.ocean) fields.push(['최소 획득력',design.incomplete?'미확인':`${v.minimum} <span class="df-mini">· 내 수치 4,300</span>`]);
+    if (!v.ocean && v.intuition) fields.push(['필수 조건','직감 · 전승록 · 지정 루어']);
+    if (v.reward) fields.push(['소장품 수령','보존 시 1마리 · 일반 수령과 구분']);
+    return section(v.mooch?'미끼와 생미끼 경로':'잡는 방법',path+kv(fields),'<button type="button" data-action="bait">미끼 찾기</button>');
+  }
+  function intuition(v) {
+    const ocean=v.ocean;
+    return section(ocean?'직감 준비 · 환해류 안에서':'직감 준비 · 두 어종 모두 필요',
+      `<div class="df-prey">
+        <div class="df-preyrow"><span>${related('선행 어종 A')}</span><span class="df-numeric">${ocean?'0 / 2':'2 / 3'}마리</span><div class="df-track"><span style="width:${ocean?0:67}%"></span></div><div class="df-sub">${ocean?'미끼: 바닷물 새우 · !! · 강력':'미끼: 은빛 루어 · ! · 섬세'}<br>이중 2마리 · 삼중 3마리</div></div>
+        <div class="df-preyrow"><span>${related('선행 어종 B')}</span><span class="df-numeric">${ocean?'0 / 1':'1 / 2'}마리</span><div class="df-track"><span style="width:${ocean?0:50}%"></span></div><div class="df-sub">미끼: 바닷물 새우 · !! · 강력<br>이중 2마리 · 삼중 ${design.incomplete?'미확인':'3마리'}</div></div>
+      </div>
+      <p class="df-note">${design.incomplete?(ocean?'직감 지속 시간 미확인':'지속 시간 미확인 · 예측에는 175초 가정 사용'):`직감 지속 시간 ${ocean?'20초':'180초'}`} · 진행도는 관찰 예시</p>
+      ${ocean?'<p class="df-caution">환해류·밤·직감 조건을 각각 확인하세요.</p>':`<details><summary>준비·재준비 요령</summary><ol class="df-steps"><li>선행 어종을 채우고 마지막 어획 전까지 준비합니다.</li><li>소장품 선택 대기를 쓸 경우, 수령 시점과 실제 수령량을 구분합니다.</li><li>직감 종료 후에는 필요한 어종을 다시 낚습니다.</li></ol><p class="df-note">검증된 어종별 준비 방법을 표시하는 자리</p></details>`}`);
+  }
+  function rewards(v) {
+    const custom=v.reward==='custom';
+    const saved=rewardInputs[picker.value];
+    const table=`<div class="df-reward-controls"><label>소장가치 직접 입력 <input type="number" min="0" step="1" value="${saved.quality}" data-quality aria-label="비교할 소장가치"></label>${custom?`<label>보상 기준 <select data-bonus aria-label="보상 기준"><option value="0" ${saved.bonus?'':'selected'}>기본 보상</option><option value="1" ${saved.bonus?'selected':''}>보너스 시</option></select></label>`:''}</div>
+      <table aria-label="가상 소장가치별 보상"><thead><tr><th>소장가치</th><th class="df-end">채집가 화폐</th>${custom?'<th class="df-end">길</th>':'<th class="df-end">경험치</th>'}</tr></thead><tbody data-reward-rows></tbody></table><p class="df-note" data-cut aria-live="polite"></p>`;
+    const cuts='<div class="df-inline"><span class="df-badge">최저 300</span><span class="df-badge">최고 보상 600 이상</span></div>';
+    const core=custom?kv([['납품 대상','단골 NPC A · 보상표 단계 5'],['위치','시안용 마을 · X:10.0 Y:12.0'],['주간 요청','미확인'],['주간 보너스','미확인']])+'<div class="df-note">'+cuts+'</div>'+table+'<details><summary>경험치·만족도 기준</summary><table aria-label="가상 단골거래 경험치"><thead><tr><th>소장가치</th><th class="df-end">경험치 · 레벨 99</th></tr></thead><tbody><tr><td>300–449</td><td class="df-end">120,000</td></tr><tr><td>450–599</td><td class="df-end">150,000</td></tr><tr><td>600 이상</td><td class="df-end">180,000</td></tr></tbody></table><p class="df-note">기본 보상 예시 · 만렙이면 경험치 없음<br>만족도: 단계 5 최대 기준 · 증가 없음</p><p class="df-note">내 만족도·주간 잔여 횟수는 미확인</p></details>':
+      cuts+table+'<p class="df-note">경험치는 납품 레벨 99 기준의 가상 예시</p><details><summary>납품처 · 여러 지역의 소장품 납품원</summary><p>시안용 마을 · X:10.0 Y:12.0</p><p>시안용 도시 · X:8.0 Y:9.0</p></details>';
+    return section(custom?'단골거래 · 소장가치와 보상':'소장품 납품원 · 소장가치와 보상',core,'<button type="button" data-action="delivery">납품처 지도</button>');
+  }
+  function ocean(v) {
+    return section('먼바다 정보',kv([['출현 해역','시안용 해역 · 항로 A / 항로 B'],['출현 구분',v.intuition?'환해류 안 · 밤':'일반 해역 · 낮'],['어종 점수',v.intuition?'기준 500점':'기준 100점'],['임무 분류',v.intuition?'해당 없음':'상어류'],['환해류 유발',v.intuition?'해당 없음':'유발 대상 어종']])+ '<p class="df-note">점수는 기본값 · 대형·항해 보너스 적용 전</p>','<button type="button" data-action="voyage">항로 전체 보기</button>');
+  }
+  function render() {
+    const v=views[picker.value];
+    product.style.maxWidth=`${design.width}px`;
+    const known=design.incomplete?'<p class="df-caution">삼중 수량·일부 조건 미확인 · 확인된 값만 표시</p>':'';
+    const forecast=v.ocean?'':v.spear?'':`<details><summary>다음 출현 · 예측 계산</summary><p>다음 회차 LT 21:00–21:05 · 시각 예시</p>${v.intuition?'<p class="df-note">대상과 선행 어종의 시간·날씨를 구분해 확인</p>':''}<p class="df-note">예측과 실제 준비 상태는 별도로 표시</p></details>`;
+    let content=`<div class="df-top"><div class="df-icon"><i data-lucide="fish" aria-hidden="true"></i></div><div class="df-name"><h2>${v.name}</h2><div class="df-meta"><span>${v.kind}</span><span>가상 어종</span></div></div></div>
+      <div class="df-actions"><button type="button" data-favorite aria-pressed="false">☆ 즐겨찾기</button><select aria-label="수집 상태"><option>미수집</option><option>수집됨 · 수동</option><option>확인 불가</option></select><button type="button" data-action="guide">어류도감</button></div>
+      <div class="df-status ${v.status.includes('예정')||v.spear||v.intuition?'df-wait':''}"><strong>${v.status}</strong><p class="df-sub">${v.time}</p></div><div class="df-location"><span>${v.place}</span><button type="button" data-action="map">지도 열기</button></div>${known}`;
+    if(v.reward) content+=`<div class="df-panes" role="group" aria-label="보는 정보"><button type="button" data-pane="fishing" aria-pressed="${panes[picker.value]==='fishing'}">낚시 정보</button><button type="button" data-pane="reward" aria-pressed="${panes[picker.value]==='reward'}">납품·보상</button></div>`;
+    if(v.reward && panes[picker.value]==='reward')content+=rewards(v);
+    else {
+      if(v.ocean) content+=ocean(v);
+      content+=setup(v);
+      if(v.spear) content+=section('숨은 어장 출현 조건',`<ol class="df-steps"><li>${related('선행 작살어 A')} 10마리<div class="df-sub">소형 · 느림 · 시안용 기본 어장</div></li><li>숨은 어장 F 출현<div class="df-sub">목표 어종: 중형 · 빠름</div></li></ol><p class="df-note">출현 절차 안내 · 현재 어장 출현 여부는 미확인</p>`);
+      if(v.intuition) content+=intuition(v);
+      if(v.reward)content+='<p class="df-note">소장품: 최저 납품 300 · 최고 보상 600 이상<br>전체 보상표는 납품·보상에서 확인</p>';
+      content+=forecast;
+    }
+    content+='<details><summary>메모·도전 횟수·타이머 프리셋</summary><p>도전 횟수 12회 · 프리셋: 기본</p><p class="df-note">기존 개인 기록 영역 유지</p></details><details><summary>데이터 출처와 확인 범위</summary><p>어종별·필드별 출처, 확인일, 획득력 조건 표시</p><p class="df-note">수량 하한·범위·고정값·미확인을 각각 구분</p></details><div class="df-compare" hidden></div><p class="df-note" data-feedback aria-live="polite"></p><div class="df-footer">가상 어종·가상 수치로 구성한 배치 시안입니다.<br>보상 컷·공략·진행도·시각은 실제 게임 자료가 아닙니다.</div>';
+    body.innerHTML=content;
+    renderRewards();
+    if(globalThis.lucide) globalThis.lucide.createIcons({attrs:{width:20,height:20}});
+  }
+  function renderRewards() {
+    const tbody=body.querySelector('[data-reward-rows]');
+    if(!tbody)return;
+    const custom=views[picker.value].reward==='custom';
+    const input=body.querySelector('[data-quality]');
+    const q=Math.max(0,Number(input.value)||0);
+    const bonus=body.querySelector('[data-bonus]')?.value==='1';
+    const index=q<300?-1:q<450?0:q<600?1:2;
+    const ranges=['300–449','450–599','600 이상'];
+    const currency=bonus?[150,180,225]:[100,120,150];
+    tbody.innerHTML=ranges.map((range,i)=>`<tr class="${i===index?'df-selected':''}"><td>${range}${i===index?'<br><span class="df-good">입력한 값</span>':''}</td><td class="df-end df-numeric">${currency[i]}</td><td class="df-end df-numeric">${custom?([900,1100,1300][i]*(bonus?1.5:1)).toLocaleString():[120000,150000,180000][i].toLocaleString()}</td></tr>`).join('');
+    const cut=body.querySelector('[data-cut]');
+    cut.textContent=index<0?`최저 납품 기준까지 ${300-q} 부족`:index===2?'최고 보상 구간 충족':`다음 보상까지 ${[450,600][index]-q} · 최고 보상까지 ${600-q}`;
+    if(custom) cut.textContent+=' · 이번 주 적용 여부는 미확인';
+  }
+  function save(){
+    if(window.openai?.setWidgetState) window.openai.setWidgetState({modelContent:{detailCase:picker.value,detailPane:panes[picker.value]||'fishing'},privateContent:{width:design.width,incomplete:design.incomplete}}).catch(()=>{});
+  }
+  picker.addEventListener('change',()=>{render();save();});
+  body.addEventListener('input',e=>{if(e.target.matches('[data-quality]')){rewardInputs[picker.value].quality=Math.max(0,Number(e.target.value)||0);renderRewards();}});
+  body.addEventListener('change',e=>{if(e.target.matches('[data-bonus]')){rewardInputs[picker.value].bonus=e.target.value==='1';renderRewards();}});
+  body.addEventListener('click',e=>{
+    const button=e.target.closest('button');if(!button)return;
+    if(button.dataset.pane){panes[picker.value]=button.dataset.pane;render();save();return;}
+    if(button.hasAttribute('data-favorite')){
+      const active=button.getAttribute('aria-pressed')!=='true';button.setAttribute('aria-pressed',String(active));button.textContent=active?'★ 즐겨찾기':'☆ 즐겨찾기';return;
+    }
+    if(button.dataset.related){
+      const panel=body.querySelector('.df-compare');panel.hidden=false;
+      panel.innerHTML=`<div class="df-section-heading"><h3>비교 상세 · ${button.dataset.related}</h3><button type="button" data-close-compare>닫기</button></div><p>원래 대상은 그대로 유지</p><p class="df-sub">미끼·입질·낚아채기·이중/삼중 수량 확인</p>`;
+      panel.scrollIntoView({block:'nearest'});return;
+    }
+    if(button.hasAttribute('data-close-compare')){body.querySelector('.df-compare').hidden=true;return;}
+    const feedback=body.querySelector('[data-feedback]');
+    const messages={map:'지도 열기 위치: 선택한 낚시터 · 시안 동작',delivery:'지도 열기 위치: 선택한 납품처 · 시안 동작',bait:'기존 미끼 찾기 동선 연결 · 시안 동작',guide:'기존 어류도감 열기 동선 연결 · 시안 동작',voyage:'아래 먼바다 시안에서 항로 전체와 같은 상세의 연결을 볼 수 있습니다.'};
+    if(button.dataset.action)feedback.textContent=messages[button.dataset.action]||'';
+  });
+  function restore(state){
+    const c=state?.modelContent?.detailCase;
+    if(c&&views[c])picker.value=c;
+    if(panes[picker.value]&&['fishing','reward'].includes(state?.modelContent?.detailPane))panes[picker.value]=state.modelContent.detailPane;
+    const p=state?.privateContent;
+    if(p&&Number.isFinite(p.width))design.width=Math.min(680,Math.max(320,p.width));
+    if(typeof p?.incomplete==='boolean')design.incomplete=p.incomplete;
+    render();
+  }
+  restore(window.openai?.widgetState);
+  window.addEventListener('openai:set_globals',e=>{if(e.detail?.globals?.widgetState)restore(e.detail.globals.widgetState);});
+  if(globalThis.Tweak){
+    const tweak=new Tweak({container:root,onChange:()=>{render();save();}});
+    tweak.addSlider(design,'width',{label:'상세 폭',min:320,max:680,step:20,unit:'px'});
+    tweak.addToggle(design,'incomplete',{label:'일부 자료 미확인 상태'});
+  }
+})();
+</script>
