@@ -185,6 +185,12 @@ $groups = [ordered]@{
         'Dalamud.Plugin.Services.IContextMenu', 'Dalamud.Game.Gui.ContextMenu.IMenuArgs',
         'Dalamud.Game.Gui.ContextMenu.IMenuOpenedArgs', 'Dalamud.Game.Gui.ContextMenu.MenuItem',
         'Dalamud.Game.Gui.ContextMenu.MenuTargetInventory', 'Dalamud.Game.Inventory.GameInventoryItem',
+        'Dalamud.Plugin.Services.IGameInventory', 'Dalamud.Game.Inventory.GameInventory',
+        'Dalamud.Game.Inventory.GameInventoryPluginScoped', 'Dalamud.Game.Inventory.GameInventoryType',
+        'Dalamud.Game.Inventory.InventoryEventArgTypes.InventoryEventArgs',
+        'Dalamud.Game.Inventory.InventoryEventArgTypes.InventoryItemAddedArgs',
+        'Dalamud.Game.Inventory.InventoryEventArgTypes.InventoryItemRemovedArgs',
+        'Dalamud.Game.Inventory.InventoryEventArgTypes.InventoryItemChangedArgs',
         'Dalamud.Game.Gui.ContextMenu.MenuTargetDefault', 'Dalamud.Utility.ItemUtil',
         'Dalamud.Game.ClientState.Statuses.Status', 'Dalamud.Game.ClientState.Statuses.StatusList',
         'Dalamud.Game.ClientState.Objects.Types.BattleChara'

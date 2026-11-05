@@ -27,7 +27,7 @@
 | 커스텀 WAV | CustomAlertSound, SpawnAlertsPanel | 전용 스레드의 Windows MCI alias/임시 복사본, 관리 요청·세대·상태만 공유 |
 | 어종별 개인 기록 | FishPersonalRecord, FishPersonalPanel, FishPreferences | 어종 ID별 공통 메모/수동 횟수/프리셋ID.64개 초안·명시적 저장/적용, 세션/복원 세대·필드별 요청·충돌/실패 보존. 백업 포함 |
 | 터주 회차 집계 | SpawnAttemptObserver, FishPreferences.RecordSpawnAttempts | 현재 식별 낚시터/시작을 아는 진행 시전과 자체 시간·날씨의 유한 구간. 공통 개인 기록의 횟수+회차 종료 UTC를 함께 저장. 수동 보정은 회차 기록 보존 |
-| 직감 진행도 | Core IntuitionCounter, Plugin IntuitionProgress/IntuitionProgressPanel | 본인 단일/복수 어획+어획 시점 공개 상태568. Framework에서 관리 큐 처리·200ms 버프 관찰, 화면과 독립. 정확/관찰분/읽기 불가 구분, 실제 종료 후 새 회차 |
+| 직감 진행도 | Core IntuitionCounter, Plugin IntuitionProgress/IntuitionCatchReceipt/IntuitionProgressPanel | 본인 단일/복수 어획+공개 상태568. 소장품 가능 어종은 같은 시전/어종의 공개 소지품 순증가·실제 수령 수량/상태와 연결. Framework에서 관리 큐 처리·200ms 버프 관찰, 화면과 독립. 정확/관찰분/읽기 불가 구분, 실제 종료 후 새 회차 |
 | 상세 진입·수량 자료 | FishDetailAccess, HookYieldData | 이름 검색/물고기 전용 공개 컨텍스트 메뉴→기존 상세. 최초 로드한 이름/Item 인덱스와 내장 수량의 ID·형식 검사. Draw는 관리 값 표시 |
 | 설정 백업·전용 WAV | CommonSettingsBackup, SettingsBackupFile, SettingsBackup, ManagedSoundFiles, ManagedSoundLibrary | 공통 설정만 버전별 JSON/ZIP 변환·제한/해시 검증. 관리 작업자 파일 처리, Framework 설정 적용·세션/취소·영구 음원 원자 교체/실패 복구. [계약](../product/SETTINGS-BACKUP.md) |
 | 업데이트 내역 | ChangelogWindow, MainWindow, FishPreferences | 메인 OnOpen에서 미확인 버전 안내, 내장 한영 릴리스 요약·최대 최신10개 표시, 공통 확인 버전을 기존 Framework 설정 큐로 저장. 원격 조회 없음 |

@@ -135,7 +135,7 @@ public sealed class Plugin : IDalamudPlugin
         var spotFishWindow = new SpotFishWindow(fishingTracker, fishCatalog, fishPreferences, fishCollection, textureProvider, fishingMap, detailWindow.Show);
         fishingBuffs = new FishingBuffObserver(objectTable, clientState, playerState, conditions, framework, dataManager,
             fishPreferences, fishingTracker);
-        intuitionProgress = new(fishingTracker, fishCatalog, fishPreferences, objectTable, clientState, playerState, conditions, framework);
+        intuitionProgress = new(fishingTracker, fishCatalog, fishPreferences, objectTable, clientState, playerState, conditions, framework, inventory);
         timerWindow = new CastingTimerWindow(fishingTracker, fishingBuffs, intuitionProgress, textureProvider, detailWindow.Show, spotFishWindow.Toggle);
         timerSettings = new CastingTimerSettingsWindow(fishPreferences, alertOutput, fishingSounds, soundLibrary);
         detailPanel.ShowTimerPresets = timerSettings.OpenPresets;

@@ -25,6 +25,7 @@ internal sealed class IntuitionProgress : IDisposable
     private readonly IPlayerState player;
     private readonly ICondition conditions;
     private readonly IFramework framework;
+    private readonly IntuitionCatchReceipt receipts;
     private readonly IntuitionCounter counter = new();
     private IntuitionProgressView view = IntuitionProgressView.Empty;
     private FishGuideRow[] targets = [];
@@ -40,12 +41,14 @@ internal sealed class IntuitionProgress : IDisposable
     private (uint Id, int Session)? requested;
 
     public IntuitionProgress(FishingTracker tracker, FishCatalog catalog, FishPreferences preferences,
-        IObjectTable objects, IClientState client, IPlayerState player, ICondition conditions, IFramework framework)
+        IObjectTable objects, IClientState client, IPlayerState player, ICondition conditions, IFramework framework,
+        IGameInventory inventory)
     {
         this.tracker = tracker; this.catalog = catalog; this.preferences = preferences;
         this.objects = objects; this.client = client; this.player = player; this.conditions = conditions; this.framework = framework;
-        tracker.IntuitionAtCatch = itemId => catalog.View.CollectableItems.Contains(itemId) ? null : ReadIntuition();
-        tracker.CatchRecorded += Catch;
+        receipts = new(inventory, framework, tracker, catalog, ReadIntuition, Catch, ObservationLost);
+        tracker.IntuitionAtCatch = _ => ReadIntuition();
+        tracker.CatchRecorded += receipts.Catch;
         tracker.CatchObservationLost += ObservationLost;
         framework.Update += Update;
     }
@@ -103,8 +106,10 @@ internal sealed class IntuitionProgress : IDisposable
             counter.Reset(); spotId = territory = selected = 0; targets = []; preyItems = FrozenSet<uint>.Empty;
             rows = null; lastCatch = null; requested = null; changed = true;
             pending.Clear(); lastStatusSample = 0;
+            receipts.Reset(session, client.TerritoryType);
         }
-        if (lastUpdate != 0 && Stopwatch.GetElapsedTime(lastUpdate).TotalSeconds > 1) counter.Reset();
+        if (lastUpdate != 0 && Stopwatch.GetElapsedTime(lastUpdate).TotalSeconds > 1)
+        { counter.Reset(); pending.Clear(); receipts.Reset(session, client.TerritoryType); }
         lastUpdate = now;
         if (!personal.HasCharacter)
         { Volatile.Write(ref view, IntuitionProgressView.Empty); return; }
@@ -112,6 +117,7 @@ internal sealed class IntuitionProgress : IDisposable
         {
             counter.Reset(territory != 0); territory = client.TerritoryType;
             spotId = selected = 0; targets = []; preyItems = FrozenSet<uint>.Empty; changed = true;
+            receipts.Reset(session, territory);
         }
         // A different, verified cast resets game preparation. Folding the rod or closing the timer does not.
         var verifiedSpot = current.Session == session && current.State == FishingTrackerState.Ready && !current.IsLastSpot &&
@@ -132,13 +138,15 @@ internal sealed class IntuitionProgress : IDisposable
         }
         if (current.Active is not null && current.SpotState != FishingSpotState.Known)
         {
-            counter.ObserveBuff(null, false); pending.Clear(); Volatile.Write(ref view, IntuitionProgressView.Empty); return;
+            counter.ObserveBuff(null, false); pending.Clear(); receipts.Reset(session, territory);
+            Volatile.Write(ref view, IntuitionProgressView.Empty); return;
         }
         if (requested is { } choose)
         {
             requested = null;
             if (choose.Session == session && targets.Any(f => f.FishParameterId == choose.Id)) { selected = choose.Id; changed = true; }
         }
+        receipts.Update(current);
         if (Interlocked.Exchange(ref observationLost, 0) != 0) counter.Reset();
         while (pending.TryDequeue(out var caught))
             if (current.MultipleCatchSupported) ApplyCatch(caught);
@@ -160,7 +168,8 @@ internal sealed class IntuitionProgress : IDisposable
 
     public void Dispose()
     {
-        framework.Update -= Update; tracker.CatchRecorded -= Catch; tracker.CatchObservationLost -= ObservationLost;
+        framework.Update -= Update; tracker.CatchRecorded -= receipts.Catch; tracker.CatchObservationLost -= ObservationLost;
+        receipts.Dispose();
         tracker.IntuitionAtCatch = null; pending.Clear(); counter.Reset(); Volatile.Write(ref view, IntuitionProgressView.Empty);
     }
 }
