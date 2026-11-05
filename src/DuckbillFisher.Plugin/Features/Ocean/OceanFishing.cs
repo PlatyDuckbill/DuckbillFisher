@@ -12,11 +12,21 @@ internal sealed record OceanRoute(uint Id, string Name, uint TerritoryId, uint C
 internal sealed record OceanDeparture(DateTimeOffset Starts, bool Ruby, OceanRoute Route);
 internal sealed record OceanGuidance(uint SpotId, byte Time, FishingItemView Bait, FishingItemView Fish, string Tug, int Double, int Triple);
 internal enum OceanDataState { Loading, Ready, Unavailable }
+[Flags]
+internal enum OceanConsumer { Main = 1, Timer = 2, FishList = 4 }
+internal enum OceanFishListState { Loading, Ready, OffVoyage, Unavailable, Moving, Waiting, Finished }
+internal sealed record OceanFishListView(OceanFishListState State, string Area = "", bool Spectral = false,
+    uint FishingSpotId = 0)
+{
+    public FishGuideRow[] Rows { get; init; } = [];
+}
 internal sealed record OceanVoyageView(int Session, OceanDataState DataState, OceanNativeSample Sample, long SampledAt,
     IReadOnlyDictionary<uint, OceanRoute> Routes, OceanDeparture[] Departures,
     IReadOnlyDictionary<(uint Spot, byte Time), OceanGuidance> Guidance)
 {
     public bool DataReady => DataState == OceanDataState.Ready;
+    public bool IsOceanTerritory { get; init; }
+    public OceanFishListView FishList { get; init; } = new(OceanFishListState.Loading);
 }
 
 /// <summary>Loads local sheets/resources once, then copies live state on Framework. No HTTP and no Draw-time data reads.</summary>
@@ -28,6 +38,7 @@ internal sealed class OceanFishing : IDisposable
     private readonly ICondition conditions;
     private readonly IFramework framework;
     private readonly FishPreferences preferences;
+    private readonly FishCatalog catalog;
     private readonly IPluginLog log;
     private readonly NativeOceanFishingReader reader;
     private readonly Func<DateTimeOffset> utcNow;
@@ -38,17 +49,21 @@ internal sealed class OceanFishing : IDisposable
         new Dictionary<uint, OceanRoute>(), [], new Dictionary<(uint, byte), OceanGuidance>());
     private bool loaded;
     private bool dataReady;
-    private volatile bool active;
+    private int consumers;
+    private IReadOnlyList<FishGuideRow>? indexedRows;
+    private bool catalogRequested;
+    private Dictionary<uint, FishGuideRow[]> fishBySpot = [];
     private bool disposed;
     private long sampledAt;
     private DateTimeOffset nextRegistration;
     private OceanDeparture[] departures = [];
 
     public OceanFishing(IDataManager data, IClientState client, IPlayerState player, ICondition conditions,
-        IFramework framework, FishPreferences preferences, IPluginLog log, Func<DateTimeOffset>? utcNow = null)
+        IFramework framework, FishPreferences preferences, FishCatalog catalog, IPluginLog log, Func<DateTimeOffset>? utcNow = null)
     {
         this.data = data; this.client = client; this.player = player; this.conditions = conditions;
         this.framework = framework; this.preferences = preferences; this.log = log;
+        this.catalog = catalog;
         this.utcNow = utcNow ?? (() => DateTimeOffset.UtcNow);
         reader = new(framework);
         framework.Update += Update;
@@ -61,11 +76,36 @@ internal sealed class OceanFishing : IDisposable
             var current = Volatile.Read(ref view);
             return current.Session != preferences.View.Session || current.SampledAt == 0 ||
                 Stopwatch.GetElapsedTime(current.SampledAt).TotalSeconds > 3
-                ? current with { Sample = new(OceanReadState.Stale) } : current;
+                ? current with { Sample = new(OceanReadState.Stale), FishList = new(OceanFishListState.Unavailable) } : current;
         }
     }
 
-    public void SetActive(bool value) => active = value;
+    public void SetActive(OceanConsumer consumer, bool value)
+    {
+        if (value) Interlocked.Or(ref consumers, (int)consumer);
+        else Interlocked.And(ref consumers, ~(int)consumer);
+    }
+
+    private OceanFishListView FishList(OceanNativeSample sample)
+    {
+        if (sample.State == OceanReadState.OffVoyage) return new(OceanFishListState.OffVoyage);
+        if (sample.State != OceanReadState.Ready) return new(OceanFishListState.Unavailable);
+        if (sample.Phase != OceanPhase.Fishing) return new(sample.Phase switch
+        {
+            OceanPhase.Waiting => OceanFishListState.Waiting,
+            OceanPhase.Finished => OceanFishListState.Finished,
+            _ => OceanFishListState.Moving,
+        });
+        if (!routes.TryGetValue(sample.RouteId, out var route) || sample.Zone < 0 || sample.Zone >= route.Stops.Length)
+            return new(OceanFishListState.Unavailable);
+        var stop = route.Stops[sample.Zone];
+        var id = sample.Spectral ? stop.SpectralSpotId : stop.FishingSpotId;
+        if (indexedRows is not { Count: > 0 }) return new(catalog.View.Status.Key == Localization.TextKey.RowsReadError
+            ? OceanFishListState.Unavailable : OceanFishListState.Loading);
+        return fishBySpot.TryGetValue(id, out var rows)
+            ? new(OceanFishListState.Ready, stop.Name, sample.Spectral, id) { Rows = rows }
+            : new(OceanFishListState.Unavailable);
+    }
 
     public string CreateReport()
     {
@@ -145,15 +185,25 @@ internal sealed class OceanFishing : IDisposable
     {
         if (disposed) return;
         var personal = preferences.View;
-        if (!active)
+        if (Volatile.Read(ref consumers) == 0)
         {
             if (view.Session != personal.Session) Volatile.Write(ref view, view with { Session = personal.Session,
-                Sample = new(OceanReadState.PlayerUnavailable), SampledAt = 0 });
+                Sample = new(OceanReadState.PlayerUnavailable), SampledAt = 0,
+                IsOceanTerritory = false, FishList = new(OceanFishListState.Unavailable) });
             return;
         }
         if (sampledAt != 0 && Stopwatch.GetElapsedTime(sampledAt).TotalMilliseconds < 200 && view.Session == personal.Session) return;
         sampledAt = Stopwatch.GetTimestamp();
         if (!loaded) Load();
+        var catalogRows = catalog.View.Rows;
+        if (!ReferenceEquals(indexedRows, catalogRows))
+        {
+            indexedRows = catalogRows;
+            fishBySpot = catalogRows.Where(f => f.IsDisplayable && f.IsOceanFishing && f.OceanFishingSpotId != 0)
+                .GroupBy(f => f.OceanFishingSpotId).ToDictionary(g => g.Key,
+                    g => g.OrderBy(f => f.Name, ClientNameOrder.Comparer).ToArray());
+        }
+        if (!catalogRequested) { catalogRequested = true; catalog.RequestLoad(); }
         var starts = OceanSchedule.RegistrationStarts(utcNow());
         if (dataReady && (departures.Length == 0 || nextRegistration != starts[0]))
         {
@@ -171,13 +221,18 @@ internal sealed class OceanFishing : IDisposable
         // A Framework callback cannot publish a departed character's state to a new session.
         if (preferences.View.Session != personal.Session) return;
         Volatile.Write(ref view, new(personal.Session, dataReady ? OceanDataState.Ready : OceanDataState.Unavailable,
-            sample, sampledAt, routes, departures, guidance));
+            sample, sampledAt, routes, departures, guidance)
+        {
+            IsOceanTerritory = personal.HasCharacter && client.IsLoggedIn && routes.Values.Any(r => r.TerritoryId == client.TerritoryType),
+            FishList = FishList(sample),
+        });
     }
 
     public void Dispose()
     {
-        disposed = true; active = false;
+        disposed = true; Interlocked.Exchange(ref consumers, 0);
         framework.Update -= Update;
-        Volatile.Write(ref view, view with { Sample = new(OceanReadState.PlayerUnavailable), SampledAt = 0 });
+        Volatile.Write(ref view, view with { Sample = new(OceanReadState.PlayerUnavailable), SampledAt = 0,
+            IsOceanTerritory = false, FishList = new(OceanFishListState.Unavailable) });
     }
 }

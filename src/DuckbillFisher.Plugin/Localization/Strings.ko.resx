@@ -1,5 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <root>
+  <data name="OceanFishTitle" xml:space="preserve"><value>이 해역의 어종 보기</value></data>
+  <data name="OceanFishAreaTitle" xml:space="preserve"><value>{0} · {1}</value></data>
+  <data name="OceanFishLoading" xml:space="preserve"><value>해역 어종을 불러오는 중입니다…</value></data>
+  <data name="OceanFishUnavailable" xml:space="preserve"><value>현재 해역의 어종 목록을 확인할 수 없습니다.</value></data>
+  <data name="OceanFishConditionsHint" xml:space="preserve"><value>해역과 일반/환해류 기준의 어종입니다. 시간·날씨·직감 조건은 추리지 않습니다.</value></data>
   <data name="OceanDataLoading" xml:space="preserve"><value>먼바다 자료를 불러오는 중입니다…</value></data>
   <data name="OceanDiagnostics" xml:space="preserve"><value>먼바다 진단</value></data>
   <data name="OceanCopyDiagnostics" xml:space="preserve"><value>항해 진단 복사</value></data>

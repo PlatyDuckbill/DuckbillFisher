@@ -133,11 +133,12 @@ public sealed class Plugin : IDalamudPlugin
             if (compareDetailWindow.IsOpen && compareDetailWindow.SelectedId == origin) compareDetailWindow.Navigate(fish);
             else compareDetailWindow.Show(fish);
         };
-        var spotFishWindow = new SpotFishWindow(fishingTracker, fishCatalog, fishPreferences, fishCollection, textureProvider, fishingMap, detailWindow.Show);
+        ocean = new(dataManager, clientState, playerState, conditions, framework, fishPreferences, fishCatalog, log);
+        var spotFishWindow = new SpotFishWindow(fishingTracker, fishCatalog, fishPreferences, fishCollection, textureProvider, fishingMap, detailWindow.Show, ocean);
         fishingBuffs = new FishingBuffObserver(objectTable, clientState, playerState, conditions, framework, dataManager,
             fishPreferences, fishingTracker);
         intuitionProgress = new(fishingTracker, fishCatalog, fishPreferences, objectTable, clientState, playerState, conditions, framework, inventory);
-        timerWindow = new CastingTimerWindow(fishingTracker, fishingBuffs, intuitionProgress, textureProvider, detailWindow.Show, spotFishWindow.Toggle);
+        timerWindow = new CastingTimerWindow(fishingTracker, fishingBuffs, intuitionProgress, textureProvider, detailWindow.Show, spotFishWindow.Toggle, ocean);
         timerSettings = new CastingTimerSettingsWindow(fishPreferences, alertOutput, fishingSounds, soundLibrary);
         detailPanel.ShowTimerPresets = timerSettings.OpenPresets;
         timerWindow.ShowSettings = () => timerSettings.IsOpen = true;
@@ -149,7 +150,6 @@ public sealed class Plugin : IDalamudPlugin
         schedule = new SpawnSchedule(fishCatalog, fishPreferences, fishCollection, fishingRegion, preparationQuery, framework, log);
         recommendations = new(fishCatalog, fishPreferences, fishCollection, framework, log);
         currentSpotAlerts = new(fishingTracker, fishCatalog, fishPreferences, fishCollection, alertOutput, framework, log);
-        ocean = new(dataManager, clientState, playerState, conditions, framework, fishPreferences, log);
         spawnAttempts = new(fishingTracker, fishCatalog, fishPreferences, fishCollection, framework);
         alertOutput.ShowDetail = id =>
         {
@@ -165,7 +165,7 @@ public sealed class Plugin : IDalamudPlugin
             new CollectionProgressPanel(collectionProgress, fishCatalog, fishPreferences, collectionFishWindow.Show),
             new SpawnSchedulePanel(schedule, fishCatalog, fishPreferences, textureProvider, detailWindow.Show, fishingMap), backupPanel,
             new FishRecommendationPanel(recommendations, fishCatalog, fishPreferences, fishCollection, detailWindow.Show, fishingMap, textureProvider),
-            fishCollection, guideOpener, new OceanFishingPanel(ocean, fishPreferences, baitStock, baitFinder, textureProvider));
+            fishCollection, guideOpener, new OceanFishingPanel(ocean, fishPreferences, baitStock, baitFinder, textureProvider, spotFishWindow.Toggle));
         mainWindow.ShowCompact = compactWindow.Toggle;
         mainWindow.ShowTimer = timerWindow.Toggle;
         var changelogWindow = new ChangelogWindow(fishPreferences);

@@ -13,6 +13,17 @@ internal static class UiWidgets
 {
     public const float BackgroundAlpha = 0.94f;
 
+    public static string OceanSpotLabel(OceanFishListView view) => view.State == OceanFishListState.Ready
+        ? UiText.Get(T.OceanFishAreaTitle, view.Area, new UiMessage(view.Spectral ? T.OceanSpectral : T.OceanNormal))
+        : UiText.Get(view.State switch
+        {
+            OceanFishListState.Loading => T.OceanFishLoading,
+            OceanFishListState.Moving => T.OceanMoving,
+            OceanFishListState.Waiting => T.OceanWaiting,
+            OceanFishListState.Finished => T.OceanFinished,
+            _ => T.OceanFishUnavailable,
+        });
+
     public static string SpotLabel(FishingTrackerView view) => view.Spot is { } spot
         ? view.IsLastSpot ? UiText.Get(T.TimerLastSpot, spot.Name) : spot.Name
         : UiText.Get(view.SpotState switch

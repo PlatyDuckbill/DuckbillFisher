@@ -1,5 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <root>
+  <data name="OceanFishTitle" xml:space="preserve"><value>Fish in this sea area</value></data>
+  <data name="OceanFishAreaTitle" xml:space="preserve"><value>{0} · {1}</value></data>
+  <data name="OceanFishLoading" xml:space="preserve"><value>Loading fish for this sea area…</value></data>
+  <data name="OceanFishUnavailable" xml:space="preserve"><value>The current sea area's fish list is unavailable.</value></data>
+  <data name="OceanFishConditionsHint" xml:space="preserve"><value>Fish for this sea area and normal/spectral state. Time, weather and Intuition conditions are not filtered.</value></data>
   <data name="OceanDataLoading" xml:space="preserve"><value>Loading Ocean Fishing data…</value></data>
   <data name="OceanDiagnostics" xml:space="preserve"><value>Ocean Fishing diagnostics</value></data>
   <data name="OceanCopyDiagnostics" xml:space="preserve"><value>Copy voyage diagnostics</value></data>

@@ -23,6 +23,7 @@ internal sealed record FishGuideRow(uint FishParameterId, uint ItemId, string It
 {
     public uint IconId { get; init; }
     public bool IsOceanFishing { get; init; }
+    public uint OceanFishingSpotId { get; init; }
     public FishRowResolution Resolution { get; init; }
     public bool IsDisplayable => Resolution == FishRowResolution.Resolved;
     public IReadOnlyList<FishingSpotView> Spots { get; init; } = [];
@@ -281,6 +282,7 @@ internal sealed class FishCatalog : IDisposable
                     {
                         IconId = iconId,
                         IsOceanFishing = fish.OceanStars > 0,
+                        OceanFishingSpotId = fish.OceanStars > 0 ? fish.FishingSpot.RowId : 0,
                         Resolution = resolution,
                         Spots = fishSpots,
                         Locations = fish.OceanStars == 0 ? fishSpots.Select(spot => spot.Location).Distinct().ToArray() : [],

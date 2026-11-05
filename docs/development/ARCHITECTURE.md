@@ -6,6 +6,8 @@
 
 먼바다 Beta는 Core `OceanSchedule`이 UTC 접수 구간/순환 인덱스를 계산하고, Plugin `OceanFishing`이 Framework에서 클라이언트 IKD 시트·내장 기본 미끼 자료를 한 번 읽고 관리 snapshot을 발행한다. `NativeOceanFishingReader`만 실제 승선 정보를 읽는다. `OceanFishingPanel`은 수동 일정 선택을 관찰 상태와 분리하며 Draw에서는 시트/파일/포인터를 읽지 않는다. 미끼 찾기는 기존 `BaitFinder`를 재사용한다. [실행 계약·실기 대기](../verification/native/GLOBAL-COMPAT.md#먼바다-beta-개발본-구현-2026-11-06).
 
+먼바다 어종 목록은 카탈로그의 `OceanFishingSpotId`를 Framework에서 낚시터별로 색인해 현재 IKDSpot 일반/환해류 ID와 연결한다. 메인·캐스팅·공유 `SpotFishWindow`의 관찰 사용 비트는 각각 열림/닫힘에 따라 해제하며 한 화면이 닫혀도 다른 화면의 관찰을 중단하지 않는다. 목록 snapshot은 Ready/Loading/이동/대기/종료/OffVoyage/Unavailable을 구분하고, 세션 불일치나3초 표본 만료에는 행을 비운다. 기존 일반 낚시 Tracker의 먼바다 미지원 경계는 유지한다.
+
 | 책임 | 주요 구현 | 경계 |
 |---|---|---|
 | 시간/날씨·정렬 | Core FishingAvailability, FishingWindowOrdering | UTC/조건/확률 입력, 게임 API 없음 |

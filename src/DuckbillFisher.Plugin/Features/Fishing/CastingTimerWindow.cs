@@ -17,13 +17,16 @@ internal sealed class CastingTimerWindow : Window
     private readonly FishingHistoryPanel history;
     private readonly FishingBuffObserver buffs;
     private readonly IntuitionProgressPanel intuition;
+    private readonly OceanFishing ocean;
     public Action? ShowSettings { get; set; }
 
-    public CastingTimerWindow(FishingTracker tracker, FishingBuffObserver buffs, IntuitionProgress progress, ITextureProvider textures, Action<FishGuideRow> showDetail, Action toggleSpotFish)
+    public CastingTimerWindow(FishingTracker tracker, FishingBuffObserver buffs, IntuitionProgress progress, ITextureProvider textures, Action<FishGuideRow> showDetail, Action toggleSpotFish,
+        OceanFishing ocean)
         : base("DuckbillFisher###DuckbillFisher.Timer")
     {
         this.tracker = tracker; this.textures = textures; this.toggleSpotFish = toggleSpotFish;
         this.buffs = buffs;
+        this.ocean = ocean;
         intuition = new(progress, textures, showDetail);
         history = new(tracker, textures, showDetail);
         Size = new Vector2(440, 560);
@@ -34,8 +37,8 @@ internal sealed class CastingTimerWindow : Window
     }
 
     public override void PreDraw() => WindowName = $"{UiText.Get(T.CastingTimerTitle)}###DuckbillFisher.Timer";
-    public override void OnOpen() => buffs.SetActive(true);
-    public override void OnClose() => buffs.SetActive(false);
+    public override void OnOpen() { buffs.SetActive(true); ocean.SetActive(OceanConsumer.Timer, true); }
+    public override void OnClose() { buffs.SetActive(false); ocean.SetActive(OceanConsumer.Timer, false); }
     public override void Draw()
     {
         var view = tracker.View;
@@ -47,14 +50,17 @@ internal sealed class CastingTimerWindow : Window
             UiWidgets.Tooltip(UiText.Get(T.TimerRetentionHint));
         }
         var spot = view.Spot;
-        var spotLabel = UiWidgets.SpotLabel(view);
+        var voyage = ocean.View;
+        var isOcean = voyage.IsOceanTerritory || view.State == FishingTrackerState.OceanUnsupported;
+        var canShowFish = isOcean ? voyage.FishList.State == OceanFishListState.Ready : spot is not null;
+        var spotLabel = isOcean ? UiWidgets.OceanSpotLabel(voyage.FishList) : UiWidgets.SpotLabel(view);
         var fishLabel = UiText.Get(T.TimerSpotFishButton);
         var buttonSize = ImGui.GetFrameHeight() + ImGui.CalcTextSize(fishLabel).X + ImGui.GetStyle().FramePadding.X * 2;
         var controlsWidth = buttonSize + ImGui.GetFrameHeight() + ImGui.GetStyle().ItemSpacing.X * 2;
         FishingHistoryPanel.Clipped(spotLabel, Math.Max(1, ImGui.GetContentRegionAvail().X - controlsWidth));
         UiWidgets.Tooltip(spotLabel);
         ImGui.SameLine();
-        ImGui.BeginDisabled(spot is null);
+        ImGui.BeginDisabled(!canShowFish);
         if (ImGui.Button("###TimerSpotFish", new Vector2(buttonSize, ImGui.GetFrameHeight()))) toggleSpotFish();
         var buttonOrigin = ImGui.GetItemRectMin() + ImGui.GetStyle().FramePadding;
         var draw = ImGui.GetWindowDrawList();
@@ -62,7 +68,7 @@ internal sealed class CastingTimerWindow : Window
         draw.AddText(UiBuilder.IconFont, ImGui.GetFontSize(), buttonOrigin, color, FontAwesomeIcon.Fish.ToIconString());
         draw.AddText(buttonOrigin + new Vector2(ImGui.GetFrameHeight(), 0), color, fishLabel);
         ImGui.EndDisabled();
-        UiWidgets.Tooltip(spot is null ? UiText.Get(T.TimerSpotUnavailableHint) : fishLabel);
+        UiWidgets.Tooltip(canShowFish ? fishLabel : isOcean ? spotLabel : UiText.Get(T.TimerSpotUnavailableHint));
         ImGui.SameLine();
         if (UiWidgets.IconButton(FontAwesomeIcon.Stopwatch, "OpenTimerSettings", UiText.Get(T.TimerAlertSettings))) ShowSettings?.Invoke();
 

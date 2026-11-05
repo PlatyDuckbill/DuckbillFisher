@@ -9,14 +9,14 @@ using T = DuckbillFisher.Plugin.Localization.TextKey;
 namespace DuckbillFisher.Plugin;
 
 internal sealed class OceanFishingPanel(OceanFishing ocean, FishPreferences preferences,
-    BaitStockObserver stock, BaitFinder finder, ITextureProvider textures)
+    BaitStockObserver stock, BaitFinder finder, ITextureProvider textures, Action toggleSpotFish)
 {
     private DateTimeOffset selectedStart;
     private bool selectedRuby;
     private int session = -1;
     private readonly List<FishingItemView> visibleBaits = [];
 
-    public void SetActive(bool value) => ocean.SetActive(value);
+    public void SetActive(bool value) => ocean.SetActive(OceanConsumer.Main, value);
 
     public void Draw()
     {
@@ -91,15 +91,25 @@ internal sealed class OceanFishingPanel(OceanFishing ocean, FishPreferences pref
         ImGui.EndTable();
     }
 
-    private static void DrawRoute(OceanRoute route, int current = -1)
+    private void DrawRoute(OceanRoute route, int current = -1, OceanFishListView? fishList = null)
     {
         ImGui.Spacing();
         if (!ImGui.BeginTable("OceanRoute", 3, ImGuiTableFlags.SizingStretchSame)) return;
         for (var i = 0; i < route.Stops.Length; i++)
         {
             ImGui.TableNextColumn();
+            ImGui.AlignTextToFramePadding();
             if (current < 0) ImGui.TextDisabled(UiText.Get(T.OceanStopOrdinal, i + 1));
             else ImGui.TextDisabled(UiText.Get(i < current ? T.OceanPassed : i == current ? T.OceanCurrent : T.OceanNext));
+            if (i == current && fishList is not null)
+            {
+                ImGui.SameLine();
+                ImGui.BeginDisabled(fishList.State != OceanFishListState.Ready);
+                if (ImGui.SmallButton(UiText.Label(T.TimerSpotFishButton, "OceanSpotFish"))) toggleSpotFish();
+                ImGui.EndDisabled();
+                UiWidgets.Tooltip(fishList.State == OceanFishListState.Ready
+                    ? UiText.Get(T.OceanFishConditionsHint) : UiWidgets.OceanSpotLabel(fishList));
+            }
             var stop = route.Stops[i];
             ImGui.TextWrapped(UiText.Get(T.OceanStopName, stop.Name, Time(stop.Time)));
             ImGui.Separator();
@@ -123,7 +133,7 @@ internal sealed class OceanFishingPanel(OceanFishing ocean, FishPreferences pref
         Heading(UiText.Get(T.OceanAboardState, UiText.Get(status)), route.Name,
             UiText.Get(fishing ? T.OceanZoneRemaining : status), seconds.HasValue ? Countdown(seconds.Value)
                 : fishing ? UiText.Get(T.ConditionUnknown) : "—");
-        DrawRoute(route, fishing ? sample.Zone : -1);
+        DrawRoute(route, fishing ? sample.Zone : -1, view.FishList);
         if (!fishing) return; // Transition zone indices are not interpreted as the next fishing stop.
         ImGui.Spacing();
         ImGui.TextUnformatted(UiText.Get(T.OceanBasicGuide));
