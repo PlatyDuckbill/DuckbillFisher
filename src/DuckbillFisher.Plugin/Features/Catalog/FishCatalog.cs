@@ -40,6 +40,8 @@ internal sealed record FishCatalogView(IReadOnlyList<FishGuideRow> Rows, UiMessa
     public IReadOnlyList<FishingItemView> Baits { get; init; } = [];
     public IReadOnlySet<uint> CollectableItems { get; init; } = FrozenSet<uint>.Empty;
     public IReadOnlyDictionary<uint, FishGuideRow> RowsById { get; init; } = FrozenDictionary<uint, FishGuideRow>.Empty;
+    public IReadOnlyDictionary<uint, IReadOnlyDictionary<uint, int>> FishingLogOrder { get; init; }
+        = FrozenDictionary<uint, IReadOnlyDictionary<uint, int>>.Empty;
     public IReadOnlyDictionary<uint, FishGuideRow> RelatedRows { get; init; } = FrozenDictionary<uint, FishGuideRow>.Empty;
     public IReadOnlyDictionary<uint, FishingSpotView> Spots { get; init; } = new Dictionary<uint, FishingSpotView>();
     public FishingGeography Geography { get; init; } = new([], []);
@@ -90,6 +92,10 @@ internal sealed class FishCatalog : IDisposable
     public FishCatalogView View { get { lock (gate) return view; } }
     public bool ConditionDataAvailable => conditionDataAvailable;
     public string ClientBuild => clientBuild;
+
+    public static FishGuideRow[] InFishingLogOrder(IEnumerable<FishGuideRow> rows, IReadOnlyDictionary<uint, int>? slots)
+        => rows.OrderBy(row => slots?.GetValueOrDefault(row.ItemId, int.MaxValue) ?? int.MaxValue)
+            .ThenBy(row => row.FishParameterId).ToArray();
 
     public void SetFishEyes(bool enabled)
     {
@@ -309,6 +315,7 @@ internal sealed class FishCatalog : IDisposable
                         .OrderBy(item => item.Name, ClientNameOrder.Comparer).ToArray(),
                     CollectableItems = items.Where(item => item.IsCollectable || item.AlwaysCollectable).Select(item => item.RowId).ToFrozenSet(),
                     RowsById = rows.ToFrozenDictionary(row => row.FishParameterId),
+                    FishingLogOrder = LoadFishingLogOrder(),
                     RelatedRows = rows.Where(row => row.Details is not null).ToFrozenDictionary(row => row.ItemId),
                     Forecast = forecast,
                     SpearfishingItems = FishingData.Dataset.Spearfishing.Select(rule => rule.ItemId).ToFrozenSet(),
@@ -333,6 +340,17 @@ internal sealed class FishCatalog : IDisposable
             }
             return view.Rows;
         }
+    }
+
+    private IReadOnlyDictionary<uint, IReadOnlyDictionary<uint, int>> LoadFishingLogOrder()
+    {
+        // FishingSpot.Item is the client's ordered log slot array, not an alphabetical list.
+        // Copy it before the regular map/territory filters, which deliberately exclude ocean spots.
+        return dataManager.GetExcelSheet<FishingSpot>()!.Where(spot => spot.RowId != 0).ToFrozenDictionary(
+            spot => spot.RowId,
+            spot => (IReadOnlyDictionary<uint, int>)spot.Item.Select((item, index) => (item.RowId, index))
+                .Where(slot => slot.RowId != 0).GroupBy(slot => slot.RowId)
+                .ToFrozenDictionary(group => group.Key, group => group.First().index));
     }
 
     private Dictionary<uint, OceanFishingView> LoadOceanSpots()

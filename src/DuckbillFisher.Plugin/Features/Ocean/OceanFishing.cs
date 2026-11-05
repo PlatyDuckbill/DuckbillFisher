@@ -195,13 +195,14 @@ internal sealed class OceanFishing : IDisposable
         if (sampledAt != 0 && Stopwatch.GetElapsedTime(sampledAt).TotalMilliseconds < 200 && view.Session == personal.Session) return;
         sampledAt = Stopwatch.GetTimestamp();
         if (!loaded) Load();
-        var catalogRows = catalog.View.Rows;
+        var catalogSnapshot = catalog.View;
+        var catalogRows = catalogSnapshot.Rows;
         if (!ReferenceEquals(indexedRows, catalogRows))
         {
             indexedRows = catalogRows;
             fishBySpot = catalogRows.Where(f => f.IsDisplayable && f.IsOceanFishing && f.OceanFishingSpotId != 0)
                 .GroupBy(f => f.OceanFishingSpotId).ToDictionary(g => g.Key,
-                    g => g.OrderBy(f => f.Name, ClientNameOrder.Comparer).ToArray());
+                    g => FishCatalog.InFishingLogOrder(g, catalogSnapshot.FishingLogOrder.GetValueOrDefault(g.Key)));
         }
         if (!catalogRequested) { catalogRequested = true; catalog.RequestLoad(); }
         var starts = OceanSchedule.RegistrationStarts(utcNow());

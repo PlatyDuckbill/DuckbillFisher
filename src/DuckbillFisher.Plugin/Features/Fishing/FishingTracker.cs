@@ -241,15 +241,16 @@ internal sealed class FishingTracker : IDisposable
             var archiveChanged = UpdateArchive();
             var before = history.Revision;
             var indexed = false;
-            if (!ReferenceEquals(indexedRows, catalog.View.Rows))
+            var catalogSnapshot = catalog.View;
+            if (!ReferenceEquals(indexedRows, catalogSnapshot.Rows))
             {
-                indexedRows = catalog.View.Rows;
+                indexedRows = catalogSnapshot.Rows;
                 fishByItem = indexedRows.Where(f => f.IsDisplayable && f.ItemType == "Item")
                     .GroupBy(f => f.ItemId).ToDictionary(g => g.Key, g => g.First());
                 fishBySpot = indexedRows.Where(f => f.IsDisplayable && !f.IsOceanFishing)
                     .SelectMany(f => f.Spots.Select(s => (s.Id, Fish: f))).GroupBy(p => p.Id)
-                    .ToDictionary(g => g.Key, g => g.Select(p => p.Fish).DistinctBy(f => f.FishParameterId)
-                        .OrderBy(f => f.Name, StringComparer.OrdinalIgnoreCase).ToArray());
+                    .ToDictionary(g => g.Key, g => FishCatalog.InFishingLogOrder(
+                        g.Select(p => p.Fish).DistinctBy(f => f.FishParameterId), catalogSnapshot.FishingLogOrder.GetValueOrDefault(g.Key)));
                 indexed = true;
             }
             var previousNative = native;
