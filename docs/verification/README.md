@@ -4,7 +4,7 @@
 
 ## 배포와 호환성
 
-- [0.8.0.0 직감 준비·어종 상세 배포](releases/RELEASE-0.8.0.0.md) · 배포 준비/인게임 확인은 배포 후 예정
+- [0.8.0.0 직감 준비·어종 상세 배포](releases/RELEASE-0.8.0.0.md) · Release/익명 자산 확인 완료·설치 목록 반영 중/인게임 확인은 배포 후 예정
 - [0.7.0.0 글로벌 클라이언트 지원 배포](releases/RELEASE-0.7.0.0.md) · Plogon 점검·Release/설치 JSON·익명 자산·공용 저장소 동기화 확인 완료
 - [0.6.0.1 dal4kr 15.0.3.9 호환 배포](releases/RELEASE-0.6.0.1.md) · Release/설치 JSON·익명 자산·공용 저장소 동기화 확인 완료
 - [0.6.0.0 터주작 추천·현재 낚시터 알림 배포](releases/RELEASE-0.6.0.0.md) · Release/설치 JSON·실제 공유 raw 확인 완료 · [추천 기준/검증](forecast/RECOMMENDATIONS.md)

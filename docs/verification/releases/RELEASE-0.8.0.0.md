@@ -1,6 +1,6 @@
 # 0.8.0.0 배포 기록
 
-2026-11-05(UTC). 사용자 지시: 최종 점검에 추가 문제가 없으면 업데이트 내역을 포함해 푸시·배포하고, 인게임 테스트는 배포 후 진행한다. 코드 최종 검토에서 추가 결함을 발견하지 않아 후보를 준비했다. **후보 ZIP의 인게임 확인은 배포 후 예정이며, 정적 검사와 구분한다.** [영어 안내](../../releases/0.8.0.0.md).
+2026-11-05(UTC). 사용자 지시: 최종 점검에 추가 문제가 없으면 업데이트 내역을 포함해 푸시·배포하고, 인게임 테스트는 배포 후 진행한다. 코드 최종 검토에서 추가 결함을 발견하지 않아 게시했다. **후보 ZIP의 인게임 확인은 배포 후 예정이며, 정적 검사와 구분한다.** [영어 안내](../../releases/0.8.0.0.md).
 
 ## 변경과 확인 범위
 
@@ -12,6 +12,11 @@
 
 ## 후보와 원격 단계
 
-- 최소 지원 참조 Release 빌드·패키지 검사·추출 대조: 준비 중.
-- 소스 push/Plogon/태그/Release/익명 다운로드/설치 JSON/공용 raw 확인: 진행 전.
+- 소스 `dc3731f`: KR·글로벌·최소15.0.3.6 Release 빌드 모두 경고0/오류0. prepare-release.ps1 통과, ZIP의7파일과 빌드 출력 해시 일치, DLL·ko 리소스·manifest0.8.0.0/API15와6개 업데이트 문장 대조 완료. 한영1,034키·문서128개/로컬 링크677개 검사 통과.
+- 고정 ZIP `artifacts/share/0.8.0.0/DuckbillFisher-0.8.0.0.zip`:643,389바이트, SHA256 `824959EACC780B1973D9443773F23DF7A917575A9EB91DB90F773EE66C6475B8`.
+- 추출 DLL `DUCKBILL_ROOT/.cache/release-validation/0.8.0.0/DuckbillFisher.dll`: SHA256 `AE0AE1D5CAD74147CF688F6268614DE3A9D53947FA254403A52CBF7F2880A1DD`.
+- 소스 push와 Plogon run **42029321554** 성공을 확인한 뒤 같은 소스에 태그v0.8.0.0을 만들었다. 태그/기존 자산 덮어쓰기는 없다.
+- [공개 Release](https://github.com/PlatyDuckbill/DuckbillFisher/releases/tag/v0.8.0.0) ID **435190222**, 공개 **2026-11-05T12:43:24Z**. 초안의 ZIP/체크섬 서버 크기·digest가 로컬과 같음을 확인한 뒤 공개했다.
+- 인증 없는 ZIP·체크섬·태그 아이콘 요청은 모두HTTP200/로컬 SHA256 일치다. 결과는 `.cache/release-remote-check/0.8.0.0/`. 이 확인 뒤 후보release.json을 설치 목록 원본에 반영한다.
+- 설치 JSON push·DuckbillRepo 공용 목록 동기화/실제 raw URL 확인은 진행 중이다.
 - 실제 Dalamud 업데이트·새 기능 인게임 확인: 배포 후 사용자 확인 예정.
