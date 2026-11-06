@@ -1,6 +1,6 @@
 # 세션 인수인계
 
-갱신: 2026-11-05. 현재 사실/확인 대기는 [STATUS](STATUS.md), 버전별 근거는 [검증 색인](verification/README.md)에 둔다.
+갱신: 2026-11-06. 현재 사실/확인 대기는 [STATUS](STATUS.md), 버전별 근거는 [검증 색인](verification/README.md)에 둔다.
 
 ## 재개 순서
 
@@ -29,7 +29,9 @@
 | SDK/대상 | global.json 최소 10.0.101(latestFeature, 이 PC 10.0.402) · Dalamud SDK15.0.0 · x64/net10.0-windows |
 | 정규 개발 DLL | DUCKBILL_ROOT/src/DuckbillFisher.Plugin/bin/Debug/DuckbillFisher.dll |
 | 최근 별도 Debug | .cache/feature-review-build/DuckbillFisher.dll |
-| 0.8.0.0 고정 Release 추출본 | .cache/release-validation/0.8.0.0/DuckbillFisher.dll · Release435190222 게시 |
+| 0.9.0.0 고정 Release 추출본 | .cache/release-validation/0.9.0.0-rc2/DuckbillFisher.dll · Release436487263 |
+| 0.9.0.0 고정 ZIP | artifacts/share/0.9.0.0-rc2/DuckbillFisher-0.9.0.0.zip · SHA256 536DB092BE1F8B5DEE6C6D651DE502DE838A946F31C22CAD1EF8AEBE6418C84B |
+| 이전0.8.0.0 고정 Release 추출본 | .cache/release-validation/0.8.0.0/DuckbillFisher.dll · Release435190222 게시 |
 | 0.8.0.0 고정 ZIP | artifacts/share/0.8.0.0/DuckbillFisher-0.8.0.0.zip · SHA256 824959EACC780B1973D9443773F23DF7A917575A9EB91DB90F773EE66C6475B8 |
 | KR 15.0.3.9 대조 보고서 | .cache/compat-15.0.3.9/metadata.json |
 
@@ -37,7 +39,7 @@
 
 ## 개발본과 게시본 구분
 
-- 현재 공개판은 0.8.0.0(태그 소스dc3731f)이다. 게시 단계와 해시는 [0.8.0.0 기록](verification/releases/RELEASE-0.8.0.0.md)을 따른다. 공개판 확인에는 위 고정 추출본을 사용하고 재빌드해 교체하지 않는다.
+- 현재 공개판은0.9.0.0(태그 소스55a8825)이다. 게시 단계와 해시는 [0.9.0.0 기록](verification/releases/RELEASE-0.9.0.0.md)을 따른다. 사용자 지시로 실기는 배포 후 확인한다. 위 고정 추출본을 재빌드해 교체하지 않는다.
 - 정규/별도 Debug와 고정 Release 추출본은 구분한다. 정규/별도 Debug를 게시본 확인에 쓰지 않으며 확인 뒤 실행 파일을 다시 빌드하지 않는다. 새 후보에 과거 대표 확인을 자동 적용하지 않는다.
 - 이전 버전 확인에는 해당 Release 기록의 추출 DLL을 사용한다. 과거 테스트 허용(추천31개·추천22/알림20/설정32개 등)은 각각 당시 승인 범위였다.
 - 설치 목록의 공용 배포는 DuckbillRepo의 `pluginmaster.json`이며 이 저장소의 repo/release.json이 원본이다. 동기화 절차는 [DISTRIBUTION](development/DISTRIBUTION.md)을 따른다.
