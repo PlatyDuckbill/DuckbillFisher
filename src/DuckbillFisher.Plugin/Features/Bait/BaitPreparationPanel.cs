@@ -102,7 +102,7 @@ internal sealed class BaitPreparationPanel(BaitPreparation preparation, BaitStoc
         if (ImGui.SmallButton($"{item.Name}###BaitItemLink")) links.Request(item, personal.Session);
         ImGui.EndDisabled();
         ImGui.SameLine();
-        if (count == 0) ImGui.TextColored(new Vector4(1, 0.55f, 0.45f, 1), UiText.Get(T.BaitQuantity, 0));
+        if (count == 0) UiWidgets.TextColored(UiThemeScope.Current is not null ? UiThemeColors.Negative : new Vector4(1, 0.55f, 0.45f, 1), UiText.Get(T.BaitQuantity, 0));
         else ImGui.TextUnformatted(count is { } quantity ? UiText.Get(T.BaitQuantity, quantity) : UiText.Get(T.BaitQuantityUnknown));
     }
 

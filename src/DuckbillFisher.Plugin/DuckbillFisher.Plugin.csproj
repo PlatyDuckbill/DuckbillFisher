@@ -2,12 +2,12 @@
   <PropertyGroup>
     <AssemblyName>DuckbillFisher</AssemblyName>
     <RootNamespace>DuckbillFisher.Plugin</RootNamespace>
-    <Version>0.8.0.0</Version>
+    <Version>0.9.0.0</Version>
     <NeutralLanguage>en</NeutralLanguage>
     <Author>PlatyDuckbill</Author>
     <Name>DuckbillFisher</Name>
     <Punchline>Let Duckbill guide your next catch.</Punchline>
-    <Changelog>• Track Intuition preparation in the casting timer, including a new count after Intuition ends.&#xA;• Automatically record one attempt per appearance of an uncaught big fish while fishing at its hole.&#xA;• Find carried baits unrelated to the current fish filters and their Intuition prerequisites.&#xA;• Open fish details by name with /dbfs or from fish-item context menus.&#xA;• View Double Hook and Triple Hook yield guidance for regular fish where data is available.&#xA;• See actual multiple-catch quantities in fishing history.</Changelog>
+    <Changelog>• Use the new Ocean Fishing Beta tab to check departures, your current route, area time remaining and basic baits.&#xA;• Narrow Ocean Fishing lists by time, weather and Intuition conditions while keeping unconfirmed fish visible.&#xA;• See minimum Gathering requirements in fish details where data is available.&#xA;• Check collectable delivery targets and collectability tiers in fish details.&#xA;• Find Double Hook and Triple Hook yield guidance for more fish.&#xA;• Choose Graphite or Paper in settings to change the plugin&apos;s appearance.&#xA;• Browse fish at each fishing hole in the in-game Fishing Log order.</Changelog>
     <Description>Let Duckbill guide your next catch.&#xA;A big-fish hunting companion for FFXIV: choose your next target, prepare baits, and track your collection.&#xA;&#xA;• Choose your next big fish by availability, mooch chains and Intuition requirements.&#xA;• Plan spawns with a timeline and monthly calendar, including Fish Eyes and Intuition forecasts.&#xA;• Track collection progress by expansion and region, synced with the in-game Fish Guide.&#xA;• Prepare baits for favorites or filtered fish, with inventory counts and in-game bait highlights.&#xA;• Get local alerts for favorites and uncaught big fish at your current fishing hole, with optional sounds.&#xA;• Follow casts with a timer and personal fishing records.&#xA;• Browse fish with filters, baits, conditions and map links; see fish available now in the quick list.&#xA;&#xA;Open: /dbfs or /duckbillfisher. /dbfs cl: compact list; /dbfs ct: casting timer.&#xA;UI: English / Korean. Game names follow your client.&#xA;&#xA;Does not automate fishing or send anything to the server.&#xA;The plugin icon was created with AI assistance.</Description>
     <RepoUrl>https://github.com/PlatyDuckbill/DuckbillFisher</RepoUrl>
     <Tags>fishing;fish;big fish;collection;timer;alerts;한국어</Tags>
@@ -23,7 +23,9 @@
     <EmbeddedResource Include="../../data/fishing.kr.v2.json" LogicalName="DuckbillFisher.FishingData" />
     <EmbeddedResource Include="../../data/fish-classifications.kr.v1.json" LogicalName="DuckbillFisher.FishClassifications" />
     <EmbeddedResource Include="../../data/hook-yields.v1.json" LogicalName="DuckbillFisher.HookYields" />
+    <EmbeddedResource Include="../../data/minimum-gathering.v1.json" LogicalName="DuckbillFisher.MinimumGathering" />
     <EmbeddedResource Include="../../data/ocean-guidance.v1.json" LogicalName="DuckbillFisher.OceanGuidance" />
+    <EmbeddedResource Include="../../data/ocean-conditions.v1.json" LogicalName="DuckbillFisher.OceanConditions" />
     <EmbeddedResource Include="../../THIRD-PARTY-NOTICES.txt" LogicalName="DuckbillFisher.ThirdPartyNotices" />
   </ItemGroup>
   <Import Project="../../build/DalamudReferences.targets" />

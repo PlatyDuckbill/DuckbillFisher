@@ -29,6 +29,7 @@ public sealed class FishPreferencesConfiguration : IPluginConfiguration
     public List<CatalogPreset> CatalogPresets { get; set; } = [];
     public UiLanguage Language { get; set; } = UiLanguage.Korean;
     public int UiScalePercent { get; set; } = UiScale.DefaultPercent;
+    public UiTheme Theme { get; set; }
     public bool DeveloperMode { get; set; }
     public string LastSeenChangelogVersion { get; set; } = "";
     public CompactViewSettings Compact { get; set; } = new();

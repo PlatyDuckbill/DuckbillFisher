@@ -18,19 +18,79 @@ internal sealed class FishDetailPanel(FishPreferences preferences, ITextureProvi
     public void Draw(FishGuideRow? fish, FishCatalogView catalog, FishPreferencesView personal, FishCollectionView observed,
         Action<FishGuideRow>? showDetail = null)
     {
-        if (fish is null)
-        {
-            ImGui.TextWrapped(UiText.Get(T.CatalogDetailPrompt));
-            return;
-        }
+        if (fish is null) { ImGui.TextWrapped(UiText.Get(T.CatalogDetailPrompt)); return; }
         ImGui.PushID((int)fish.FishParameterId);
+        var now = DateTimeOffset.UtcNow;
+        DrawIdentity(fish, personal, observed, showDetail);
+        if (!personal.HasCharacter) ImGui.TextWrapped(UiText.Get(T.ManualPlayerRequired));
+        if (personal.Error is { } error) ImGui.TextWrapped(error.Display);
+
+        void Open(uint itemId) => OpenRelated?.Invoke(fish.FishParameterId, itemId);
+        UiWidgets.Heading(T.DetailAvailability);
+        DrawAvailability(fish, catalog, now);
+        if (fish.Details is { Predators.Length: > 0 } intuition)
+            conditions.DrawIntuition(intuition, personal, catalog.RelatedDetails, Open);
+        UiWidgets.Heading(T.DetailLocations);
+        DrawLocations(fish, personal);
+        if (!fish.IsOceanFishing)
+        {
+            if (fish.Details is { } details)
+            {
+                conditions.DrawHeading(details, personal, catalog.RelatedDetails);
+                conditions.Draw(details, personal, catalog.RelatedDetails, Open);
+            }
+            else
+            {
+                UiWidgets.Heading(T.DetailConditions);
+                ImGui.TextWrapped(UiText.Get(T.CatalogDetailsMissing));
+                if (fish.IsDisplayable && fish.IsNormalItem)
+                {
+                    ImGui.TextDisabled(UiText.Get(T.DetailMinimumGathering));
+                    FishingConditionPanel.DrawMinimumGathering(fish.ItemId, fish.FishParameterId);
+                }
+            }
+        }
+        else HookYieldText.Draw(fish.ItemId, fishParameterId: fish.FishParameterId);
+        DrawDeliveries(fish, catalog);
+        ImGui.Spacing();
+        personalPanel.Draw(fish.FishParameterId, personal, fish.IsDisplayable);
+        ImGui.PopID();
+    }
+
+    private static void DrawDeliveries(FishGuideRow fish, FishCatalogView catalog)
+    {
+        if (!fish.IsDisplayable || !fish.IsNormalItem) return;
+        if (catalog.Deliveries.ByItem.TryGetValue(fish.ItemId, out var targets))
+        {
+            ImGui.Spacing();
+            var themed = UiThemeScope.Current is not null;
+            foreach (var target in targets)
+            {
+                if (themed) ImGui.PushStyleColor(ImGuiCol.Text, UiThemeColors.Special);
+                ImGui.TextWrapped(target.Kind == FishDeliveryKind.Appraiser
+                    ? UiText.Get(T.DeliveryAppraiserLine, target.Low, target.Mid, target.High)
+                    : UiText.Get(T.DeliveryCustomLine, target.TargetName, target.Low, target.Mid, target.High));
+                if (themed) ImGui.PopStyleColor();
+                UiWidgets.Tooltip(UiText.Get(T.DeliveryHint));
+            }
+        }
+        else if (catalog.CollectableItems.Contains(fish.ItemId))
+        {
+            ImGui.TextDisabled(UiText.Get(catalog.Deliveries.State == FishDeliveryDataState.Unavailable ? T.DeliveryUnavailable : T.DeliveryUnknown));
+            UiWidgets.Tooltip(UiText.Get(T.DeliveryHint));
+        }
+    }
+
+    private void DrawIdentity(FishGuideRow fish, FishPreferencesView personal, FishCollectionView observed, Action<FishGuideRow>? showDetail)
+    {
+        var iconSize = ImGui.GetFontSize() * 3;
         var patch = fish.Details is { } patchDetails ? PatchText(patchDetails.Rule) : "";
         if (ImGui.BeginTable("DetailTitle", 2, ImGuiTableFlags.SizingFixedFit))
         {
-            ImGui.TableSetupColumn("Icon", ImGuiTableColumnFlags.WidthFixed, ImGui.GetFontSize() * 3);
+            ImGui.TableSetupColumn("Icon", ImGuiTableColumnFlags.WidthFixed, iconSize);
             ImGui.TableSetupColumn("Name", ImGuiTableColumnFlags.WidthStretch);
             ImGui.TableNextColumn();
-            UiWidgets.GameIcon(textures, fish.IconId, ImGui.GetFontSize() * 3, fish.DisplayName);
+            UiWidgets.GameIcon(textures, fish.IconId, iconSize, fish.DisplayName);
             ImGui.TableNextColumn();
             if (ImGui.BeginTable("DetailName", patch.Length > 0 ? 2 : 1, ImGuiTableFlags.SizingFixedFit))
             {
@@ -49,16 +109,13 @@ internal sealed class FishDetailPanel(FishPreferences preferences, ITextureProvi
             DrawActions(fish, personal, observed, showDetail);
             ImGui.EndTable();
         }
-        if (!personal.HasCharacter) ImGui.TextWrapped(UiText.Get(T.ManualPlayerRequired));
-        if (personal.Error is { } error) ImGui.TextWrapped(error.Display);
+    }
 
-        personalPanel.Draw(fish.FishParameterId, personal, fish.IsDisplayable);
-
-        UiWidgets.Heading(T.DetailAvailability);
+    private void DrawAvailability(FishGuideRow fish, FishCatalogView catalog, DateTimeOffset now)
+    {
         if (fish.IsOceanFishing) DrawOcean(fish.Ocean);
         else
         {
-            var now = DateTimeOffset.UtcNow;
             catalog.Windows.TryGetValue(fish.FishParameterId, out var window);
             var reason = fish.Details is { Rule.ConditionsKnown: false } partial ? partial.ConditionWarning : null;
             catalog.NormalWindows.TryGetValue(fish.FishParameterId, out var normal);
@@ -83,10 +140,10 @@ internal sealed class FishDetailPanel(FishPreferences preferences, ITextureProvi
             }
         }
 
-        void Open(uint itemId) => OpenRelated?.Invoke(fish.FishParameterId, itemId);
-        if (fish.Details is { Predators.Length: > 0 } intuitionDetails) conditions.DrawIntuition(intuitionDetails, personal, catalog.RelatedDetails, Open);
+    }
 
-        UiWidgets.Heading(T.DetailLocations);
+    private void DrawLocations(FishGuideRow fish, FishPreferencesView personal)
+    {
         foreach (var spot in fish.Spots)
         {
             if (!ImGui.BeginTable($"Spot{spot.Id}", 2, ImGuiTableFlags.SizingFixedFit)) continue;
@@ -102,20 +159,6 @@ internal sealed class FishDetailPanel(FishPreferences preferences, ITextureProvi
         }
         if (fish.Spots.Count == 0 && !fish.IsOceanFishing) ImGui.TextWrapped(UiText.Get(T.DetailLocationUnknown));
         if (maps.Result is { } mapResult && mapResult.Key != T.MapOpened) ImGui.TextWrapped(mapResult.Display);
-        if (!fish.IsOceanFishing)
-        {
-            if (fish.Details is { } details)
-            {
-                conditions.DrawHeading(details, personal, catalog.RelatedDetails);
-                conditions.Draw(details, personal, catalog.RelatedDetails, Open);
-            }
-            else
-            {
-                UiWidgets.Heading(T.DetailConditions);
-                ImGui.TextWrapped(UiText.Get(T.CatalogDetailsMissing));
-            }
-        }
-        ImGui.PopID();
     }
 
     private void DrawActions(FishGuideRow fish, FishPreferencesView personal, FishCollectionView observed, Action<FishGuideRow>? showDetail)

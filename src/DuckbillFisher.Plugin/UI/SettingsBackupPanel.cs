@@ -45,7 +45,7 @@ internal sealed class SettingsBackupPanel(SettingsBackup backup, FishPreferences
             });
         }
         ImGui.EndDisabled();
-        if (ImGui.CollapsingHeader(UiText.Label(T.BackupHelp, "BackupHelp")))
+        if (UiWidgets.Disclosure(UiText.Label(T.BackupHelp, "BackupHelp")))
         {
             ImGui.TextWrapped(UiText.Get(T.BackupScope));
             ImGui.TextWrapped(UiText.Get(includeSounds ? T.BackupZipHint : T.BackupJsonHint));

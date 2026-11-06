@@ -13,7 +13,10 @@ internal sealed class IntuitionProgressPanel(IntuitionProgress progress, ITextur
     {
         var view = progress.View;
         if (view.Targets.Length == 0) return;
+        var themed = UiThemeScope.Current is not null;
+        if (themed) ImGui.PushStyleColor(ImGuiCol.Text, UiThemeColors.Special);
         if (ImGui.SmallButton(UiText.Label(T.IntuitionPreparation, "IntuitionProgressDetails"))) ImGui.OpenPopup("IntuitionProgress");
+        if (themed) ImGui.PopStyleColor();
         var target = view.Targets.FirstOrDefault(f => f.FishParameterId == view.Selected);
         UiWidgets.Tooltip(target?.DisplayName ?? "");
         if (view.Active == true)

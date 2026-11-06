@@ -22,6 +22,7 @@ internal enum FishRowResolution
 internal sealed record FishGuideRow(uint FishParameterId, uint ItemId, string ItemType, string Name, bool IsInLog)
 {
     public uint IconId { get; init; }
+    public bool IsNormalItem { get; init; }
     public bool IsOceanFishing { get; init; }
     public uint OceanFishingSpotId { get; init; }
     public FishRowResolution Resolution { get; init; }
@@ -39,6 +40,7 @@ internal sealed record FishCatalogView(IReadOnlyList<FishGuideRow> Rows, UiMessa
 {
     public IReadOnlyList<FishingItemView> Baits { get; init; } = [];
     public IReadOnlySet<uint> CollectableItems { get; init; } = FrozenSet<uint>.Empty;
+    public FishDeliveryCatalog Deliveries { get; init; } = FishDeliveryCatalog.Unavailable;
     public IReadOnlyDictionary<uint, FishGuideRow> RowsById { get; init; } = FrozenDictionary<uint, FishGuideRow>.Empty;
     public IReadOnlyDictionary<uint, IReadOnlyDictionary<uint, int>> FishingLogOrder { get; init; }
         = FrozenDictionary<uint, IReadOnlyDictionary<uint, int>>.Empty;
@@ -86,6 +88,7 @@ internal sealed class FishCatalog : IDisposable
         _ = FishingData.Notices;
         _ = FishClassificationData.ByFishId;
         _ = HookYieldData.ByItem;
+        _ = MinimumGatheringData.ByItem;
         framework.Update += OnUpdate;
     }
 
@@ -191,6 +194,7 @@ internal sealed class FishCatalog : IDisposable
                 var actions = dataManager.GetExcelSheet<Lumina.Excel.Sheets.Action>()!;
                 var statuses = dataManager.GetExcelSheet<Status>();
                 var oceanSpots = LoadOceanSpots();
+                var fishingLogOrder = LoadFishingLogOrder();
                 var rules = FishingData.Dataset.Fish.ToDictionary(rule => rule.ItemId);
                 var notes = dataManager.GetExcelSheet<FishingNoteInfo>()!.Where(note => note.Item.RowId != 0)
                     .GroupBy(note => note.Item.RowId).Where(group => group.Count() == 1)
@@ -287,6 +291,7 @@ internal sealed class FishCatalog : IDisposable
                     rows.Add(new(fish.RowId, item.RowId, item.RowType?.Name ?? "Unknown", name ?? "", fish.IsInLog)
                     {
                         IconId = iconId,
+                        IsNormalItem = item.RowId != 0 && item.Is<Item>(),
                         IsOceanFishing = fish.OceanStars > 0,
                         OceanFishingSpotId = fish.OceanStars > 0 ? fish.FishingSpot.RowId : 0,
                         Resolution = resolution,
@@ -295,7 +300,12 @@ internal sealed class FishCatalog : IDisposable
                         Details = details,
                         Grade = grade,
                         TimeRestriction = timing,
-                        Ocean = fish.OceanStars > 0 && oceanSpots.TryGetValue(fish.FishingSpot.RowId, out var ocean) ? ocean : null,
+                        Ocean = fish.OceanStars > 0 && oceanSpots.TryGetValue(fish.FishingSpot.RowId, out var ocean) ? ocean with
+                        {
+                            FishingSpot = string.Join(" / ", oceanSpots.Where(pair => pair.Value.AreaId == ocean.AreaId &&
+                                fishingLogOrder.GetValueOrDefault(pair.Key)?.ContainsKey(item.RowId) == true)
+                                .Select(pair => pair.Value.FishingSpot).Distinct().DefaultIfEmpty(ocean.FishingSpot)),
+                        } : null,
                     });
                 }
                 if (rows.Count == 0)
@@ -314,8 +324,10 @@ internal sealed class FishCatalog : IDisposable
                         .Select(item => new FishingItemView(item.RowId, item.Name.ExtractText(), item.Icon))
                         .OrderBy(item => item.Name, ClientNameOrder.Comparer).ToArray(),
                     CollectableItems = items.Where(item => item.IsCollectable || item.AlwaysCollectable).Select(item => item.RowId).ToFrozenSet(),
+                    Deliveries = FishDeliveryData.Load(dataManager, rows.Where(row => row.IsDisplayable && row.IsNormalItem && row.ItemId != 0)
+                        .Select(row => row.ItemId).ToFrozenSet()),
                     RowsById = rows.ToFrozenDictionary(row => row.FishParameterId),
-                    FishingLogOrder = LoadFishingLogOrder(),
+                    FishingLogOrder = fishingLogOrder,
                     RelatedRows = rows.Where(row => row.Details is not null).ToFrozenDictionary(row => row.ItemId),
                     Forecast = forecast,
                     SpearfishingItems = FishingData.Dataset.Spearfishing.Select(rule => rule.ItemId).ToFrozenSet(),

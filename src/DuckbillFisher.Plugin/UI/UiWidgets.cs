@@ -13,6 +13,33 @@ internal static class UiWidgets
 {
     public const float BackgroundAlpha = 0.94f;
 
+    public static void TextColored(Vector4 color, string text) => ImGui.TextColored(ReadableColor(color), text);
+
+    public static void TextWrappedSecondary(string text)
+    {
+        var themed = UiThemeScope.Current is not null;
+        if (themed) ImGui.PushStyleColor(ImGuiCol.Text, UiThemeColors.Secondary);
+        try { ImGui.TextWrapped(text); }
+        finally { if (themed) ImGui.PopStyleColor(); }
+    }
+
+    // Existing semantic colors target dark surfaces. Keep the hue on Paper, but darken for readable text.
+    public static Vector4 ReadableColor(Vector4 color)
+    {
+        if (UiThemeScope.Current is not { IsLight: true } theme) return color;
+        var background = Luminance(theme.Background);
+        for (var i = 0; i < 12 && (background + .05f) / (Luminance(color) + .05f) < 4.5f; i++)
+        {
+            color.X *= .8f;
+            color.Y *= .8f;
+            color.Z *= .8f;
+        }
+        return color;
+
+        static float Luminance(Vector4 value) => .2126f * Linear(value.X) + .7152f * Linear(value.Y) + .0722f * Linear(value.Z);
+        static float Linear(float value) => value <= .04045f ? value / 12.92f : MathF.Pow((value + .055f) / 1.055f, 2.4f);
+    }
+
     public static string OceanSpotLabel(OceanFishListView view) => view.State == OceanFishListState.Ready
         ? UiText.Get(T.OceanFishAreaTitle, view.Area, new UiMessage(view.Spectral ? T.OceanSpectral : T.OceanNormal))
         : UiText.Get(view.State switch
@@ -58,7 +85,8 @@ internal static class UiWidgets
 
     public static bool IconButton(FontAwesomeIcon icon, string id, string tooltip, bool active = false, float size = 0)
     {
-        if (active) ImGui.PushStyleColor(ImGuiCol.Text, new Vector4(1, 0.8f, 0.32f, 1));
+        if (active) ImGui.PushStyleColor(ImGuiCol.Text, UiThemeScope.Current is not null ? UiThemeColors.Favorite
+            : ReadableColor(new Vector4(1, 0.8f, 0.32f, 1)));
         ImGui.PushFont(UiBuilder.IconFont);
         if (size > 0) ImGui.PushStyleVar(ImGuiStyleVar.FramePadding, Vector2.Zero);
         var clicked = ImGui.Button($"{icon.ToIconString()}###{id}", new Vector2(size > 0 ? size : ImGui.GetFrameHeight()));
@@ -115,7 +143,7 @@ internal static class UiWidgets
 
     public static bool GameIconButton(ITextureProvider textures, uint iconId, string id, string tooltip, bool active)
     {
-        if (active) ImGui.PushStyleColor(ImGuiCol.Button, new Vector4(0.18f, 0.48f, 0.62f, 1));
+        if (active) ImGui.PushStyleColor(ImGuiCol.Button, UiThemeScope.Current is { } theme ? theme.Selection : new Vector4(0.18f, 0.48f, 0.62f, 1));
         var size = ImGui.GetFrameHeight();
         var clicked = ImGui.Button($"###{id}", new Vector2(size));
         if (active) ImGui.PopStyleColor();
@@ -133,6 +161,8 @@ internal static class UiWidgets
 
     public static bool MapPinButton(string id, string tooltip, float height)
     {
+        var themed = UiThemeScope.Current is not null;
+        if (themed) ImGui.PushStyleColor(ImGuiCol.Text, UiThemeColors.Location);
         ImGui.PushStyleColor(ImGuiCol.Button, Vector4.Zero);
         ImGui.PushStyleVar(ImGuiStyleVar.FramePadding, Vector2.Zero);
         ImGui.PushFont(UiBuilder.IconFont);
@@ -140,6 +170,7 @@ internal static class UiWidgets
         ImGui.PopFont();
         ImGui.PopStyleVar();
         ImGui.PopStyleColor();
+        if (themed) ImGui.PopStyleColor();
         Tooltip(tooltip);
         return clicked;
     }
@@ -149,7 +180,8 @@ internal static class UiWidgets
         var size = ImGui.GetFrameHeight();
         var clicked = ImGui.Button($"###{id}", new Vector2(size));
         var center = (ImGui.GetItemRectMin() + ImGui.GetItemRectMax()) / 2;
-        var color = ImGui.GetColorU32(favorite ? new Vector4(1, 0.8f, 0.32f, 1) : ImGui.GetStyle().Colors[(int)ImGuiCol.Text]);
+        var color = ImGui.GetColorU32(favorite ? UiThemeScope.Current is not null ? UiThemeColors.Favorite : new Vector4(1, 0.8f, 0.32f, 1)
+            : ImGui.GetStyle().Colors[(int)ImGuiCol.Text]);
         Span<Vector2> points = stackalloc Vector2[10];
         for (var i = 0; i < points.Length; i++)
         {
@@ -171,15 +203,74 @@ internal static class UiWidgets
     public static void Heading(T key)
     {
         ImGui.Spacing();
+        if (UiThemeScope.Current is not null)
+        {
+            SectionLabel(key);
+            return;
+        }
         ImGui.Separator();
         ImGui.TextUnformatted(UiText.Get(key));
         ImGui.Spacing();
     }
 
+    public static void SectionLabel(T key)
+    {
+        var origin = ImGui.GetCursorScreenPos();
+        var width = ImGui.GetContentRegionAvail().X;
+        var label = UiText.Get(key);
+        var role = UiThemeScope.Current is not null ? key switch
+        {
+            T.DetailAvailability => UiThemeColors.Information,
+            T.DetailLocations or T.CollectionProgressOcean => UiThemeColors.Location,
+            T.DetailConditions or T.DetailMinimumGathering => UiThemeColors.Preparation,
+            T.DetailFolklore => UiThemeColors.Special,
+            _ => UiThemeColors.Secondary,
+        } : UiThemeColors.Secondary;
+        ImGui.TextColored(role, label);
+        var start = origin.X + ImGui.CalcTextSize(label).X + ImGui.GetStyle().ItemSpacing.X;
+        var y = origin.Y + ImGui.GetTextLineHeight() * .5f;
+        if (start < origin.X + width)
+        {
+            ImGui.GetWindowDrawList().AddLine(new(start, y), new(origin.X + width, y), ImGui.GetColorU32(ImGuiCol.Separator));
+            if (UiThemeScope.Current is { } theme && role != UiThemeColors.Secondary)
+                ImGui.GetWindowDrawList().AddLine(new(start, y), new(Math.Min(origin.X + width, start + ImGui.GetFontSize() * 1.5f), y),
+                    ImGui.GetColorU32(Vector4.Lerp(theme.Surface, role, .45f)));
+        }
+    }
+
+    public static bool Disclosure(string label, ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags.None)
+    {
+        if (UiThemeScope.Current is not { } theme) return ImGui.CollapsingHeader(label, flags);
+        // A disclosure is not a selected row. Keep the same hit area and ID, with a quiet surface.
+        ImGui.PushStyleColor(ImGuiCol.Header, Vector4.Lerp(theme.Background, theme.Surface, .35f));
+        ImGui.PushStyleColor(ImGuiCol.HeaderHovered, theme.Hover);
+        ImGui.PushStyleColor(ImGuiCol.HeaderActive, theme.Input);
+        try { return ImGui.CollapsingHeader(label, flags); }
+        finally { ImGui.PopStyleColor(3); }
+    }
+
+    public static bool BeginTabItem(string label, ImGuiTabItemFlags flags = ImGuiTabItemFlags.None)
+    {
+        var theme = UiThemeScope.Current;
+        if (theme is not null) ImGui.PushStyleColor(ImGuiCol.TabActive, theme.Selection);
+        var active = ImGui.BeginTabItem(label, flags);
+        if (theme is not null) ImGui.PopStyleColor();
+        if (active && theme is not null && ImGui.IsItemVisible())
+        {
+            var min = ImGui.GetItemRectMin();
+            var max = ImGui.GetItemRectMax();
+            var thickness = Math.Max(2, ImGui.GetFontSize() / 8);
+            ImGui.GetWindowDrawList().AddRectFilled(new(min.X + 2, max.Y - thickness), new(max.X - 2, max.Y), ImGui.GetColorU32(theme.Accent));
+        }
+        return active;
+    }
+
     public static void GuideBanner(FishCollectionView collection, FishPreferencesView personal, FishGuideOpenService opener)
     {
         if (collection.GuidePrompt(personal.Session, personal.HasCharacter) is not { } prompt) return;
-        ImGui.PushStyleColor(ImGuiCol.ChildBg, new Vector4(0.42f, 0.29f, 0.06f, 0.72f));
+        ImGui.PushStyleColor(ImGuiCol.ChildBg, UiThemeScope.Current is not null
+            ? UiThemeColors.Surface(UiThemeColors.Attention)
+            : new Vector4(0.42f, 0.29f, 0.06f, 0.72f));
         var text = opener.IsSupported
             ? UiText.Get(prompt.Key == T.CollectionGuideOpenRequired ? T.GuideBannerOpen : T.GuideBannerRetry)
             : UiText.Get(T.NativeFeaturesBlocked, opener.UnavailableReason.Display);
@@ -225,7 +316,8 @@ internal static class UiWidgets
         if (failure is not null) hints.Add(failure.Display);
         var hint = string.Join("\n", hints);
         var frame = ImGui.GetFrameHeight();
-        ImGui.PushStyleColor(ImGuiCol.ChildBg, new Vector4(0.42f, 0.29f, 0.06f, 0.72f));
+        ImGui.PushStyleColor(ImGuiCol.ChildBg, UiThemeScope.Current is not null ? UiThemeColors.Surface(UiThemeColors.Attention)
+            : new Vector4(0.42f, 0.29f, 0.06f, 0.72f));
         if (ImGui.BeginChild("GlobalGuideWarning", new Vector2(0, frame), false,
                 ImGuiWindowFlags.NoScrollbar | ImGuiWindowFlags.NoScrollWithMouse))
         {

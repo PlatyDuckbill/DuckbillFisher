@@ -45,7 +45,7 @@ internal sealed class CastingTimerWindow : Window
         var retained = !view.HasSession && view.CurrentTrip is not null && view.TimerRetainedUntil is not null;
         if (retained && view.TimerRetainedUntil is { } expires)
         {
-            ImGui.TextColored(new Vector4(.60f, .76f, .84f, 1), UiText.Get(T.TimerRetained,
+            UiWidgets.TextColored(UiThemeScope.Current is not null ? UiThemeColors.Information : new Vector4(.60f, .76f, .84f, 1), UiText.Get(T.TimerRetained,
                 FishRowRenderer.Countdown(expires > tracker.Now ? expires - tracker.Now : TimeSpan.Zero, compact: false)));
             UiWidgets.Tooltip(UiText.Get(T.TimerRetentionHint));
         }
@@ -57,9 +57,11 @@ internal sealed class CastingTimerWindow : Window
         var fishLabel = UiText.Get(T.TimerSpotFishButton);
         var buttonSize = ImGui.GetFrameHeight() + ImGui.CalcTextSize(fishLabel).X + ImGui.GetStyle().FramePadding.X * 2;
         var controlsWidth = buttonSize + ImGui.GetFrameHeight() + ImGui.GetStyle().ItemSpacing.X * 2;
-        FishingHistoryPanel.Clipped(spotLabel, Math.Max(1, ImGui.GetContentRegionAvail().X - controlsWidth));
+        var stackedHeader = ImGui.GetContentRegionAvail().X < controlsWidth + ImGui.GetFontSize() * 8;
+        if (stackedHeader) ImGui.TextWrapped(spotLabel);
+        else FishingHistoryPanel.Clipped(spotLabel, Math.Max(1, ImGui.GetContentRegionAvail().X - controlsWidth));
         UiWidgets.Tooltip(spotLabel);
-        ImGui.SameLine();
+        if (!stackedHeader) ImGui.SameLine();
         ImGui.BeginDisabled(!canShowFish);
         if (ImGui.Button("###TimerSpotFish", new Vector2(buttonSize, ImGui.GetFrameHeight()))) toggleSpotFish();
         var buttonOrigin = ImGui.GetItemRectMin() + ImGui.GetStyle().FramePadding;
@@ -83,7 +85,7 @@ internal sealed class CastingTimerWindow : Window
         var baitLabel = bait is > 0 ? FishingTimeText.Item(view, bait) : usesFishBait
             ? UiText.Get(timed?.BaitKind == FishingBaitKind.Swimbait ? T.HistorySwimbaitUnknown : T.HistoryMoochUnknown)
             : UiText.Get(T.ConditionUnknown);
-        ImGui.TextUnformatted(UiText.Get(usesFishBait || retained ? T.TimerCastBait : T.TimerEquippedBait, baitLabel));
+        UiWidgets.TextWrappedSecondary(UiText.Get(usesFishBait || retained ? T.TimerCastBait : T.TimerEquippedBait, baitLabel));
         var phase = view.Native?.Phase;
         var label = view.State switch
         {
@@ -98,7 +100,7 @@ internal sealed class CastingTimerWindow : Window
         if (retained) label = T.TimerRecentCast;
         var elapsed = timed is not null && FishingTimeText.DisplaySeconds(timed, view, tracker.Now) is { } seconds
             ? FishingTimeText.Elapsed(TimeSpan.FromSeconds(seconds)) : "—";
-        ImGui.TextUnformatted(UiText.Get(T.TimerCastLine, new UiMessage(label), elapsed));
+        ImGui.TextWrapped(UiText.Get(T.TimerCastLine, new UiMessage(label), elapsed));
         DrawLure();
         var et = timed?.StartedUtc is { } utc ? FishingTimeText.Et(utc) : "—";
         ImGui.TextDisabled(UiText.Get(T.TimerCastEt, et));
@@ -106,7 +108,7 @@ internal sealed class CastingTimerWindow : Window
         intuition.Draw();
         var sessionTime = (view.CurrentTrip?.FirstCastUtc ?? view.SessionStartedUtc)?.ToLocalTime().ToString("HH:mm:ss", UiText.Culture) ?? "—";
         var sessionElapsed = view.CurrentTrip is { } trip ? FishingTimeText.TripDuration(trip, view, tracker.Now) : "—";
-        ImGui.TextUnformatted(UiText.Get(retained ? T.TimerCompletedSessionLine : T.TimerSessionLine, sessionTime, sessionElapsed));
+        UiWidgets.TextWrappedSecondary(UiText.Get(retained ? T.TimerCompletedSessionLine : T.TimerSessionLine, sessionTime, sessionElapsed));
         UiWidgets.Tooltip(UiText.Get(T.TripDurationHint));
         ImGui.Separator();
         ImGui.TextUnformatted(UiText.Get(T.TimerCurrentHistory, view.CurrentTrip?.Casts ?? 0));
@@ -159,7 +161,7 @@ internal sealed class CastingTimerWindow : Window
                 ImGui.SameLine();
             }
             var text = BuffLabel(key, end);
-            if (active) ImGui.TextColored(new Vector4(.46f, .88f, .70f, 1), text);
+            if (active) UiWidgets.TextColored(UiThemeScope.Current is not null ? UiThemeColors.Positive : new Vector4(.46f, .88f, .70f, 1), text);
             else ImGui.TextDisabled(text);
             ImGui.EndGroup();
             UiWidgets.Tooltip(UiText.Get(T.TimerBuffHint));

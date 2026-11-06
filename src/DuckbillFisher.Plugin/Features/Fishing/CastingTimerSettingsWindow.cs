@@ -97,7 +97,7 @@ internal sealed class CastingTimerSettingsWindow(FishPreferences preferences, Sp
         var gap = fontSize + ImGui.GetStyle().ItemInnerSpacing.X;
         var padding = new string(' ', Math.Max(1, (int)MathF.Ceiling(gap / Math.Max(1, ImGui.CalcTextSize(" ").X))));
         var flags = showPresets && page == SettingsTab.CastAlerts ? ImGuiTabItemFlags.SetSelected : ImGuiTabItemFlags.None;
-        var active = ImGui.BeginTabItem($"{padding}{UiText.Label(label, id)}", flags);
+        var active = UiWidgets.BeginTabItem($"{padding}{UiText.Label(label, id)}", flags);
         if (ImGui.IsItemVisible())
         {
             var min = ImGui.GetItemRectMin();

@@ -46,7 +46,7 @@ internal sealed class FishGeographyPanel
         UpdateOptions(options);
         var regionPreview = Preview(regions, id => options.Regions.FirstOrDefault(option => option.Id == id)?.Name);
         var expansionPreview = Preview(expansions, id => options.Expansions.FirstOrDefault(option => option.Id == id)?.Name);
-        var open = ImGui.CollapsingHeader(UiText.Label(T.GeographyHeading, "CatalogGeography"));
+        var open = UiWidgets.Disclosure(UiText.Label(T.GeographyHeading, "CatalogGeography"));
         if (ImGui.IsItemHovered())
         {
             ImGui.BeginTooltip();

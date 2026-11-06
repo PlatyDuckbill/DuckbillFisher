@@ -36,6 +36,9 @@ internal sealed class SpawnAlertsPanel(FishPreferences preferences, SpawnAlerts 
         {
             selectedId = null;
             selectedRow = null;
+            lastFavorites = null;
+            lastFavoritesRevision = -1;
+            resetDetailScroll = true;
             lastSession = settings.Session;
         }
         var view = alerts.View;
@@ -51,7 +54,7 @@ internal sealed class SpawnAlertsPanel(FishPreferences preferences, SpawnAlerts 
         if (view.Next is { } next && ImGui.IsItemHovered())
             ImGui.SetTooltip(UiText.Get(T.AlertsNext, next.Name, next.Start.AddMinutes(-next.LeadMinutes).ToLocalTime(),
                 next.Start.ToLocalTime()));
-        if (DeveloperMode && ImGui.CollapsingHeader(UiText.Label(T.AlertDiagnosticsHeading, "SpawnAlertDiagnostics")))
+        if (DeveloperMode && UiWidgets.Disclosure(UiText.Label(T.AlertDiagnosticsHeading, "SpawnAlertDiagnostics")))
         {
             ImGui.TextWrapped(view.Status.Display);
             if (ImGui.Button(UiText.Label(T.AlertsCopy, "CopySpawnAlerts")))
@@ -60,18 +63,18 @@ internal sealed class SpawnAlertsPanel(FishPreferences preferences, SpawnAlerts 
         ImGui.Separator();
         if (ImGui.BeginTabBar("SpawnAlertViews", ImGuiTabBarFlags.FittingPolicyScroll))
         {
-            if (ImGui.BeginTabItem(UiText.Label(T.AlertFavorites, "AlertFavorites")))
+            if (UiWidgets.BeginTabItem(UiText.Label(T.AlertFavorites, "AlertFavorites")))
             {
                 DrawFavorites(view, settings);
                 ImGui.EndTabItem();
             }
-            if (ImGui.BeginTabItem(UiText.Label(T.AlertSettingsHeading, "AlertSettings")))
+            if (UiWidgets.BeginTabItem(UiText.Label(T.AlertSettingsHeading, "AlertSettings")))
             {
                 if (ImGui.BeginChild("SpawnAlertSettingsContent")) DrawSettings(settings);
                 ImGui.EndChild();
                 ImGui.EndTabItem();
             }
-            if (ImGui.BeginTabItem(UiText.Label(T.AlertHistory, "AlertHistory")))
+            if (UiWidgets.BeginTabItem(UiText.Label(T.AlertHistory, "AlertHistory")))
             {
                 if (ImGui.BeginChild("AlertHistoryRows")) DrawHistory(view);
                 ImGui.EndChild();
@@ -200,7 +203,7 @@ internal sealed class SpawnAlertsPanel(FishPreferences preferences, SpawnAlerts 
             preferences.SetSpawnAlerts(enabled, minutes, ChatChannelChoices.All[channel], sound,
                 uncaughtOnly ? SpawnAlertAudience.UncaughtOnly : SpawnAlertAudience.AllFavorites, removeOnRegistration, currentSpot);
 
-        if (ImGui.CollapsingHeader(UiText.Label(T.AlertsRulesHeading, "SpawnAlertRules")))
+        if (UiWidgets.Disclosure(UiText.Label(T.AlertsRulesHeading, "SpawnAlertRules")))
         {
             ImGui.TextWrapped(UiText.Get(T.AlertsIntro));
             ImGui.TextWrapped(UiText.Get(T.AlertsPolicy));
@@ -225,16 +228,25 @@ internal sealed class SpawnAlertsPanel(FishPreferences preferences, SpawnAlerts 
             hasStateRows = matches.Any(fish => fish.State != FavoriteAlertState.Armed);
             if (selectedId is { } selected && !settings.Favorites.Contains(selected))
                 selectedId = null;
+            if (selectedId is null && matches.FirstOrDefault(fish => fish.Row is not null) is { } first)
+            {
+                selectedId = first.FishId;
+                resetDetailScroll = true;
+            }
             selectedRow = selectedId is { } id ? view.Favorites.FirstOrDefault(fish => fish.FishId == id)?.Row : null;
         }
         ImGui.TextDisabled(UiText.Get(T.AlertFavoritesCount, matches.Length));
         if (ImGui.IsItemHovered()) ImGui.SetTooltip(UiText.Get(T.AlertFavoritesHint));
-        if (!ImGui.BeginTable("FavoritesLayout", 2, ImGuiTableFlags.Resizable | ImGuiTableFlags.BordersInnerV)) return;
+        var themed = UiThemeScope.Current is not null;
+        if (!ImGui.BeginTable("FavoritesLayout", 2,
+            ImGuiTableFlags.Resizable | (themed ? ImGuiTableFlags.None : ImGuiTableFlags.BordersInnerV))) return;
         ImGui.TableSetupColumn("List", ImGuiTableColumnFlags.WidthStretch, 1.15f);
         ImGui.TableSetupColumn("Detail", ImGuiTableColumnFlags.WidthStretch, 1);
         ImGui.TableNextColumn();
+        if (themed) ImGui.PushStyleColor(ImGuiCol.ChildBg, UiThemeScope.Current!.Background);
         if (ImGui.BeginChild("FavoriteRows")) DrawFavoriteRows(settings);
         ImGui.EndChild();
+        if (themed) ImGui.PopStyleColor();
         ImGui.TableNextColumn();
         if (ImGui.BeginChild("FavoriteDetail"))
         {
@@ -247,9 +259,13 @@ internal sealed class SpawnAlertsPanel(FishPreferences preferences, SpawnAlerts 
 
     private void DrawFavoriteRows(FishPreferencesView settings)
     {
+        var themed = UiThemeScope.Current is not null;
         if (matches.Length == 0) ImGui.TextWrapped(UiText.Get(T.FavoritesEmpty));
         var baseHeight = FishRowRenderer.GetHeight(ImGui.GetContentRegionAvail().X);
-        var narrow = ImGui.GetContentRegionAvail().X < ImGui.GetFontSize() * 20;
+        var editorWidth = ImGui.GetFrameHeight() * 2 + ImGui.GetFontSize() * 5.5f +
+            ImGui.CalcTextSize(UiText.Get(T.AlertCustomLead)).X + ImGui.CalcTextSize(UiText.Get(T.AlertFishMinutes)).X +
+            ImGui.GetStyle().ItemInnerSpacing.X * 2 + ImGui.GetStyle().ItemSpacing.X * 2 + 8;
+        var narrow = ImGui.GetContentRegionAvail().X < (themed ? editorWidth : ImGui.GetFontSize() * 20);
         var rowHeight = baseHeight + ImGui.GetFrameHeightWithSpacing() * (narrow ? 2 : 1) +
             (hasStateRows ? ImGui.GetTextLineHeightWithSpacing() : 0) + 8;
         var observed = collection.View;
@@ -263,14 +279,22 @@ internal sealed class SpawnAlertsPanel(FishPreferences preferences, SpawnAlerts 
                 {
                     var fish = matches[i];
                     ImGui.PushID((int)fish.FishId);
-                    var rowY = ImGui.GetCursorPosY();
+                    var rowStart = ImGui.GetCursorPos();
+                    var rowY = rowStart.Y;
+                    if (themed)
+                    {
+                        var origin = ImGui.GetCursorScreenPos();
+                        var size = new System.Numerics.Vector2(ImGui.GetContentRegionAvail().X, rowHeight - 4);
+                        UiThemeDecorations.ListItemSurface(origin, size.X, size.Y, selectedId == fish.FishId,
+                            ImGui.IsWindowHovered() && ImGui.IsMouseHoveringRect(origin, origin + size));
+                    }
                     if (fish.Row is { } row)
                     {
                         var state = UiText.Get(FishRowRenderer.CollectionKey(settings, observed, fish.FishId));
                         var place = row.Ocean is { } ocean ? UiText.Get(T.OceanArea, ocean.Area) : row.Spots.FirstOrDefault()?.Name
                             ?? UiText.Get(row.IsDisplayable ? T.CatalogRowInfo : T.CatalogUnresolvedRow, row.FishParameterId);
                         if (rows.Draw(row, baseHeight, selectedId == fish.FishId, state, place, fish.Window, now,
-                            spot: row.Spots.FirstOrDefault(), canOpenMap: settings.HasCharacter))
+                            spot: row.Spots.FirstOrDefault(), canOpenMap: settings.HasCharacter, grouped: themed))
                         {
                             resetDetailScroll |= selectedId != fish.FishId;
                             selectedId = fish.FishId;
@@ -279,7 +303,7 @@ internal sealed class SpawnAlertsPanel(FishPreferences preferences, SpawnAlerts 
                     }
                     else
                         ImGui.TextUnformatted(UiText.Get(T.AlertFavoriteName, UiText.Get(T.MissingName), fish.FishId));
-                    ImGui.SetCursorPosY(rowY + baseHeight + 4);
+                    ImGui.SetCursorPos(rowStart + new System.Numerics.Vector2(themed ? 8 : 0, baseHeight + 4));
                     var custom = settings.FishAlertLeadMinutes.ContainsKey(fish.FishId);
                     var lead = settings.AlertLead(fish.FishId);
                     ImGui.BeginDisabled(!settings.CanEdit);
@@ -303,8 +327,8 @@ internal sealed class SpawnAlertsPanel(FishPreferences preferences, SpawnAlerts 
                             ? UiText.Get(T.AlertFavoriteNext, start.AddMinutes(-fish.LeadMinutes).ToLocalTime(), start.ToLocalTime())
                             : UiText.Get(T.AlertNoReservation));
                     }
-                    ImGui.Separator();
-                    ImGui.SetCursorPosY(rowY + rowHeight);
+                    if (!themed) ImGui.Separator();
+                    ImGui.SetCursorPos(new System.Numerics.Vector2(rowStart.X, rowY + rowHeight));
                     ImGui.PopID();
                 }
         }

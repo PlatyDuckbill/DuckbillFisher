@@ -14,9 +14,9 @@ internal sealed class SpawnSchedulePanel(SpawnSchedule schedule, FishCatalog cat
     ITextureProvider textures, Action<FishGuideRow> showDetail, FishingMapService maps)
 {
     private static readonly int[] Hours = [1, 3, 6, 12, 24];
-    private static readonly Vector4 OpenColor = new(0.30f, 0.71f, 0.56f, 1);
-    private static readonly Vector4 UpcomingColor = new(0.34f, 0.60f, 0.84f, 1);
-    private static readonly Vector4 ConcurrentColor = new(0.94f, 0.70f, 0.32f, 1);
+    private static Vector4 OpenColor => UiThemeScope.Current is not null ? UiThemeColors.Positive : new(0.30f, 0.71f, 0.56f, 1);
+    private static Vector4 UpcomingColor => UiThemeScope.Current is not null ? UiThemeColors.Information : new(0.34f, 0.60f, 0.84f, 1);
+    private static Vector4 ConcurrentColor => UiThemeScope.Current is not null ? UiThemeColors.Attention : new(0.94f, 0.70f, 0.32f, 1);
     private string search = "";
     private int session = -1;
     private bool calendarMode, otherOpen;
@@ -203,7 +203,7 @@ internal sealed class SpawnSchedulePanel(SpawnSchedule schedule, FishCatalog cat
         ImGui.EndGroup();
         ImGui.PopStyleVar();
         var draw = ImGui.GetWindowDrawList();
-        var border = ImGui.GetColorU32(new Vector4(0.54f, 0.67f, 0.82f, 1));
+        var border = ImGui.GetColorU32(UiThemeScope.Current?.Border ?? new Vector4(0.54f, 0.67f, 0.82f, 1));
         draw.AddRect(origin, origin + new Vector2(width, height), border, 3);
         draw.AddLine(origin + new Vector2(width / 2, 0), origin + new Vector2(width / 2, height), border);
     }
@@ -212,21 +212,23 @@ internal sealed class SpawnSchedulePanel(SpawnSchedule schedule, FishCatalog cat
     {
         var origin = ImGui.GetCursorScreenPos();
         var fontSize = ImGui.GetFontSize();
-        ImGui.PushStyleColor(ImGuiCol.Button, active ? new Vector4(0.20f, 0.40f, 0.56f, 1) : new Vector4(0.15f, 0.23f, 0.31f, 1));
-        ImGui.PushStyleColor(ImGuiCol.ButtonHovered, new Vector4(0.23f, 0.34f, 0.45f, 1));
-        ImGui.PushStyleColor(ImGuiCol.ButtonActive, new Vector4(0.20f, 0.40f, 0.56f, 1));
+        var theme = UiThemeScope.Current;
+        ImGui.PushStyleColor(ImGuiCol.Button, active ? theme?.Selection ?? new Vector4(0.20f, 0.40f, 0.56f, 1)
+            : theme?.Field ?? new Vector4(0.15f, 0.23f, 0.31f, 1));
+        ImGui.PushStyleColor(ImGuiCol.ButtonHovered, theme?.Hover ?? new Vector4(0.23f, 0.34f, 0.45f, 1));
+        ImGui.PushStyleColor(ImGuiCol.ButtonActive, theme?.Selection ?? new Vector4(0.20f, 0.40f, 0.56f, 1));
         var clicked = ImGui.Button($"###{id}", new Vector2(width, height));
         ImGui.PopStyleColor(3);
         var draw = ImGui.GetWindowDrawList();
         var line = Math.Max(1, fontSize * 0.1f);
         if (active) draw.AddRectFilled(origin + new Vector2(0, height - line),
-            origin + new Vector2(width, height), ImGui.GetColorU32(new Vector4(0.72f, 0.88f, 1, 1)));
+            origin + new Vector2(width, height), ImGui.GetColorU32(theme?.Accent ?? new Vector4(0.72f, 0.88f, 1, 1)));
         var padding = ImGui.GetStyle().FramePadding.X;
         var gap = ImGui.GetStyle().ItemInnerSpacing.X;
         var label = Fit(UiText.Get(title), width - padding * 2 - fontSize - gap);
         var textWidth = ImGui.CalcTextSize(label).X;
         var x = origin.X + Math.Max(padding, (width - fontSize - gap - textWidth) / 2);
-        var textColor = ImGui.GetColorU32(active ? Vector4.One : new Vector4(0.86f, 0.91f, 0.96f, 1));
+        var textColor = ImGui.GetColorU32(active ? theme?.Text ?? Vector4.One : theme?.Muted ?? new Vector4(0.86f, 0.91f, 0.96f, 1));
         draw.PushClipRect(origin, origin + new Vector2(width, height), true);
         // Use the current native font size and a single pass. Enlarging baked glyphs and overpainting
         // the title made the previous tabs heavy and could degrade glyph edges.
@@ -235,7 +237,7 @@ internal sealed class SpawnSchedulePanel(SpawnSchedule schedule, FishCatalog cat
         ImGui.PopFont();
         draw.AddText(new(x + fontSize + gap, origin.Y + (height - fontSize) / 2), textColor, label);
         draw.PopClipRect();
-        UiWidgets.Tooltip(UiText.Get(hint));
+        UiWidgets.Tooltip(UiText.Get(UiThemeScope.Current is not null && title == T.ScheduleTimelineMode ? T.ThemeScheduleMarksHint : hint));
         return clicked;
     }
 
@@ -289,7 +291,7 @@ internal sealed class SpawnSchedulePanel(SpawnSchedule schedule, FishCatalog cat
         UiWidgets.Tooltip(UiText.Get(T.ScheduleAxisHint, now.ToLocalTime()));
         UiWidgets.FlowNext(currentWidth, right);
         ImGui.SetCursorPosX(Math.Max(ImGui.GetCursorPosX(), right - currentWidth));
-        ImGui.TextColored(ConcurrentColor, current);
+        UiWidgets.TextColored(ConcurrentColor, current);
         UiWidgets.Tooltip(UiText.Get(T.ScheduleAxisHint, now.ToLocalTime()));
     }
 
@@ -391,10 +393,12 @@ internal sealed class SpawnSchedulePanel(SpawnSchedule schedule, FishCatalog cat
         var clicked = ImGui.IsItemClicked();
         var draw = ImGui.GetWindowDrawList();
         draw.PushClipRect(origin, origin + new Vector2(width, actualHeight), true);
+        if (UiThemeScope.Current is { } theme)
+            draw.AddRectFilled(origin, origin + new Vector2(width, actualHeight), ImGui.GetColorU32(theme.Background), 2);
         for (var tick = axisStart; tick <= axisEnd; tick = tick.AddMinutes(TickMinutes()))
         {
             var x = origin.X + X(tick, width);
-            draw.AddLine(new Vector2(x, origin.Y), new Vector2(x, origin.Y + actualHeight), ImGui.GetColorU32(ImGuiCol.Separator));
+            draw.AddLine(new Vector2(x, origin.Y), new Vector2(x, origin.Y + actualHeight), ImGui.GetColorU32(UiThemeColors.Grid));
         }
         var hits = new List<FishingWindow>();
         foreach (var window in entry.Windows)
@@ -408,9 +412,13 @@ internal sealed class SpawnSchedulePanel(SpawnSchedule schedule, FishCatalog cat
             var bottom = origin.Y + actualHeight * 0.72f;
             var a = new Vector2(origin.X + left, top);
             var b = new Vector2(origin.X + Math.Min(width, Math.Max(right, left + 3)), bottom);
-            draw.AddRectFilled(a, b, ImGui.GetColorU32(start <= now ? OpenColor : UpcomingColor), 2);
-            if (selected?.Entry.Fish.FishParameterId == entry.Fish.FishParameterId && selected.Window.Start == start)
-                draw.AddRect(a - new Vector2(2), b + new Vector2(2), ImGui.GetColorU32(ImGuiCol.Text), 2);
+            var selectedBar = selected?.Entry.Fish.FishParameterId == entry.Fish.FishParameterId && selected.Window.Start == start;
+            if (UiThemeScope.Current is not null) UiThemeCharts.ScheduleBar(a, b, start <= now, selectedBar);
+            else
+            {
+                draw.AddRectFilled(a, b, ImGui.GetColorU32(start <= now ? OpenColor : UpcomingColor), 2);
+                if (selectedBar) draw.AddRect(a - new Vector2(2), b + new Vector2(2), ImGui.GetColorU32(ImGuiCol.Text), 2);
+            }
             if (selected is not null && selected.Entry.Fish.FishParameterId != entry.Fish.FishParameterId &&
                 selected.Coincidences.TryGetValue(entry.Fish.FishParameterId, out var coincidences))
                 foreach (var range in coincidences)
@@ -428,7 +436,8 @@ internal sealed class SpawnSchedulePanel(SpawnSchedule schedule, FishCatalog cat
                 hits.Add(window);
         }
         var nowX = origin.X + Math.Clamp(X(now, width), 0, width);
-        draw.AddLine(new Vector2(nowX, origin.Y), new Vector2(nowX, origin.Y + actualHeight), ImGui.GetColorU32(ConcurrentColor));
+        draw.AddLine(new Vector2(nowX, origin.Y), new Vector2(nowX, origin.Y + actualHeight), ImGui.GetColorU32(ConcurrentColor),
+            UiThemeScope.Current is not null ? 2 : 1);
         draw.PopClipRect();
         if (hits.Count > 0)
         {
@@ -467,7 +476,7 @@ internal sealed class SpawnSchedulePanel(SpawnSchedule schedule, FishCatalog cat
 
     private void DrawOther(SpawnScheduleView view, SpawnScheduleSettings settings)
     {
-        otherOpen = ImGui.CollapsingHeader($"{UiText.Get(T.ScheduleOtherHeading, view.Other.Length)}###ScheduleHiddenFish");
+        otherOpen = UiWidgets.Disclosure($"{UiText.Get(T.ScheduleOtherHeading, view.Other.Length)}###ScheduleHiddenFish");
         if (!otherOpen) return;
         if (view.Other.Length == 0) { ImGui.TextDisabled(UiText.Get(T.ScheduleNoOther)); return; }
         if (!ImGui.BeginTable("ScheduleOther", 3, ImGuiTableFlags.RowBg | ImGuiTableFlags.ScrollY,
@@ -528,7 +537,7 @@ internal sealed class SpawnSchedulePanel(SpawnSchedule schedule, FishCatalog cat
     {
         var calendar = view.Calendar!;
         if (calendar.Incomplete)
-        { ImGui.TextColored(ConcurrentColor, UiText.Get(T.ScheduleCalendarPartial)); UiWidgets.Tooltip(UiText.Get(T.ScheduleCalendarLimit, SpawnScheduleCalendar.MaxOccurrences, SpawnScheduleCalendar.MaxFishWindows)); }
+        { UiWidgets.TextColored(ConcurrentColor, UiText.Get(T.ScheduleCalendarPartial)); UiWidgets.Tooltip(UiText.Get(T.ScheduleCalendarLimit, SpawnScheduleCalendar.MaxOccurrences, SpawnScheduleCalendar.MaxFishWindows)); }
         var available = Math.Max(1, ImGui.GetContentRegionAvail().Y);
         if (!showCalendarList)
         { DrawCalendarGridArea(calendar, available); return; }
@@ -603,7 +612,7 @@ internal sealed class SpawnSchedulePanel(SpawnSchedule schedule, FishCatalog cat
                 if (day.Date == selectedDate || ImGui.IsItemHovered())
                     draw.AddRectFilled(origin, origin + new Vector2(width, actualHeight), ImGui.GetColorU32(day.Date == selectedDate ? ImGuiCol.Header : ImGuiCol.HeaderHovered), 2);
                 draw.PushClipRect(origin, origin + new Vector2(width, actualHeight), true);
-                draw.AddText(origin + new Vector2(3, 0), ImGui.GetColorU32(day.Date == today ? ConcurrentColor : ImGui.GetStyle().Colors[(int)ImGuiCol.Text]), day.Date.Day.ToString(UiText.Culture));
+                draw.AddText(origin + new Vector2(3, 0), ImGui.GetColorU32(day.Date == today ? UiWidgets.ReadableColor(ConcurrentColor) : ImGui.GetStyle().Colors[(int)ImGuiCol.Text]), day.Date.Day.ToString(UiText.Culture));
                 var small = Math.Max(12, ImGui.GetFontSize() * 0.85f);
                 var lineHeight = small + 3;
                 // Keep a first time/name line even in six-week months; the remaining count shares the date header.

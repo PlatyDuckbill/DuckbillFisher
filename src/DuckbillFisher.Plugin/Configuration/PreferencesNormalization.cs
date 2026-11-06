@@ -21,6 +21,7 @@ internal static class PreferencesNormalization
         loaded.CatalogPresets = PreferencesMigration.Presets(loaded.CatalogPresets, version);
         loaded.CustomAlertSoundPath ??= "";
         loaded.UiScalePercent = UiScale.Normalize(loaded.UiScalePercent);
+        loaded.Theme = UiThemeSettings.Normalize(loaded.Theme);
         loaded.Schedule = PreferencesMigration.Schedule(loaded.Schedule, version);
         loaded.LastSeenChangelogVersion = PreferencesMigration.SeenVersion(loaded.LastSeenChangelogVersion);
         loaded.Timer = loaded.Timer is not null && loaded.Timer.IsValid() ? loaded.Timer.Copy() : new();

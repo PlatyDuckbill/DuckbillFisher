@@ -15,9 +15,9 @@ internal sealed class FishRecommendationPanel(FishRecommendationService service,
     private static readonly int[] Hours = [1, 3, 6, 12, 24];
     private static readonly T[] TabNames = [T.RecommendationNowTab, T.RecommendationPreparationTab, T.RecommendationRareTab];
     private static readonly T[] TabHints = [T.RecommendationNowHint, T.RecommendationPreparationHint, T.RecommendationRareHint];
-    private static readonly Vector4 Green = new(0.34f, 0.78f, 0.62f, 1);
-    private static readonly Vector4 Gold = new(0.98f, 0.73f, 0.35f, 1);
-    private static readonly Vector4 Blue = new(0.55f, 0.75f, 1, 1);
+    private static Vector4 Green => UiThemeScope.Current is not null ? UiThemeColors.Positive : new(0.34f, 0.78f, 0.62f, 1);
+    private static Vector4 Gold => UiThemeScope.Current is not null ? UiThemeColors.Attention : new(0.98f, 0.73f, 0.35f, 1);
+    private static Vector4 Blue => UiThemeScope.Current is not null ? UiThemeColors.Information : new(0.55f, 0.75f, 1, 1);
     private readonly RecommendationText text = new(catalog);
     private readonly FishRowRenderer rows = new(textures, maps);
     private RecommendationOptions options = new();
@@ -75,19 +75,21 @@ internal sealed class FishRecommendationPanel(FishRecommendationService service,
                 ImGuiWindowFlags.NoScrollbar | ImGuiWindowFlags.NoScrollWithMouse))
         {
             // Keep the compact header; background contrast and a marker identify the active tab.
-            var inactive = new Vector4(0.14f, 0.15f, 0.17f, 1);
-            var active = new Vector4(0.46f, 0.19f, 0.21f, 1);
+            var theme = UiThemeScope.Current;
+            var inactive = theme?.Background ?? new Vector4(0.14f, 0.15f, 0.17f, 1);
+            var active = theme?.Selection ?? new Vector4(0.46f, 0.19f, 0.21f, 1);
             ImGui.PushStyleColor(ImGuiCol.Tab, inactive);
             ImGui.PushStyleColor(ImGuiCol.TabUnfocused, inactive);
             ImGui.PushStyleColor(ImGuiCol.TabActive, active);
             ImGui.PushStyleColor(ImGuiCol.TabUnfocusedActive, active);
-            ImGui.PushStyleColor(ImGuiCol.TabHovered, new Vector4(0.34f, 0.25f, 0.27f, 1));
+            ImGui.PushStyleColor(ImGuiCol.TabHovered, theme?.Hover ?? new Vector4(0.34f, 0.25f, 0.27f, 1));
             if (ImGui.BeginTabBar("RecommendationFocus", ImGuiTabBarFlags.FittingPolicyScroll))
             {
                 var counts = new[] { view.Now.Length, view.Preparation.Length, view.Rare.Length };
                 for (var index = 0; index < TabNames.Length; index++)
                 {
-                    ImGui.PushStyleColor(ImGuiCol.Text, index == focus ? Vector4.One : new Vector4(0.78f, 0.80f, 0.83f, 1));
+                    ImGui.PushStyleColor(ImGuiCol.Text, index == focus ? theme?.Text ?? Vector4.One
+                        : theme?.Muted ?? new Vector4(0.78f, 0.80f, 0.83f, 1));
                     var selected = ImGui.BeginTabItem($"{UiText.Get(T.RecommendationTabCount, UiText.Get(TabNames[index]), counts[index])}###RecommendationFocus{index}");
                     ImGui.PopStyleColor();
                     if (selected && ImGui.IsItemVisible())
@@ -99,7 +101,7 @@ internal sealed class FishRecommendationPanel(FishRecommendationService service,
                         var draw = ImGui.GetWindowDrawList();
                         draw.PushClipRect(min, max, true);
                         draw.AddRectFilled(new Vector2(min.X + inset, max.Y - thickness),
-                            new Vector2(max.X - inset, max.Y), ImGui.GetColorU32(Gold));
+                            new Vector2(max.X - inset, max.Y), ImGui.GetColorU32(theme?.Accent ?? Gold));
                         draw.PopClipRect();
                     }
                     Tooltip(UiText.Get(TabHints[index]));
@@ -334,7 +336,7 @@ internal sealed class FishRecommendationPanel(FishRecommendationService service,
         var width = ImGui.CalcTextSize(stamp).X;
         ImGui.SameLine(Math.Max(left + buttonWidth + ImGui.GetStyle().ItemSpacing.X, left + available - width));
         ImGui.AlignTextToFramePadding();
-        if (view.NeedsRefresh) ImGui.PushStyleColor(ImGuiCol.Text, Gold);
+        if (view.NeedsRefresh) ImGui.PushStyleColor(ImGuiCol.Text, UiWidgets.ReadableColor(Gold));
         ImGui.TextUnformatted(stamp);
         if (view.NeedsRefresh) ImGui.PopStyleColor();
         Tooltip(UiText.Get(T.RecommendationManualHelp));
@@ -381,7 +383,7 @@ internal sealed class FishRecommendationPanel(FishRecommendationService service,
     private static void Bullet(string text)
     { ImGui.PushTextWrapPos(); ImGui.BulletText(text); ImGui.PopTextWrapPos(); }
     private static void Colored(Vector4 color, string text)
-    { ImGui.PushStyleColor(ImGuiCol.Text, color); ImGui.TextWrapped(text); ImGui.PopStyleColor(); }
+    { ImGui.PushStyleColor(ImGuiCol.Text, UiWidgets.ReadableColor(color)); ImGui.TextWrapped(text); ImGui.PopStyleColor(); }
     private static void Tooltip(string message)
     {
         if (!ImGui.IsItemHovered(ImGuiHoveredFlags.AllowWhenDisabled)) return;

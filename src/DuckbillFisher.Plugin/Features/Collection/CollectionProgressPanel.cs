@@ -10,6 +10,7 @@ internal sealed class CollectionProgressPanel(CollectionProgress progress, FishC
     Action<CollectionProgressSelection> showFish)
 {
     private int scope;
+    private readonly HashSet<(int Scope, uint? Id)> expandedExpansions = [];
 
     public void Draw()
     {
@@ -35,9 +36,9 @@ internal sealed class CollectionProgressPanel(CollectionProgress progress, FishC
             // All columns follow the available width; compact labels retain full values in the tooltip.
             var flags = ImGuiTableFlags.RowBg | ImGuiTableFlags.BordersInnerH | ImGuiTableFlags.Resizable |
                 ImGuiTableFlags.SizingStretchProp | ImGuiTableFlags.ScrollY;
-            var tableHeight = Math.Min(ImGui.GetContentRegionAvail().Y * 0.7f,
-                ImGui.GetTextLineHeightWithSpacing() * 20);
-            tableHeight = Math.Max(ImGui.GetFrameHeightWithSpacing() * 4, tableHeight);
+            var maxTableHeight = Math.Max(ImGui.GetFrameHeightWithSpacing() * 2,
+                Math.Min(ImGui.GetContentRegionAvail().Y * 0.7f, ImGui.GetTextLineHeightWithSpacing() * 20));
+            var tableHeight = Math.Min(maxTableHeight, EstimateTableHeight(view.Expansions));
             if (ImGui.BeginTable($"CollectionProgressTable.{scope}", columns, flags, new Vector2(0, tableHeight)))
             {
                 ImGui.TableSetupColumn(UiText.Get(T.CollectionProgressArea), ImGuiTableColumnFlags.WidthStretch, 1.3f);
@@ -59,6 +60,8 @@ internal sealed class CollectionProgressPanel(CollectionProgress progress, FishC
                     ImGui.TableNextColumn();
                     var name = string.IsNullOrWhiteSpace(expansion.Name) ? UiText.Get(T.CollectionProgressUnknownArea) : expansion.Name;
                     var open = ImGui.TreeNodeEx($"{name}###Expansion", ImGuiTreeNodeFlags.SpanAvailWidth);
+                    if (open) expandedExpansions.Add((scope, expansion.Id));
+                    else expandedExpansions.Remove((scope, expansion.Id));
                     Counts(expansion.Counts, CollectionProgressArea.Expansion, expansion.Id, null);
                     if (open)
                     {
@@ -95,13 +98,34 @@ internal sealed class CollectionProgressPanel(CollectionProgress progress, FishC
                 ImGui.EndTable();
             }
             ImGui.Spacing();
-            if (ImGui.CollapsingHeader(UiText.Label(T.CollectionProgressRules, "CollectionProgressRules")))
+            if (UiWidgets.Disclosure(UiText.Label(T.CollectionProgressRules, "CollectionProgressRules")))
                 ImGui.TextWrapped(UiText.Get(T.CollectionProgressHint));
         }
         ImGui.EndChild();
     }
 
     private FishGradeVisibility SelectedGrade => scope == 1 ? FishGradeVisibility.BigIncludingLegendary : FishGradeVisibility.LegendaryOnly;
+
+    private float EstimateTableHeight(CollectionProgressGroup[] expansions)
+    {
+        // Use only the small, already aggregated groups. Tree changes settle the viewport next frame;
+        // the existing ScrollY table still handles wrapped labels and long expanded content.
+        var rowHeight = ImGui.GetFrameHeight() + ImGui.GetStyle().CellPadding.Y * 2;
+        var height = rowHeight + ImGui.GetStyle().ChildBorderSize * 2;
+        foreach (var expansion in expansions)
+        {
+            height += GroupHeight(expansion);
+            if (expandedExpansions.Contains((scope, expansion.Id)))
+                foreach (var region in expansion.Regions) height += GroupHeight(region);
+        }
+        return height;
+
+        float GroupHeight(CollectionProgressGroup group)
+        {
+            var unknown = scope == 0 ? group.Counts.All.Unknown : scope == 1 ? group.Counts.Big.Unknown : group.Counts.Legendary.Unknown;
+            return rowHeight + (unknown > 0 ? ImGui.GetTextLineHeightWithSpacing() : 0);
+        }
+    }
 
     private void Summary(CollectionProgressCategories counts, string[] choices)
     {
@@ -182,12 +206,27 @@ internal sealed class CollectionProgressPanel(CollectionProgress progress, FishC
         var width = Math.Max(1, ImGui.GetContentRegionAvail().X);
         var compact = UiText.Get(T.CollectionProgressCompactRatio, count.Caught, count.Total);
         var overlay = ImGui.CalcTextSize(label).X + ImGui.GetStyle().FramePadding.X * 2 <= width ? label : compact;
-        if (ImGui.CalcTextSize(overlay).X > width) overlay = "";
-        ImGui.PushStyleColor(ImGuiCol.PlotHistogram, ProgressColor(fraction));
-        ImGui.ProgressBar(fraction, new Vector2(width, ImGui.GetFrameHeight() * (large ? 1.5f : 1)), overlay);
-        ImGui.PopStyleColor();
+        if (UiThemeScope.Current is not null && count.Complete &&
+            ImGui.CalcTextSize(overlay).X + ImGui.GetFontSize() * 1.2f > width) overlay = compact;
+        var textWidth = width - (UiThemeScope.Current is not null && count.Complete ? ImGui.GetFontSize() * 1.2f : 0);
+        if (ImGui.CalcTextSize(overlay).X > Math.Max(0, textWidth)) overlay = "";
+        var size = new Vector2(width, ImGui.GetFrameHeight() * (large ? 1.5f : 1));
+        if (UiThemeScope.Current is not null)
+            UiThemeCharts.Collection(fraction, size, overlay, count.Complete);
+        else
+        {
+            ImGui.PushStyleColor(ImGuiCol.PlotHistogram, ProgressColor(fraction));
+            ImGui.ProgressBar(fraction, size, overlay);
+            ImGui.PopStyleColor();
+        }
         if (target is not null && ImGui.IsItemClicked(ImGuiMouseButton.Left)) showFish(target);
-        if (target is not null && ImGui.IsItemHovered()) ImGui.SetMouseCursor(ImGuiMouseCursor.Hand);
+        if (target is not null && ImGui.IsItemHovered())
+        {
+            ImGui.SetMouseCursor(ImGuiMouseCursor.Hand);
+            if (UiThemeScope.Current is { } theme)
+                ImGui.GetWindowDrawList().AddRect(ImGui.GetItemRectMin(), ImGui.GetItemRectMax(),
+                    ImGui.GetColorU32(theme.Accent), 2);
+        }
         if (ImGui.IsItemHovered())
         {
             ImGui.BeginTooltip();

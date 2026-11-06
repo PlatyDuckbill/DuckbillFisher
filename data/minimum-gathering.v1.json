@@ -1,0 +1,1762 @@
+{
+  "schemaVersion": 1,
+  "source": {
+    "url": "https://github.com/ffxiv-teamcraft/ffxiv-teamcraft/blob/8925c7b73a99e8ba4fb2aa10719a3b3f48109ea7/libs/data/src/lib/json/fishing-sources.json",
+    "revision": "8925c7b73a99e8ba4fb2aa10719a3b3f48109ea7",
+    "sha256": "701438120D5DB489985972A833777F7B31DCF7CA2E76A756136DD1677B957B74",
+    "license": "MIT",
+    "processing": "Positive minGathering only. Zero/missing omitted as unknown. Unique Item/FishParameter identities matched on both installed clients. No multiple-hook guarantee thresholds inferred."
+  },
+  "entries": [
+    {
+      "itemId": 7678,
+      "fishParameterId": 187,
+      "minimumGathering": 290
+    },
+    {
+      "itemId": 7679,
+      "fishParameterId": 188,
+      "minimumGathering": 290
+    },
+    {
+      "itemId": 7680,
+      "fishParameterId": 189,
+      "minimumGathering": 290
+    },
+    {
+      "itemId": 7681,
+      "fishParameterId": 190,
+      "minimumGathering": 290
+    },
+    {
+      "itemId": 7682,
+      "fishParameterId": 191,
+      "minimumGathering": 332
+    },
+    {
+      "itemId": 7683,
+      "fishParameterId": 192,
+      "minimumGathering": 335
+    },
+    {
+      "itemId": 7684,
+      "fishParameterId": 193,
+      "minimumGathering": 335
+    },
+    {
+      "itemId": 7685,
+      "fishParameterId": 194,
+      "minimumGathering": 290
+    },
+    {
+      "itemId": 7686,
+      "fishParameterId": 195,
+      "minimumGathering": 290
+    },
+    {
+      "itemId": 7687,
+      "fishParameterId": 196,
+      "minimumGathering": 308
+    },
+    {
+      "itemId": 7688,
+      "fishParameterId": 197,
+      "minimumGathering": 290
+    },
+    {
+      "itemId": 7689,
+      "fishParameterId": 198,
+      "minimumGathering": 335
+    },
+    {
+      "itemId": 7690,
+      "fishParameterId": 199,
+      "minimumGathering": 300
+    },
+    {
+      "itemId": 7691,
+      "fishParameterId": 200,
+      "minimumGathering": 308
+    },
+    {
+      "itemId": 7692,
+      "fishParameterId": 201,
+      "minimumGathering": 290
+    },
+    {
+      "itemId": 7693,
+      "fishParameterId": 202,
+      "minimumGathering": 290
+    },
+    {
+      "itemId": 7694,
+      "fishParameterId": 203,
+      "minimumGathering": 332
+    },
+    {
+      "itemId": 7695,
+      "fishParameterId": 204,
+      "minimumGathering": 335
+    },
+    {
+      "itemId": 7696,
+      "fishParameterId": 205,
+      "minimumGathering": 290
+    },
+    {
+      "itemId": 7697,
+      "fishParameterId": 206,
+      "minimumGathering": 332
+    },
+    {
+      "itemId": 7698,
+      "fishParameterId": 207,
+      "minimumGathering": 308
+    },
+    {
+      "itemId": 7699,
+      "fishParameterId": 208,
+      "minimumGathering": 332
+    },
+    {
+      "itemId": 7700,
+      "fishParameterId": 209,
+      "minimumGathering": 332
+    },
+    {
+      "itemId": 7701,
+      "fishParameterId": 210,
+      "minimumGathering": 290
+    },
+    {
+      "itemId": 7702,
+      "fishParameterId": 211,
+      "minimumGathering": 332
+    },
+    {
+      "itemId": 7703,
+      "fishParameterId": 212,
+      "minimumGathering": 308
+    },
+    {
+      "itemId": 7704,
+      "fishParameterId": 213,
+      "minimumGathering": 332
+    },
+    {
+      "itemId": 7705,
+      "fishParameterId": 214,
+      "minimumGathering": 290
+    },
+    {
+      "itemId": 7706,
+      "fishParameterId": 215,
+      "minimumGathering": 308
+    },
+    {
+      "itemId": 7707,
+      "fishParameterId": 216,
+      "minimumGathering": 290
+    },
+    {
+      "itemId": 7708,
+      "fishParameterId": 217,
+      "minimumGathering": 290
+    },
+    {
+      "itemId": 7709,
+      "fishParameterId": 218,
+      "minimumGathering": 290
+    },
+    {
+      "itemId": 7710,
+      "fishParameterId": 219,
+      "minimumGathering": 308
+    },
+    {
+      "itemId": 7711,
+      "fishParameterId": 220,
+      "minimumGathering": 332
+    },
+    {
+      "itemId": 7712,
+      "fishParameterId": 221,
+      "minimumGathering": 308
+    },
+    {
+      "itemId": 7713,
+      "fishParameterId": 222,
+      "minimumGathering": 290
+    },
+    {
+      "itemId": 7714,
+      "fishParameterId": 223,
+      "minimumGathering": 290
+    },
+    {
+      "itemId": 7902,
+      "fishParameterId": 224,
+      "minimumGathering": 335
+    },
+    {
+      "itemId": 7903,
+      "fishParameterId": 225,
+      "minimumGathering": 335
+    },
+    {
+      "itemId": 7904,
+      "fishParameterId": 226,
+      "minimumGathering": 335
+    },
+    {
+      "itemId": 7905,
+      "fishParameterId": 227,
+      "minimumGathering": 335
+    },
+    {
+      "itemId": 7906,
+      "fishParameterId": 228,
+      "minimumGathering": 335
+    },
+    {
+      "itemId": 7907,
+      "fishParameterId": 229,
+      "minimumGathering": 350
+    },
+    {
+      "itemId": 7908,
+      "fishParameterId": 230,
+      "minimumGathering": 335
+    },
+    {
+      "itemId": 7909,
+      "fishParameterId": 231,
+      "minimumGathering": 335
+    },
+    {
+      "itemId": 7910,
+      "fishParameterId": 232,
+      "minimumGathering": 335
+    },
+    {
+      "itemId": 7911,
+      "fishParameterId": 233,
+      "minimumGathering": 335
+    },
+    {
+      "itemId": 7912,
+      "fishParameterId": 234,
+      "minimumGathering": 335
+    },
+    {
+      "itemId": 7914,
+      "fishParameterId": 236,
+      "minimumGathering": 335
+    },
+    {
+      "itemId": 7915,
+      "fishParameterId": 237,
+      "minimumGathering": 338
+    },
+    {
+      "itemId": 7916,
+      "fishParameterId": 238,
+      "minimumGathering": 338
+    },
+    {
+      "itemId": 7917,
+      "fishParameterId": 239,
+      "minimumGathering": 338
+    },
+    {
+      "itemId": 7918,
+      "fishParameterId": 240,
+      "minimumGathering": 338
+    },
+    {
+      "itemId": 7919,
+      "fishParameterId": 241,
+      "minimumGathering": 338
+    },
+    {
+      "itemId": 7920,
+      "fishParameterId": 242,
+      "minimumGathering": 338
+    },
+    {
+      "itemId": 7921,
+      "fishParameterId": 243,
+      "minimumGathering": 338
+    },
+    {
+      "itemId": 7922,
+      "fishParameterId": 244,
+      "minimumGathering": 338
+    },
+    {
+      "itemId": 7924,
+      "fishParameterId": 246,
+      "minimumGathering": 345
+    },
+    {
+      "itemId": 7925,
+      "fishParameterId": 247,
+      "minimumGathering": 345
+    },
+    {
+      "itemId": 7926,
+      "fishParameterId": 248,
+      "minimumGathering": 345
+    },
+    {
+      "itemId": 7927,
+      "fishParameterId": 249,
+      "minimumGathering": 345
+    },
+    {
+      "itemId": 7928,
+      "fishParameterId": 250,
+      "minimumGathering": 345
+    },
+    {
+      "itemId": 7929,
+      "fishParameterId": 251,
+      "minimumGathering": 345
+    },
+    {
+      "itemId": 7930,
+      "fishParameterId": 252,
+      "minimumGathering": 348
+    },
+    {
+      "itemId": 7931,
+      "fishParameterId": 253,
+      "minimumGathering": 345
+    },
+    {
+      "itemId": 7932,
+      "fishParameterId": 254,
+      "minimumGathering": 345
+    },
+    {
+      "itemId": 7933,
+      "fishParameterId": 255,
+      "minimumGathering": 345
+    },
+    {
+      "itemId": 7934,
+      "fishParameterId": 256,
+      "minimumGathering": 345
+    },
+    {
+      "itemId": 7935,
+      "fishParameterId": 257,
+      "minimumGathering": 345
+    },
+    {
+      "itemId": 7936,
+      "fishParameterId": 258,
+      "minimumGathering": 345
+    },
+    {
+      "itemId": 7937,
+      "fishParameterId": 259,
+      "minimumGathering": 349
+    },
+    {
+      "itemId": 7938,
+      "fishParameterId": 260,
+      "minimumGathering": 349
+    },
+    {
+      "itemId": 7939,
+      "fishParameterId": 261,
+      "minimumGathering": 349
+    },
+    {
+      "itemId": 7940,
+      "fishParameterId": 262,
+      "minimumGathering": 349
+    },
+    {
+      "itemId": 7941,
+      "fishParameterId": 263,
+      "minimumGathering": 355
+    },
+    {
+      "itemId": 7942,
+      "fishParameterId": 264,
+      "minimumGathering": 349
+    },
+    {
+      "itemId": 7943,
+      "fishParameterId": 265,
+      "minimumGathering": 355
+    },
+    {
+      "itemId": 7944,
+      "fishParameterId": 266,
+      "minimumGathering": 349
+    },
+    {
+      "itemId": 7945,
+      "fishParameterId": 267,
+      "minimumGathering": 355
+    },
+    {
+      "itemId": 7946,
+      "fishParameterId": 268,
+      "minimumGathering": 349
+    },
+    {
+      "itemId": 7947,
+      "fishParameterId": 269,
+      "minimumGathering": 355
+    },
+    {
+      "itemId": 7948,
+      "fishParameterId": 270,
+      "minimumGathering": 358
+    },
+    {
+      "itemId": 7949,
+      "fishParameterId": 271,
+      "minimumGathering": 358
+    },
+    {
+      "itemId": 7950,
+      "fishParameterId": 272,
+      "minimumGathering": 380
+    },
+    {
+      "itemId": 7951,
+      "fishParameterId": 273,
+      "minimumGathering": 338
+    },
+    {
+      "itemId": 8752,
+      "fishParameterId": 274,
+      "minimumGathering": 358
+    },
+    {
+      "itemId": 8753,
+      "fishParameterId": 275,
+      "minimumGathering": 385
+    },
+    {
+      "itemId": 8754,
+      "fishParameterId": 276,
+      "minimumGathering": 403
+    },
+    {
+      "itemId": 8755,
+      "fishParameterId": 277,
+      "minimumGathering": 378
+    },
+    {
+      "itemId": 8756,
+      "fishParameterId": 278,
+      "minimumGathering": 397
+    },
+    {
+      "itemId": 8757,
+      "fishParameterId": 279,
+      "minimumGathering": 384
+    },
+    {
+      "itemId": 8758,
+      "fishParameterId": 280,
+      "minimumGathering": 358
+    },
+    {
+      "itemId": 8759,
+      "fishParameterId": 281,
+      "minimumGathering": 378
+    },
+    {
+      "itemId": 8760,
+      "fishParameterId": 282,
+      "minimumGathering": 378
+    },
+    {
+      "itemId": 8761,
+      "fishParameterId": 283,
+      "minimumGathering": 358
+    },
+    {
+      "itemId": 8762,
+      "fishParameterId": 284,
+      "minimumGathering": 384
+    },
+    {
+      "itemId": 8763,
+      "fishParameterId": 285,
+      "minimumGathering": 397
+    },
+    {
+      "itemId": 8765,
+      "fishParameterId": 287,
+      "minimumGathering": 382
+    },
+    {
+      "itemId": 8766,
+      "fishParameterId": 288,
+      "minimumGathering": 361
+    },
+    {
+      "itemId": 8767,
+      "fishParameterId": 289,
+      "minimumGathering": 361
+    },
+    {
+      "itemId": 8768,
+      "fishParameterId": 290,
+      "minimumGathering": 397
+    },
+    {
+      "itemId": 8769,
+      "fishParameterId": 291,
+      "minimumGathering": 382
+    },
+    {
+      "itemId": 8770,
+      "fishParameterId": 292,
+      "minimumGathering": 358
+    },
+    {
+      "itemId": 8771,
+      "fishParameterId": 293,
+      "minimumGathering": 361
+    },
+    {
+      "itemId": 8772,
+      "fishParameterId": 294,
+      "minimumGathering": 373
+    },
+    {
+      "itemId": 8774,
+      "fishParameterId": 296,
+      "minimumGathering": 385
+    },
+    {
+      "itemId": 8775,
+      "fishParameterId": 297,
+      "minimumGathering": 397
+    },
+    {
+      "itemId": 8776,
+      "fishParameterId": 298,
+      "minimumGathering": 361
+    },
+    {
+      "itemId": 15626,
+      "fishParameterId": 441,
+      "minimumGathering": 630
+    },
+    {
+      "itemId": 15627,
+      "fishParameterId": 442,
+      "minimumGathering": 630
+    },
+    {
+      "itemId": 15628,
+      "fishParameterId": 443,
+      "minimumGathering": 660
+    },
+    {
+      "itemId": 15629,
+      "fishParameterId": 444,
+      "minimumGathering": 660
+    },
+    {
+      "itemId": 15631,
+      "fishParameterId": 446,
+      "minimumGathering": 660
+    },
+    {
+      "itemId": 15632,
+      "fishParameterId": 447,
+      "minimumGathering": 660
+    },
+    {
+      "itemId": 15633,
+      "fishParameterId": 448,
+      "minimumGathering": 680
+    },
+    {
+      "itemId": 15634,
+      "fishParameterId": 449,
+      "minimumGathering": 720
+    },
+    {
+      "itemId": 15637,
+      "fishParameterId": 452,
+      "minimumGathering": 660
+    },
+    {
+      "itemId": 15638,
+      "fishParameterId": 453,
+      "minimumGathering": 720
+    },
+    {
+      "itemId": 16742,
+      "fishParameterId": 465,
+      "minimumGathering": 750
+    },
+    {
+      "itemId": 16743,
+      "fishParameterId": 466,
+      "minimumGathering": 750
+    },
+    {
+      "itemId": 16744,
+      "fishParameterId": 467,
+      "minimumGathering": 750
+    },
+    {
+      "itemId": 16746,
+      "fishParameterId": 455,
+      "minimumGathering": 700
+    },
+    {
+      "itemId": 16747,
+      "fishParameterId": 456,
+      "minimumGathering": 720
+    },
+    {
+      "itemId": 16748,
+      "fishParameterId": 457,
+      "minimumGathering": 720
+    },
+    {
+      "itemId": 16749,
+      "fishParameterId": 458,
+      "minimumGathering": 720
+    },
+    {
+      "itemId": 16751,
+      "fishParameterId": 460,
+      "minimumGathering": 720
+    },
+    {
+      "itemId": 16752,
+      "fishParameterId": 461,
+      "minimumGathering": 720
+    },
+    {
+      "itemId": 16753,
+      "fishParameterId": 462,
+      "minimumGathering": 720
+    },
+    {
+      "itemId": 16754,
+      "fishParameterId": 463,
+      "minimumGathering": 720
+    },
+    {
+      "itemId": 16756,
+      "fishParameterId": 464,
+      "minimumGathering": 720
+    },
+    {
+      "itemId": 17578,
+      "fishParameterId": 469,
+      "minimumGathering": 750
+    },
+    {
+      "itemId": 17579,
+      "fishParameterId": 470,
+      "minimumGathering": 803
+    },
+    {
+      "itemId": 17582,
+      "fishParameterId": 473,
+      "minimumGathering": 730
+    },
+    {
+      "itemId": 17588,
+      "fishParameterId": 479,
+      "minimumGathering": 800
+    },
+    {
+      "itemId": 17589,
+      "fishParameterId": 480,
+      "minimumGathering": 800
+    },
+    {
+      "itemId": 17590,
+      "fishParameterId": 481,
+      "minimumGathering": 800
+    },
+    {
+      "itemId": 17591,
+      "fishParameterId": 482,
+      "minimumGathering": 800
+    },
+    {
+      "itemId": 17592,
+      "fishParameterId": 483,
+      "minimumGathering": 800
+    },
+    {
+      "itemId": 17593,
+      "fishParameterId": 484,
+      "minimumGathering": 800
+    },
+    {
+      "itemId": 20143,
+      "fishParameterId": 615,
+      "minimumGathering": 170
+    },
+    {
+      "itemId": 23058,
+      "fishParameterId": 640,
+      "minimumGathering": 1050
+    },
+    {
+      "itemId": 23059,
+      "fishParameterId": 641,
+      "minimumGathering": 1050
+    },
+    {
+      "itemId": 23060,
+      "fishParameterId": 642,
+      "minimumGathering": 1100
+    },
+    {
+      "itemId": 23061,
+      "fishParameterId": 643,
+      "minimumGathering": 1100
+    },
+    {
+      "itemId": 23062,
+      "fishParameterId": 644,
+      "minimumGathering": 1200
+    },
+    {
+      "itemId": 23063,
+      "fishParameterId": 645,
+      "minimumGathering": 1050
+    },
+    {
+      "itemId": 23064,
+      "fishParameterId": 646,
+      "minimumGathering": 1050
+    },
+    {
+      "itemId": 23065,
+      "fishParameterId": 647,
+      "minimumGathering": 1050
+    },
+    {
+      "itemId": 23066,
+      "fishParameterId": 648,
+      "minimumGathering": 1050
+    },
+    {
+      "itemId": 23067,
+      "fishParameterId": 649,
+      "minimumGathering": 1200
+    },
+    {
+      "itemId": 23068,
+      "fishParameterId": 650,
+      "minimumGathering": 1200
+    },
+    {
+      "itemId": 23069,
+      "fishParameterId": 651,
+      "minimumGathering": 1100
+    },
+    {
+      "itemId": 23070,
+      "fishParameterId": 652,
+      "minimumGathering": 1200
+    },
+    {
+      "itemId": 24205,
+      "fishParameterId": 660,
+      "minimumGathering": 1200
+    },
+    {
+      "itemId": 24206,
+      "fishParameterId": 661,
+      "minimumGathering": 1200
+    },
+    {
+      "itemId": 24207,
+      "fishParameterId": 662,
+      "minimumGathering": 1200
+    },
+    {
+      "itemId": 24208,
+      "fishParameterId": 663,
+      "minimumGathering": 1200
+    },
+    {
+      "itemId": 24209,
+      "fishParameterId": 664,
+      "minimumGathering": 1200
+    },
+    {
+      "itemId": 24210,
+      "fishParameterId": 665,
+      "minimumGathering": 1200
+    },
+    {
+      "itemId": 24211,
+      "fishParameterId": 666,
+      "minimumGathering": 1200
+    },
+    {
+      "itemId": 24212,
+      "fishParameterId": 667,
+      "minimumGathering": 1250
+    },
+    {
+      "itemId": 24213,
+      "fishParameterId": 668,
+      "minimumGathering": 1200
+    },
+    {
+      "itemId": 24214,
+      "fishParameterId": 669,
+      "minimumGathering": 1250
+    },
+    {
+      "itemId": 24215,
+      "fishParameterId": 670,
+      "minimumGathering": 1250
+    },
+    {
+      "itemId": 24216,
+      "fishParameterId": 671,
+      "minimumGathering": 1250
+    },
+    {
+      "itemId": 24217,
+      "fishParameterId": 672,
+      "minimumGathering": 1250
+    },
+    {
+      "itemId": 24218,
+      "fishParameterId": 673,
+      "minimumGathering": 1200
+    },
+    {
+      "itemId": 24881,
+      "fishParameterId": 674,
+      "minimumGathering": 1250
+    },
+    {
+      "itemId": 24882,
+      "fishParameterId": 675,
+      "minimumGathering": 1250
+    },
+    {
+      "itemId": 24883,
+      "fishParameterId": 676,
+      "minimumGathering": 1250
+    },
+    {
+      "itemId": 24884,
+      "fishParameterId": 677,
+      "minimumGathering": 1250
+    },
+    {
+      "itemId": 24885,
+      "fishParameterId": 678,
+      "minimumGathering": 1250
+    },
+    {
+      "itemId": 24886,
+      "fishParameterId": 679,
+      "minimumGathering": 1250
+    },
+    {
+      "itemId": 24887,
+      "fishParameterId": 680,
+      "minimumGathering": 1250
+    },
+    {
+      "itemId": 24888,
+      "fishParameterId": 681,
+      "minimumGathering": 1250
+    },
+    {
+      "itemId": 24889,
+      "fishParameterId": 682,
+      "minimumGathering": 1250
+    },
+    {
+      "itemId": 24890,
+      "fishParameterId": 683,
+      "minimumGathering": 1250
+    },
+    {
+      "itemId": 24891,
+      "fishParameterId": 684,
+      "minimumGathering": 1250
+    },
+    {
+      "itemId": 24892,
+      "fishParameterId": 685,
+      "minimumGathering": 1250
+    },
+    {
+      "itemId": 24893,
+      "fishParameterId": 686,
+      "minimumGathering": 1250
+    },
+    {
+      "itemId": 24990,
+      "fishParameterId": 693,
+      "minimumGathering": 1300
+    },
+    {
+      "itemId": 24991,
+      "fishParameterId": 694,
+      "minimumGathering": 1300
+    },
+    {
+      "itemId": 24992,
+      "fishParameterId": 695,
+      "minimumGathering": 1300
+    },
+    {
+      "itemId": 24993,
+      "fishParameterId": 696,
+      "minimumGathering": 1300
+    },
+    {
+      "itemId": 24994,
+      "fishParameterId": 692,
+      "minimumGathering": 1300
+    },
+    {
+      "itemId": 24995,
+      "fishParameterId": 697,
+      "minimumGathering": 1300
+    },
+    {
+      "itemId": 28065,
+      "fishParameterId": 809,
+      "minimumGathering": 1500
+    },
+    {
+      "itemId": 28066,
+      "fishParameterId": 810,
+      "minimumGathering": 1500
+    },
+    {
+      "itemId": 28067,
+      "fishParameterId": 811,
+      "minimumGathering": 1500
+    },
+    {
+      "itemId": 28068,
+      "fishParameterId": 812,
+      "minimumGathering": 1500
+    },
+    {
+      "itemId": 28069,
+      "fishParameterId": 813,
+      "minimumGathering": 1500
+    },
+    {
+      "itemId": 28070,
+      "fishParameterId": 814,
+      "minimumGathering": 1500
+    },
+    {
+      "itemId": 28071,
+      "fishParameterId": 815,
+      "minimumGathering": 1500
+    },
+    {
+      "itemId": 28072,
+      "fishParameterId": 816,
+      "minimumGathering": 1500
+    },
+    {
+      "itemId": 28925,
+      "fishParameterId": 822,
+      "minimumGathering": 1850
+    },
+    {
+      "itemId": 28926,
+      "fishParameterId": 823,
+      "minimumGathering": 1850
+    },
+    {
+      "itemId": 28927,
+      "fishParameterId": 824,
+      "minimumGathering": 1850
+    },
+    {
+      "itemId": 28928,
+      "fishParameterId": 825,
+      "minimumGathering": 1850
+    },
+    {
+      "itemId": 28929,
+      "fishParameterId": 826,
+      "minimumGathering": 1850
+    },
+    {
+      "itemId": 28930,
+      "fishParameterId": 827,
+      "minimumGathering": 1850
+    },
+    {
+      "itemId": 30006,
+      "fishParameterId": 15093,
+      "minimumGathering": 1435
+    },
+    {
+      "itemId": 30007,
+      "fishParameterId": 15094,
+      "minimumGathering": 1435
+    },
+    {
+      "itemId": 30008,
+      "fishParameterId": 15095,
+      "minimumGathering": 1435
+    },
+    {
+      "itemId": 30009,
+      "fishParameterId": 15096,
+      "minimumGathering": 1435
+    },
+    {
+      "itemId": 30010,
+      "fishParameterId": 15097,
+      "minimumGathering": 1435
+    },
+    {
+      "itemId": 30011,
+      "fishParameterId": 15098,
+      "minimumGathering": 1435
+    },
+    {
+      "itemId": 30012,
+      "fishParameterId": 15099,
+      "minimumGathering": 1435
+    },
+    {
+      "itemId": 30013,
+      "fishParameterId": 15100,
+      "minimumGathering": 1435
+    },
+    {
+      "itemId": 30432,
+      "fishParameterId": 912,
+      "minimumGathering": 1900
+    },
+    {
+      "itemId": 30433,
+      "fishParameterId": 913,
+      "minimumGathering": 1900
+    },
+    {
+      "itemId": 30434,
+      "fishParameterId": 914,
+      "minimumGathering": 1900
+    },
+    {
+      "itemId": 30435,
+      "fishParameterId": 915,
+      "minimumGathering": 1900
+    },
+    {
+      "itemId": 30436,
+      "fishParameterId": 916,
+      "minimumGathering": 1900
+    },
+    {
+      "itemId": 30437,
+      "fishParameterId": 917,
+      "minimumGathering": 1900
+    },
+    {
+      "itemId": 30438,
+      "fishParameterId": 918,
+      "minimumGathering": 1900
+    },
+    {
+      "itemId": 30439,
+      "fishParameterId": 919,
+      "minimumGathering": 1900
+    },
+    {
+      "itemId": 31596,
+      "fishParameterId": 15119,
+      "minimumGathering": 1610
+    },
+    {
+      "itemId": 31597,
+      "fishParameterId": 15120,
+      "minimumGathering": 1610
+    },
+    {
+      "itemId": 31598,
+      "fishParameterId": 15121,
+      "minimumGathering": 1610
+    },
+    {
+      "itemId": 31599,
+      "fishParameterId": 15122,
+      "minimumGathering": 1610
+    },
+    {
+      "itemId": 31600,
+      "fishParameterId": 15123,
+      "minimumGathering": 1610
+    },
+    {
+      "itemId": 31601,
+      "fishParameterId": 15124,
+      "minimumGathering": 1610
+    },
+    {
+      "itemId": 31602,
+      "fishParameterId": 15125,
+      "minimumGathering": 1610
+    },
+    {
+      "itemId": 32049,
+      "fishParameterId": 927,
+      "minimumGathering": 1950
+    },
+    {
+      "itemId": 32050,
+      "fishParameterId": 928,
+      "minimumGathering": 1950
+    },
+    {
+      "itemId": 32051,
+      "fishParameterId": 929,
+      "minimumGathering": 1950
+    },
+    {
+      "itemId": 32052,
+      "fishParameterId": 930,
+      "minimumGathering": 1950
+    },
+    {
+      "itemId": 32053,
+      "fishParameterId": 931,
+      "minimumGathering": 1950
+    },
+    {
+      "itemId": 32054,
+      "fishParameterId": 932,
+      "minimumGathering": 1950
+    },
+    {
+      "itemId": 32894,
+      "fishParameterId": 15139,
+      "minimumGathering": 1084
+    },
+    {
+      "itemId": 32895,
+      "fishParameterId": 15140,
+      "minimumGathering": 1084
+    },
+    {
+      "itemId": 32896,
+      "fishParameterId": 15141,
+      "minimumGathering": 1084
+    },
+    {
+      "itemId": 32897,
+      "fishParameterId": 15142,
+      "minimumGathering": 1084
+    },
+    {
+      "itemId": 32898,
+      "fishParameterId": 15143,
+      "minimumGathering": 1084
+    },
+    {
+      "itemId": 32899,
+      "fishParameterId": 15144,
+      "minimumGathering": 1084
+    },
+    {
+      "itemId": 32900,
+      "fishParameterId": 15145,
+      "minimumGathering": 1610
+    },
+    {
+      "itemId": 32901,
+      "fishParameterId": 15146,
+      "minimumGathering": 1610
+    },
+    {
+      "itemId": 32902,
+      "fishParameterId": 15147,
+      "minimumGathering": 1610
+    },
+    {
+      "itemId": 32903,
+      "fishParameterId": 15148,
+      "minimumGathering": 1610
+    },
+    {
+      "itemId": 32904,
+      "fishParameterId": 15149,
+      "minimumGathering": 1610
+    },
+    {
+      "itemId": 32905,
+      "fishParameterId": 15150,
+      "minimumGathering": 1610
+    },
+    {
+      "itemId": 32906,
+      "fishParameterId": 15151,
+      "minimumGathering": 1610
+    },
+    {
+      "itemId": 32907,
+      "fishParameterId": 15152,
+      "minimumGathering": 1610
+    },
+    {
+      "itemId": 33239,
+      "fishParameterId": 1011,
+      "minimumGathering": 2250
+    },
+    {
+      "itemId": 33240,
+      "fishParameterId": 1012,
+      "minimumGathering": 2250
+    },
+    {
+      "itemId": 33241,
+      "fishParameterId": 1013,
+      "minimumGathering": 2250
+    },
+    {
+      "itemId": 33242,
+      "fishParameterId": 1014,
+      "minimumGathering": 2250
+    },
+    {
+      "itemId": 33243,
+      "fishParameterId": 1015,
+      "minimumGathering": 2250
+    },
+    {
+      "itemId": 33244,
+      "fishParameterId": 1016,
+      "minimumGathering": 2250
+    },
+    {
+      "itemId": 33316,
+      "fishParameterId": 995,
+      "minimumGathering": 2150
+    },
+    {
+      "itemId": 33317,
+      "fishParameterId": 996,
+      "minimumGathering": 2150
+    },
+    {
+      "itemId": 33318,
+      "fishParameterId": 997,
+      "minimumGathering": 2150
+    },
+    {
+      "itemId": 33319,
+      "fishParameterId": 998,
+      "minimumGathering": 2150
+    },
+    {
+      "itemId": 33320,
+      "fishParameterId": 999,
+      "minimumGathering": 1850
+    },
+    {
+      "itemId": 33321,
+      "fishParameterId": 1000,
+      "minimumGathering": 2150
+    },
+    {
+      "itemId": 33322,
+      "fishParameterId": 1001,
+      "minimumGathering": 2150
+    },
+    {
+      "itemId": 33323,
+      "fishParameterId": 1002,
+      "minimumGathering": 2150
+    },
+    {
+      "itemId": 33324,
+      "fishParameterId": 1003,
+      "minimumGathering": 2150
+    },
+    {
+      "itemId": 33325,
+      "fishParameterId": 1004,
+      "minimumGathering": 2150
+    },
+    {
+      "itemId": 33326,
+      "fishParameterId": 1005,
+      "minimumGathering": 2150
+    },
+    {
+      "itemId": 36679,
+      "fishParameterId": 1135,
+      "minimumGathering": 2400
+    },
+    {
+      "itemId": 36680,
+      "fishParameterId": 1136,
+      "minimumGathering": 2400
+    },
+    {
+      "itemId": 36681,
+      "fishParameterId": 1137,
+      "minimumGathering": 2400
+    },
+    {
+      "itemId": 36682,
+      "fishParameterId": 1138,
+      "minimumGathering": 2400
+    },
+    {
+      "itemId": 36683,
+      "fishParameterId": 1139,
+      "minimumGathering": 2400
+    },
+    {
+      "itemId": 36684,
+      "fishParameterId": 1140,
+      "minimumGathering": 2400
+    },
+    {
+      "itemId": 36685,
+      "fishParameterId": 1141,
+      "minimumGathering": 2400
+    },
+    {
+      "itemId": 37697,
+      "fishParameterId": 1155,
+      "minimumGathering": 2960
+    },
+    {
+      "itemId": 37845,
+      "fishParameterId": 1146,
+      "minimumGathering": 2780
+    },
+    {
+      "itemId": 37846,
+      "fishParameterId": 1147,
+      "minimumGathering": 2780
+    },
+    {
+      "itemId": 37847,
+      "fishParameterId": 1148,
+      "minimumGathering": 2780
+    },
+    {
+      "itemId": 37848,
+      "fishParameterId": 1149,
+      "minimumGathering": 2780
+    },
+    {
+      "itemId": 37849,
+      "fishParameterId": 1150,
+      "minimumGathering": 2780
+    },
+    {
+      "itemId": 37850,
+      "fishParameterId": 1151,
+      "minimumGathering": 2780
+    },
+    {
+      "itemId": 37851,
+      "fishParameterId": 1152,
+      "minimumGathering": 2780
+    },
+    {
+      "itemId": 37852,
+      "fishParameterId": 1153,
+      "minimumGathering": 2780
+    },
+    {
+      "itemId": 37853,
+      "fishParameterId": 1154,
+      "minimumGathering": 2780
+    },
+    {
+      "itemId": 38830,
+      "fishParameterId": 1156,
+      "minimumGathering": 2950
+    },
+    {
+      "itemId": 38831,
+      "fishParameterId": 1157,
+      "minimumGathering": 2950
+    },
+    {
+      "itemId": 38832,
+      "fishParameterId": 1158,
+      "minimumGathering": 2950
+    },
+    {
+      "itemId": 38833,
+      "fishParameterId": 1159,
+      "minimumGathering": 2950
+    },
+    {
+      "itemId": 38834,
+      "fishParameterId": 1160,
+      "minimumGathering": 2950
+    },
+    {
+      "itemId": 38835,
+      "fishParameterId": 1161,
+      "minimumGathering": 2950
+    },
+    {
+      "itemId": 38836,
+      "fishParameterId": 1162,
+      "minimumGathering": 2950
+    },
+    {
+      "itemId": 39240,
+      "fishParameterId": 1167,
+      "minimumGathering": 3150
+    },
+    {
+      "itemId": 39879,
+      "fishParameterId": 1172,
+      "minimumGathering": 3060
+    },
+    {
+      "itemId": 39880,
+      "fishParameterId": 1173,
+      "minimumGathering": 3060
+    },
+    {
+      "itemId": 39881,
+      "fishParameterId": 1174,
+      "minimumGathering": 3060
+    },
+    {
+      "itemId": 39882,
+      "fishParameterId": 1175,
+      "minimumGathering": 3060
+    },
+    {
+      "itemId": 39883,
+      "fishParameterId": 1176,
+      "minimumGathering": 3060
+    },
+    {
+      "itemId": 39912,
+      "fishParameterId": 1257,
+      "minimumGathering": 3200
+    },
+    {
+      "itemId": 41401,
+      "fishParameterId": 1262,
+      "minimumGathering": 3150
+    },
+    {
+      "itemId": 41402,
+      "fishParameterId": 1263,
+      "minimumGathering": 3150
+    },
+    {
+      "itemId": 41403,
+      "fishParameterId": 1264,
+      "minimumGathering": 3150
+    },
+    {
+      "itemId": 41404,
+      "fishParameterId": 1265,
+      "minimumGathering": 3150
+    },
+    {
+      "itemId": 41405,
+      "fishParameterId": 1266,
+      "minimumGathering": 3150
+    },
+    {
+      "itemId": 41406,
+      "fishParameterId": 1267,
+      "minimumGathering": 3150
+    },
+    {
+      "itemId": 41407,
+      "fishParameterId": 1277,
+      "minimumGathering": 3300
+    },
+    {
+      "itemId": 41408,
+      "fishParameterId": 1278,
+      "minimumGathering": 3300
+    },
+    {
+      "itemId": 41409,
+      "fishParameterId": 1279,
+      "minimumGathering": 3300
+    },
+    {
+      "itemId": 41410,
+      "fishParameterId": 1280,
+      "minimumGathering": 3300
+    },
+    {
+      "itemId": 41411,
+      "fishParameterId": 1281,
+      "minimumGathering": 3300
+    },
+    {
+      "itemId": 41412,
+      "fishParameterId": 1282,
+      "minimumGathering": 3300
+    },
+    {
+      "itemId": 41419,
+      "fishParameterId": 1271,
+      "minimumGathering": 3250
+    },
+    {
+      "itemId": 44339,
+      "fishParameterId": 1423,
+      "minimumGathering": 3500
+    },
+    {
+      "itemId": 44340,
+      "fishParameterId": 1424,
+      "minimumGathering": 3500
+    },
+    {
+      "itemId": 44341,
+      "fishParameterId": 1425,
+      "minimumGathering": 3500
+    },
+    {
+      "itemId": 44342,
+      "fishParameterId": 1427,
+      "minimumGathering": 3500
+    },
+    {
+      "itemId": 44343,
+      "fishParameterId": 1426,
+      "minimumGathering": 3500
+    },
+    {
+      "itemId": 44344,
+      "fishParameterId": 1430,
+      "minimumGathering": 3500
+    },
+    {
+      "itemId": 44345,
+      "fishParameterId": 1428,
+      "minimumGathering": 3500
+    },
+    {
+      "itemId": 44346,
+      "fishParameterId": 1429,
+      "minimumGathering": 3500
+    },
+    {
+      "itemId": 46189,
+      "fishParameterId": 1448,
+      "minimumGathering": 4450
+    },
+    {
+      "itemId": 46190,
+      "fishParameterId": 1449,
+      "minimumGathering": 4450
+    },
+    {
+      "itemId": 46191,
+      "fishParameterId": 1450,
+      "minimumGathering": 4450
+    },
+    {
+      "itemId": 46192,
+      "fishParameterId": 1451,
+      "minimumGathering": 4450
+    },
+    {
+      "itemId": 46193,
+      "fishParameterId": 1452,
+      "minimumGathering": 4450
+    },
+    {
+      "itemId": 46194,
+      "fishParameterId": 1453,
+      "minimumGathering": 4450
+    },
+    {
+      "itemId": 46195,
+      "fishParameterId": 1454,
+      "minimumGathering": 4450
+    },
+    {
+      "itemId": 46196,
+      "fishParameterId": 1455,
+      "minimumGathering": 4450
+    },
+    {
+      "itemId": 47988,
+      "fishParameterId": 1437,
+      "minimumGathering": 4040
+    },
+    {
+      "itemId": 47989,
+      "fishParameterId": 1438,
+      "minimumGathering": 4040
+    },
+    {
+      "itemId": 47990,
+      "fishParameterId": 1439,
+      "minimumGathering": 4040
+    },
+    {
+      "itemId": 47991,
+      "fishParameterId": 1440,
+      "minimumGathering": 4040
+    },
+    {
+      "itemId": 47992,
+      "fishParameterId": 1441,
+      "minimumGathering": 4040
+    },
+    {
+      "itemId": 47993,
+      "fishParameterId": 1442,
+      "minimumGathering": 4040
+    },
+    {
+      "itemId": 47994,
+      "fishParameterId": 1443,
+      "minimumGathering": 4040
+    },
+    {
+      "itemId": 47995,
+      "fishParameterId": 1444,
+      "minimumGathering": 4040
+    },
+    {
+      "itemId": 49794,
+      "fishParameterId": 1456,
+      "minimumGathering": 4450
+    },
+    {
+      "itemId": 49795,
+      "fishParameterId": 1457,
+      "minimumGathering": 4450
+    },
+    {
+      "itemId": 49796,
+      "fishParameterId": 1458,
+      "minimumGathering": 4450
+    },
+    {
+      "itemId": 49797,
+      "fishParameterId": 1459,
+      "minimumGathering": 4450
+    },
+    {
+      "itemId": 49798,
+      "fishParameterId": 1460,
+      "minimumGathering": 4450
+    },
+    {
+      "itemId": 49799,
+      "fishParameterId": 1461,
+      "minimumGathering": 4450
+    },
+    {
+      "itemId": 49800,
+      "fishParameterId": 1462,
+      "minimumGathering": 4450
+    },
+    {
+      "itemId": 49801,
+      "fishParameterId": 1463,
+      "minimumGathering": 4450
+    },
+    {
+      "itemId": 51999,
+      "fishParameterId": 1464,
+      "minimumGathering": 4450
+    },
+    {
+      "itemId": 52000,
+      "fishParameterId": 1465,
+      "minimumGathering": 4450
+    },
+    {
+      "itemId": 52001,
+      "fishParameterId": 1466,
+      "minimumGathering": 4450
+    },
+    {
+      "itemId": 52002,
+      "fishParameterId": 1467,
+      "minimumGathering": 4450
+    },
+    {
+      "itemId": 52003,
+      "fishParameterId": 1468,
+      "minimumGathering": 4450
+    },
+    {
+      "itemId": 52004,
+      "fishParameterId": 1469,
+      "minimumGathering": 4450
+    },
+    {
+      "itemId": 52005,
+      "fishParameterId": 1470,
+      "minimumGathering": 4450
+    },
+    {
+      "itemId": 52006,
+      "fishParameterId": 1471,
+      "minimumGathering": 4450
+    },
+    {
+      "itemId": 52007,
+      "fishParameterId": 1517,
+      "minimumGathering": 4570
+    },
+    {
+      "itemId": 52008,
+      "fishParameterId": 1518,
+      "minimumGathering": 4570
+    },
+    {
+      "itemId": 52009,
+      "fishParameterId": 1519,
+      "minimumGathering": 4570
+    },
+    {
+      "itemId": 52010,
+      "fishParameterId": 1520,
+      "minimumGathering": 4570
+    },
+    {
+      "itemId": 52011,
+      "fishParameterId": 1522,
+      "minimumGathering": 4570
+    },
+    {
+      "itemId": 52297,
+      "fishParameterId": 1521,
+      "minimumGathering": 4570
+    }
+  ]
+}

@@ -22,6 +22,7 @@ internal sealed class CommonSettingsBackup
     public required List<CatalogPreset> CatalogPresets { get; set; } = [];
     public required UiLanguage Language { get; set; } = UiLanguage.Korean;
     public required int UiScalePercent { get; set; } = UiScale.DefaultPercent;
+    public UiTheme Theme { get; set; }
     public required bool DeveloperMode { get; set; }
     public required CompactViewSettings Compact { get; set; } = new();
     public required SpawnScheduleSettings Schedule { get; set; } = new();
@@ -40,6 +41,7 @@ internal sealed class CommonSettingsBackup
         SpawnAlertAudience = value.SpawnAlertAudience, RemoveFavoriteOnRegistration = value.RemoveFavoriteOnRegistration,
         Catalog = value.Catalog.Copy(), CatalogPresets = value.CatalogPresets.Select(preset => preset.Copy()).ToList(),
         Language = value.Language, UiScalePercent = value.UiScalePercent, DeveloperMode = value.DeveloperMode,
+        Theme = value.Theme,
         Compact = value.Compact, Schedule = value.Schedule, Timer = value.Timer.Copy(),
         SpotFishHideCaught = value.SpotFishHideCaught, FishAlertLeadMinutes = new(value.FishAlertLeadMinutes),
         PersonalRecords = new(value.PersonalRecords),
@@ -60,6 +62,7 @@ internal sealed class CommonSettingsBackup
         target.CatalogPresets = CatalogPresets.Select(preset => preset.Copy()).ToList();
         target.Language = Language;
         target.UiScalePercent = UiScalePercent;
+        target.Theme = UiThemeSettings.Normalize(Theme);
         target.DeveloperMode = DeveloperMode;
         target.Compact = Compact;
         target.Schedule = Schedule;

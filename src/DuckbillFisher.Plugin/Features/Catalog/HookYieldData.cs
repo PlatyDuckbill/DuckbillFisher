@@ -12,7 +12,7 @@ internal sealed record HookYieldRange(int Minimum, int? Maximum)
     public string Display => Maximum is null ? UiText.Get(T.HookYieldAtLeast, Minimum) : Maximum == Minimum
         ? Minimum.ToString(UiText.Culture) : UiText.Get(T.HookYieldRange, Minimum, Maximum);
 }
-internal sealed record HookYieldEntry(uint ItemId, uint FishParameterId, string Source, HookYieldRange? DoubleHook, HookYieldRange? TripleHook);
+internal sealed record HookYieldEntry(uint ItemId, uint FishParameterId, string Source, HookYieldRange? DoubleHook, HookYieldRange? TripleHook, bool Ocean = false);
 
 internal static class HookYieldData
 {
@@ -35,7 +35,8 @@ internal static class HookYieldData
                 throw new InvalidDataException("HookYieldSource");
             var rules = FishingData.Dataset.Fish.ToDictionary(f => f.ItemId);
             foreach (var entry in data.Entries)
-                if (!sources.ContainsKey(entry.Source) || !rules.TryGetValue(entry.ItemId, out var fish) || fish.FishParameterId != entry.FishParameterId ||
+                if (!sources.ContainsKey(entry.Source) || entry.ItemId == 0 || entry.FishParameterId == 0 ||
+                    !entry.Ocean && (!rules.TryGetValue(entry.ItemId, out var fish) || fish.FishParameterId != entry.FishParameterId) ||
                     entry.DoubleHook is null && entry.TripleHook is null || entry.DoubleHook?.Valid == false || entry.TripleHook?.Valid == false)
                     throw new InvalidDataException("HookYieldIdentity");
             ByItem = data.Entries.ToFrozenDictionary(e => e.ItemId);
@@ -49,14 +50,30 @@ internal static class HookYieldData
 
 internal static class HookYieldText
 {
-    public static void Draw(uint itemId)
+    public static void Draw(uint itemId, bool standalone = true, uint? fishParameterId = null)
     {
         HookYieldData.ByItem.TryGetValue(itemId, out var entry);
+        if (fishParameterId is { } fishId && entry?.FishParameterId != fishId) entry = null;
+        var known = entry?.DoubleHook is not null || entry?.TripleHook is not null;
+        var doubleCount = Count(entry?.DoubleHook);
+        var tripleCount = Count(entry?.TripleHook);
+        var text = known ? UiText.Get(T.HookYieldValues, doubleCount, tripleCount)
+            : UiText.Get(standalone ? T.HookYieldUnknown : T.ConditionUnknown);
+        var hint = UiText.Get(HookYieldData.Invalid ? T.HookYieldUnavailable : T.HookYieldHint);
         ImGui.PushTextWrapPos(0);
-        ImGui.TextDisabled(UiText.Get(T.HookYieldValues,
-            entry?.DoubleHook?.Display ?? UiText.Get(T.ConditionUnknown),
-            entry?.TripleHook?.Display ?? UiText.Get(T.ConditionUnknown)));
+        if (known && ImGui.CalcTextSize(text).X > ImGui.GetContentRegionAvail().X)
+        {
+            ImGui.TextWrapped(UiText.Get(T.HookYieldDoubleValue, doubleCount));
+            UiWidgets.Tooltip(hint);
+            ImGui.TextWrapped(UiText.Get(T.HookYieldTripleValue, tripleCount));
+        }
+        else if (known) ImGui.TextWrapped(text);
+        else ImGui.TextDisabled(text);
         ImGui.PopTextWrapPos();
-        UiWidgets.Tooltip(UiText.Get(HookYieldData.Invalid ? T.HookYieldUnavailable : T.HookYieldHint));
+        UiWidgets.Tooltip(hint);
+
+        static string Count(HookYieldRange? range) => range is null ? UiText.Get(T.ConditionUnknown)
+            : range.Maximum is null ? UiText.Get(T.HookYieldCountAtLeast, range.Minimum)
+            : UiText.Get(T.HookYieldCount, range.Display);
     }
 }

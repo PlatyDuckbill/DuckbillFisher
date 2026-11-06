@@ -23,12 +23,14 @@ internal sealed record RecommendationRowInfo(string Timing, string Context, stri
 /// <summary>Shared catalog/favorite/recommendation rows. Uses managed data and borrowed textures only.</summary>
 internal sealed class FishRowRenderer(ITextureProvider textures, FishingMapService maps)
 {
-    private static readonly Vector4 OpenBackground = new(0.10f, 0.48f, 0.30f, 0.14f);
-    private static readonly Vector4 OpenAccent = new(0.55f, 0.88f, 0.68f, 1);
+    private static Vector4 OpenBackground => UiThemeScope.Current is not null
+        ? new Vector4(UiThemeColors.Positive.X, UiThemeColors.Positive.Y, UiThemeColors.Positive.Z, .065f)
+        : new(0.10f, 0.48f, 0.30f, 0.14f);
+    private static Vector4 OpenAccent => UiThemeScope.Current is not null ? UiThemeColors.Positive : new(0.55f, 0.88f, 0.68f, 1);
     private readonly Dictionary<uint, (FishGuideRow Row, FishRowSummary Summary)> summaries = [];
     private readonly Dictionary<uint, (RowToken[] Bait, RowToken[] Conditions)> tokens = [];
     private CultureInfo? culture;
-    private static bool IsWide(float width) => width >= ImGui.GetFontSize() * 23;
+    private static bool IsWide(float width) => width >= ImGui.GetFontSize() * 21;
     private static int LineCount(float width) => IsWide(width) ? 3 : 4;
     public static float GetHeight(float width) => ImGui.GetTextLineHeightWithSpacing() * LineCount(width) + 8;
     public static float GetRecommendationHeight() => ImGui.GetTextLineHeightWithSpacing() * 3 + 8;
@@ -36,7 +38,7 @@ internal sealed class FishRowRenderer(ITextureProvider textures, FishingMapServi
     public bool Draw(FishGuideRow fish, float height, bool selected, string state, string place,
         FishingWindow? forecast, DateTimeOffset now, bool usesOtherRegion = false, bool favorite = false, bool compact = false,
         FishingSpotView? spot = null, bool canOpenMap = false, CollectionStatus? collectionStatus = null,
-        RecommendationRowInfo? recommendation = null)
+        RecommendationRowInfo? recommendation = null, bool grouped = false)
     {
         if (culture != UiText.Culture)
         {
@@ -47,23 +49,37 @@ internal sealed class FishRowRenderer(ITextureProvider textures, FishingMapServi
         ImGui.PushID((int)fish.FishParameterId);
         var start = ImGui.GetCursorPos();
         var width = ImGui.GetContentRegionAvail().X;
+        var rowOrigin = ImGui.GetCursorScreenPos();
         var wide = IsWide(width);
         var line = ImGui.GetTextLineHeightWithSpacing();
         var open = recommendation is null && !fish.IsOceanFishing && forecast is { Kind: FishingWindowKind.Open } &&
             (forecast.Start is null || forecast.Start <= now) && (forecast.End is null || now < forecast.End);
-        if (open)
+        var themed = UiThemeScope.Current is not null;
+        if (open && !themed)
         {
             var screen = ImGui.GetCursorScreenPos();
             ImGui.GetWindowDrawList().AddRectFilled(screen, screen + new Vector2(width, height), ImGui.GetColorU32(OpenBackground));
         }
+        if (themed)
+        {
+            ImGui.PushStyleColor(ImGuiCol.Header, Vector4.Zero);
+            ImGui.PushStyleColor(ImGuiCol.HeaderHovered, Vector4.Zero);
+            ImGui.PushStyleColor(ImGuiCol.HeaderActive, Vector4.Zero);
+        }
         var clicked = ImGui.Selectable("###FishRow", selected, ImGuiSelectableFlags.AllowItemOverlap, new Vector2(width, height));
-        if (open)
+        if (themed)
+        {
+            ImGui.PopStyleColor(3);
+            if (!grouped) UiThemeDecorations.ListItemSurface(rowOrigin, width, height, selected, ImGui.IsItemHovered());
+        }
+        if (open && !themed && (!selected || UiThemeScope.Current is null))
         {
             var screen = ImGui.GetItemRectMin();
             ImGui.GetWindowDrawList().AddRectFilled(screen, screen + new Vector2(2, height), ImGui.GetColorU32(OpenAccent));
         }
         var next = ImGui.GetCursorPos();
-        var iconSize = line * (wide || compact || recommendation is not null ? 2 : 3);
+        // A narrower text area must not also enlarge the image and take still more text width.
+        var iconSize = line * 2;
         var informationHeight = line * (recommendation is not null ? 3 : LineCount(width)) - ImGui.GetStyle().ItemSpacing.Y;
         var iconY = 4 + Math.Max(0, (informationHeight - iconSize) / 2);
         ImGui.SetCursorPos(start + new Vector2(4, iconY));
@@ -78,7 +94,8 @@ internal sealed class FishRowRenderer(ITextureProvider textures, FishingMapServi
         if (favorite)
         {
             ImGui.SetCursorPos(start + new Vector2(6, iconY + iconSize - ImGui.GetTextLineHeight()));
-            ImGui.PushStyleColor(ImGuiCol.Text, new Vector4(1, 0.8f, 0.32f, 1));
+            ImGui.PushStyleColor(ImGuiCol.Text, UiThemeScope.Current is not null ? UiThemeColors.Favorite
+                : UiWidgets.ReadableColor(new Vector4(1, 0.8f, 0.32f, 1)));
             UiWidgets.Icon(FontAwesomeIcon.Star);
             ImGui.PopStyleColor();
             UiWidgets.Tooltip(UiText.Get(T.FavoriteToggle));
@@ -106,6 +123,8 @@ internal sealed class FishRowRenderer(ITextureProvider textures, FishingMapServi
             CollectionStatus.Uncaught => new Vector4(1, 0.89f, 0.86f, 1),
             _ => (Vector4?)null,
         };
+        if (UiThemeScope.Current is not null && collectionStatus is not null)
+            collectionColor = collectionStatus == CollectionStatus.Caught ? UiThemeColors.Positive : UiThemeColors.Secondary;
         if (collectionStatus is not null)
         {
             var badgeStart = ImGui.GetCursorScreenPos() - new Vector2(0, 2);
@@ -116,6 +135,8 @@ internal sealed class FishRowRenderer(ITextureProvider textures, FishingMapServi
                 CollectionStatus.Uncaught => new Vector4(0.48f, 0.12f, 0.10f, 0.97f),
                 _ => new Vector4(0.20f, 0.22f, 0.25f, 0.97f),
             };
+            if (UiThemeScope.Current is not null)
+                background = UiThemeColors.Surface(collectionColor ?? UiThemeColors.Secondary, .09f);
             var draw = ImGui.GetWindowDrawList();
             draw.AddRectFilled(badgeStart, badgeEnd, ImGui.GetColorU32(background), 3);
             draw.AddRect(badgeStart, badgeEnd, ImGui.GetColorU32(collectionColor ?? ImGui.GetStyle().Colors[(int)ImGuiCol.TextDisabled]), 3);
@@ -144,8 +165,8 @@ internal sealed class FishRowRenderer(ITextureProvider textures, FishingMapServi
         LineText(place, Math.Max(1, identityWidth - (recommendation is null ? timerWidth : 0) - pinWidth - 16), true);
         ImGui.SetCursorPos(start + new Vector2(recommendation is not null ? scheduleX : textX + textWidth - timerWidth,
             4 + (recommendation is not null ? 0 : line)));
-        if (open) ImGui.PushStyleColor(ImGuiCol.Text, OpenAccent);
-        if (recommendation is not null) ImGui.PushStyleColor(ImGuiCol.Text, recommendation.Tint);
+        if (open) ImGui.PushStyleColor(ImGuiCol.Text, UiWidgets.ReadableColor(OpenAccent));
+        if (recommendation is not null) ImGui.PushStyleColor(ImGuiCol.Text, UiWidgets.ReadableColor(recommendation.Tint));
         LineText(time, timerWidth, false, showTooltip: recommendation is null);
         if (recommendation is not null) ImGui.PopStyleColor();
         if (open) ImGui.PopStyleColor();
@@ -200,7 +221,7 @@ internal sealed class FishRowRenderer(ITextureProvider textures, FishingMapServi
             { actionClicked = true; recommendation.OpenEvidence?.Invoke(); }
             actionHovered |= ImGui.IsItemHovered();
             ImGui.SetCursorPos(start + new Vector2(scheduleX, 4 + line * 2));
-            if (recommendation.ContextTint is { } tint) ImGui.PushStyleColor(ImGuiCol.Text, tint);
+            if (recommendation.ContextTint is { } tint) ImGui.PushStyleColor(ImGuiCol.Text, UiWidgets.ReadableColor(tint));
             LineText(recommendation.Reason, textX + textWidth - scheduleX, false);
             if (recommendation.ContextTint is not null) ImGui.PopStyleColor();
         }

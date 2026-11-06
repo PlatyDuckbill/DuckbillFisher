@@ -1,10 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
 <root>
+  <data name="ThemeSetting" xml:space="preserve"><value>Theme</value></data>
+  <data name="ThemeSettingHint" xml:space="preserve"><value>Applies to the main screen, casting timer and auxiliary views. Spacing and timer layout follow the original Dalamud view. Your choice is saved.</value></data>
+  <data name="ThemeOriginal" xml:space="preserve"><value>Original · Dalamud theme</value></data>
+  <data name="ThemeOriginalHint" xml:space="preserve"><value>Uses the existing Dalamud appearance and compact timer.</value></data>
+  <data name="ThemeGraphite" xml:space="preserve"><value>Graphite</value></data>
+  <data name="ThemeGraphiteHint" xml:space="preserve"><value>Neutral graphite surfaces, outlined controls and aligned fishing details.</value></data>
+  <data name="PresetApplyHint" xml:space="preserve"><value>Apply the filters and sort order from “{0}”.</value></data>
+  <data name="DetailMinimumGathering" xml:space="preserve"><value>Min. Gathering</value></data>
+  <data name="MinimumGatheringUnavailable" xml:space="preserve"><value>Data unavailable</value></data>
+  <data name="MinimumGatheringHint" xml:space="preserve"><value>Published minimum Gathering to catch this fish. This is separate from Gathering thresholds for guaranteed Double or Triple Hook yields. Missing or zero source values remain unknown.</value></data>
+  <data name="DeliveryAppraiserLine" xml:space="preserve"><value>Collectable Appraiser · collectability {0} / {1} / {2}+</value></data>
+  <data name="DeliveryCustomLine" xml:space="preserve"><value>{0} · collectability {1} / {2} / {3}+</value></data>
+  <data name="DeliveryUnknown" xml:space="preserve"><value>Collectable · delivery information unknown</value></data>
+  <data name="DeliveryUnavailable" xml:space="preserve"><value>Collectable · delivery information unavailable</value></data>
+  <data name="DeliveryHint" xml:space="preserve"><value>These are delivery targets and collectability tiers. Check the game for unlock requirements and currently requested items. Special exchanges outside appraisers and custom deliveries are not included.</value></data>
+  <data name="HookYieldDoubleValue" xml:space="preserve"><value>Double {0}</value></data>
+  <data name="HookYieldTripleValue" xml:space="preserve"><value>Triple {0}</value></data>
+  <data name="ThemePaper" xml:space="preserve"><value>Paper</value></data>
+  <data name="ThemePaperHint" xml:space="preserve"><value>Warm white surfaces and dark text, with teal, ochre and plum information accents.</value></data>
+  <data name="ThemeScheduleMarksHint" xml:space="preserve"><value>Filled bars are open now; outlined bars are upcoming. A highlighted outline marks your selection, and amber hatching marks overlapping windows.</value></data>
   <data name="OceanFishTitle" xml:space="preserve"><value>Fish in this sea area</value></data>
   <data name="OceanFishAreaTitle" xml:space="preserve"><value>{0} · {1}</value></data>
   <data name="OceanFishLoading" xml:space="preserve"><value>Loading fish for this sea area…</value></data>
   <data name="OceanFishUnavailable" xml:space="preserve"><value>The current sea area's fish list is unavailable.</value></data>
-  <data name="OceanFishConditionsHint" xml:space="preserve"><value>Fish for this sea area and normal/spectral state. Time, weather and Intuition conditions are not filtered.</value></data>
+  <data name="OceanFishConditionsHint" xml:space="preserve"><value>Exclude fish that conflict with the route's visiting time, observed weather or absence of Intuition. Keep unconfirmed conditions as candidates. An active Intuition status does not confirm its target. Bait, gear and special catch tables are not fully checked. Uncheck to see all fish in the sea area.</value></data>
   <data name="OceanDataLoading" xml:space="preserve"><value>Loading Ocean Fishing data…</value></data>
   <data name="OceanDiagnostics" xml:space="preserve"><value>Ocean Fishing diagnostics</value></data>
   <data name="OceanCopyDiagnostics" xml:space="preserve"><value>Copy voyage diagnostics</value></data>
@@ -166,7 +186,7 @@
   <data name="English" xml:space="preserve"><value>English</value></data>
   <data name="TabGuide" xml:space="preserve"><value>Fish log diagnostics</value></data>
   <data name="TabFishing" xml:space="preserve"><value>Fishing observations</value></data>
-  <data name="CommandHelp" xml:space="preserve"><value>Toggle DuckbillFisher with /dbfs or /duckbillfisher. Use /dbfs cl for the compact list, /dbfs ct for the casting timer, or /dbfs fish name for fish details. compact and timer also work with either command.</value></data>
+  <data name="CommandHelp" xml:space="preserve"><value>Toggle DuckbillFisher with /dbfs or /duckbillfisher. Use /dbfs cl for the compact list, /dbfs ct for the casting timer, or /dbfs fish name for fish details. Change the theme in Settings. compact and timer also work with either command.</value></data>
   <data name="CommandConflict" xml:space="preserve"><value>Command already registered: {0}</value></data>
   <data name="GuideIntro" xml:space="preserve"><value>Open the in-game Fish Guide and click a fish below to read its caught bit. This is a diagnostic sample, not an automatic collection filter.</value></data>
   <data name="LoginState" xml:space="preserve"><value>Logged in: {0} | Player data loaded: {1}</value></data>
@@ -342,7 +362,7 @@
   <data name="OceanTimeSunset" xml:space="preserve"><value>Sunset</value></data>
   <data name="OceanTimeDay" xml:space="preserve"><value>Day</value></data>
   <data name="OceanTimeNight" xml:space="preserve"><value>Night</value></data>
-  <data name="OceanScope" xml:space="preserve"><value>Visit periods describe routes to this area, not this fish's catch restrictions. Fish-specific time, bait and special conditions are not established. Standard time/weather forecasts are not applied.</value></data>
+  <data name="OceanScope" xml:space="preserve"><value>Visit periods describe the route. While aboard, View Fish can narrow candidates by visiting time, current weather and absence of Intuition. Check unknown conditions, equipped bait, gear and special catch tables in game. Standard time/weather forecasts do not apply.</value></data>
   <data name="OceanRoutes" xml:space="preserve"><value>Route destinations: {0}</value></data>
   <data name="SourceCoverageInfo" xml:space="preserve"><value>Rod-fishing source records: {0}. Spearfishing records stored separately: {1} ({2} with unknown conditions); spearfishing UI and collection integration are pending.</value></data>
   <data name="RowBaitPath" xml:space="preserve"><value>{0}</value></data>
@@ -804,11 +824,6 @@ Manual settings included: {3:N0}</value></data>
   <data name="TimerRetentionHint" xml:space="preserve"><value>Recent timer contents stay for five minutes after stopping, including across area changes. Starting a new trip replaces them; logout, character change, and reload clear this preview.</value></data>
   <data name="TimerRecentCast" xml:space="preserve"><value>Recent cast</value></data>
   <data name="TimerCompletedSessionLine" xml:space="preserve"><value>Recent trip {0} · total {1}</value></data>
-  <data name="ChangelogHistoryLocation" xml:space="preserve"><value>When a new fishing spot is discovered through a verified catch, its location now updates that catch record and the trip summary.</value></data>
-  <data name="ChangelogHistoryPresentation" xml:space="preserve"><value>History columns can be resized. Trip lists and details show total fishing time, with fish/bait icons, clearer outcomes, and separate result timing in details.</value></data>
-  <data name="ChangelogMoochLink" xml:space="preserve"><value>Confirmed mooch casts show a connection to the preceding successful catch in the timer and records.</value></data>
-  <data name="ChangelogTimerRetention" xml:space="preserve"><value>Recent timer contents stay visible for five minutes after stopping, even across area changes. A new trip replaces them.</value></data>
-  <data name="ChangelogProgressPalette" xml:space="preserve"><value>Refined collection-progress colors into a consistent blue, teal, and green palette.</value></data>
   <data name="ScheduleTitle" xml:space="preserve"><value>Spawn schedule</value></data>
   <data name="ScheduleFavorites" xml:space="preserve"><value>Favorites</value></data>
   <data name="ScheduleCatalog" xml:space="preserve"><value>Current filtered fish</value></data>
@@ -1140,7 +1155,7 @@ Shares duplicate prevention with zero-minute favorite alerts and uses the channe
     <value>Multi-hook</value>
   </data>
   <data name="HookYieldValues" xml:space="preserve">
-    <value>Double {0} · Triple {1} fish</value>
+    <value>Double {0} · Triple {1}</value>
   </data>
   <data name="HookYieldRange" xml:space="preserve">
     <value>{0}–{1}</value>
@@ -1149,6 +1164,9 @@ Shares duplicate prevention with zero-minute favorite alerts and uses the channe
     <value>Published yield guidance, not a guarantee at your current Gathering. Unknown values are not inferred from the other action. Collectables may behave differently.</value>
   </data>
   <data name="HookYieldAtLeast" xml:space="preserve"><value>{0}+</value></data>
+  <data name="HookYieldCount" xml:space="preserve"><value>{0} fish</value></data>
+  <data name="HookYieldCountAtLeast" xml:space="preserve"><value>{0}+ fish</value></data>
+  <data name="HookYieldUnknown" xml:space="preserve"><value>Multi-hook yield unknown</value></data>
   <data name="HookYieldUnavailable" xml:space="preserve"><value>Hook yield data could not be read. Other fishing conditions are unaffected.</value></data>
   <data name="IntuitionActiveSummary" xml:space="preserve"><value>Intuition active</value></data>
   <data name="ChangelogIntuitionProgress" xml:space="preserve"><value>Track Intuition preparation in the casting timer, including a new count after Intuition ends.</value></data>
@@ -1157,4 +1175,19 @@ Shares duplicate prevention with zero-minute favorite alerts and uses the channe
   <data name="ChangelogFishLookup" xml:space="preserve"><value>Open fish details by name with /dbfs or from fish-item context menus.</value></data>
   <data name="ChangelogHookYieldGuide" xml:space="preserve"><value>View Double Hook and Triple Hook yield guidance for regular fish where data is available.</value></data>
   <data name="ChangelogMultipleCatchQuantity" xml:space="preserve"><value>See actual multiple-catch quantities in fishing history.</value></data>
+  <data name="OceanFishFilter" xml:space="preserve"><value>Filter conditions</value></data>
+  <data name="OceanFishObserved" xml:space="preserve"><value>{0} · {1} · {2}</value></data>
+  <data name="OceanFishUnconfirmedCount" xml:space="preserve"><value>Includes {0} fish with unconfirmed conditions · verify availability in game</value></data>
+  <data name="OceanFishUnconfirmedRow" xml:space="preserve"><value>{0} · conditions unconfirmed</value></data>
+  <data name="OceanIntuitionPresent" xml:space="preserve"><value>Intuition active</value></data>
+  <data name="OceanIntuitionAbsent" xml:space="preserve"><value>No Intuition</value></data>
+  <data name="OceanIntuitionUnknown" xml:space="preserve"><value>Intuition unknown</value></data>
+  <data name="OceanConditionsUnavailable" xml:space="preserve"><value>Condition data is unavailable; all fish in this area are retained.</value></data>
+  <data name="ChangelogThemes" xml:space="preserve"><value>Choose Graphite or Paper in settings to change the plugin&apos;s appearance.</value></data>
+  <data name="ChangelogMinimumGathering" xml:space="preserve"><value>See minimum Gathering requirements in fish details where data is available.</value></data>
+  <data name="ChangelogDeliveryTiers" xml:space="preserve"><value>Check collectable delivery targets and collectability tiers in fish details.</value></data>
+  <data name="ChangelogExpandedHookYield" xml:space="preserve"><value>Find Double Hook and Triple Hook yield guidance for more fish.</value></data>
+  <data name="ChangelogOceanBeta" xml:space="preserve"><value>Use the new Ocean Fishing Beta tab to check departures, your current route, area time remaining and basic baits.</value></data>
+  <data name="ChangelogOceanCandidates" xml:space="preserve"><value>Narrow Ocean Fishing lists by time, weather and Intuition conditions while keeping unconfirmed fish visible.</value></data>
+  <data name="ChangelogFishingLogOrder" xml:space="preserve"><value>Browse fish at each fishing hole in the in-game Fishing Log order.</value></data>
 </root>

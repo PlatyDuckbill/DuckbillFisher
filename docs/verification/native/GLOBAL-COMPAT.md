@@ -322,6 +322,15 @@ Review의 크기 차이가 난 세 타입은 Fisher 소스가 직접 쓰지 않�
 
 ## 미확인 범위
 
+### 먼바다 조건 후보 (개발본 2026-11-06)
+
+- 기존 어종 보기에 전체/조건 후보 체크를 추가했다. 원저자 CSV260개 해역 소속 행을 양쪽 설치 FishingSpot.Item 슬롯과 대조했고 불일치0이다. Junior Jinbei는 일반/환해류 양쪽 슬롯을 유지한다. 자료/관찰 미확인은 후보에서 제외하지 않으며 직감 활성의 대상·미끼/장비·특수 어획표는 확정하지 않는다. [출처/범위](../../development/DATA-SOURCES.md#필요한-어종-보완과-먼바다-조건-2026-11-06).
+- 공개 서비스 IClientState/IDutyState에는 현재 날씨를 제공하는 멤버가 없다. Framework에서 기존 승선 캐릭터/콘텐츠/항로/지역 검사를 통과한 낚시 단계에만 ClientStructs `WeatherManager.StaticAddressPointers.pInstance`·`MemberFunctionPointers.GetCurrentWeather`의 주소 해석을 확인하고 접근자를 호출한다. 엔진 싱글턴을 콜백 안에서만 사용하며 포인터/게임 객체를 보관하지 않는다.0/미해석 주소/시트에 없는 날씨는 해당 조건만 Unknown이고 항로/타이머/목록은 유지한다. 임의 오프셋/자체 시그니처/원격 접근은 없다.
+- KR 설치 ClientStructs `479ea936b7ecbf6436c16941ece9c9ee83cba494`와 글로벌 `dd57986b8287e7c6ed9c27198f8c76cb04a81dfe`의 메타데이터/IL을 대조했다. 각각 [KR 소스](https://github.com/ottermandias/FFXIVClientStructs/blob/479ea936b7ecbf6436c16941ece9c9ee83cba494/FFXIVClientStructs/FFXIV/Client/Game/WeatherManager.cs)·[글로벌 소스](https://github.com/aers/FFXIVClientStructs/blob/dd57986b8287e7c6ed9c27198f8c76cb04a81dfe/FFXIVClientStructs/FFXIV/Client/Game/WeatherManager.cs)의 접근자/정적 주소·함수 포인터 결합이 같다. 네이티브 인게임 날씨 의미 대조는 아직 대기이며 구조 일치만으로 완료 처리하지 않는다.
+- 직감은 같은 Framework 콜백에서 공개 LocalPlayer.StatusList의568번/남은 시간 유한값을 관리 bool?로 복사한다. 없음은 제외 근거, 읽기 실패는 Unknown이다. 활성 상태만으로 일반/환해류 전환 뒤 대상이 같다고 추론하지 않는다. 관찰은200ms·세션 대조·3초 만료·이동/종료 비우기·소비자별 활성/Dispose 해제를 유지한다. 일반 먼바다 시전·어획 추적은 여전히 미지원이다.
+- 진단을 `ocean-beta/v2`로 올리고 조건 자료 준비/행 수·날씨 상태 코드/ID·시간대·직감 관찰·전체/후보/미확인 수를 추가했다. 사용 멤버284개·Breaking0/Uncovered0이다. 기존 UI 계층 크기 Review3·미사용 멤버 Warning82는 이번 새 멤버 차이가 아니다. 보고서는 로컬 `.cache/four-task-review/native-comparison.json`이다.
+- **실기 대기:** 사용자가 KR 확인 가능하다고 답했다. 같은 최종 DLL로 일반→환해류→다음 해역→하선, 전체/조건 후보와 수집 숨김 조합, 날씨 표시/직감 부재, 목록만 열기/재로그인 때 과거 상태 비우기를 확인한다. 직감이 생기면 해당 희귀 어종은 ‘조건 미확인’으로 남아야 한다. 실패 시 진단의 `ocean-beta/v2`만 요청한다. 글로벌은 빌드/시트/IL 대조만이며 이번 승선 실기를 완료하지 않았다.
+
 - 글로벌 인게임 동작: 개발본 대표 확인은 마쳤다. 공개판으로 배포한 뒤의 확인은 아직이다.
 - 최신 공식 CI(Plogon)의 빌드 결과.
 - API 전환 시 KR 설치본의 실제 화면 표시.

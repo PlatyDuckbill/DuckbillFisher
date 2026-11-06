@@ -1,6 +1,6 @@
 {
   "schemaVersion": 2,
-  "dataVersion": "kr-regular-2026-10-17",
+  "dataVersion": "kr-regular-2026-11-06",
   "region": "KR",
   "gameBuild": "2026.10.06.0000.0000",
   "sourceRepository": "https://github.com/icykoneko/ff14-fish-tracker-app",
@@ -37230,7 +37230,7 @@
           "count": 3
         }
       ],
-      "intuitionSeconds": null,
+      "intuitionSeconds": 350,
       "folkloreRequired": true,
       "fishEyesSupported": false,
       "conditionsKnown": true,
@@ -37395,7 +37395,7 @@
           "count": 3
         }
       ],
-      "intuitionSeconds": null,
+      "intuitionSeconds": 300,
       "folkloreRequired": true,
       "fishEyesSupported": false,
       "conditionsKnown": true,
@@ -37533,7 +37533,7 @@
           "count": 3
         }
       ],
-      "intuitionSeconds": null,
+      "intuitionSeconds": 300,
       "folkloreRequired": true,
       "fishEyesSupported": false,
       "conditionsKnown": true,
@@ -37771,7 +37771,7 @@
           "count": 3
         }
       ],
-      "intuitionSeconds": null,
+      "intuitionSeconds": 300,
       "folkloreRequired": true,
       "fishEyesSupported": false,
       "conditionsKnown": true,
@@ -37920,13 +37920,13 @@
           28634
         ]
       ],
-      "hookset": "",
+      "hookset": "Powerful",
       "tug": "medium",
       "predators": [],
       "intuitionSeconds": null,
       "folkloreRequired": false,
       "fishEyesSupported": null,
-      "conditionsKnown": false,
+      "conditionsKnown": true,
       "snaggingRequired": false,
       "lure": "",
       "bigFish": false,
@@ -38025,7 +38025,7 @@
           "count": 6
         }
       ],
-      "intuitionSeconds": null,
+      "intuitionSeconds": 360,
       "folkloreRequired": true,
       "fishEyesSupported": false,
       "conditionsKnown": true,
@@ -38069,7 +38069,7 @@
           "count": 3
         }
       ],
-      "intuitionSeconds": null,
+      "intuitionSeconds": 900,
       "folkloreRequired": true,
       "fishEyesSupported": false,
       "conditionsKnown": true,
@@ -38144,7 +38144,7 @@
           "count": 1
         }
       ],
-      "intuitionSeconds": null,
+      "intuitionSeconds": 90,
       "folkloreRequired": true,
       "fishEyesSupported": false,
       "conditionsKnown": true,
@@ -38185,7 +38185,7 @@
           "count": 2
         }
       ],
-      "intuitionSeconds": null,
+      "intuitionSeconds": 600,
       "folkloreRequired": true,
       "fishEyesSupported": false,
       "conditionsKnown": true,
@@ -40167,5 +40167,102 @@
       "checkedOn": "2026-10-17",
       "scope": "Individual published catch observation: bait and tug only. No comment text or bite seconds copied. Time/weather completeness and hookset remain unknown."
     }
+  ],
+  "reviewedDetailObservations": {
+  "checkedUtc": "2026-11-06",
+  "rights": "Individual observed facts only. No public reuse license identified; no prose, code, images, macros or bite times redistributed.",
+  "processing": "Eight explicitly stated Intuition durations in seconds. Unknown durations are not replaced by spawn-window lengths. Both clients FishingNoteInfo rows for Items 52014/52015 have TimeRestriction=0, WeatherRestriction=0, SpecialConditions=0; zero alone does not establish unrestricted conditions. Only Yowekwa is confirmed unrestricted by its published observer, who also explicitly states Powerful Hookset. Iq Ebaji remains partial.",
+  "sources": [
+    {
+      "id": "fruity-dawntrail-2026-11-06",
+      "url": "https://docs.google.com/document/d/1HB2R8e2ZS6kW3v-7xSYuBbTEA3AZSLj4j2jrA2YcPFs/export?format=txt",
+      "sha256": "F71A2C1920C919374C8F94CE523E631A2E5067F67B532D5D5465A91839C583B6"
+    },
+    {
+      "id": "uzel-7.4",
+      "url": "https://jp.finalfantasyxiv.com/lodestone/character/29265719/blog/5636744",
+      "sha256": "FBDC5FD31135083ED90CBB61B9B68CDF43019017B6A72EF1A6883A27A7F52CFF"
+    },
+    {
+      "id": "razor-vagrant",
+      "url": "https://jp.finalfantasyxiv.com/lodestone/character/22067410/blog/5681892",
+      "sha256": "DDB0C97251F34B573BD3809F2EAE7C0952247ADCA74AC1278A8F780B47375113"
+    },
+    {
+      "id": "razor-lightning",
+      "url": "https://na.finalfantasyxiv.com/lodestone/character/22067410/blog/5723521/",
+      "sha256": "DA2D619D7644E442D5F1598BA6DD4D515F215BF1085B7B7E09E2D1DFD671E24C"
+    },
+    {
+      "id": "eorzea-weather-yowekwa",
+      "url": "https://eorzea-weather.com/en/fish/yowekwa-inkhead",
+      "sha256": "ABA92B428B4AA775CAEC16DEA67F68146B9F9849AED76998CA19093D1F5BB189"
+    }
+  ],
+  "intuitionDurations": [
+    {
+      "seconds": 350,
+      "source": "fruity-dawntrail-2026-11-06",
+      "itemId": 46195
+    },
+    {
+      "seconds": 300,
+      "source": "uzel-7.4",
+      "itemId": 49797
+    },
+    {
+      "seconds": 300,
+      "source": "uzel-7.4",
+      "itemId": 49801
+    },
+    {
+      "seconds": 300,
+      "source": "razor-vagrant",
+      "itemId": 52005
+    },
+    {
+      "seconds": 360,
+      "source": "fruity-dawntrail-2026-11-06",
+      "itemId": 52008
+    },
+    {
+      "seconds": 900,
+      "source": "fruity-dawntrail-2026-11-06",
+      "itemId": 52009
+    },
+    {
+      "seconds": 90,
+      "source": "razor-lightning",
+      "itemId": 52297
+    },
+    {
+      "seconds": 600,
+      "source": "fruity-dawntrail-2026-11-06",
+      "itemId": 52011
+    }
+  ],
+  "hooksets": [
+    {
+      "hookset": "Powerful",
+      "source": "eorzea-weather-yowekwa",
+      "itemId": 52015
+    }
+  ],
+  "sheetConditions": [
+    {
+      "weatherRestriction": 0,
+      "specialConditions": 0,
+      "fishParameterId": 1514,
+      "itemId": 52014,
+      "timeRestriction": 0
+    },
+    {
+      "weatherRestriction": 0,
+      "specialConditions": 0,
+      "fishParameterId": 1515,
+      "itemId": 52015,
+      "timeRestriction": 0
+    }
   ]
+}
 }

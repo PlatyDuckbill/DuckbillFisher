@@ -133,6 +133,18 @@ internal sealed class MainWindow : Window
         var timerWidth = iconWidth + ImGui.CalcTextSize(timer).X + padding.X * 2;
         var spacing = ImGui.GetStyle().ItemSpacing.X;
         var available = ImGui.GetContentRegionAvail().X;
+        var themed = UiThemeScope.Current is { };
+        if (themed)
+        {
+            UiThemeDecorations.NavigationBand(ImGui.GetCursorScreenPos(), available, ImGui.GetFrameHeight());
+            // Let the continuous band show through the native tab container; keep all tab geometry and IDs.
+            ImGui.PushStyleColor(ImGuiCol.ChildBg, Vector4.Zero);
+            ImGui.PushStyleColor(ImGuiCol.Tab, Vector4.Zero);
+            ImGui.PushStyleColor(ImGuiCol.TabActive, UiThemeDecorations.NavigationSelection);
+            ImGui.PushStyleColor(ImGuiCol.TabHovered, UiThemeDecorations.NavigationHover);
+            ImGui.PushStyleColor(ImGuiCol.TabUnfocused, Vector4.Zero);
+            ImGui.PushStyleColor(ImGuiCol.TabUnfocusedActive, UiThemeDecorations.NavigationSelection);
+        }
         // The public tab bar uses its container width. Reserve the shortcut area in a header-only child.
         var tabWidth = Math.Max(1, available - compactWidth - timerWidth - spacing * 2);
         if (ImGui.BeginChild("MainNavigationTabs", new Vector2(tabWidth, ImGui.GetFrameHeightWithSpacing()), false,
@@ -160,6 +172,7 @@ internal sealed class MainWindow : Window
             }
         }
         ImGui.EndChild();
+        if (themed) ImGui.PopStyleColor(6);
         ImGui.SameLine(0, spacing);
         if (Shortcut(FontAwesomeIcon.List, compact, "OpenCompactWindow", compactWidth)) ShowCompact?.Invoke();
         UiWidgets.Tooltip(UiText.Get(T.OpenCompactWindow));
@@ -175,16 +188,30 @@ internal sealed class MainWindow : Window
         var fontSize = ImGui.GetFontSize();
         var gap = fontSize + ImGui.GetStyle().ItemInnerSpacing.X;
         var padding = new string(' ', Math.Max(1, (int)MathF.Ceiling(gap / Math.Max(1, ImGui.CalcTextSize(" ").X))));
+        var theme = UiThemeScope.Current;
+        var accent = theme is not null ? UiThemeDecorations.NavigationAccent : Vector4.Zero;
+        if (theme is not null) ImGui.PushStyleColor(ImGuiCol.Text, selectedPage == page || select ? theme.Text : theme.Muted);
         var active = ImGui.BeginTabItem($"{padding}{UiText.Label(label, id)}", select ? ImGuiTabItemFlags.SetSelected : ImGuiTabItemFlags.None);
+        if (theme is not null) ImGui.PopStyleColor();
         if (ImGui.IsItemVisible())
         {
             var min = ImGui.GetItemRectMin();
             var max = ImGui.GetItemRectMax();
             var draw = ImGui.GetWindowDrawList();
             draw.PushClipRect(min, max, true);
-            draw.AddText(UiBuilder.IconFont, fontSize,
-                min + new Vector2(ImGui.GetStyle().FramePadding.X, Math.Max(0, (max.Y - min.Y - fontSize) / 2)),
-                ImGui.GetColorU32(active ? ImGuiCol.Text : ImGuiCol.TextDisabled), icon.ToIconString());
+            var iconSize = theme is not null ? fontSize * .88f : fontSize;
+            draw.AddText(UiBuilder.IconFont, iconSize,
+                min + new Vector2(ImGui.GetStyle().FramePadding.X + (fontSize - iconSize) / 2,
+                    Math.Max(0, (max.Y - min.Y - iconSize) / 2)),
+                theme is not null ? ImGui.GetColorU32(active ? accent : NavigationIconColor(page))
+                    : ImGui.GetColorU32(active ? ImGuiCol.Text : ImGuiCol.TextDisabled), icon.ToIconString());
+            if (active && theme is not null)
+            {
+                draw.AddLine(new(min.X + 3, min.Y + 1), new(max.X - 3, min.Y + 1),
+                    ImGui.GetColorU32(Vector4.Lerp(UiThemeDecorations.NavigationSelection, theme.Text, .2f)));
+                draw.AddLine(new(min.X + ImGui.GetStyle().FramePadding.X, max.Y - 1),
+                    new(max.X - ImGui.GetStyle().FramePadding.X, max.Y - 1), ImGui.GetColorU32(accent), 2);
+            }
             draw.PopClipRect();
         }
         if (active)
@@ -194,12 +221,35 @@ internal sealed class MainWindow : Window
         }
     }
 
+    private static Vector4 NavigationIconColor(MainPage page)
+    {
+        var role = page switch
+        {
+            MainPage.Catalog or MainPage.Ocean or MainPage.Fishing => UiThemeColors.Location,
+            MainPage.Alerts or MainPage.Recommendations => UiThemeColors.Preparation,
+            MainPage.Schedule => UiThemeColors.Information,
+            MainPage.Collection or MainPage.History or MainPage.Guide => UiThemeColors.Special,
+            _ => UiThemeColors.Secondary,
+        };
+        return Vector4.Lerp(role, UiThemeColors.Secondary, .25f);
+    }
+
     private static bool Shortcut(FontAwesomeIcon icon, string label, string id, float width)
     {
-        var clicked = ImGui.Button($"###{id}", new Vector2(width, ImGui.GetFrameHeight()));
+        var theme = UiThemeScope.Current;
+        if (theme is not null)
+        {
+            ImGui.PushStyleColor(ImGuiCol.Button, Vector4.Zero);
+            ImGui.PushStyleColor(ImGuiCol.ButtonHovered, theme.Hover);
+            ImGui.PushStyleColor(ImGuiCol.ButtonActive, theme.Pressed);
+        }
+        bool clicked;
+        try { clicked = ImGui.Button($"###{id}", new Vector2(width, ImGui.GetFrameHeight())); }
+        finally { if (theme is not null) ImGui.PopStyleColor(3); }
         var origin = ImGui.GetItemRectMin() + ImGui.GetStyle().FramePadding;
         var draw = ImGui.GetWindowDrawList();
-        var color = ImGui.GetColorU32(ImGuiCol.Text);
+        var color = theme is not null ? ImGui.GetColorU32(ImGui.IsItemHovered() ? theme.Text : theme.Muted)
+            : ImGui.GetColorU32(ImGuiCol.Text);
         draw.AddText(UiBuilder.IconFont, ImGui.GetFontSize(), origin, color, icon.ToIconString());
         draw.AddText(origin + new Vector2(ImGui.GetFrameHeight(), 0), color, label);
         return clicked;
@@ -213,7 +263,7 @@ internal sealed class MainWindow : Window
         var changed = false;
         if (ImGui.BeginTable("InterfaceSettingsFields", 2, ImGuiTableFlags.SizingFixedFit))
         {
-            var labelWidth = new[] { T.Language, T.UiScale, T.DeveloperMode, T.ChangelogTitle }
+            var labelWidth = new[] { T.Language, T.UiScale, T.ThemeSetting, T.DeveloperMode, T.ChangelogTitle }
                 .Max(key => ImGui.CalcTextSize(UiText.Get(key)).X);
             ImGui.TableSetupColumn("Setting", ImGuiTableColumnFlags.WidthFixed, labelWidth);
             ImGui.TableSetupColumn("Value", ImGuiTableColumnFlags.WidthStretch);
@@ -242,6 +292,25 @@ internal sealed class MainWindow : Window
             ImGui.TableNextRow();
             ImGui.TableNextColumn();
             ImGui.AlignTextToFramePadding();
+            ImGui.TextUnformatted(UiText.Get(T.ThemeSetting));
+            ImGui.TableNextColumn();
+            ImGui.SetNextItemWidth(Math.Max(1, Math.Min(ImGui.GetContentRegionAvail().X, ImGui.GetFontSize() * 20)));
+            if (ImGui.BeginCombo("###InterfaceTheme", UiText.Get(UiThemes.Name(settings.Theme))))
+            {
+                foreach (var theme in UiThemes.Choices)
+                {
+                    var selected = theme == settings.Theme;
+                    if (ImGui.Selectable(UiText.Label(UiThemes.Name(theme), $"Theme.{theme}"), selected))
+                        preferences.SetTheme(theme);
+                    if (selected) ImGui.SetItemDefaultFocus();
+                    UiWidgets.Tooltip(UiText.Get(UiThemes.Description(theme)));
+                }
+                ImGui.EndCombo();
+            }
+            UiWidgets.Tooltip(UiText.Get(T.ThemeSettingHint));
+            ImGui.TableNextRow();
+            ImGui.TableNextColumn();
+            ImGui.AlignTextToFramePadding();
             ImGui.TextUnformatted(UiText.Get(T.DeveloperMode));
             ImGui.TableNextColumn();
             changed |= ImGui.Checkbox("###DeveloperMode", ref developer);
@@ -261,7 +330,7 @@ internal sealed class MainWindow : Window
         backup.Draw(settings);
         ImGui.Spacing();
         ImGui.Separator();
-        if (FishingData.Failure is not null || ImGui.CollapsingHeader(UiText.Label(T.DataSourceLabel, "SettingsSources")))
+        if (FishingData.Failure is not null || UiWidgets.Disclosure(UiText.Label(T.DataSourceLabel, "SettingsSources")))
             FishDetailPanel.DrawSources();
     }
 
@@ -321,7 +390,7 @@ internal sealed class MainWindow : Window
             if (ImGui.Button(UiText.Label(T.ReadBitAgain, "ReadBitAgain")))
                 fishGuide.RequestCollectionRead(selected.FishParameterId);
         }
-        if (ImGui.CollapsingHeader(UiText.Label(T.GuideHistory, "GuideHistory")))
+        if (UiWidgets.Disclosure(UiText.Label(T.GuideHistory, "GuideHistory")))
         {
             if (ImGui.BeginChild("FishGuideHistory", new Vector2(0, 130), true, ImGuiWindowFlags.HorizontalScrollbar))
             {

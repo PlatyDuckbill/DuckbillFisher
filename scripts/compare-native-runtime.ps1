@@ -206,6 +206,7 @@ $groups = [ordered]@{
         'FFXIVClientStructs.FFXIV.Client.UI.Agent.AgentFishGuide',
         'FFXIVClientStructs.FFXIV.Client.Game.Event.EventFramework',
         'FFXIVClientStructs.FFXIV.Client.Game.InstanceContent.InstanceContentOceanFishing',
+        'FFXIVClientStructs.FFXIV.Client.Game.WeatherManager',
         'FFXIVClientStructs.FFXIV.Client.Game.InstanceContent.InstanceContentDirector',
         'FFXIVClientStructs.FFXIV.Client.Game.InstanceContent.ContentDirector',
         'FFXIVClientStructs.FFXIV.Client.Game.InstanceContent.InstanceContentType',

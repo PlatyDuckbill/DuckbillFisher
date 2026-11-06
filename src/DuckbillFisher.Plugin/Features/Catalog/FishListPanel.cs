@@ -170,7 +170,7 @@ internal sealed class FishListPanel(FishCatalog catalog, ITextureProvider textur
                 if (ImGui.Button(UiText.Label(T.ReloadFish, "ReloadCatalog"))) catalog.RequestLoad(reload: true);
                 if (ImGui.Button(UiText.Label(T.CopyCatalogReport, "CopyCatalogReport"))) ImGui.SetClipboardText(CreateReport(personal, observed));
                 if (ImGui.Button(UiText.Label(T.CopyFullCatalogReport, "CopyFullCatalogReport"))) ImGui.SetClipboardText(CreateReport(personal, observed, full: true));
-                if (ImGui.CollapsingHeader(UiText.Label(T.CollectionHelp, "CollectionHelp")))
+                if (UiWidgets.Disclosure(UiText.Label(T.CollectionHelp, "CollectionHelp")))
                 {
                     ImGui.TextWrapped(UiText.Get(T.CollectionObservedCount, observed.Caught.Count, observed.Uncaught.Count, observed.Status));
                     ImGui.TextWrapped(UiText.Get(T.CollectionFilterHint));
@@ -208,7 +208,9 @@ internal sealed class FishListPanel(FishCatalog catalog, ITextureProvider textur
             ImGui.TextWrapped(UiText.Get(T.CatalogUnresolvedCount, unresolvedCount));
         ImGui.Separator();
 
-        if (ImGui.BeginTable("CatalogLayout", 2, ImGuiTableFlags.Resizable | ImGuiTableFlags.BordersInnerV))
+        var themed = UiThemeScope.Current is not null;
+        if (ImGui.BeginTable("CatalogLayout", 2,
+            ImGuiTableFlags.Resizable | (themed ? ImGuiTableFlags.None : ImGuiTableFlags.BordersInnerV)))
         {
             ImGui.TableSetupColumn("List", ImGuiTableColumnFlags.WidthStretch, 1.15f);
             ImGui.TableSetupColumn("Detail", ImGuiTableColumnFlags.WidthStretch, 1);
@@ -236,8 +238,9 @@ internal sealed class FishListPanel(FishCatalog catalog, ITextureProvider textur
                 new UiMessage(timeRestrictedOnly ? T.OptionOn : T.OptionOff), gradeNames[gradeVisibility],
                 new UiMessage(favoritesOnly ? T.OptionOn : T.OptionOff), new UiMessage(currentRegionOnly ? T.OptionOn : T.OptionOff),
                 new UiMessage(includeOceanFish ? T.OptionOn : T.OptionOff), new UiMessage(inLogOnly ? T.OptionOn : T.OptionOff)));
-        ImGui.SetNextWindowSizeConstraints(new Vector2(ImGui.GetFontSize() * 24, 0),
-            new Vector2(ImGui.GetFontSize() * 38, ImGui.GetMainViewport().WorkSize.Y * 0.85f));
+        var popupWidth = Math.Min(ImGui.GetFontSize() * 38, ImGui.GetMainViewport().WorkSize.X * .95f);
+        ImGui.SetNextWindowSizeConstraints(new Vector2(Math.Min(ImGui.GetFontSize() * 24, popupWidth), 0),
+            new Vector2(popupWidth, ImGui.GetMainViewport().WorkSize.Y * 0.85f));
         if (!ImGui.BeginPopup("CatalogFiltersPopup")) return false;
         var changed = false;
         if (ImGui.Button(UiText.Label(T.CatalogShowAll, "CatalogShowAll")))
@@ -259,8 +262,10 @@ internal sealed class FishListPanel(FishCatalog catalog, ITextureProvider textur
         changed |= DrawTimeInput(T.MaximumUpcomingMinutes, T.MaximumUpcomingHint, "CatalogMaximumUpcoming", ref maximumUpcomingInput, ref maximumUpcomingMinutes);
         if (!TryTimeMinutes(minimumRemainingInput, out _) || !TryTimeMinutes(minimumUpcomingInput, out _) || !TryTimeMinutes(maximumUpcomingInput, out _))
             ImGui.TextWrapped(UiText.Get(T.UpcomingInputInvalid, CatalogSettings.MaxTimeFilterMinutes));
-        ImGui.SetNextItemWidth(190);
-        changed |= ImGui.Combo(UiText.Label(T.GradeFilter, "CatalogGradeFilter"), ref gradeVisibility, gradeNames, gradeNames.Length);
+        var gradeStacked = ImGui.GetContentRegionAvail().X < ImGui.GetFontSize() * 12 + ImGui.CalcTextSize(UiText.Get(T.GradeFilter)).X;
+        if (gradeStacked) ImGui.TextWrapped(UiText.Get(T.GradeFilter));
+        ImGui.SetNextItemWidth(Math.Min(ImGui.GetContentRegionAvail().X, ImGui.GetFontSize() * 12));
+        changed |= ImGui.Combo(gradeStacked ? "###CatalogGradeFilter" : UiText.Label(T.GradeFilter, "CatalogGradeFilter"), ref gradeVisibility, gradeNames, gradeNames.Length);
         if (ImGui.IsItemHovered()) ImGui.SetTooltip(UiText.Get(T.GradeFilterHint));
         changed |= ImGui.Checkbox(UiText.Label(T.CatalogFavoritesOnly, "CatalogFavoritesOnly"), ref favoritesOnly);
         changed |= ImGui.Checkbox(UiText.Label(T.CurrentRegionOnly, "CatalogCurrentRegionOnly"), ref currentRegionOnly);
@@ -304,8 +309,10 @@ internal sealed class FishListPanel(FishCatalog catalog, ITextureProvider textur
 
     private static bool DrawTimeInput(T label, T hint, string id, ref string input, ref int? value)
     {
-        ImGui.SetNextItemWidth(ImGui.GetFontSize() * 8);
-        var edited = ImGui.InputTextWithHint(UiText.Label(label, id), UiText.Get(T.UpcomingNoLimit), ref input, 6, ImGuiInputTextFlags.CharsDecimal);
+        var stacked = ImGui.GetContentRegionAvail().X < ImGui.GetFontSize() * 8 + ImGui.GetStyle().ItemInnerSpacing.X + ImGui.CalcTextSize(UiText.Get(label)).X;
+        if (stacked) ImGui.TextWrapped(UiText.Get(label));
+        ImGui.SetNextItemWidth(Math.Min(ImGui.GetContentRegionAvail().X, ImGui.GetFontSize() * 8));
+        var edited = ImGui.InputTextWithHint(stacked ? $"###{id}" : UiText.Label(label, id), UiText.Get(T.UpcomingNoLimit), ref input, 6, ImGuiInputTextFlags.CharsDecimal);
         UiWidgets.Tooltip(UiText.Get(hint));
         if (!edited || !TryTimeMinutes(input, out var parsed) || value == parsed) return false;
         value = parsed;
@@ -323,7 +330,9 @@ internal sealed class FishListPanel(FishCatalog catalog, ITextureProvider textur
 
     private void DrawRows(FishCatalogView view, FishPreferencesView personal, FishCollectionView observed, FishingRegionView location)
     {
-        if (ImGui.BeginChild("CatalogRows", new Vector2(0, 0), true))
+        var themed = UiThemeScope.Current is not null;
+        if (themed) ImGui.PushStyleColor(ImGuiCol.ChildBg, UiThemeScope.Current!.Background);
+        if (ImGui.BeginChild("CatalogRows", new Vector2(0, 0), !themed))
         {
             if (resetScroll)
             {
@@ -353,6 +362,7 @@ internal sealed class FishListPanel(FishCatalog catalog, ITextureProvider textur
             }
         }
         ImGui.EndChild();
+        if (themed) ImGui.PopStyleColor();
     }
 
     private void UpdateMatches(FishCatalogView view, FishPreferencesView personal, FishCollectionView observed,

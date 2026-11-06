@@ -15,12 +15,13 @@ internal sealed class FishingConditionPanel(ITextureProvider textures, FishingIt
         IReadOnlyDictionary<uint, FishingDetailView> related)
     {
         ImGui.Spacing();
-        ImGui.Separator();
+        var themed = UiThemeScope.Current is not null;
+        if (!themed) ImGui.Separator();
         var firstBaits = details.BaitSteps.FirstOrDefault();
         if (firstBaits is not { Length: > 0 } || firstBaits.Any(item => related.ContainsKey(item.Id)))
         {
-            ImGui.TextUnformatted(UiText.Get(T.DetailConditions));
-            ImGui.Spacing();
+            if (themed) UiWidgets.SectionLabel(T.DetailConditions);
+            else { ImGui.TextUnformatted(UiText.Get(T.DetailConditions)); ImGui.Spacing(); }
             return;
         }
         if (ImGui.BeginTable("ConditionsHeading", 2, ImGuiTableFlags.SizingFixedFit))
@@ -29,7 +30,8 @@ internal sealed class FishingConditionPanel(ITextureProvider textures, FishingIt
             ImGui.TableSetupColumn("Find", ImGuiTableColumnFlags.WidthFixed,
                 ImGui.CalcTextSize(UiText.Get(T.BaitFind)).X + ImGui.GetStyle().FramePadding.X * 2);
             ImGui.TableNextColumn();
-            ImGui.TextUnformatted(UiText.Get(T.DetailConditions));
+            if (themed) UiWidgets.SectionLabel(T.DetailConditions);
+            else ImGui.TextUnformatted(UiText.Get(T.DetailConditions));
             ImGui.TableNextColumn();
             if (firstBaits.Length == 1) baitFinder.DrawButton(firstBaits[0], personal.Session);
             else
@@ -51,7 +53,7 @@ internal sealed class FishingConditionPanel(ITextureProvider textures, FishingIt
             }
             ImGui.EndTable();
         }
-        ImGui.Spacing();
+        if (!themed) ImGui.Spacing();
     }
 
     public void Draw(FishingDetailView details, FishPreferencesView personal,
@@ -61,41 +63,33 @@ internal sealed class FishingConditionPanel(ITextureProvider textures, FishingIt
         DrawBaitPath(details, personal, related, openDetail);
         baitFinder.DrawStatus(details.BaitSteps.FirstOrDefault() ?? []);
         ImGui.Spacing();
-        if (ImGui.BeginTable("Conditions", 2, ImGuiTableFlags.SizingFixedFit))
+        var themed = UiThemeScope.Current is not null;
+        var labelWidth = themed ? new[] { T.DetailHookset, T.DetailTug, T.HookYieldLabel, T.DetailTime,
+            T.DetailWeatherTransition, T.DetailRequired, T.DetailMinimumGathering }.Max(key => ImGui.CalcTextSize(UiText.Get(key)).X)
+            : Math.Max(ImGui.GetFontSize() * 5.5f, ImGui.CalcTextSize(UiText.Get(T.DetailMinimumGathering)).X);
+        var stacked = ImGui.GetContentRegionAvail().X < labelWidth + ImGui.GetFontSize() * 8;
+        if (ImGui.BeginTable("Conditions", stacked ? 1 : 2, ImGuiTableFlags.SizingFixedFit))
         {
-            ImGui.TableSetupColumn("Label", ImGuiTableColumnFlags.WidthFixed, ImGui.GetFontSize() * 5.5f);
+            if (!stacked) ImGui.TableSetupColumn("Label", ImGuiTableColumnFlags.WidthFixed, labelWidth);
             ImGui.TableSetupColumn("Value", ImGuiTableColumnFlags.WidthStretch);
-            Label(T.DetailHookset);
+            Label(T.DetailHookset, stacked);
             UiWidgets.Tooltip(UiText.Get(T.HooksetLabel, details.Hookset?.Name ?? UiText.Get(T.ConditionUnknown)));
-            if (details.Hookset is { } hookset)
-                UiWidgets.GameIcon(textures, hookset.IconId, IconSize, UiText.Get(T.HooksetLabel, hookset.Name));
-            else ImGui.TextWrapped(UiText.Get(rule.Hookset switch
-                { "Precision" => T.HooksetPrecision, "Powerful" => T.HooksetPowerful, _ => T.ConditionUnknown }));
-            Label(T.DetailTug);
-            ImGui.TextUnformatted(rule.Tug switch { "light" => "!", "medium" => "!!", "heavy" => "!!!", _ => UiText.Get(T.ConditionUnknown) });
-            Label(T.HookYieldLabel);
-            HookYieldText.Draw(rule.ItemId);
-            Label(T.DetailTime);
-            ImGui.TextWrapped(!rule.ConditionsKnown ? UiText.Get(T.ConditionUnknown)
-                : rule.StartHour == 0 && rule.EndHour == 24 ? UiText.Get(T.TimeAllDay)
-                : UiText.Get(T.TimeConditionLabel, EtClock(rule.StartHour), EtClock(rule.EndHour)));
-            if (!rule.ConditionsKnown) UiWidgets.Tooltip(details.ConditionWarning.Display);
+            DrawHookset(details);
+            Label(T.DetailTug, stacked);
+            ImGui.TextUnformatted(TugText(rule.Tug));
+            Label(T.HookYieldLabel, stacked);
+            HookYieldText.Draw(rule.ItemId, standalone: false, fishParameterId: rule.FishParameterId);
+            Label(T.DetailMinimumGathering, stacked);
+            DrawMinimumGathering(rule.ItemId, rule.FishParameterId);
+            Label(T.DetailTime, stacked);
+            DrawTime(details);
             if (rule.ConditionsKnown)
             {
-                Label(T.DetailWeatherTransition);
-                var right = ImGui.GetCursorPosX() + ImGui.GetContentRegionAvail().X;
-                if (details.PreviousWeather.Length > 0)
-                {
-                    Weather(details.PreviousWeather, T.PreviousWeatherConditionLabel, right);
-                    UiWidgets.FlowNext(IconSize * 2 + 12, right, 6);
-                    ImGui.TextUnformatted("→");
-                    UiWidgets.Tooltip(UiText.Get(T.WeatherTransitionHint));
-                    ImGui.SameLine(0, 6);
-                }
-                Weather(details.Weather, T.WeatherConditionLabel, right);
+                Label(T.DetailWeatherTransition, stacked);
+                DrawWeather(details);
             }
-            if (rule.SnaggingRequired) { Label(T.DetailRequired); Skill(details.Snagging, T.SnaggingRequired); }
-            if (rule.Lure.Length > 0) { Label(T.DetailRequired); Skill(details.Lure, rule.Lure == "Modest" ? T.LureModest : T.LureAmbitious); }
+            if (rule.SnaggingRequired) { Label(T.DetailRequired, stacked); Skill(details.Snagging, T.SnaggingRequired); }
+            if (rule.Lure.Length > 0) { Label(T.DetailRequired, stacked); Skill(details.Lure, rule.Lure == "Modest" ? T.LureModest : T.LureAmbitious); }
             ImGui.EndTable();
         }
         if (itemLinks.Result is { } result && result.Key != T.ItemLinkPrinted) ImGui.TextWrapped(result.Display);
@@ -108,18 +102,73 @@ internal sealed class FishingConditionPanel(ITextureProvider textures, FishingIt
 
     }
 
+    private void DrawHookset(FishingDetailView details)
+    {
+        if (details.Hookset is { } hookset)
+        {
+            UiWidgets.GameIcon(textures, hookset.IconId, IconSize, UiText.Get(T.HooksetLabel, hookset.Name));
+            if (UiThemeScope.Current is not null)
+            {
+                ImGui.SameLine();
+                ImGui.TextWrapped(hookset.Name);
+            }
+        }
+        else ImGui.TextWrapped(UiText.Get(details.Rule.Hookset switch
+            { "Precision" => T.HooksetPrecision, "Powerful" => T.HooksetPowerful, _ => T.ConditionUnknown }));
+    }
+
+    public static void DrawMinimumGathering(uint itemId, uint fishParameterId)
+    {
+        if (MinimumGatheringData.ByItem.TryGetValue(itemId, out var gathering) && gathering.FishParameterId == fishParameterId)
+        {
+            var text = gathering.MinimumGathering.ToString("N0", UiText.Culture);
+            if (UiThemeScope.Current is not null) UiWidgets.TextColored(UiThemeColors.Preparation, text);
+            else ImGui.TextUnformatted(text);
+        }
+        else ImGui.TextDisabled(UiText.Get(MinimumGatheringData.Invalid ? T.MinimumGatheringUnavailable : T.ConditionUnknown));
+        UiWidgets.Tooltip(UiText.Get(T.MinimumGatheringHint));
+    }
+
+    private static string TugText(string tug) => tug switch
+        { "light" => "!", "medium" => "!!", "heavy" => "!!!", _ => UiText.Get(T.ConditionUnknown) };
+
+    private static void DrawTime(FishingDetailView details)
+    {
+        var rule = details.Rule;
+        ImGui.TextWrapped(!rule.ConditionsKnown ? UiText.Get(T.ConditionUnknown)
+            : rule.StartHour == 0 && rule.EndHour == 24 ? UiText.Get(T.TimeAllDay)
+            : UiText.Get(T.TimeConditionLabel, EtClock(rule.StartHour), EtClock(rule.EndHour)));
+        if (!rule.ConditionsKnown) UiWidgets.Tooltip(details.ConditionWarning.Display);
+    }
+
+    private void DrawWeather(FishingDetailView details)
+    {
+        var right = ImGui.GetCursorPosX() + ImGui.GetContentRegionAvail().X;
+        if (details.PreviousWeather.Length > 0)
+        {
+            Weather(details.PreviousWeather, T.PreviousWeatherConditionLabel, right);
+            UiWidgets.FlowNext(IconSize * 2 + 12, right, 6);
+            ImGui.TextUnformatted("→");
+            UiWidgets.Tooltip(UiText.Get(T.WeatherTransitionHint));
+            ImGui.SameLine(0, 6);
+        }
+        Weather(details.Weather, T.WeatherConditionLabel, right);
+    }
+
     public void DrawIntuition(FishingDetailView details, FishPreferencesView personal,
         IReadOnlyDictionary<uint, FishingDetailView> related, Action<uint>? openDetail = null)
     {
         ImGui.Spacing();
-        ImGui.PushStyleColor(ImGuiCol.TableRowBg, new System.Numerics.Vector4(0.30f, 0.18f, 0.45f, 0.55f));
-        if (ImGui.BeginTable("IntuitionHighlight", 1, ImGuiTableFlags.RowBg | ImGuiTableFlags.Borders))
+        var themed = UiThemeScope.Current is not null;
+        ImGui.PushStyleColor(ImGuiCol.TableRowBg, themed ? Vector4.Zero : new Vector4(0.30f, 0.18f, 0.45f, 0.55f));
+        if (ImGui.BeginTable("IntuitionHighlight", 1, ImGuiTableFlags.RowBg | (themed ? ImGuiTableFlags.None : ImGuiTableFlags.Borders)))
         {
             ImGui.TableNextRow();
             ImGui.TableNextColumn();
             UiWidgets.GameIcon(textures, details.Intuition?.IconId ?? 0, IconSize, UiText.Get(T.IntuitionRequired));
             ImGui.SameLine();
-            ImGui.TextUnformatted(UiText.Get(T.IntuitionRequired));
+            if (themed) UiWidgets.TextColored(UiThemeColors.Special, UiText.Get(T.IntuitionRequired));
+            else ImGui.TextUnformatted(UiText.Get(T.IntuitionRequired));
             ImGui.TextDisabled(UiText.Get(T.IntuitionAllRequired));
             for (var index = 0; index < details.Predators.Length; index++)
             {
@@ -133,7 +182,8 @@ internal sealed class FishingConditionPanel(ITextureProvider textures, FishingIt
                 ImGui.TextWrapped(UiText.Get(T.IntuitionDuration, seconds));
             else
             {
-                ImGui.PushStyleColor(ImGuiCol.Text, new Vector4(1, 0.78f, 0.36f, 1));
+                ImGui.PushStyleColor(ImGuiCol.Text, UiThemeScope.Current is not null ? UiThemeColors.Attention
+                    : UiWidgets.ReadableColor(new Vector4(1, 0.78f, 0.36f, 1)));
                 UiWidgets.Icon(FontAwesomeIcon.ExclamationTriangle);
                 ImGui.SameLine();
                 ImGui.TextWrapped(UiText.Get(T.ForecastDurationAssumed, FishingForecast.DefaultIntuitionSeconds));
@@ -204,7 +254,7 @@ internal sealed class FishingConditionPanel(ITextureProvider textures, FishingIt
         ImGui.PushID(id);
         ImGui.BeginGroup();
         Item(item, name, "Item", personal, nameWidth, tooltip,
-            detail is not null && openDetail is not null ? () => openDetail(item.Id) : null);
+            detail is not null && openDetail is not null ? () => openDetail(item.Id) : null, preparation: true);
         if (detail is not null)
         {
             ImGui.SameLine(0, 6);
@@ -268,20 +318,23 @@ internal sealed class FishingConditionPanel(ITextureProvider textures, FishingIt
             UiWidgets.Tooltip(tooltip);
         }
     }
-    private static float IconSize => ImGui.GetTextLineHeightWithSpacing() * 1.35f;
-    private static void Label(T key)
+    private static float IconSize => ImGui.GetTextLineHeightWithSpacing() *
+        (UiThemeScope.Current is not null ? 1.1f : 1.35f);
+    private static void Label(T key, bool stacked)
     {
         ImGui.TableNextRow();
         ImGui.TableNextColumn();
         ImGui.TextDisabled(UiText.Get(key));
-        ImGui.TableNextColumn();
+        if (!stacked) ImGui.TableNextColumn();
     }
 
     private void Item(FishingItemView item, string name, string id, FishPreferencesView personal, float? nameWidth = null,
-        string? tooltip = null, Action? openDetail = null)
+        string? tooltip = null, Action? openDetail = null, bool preparation = false)
     {
         ImGui.PushID(id);
         var enabled = openDetail is not null || personal.HasCharacter;
+        var linkTheme = enabled && UiThemeScope.Current is not null ? UiThemeScope.Current : null;
+        var linkColor = preparation ? UiThemeColors.Preparation : linkTheme?.Accent ?? default;
         var hint = tooltip ?? UiText.Get(openDetail is not null ? T.OpenRelatedDetailHint : T.ItemLinkHint, item.Name);
         ImGui.BeginDisabled(!enabled);
         UiWidgets.GameIcon(textures, item.IconId, IconSize, hint);
@@ -292,12 +345,27 @@ internal sealed class FishingConditionPanel(ITextureProvider textures, FishingIt
             var position = ImGui.GetCursorScreenPos();
             ImGui.GetWindowDrawList().PushClipRect(position, position + new Vector2(fixedWidth, IconSize), true);
             ImGui.GetWindowDrawList().AddText(position + new Vector2(0, (IconSize - ImGui.GetTextLineHeight()) / 2),
-                ImGui.GetColorU32(ImGuiCol.Text), name);
+                linkTheme is not null ? ImGui.GetColorU32(linkColor) : ImGui.GetColorU32(ImGuiCol.Text), name);
             ImGui.GetWindowDrawList().PopClipRect();
             ImGui.Dummy(new Vector2(fixedWidth, IconSize));
         }
+        else if (linkTheme is not null)
+        {
+            ImGui.PushStyleColor(ImGuiCol.Text, linkColor);
+            ImGui.TextWrapped(name);
+            ImGui.PopStyleColor();
+        }
         else ImGui.TextWrapped(name);
         if (enabled && ImGui.IsItemClicked()) Click();
+        if (linkTheme is not null)
+        {
+            var min = ImGui.GetItemRectMin();
+            var max = ImGui.GetItemRectMax();
+            var underline = linkColor;
+            underline.W = ImGui.IsItemHovered() ? .9f : .4f;
+            ImGui.GetWindowDrawList().AddLine(new(min.X, max.Y - 1),
+                new(Math.Min(max.X, min.X + ImGui.CalcTextSize(name).X), max.Y - 1), ImGui.GetColorU32(underline));
+        }
         UiWidgets.Tooltip(hint);
         ImGui.EndDisabled();
         ImGui.PopID();

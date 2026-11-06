@@ -1,10 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
 <root>
+  <data name="ThemeSetting" xml:space="preserve"><value>테마</value></data>
+  <data name="ThemeSettingHint" xml:space="preserve"><value>메인·캐스팅 타이머·보조 화면에 함께 적용합니다. 간격과 타이머 배치는 기존 Dalamud 화면을 따르며 선택한 테마를 저장합니다.</value></data>
+  <data name="ThemeOriginal" xml:space="preserve"><value>기존 · Dalamud 테마</value></data>
+  <data name="ThemeOriginalHint" xml:space="preserve"><value>기존 Dalamud 디자인과 간결한 타이머 표시를 사용합니다.</value></data>
+  <data name="ThemeGraphite" xml:space="preserve"><value>그라파이트</value></data>
+  <data name="ThemeGraphiteHint" xml:space="preserve"><value>무채색 바탕에 조작부의 윤곽과 정렬된 낚시 정보를 표시합니다.</value></data>
+  <data name="PresetApplyHint" xml:space="preserve"><value>‘{0}’의 필터·정렬을 적용합니다.</value></data>
+  <data name="DetailMinimumGathering" xml:space="preserve"><value>최소 획득력</value></data>
+  <data name="MinimumGatheringUnavailable" xml:space="preserve"><value>자료 확인 불가</value></data>
+  <data name="MinimumGatheringHint" xml:space="preserve"><value>이 어종을 낚는 데 필요한 최소 획득력 자료입니다. 이중·삼중 낚아채기의 보장 수량 임계값과는 다릅니다. 원본의 누락이나 0은 미확인으로 유지합니다.</value></data>
+  <data name="DeliveryAppraiserLine" xml:space="preserve"><value>소장품 납품원 · 소장가치 {0} / {1} / {2}+</value></data>
+  <data name="DeliveryCustomLine" xml:space="preserve"><value>{0} · 소장가치 {1} / {2} / {3}+</value></data>
+  <data name="DeliveryUnknown" xml:space="preserve"><value>소장품 · 납품 정보 미확인</value></data>
+  <data name="DeliveryUnavailable" xml:space="preserve"><value>소장품 · 납품 정보 확인 불가</value></data>
+  <data name="DeliveryHint" xml:space="preserve"><value>납품 대상과 소장가치 구간입니다. 개방 단계와 현재 요청 품목은 게임에서 확인해 주세요. 납품원·단골거래 외의 특수 교환은 포함하지 않습니다.</value></data>
+  <data name="HookYieldDoubleValue" xml:space="preserve"><value>이중 {0}</value></data>
+  <data name="HookYieldTripleValue" xml:space="preserve"><value>삼중 {0}</value></data>
+  <data name="ThemePaper" xml:space="preserve"><value>페이퍼</value></data>
+  <data name="ThemePaperHint" xml:space="preserve"><value>따뜻한 흰 바탕과 짙은 글자에 청록·황토·자주색으로 정보를 구분합니다.</value></data>
+  <data name="ThemeScheduleMarksHint" xml:space="preserve"><value>채운 막대는 출현 중, 윤곽선 막대는 출현 예정입니다. 강조 테두리는 선택 항목, 주황색 빗금은 겹치는 출현 구간입니다.</value></data>
   <data name="OceanFishTitle" xml:space="preserve"><value>이 해역의 어종 보기</value></data>
   <data name="OceanFishAreaTitle" xml:space="preserve"><value>{0} · {1}</value></data>
   <data name="OceanFishLoading" xml:space="preserve"><value>해역 어종을 불러오는 중입니다…</value></data>
   <data name="OceanFishUnavailable" xml:space="preserve"><value>현재 해역의 어종 목록을 확인할 수 없습니다.</value></data>
-  <data name="OceanFishConditionsHint" xml:space="preserve"><value>해역과 일반/환해류 기준의 어종입니다. 시간·날씨·직감 조건은 추리지 않습니다.</value></data>
+  <data name="OceanFishConditionsHint" xml:space="preserve"><value>항로의 방문 시간대·현재 날씨·직감 부재로 맞지 않는 어종만 제외합니다. 미확인 조건은 후보로 남깁니다. 직감 발동 중에는 대상 어종을 확정하지 않습니다. 미끼·장비·특수 어획표까지 확인한 목록은 아닙니다. 체크를 끄면 해역 전체 어종을 볼 수 있습니다.</value></data>
   <data name="OceanDataLoading" xml:space="preserve"><value>먼바다 자료를 불러오는 중입니다…</value></data>
   <data name="OceanDiagnostics" xml:space="preserve"><value>먼바다 진단</value></data>
   <data name="OceanCopyDiagnostics" xml:space="preserve"><value>항해 진단 복사</value></data>
@@ -166,7 +186,7 @@
   <data name="English" xml:space="preserve"><value>English</value></data>
   <data name="TabGuide" xml:space="preserve"><value>수첩 연동 확인</value></data>
   <data name="TabFishing" xml:space="preserve"><value>낚시 상태 관찰</value></data>
-  <data name="CommandHelp" xml:space="preserve"><value>/dbfs 또는 /duckbillfisher로 메인을 열고 닫습니다. /dbfs cl은 간이 목록, /dbfs ct는 캐스팅 타이머, /dbfs 어종 이름은 어종 상세를 엽니다. 두 명령어 모두 compact·timer도 지원합니다.</value></data>
+  <data name="CommandHelp" xml:space="preserve"><value>/dbfs 또는 /duckbillfisher로 메인을 열고 닫습니다. /dbfs cl은 간이 목록, /dbfs ct는 캐스팅 타이머, /dbfs 어종 이름은 어종 상세를 엽니다. 테마는 설정에서 바꿀 수 있습니다. 두 명령어 모두 compact·timer도 지원합니다.</value></data>
   <data name="CommandConflict" xml:space="preserve"><value>이미 등록된 명령입니다: {0}</value></data>
   <data name="GuideIntro" xml:space="preserve"><value>게임의 어류도감을 연 상태에서 아래 어종 이름을 클릭하면 실제 수집 비트를 조회합니다. 검증용 표본이며 자동 필터에는 반영하지 않습니다.</value></data>
   <data name="LoginState" xml:space="preserve"><value>로그인: {0} | 캐릭터 준비: {1}</value></data>
@@ -342,7 +362,7 @@
   <data name="OceanTimeSunset" xml:space="preserve"><value>저녁</value></data>
   <data name="OceanTimeDay" xml:space="preserve"><value>낮</value></data>
   <data name="OceanTimeNight" xml:space="preserve"><value>밤</value></data>
-  <data name="OceanScope" xml:space="preserve"><value>방문 시간대는 항로의 해역 방문 시간이며 이 어종의 어획 제한을 뜻하지 않습니다. 어종별 시간 제한·미끼·특수 조건은 확인 전입니다. 일반 낚시의 시간·날씨 예측은 적용하지 않습니다.</value></data>
+  <data name="OceanScope" xml:space="preserve"><value>방문 시간대는 항로 정보입니다. 승선 중 ‘어종 보기’에서 시간대·현재 날씨·직감 부재로 후보를 좁힐 수 있습니다. 미확인 조건·장착 미끼·장비·특수 어획표는 게임에서 확인하세요. 일반 낚시의 시간·날씨 예측은 적용하지 않습니다.</value></data>
   <data name="OceanRoutes" xml:space="preserve"><value>항로 목적지: {0}</value></data>
   <data name="SourceCoverageInfo" xml:space="preserve"><value>일반 낚시 원본 {0}종. 작살 자료는 별도 {1}건 보존({2}건 조건 미확인)하며 작살 화면·수집 연동은 후속입니다.</value></data>
   <data name="RowBaitPath" xml:space="preserve"><value>{0}</value></data>
@@ -804,11 +824,6 @@
   <data name="TimerRetentionHint" xml:space="preserve"><value>낚시를 중단한 뒤 지역을 이동해도 타이머 내용을 5분간 유지합니다. 새 낚시를 시작하면 교체하고, 로그아웃·캐릭터 전환·재로드 시 이 임시 표시는 비웁니다.</value></data>
   <data name="TimerRecentCast" xml:space="preserve"><value>최근 시전</value></data>
   <data name="TimerCompletedSessionLine" xml:space="preserve"><value>최근 낚시 {0} · 총 {1}</value></data>
-  <data name="ChangelogHistoryLocation" xml:space="preserve"><value>미지의 낚시터를 검증된 본인 어획과 함께 발견하면 해당 어획 기록과 낚시 묶음의 위치도 갱신합니다.</value></data>
-  <data name="ChangelogHistoryPresentation" xml:space="preserve"><value>기록의 열 너비를 조절할 수 있습니다. 목록·상세의 총 낚시 시간, 미끼·어종 아이콘과 결과 구분을 보강하고 상세에 결과 수신까지의 경과를 나눠 표시합니다.</value></data>
-  <data name="ChangelogMoochLink" xml:space="preserve"><value>사용 미끼와 직전 성공 어획이 일치하는 생미끼 시전은 타이머와 기록에서 연결 표시로 구분합니다.</value></data>
-  <data name="ChangelogTimerRetention" xml:space="preserve"><value>낚시를 중단한 뒤 지역을 이동해도 타이머 내용을 5분간 유지합니다. 새 낚시를 시작하면 새 내용으로 교체합니다.</value></data>
-  <data name="ChangelogProgressPalette" xml:space="preserve"><value>수집 현황 그래프 색상을 청색·청록·녹색 계열로 통일해 톤을 정돈했습니다.</value></data>
   <data name="ScheduleTitle" xml:space="preserve"><value>출현 일정표</value></data>
   <data name="ScheduleFavorites" xml:space="preserve"><value>즐겨찾기</value></data>
   <data name="ScheduleCatalog" xml:space="preserve"><value>현재 필터 어종</value></data>
@@ -1140,7 +1155,7 @@
     <value>이중·삼중</value>
   </data>
   <data name="HookYieldValues" xml:space="preserve">
-    <value>이중 {0} · 삼중 {1}마리</value>
+    <value>이중 {0} · 삼중 {1}</value>
   </data>
   <data name="HookYieldRange" xml:space="preserve">
     <value>{0}~{1}</value>
@@ -1149,6 +1164,9 @@
     <value>공개 자료의 수량 안내이며 현재 획득력에서의 보장 수량은 아닙니다. 한 기술의 수량으로 다른 기술을 추정하지 않습니다. 소장품은 적용이 다를 수 있습니다.</value>
   </data>
   <data name="HookYieldAtLeast" xml:space="preserve"><value>{0} 이상</value></data>
+  <data name="HookYieldCount" xml:space="preserve"><value>{0}마리</value></data>
+  <data name="HookYieldCountAtLeast" xml:space="preserve"><value>{0}마리 이상</value></data>
+  <data name="HookYieldUnknown" xml:space="preserve"><value>이중·삼중 수량 미확인</value></data>
   <data name="HookYieldUnavailable" xml:space="preserve"><value>낚아채기 수량 자료를 읽을 수 없습니다. 다른 낚시 조건은 계속 표시합니다.</value></data>
   <data name="IntuitionActiveSummary" xml:space="preserve"><value>직감 발동 중</value></data>
   <data name="ChangelogIntuitionProgress" xml:space="preserve"><value>캐스팅 타이머에서 직감 선행 어종의 진행도를 확인하고 직감 종료 후 새로 집계할 수 있습니다.</value></data>
@@ -1157,4 +1175,19 @@
   <data name="ChangelogFishLookup" xml:space="preserve"><value>/dbfs 어종 이름 검색과 물고기 아이템 우클릭 메뉴로 상세 정보를 열 수 있습니다.</value></data>
   <data name="ChangelogHookYieldGuide" xml:space="preserve"><value>자료가 확인된 일반 어종의 이중·삼중 낚아채기 마릿수를 확인할 수 있습니다.</value></data>
   <data name="ChangelogMultipleCatchQuantity" xml:space="preserve"><value>낚시 기록에서 복수 어획의 실제 마릿수를 확인할 수 있습니다.</value></data>
+  <data name="OceanFishFilter" xml:space="preserve"><value>조건으로 좁히기</value></data>
+  <data name="OceanFishObserved" xml:space="preserve"><value>{0} · {1} · {2}</value></data>
+  <data name="OceanFishUnconfirmedCount" xml:space="preserve"><value>조건 미확인 {0}종 포함 · 어획 가능 여부는 게임에서 확인</value></data>
+  <data name="OceanFishUnconfirmedRow" xml:space="preserve"><value>{0} · 조건 미확인</value></data>
+  <data name="OceanIntuitionPresent" xml:space="preserve"><value>직감 발동 중</value></data>
+  <data name="OceanIntuitionAbsent" xml:space="preserve"><value>직감 없음</value></data>
+  <data name="OceanIntuitionUnknown" xml:space="preserve"><value>직감 미확인</value></data>
+  <data name="OceanConditionsUnavailable" xml:space="preserve"><value>조건 자료를 읽을 수 없어 해역 전체 어종을 유지합니다.</value></data>
+  <data name="ChangelogThemes" xml:space="preserve"><value>설정에서 그라파이트·페이퍼 테마를 선택할 수 있습니다.</value></data>
+  <data name="ChangelogMinimumGathering" xml:space="preserve"><value>자료가 있는 어종은 상세에서 최소 획득력을 확인할 수 있습니다.</value></data>
+  <data name="ChangelogDeliveryTiers" xml:space="preserve"><value>소장품 어종의 납품 대상과 소장가치 구간을 상세에서 확인할 수 있습니다.</value></data>
+  <data name="ChangelogExpandedHookYield" xml:space="preserve"><value>더 많은 어종의 이중·삼중 낚아채기 수량 안내를 확인할 수 있습니다.</value></data>
+  <data name="ChangelogOceanBeta" xml:space="preserve"><value>먼바다 Beta에서 출항 일정과 현재 항로·해역의 남은 시간·기본 미끼를 확인할 수 있습니다.</value></data>
+  <data name="ChangelogOceanCandidates" xml:space="preserve"><value>먼바다 어종 목록을 시간·날씨·직감 조건으로 추려볼 수 있으며, 조건이 미확인인 어종은 남겨 둡니다.</value></data>
+  <data name="ChangelogFishingLogOrder" xml:space="preserve"><value>낚시터 어종 목록을 게임 낚시수첩 순서로 볼 수 있습니다.</value></data>
 </root>

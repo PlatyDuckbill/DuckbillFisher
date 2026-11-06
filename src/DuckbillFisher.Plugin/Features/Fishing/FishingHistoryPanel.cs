@@ -43,7 +43,8 @@ internal sealed class FishingHistoryPanel(FishingTracker tracker, ITextureProvid
     {
         if (view.Storage is FishingStorageState.ReadFailed or FishingStorageState.InvalidFile or FishingStorageState.WriteFailed || view.DetailError && table)
         {
-            ImGui.PushStyleColor(ImGuiCol.Text, new Vector4(1, .72f, .3f, 1));
+            ImGui.PushStyleColor(ImGuiCol.Text, UiThemeScope.Current is not null ? UiThemeColors.Attention
+                : UiWidgets.ReadableColor(new Vector4(1, .72f, .3f, 1)));
             ImGui.TextWrapped(StorageMessage(view));
             ImGui.PopStyleColor();
         }
@@ -146,7 +147,7 @@ internal sealed class FishingHistoryPanel(FishingTracker tracker, ITextureProvid
         var time = row.StartedUtc?.ToLocalTime().ToString("HH:mm:ss", UiText.Culture) ?? "—";
         var timeWidth = Math.Min(ImGui.CalcTextSize(time).X, textWidth * .35f);
         ImGui.SetCursorPos(start + new Vector2(textX, 4));
-        ImGui.PushStyleColor(ImGuiCol.Text, OutcomeColor(row.Outcome));
+        ImGui.PushStyleColor(ImGuiCol.Text, UiWidgets.ReadableColor(OutcomeColor(row.Outcome)));
         Clipped(Result(row, view), Math.Max(1, textWidth - timeWidth - 8));
         ImGui.PopStyleColor();
         ImGui.SetCursorPos(start + new Vector2(width - timeWidth - 4, 4));
@@ -238,12 +239,18 @@ internal sealed class FishingHistoryPanel(FishingTracker tracker, ITextureProvid
             UiWidgets.GameIcon(textures, item.IconId, ImGui.GetTextLineHeight(), item.Name);
             ImGui.SameLine(0, 4);
         }
-        if (color is { } tint) ImGui.PushStyleColor(ImGuiCol.Text, tint);
+        if (color is { } tint) ImGui.PushStyleColor(ImGuiCol.Text, UiWidgets.ReadableColor(tint));
         Clipped(text, Math.Max(1, ImGui.GetContentRegionAvail().X));
         if (color is not null) ImGui.PopStyleColor();
         UiWidgets.Tooltip(text);
     }
-    private static Vector4 OutcomeColor(FishingOutcome outcome) => outcome switch
+    private static Vector4 OutcomeColor(FishingOutcome outcome) => UiThemeScope.Current is not null ? outcome switch
+    {
+        FishingOutcome.Caught => UiThemeColors.Positive,
+        FishingOutcome.Failed => UiThemeColors.Negative,
+        FishingOutcome.Pending => UiThemeColors.Information,
+        _ => UiThemeColors.Secondary,
+    } : outcome switch
     {
         FishingOutcome.Caught => new(.55f, .84f, .66f, 1),
         FishingOutcome.Failed => new(.94f, .65f, .48f, 1),

@@ -48,6 +48,9 @@ fish-parameter.json, item-patch.json, patch-names.json and items.json.
 Changes: added 353 KR-matched ordinary fish rules, filled missing hookset/tug
 and compatible locations in the existing tracker rules, validated bait chains
 against KR items and fishing spots, preserved unresolved fields as unknown.
+Additional derived material: 350 positive minGathering facts from the same fixed
+fishing-sources.json, matched to Item/FishParameter IDs on KR and global clients.
+Zero/missing values remain unknown. No multiple-hook Gathering thresholds inferred.
 No hosted statistics API or bite-time data is used. No external implementation
 code, icons, descriptions, or complete localization dictionaries are bundled.
 
@@ -99,14 +102,28 @@ https://www.youtube.com/watch?v=X5DJDS5Iy1g
 https://docs.google.com/document/d/1B7wjAtw5uCiARS9tXsozYAX8l6JZOzl2YtJSjejqchk/edit
 The document is A Fisher's Guide to Eorzea by Fruity Snacks. Its plain-text
 export snapshot is identified by date and content SHA256 in the data file.
+Additional Dawntrail volume, checked 2026-11-06:
+https://docs.google.com/document/d/1HB2R8e2ZS6kW3v-7xSYuBbTEA3AZSLj4j2jrA2YcPFs/edit
+Eight missing Intuition durations and one hookset were supplemented from
+individual published observations by Fruity Snacks, Uzel Qestir, Razor Edge
+and Eorzea Weather. URLs, snapshot hashes and values are recorded in
+data/fishing.kr.v2.json reviewedDetailObservations. No source prose or macros
+are redistributed. Conflicting or unstated facts remain unconfirmed.
 Only numerical single-action yields, explicit ranges or documented lower bounds
 are recorded. No cross-action yield conversion or Gathering breakpoints inferred.
 No guide prose, code, images or video is redistributed. No public reuse license
 was identified; rights to the guides remain with their authors. These observations
 are not represented as MIT-licensed or Apache-licensed upstream data.
 
-Ocean Fishing basic-bait observations (13 stops, 52 guidance rows)
+Ocean Fishing basic-bait observations (13 stops, 52 guidance rows) and multi-hook quantities (259 fish)
 Observer: Tyo'to Tayuun, checked 2026-11-06
+The DH/TH numeric values and explicit ranges are also included in data/hook-yields.v1.json.
+CSV content hashes, original URLs and the extraction date are recorded there.
+data/ocean-conditions.v1.json retains individual time/weather/Intuition-required
+facts for 260 pool memberships, including explicitly unknown weather values.
+The same original CSV URLs/hashes and the source classification convention
+are recorded in that file. No original table formatting or website code is copied.
+Only individual numerical observations are retained; no bite times or strategies are copied.
 https://ffxiv.oceanfishing.boats/indigo/
 https://ffxiv.oceanfishing.boats/ruby/
 Source URLs and fixed SHA256 snapshots: data/ocean-guidance.v1.json

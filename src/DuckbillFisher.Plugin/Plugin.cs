@@ -133,7 +133,7 @@ public sealed class Plugin : IDalamudPlugin
             if (compareDetailWindow.IsOpen && compareDetailWindow.SelectedId == origin) compareDetailWindow.Navigate(fish);
             else compareDetailWindow.Show(fish);
         };
-        ocean = new(dataManager, clientState, playerState, conditions, framework, fishPreferences, fishCatalog, log);
+        ocean = new(dataManager, clientState, playerState, conditions, framework, fishPreferences, fishCatalog, log, objectTable);
         var spotFishWindow = new SpotFishWindow(fishingTracker, fishCatalog, fishPreferences, fishCollection, textureProvider, fishingMap, detailWindow.Show, ocean);
         fishingBuffs = new FishingBuffObserver(objectTable, clientState, playerState, conditions, framework, dataManager,
             fishPreferences, fishingTracker);
@@ -203,7 +203,11 @@ public sealed class Plugin : IDalamudPlugin
 
     private void OpenMainUi() => mainWindow.IsOpen = true;
 
-    private void DrawWindows() => UiScale.Draw(windows, fishPreferences.View.UiScalePercent);
+    private void DrawWindows()
+    {
+        var settings = fishPreferences.View;
+        UiScale.Draw(windows, settings.UiScalePercent, settings.Theme);
+    }
 
     public void Dispose()
     {

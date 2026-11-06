@@ -1,9 +1,9 @@
 {
   "schemaVersion": 1,
-  "dataVersion": "regular-hook-yields-2026-11-05",
-  "checkedUtc": "2026-11-05",
-  "rights": "Fruity Snacks gameplay observations from video descriptions and A Fisher's Guide to Eorzea. No public reuse license identified. Numeric facts only; no guide prose, code, images or video redistributed.",
-  "processing": "Linked to existing FishParameter/Item identities. Single-action values only. Null means unconfirmed. Null maximum means the guide only establishes a lower bound; no upper bound or cross-action conversion is inferred. Gathering breakpoints not inferred.",
+  "dataVersion": "regular-and-ocean-hook-yields-2026-11-06",
+  "checkedUtc": "2026-11-06",
+  "rights": "Fruity Snacks and Tyo\u0027to Tayuun gameplay observations. No public reuse license identified. Individual numeric facts only; no prose, code, images, bite times or strategies redistributed.",
+  "processing": "Linked to existing FishParameter/Item identities. Explicit single-action quantities only. Null means unconfirmed. Null maximum means the guide establishes only a lower bound, including the count reached by its stated preparation sequence; no upper bound, cross-action conversion or Gathering breakpoint inferred.",
   "sources": [
     {
       "id": "_tSbRKjum54",
@@ -61,6 +61,23 @@
       "contentSha256": "4CD82A004E2B11BAD2442FD07FCFD066EE9DC13FE38701DF26CBC2A9751486A0",
       "snapshotFormat": "Google Docs plain text export, UTF-8 without BOM",
       "checkedUtc": "2026-11-05"
+    },
+    {
+      "id": "ocean-indigo-2026-11-06",
+      "url": "https://ffxiv.oceanfishing.boats/fishdata/indigo-EN.csv",
+      "contentSha256": "8F8FB4EB0911BA670093EECA7650689C24A3D0476097514E63A7A0B0F3010E92",
+      "checkedUtc": "2026-11-06"
+    },
+    {
+      "id": "ocean-ruby-2026-11-06",
+      "url": "https://ffxiv.oceanfishing.boats/fishdata/ruby-EN.csv",
+      "contentSha256": "EFED3C3D8FDF925E6886C83CCA94BC1BE538DDF45253693699233A8D7A6CEB1E",
+      "checkedUtc": "2026-11-06"
+    },
+    {
+      "id": "fruity-dawntrail-2026-11-06",
+      "url": "https://docs.google.com/document/d/1HB2R8e2ZS6kW3v-7xSYuBbTEA3AZSLj4j2jrA2YcPFs/edit",
+      "contentSha256": "F71A2C1920C919374C8F94CE523E631A2E5067F67B532D5D5465A91839C583B6"
     }
   ],
   "entries": [
@@ -303,6 +320,3685 @@
         "minimum": 3,
         "maximum": 3
       }
+    },
+    {
+      "itemId": 28937,
+      "fishParameterId": 828,
+      "source": "ocean-indigo-2026-11-06",
+      "doubleHook": {
+        "minimum": 2,
+        "maximum": 2
+      },
+      "tripleHook": {
+        "minimum": 3,
+        "maximum": 3
+      },
+      "ocean": true
+    },
+    {
+      "itemId": 28938,
+      "fishParameterId": 829,
+      "source": "ocean-indigo-2026-11-06",
+      "doubleHook": {
+        "minimum": 2,
+        "maximum": 2
+      },
+      "tripleHook": {
+        "minimum": 3,
+        "maximum": 3
+      },
+      "ocean": true
+    },
+    {
+      "itemId": 28939,
+      "fishParameterId": 842,
+      "source": "ocean-indigo-2026-11-06",
+      "doubleHook": {
+        "minimum": 3,
+        "maximum": 4
+      },
+      "tripleHook": {
+        "minimum": 5,
+        "maximum": 7
+      },
+      "ocean": true
+    },
+    {
+      "itemId": 28940,
+      "fishParameterId": 844,
+      "source": "ocean-indigo-2026-11-06",
+      "doubleHook": {
+        "minimum": 2,
+        "maximum": 2
+      },
+      "tripleHook": {
+        "minimum": 3,
+        "maximum": 3
+      },
+      "ocean": true
+    },
+    {
+      "itemId": 28941,
+      "fishParameterId": 833,
+      "source": "ocean-indigo-2026-11-06",
+      "doubleHook": {
+        "minimum": 2,
+        "maximum": 2
+      },
+      "tripleHook": {
+        "minimum": 3,
+        "maximum": 3
+      },
+      "ocean": true
+    },
+    {
+      "itemId": 28942,
+      "fishParameterId": 841,
+      "source": "ocean-indigo-2026-11-06",
+      "doubleHook": {
+        "minimum": 2,
+        "maximum": 2
+      },
+      "tripleHook": {
+        "minimum": 3,
+        "maximum": 3
+      },
+      "ocean": true
+    },
+    {
+      "itemId": 29718,
+      "fishParameterId": 849,
+      "source": "ocean-indigo-2026-11-06",
+      "doubleHook": {
+        "minimum": 2,
+        "maximum": 2
+      },
+      "tripleHook": {
+        "minimum": 3,
+        "maximum": 3
+      },
+      "ocean": true
+    },
+    {
+      "itemId": 29719,
+      "fishParameterId": 840,
+      "source": "ocean-indigo-2026-11-06",
+      "doubleHook": {
+        "minimum": 2,
+        "maximum": 2
+      },
+      "tripleHook": {
+        "minimum": 3,
+        "maximum": 3
+      },
+      "ocean": true
+    },
+    {
+      "itemId": 29720,
+      "fishParameterId": 858,
+      "source": "ocean-indigo-2026-11-06",
+      "doubleHook": {
+        "minimum": 2,
+        "maximum": 2
+      },
+      "tripleHook": {
+        "minimum": 3,
+        "maximum": 3
+      },
+      "ocean": true
+    },
+    {
+      "itemId": 29721,
+      "fishParameterId": 853,
+      "source": "ocean-indigo-2026-11-06",
+      "doubleHook": {
+        "minimum": 2,
+        "maximum": 2
+      },
+      "tripleHook": {
+        "minimum": 3,
+        "maximum": 3
+      },
+      "ocean": true
+    },
+    {
+      "itemId": 29722,
+      "fishParameterId": 831,
+      "source": "ocean-indigo-2026-11-06",
+      "doubleHook": {
+        "minimum": 2,
+        "maximum": 2
+      },
+      "tripleHook": {
+        "minimum": 3,
+        "maximum": 3
+      },
+      "ocean": true
+    },
+    {
+      "itemId": 29723,
+      "fishParameterId": 832,
+      "source": "ocean-indigo-2026-11-06",
+      "doubleHook": {
+        "minimum": 2,
+        "maximum": 2
+      },
+      "tripleHook": {
+        "minimum": 3,
+        "maximum": 3
+      },
+      "ocean": true
+    },
+    {
+      "itemId": 29724,
+      "fishParameterId": 843,
+      "source": "ocean-indigo-2026-11-06",
+      "doubleHook": {
+        "minimum": 2,
+        "maximum": 2
+      },
+      "tripleHook": {
+        "minimum": 3,
+        "maximum": 3
+      },
+      "ocean": true
+    },
+    {
+      "itemId": 29725,
+      "fishParameterId": 845,
+      "source": "ocean-indigo-2026-11-06",
+      "doubleHook": {
+        "minimum": 2,
+        "maximum": 2
+      },
+      "tripleHook": {
+        "minimum": 3,
+        "maximum": 3
+      },
+      "ocean": true
+    },
+    {
+      "itemId": 29726,
+      "fishParameterId": 854,
+      "source": "ocean-indigo-2026-11-06",
+      "doubleHook": {
+        "minimum": 2,
+        "maximum": 2
+      },
+      "tripleHook": {
+        "minimum": 3,
+        "maximum": 3
+      },
+      "ocean": true
+    },
+    {
+      "itemId": 29727,
+      "fishParameterId": 855,
+      "source": "ocean-indigo-2026-11-06",
+      "doubleHook": {
+        "minimum": 2,
+        "maximum": 2
+      },
+      "tripleHook": {
+        "minimum": 3,
+        "maximum": 3
+      },
+      "ocean": true
+    },
+    {
+      "itemId": 29728,
+      "fishParameterId": 834,
+      "source": "ocean-indigo-2026-11-06",
+      "doubleHook": {
+        "minimum": 2,
+        "maximum": 2
+      },
+      "tripleHook": {
+        "minimum": 3,
+        "maximum": 3
+      },
+      "ocean": true
+    },
+    {
+      "itemId": 29729,
+      "fishParameterId": 835,
+      "source": "ocean-indigo-2026-11-06",
+      "doubleHook": {
+        "minimum": 2,
+        "maximum": 2
+      },
+      "tripleHook": {
+        "minimum": 3,
+        "maximum": 3
+      },
+      "ocean": true
+    },
+    {
+      "itemId": 29730,
+      "fishParameterId": 836,
+      "source": "ocean-indigo-2026-11-06",
+      "doubleHook": {
+        "minimum": 2,
+        "maximum": 2
+      },
+      "tripleHook": {
+        "minimum": 3,
+        "maximum": 3
+      },
+      "ocean": true
+    },
+    {
+      "itemId": 29731,
+      "fishParameterId": 846,
+      "source": "ocean-indigo-2026-11-06",
+      "doubleHook": {
+        "minimum": 3,
+        "maximum": 4
+      },
+      "tripleHook": {
+        "minimum": 5,
+        "maximum": 7
+      },
+      "ocean": true
+    },
+    {
+      "itemId": 29732,
+      "fishParameterId": 857,
+      "source": "ocean-indigo-2026-11-06",
+      "doubleHook": {
+        "minimum": 2,
+        "maximum": 2
+      },
+      "tripleHook": {
+        "minimum": 3,
+        "maximum": 3
+      },
+      "ocean": true
+    },
+    {
+      "itemId": 29733,
+      "fishParameterId": 848,
+      "source": "ocean-indigo-2026-11-06",
+      "doubleHook": {
+        "minimum": 2,
+        "maximum": 2
+      },
+      "tripleHook": {
+        "minimum": 3,
+        "maximum": 3
+      },
+      "ocean": true
+    },
+    {
+      "itemId": 29734,
+      "fishParameterId": 852,
+      "source": "ocean-indigo-2026-11-06",
+      "doubleHook": {
+        "minimum": 4,
+        "maximum": 4
+      },
+      "tripleHook": {
+        "minimum": 7,
+        "maximum": 7
+      },
+      "ocean": true
+    },
+    {
+      "itemId": 29735,
+      "fishParameterId": 847,
+      "source": "ocean-indigo-2026-11-06",
+      "doubleHook": {
+        "minimum": 4,
+        "maximum": 4
+      },
+      "tripleHook": {
+        "minimum": 7,
+        "maximum": 7
+      },
+      "ocean": true
+    },
+    {
+      "itemId": 29736,
+      "fishParameterId": 837,
+      "source": "ocean-indigo-2026-11-06",
+      "doubleHook": {
+        "minimum": 2,
+        "maximum": 2
+      },
+      "tripleHook": {
+        "minimum": 3,
+        "maximum": 3
+      },
+      "ocean": true
+    },
+    {
+      "itemId": 29737,
+      "fishParameterId": 838,
+      "source": "ocean-indigo-2026-11-06",
+      "doubleHook": {
+        "minimum": 2,
+        "maximum": 2
+      },
+      "tripleHook": {
+        "minimum": 3,
+        "maximum": 3
+      },
+      "ocean": true
+    },
+    {
+      "itemId": 29738,
+      "fishParameterId": 839,
+      "source": "ocean-indigo-2026-11-06",
+      "doubleHook": {
+        "minimum": 2,
+        "maximum": 2
+      },
+      "tripleHook": {
+        "minimum": 3,
+        "maximum": 3
+      },
+      "ocean": true
+    },
+    {
+      "itemId": 29739,
+      "fishParameterId": 830,
+      "source": "ocean-indigo-2026-11-06",
+      "doubleHook": {
+        "minimum": 3,
+        "maximum": 4
+      },
+      "tripleHook": {
+        "minimum": 5,
+        "maximum": 7
+      },
+      "ocean": true
+    },
+    {
+      "itemId": 29740,
+      "fishParameterId": 850,
+      "source": "ocean-indigo-2026-11-06",
+      "doubleHook": {
+        "minimum": 4,
+        "maximum": 4
+      },
+      "tripleHook": {
+        "minimum": 7,
+        "maximum": 7
+      },
+      "ocean": true
+    },
+    {
+      "itemId": 29741,
+      "fishParameterId": 851,
+      "source": "ocean-indigo-2026-11-06",
+      "doubleHook": {
+        "minimum": 2,
+        "maximum": 2
+      },
+      "tripleHook": {
+        "minimum": 3,
+        "maximum": 3
+      },
+      "ocean": true
+    },
+    {
+      "itemId": 29742,
+      "fishParameterId": 856,
+      "source": "ocean-indigo-2026-11-06",
+      "doubleHook": {
+        "minimum": 2,
+        "maximum": 2
+      },
+      "tripleHook": {
+        "minimum": 3,
+        "maximum": 3
+      },
+      "ocean": true
+    },
+    {
+      "itemId": 29743,
+      "fishParameterId": 859,
+      "source": "ocean-indigo-2026-11-06",
+      "doubleHook": {
+        "minimum": 2,
+        "maximum": 2
+      },
+      "tripleHook": {
+        "minimum": 3,
+        "maximum": 3
+      },
+      "ocean": true
+    },
+    {
+      "itemId": 29744,
+      "fishParameterId": 860,
+      "source": "ocean-indigo-2026-11-06",
+      "doubleHook": {
+        "minimum": 1,
+        "maximum": 1
+      },
+      "tripleHook": {
+        "minimum": 1,
+        "maximum": 1
+      },
+      "ocean": true
+    },
+    {
+      "itemId": 29745,
+      "fishParameterId": 861,
+      "source": "ocean-indigo-2026-11-06",
+      "doubleHook": {
+        "minimum": 1,
+        "maximum": 1
+      },
+      "tripleHook": {
+        "minimum": 1,
+        "maximum": 1
+      },
+      "ocean": true
+    },
+    {
+      "itemId": 29746,
+      "fishParameterId": 862,
+      "source": "ocean-indigo-2026-11-06",
+      "doubleHook": {
+        "minimum": 1,
+        "maximum": 1
+      },
+      "tripleHook": {
+        "minimum": 1,
+        "maximum": 1
+      },
+      "ocean": true
+    },
+    {
+      "itemId": 29747,
+      "fishParameterId": 863,
+      "source": "ocean-indigo-2026-11-06",
+      "doubleHook": {
+        "minimum": 1,
+        "maximum": 1
+      },
+      "tripleHook": {
+        "minimum": 1,
+        "maximum": 1
+      },
+      "ocean": true
+    },
+    {
+      "itemId": 29748,
+      "fishParameterId": 891,
+      "source": "ocean-indigo-2026-11-06",
+      "doubleHook": {
+        "minimum": 2,
+        "maximum": 2
+      },
+      "tripleHook": {
+        "minimum": 3,
+        "maximum": 3
+      },
+      "ocean": true
+    },
+    {
+      "itemId": 29749,
+      "fishParameterId": 865,
+      "source": "ocean-indigo-2026-11-06",
+      "doubleHook": {
+        "minimum": 2,
+        "maximum": 2
+      },
+      "tripleHook": {
+        "minimum": 3,
+        "maximum": 3
+      },
+      "ocean": true
+    },
+    {
+      "itemId": 29750,
+      "fishParameterId": 866,
+      "source": "ocean-indigo-2026-11-06",
+      "doubleHook": {
+        "minimum": 4,
+        "maximum": 4
+      },
+      "tripleHook": {
+        "minimum": 7,
+        "maximum": 7
+      },
+      "ocean": true
+    },
+    {
+      "itemId": 29751,
+      "fishParameterId": 867,
+      "source": "ocean-indigo-2026-11-06",
+      "doubleHook": {
+        "minimum": 2,
+        "maximum": 2
+      },
+      "tripleHook": {
+        "minimum": 3,
+        "maximum": 3
+      },
+      "ocean": true
+    },
+    {
+      "itemId": 29752,
+      "fishParameterId": 868,
+      "source": "ocean-indigo-2026-11-06",
+      "doubleHook": {
+        "minimum": 2,
+        "maximum": 2
+      },
+      "tripleHook": {
+        "minimum": 3,
+        "maximum": 3
+      },
+      "ocean": true
+    },
+    {
+      "itemId": 29753,
+      "fishParameterId": 869,
+      "source": "ocean-indigo-2026-11-06",
+      "doubleHook": {
+        "minimum": 2,
+        "maximum": 2
+      },
+      "tripleHook": {
+        "minimum": 3,
+        "maximum": 3
+      },
+      "ocean": true
+    },
+    {
+      "itemId": 29754,
+      "fishParameterId": 870,
+      "source": "ocean-indigo-2026-11-06",
+      "doubleHook": {
+        "minimum": 2,
+        "maximum": 2
+      },
+      "tripleHook": {
+        "minimum": 3,
+        "maximum": 3
+      },
+      "ocean": true
+    },
+    {
+      "itemId": 29755,
+      "fishParameterId": 871,
+      "source": "ocean-indigo-2026-11-06",
+      "doubleHook": {
+        "minimum": 2,
+        "maximum": 2
+      },
+      "tripleHook": {
+        "minimum": 3,
+        "maximum": 3
+      },
+      "ocean": true
+    },
+    {
+      "itemId": 29756,
+      "fishParameterId": 872,
+      "source": "ocean-indigo-2026-11-06",
+      "doubleHook": {
+        "minimum": 2,
+        "maximum": 2
+      },
+      "tripleHook": {
+        "minimum": 3,
+        "maximum": 3
+      },
+      "ocean": true
+    },
+    {
+      "itemId": 29757,
+      "fishParameterId": 873,
+      "source": "ocean-indigo-2026-11-06",
+      "doubleHook": {
+        "minimum": 4,
+        "maximum": 4
+      },
+      "tripleHook": {
+        "minimum": 7,
+        "maximum": 7
+      },
+      "ocean": true
+    },
+    {
+      "itemId": 29758,
+      "fishParameterId": 874,
+      "source": "ocean-indigo-2026-11-06",
+      "doubleHook": {
+        "minimum": 2,
+        "maximum": 2
+      },
+      "tripleHook": {
+        "minimum": 3,
+        "maximum": 3
+      },
+      "ocean": true
+    },
+    {
+      "itemId": 29759,
+      "fishParameterId": 875,
+      "source": "ocean-indigo-2026-11-06",
+      "doubleHook": {
+        "minimum": 2,
+        "maximum": 2
+      },
+      "tripleHook": {
+        "minimum": 3,
+        "maximum": 3
+      },
+      "ocean": true
+    },
+    {
+      "itemId": 29760,
+      "fishParameterId": 878,
+      "source": "ocean-indigo-2026-11-06",
+      "doubleHook": {
+        "minimum": 2,
+        "maximum": 2
+      },
+      "tripleHook": {
+        "minimum": 3,
+        "maximum": 3
+      },
+      "ocean": true
+    },
+    {
+      "itemId": 29761,
+      "fishParameterId": 877,
+      "source": "ocean-indigo-2026-11-06",
+      "doubleHook": {
+        "minimum": 2,
+        "maximum": 2
+      },
+      "tripleHook": {
+        "minimum": 3,
+        "maximum": 3
+      },
+      "ocean": true
+    },
+    {
+      "itemId": 29762,
+      "fishParameterId": 896,
+      "source": "ocean-indigo-2026-11-06",
+      "doubleHook": {
+        "minimum": 4,
+        "maximum": 4
+      },
+      "tripleHook": {
+        "minimum": 7,
+        "maximum": 7
+      },
+      "ocean": true
+    },
+    {
+      "itemId": 29763,
+      "fishParameterId": 879,
+      "source": "ocean-indigo-2026-11-06",
+      "doubleHook": {
+        "minimum": 2,
+        "maximum": 2
+      },
+      "tripleHook": {
+        "minimum": 3,
+        "maximum": 3
+      },
+      "ocean": true
+    },
+    {
+      "itemId": 29764,
+      "fishParameterId": 880,
+      "source": "ocean-indigo-2026-11-06",
+      "doubleHook": {
+        "minimum": 4,
+        "maximum": 4
+      },
+      "tripleHook": {
+        "minimum": 7,
+        "maximum": 7
+      },
+      "ocean": true
+    },
+    {
+      "itemId": 29765,
+      "fishParameterId": 881,
+      "source": "ocean-indigo-2026-11-06",
+      "doubleHook": {
+        "minimum": 2,
+        "maximum": 2
+      },
+      "tripleHook": {
+        "minimum": 3,
+        "maximum": 3
+      },
+      "ocean": true
+    },
+    {
+      "itemId": 29766,
+      "fishParameterId": 864,
+      "source": "ocean-indigo-2026-11-06",
+      "doubleHook": {
+        "minimum": 4,
+        "maximum": 4
+      },
+      "tripleHook": {
+        "minimum": 7,
+        "maximum": 7
+      },
+      "ocean": true
+    },
+    {
+      "itemId": 29767,
+      "fishParameterId": 883,
+      "source": "ocean-indigo-2026-11-06",
+      "doubleHook": {
+        "minimum": 2,
+        "maximum": 2
+      },
+      "tripleHook": {
+        "minimum": 3,
+        "maximum": 3
+      },
+      "ocean": true
+    },
+    {
+      "itemId": 29768,
+      "fishParameterId": 884,
+      "source": "ocean-indigo-2026-11-06",
+      "doubleHook": {
+        "minimum": 4,
+        "maximum": 4
+      },
+      "tripleHook": {
+        "minimum": 7,
+        "maximum": 7
+      },
+      "ocean": true
+    },
+    {
+      "itemId": 29769,
+      "fishParameterId": 885,
+      "source": "ocean-indigo-2026-11-06",
+      "doubleHook": {
+        "minimum": 2,
+        "maximum": 2
+      },
+      "tripleHook": {
+        "minimum": 3,
+        "maximum": 3
+      },
+      "ocean": true
+    },
+    {
+      "itemId": 29770,
+      "fishParameterId": 886,
+      "source": "ocean-indigo-2026-11-06",
+      "doubleHook": {
+        "minimum": 4,
+        "maximum": 4
+      },
+      "tripleHook": {
+        "minimum": 7,
+        "maximum": 7
+      },
+      "ocean": true
+    },
+    {
+      "itemId": 29771,
+      "fishParameterId": 887,
+      "source": "ocean-indigo-2026-11-06",
+      "doubleHook": {
+        "minimum": 2,
+        "maximum": 2
+      },
+      "tripleHook": {
+        "minimum": 3,
+        "maximum": 3
+      },
+      "ocean": true
+    },
+    {
+      "itemId": 29772,
+      "fishParameterId": 888,
+      "source": "ocean-indigo-2026-11-06",
+      "doubleHook": {
+        "minimum": 2,
+        "maximum": 2
+      },
+      "tripleHook": {
+        "minimum": 3,
+        "maximum": 3
+      },
+      "ocean": true
+    },
+    {
+      "itemId": 29773,
+      "fishParameterId": 895,
+      "source": "ocean-indigo-2026-11-06",
+      "doubleHook": {
+        "minimum": 4,
+        "maximum": 4
+      },
+      "tripleHook": {
+        "minimum": 7,
+        "maximum": 7
+      },
+      "ocean": true
+    },
+    {
+      "itemId": 29774,
+      "fishParameterId": 890,
+      "source": "ocean-indigo-2026-11-06",
+      "doubleHook": {
+        "minimum": 2,
+        "maximum": 2
+      },
+      "tripleHook": {
+        "minimum": 3,
+        "maximum": 3
+      },
+      "ocean": true
+    },
+    {
+      "itemId": 29775,
+      "fishParameterId": 882,
+      "source": "ocean-indigo-2026-11-06",
+      "doubleHook": {
+        "minimum": 2,
+        "maximum": 2
+      },
+      "tripleHook": {
+        "minimum": 3,
+        "maximum": 3
+      },
+      "ocean": true
+    },
+    {
+      "itemId": 29776,
+      "fishParameterId": 892,
+      "source": "ocean-indigo-2026-11-06",
+      "doubleHook": {
+        "minimum": 2,
+        "maximum": 2
+      },
+      "tripleHook": {
+        "minimum": 3,
+        "maximum": 3
+      },
+      "ocean": true
+    },
+    {
+      "itemId": 29777,
+      "fishParameterId": 893,
+      "source": "ocean-indigo-2026-11-06",
+      "doubleHook": {
+        "minimum": 4,
+        "maximum": 4
+      },
+      "tripleHook": {
+        "minimum": 7,
+        "maximum": 7
+      },
+      "ocean": true
+    },
+    {
+      "itemId": 29778,
+      "fishParameterId": 894,
+      "source": "ocean-indigo-2026-11-06",
+      "doubleHook": {
+        "minimum": 2,
+        "maximum": 2
+      },
+      "tripleHook": {
+        "minimum": 3,
+        "maximum": 3
+      },
+      "ocean": true
+    },
+    {
+      "itemId": 29779,
+      "fishParameterId": 876,
+      "source": "ocean-indigo-2026-11-06",
+      "doubleHook": {
+        "minimum": 2,
+        "maximum": 2
+      },
+      "tripleHook": {
+        "minimum": 3,
+        "maximum": 3
+      },
+      "ocean": true
+    },
+    {
+      "itemId": 29780,
+      "fishParameterId": 889,
+      "source": "ocean-indigo-2026-11-06",
+      "doubleHook": {
+        "minimum": 2,
+        "maximum": 2
+      },
+      "tripleHook": {
+        "minimum": 3,
+        "maximum": 3
+      },
+      "ocean": true
+    },
+    {
+      "itemId": 29781,
+      "fishParameterId": 897,
+      "source": "ocean-indigo-2026-11-06",
+      "doubleHook": {
+        "minimum": 3,
+        "maximum": 4
+      },
+      "tripleHook": {
+        "minimum": 5,
+        "maximum": 7
+      },
+      "ocean": true
+    },
+    {
+      "itemId": 29782,
+      "fishParameterId": 898,
+      "source": "ocean-indigo-2026-11-06",
+      "doubleHook": {
+        "minimum": 4,
+        "maximum": 4
+      },
+      "tripleHook": {
+        "minimum": 7,
+        "maximum": 7
+      },
+      "ocean": true
+    },
+    {
+      "itemId": 29783,
+      "fishParameterId": 899,
+      "source": "ocean-indigo-2026-11-06",
+      "doubleHook": {
+        "minimum": 2,
+        "maximum": 2
+      },
+      "tripleHook": {
+        "minimum": 3,
+        "maximum": 3
+      },
+      "ocean": true
+    },
+    {
+      "itemId": 29784,
+      "fishParameterId": 900,
+      "source": "ocean-indigo-2026-11-06",
+      "doubleHook": {
+        "minimum": 1,
+        "maximum": 1
+      },
+      "tripleHook": {
+        "minimum": 1,
+        "maximum": 1
+      },
+      "ocean": true
+    },
+    {
+      "itemId": 29785,
+      "fishParameterId": 901,
+      "source": "ocean-indigo-2026-11-06",
+      "doubleHook": {
+        "minimum": 1,
+        "maximum": 1
+      },
+      "tripleHook": {
+        "minimum": 1,
+        "maximum": 1
+      },
+      "ocean": true
+    },
+    {
+      "itemId": 29786,
+      "fishParameterId": 902,
+      "source": "ocean-indigo-2026-11-06",
+      "doubleHook": {
+        "minimum": 1,
+        "maximum": 1
+      },
+      "tripleHook": {
+        "minimum": 1,
+        "maximum": 1
+      },
+      "ocean": true
+    },
+    {
+      "itemId": 29787,
+      "fishParameterId": 903,
+      "source": "ocean-indigo-2026-11-06",
+      "doubleHook": {
+        "minimum": 1,
+        "maximum": 1
+      },
+      "tripleHook": {
+        "minimum": 1,
+        "maximum": 1
+      },
+      "ocean": true
+    },
+    {
+      "itemId": 29788,
+      "fishParameterId": 904,
+      "source": "ocean-indigo-2026-11-06",
+      "doubleHook": {
+        "minimum": 1,
+        "maximum": 1
+      },
+      "tripleHook": {
+        "minimum": 1,
+        "maximum": 1
+      },
+      "ocean": true
+    },
+    {
+      "itemId": 29789,
+      "fishParameterId": 905,
+      "source": "ocean-indigo-2026-11-06",
+      "doubleHook": {
+        "minimum": 1,
+        "maximum": 1
+      },
+      "tripleHook": {
+        "minimum": 1,
+        "maximum": 1
+      },
+      "ocean": true
+    },
+    {
+      "itemId": 29790,
+      "fishParameterId": 906,
+      "source": "ocean-indigo-2026-11-06",
+      "doubleHook": {
+        "minimum": 1,
+        "maximum": 1
+      },
+      "tripleHook": {
+        "minimum": 1,
+        "maximum": 1
+      },
+      "ocean": true
+    },
+    {
+      "itemId": 29791,
+      "fishParameterId": 907,
+      "source": "ocean-indigo-2026-11-06",
+      "doubleHook": {
+        "minimum": 1,
+        "maximum": 1
+      },
+      "tripleHook": {
+        "minimum": 1,
+        "maximum": 1
+      },
+      "ocean": true
+    },
+    {
+      "itemId": 32055,
+      "fishParameterId": 933,
+      "source": "ocean-indigo-2026-11-06",
+      "doubleHook": {
+        "minimum": 2,
+        "maximum": 2
+      },
+      "tripleHook": {
+        "minimum": 3,
+        "maximum": 3
+      },
+      "ocean": true
+    },
+    {
+      "itemId": 32056,
+      "fishParameterId": 934,
+      "source": "ocean-indigo-2026-11-06",
+      "doubleHook": {
+        "minimum": 2,
+        "maximum": 2
+      },
+      "tripleHook": {
+        "minimum": 3,
+        "maximum": 3
+      },
+      "ocean": true
+    },
+    {
+      "itemId": 32057,
+      "fishParameterId": 935,
+      "source": "ocean-indigo-2026-11-06",
+      "doubleHook": {
+        "minimum": 2,
+        "maximum": 2
+      },
+      "tripleHook": {
+        "minimum": 3,
+        "maximum": 3
+      },
+      "ocean": true
+    },
+    {
+      "itemId": 32058,
+      "fishParameterId": 942,
+      "source": "ocean-indigo-2026-11-06",
+      "doubleHook": {
+        "minimum": 2,
+        "maximum": 2
+      },
+      "tripleHook": {
+        "minimum": 3,
+        "maximum": 3
+      },
+      "ocean": true
+    },
+    {
+      "itemId": 32059,
+      "fishParameterId": 943,
+      "source": "ocean-indigo-2026-11-06",
+      "doubleHook": {
+        "minimum": 2,
+        "maximum": 2
+      },
+      "tripleHook": {
+        "minimum": 3,
+        "maximum": 3
+      },
+      "ocean": true
+    },
+    {
+      "itemId": 32060,
+      "fishParameterId": 944,
+      "source": "ocean-indigo-2026-11-06",
+      "doubleHook": {
+        "minimum": 2,
+        "maximum": 2
+      },
+      "tripleHook": {
+        "minimum": 3,
+        "maximum": 3
+      },
+      "ocean": true
+    },
+    {
+      "itemId": 32061,
+      "fishParameterId": 951,
+      "source": "ocean-indigo-2026-11-06",
+      "doubleHook": {
+        "minimum": 2,
+        "maximum": 2
+      },
+      "tripleHook": {
+        "minimum": 3,
+        "maximum": 3
+      },
+      "ocean": true
+    },
+    {
+      "itemId": 32062,
+      "fishParameterId": 952,
+      "source": "ocean-indigo-2026-11-06",
+      "doubleHook": {
+        "minimum": 2,
+        "maximum": 2
+      },
+      "tripleHook": {
+        "minimum": 3,
+        "maximum": 3
+      },
+      "ocean": true
+    },
+    {
+      "itemId": 32063,
+      "fishParameterId": 987,
+      "source": "ocean-indigo-2026-11-06",
+      "doubleHook": {
+        "minimum": 1,
+        "maximum": 1
+      },
+      "tripleHook": {
+        "minimum": 1,
+        "maximum": 1
+      },
+      "ocean": true
+    },
+    {
+      "itemId": 32064,
+      "fishParameterId": 957,
+      "source": "ocean-indigo-2026-11-06",
+      "doubleHook": {
+        "minimum": 1,
+        "maximum": 1
+      },
+      "tripleHook": {
+        "minimum": 1,
+        "maximum": 1
+      },
+      "ocean": true
+    },
+    {
+      "itemId": 32065,
+      "fishParameterId": 960,
+      "source": "ocean-indigo-2026-11-06",
+      "doubleHook": {
+        "minimum": 4,
+        "maximum": 4
+      },
+      "tripleHook": {
+        "minimum": 7,
+        "maximum": 7
+      },
+      "ocean": true
+    },
+    {
+      "itemId": 32066,
+      "fishParameterId": 961,
+      "source": "ocean-indigo-2026-11-06",
+      "doubleHook": {
+        "minimum": 4,
+        "maximum": 4
+      },
+      "tripleHook": {
+        "minimum": 7,
+        "maximum": 7
+      },
+      "ocean": true
+    },
+    {
+      "itemId": 32067,
+      "fishParameterId": 962,
+      "source": "ocean-indigo-2026-11-06",
+      "doubleHook": {
+        "minimum": 2,
+        "maximum": 2
+      },
+      "tripleHook": {
+        "minimum": 3,
+        "maximum": 3
+      },
+      "ocean": true
+    },
+    {
+      "itemId": 32068,
+      "fishParameterId": 963,
+      "source": "ocean-indigo-2026-11-06",
+      "doubleHook": {
+        "minimum": 2,
+        "maximum": 2
+      },
+      "tripleHook": {
+        "minimum": 3,
+        "maximum": 3
+      },
+      "ocean": true
+    },
+    {
+      "itemId": 32069,
+      "fishParameterId": 964,
+      "source": "ocean-indigo-2026-11-06",
+      "doubleHook": {
+        "minimum": 2,
+        "maximum": 2
+      },
+      "tripleHook": {
+        "minimum": 3,
+        "maximum": 3
+      },
+      "ocean": true
+    },
+    {
+      "itemId": 32070,
+      "fishParameterId": 965,
+      "source": "ocean-indigo-2026-11-06",
+      "doubleHook": {
+        "minimum": 4,
+        "maximum": 4
+      },
+      "tripleHook": {
+        "minimum": 7,
+        "maximum": 7
+      },
+      "ocean": true
+    },
+    {
+      "itemId": 32071,
+      "fishParameterId": 966,
+      "source": "ocean-indigo-2026-11-06",
+      "doubleHook": {
+        "minimum": 2,
+        "maximum": 2
+      },
+      "tripleHook": {
+        "minimum": 3,
+        "maximum": 3
+      },
+      "ocean": true
+    },
+    {
+      "itemId": 32072,
+      "fishParameterId": 967,
+      "source": "ocean-indigo-2026-11-06",
+      "doubleHook": {
+        "minimum": 2,
+        "maximum": 2
+      },
+      "tripleHook": {
+        "minimum": 3,
+        "maximum": 3
+      },
+      "ocean": true
+    },
+    {
+      "itemId": 32073,
+      "fishParameterId": 968,
+      "source": "ocean-indigo-2026-11-06",
+      "doubleHook": {
+        "minimum": 2,
+        "maximum": 2
+      },
+      "tripleHook": {
+        "minimum": 3,
+        "maximum": 3
+      },
+      "ocean": true
+    },
+    {
+      "itemId": 32074,
+      "fishParameterId": 990,
+      "source": "ocean-indigo-2026-11-06",
+      "doubleHook": {
+        "minimum": 1,
+        "maximum": 1
+      },
+      "tripleHook": {
+        "minimum": 1,
+        "maximum": 1
+      },
+      "ocean": true
+    },
+    {
+      "itemId": 32075,
+      "fishParameterId": 936,
+      "source": "ocean-indigo-2026-11-06",
+      "doubleHook": {
+        "minimum": 2,
+        "maximum": 2
+      },
+      "tripleHook": {
+        "minimum": 3,
+        "maximum": 3
+      },
+      "ocean": true
+    },
+    {
+      "itemId": 32076,
+      "fishParameterId": 937,
+      "source": "ocean-indigo-2026-11-06",
+      "doubleHook": {
+        "minimum": 2,
+        "maximum": 2
+      },
+      "tripleHook": {
+        "minimum": 3,
+        "maximum": 3
+      },
+      "ocean": true
+    },
+    {
+      "itemId": 32077,
+      "fishParameterId": 938,
+      "source": "ocean-indigo-2026-11-06",
+      "doubleHook": {
+        "minimum": 2,
+        "maximum": 2
+      },
+      "tripleHook": {
+        "minimum": 3,
+        "maximum": 3
+      },
+      "ocean": true
+    },
+    {
+      "itemId": 32078,
+      "fishParameterId": 945,
+      "source": "ocean-indigo-2026-11-06",
+      "doubleHook": {
+        "minimum": 2,
+        "maximum": 2
+      },
+      "tripleHook": {
+        "minimum": 3,
+        "maximum": 3
+      },
+      "ocean": true
+    },
+    {
+      "itemId": 32079,
+      "fishParameterId": 946,
+      "source": "ocean-indigo-2026-11-06",
+      "doubleHook": {
+        "minimum": 4,
+        "maximum": 4
+      },
+      "tripleHook": {
+        "minimum": 7,
+        "maximum": 7
+      },
+      "ocean": true
+    },
+    {
+      "itemId": 32080,
+      "fishParameterId": 947,
+      "source": "ocean-indigo-2026-11-06",
+      "doubleHook": {
+        "minimum": 2,
+        "maximum": 2
+      },
+      "tripleHook": {
+        "minimum": 3,
+        "maximum": 3
+      },
+      "ocean": true
+    },
+    {
+      "itemId": 32081,
+      "fishParameterId": 953,
+      "source": "ocean-indigo-2026-11-06",
+      "doubleHook": {
+        "minimum": 2,
+        "maximum": 2
+      },
+      "tripleHook": {
+        "minimum": 3,
+        "maximum": 3
+      },
+      "ocean": true
+    },
+    {
+      "itemId": 32082,
+      "fishParameterId": 954,
+      "source": "ocean-indigo-2026-11-06",
+      "doubleHook": {
+        "minimum": 2,
+        "maximum": 2
+      },
+      "tripleHook": {
+        "minimum": 3,
+        "maximum": 3
+      },
+      "ocean": true
+    },
+    {
+      "itemId": 32083,
+      "fishParameterId": 988,
+      "source": "ocean-indigo-2026-11-06",
+      "doubleHook": {
+        "minimum": 1,
+        "maximum": 1
+      },
+      "tripleHook": {
+        "minimum": 1,
+        "maximum": 1
+      },
+      "ocean": true
+    },
+    {
+      "itemId": 32084,
+      "fishParameterId": 958,
+      "source": "ocean-indigo-2026-11-06",
+      "doubleHook": {
+        "minimum": 1,
+        "maximum": 1
+      },
+      "tripleHook": {
+        "minimum": 1,
+        "maximum": 1
+      },
+      "ocean": true
+    },
+    {
+      "itemId": 32085,
+      "fishParameterId": 969,
+      "source": "ocean-indigo-2026-11-06",
+      "doubleHook": {
+        "minimum": 4,
+        "maximum": 4
+      },
+      "tripleHook": {
+        "minimum": 7,
+        "maximum": 7
+      },
+      "ocean": true
+    },
+    {
+      "itemId": 32086,
+      "fishParameterId": 970,
+      "source": "ocean-indigo-2026-11-06",
+      "doubleHook": {
+        "minimum": 2,
+        "maximum": 2
+      },
+      "tripleHook": {
+        "minimum": 3,
+        "maximum": 3
+      },
+      "ocean": true
+    },
+    {
+      "itemId": 32087,
+      "fishParameterId": 971,
+      "source": "ocean-indigo-2026-11-06",
+      "doubleHook": {
+        "minimum": 4,
+        "maximum": 4
+      },
+      "tripleHook": {
+        "minimum": 7,
+        "maximum": 7
+      },
+      "ocean": true
+    },
+    {
+      "itemId": 32088,
+      "fishParameterId": 972,
+      "source": "ocean-indigo-2026-11-06",
+      "doubleHook": {
+        "minimum": 2,
+        "maximum": 2
+      },
+      "tripleHook": {
+        "minimum": 3,
+        "maximum": 3
+      },
+      "ocean": true
+    },
+    {
+      "itemId": 32089,
+      "fishParameterId": 973,
+      "source": "ocean-indigo-2026-11-06",
+      "doubleHook": {
+        "minimum": 4,
+        "maximum": 4
+      },
+      "tripleHook": {
+        "minimum": 7,
+        "maximum": 7
+      },
+      "ocean": true
+    },
+    {
+      "itemId": 32090,
+      "fishParameterId": 974,
+      "source": "ocean-indigo-2026-11-06",
+      "doubleHook": {
+        "minimum": 4,
+        "maximum": 4
+      },
+      "tripleHook": {
+        "minimum": 7,
+        "maximum": 7
+      },
+      "ocean": true
+    },
+    {
+      "itemId": 32091,
+      "fishParameterId": 975,
+      "source": "ocean-indigo-2026-11-06",
+      "doubleHook": {
+        "minimum": 2,
+        "maximum": 2
+      },
+      "tripleHook": {
+        "minimum": 3,
+        "maximum": 3
+      },
+      "ocean": true
+    },
+    {
+      "itemId": 32092,
+      "fishParameterId": 976,
+      "source": "ocean-indigo-2026-11-06",
+      "doubleHook": {
+        "minimum": 2,
+        "maximum": 2
+      },
+      "tripleHook": {
+        "minimum": 3,
+        "maximum": 3
+      },
+      "ocean": true
+    },
+    {
+      "itemId": 32093,
+      "fishParameterId": 977,
+      "source": "ocean-indigo-2026-11-06",
+      "doubleHook": {
+        "minimum": 2,
+        "maximum": 2
+      },
+      "tripleHook": {
+        "minimum": 3,
+        "maximum": 3
+      },
+      "ocean": true
+    },
+    {
+      "itemId": 32094,
+      "fishParameterId": 991,
+      "source": "ocean-indigo-2026-11-06",
+      "doubleHook": {
+        "minimum": 1,
+        "maximum": 1
+      },
+      "tripleHook": {
+        "minimum": 1,
+        "maximum": 1
+      },
+      "ocean": true
+    },
+    {
+      "itemId": 32095,
+      "fishParameterId": 939,
+      "source": "ocean-indigo-2026-11-06",
+      "doubleHook": {
+        "minimum": 2,
+        "maximum": 2
+      },
+      "tripleHook": {
+        "minimum": 3,
+        "maximum": 3
+      },
+      "ocean": true
+    },
+    {
+      "itemId": 32096,
+      "fishParameterId": 940,
+      "source": "ocean-indigo-2026-11-06",
+      "doubleHook": {
+        "minimum": 3,
+        "maximum": 4
+      },
+      "tripleHook": {
+        "minimum": 5,
+        "maximum": 7
+      },
+      "ocean": true
+    },
+    {
+      "itemId": 32097,
+      "fishParameterId": 941,
+      "source": "ocean-indigo-2026-11-06",
+      "doubleHook": {
+        "minimum": 2,
+        "maximum": 2
+      },
+      "tripleHook": {
+        "minimum": 3,
+        "maximum": 3
+      },
+      "ocean": true
+    },
+    {
+      "itemId": 32098,
+      "fishParameterId": 948,
+      "source": "ocean-indigo-2026-11-06",
+      "doubleHook": {
+        "minimum": 4,
+        "maximum": 4
+      },
+      "tripleHook": {
+        "minimum": 7,
+        "maximum": 7
+      },
+      "ocean": true
+    },
+    {
+      "itemId": 32099,
+      "fishParameterId": 949,
+      "source": "ocean-indigo-2026-11-06",
+      "doubleHook": {
+        "minimum": 2,
+        "maximum": 2
+      },
+      "tripleHook": {
+        "minimum": 3,
+        "maximum": 3
+      },
+      "ocean": true
+    },
+    {
+      "itemId": 32100,
+      "fishParameterId": 950,
+      "source": "ocean-indigo-2026-11-06",
+      "doubleHook": {
+        "minimum": 2,
+        "maximum": 2
+      },
+      "tripleHook": {
+        "minimum": 3,
+        "maximum": 3
+      },
+      "ocean": true
+    },
+    {
+      "itemId": 32101,
+      "fishParameterId": 955,
+      "source": "ocean-indigo-2026-11-06",
+      "doubleHook": {
+        "minimum": 2,
+        "maximum": 2
+      },
+      "tripleHook": {
+        "minimum": 3,
+        "maximum": 3
+      },
+      "ocean": true
+    },
+    {
+      "itemId": 32102,
+      "fishParameterId": 956,
+      "source": "ocean-indigo-2026-11-06",
+      "doubleHook": {
+        "minimum": 2,
+        "maximum": 2
+      },
+      "tripleHook": {
+        "minimum": 3,
+        "maximum": 3
+      },
+      "ocean": true
+    },
+    {
+      "itemId": 32103,
+      "fishParameterId": 989,
+      "source": "ocean-indigo-2026-11-06",
+      "doubleHook": {
+        "minimum": 1,
+        "maximum": 1
+      },
+      "tripleHook": {
+        "minimum": 1,
+        "maximum": 1
+      },
+      "ocean": true
+    },
+    {
+      "itemId": 32104,
+      "fishParameterId": 959,
+      "source": "ocean-indigo-2026-11-06",
+      "doubleHook": {
+        "minimum": 1,
+        "maximum": 1
+      },
+      "tripleHook": {
+        "minimum": 1,
+        "maximum": 1
+      },
+      "ocean": true
+    },
+    {
+      "itemId": 32105,
+      "fishParameterId": 978,
+      "source": "ocean-indigo-2026-11-06",
+      "doubleHook": {
+        "minimum": 4,
+        "maximum": 4
+      },
+      "tripleHook": {
+        "minimum": 7,
+        "maximum": 7
+      },
+      "ocean": true
+    },
+    {
+      "itemId": 32106,
+      "fishParameterId": 979,
+      "source": "ocean-indigo-2026-11-06",
+      "doubleHook": {
+        "minimum": 2,
+        "maximum": 2
+      },
+      "tripleHook": {
+        "minimum": 3,
+        "maximum": 3
+      },
+      "ocean": true
+    },
+    {
+      "itemId": 32107,
+      "fishParameterId": 980,
+      "source": "ocean-indigo-2026-11-06",
+      "doubleHook": {
+        "minimum": 2,
+        "maximum": 2
+      },
+      "tripleHook": {
+        "minimum": 3,
+        "maximum": 3
+      },
+      "ocean": true
+    },
+    {
+      "itemId": 32108,
+      "fishParameterId": 981,
+      "source": "ocean-indigo-2026-11-06",
+      "doubleHook": {
+        "minimum": 2,
+        "maximum": 2
+      },
+      "tripleHook": {
+        "minimum": 3,
+        "maximum": 3
+      },
+      "ocean": true
+    },
+    {
+      "itemId": 32109,
+      "fishParameterId": 982,
+      "source": "ocean-indigo-2026-11-06",
+      "doubleHook": {
+        "minimum": 4,
+        "maximum": 4
+      },
+      "tripleHook": {
+        "minimum": 7,
+        "maximum": 7
+      },
+      "ocean": true
+    },
+    {
+      "itemId": 32110,
+      "fishParameterId": 983,
+      "source": "ocean-indigo-2026-11-06",
+      "doubleHook": {
+        "minimum": 2,
+        "maximum": 2
+      },
+      "tripleHook": {
+        "minimum": 3,
+        "maximum": 3
+      },
+      "ocean": true
+    },
+    {
+      "itemId": 32111,
+      "fishParameterId": 984,
+      "source": "ocean-indigo-2026-11-06",
+      "doubleHook": {
+        "minimum": 4,
+        "maximum": 4
+      },
+      "tripleHook": {
+        "minimum": 7,
+        "maximum": 7
+      },
+      "ocean": true
+    },
+    {
+      "itemId": 32112,
+      "fishParameterId": 985,
+      "source": "ocean-indigo-2026-11-06",
+      "doubleHook": {
+        "minimum": 2,
+        "maximum": 2
+      },
+      "tripleHook": {
+        "minimum": 3,
+        "maximum": 3
+      },
+      "ocean": true
+    },
+    {
+      "itemId": 32113,
+      "fishParameterId": 986,
+      "source": "ocean-indigo-2026-11-06",
+      "doubleHook": {
+        "minimum": 2,
+        "maximum": 2
+      },
+      "tripleHook": {
+        "minimum": 3,
+        "maximum": 3
+      },
+      "ocean": true
+    },
+    {
+      "itemId": 32114,
+      "fishParameterId": 992,
+      "source": "ocean-indigo-2026-11-06",
+      "doubleHook": {
+        "minimum": 1,
+        "maximum": 1
+      },
+      "tripleHook": {
+        "minimum": 1,
+        "maximum": 1
+      },
+      "ocean": true
+    },
+    {
+      "itemId": 40521,
+      "fishParameterId": 1189,
+      "source": "ocean-ruby-2026-11-06",
+      "doubleHook": {
+        "minimum": 3,
+        "maximum": 3
+      },
+      "tripleHook": {
+        "minimum": 5,
+        "maximum": 5
+      },
+      "ocean": true
+    },
+    {
+      "itemId": 40522,
+      "fishParameterId": 1178,
+      "source": "ocean-ruby-2026-11-06",
+      "doubleHook": {
+        "minimum": 3,
+        "maximum": 3
+      },
+      "tripleHook": {
+        "minimum": 5,
+        "maximum": 5
+      },
+      "ocean": true
+    },
+    {
+      "itemId": 40523,
+      "fishParameterId": 1179,
+      "source": "ocean-ruby-2026-11-06",
+      "doubleHook": {
+        "minimum": 3,
+        "maximum": 3
+      },
+      "tripleHook": {
+        "minimum": 5,
+        "maximum": 5
+      },
+      "ocean": true
+    },
+    {
+      "itemId": 40524,
+      "fishParameterId": 1177,
+      "source": "ocean-ruby-2026-11-06",
+      "doubleHook": {
+        "minimum": 2,
+        "maximum": 2
+      },
+      "tripleHook": {
+        "minimum": 3,
+        "maximum": 3
+      },
+      "ocean": true
+    },
+    {
+      "itemId": 40525,
+      "fishParameterId": 1190,
+      "source": "ocean-ruby-2026-11-06",
+      "doubleHook": {
+        "minimum": 2,
+        "maximum": 2
+      },
+      "tripleHook": {
+        "minimum": 3,
+        "maximum": 3
+      },
+      "ocean": true
+    },
+    {
+      "itemId": 40526,
+      "fishParameterId": 1191,
+      "source": "ocean-ruby-2026-11-06",
+      "doubleHook": {
+        "minimum": 4,
+        "maximum": 4
+      },
+      "tripleHook": {
+        "minimum": 7,
+        "maximum": 7
+      },
+      "ocean": true
+    },
+    {
+      "itemId": 40527,
+      "fishParameterId": 1201,
+      "source": "ocean-ruby-2026-11-06",
+      "doubleHook": {
+        "minimum": 2,
+        "maximum": 2
+      },
+      "tripleHook": {
+        "minimum": 3,
+        "maximum": 3
+      },
+      "ocean": true
+    },
+    {
+      "itemId": 40528,
+      "fishParameterId": 1202,
+      "source": "ocean-ruby-2026-11-06",
+      "doubleHook": {
+        "minimum": 2,
+        "maximum": 2
+      },
+      "tripleHook": {
+        "minimum": 3,
+        "maximum": 3
+      },
+      "ocean": true
+    },
+    {
+      "itemId": 40529,
+      "fishParameterId": 1249,
+      "source": "ocean-ruby-2026-11-06",
+      "doubleHook": {
+        "minimum": 1,
+        "maximum": 1
+      },
+      "tripleHook": {
+        "minimum": 1,
+        "maximum": 1
+      },
+      "ocean": true
+    },
+    {
+      "itemId": 40530,
+      "fishParameterId": 1209,
+      "source": "ocean-ruby-2026-11-06",
+      "doubleHook": {
+        "minimum": 1,
+        "maximum": 1
+      },
+      "tripleHook": {
+        "minimum": 1,
+        "maximum": 1
+      },
+      "ocean": true
+    },
+    {
+      "itemId": 40531,
+      "fishParameterId": 1213,
+      "source": "ocean-ruby-2026-11-06",
+      "doubleHook": {
+        "minimum": 4,
+        "maximum": 4
+      },
+      "tripleHook": {
+        "minimum": 7,
+        "maximum": 7
+      },
+      "ocean": true
+    },
+    {
+      "itemId": 40532,
+      "fishParameterId": 1214,
+      "source": "ocean-ruby-2026-11-06",
+      "doubleHook": {
+        "minimum": 4,
+        "maximum": 4
+      },
+      "tripleHook": {
+        "minimum": 7,
+        "maximum": 7
+      },
+      "ocean": true
+    },
+    {
+      "itemId": 40533,
+      "fishParameterId": 1215,
+      "source": "ocean-ruby-2026-11-06",
+      "doubleHook": {
+        "minimum": 4,
+        "maximum": 4
+      },
+      "tripleHook": {
+        "minimum": 7,
+        "maximum": 7
+      },
+      "ocean": true
+    },
+    {
+      "itemId": 40534,
+      "fishParameterId": 1216,
+      "source": "ocean-ruby-2026-11-06",
+      "doubleHook": {
+        "minimum": 2,
+        "maximum": 2
+      },
+      "tripleHook": {
+        "minimum": 3,
+        "maximum": 3
+      },
+      "ocean": true
+    },
+    {
+      "itemId": 40535,
+      "fishParameterId": 1217,
+      "source": "ocean-ruby-2026-11-06",
+      "doubleHook": {
+        "minimum": 2,
+        "maximum": 2
+      },
+      "tripleHook": {
+        "minimum": 3,
+        "maximum": 3
+      },
+      "ocean": true
+    },
+    {
+      "itemId": 40536,
+      "fishParameterId": 1218,
+      "source": "ocean-ruby-2026-11-06",
+      "doubleHook": {
+        "minimum": 4,
+        "maximum": 4
+      },
+      "tripleHook": {
+        "minimum": 7,
+        "maximum": 7
+      },
+      "ocean": true
+    },
+    {
+      "itemId": 40537,
+      "fishParameterId": 1219,
+      "source": "ocean-ruby-2026-11-06",
+      "doubleHook": {
+        "minimum": 2,
+        "maximum": 2
+      },
+      "tripleHook": {
+        "minimum": 3,
+        "maximum": 3
+      },
+      "ocean": true
+    },
+    {
+      "itemId": 40538,
+      "fishParameterId": 1220,
+      "source": "ocean-ruby-2026-11-06",
+      "doubleHook": {
+        "minimum": 4,
+        "maximum": 4
+      },
+      "tripleHook": {
+        "minimum": 7,
+        "maximum": 7
+      },
+      "ocean": true
+    },
+    {
+      "itemId": 40539,
+      "fishParameterId": 1221,
+      "source": "ocean-ruby-2026-11-06",
+      "doubleHook": {
+        "minimum": 2,
+        "maximum": 2
+      },
+      "tripleHook": {
+        "minimum": 3,
+        "maximum": 3
+      },
+      "ocean": true
+    },
+    {
+      "itemId": 40540,
+      "fishParameterId": 1253,
+      "source": "ocean-ruby-2026-11-06",
+      "doubleHook": {
+        "minimum": 1,
+        "maximum": 1
+      },
+      "tripleHook": {
+        "minimum": 1,
+        "maximum": 1
+      },
+      "ocean": true
+    },
+    {
+      "itemId": 40541,
+      "fishParameterId": 1180,
+      "source": "ocean-ruby-2026-11-06",
+      "doubleHook": {
+        "minimum": 2,
+        "maximum": 2
+      },
+      "tripleHook": {
+        "minimum": 3,
+        "maximum": 3
+      },
+      "ocean": true
+    },
+    {
+      "itemId": 40542,
+      "fishParameterId": 1181,
+      "source": "ocean-ruby-2026-11-06",
+      "doubleHook": {
+        "minimum": 3,
+        "maximum": 3
+      },
+      "tripleHook": {
+        "minimum": 5,
+        "maximum": 5
+      },
+      "ocean": true
+    },
+    {
+      "itemId": 40543,
+      "fishParameterId": 1182,
+      "source": "ocean-ruby-2026-11-06",
+      "doubleHook": {
+        "minimum": 3,
+        "maximum": 3
+      },
+      "tripleHook": {
+        "minimum": 5,
+        "maximum": 5
+      },
+      "ocean": true
+    },
+    {
+      "itemId": 40544,
+      "fishParameterId": 1192,
+      "source": "ocean-ruby-2026-11-06",
+      "doubleHook": {
+        "minimum": 3,
+        "maximum": 3
+      },
+      "tripleHook": {
+        "minimum": 5,
+        "maximum": 5
+      },
+      "ocean": true
+    },
+    {
+      "itemId": 40545,
+      "fishParameterId": 1193,
+      "source": "ocean-ruby-2026-11-06",
+      "doubleHook": {
+        "minimum": 2,
+        "maximum": 2
+      },
+      "tripleHook": {
+        "minimum": 3,
+        "maximum": 3
+      },
+      "ocean": true
+    },
+    {
+      "itemId": 40546,
+      "fishParameterId": 1194,
+      "source": "ocean-ruby-2026-11-06",
+      "doubleHook": {
+        "minimum": 2,
+        "maximum": 2
+      },
+      "tripleHook": {
+        "minimum": 3,
+        "maximum": 3
+      },
+      "ocean": true
+    },
+    {
+      "itemId": 40547,
+      "fishParameterId": 1203,
+      "source": "ocean-ruby-2026-11-06",
+      "doubleHook": {
+        "minimum": 2,
+        "maximum": 2
+      },
+      "tripleHook": {
+        "minimum": 3,
+        "maximum": 3
+      },
+      "ocean": true
+    },
+    {
+      "itemId": 40548,
+      "fishParameterId": 1204,
+      "source": "ocean-ruby-2026-11-06",
+      "doubleHook": {
+        "minimum": 2,
+        "maximum": 2
+      },
+      "tripleHook": {
+        "minimum": 3,
+        "maximum": 3
+      },
+      "ocean": true
+    },
+    {
+      "itemId": 40549,
+      "fishParameterId": 1250,
+      "source": "ocean-ruby-2026-11-06",
+      "doubleHook": {
+        "minimum": 1,
+        "maximum": 1
+      },
+      "tripleHook": {
+        "minimum": 1,
+        "maximum": 1
+      },
+      "ocean": true
+    },
+    {
+      "itemId": 40550,
+      "fishParameterId": 1210,
+      "source": "ocean-ruby-2026-11-06",
+      "doubleHook": {
+        "minimum": 1,
+        "maximum": 1
+      },
+      "tripleHook": {
+        "minimum": 1,
+        "maximum": 1
+      },
+      "ocean": true
+    },
+    {
+      "itemId": 40551,
+      "fishParameterId": 1222,
+      "source": "ocean-ruby-2026-11-06",
+      "doubleHook": {
+        "minimum": 2,
+        "maximum": 2
+      },
+      "tripleHook": {
+        "minimum": 3,
+        "maximum": 3
+      },
+      "ocean": true
+    },
+    {
+      "itemId": 40552,
+      "fishParameterId": 1223,
+      "source": "ocean-ruby-2026-11-06",
+      "doubleHook": {
+        "minimum": 4,
+        "maximum": 4
+      },
+      "tripleHook": {
+        "minimum": 7,
+        "maximum": 7
+      },
+      "ocean": true
+    },
+    {
+      "itemId": 40553,
+      "fishParameterId": 1224,
+      "source": "ocean-ruby-2026-11-06",
+      "doubleHook": {
+        "minimum": 2,
+        "maximum": 2
+      },
+      "tripleHook": {
+        "minimum": 3,
+        "maximum": 3
+      },
+      "ocean": true
+    },
+    {
+      "itemId": 40554,
+      "fishParameterId": 1225,
+      "source": "ocean-ruby-2026-11-06",
+      "doubleHook": {
+        "minimum": 4,
+        "maximum": 4
+      },
+      "tripleHook": {
+        "minimum": 7,
+        "maximum": 7
+      },
+      "ocean": true
+    },
+    {
+      "itemId": 40555,
+      "fishParameterId": 1226,
+      "source": "ocean-ruby-2026-11-06",
+      "doubleHook": {
+        "minimum": 2,
+        "maximum": 2
+      },
+      "tripleHook": {
+        "minimum": 3,
+        "maximum": 3
+      },
+      "ocean": true
+    },
+    {
+      "itemId": 40556,
+      "fishParameterId": 1227,
+      "source": "ocean-ruby-2026-11-06",
+      "doubleHook": {
+        "minimum": 2,
+        "maximum": 2
+      },
+      "tripleHook": {
+        "minimum": 3,
+        "maximum": 3
+      },
+      "ocean": true
+    },
+    {
+      "itemId": 40557,
+      "fishParameterId": 1228,
+      "source": "ocean-ruby-2026-11-06",
+      "doubleHook": {
+        "minimum": 4,
+        "maximum": 4
+      },
+      "tripleHook": {
+        "minimum": 7,
+        "maximum": 7
+      },
+      "ocean": true
+    },
+    {
+      "itemId": 40558,
+      "fishParameterId": 1229,
+      "source": "ocean-ruby-2026-11-06",
+      "doubleHook": {
+        "minimum": 2,
+        "maximum": 2
+      },
+      "tripleHook": {
+        "minimum": 3,
+        "maximum": 3
+      },
+      "ocean": true
+    },
+    {
+      "itemId": 40559,
+      "fishParameterId": 1230,
+      "source": "ocean-ruby-2026-11-06",
+      "doubleHook": {
+        "minimum": 2,
+        "maximum": 2
+      },
+      "tripleHook": {
+        "minimum": 3,
+        "maximum": 3
+      },
+      "ocean": true
+    },
+    {
+      "itemId": 40560,
+      "fishParameterId": 1254,
+      "source": "ocean-ruby-2026-11-06",
+      "doubleHook": {
+        "minimum": 1,
+        "maximum": 1
+      },
+      "tripleHook": {
+        "minimum": 1,
+        "maximum": 1
+      },
+      "ocean": true
+    },
+    {
+      "itemId": 40561,
+      "fishParameterId": 1183,
+      "source": "ocean-ruby-2026-11-06",
+      "doubleHook": {
+        "minimum": 2,
+        "maximum": 2
+      },
+      "tripleHook": {
+        "minimum": 3,
+        "maximum": 3
+      },
+      "ocean": true
+    },
+    {
+      "itemId": 40562,
+      "fishParameterId": 1184,
+      "source": "ocean-ruby-2026-11-06",
+      "doubleHook": {
+        "minimum": 3,
+        "maximum": 3
+      },
+      "tripleHook": {
+        "minimum": 5,
+        "maximum": 5
+      },
+      "ocean": true
+    },
+    {
+      "itemId": 40563,
+      "fishParameterId": 1185,
+      "source": "ocean-ruby-2026-11-06",
+      "doubleHook": {
+        "minimum": 2,
+        "maximum": 2
+      },
+      "tripleHook": {
+        "minimum": 3,
+        "maximum": 3
+      },
+      "ocean": true
+    },
+    {
+      "itemId": 40564,
+      "fishParameterId": 1195,
+      "source": "ocean-ruby-2026-11-06",
+      "doubleHook": {
+        "minimum": 2,
+        "maximum": 2
+      },
+      "tripleHook": {
+        "minimum": 3,
+        "maximum": 3
+      },
+      "ocean": true
+    },
+    {
+      "itemId": 40565,
+      "fishParameterId": 1205,
+      "source": "ocean-ruby-2026-11-06",
+      "doubleHook": {
+        "minimum": 2,
+        "maximum": 2
+      },
+      "tripleHook": {
+        "minimum": 3,
+        "maximum": 3
+      },
+      "ocean": true
+    },
+    {
+      "itemId": 40566,
+      "fishParameterId": 1197,
+      "source": "ocean-ruby-2026-11-06",
+      "doubleHook": {
+        "minimum": 2,
+        "maximum": 2
+      },
+      "tripleHook": {
+        "minimum": 3,
+        "maximum": 3
+      },
+      "ocean": true
+    },
+    {
+      "itemId": 40567,
+      "fishParameterId": 1196,
+      "source": "ocean-ruby-2026-11-06",
+      "doubleHook": {
+        "minimum": 3,
+        "maximum": 3
+      },
+      "tripleHook": {
+        "minimum": 5,
+        "maximum": 5
+      },
+      "ocean": true
+    },
+    {
+      "itemId": 40568,
+      "fishParameterId": 1206,
+      "source": "ocean-ruby-2026-11-06",
+      "doubleHook": {
+        "minimum": 2,
+        "maximum": 2
+      },
+      "tripleHook": {
+        "minimum": 3,
+        "maximum": 3
+      },
+      "ocean": true
+    },
+    {
+      "itemId": 40569,
+      "fishParameterId": 1251,
+      "source": "ocean-ruby-2026-11-06",
+      "doubleHook": {
+        "minimum": 1,
+        "maximum": 1
+      },
+      "tripleHook": {
+        "minimum": 1,
+        "maximum": 1
+      },
+      "ocean": true
+    },
+    {
+      "itemId": 40570,
+      "fishParameterId": 1211,
+      "source": "ocean-ruby-2026-11-06",
+      "doubleHook": {
+        "minimum": 1,
+        "maximum": 1
+      },
+      "tripleHook": {
+        "minimum": 1,
+        "maximum": 1
+      },
+      "ocean": true
+    },
+    {
+      "itemId": 40571,
+      "fishParameterId": 1231,
+      "source": "ocean-ruby-2026-11-06",
+      "doubleHook": {
+        "minimum": 4,
+        "maximum": 4
+      },
+      "tripleHook": {
+        "minimum": 7,
+        "maximum": 7
+      },
+      "ocean": true
+    },
+    {
+      "itemId": 40572,
+      "fishParameterId": 1232,
+      "source": "ocean-ruby-2026-11-06",
+      "doubleHook": {
+        "minimum": 4,
+        "maximum": 4
+      },
+      "tripleHook": {
+        "minimum": 7,
+        "maximum": 7
+      },
+      "ocean": true
+    },
+    {
+      "itemId": 40573,
+      "fishParameterId": 1233,
+      "source": "ocean-ruby-2026-11-06",
+      "doubleHook": {
+        "minimum": 2,
+        "maximum": 2
+      },
+      "tripleHook": {
+        "minimum": 3,
+        "maximum": 3
+      },
+      "ocean": true
+    },
+    {
+      "itemId": 40574,
+      "fishParameterId": 1234,
+      "source": "ocean-ruby-2026-11-06",
+      "doubleHook": {
+        "minimum": 2,
+        "maximum": 2
+      },
+      "tripleHook": {
+        "minimum": 3,
+        "maximum": 3
+      },
+      "ocean": true
+    },
+    {
+      "itemId": 40575,
+      "fishParameterId": 1235,
+      "source": "ocean-ruby-2026-11-06",
+      "doubleHook": {
+        "minimum": 2,
+        "maximum": 2
+      },
+      "tripleHook": {
+        "minimum": 3,
+        "maximum": 3
+      },
+      "ocean": true
+    },
+    {
+      "itemId": 40576,
+      "fishParameterId": 1236,
+      "source": "ocean-ruby-2026-11-06",
+      "doubleHook": {
+        "minimum": 2,
+        "maximum": 2
+      },
+      "tripleHook": {
+        "minimum": 3,
+        "maximum": 3
+      },
+      "ocean": true
+    },
+    {
+      "itemId": 40577,
+      "fishParameterId": 1237,
+      "source": "ocean-ruby-2026-11-06",
+      "doubleHook": {
+        "minimum": 2,
+        "maximum": 2
+      },
+      "tripleHook": {
+        "minimum": 3,
+        "maximum": 3
+      },
+      "ocean": true
+    },
+    {
+      "itemId": 40578,
+      "fishParameterId": 1238,
+      "source": "ocean-ruby-2026-11-06",
+      "doubleHook": {
+        "minimum": 2,
+        "maximum": 2
+      },
+      "tripleHook": {
+        "minimum": 3,
+        "maximum": 3
+      },
+      "ocean": true
+    },
+    {
+      "itemId": 40579,
+      "fishParameterId": 1239,
+      "source": "ocean-ruby-2026-11-06",
+      "doubleHook": {
+        "minimum": 4,
+        "maximum": 4
+      },
+      "tripleHook": {
+        "minimum": 7,
+        "maximum": 7
+      },
+      "ocean": true
+    },
+    {
+      "itemId": 40580,
+      "fishParameterId": 1255,
+      "source": "ocean-ruby-2026-11-06",
+      "doubleHook": {
+        "minimum": 1,
+        "maximum": 1
+      },
+      "tripleHook": {
+        "minimum": 1,
+        "maximum": 1
+      },
+      "ocean": true
+    },
+    {
+      "itemId": 40581,
+      "fishParameterId": 1186,
+      "source": "ocean-ruby-2026-11-06",
+      "doubleHook": {
+        "minimum": 2,
+        "maximum": 2
+      },
+      "tripleHook": {
+        "minimum": 3,
+        "maximum": 3
+      },
+      "ocean": true
+    },
+    {
+      "itemId": 40582,
+      "fishParameterId": 1187,
+      "source": "ocean-ruby-2026-11-06",
+      "doubleHook": {
+        "minimum": 2,
+        "maximum": 2
+      },
+      "tripleHook": {
+        "minimum": 3,
+        "maximum": 3
+      },
+      "ocean": true
+    },
+    {
+      "itemId": 40583,
+      "fishParameterId": 1188,
+      "source": "ocean-ruby-2026-11-06",
+      "doubleHook": {
+        "minimum": 2,
+        "maximum": 2
+      },
+      "tripleHook": {
+        "minimum": 3,
+        "maximum": 3
+      },
+      "ocean": true
+    },
+    {
+      "itemId": 40584,
+      "fishParameterId": 1198,
+      "source": "ocean-ruby-2026-11-06",
+      "doubleHook": {
+        "minimum": 2,
+        "maximum": 2
+      },
+      "tripleHook": {
+        "minimum": 3,
+        "maximum": 3
+      },
+      "ocean": true
+    },
+    {
+      "itemId": 40585,
+      "fishParameterId": 1199,
+      "source": "ocean-ruby-2026-11-06",
+      "doubleHook": {
+        "minimum": 2,
+        "maximum": 2
+      },
+      "tripleHook": {
+        "minimum": 3,
+        "maximum": 3
+      },
+      "ocean": true
+    },
+    {
+      "itemId": 40586,
+      "fishParameterId": 1200,
+      "source": "ocean-ruby-2026-11-06",
+      "doubleHook": {
+        "minimum": 3,
+        "maximum": 3
+      },
+      "tripleHook": {
+        "minimum": 5,
+        "maximum": 5
+      },
+      "ocean": true
+    },
+    {
+      "itemId": 40587,
+      "fishParameterId": 1207,
+      "source": "ocean-ruby-2026-11-06",
+      "doubleHook": {
+        "minimum": 2,
+        "maximum": 2
+      },
+      "tripleHook": {
+        "minimum": 3,
+        "maximum": 3
+      },
+      "ocean": true
+    },
+    {
+      "itemId": 40588,
+      "fishParameterId": 1208,
+      "source": "ocean-ruby-2026-11-06",
+      "doubleHook": {
+        "minimum": 2,
+        "maximum": 2
+      },
+      "tripleHook": {
+        "minimum": 3,
+        "maximum": 3
+      },
+      "ocean": true
+    },
+    {
+      "itemId": 40589,
+      "fishParameterId": 1252,
+      "source": "ocean-ruby-2026-11-06",
+      "doubleHook": {
+        "minimum": 1,
+        "maximum": 1
+      },
+      "tripleHook": {
+        "minimum": 1,
+        "maximum": 1
+      },
+      "ocean": true
+    },
+    {
+      "itemId": 40590,
+      "fishParameterId": 1212,
+      "source": "ocean-ruby-2026-11-06",
+      "doubleHook": {
+        "minimum": 1,
+        "maximum": 1
+      },
+      "tripleHook": {
+        "minimum": 1,
+        "maximum": 1
+      },
+      "ocean": true
+    },
+    {
+      "itemId": 40591,
+      "fishParameterId": 1240,
+      "source": "ocean-ruby-2026-11-06",
+      "doubleHook": {
+        "minimum": 4,
+        "maximum": 4
+      },
+      "tripleHook": {
+        "minimum": 7,
+        "maximum": 7
+      },
+      "ocean": true
+    },
+    {
+      "itemId": 40592,
+      "fishParameterId": 1241,
+      "source": "ocean-ruby-2026-11-06",
+      "doubleHook": {
+        "minimum": 2,
+        "maximum": 2
+      },
+      "tripleHook": {
+        "minimum": 3,
+        "maximum": 3
+      },
+      "ocean": true
+    },
+    {
+      "itemId": 40593,
+      "fishParameterId": 1242,
+      "source": "ocean-ruby-2026-11-06",
+      "doubleHook": {
+        "minimum": 2,
+        "maximum": 2
+      },
+      "tripleHook": {
+        "minimum": 3,
+        "maximum": 3
+      },
+      "ocean": true
+    },
+    {
+      "itemId": 40594,
+      "fishParameterId": 1243,
+      "source": "ocean-ruby-2026-11-06",
+      "doubleHook": {
+        "minimum": 4,
+        "maximum": 4
+      },
+      "tripleHook": {
+        "minimum": 7,
+        "maximum": 7
+      },
+      "ocean": true
+    },
+    {
+      "itemId": 40595,
+      "fishParameterId": 1244,
+      "source": "ocean-ruby-2026-11-06",
+      "doubleHook": {
+        "minimum": 2,
+        "maximum": 2
+      },
+      "tripleHook": {
+        "minimum": 3,
+        "maximum": 3
+      },
+      "ocean": true
+    },
+    {
+      "itemId": 40596,
+      "fishParameterId": 1245,
+      "source": "ocean-ruby-2026-11-06",
+      "doubleHook": {
+        "minimum": 2,
+        "maximum": 2
+      },
+      "tripleHook": {
+        "minimum": 3,
+        "maximum": 3
+      },
+      "ocean": true
+    },
+    {
+      "itemId": 40597,
+      "fishParameterId": 1246,
+      "source": "ocean-ruby-2026-11-06",
+      "doubleHook": {
+        "minimum": 2,
+        "maximum": 2
+      },
+      "tripleHook": {
+        "minimum": 3,
+        "maximum": 3
+      },
+      "ocean": true
+    },
+    {
+      "itemId": 40598,
+      "fishParameterId": 1247,
+      "source": "ocean-ruby-2026-11-06",
+      "doubleHook": {
+        "minimum": 2,
+        "maximum": 2
+      },
+      "tripleHook": {
+        "minimum": 3,
+        "maximum": 3
+      },
+      "ocean": true
+    },
+    {
+      "itemId": 40599,
+      "fishParameterId": 1248,
+      "source": "ocean-ruby-2026-11-06",
+      "doubleHook": {
+        "minimum": 2,
+        "maximum": 2
+      },
+      "tripleHook": {
+        "minimum": 3,
+        "maximum": 3
+      },
+      "ocean": true
+    },
+    {
+      "itemId": 40600,
+      "fishParameterId": 1256,
+      "source": "ocean-ruby-2026-11-06",
+      "doubleHook": {
+        "minimum": 1,
+        "maximum": 1
+      },
+      "tripleHook": {
+        "minimum": 1,
+        "maximum": 1
+      },
+      "ocean": true
+    },
+    {
+      "itemId": 51209,
+      "fishParameterId": 1472,
+      "source": "ocean-ruby-2026-11-06",
+      "doubleHook": {
+        "minimum": 3,
+        "maximum": 3
+      },
+      "tripleHook": {
+        "minimum": 5,
+        "maximum": 5
+      },
+      "ocean": true
+    },
+    {
+      "itemId": 51210,
+      "fishParameterId": 1473,
+      "source": "ocean-ruby-2026-11-06",
+      "doubleHook": {
+        "minimum": 2,
+        "maximum": 2
+      },
+      "tripleHook": {
+        "minimum": 3,
+        "maximum": 3
+      },
+      "ocean": true
+    },
+    {
+      "itemId": 51211,
+      "fishParameterId": 1474,
+      "source": "ocean-ruby-2026-11-06",
+      "doubleHook": {
+        "minimum": 2,
+        "maximum": 2
+      },
+      "tripleHook": {
+        "minimum": 3,
+        "maximum": 3
+      },
+      "ocean": true
+    },
+    {
+      "itemId": 51212,
+      "fishParameterId": 1475,
+      "source": "ocean-ruby-2026-11-06",
+      "doubleHook": {
+        "minimum": 2,
+        "maximum": 2
+      },
+      "tripleHook": {
+        "minimum": 3,
+        "maximum": 3
+      },
+      "ocean": true
+    },
+    {
+      "itemId": 51213,
+      "fishParameterId": 1476,
+      "source": "ocean-ruby-2026-11-06",
+      "doubleHook": {
+        "minimum": 2,
+        "maximum": 2
+      },
+      "tripleHook": {
+        "minimum": 3,
+        "maximum": 3
+      },
+      "ocean": true
+    },
+    {
+      "itemId": 51214,
+      "fishParameterId": 1477,
+      "source": "ocean-ruby-2026-11-06",
+      "doubleHook": {
+        "minimum": 2,
+        "maximum": 2
+      },
+      "tripleHook": {
+        "minimum": 3,
+        "maximum": 3
+      },
+      "ocean": true
+    },
+    {
+      "itemId": 51215,
+      "fishParameterId": 1478,
+      "source": "ocean-ruby-2026-11-06",
+      "doubleHook": {
+        "minimum": 3,
+        "maximum": 3
+      },
+      "tripleHook": {
+        "minimum": 5,
+        "maximum": 5
+      },
+      "ocean": true
+    },
+    {
+      "itemId": 51216,
+      "fishParameterId": 1479,
+      "source": "ocean-ruby-2026-11-06",
+      "doubleHook": {
+        "minimum": 2,
+        "maximum": 2
+      },
+      "tripleHook": {
+        "minimum": 3,
+        "maximum": 3
+      },
+      "ocean": true
+    },
+    {
+      "itemId": 51217,
+      "fishParameterId": 1480,
+      "source": "ocean-ruby-2026-11-06",
+      "doubleHook": {
+        "minimum": 1,
+        "maximum": 1
+      },
+      "tripleHook": {
+        "minimum": 1,
+        "maximum": 1
+      },
+      "ocean": true
+    },
+    {
+      "itemId": 51218,
+      "fishParameterId": 1481,
+      "source": "ocean-ruby-2026-11-06",
+      "doubleHook": {
+        "minimum": 1,
+        "maximum": 1
+      },
+      "tripleHook": {
+        "minimum": 1,
+        "maximum": 1
+      },
+      "ocean": true
+    },
+    {
+      "itemId": 51219,
+      "fishParameterId": 1482,
+      "source": "ocean-ruby-2026-11-06",
+      "doubleHook": {
+        "minimum": 4,
+        "maximum": 4
+      },
+      "tripleHook": {
+        "minimum": 7,
+        "maximum": 7
+      },
+      "ocean": true
+    },
+    {
+      "itemId": 51220,
+      "fishParameterId": 1483,
+      "source": "ocean-ruby-2026-11-06",
+      "doubleHook": {
+        "minimum": 2,
+        "maximum": 2
+      },
+      "tripleHook": {
+        "minimum": 3,
+        "maximum": 3
+      },
+      "ocean": true
+    },
+    {
+      "itemId": 51221,
+      "fishParameterId": 1484,
+      "source": "ocean-ruby-2026-11-06",
+      "doubleHook": {
+        "minimum": 2,
+        "maximum": 2
+      },
+      "tripleHook": {
+        "minimum": 3,
+        "maximum": 3
+      },
+      "ocean": true
+    },
+    {
+      "itemId": 51222,
+      "fishParameterId": 1485,
+      "source": "ocean-ruby-2026-11-06",
+      "doubleHook": {
+        "minimum": 2,
+        "maximum": 2
+      },
+      "tripleHook": {
+        "minimum": 3,
+        "maximum": 3
+      },
+      "ocean": true
+    },
+    {
+      "itemId": 51223,
+      "fishParameterId": 1486,
+      "source": "ocean-ruby-2026-11-06",
+      "doubleHook": {
+        "minimum": 2,
+        "maximum": 2
+      },
+      "tripleHook": {
+        "minimum": 3,
+        "maximum": 3
+      },
+      "ocean": true
+    },
+    {
+      "itemId": 51224,
+      "fishParameterId": 1487,
+      "source": "ocean-ruby-2026-11-06",
+      "doubleHook": {
+        "minimum": 3,
+        "maximum": 3
+      },
+      "tripleHook": {
+        "minimum": 5,
+        "maximum": 5
+      },
+      "ocean": true
+    },
+    {
+      "itemId": 51225,
+      "fishParameterId": 1488,
+      "source": "ocean-ruby-2026-11-06",
+      "doubleHook": {
+        "minimum": 2,
+        "maximum": 2
+      },
+      "tripleHook": {
+        "minimum": 3,
+        "maximum": 3
+      },
+      "ocean": true
+    },
+    {
+      "itemId": 51226,
+      "fishParameterId": 1489,
+      "source": "ocean-ruby-2026-11-06",
+      "doubleHook": {
+        "minimum": 4,
+        "maximum": 4
+      },
+      "tripleHook": {
+        "minimum": 7,
+        "maximum": 7
+      },
+      "ocean": true
+    },
+    {
+      "itemId": 51227,
+      "fishParameterId": 1490,
+      "source": "ocean-ruby-2026-11-06",
+      "doubleHook": {
+        "minimum": 2,
+        "maximum": 2
+      },
+      "tripleHook": {
+        "minimum": 3,
+        "maximum": 3
+      },
+      "ocean": true
+    },
+    {
+      "itemId": 51228,
+      "fishParameterId": 1491,
+      "source": "ocean-ruby-2026-11-06",
+      "doubleHook": {
+        "minimum": 1,
+        "maximum": 1
+      },
+      "tripleHook": {
+        "minimum": 1,
+        "maximum": 1
+      },
+      "ocean": true
+    },
+    {
+      "itemId": 51229,
+      "fishParameterId": 1492,
+      "source": "ocean-ruby-2026-11-06",
+      "doubleHook": {
+        "minimum": 3,
+        "maximum": 3
+      },
+      "tripleHook": {
+        "minimum": 5,
+        "maximum": 5
+      },
+      "ocean": true
+    },
+    {
+      "itemId": 51230,
+      "fishParameterId": 1493,
+      "source": "ocean-ruby-2026-11-06",
+      "doubleHook": {
+        "minimum": 2,
+        "maximum": 2
+      },
+      "tripleHook": {
+        "minimum": 3,
+        "maximum": 3
+      },
+      "ocean": true
+    },
+    {
+      "itemId": 51231,
+      "fishParameterId": 1494,
+      "source": "ocean-ruby-2026-11-06",
+      "doubleHook": {
+        "minimum": 2,
+        "maximum": 2
+      },
+      "tripleHook": {
+        "minimum": 3,
+        "maximum": 3
+      },
+      "ocean": true
+    },
+    {
+      "itemId": 51232,
+      "fishParameterId": 1495,
+      "source": "ocean-ruby-2026-11-06",
+      "doubleHook": {
+        "minimum": 2,
+        "maximum": 2
+      },
+      "tripleHook": {
+        "minimum": 3,
+        "maximum": 3
+      },
+      "ocean": true
+    },
+    {
+      "itemId": 51233,
+      "fishParameterId": 1496,
+      "source": "ocean-ruby-2026-11-06",
+      "doubleHook": {
+        "minimum": 2,
+        "maximum": 2
+      },
+      "tripleHook": {
+        "minimum": 3,
+        "maximum": 3
+      },
+      "ocean": true
+    },
+    {
+      "itemId": 51234,
+      "fishParameterId": 1497,
+      "source": "ocean-ruby-2026-11-06",
+      "doubleHook": {
+        "minimum": 3,
+        "maximum": 3
+      },
+      "tripleHook": {
+        "minimum": 5,
+        "maximum": 5
+      },
+      "ocean": true
+    },
+    {
+      "itemId": 51235,
+      "fishParameterId": 1498,
+      "source": "ocean-ruby-2026-11-06",
+      "doubleHook": {
+        "minimum": 3,
+        "maximum": 3
+      },
+      "tripleHook": {
+        "minimum": 5,
+        "maximum": 5
+      },
+      "ocean": true
+    },
+    {
+      "itemId": 51237,
+      "fishParameterId": 1500,
+      "source": "ocean-ruby-2026-11-06",
+      "doubleHook": {
+        "minimum": 1,
+        "maximum": 1
+      },
+      "tripleHook": {
+        "minimum": 1,
+        "maximum": 1
+      },
+      "ocean": true
+    },
+    {
+      "itemId": 51238,
+      "fishParameterId": 1501,
+      "source": "ocean-ruby-2026-11-06",
+      "doubleHook": {
+        "minimum": 1,
+        "maximum": 1
+      },
+      "tripleHook": {
+        "minimum": 1,
+        "maximum": 1
+      },
+      "ocean": true
+    },
+    {
+      "itemId": 51239,
+      "fishParameterId": 1502,
+      "source": "ocean-ruby-2026-11-06",
+      "doubleHook": {
+        "minimum": 3,
+        "maximum": 3
+      },
+      "tripleHook": {
+        "minimum": 5,
+        "maximum": 5
+      },
+      "ocean": true
+    },
+    {
+      "itemId": 51240,
+      "fishParameterId": 1503,
+      "source": "ocean-ruby-2026-11-06",
+      "doubleHook": {
+        "minimum": 2,
+        "maximum": 2
+      },
+      "tripleHook": {
+        "minimum": 3,
+        "maximum": 3
+      },
+      "ocean": true
+    },
+    {
+      "itemId": 51241,
+      "fishParameterId": 1504,
+      "source": "ocean-ruby-2026-11-06",
+      "doubleHook": {
+        "minimum": 2,
+        "maximum": 2
+      },
+      "tripleHook": {
+        "minimum": 3,
+        "maximum": 3
+      },
+      "ocean": true
+    },
+    {
+      "itemId": 51242,
+      "fishParameterId": 1505,
+      "source": "ocean-ruby-2026-11-06",
+      "doubleHook": {
+        "minimum": 2,
+        "maximum": 2
+      },
+      "tripleHook": {
+        "minimum": 3,
+        "maximum": 3
+      },
+      "ocean": true
+    },
+    {
+      "itemId": 51243,
+      "fishParameterId": 1506,
+      "source": "ocean-ruby-2026-11-06",
+      "doubleHook": {
+        "minimum": 3,
+        "maximum": 3
+      },
+      "tripleHook": {
+        "minimum": 5,
+        "maximum": 5
+      },
+      "ocean": true
+    },
+    {
+      "itemId": 51244,
+      "fishParameterId": 1507,
+      "source": "ocean-ruby-2026-11-06",
+      "doubleHook": {
+        "minimum": 4,
+        "maximum": 4
+      },
+      "tripleHook": {
+        "minimum": 7,
+        "maximum": 7
+      },
+      "ocean": true
+    },
+    {
+      "itemId": 51245,
+      "fishParameterId": 1508,
+      "source": "ocean-ruby-2026-11-06",
+      "doubleHook": {
+        "minimum": 2,
+        "maximum": 2
+      },
+      "tripleHook": {
+        "minimum": 3,
+        "maximum": 3
+      },
+      "ocean": true
+    },
+    {
+      "itemId": 51246,
+      "fishParameterId": 1510,
+      "source": "ocean-ruby-2026-11-06",
+      "doubleHook": {
+        "minimum": 4,
+        "maximum": 4
+      },
+      "tripleHook": {
+        "minimum": 7,
+        "maximum": 7
+      },
+      "ocean": true
+    },
+    {
+      "itemId": 51247,
+      "fishParameterId": 1511,
+      "source": "ocean-ruby-2026-11-06",
+      "doubleHook": {
+        "minimum": 1,
+        "maximum": 1
+      },
+      "tripleHook": {
+        "minimum": 1,
+        "maximum": 1
+      },
+      "ocean": true
+    },
+    {
+      "itemId": 51687,
+      "fishParameterId": 1509,
+      "source": "ocean-ruby-2026-11-06",
+      "doubleHook": {
+        "minimum": 1,
+        "maximum": 1
+      },
+      "tripleHook": {
+        "minimum": 1,
+        "maximum": 1
+      },
+      "ocean": true
+    },
+    {
+      "itemId": 43781,
+      "fishParameterId": 1404,
+      "source": "fruity-dawntrail-2026-11-06",
+      "doubleHook": {
+        "minimum": 2,
+        "maximum": 2
+      },
+      "tripleHook": null
+    },
+    {
+      "itemId": 43735,
+      "fishParameterId": 1357,
+      "source": "fruity-dawntrail-2026-11-06",
+      "doubleHook": {
+        "minimum": 2,
+        "maximum": 2
+      },
+      "tripleHook": null
+    },
+    {
+      "itemId": 43796,
+      "fishParameterId": 1419,
+      "source": "fruity-dawntrail-2026-11-06",
+      "doubleHook": {
+        "minimum": 2,
+        "maximum": null
+      },
+      "tripleHook": {
+        "minimum": 3,
+        "maximum": null
+      }
+    },
+    {
+      "itemId": 43798,
+      "fishParameterId": 1421,
+      "source": "fruity-dawntrail-2026-11-06",
+      "doubleHook": {
+        "minimum": 2,
+        "maximum": null
+      },
+      "tripleHook": null
+    },
+    {
+      "itemId": 43795,
+      "fishParameterId": 1418,
+      "source": "fruity-dawntrail-2026-11-06",
+      "doubleHook": {
+        "minimum": 2,
+        "maximum": null
+      },
+      "tripleHook": null
     }
   ]
 }

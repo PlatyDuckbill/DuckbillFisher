@@ -34,7 +34,7 @@ internal sealed class FishPersonalPanel(FishPreferences preferences)
         if (drafts.TryGetValue(fishId, out var existing)) existing.Sync(record.Note);
         var dirty = existing?.Dirty == true;
         var heading = UiText.Get(dirty ? T.FishPersonalHeadingDraft : T.FishPersonalHeading);
-        var open = ImGui.CollapsingHeader(heading + "###FishPersonalRecord");
+        var open = UiWidgets.Disclosure(heading + "###FishPersonalRecord");
         UiWidgets.Tooltip(heading);
         if (!open) return;
         var canEdit = personal.CanEdit && editable;

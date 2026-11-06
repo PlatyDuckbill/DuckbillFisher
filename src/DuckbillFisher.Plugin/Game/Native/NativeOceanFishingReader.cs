@@ -1,15 +1,21 @@
 using Dalamud.Plugin.Services;
 using NativeEvents = FFXIVClientStructs.FFXIV.Client.Game.Event.EventFramework;
 using NativePlayer = FFXIVClientStructs.FFXIV.Client.Game.UI.PlayerState;
+using NativeWeather = FFXIVClientStructs.FFXIV.Client.Game.WeatherManager;
 using NativeStatus = FFXIVClientStructs.FFXIV.Client.Game.InstanceContent.InstanceContentOceanFishing.OceanFishingStatus;
 
 namespace DuckbillFisher.Plugin;
 
 internal enum OceanReadState { OffVoyage, Ready, PlayerUnavailable, AddressUnavailable, DirectorUnavailable, InvalidState, RouteMismatch, WrongThread, Stale }
 internal enum OceanPhase { Waiting, Moving, Fishing, Arriving, Finished }
+internal enum OceanWeatherReadState { NotObserved, Ready, AddressUnavailable, InvalidValue }
 internal sealed record OceanNativeSample(OceanReadState State, uint RouteId = 0, int Zone = -1,
     OceanPhase Phase = OceanPhase.Waiting, bool Spectral = false, double? RemainingSeconds = null,
-    uint? ContentId = null, uint? Duration = null, float? ContentSeconds = null, uint? TimeOffset = null);
+    uint? ContentId = null, uint? Duration = null, float? ContentSeconds = null, uint? TimeOffset = null)
+{
+    public byte? WeatherId { get; init; }
+    public OceanWeatherReadState WeatherState { get; init; }
+}
 
 /// <summary>Framework-only, read-only adapter. Never retains a game pointer or invokes a game action.</summary>
 internal sealed class NativeOceanFishingReader(IFramework framework)
@@ -48,8 +54,18 @@ internal sealed class NativeOceanFishingReader(IFramework framework)
             if (ocean->Duration == 420 && float.IsFinite(contentTime) && contentTime is >= 0 and <= 3600 && remaining is >= 0 and <= 420)
                 seconds = remaining; // An invalid clock does not discard a valid route/current-zone observation.
         }
+        byte? weather = null;
+        var weatherState = phase == OceanPhase.Fishing ? OceanWeatherReadState.AddressUnavailable : OceanWeatherReadState.NotObserved;
+        // Optional weather observation has its own address contract and cannot disable the voyage.
+        if (phase == OceanPhase.Fishing && NativeWeather.StaticAddressPointers.pInstance is not null &&
+            NativeWeather.MemberFunctionPointers.GetCurrentWeather != null)
+        {
+            var id = NativeWeather.StaticAddressPointers.pInstance->GetCurrentWeather();
+            weatherState = id > 0 ? OceanWeatherReadState.Ready : OceanWeatherReadState.InvalidValue;
+            if (id > 0) weather = id;
+        }
         return new(OceanReadState.Ready, routeId, (int)ocean->CurrentZone, phase,
             phase == OceanPhase.Fishing && ocean->SpectralCurrentActive, seconds, ocean->ContentId,
-            ocean->Duration, ocean->ContentTimeLeft, ocean->TimeOffset);
+            ocean->Duration, ocean->ContentTimeLeft, ocean->TimeOffset) { WeatherId = weather, WeatherState = weatherState };
     }
 }

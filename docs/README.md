@@ -38,7 +38,7 @@ docs/
 | 남은 시간 정렬 | [LIST-SORTING](product/LIST-SORTING.md) | [정렬 확인](verification/catalog/REMAINING-TIME-SORT.md) |
 | UI 구성·UX 조사 | [UI-UX-REDESIGN](product/UI-UX-REDESIGN.md) | [UI 확인 요약](verification/catalog/UI.md) |
 | 데이터 출처/판정 | [DATA-SOURCES](development/DATA-SOURCES.md), [data/README](../data/README.md) | [보완 검사](verification/data/DATA-COMPLETION-2026-10-18.md), [잔여 목록](verification/data/reports/fishing-data-2026-10-17/remaining.md) |
-| 터주작 아이디어 | [TROPHY-FISHING-PROPOSALS](product/TROPHY-FISHING-PROPOSALS.md) | 후보 기록은 착수 승인과 다름 |
+| 터주작 제안 이력 | [TROPHY-FISHING-PROPOSALS](product/TROPHY-FISHING-PROPOSALS.md) | 채택/제외 기록이며 현재 TODO는 ROADMAP만 따름 |
 | 지금 시작할 터주작 추천 | [일정·조건 중심 추천](product/NEXT-FISH-RECOMMENDATION.md) | [검사·대표 확인](verification/forecast/RECOMMENDATIONS.md) |
 | 출현 일정표 | [동작·구조](product/SPAWN-SCHEDULE.md), [가상 HTML 시안](product/mockups/spawn-schedule.html) | [확인 순서](verification/catalog/UI.md#0500-r7-옵션-제거와-단일-대상-전환-2026-10-21) |
 | 설정 백업·전용 WAV | [포함 범위·형식·호환성](product/SETTINGS-BACKUP.md) | [빌드·실기 확인 절차](verification/configuration/SETTINGS-BACKUP.md) |

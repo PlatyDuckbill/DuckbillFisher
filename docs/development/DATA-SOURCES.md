@@ -1,14 +1,32 @@
 # 낚시 상세 데이터의 출처와 조회 계획
 
-갱신: 2026-10-18. 0.2.9.0은 고정 Fish Tracker 903종에 Teamcraft 정적 자료 353종과 개별 어획 사실 2종을 보완해 KR 일반 도감 1,258종 모두 상세에 연결했다. 시간·날씨 확인 1,256종/부분 확인 2종이며 직감 지속 시간 등 핵심 잔여는 11종이다. 작살 203건/미확인 115건은 보존했다. 빌드·자료 대조와 인게임 확인 대기를 구분한다. [재현](../../data/README.md), [이번 근거](../verification/data/DATA-COMPLETION-2026-10-18.md), [잔여 전체 목록](../verification/data/reports/fishing-data-2026-10-17/remaining.md). 입질 통계 API와 런타임 HTTP는 도입하지 않는다.
+갱신: 2026-11-06. 일반 도감1,258종 모두 상세에 연결했다. 최신 개발 자료는 시간·날씨1,257종 확인/부분1종, 핵심 미확인2종(성 파스릭의 석두 직감 시간·이크에바지 가위 낚아채기·시간/날씨)이다. 작살203건/미확인115건은 보존했다. 빌드·자료 대조와 인게임 확인 대기를 구분한다. [재현](../../data/README.md), [초기 보완 근거](../verification/data/DATA-COMPLETION-2026-10-18.md), [당시 잔여 목록](../verification/data/reports/fishing-data-2026-10-17/remaining.md). 입질 통계 API와 런타임 HTTP는 도입하지 않는다.
+
+## 필요한 어종 보완과 먼바다 조건 (2026-11-06)
+
+- 조건 자료는 `kr-regular-2026-11-06`으로 갱신하고 등급 자료의 조건 해시를 함께 갱신했다. `reviewedDetailObservations`에 URL·확인일·스냅샷 SHA256·수치·가공 범위를 기록했다. 기존 Tracker/Teamcraft revision은 원래 기반으로 보존한다. 새 자료가 전체 기반을 대체했다고 표현하지 않는다.
+- [Fruity Snacks Dawntrail 가이드](https://docs.google.com/document/d/1HB2R8e2ZS6kW3v-7xSYuBbTEA3AZSLj4j2jrA2YcPFs/edit)의 명시적 직감 시간으로 대왕큰뱀머리고기350초·제파 보폴360초·채광 하트가오리900초·세 날 범고래600초를 채웠다. [Uzel Qestir의 기록](https://jp.finalfantasyxiv.com/lodestone/character/29265719/blog/5636744)으로 정강이 메기/희망잉어 각300초, Razor Edge의 [심혈 망령](https://jp.finalfantasyxiv.com/lodestone/character/22067410/blog/5681892)300초·[번개구체](https://na.finalfantasyxiv.com/lodestone/character/22067410/blog/5723521/)90초를 보완했다. 출현 시간 길이를 직감 시간으로 사용하지 않았다.
+- 양쪽 시트의 이크에바지/요에콰 `FishingNoteInfo` 제한 플래그는0이지만,0만으로 제한 없음을 확정할 수 없다는 기존 계약을 유지한다. 요에콰만 [실측 기록 운영자의 명시적 무제한/Powerful 안내](https://eorzea-weather.com/en/fish/yowekwa-inkhead)를 채택했다. 이크에바지는 낚아채기와 시간/날씨 완전성 미확인을 유지한다. 성 파스릭은 실제 어획자의 공개 기록끼리120초/180초가 충돌해 null을 유지한다([180초](https://jp.finalfantasyxiv.com/lodestone/character/1632871/blog/5329881)·[120초](https://jp.finalfantasyxiv.com/lodestone/character/18733847/blog/5308295)).
+- 같은 Dawntrail 가이드로 기사 망둥이/발목 메기의 이중2를 추가했다. Golden Day 이중2이상·삼중3이상, Scarlet Queen/Copper Shark 이중2이상은 해당 기술로 준비 수량에 도달하는 원문의 절차가 입증하는 하한만 기록한다. 최대값·다른 기술·획득력 컷은 환산하지 않는다. 현재 일반26종/이중26·삼중11, 직감 선행43종 중20종/이중20·삼중8이다. 먼바다259종/양쪽259는 유지한다.
+- 현재 Teamcraft 경로 최신 고정 revision `ca634a20561a1178fea3eb948be82e8fcccb8e2e`도 기존 최소 획득력350종과 값 충돌0, 우선 대상에 새 양수 값0이었다. 더 보완할 근거가 없는 최소 획득력은 미확인으로 유지한다. 일반 전수 완성·획득력별 보장 수량은 범위 밖이다.
+- [ocean-conditions.v1.json](../../data/ocean-conditions.v1.json)은 같은 원저자 Indigo/Ruby CSV의 시간 Yes/No·날씨 Yes/No/???·직감 필요 여부만 추린260행이다. URL·날짜·SHA256·권리 범위를 파일에 기록했다. 표/본문/이미지/코드는 배포하지 않는다. `???` 두 행은 미확인으로 남긴다. 빈 시간 열=일반, 빈 날씨 열=환해류 구분은 원저자 `displayStops.js`의 분류와 두 클라이언트 낚시터 슬롯으로 대조했다. Junior Jinbei는 양쪽 해역에 속하므로 Item 단독 키로 합치지 않는다.
+- 후보 판정은 Core의 순수 조건 비교다. 방문 시간대는 항로 시트, 현재 날씨는 검증된 ClientStructs 접근자, 직감 부재는 공개 StatusList 관찰이다. 관찰/자료 미확인 및 원본에 없는 날씨는 제외 근거가 아니다. 직감 활성은 대상까지 식별하지 못하므로 직감 필요 어종을 ‘조건 미확인’으로 남긴다. 장착 미끼/장비·특수 어획표·업적·점수 최적화는 판정하지 않는다. [실행 계약·실기 경계](../verification/native/GLOBAL-COMPAT.md#먼바다-조건-후보-개발본-2026-11-06).
 
 ## 일반 낚시 이중·삼중 수량 안내 (2026-11-05)
 
-- 별도 자료 [hook-yields.v1.json](../../data/hook-yields.v1.json)는 일반21종/이중21·삼중10종이다. 최초12종은 Fruity Snacks 본인 영상10개만 확인한 제한된 조사였으며, 전체 자료가 없다고 결론 내린 결과가 아니다. 재조사에서 [A Fisher's Guide to Eorzea](https://docs.google.com/document/d/1B7wjAtw5uCiARS9tXsozYAX8l6JZOzl2YtJSjejqchk/edit)의 숫자 설명으로9종과 기존2종의 누락 기술을 보강했다. 일반 직감 선행43종 중15종의 이중,7종의 삼중만 포함하므로 나머지는 여전히 미확인이다.
+- 별도 자료 [hook-yields.v1.json](../../data/hook-yields.v1.json)는 현재 일반26종/이중26·삼중11종이다. 최초12종의 영상 조사와 통합 가이드 추가9종에 위 Dawntrail5종을 보완한 결과다. 일반 직감 선행43종 중20종의 이중,8종의 삼중만 포함하므로 나머지는 여전히 미확인이다.
 - 영상ID와 설명 SHA256, 문서의2026-11-05 UTF-8 텍스트 내보내기 스냅샷 SHA256(4CD82A004E2B11BAD2442FD07FCFD066EE9DC13FE38701DF26CBC2A9751486A0)을 기록한다. 문서 URL은 내용이 바뀔 수 있어 고정 revision으로 취급하지 않는다. 형식1의 source는 기존descriptionSha256과 추가contentSha256 중 유효한 해시를 요구한다. 기존 FishParameter↔Item 짝과 연결하며 원본에 없는 이름/ID/수량은 채우지 않는다.
 - 보강한 수량(이중/삼중, 빈 기술은 미확인): Titanic Sawfish4/7, Granite Crab3~4/미확인, Sculptor2/미확인, Eighteyes Eel1/미확인, Amber Monkfish1/미확인, Ponderer2/미확인, Thavnairian Caiman2/3, Thavnairian Calamari2/3, Jhinga2/3. 기존 Sand Egg의 삼중3, Astacus Aetherius의 이중2이상도 보완했다. 가이드의 해당 어종·직감 준비/재준비 절을 읽어 개별 기술의 숫자만 옮겼다. Green Prismfish의 복합 준비 순서 등 모호한 설명은 수량으로 환산하지 않았다.
 - 출처의 수량은 캐릭터 현재 획득력에서의 보장 수량이 아니다. ‘단일 어획+이중으로 직감 조건 충족’처럼 최소량만 확인되는 설명은 하한으로만 기록하고 상한은 null이다. 3~4처럼 명시한 범위와 구분한다. 삼중 설명이 없으면 null이며 이중 수량으로 변환하지 않는다. 일반 어종 전수·획득력별 임계값·소장품 실제 수령 계약은 미확인이다.
 - 공개 재사용 라이선스는 확인하지 못했다. 저작권은 원저작자에게 있으며 소수의 숫자 사실만 기록한다. 원문 문장·코드·이미지·영상은 도입하지 않고 MIT/Apache 자료로 표시하지 않는다. URL/고정ID/해시/가공 범위는 JSON과 THIRD-PARTY-NOTICES에 남긴다. 개발 중 수집과 DLL 내장은 런타임 통신과 구분한다.
+
+## 최소 획득력·납품 구간·수량 확장 (2026-11-06)
+
+- 최소 획득력은 [minimum-gathering.v1.json](../../data/minimum-gathering.v1.json)에350종을 내장한다. 기존 Teamcraft MIT 원본 revision `8925c7b73a99e8ba4fb2aa10719a3b3f48109ea7`의 `fishing-sources.json`에서 양수 `minGathering`만 추렸다. SHA256 `701438120D5DB489985972A833777F7B31DCF7CA2E76A756136DD1677B957B74`가 기존 고정 manifest와 일치하며 어종별 양수 충돌0건·KR/글로벌 Item↔FishParameter 짝 불일치0건이다. 원본0/누락은 미확인이다. 일반 조건 자료와 연결321종·상세 조건이 없는29종이며 후자도 상세의 독립 획득력 표시를 사용한다. 복수 낚아채기의 획득력별 보장 임계값으로 바꾸지 않는다.
+- 소장품은 외부 표를 복사하지 않고 Framework의 카탈로그 로드에서 실행 클라이언트 `CollectablesShop → CollectablesShopItem → CollectablesShopRefine`의 세 구간을 읽는다. `RewardType=1`의 납품원만 포함하고 장비 개량용 부재/거래 자본 등 `RewardType=2` 교환14종은 일반 납품원으로 분류하지 않는다. 단골거래는 `SatisfactionNpc.SatisfactionNpcParams.SupplyIndex → SatisfactionSupply`로 Item/구간을 연결하고 이름은 `SatisfactionNpc.Npc → ENpcResident.Singular`를 사용한다. 0번 공급/빈 Item과 같은 NPC·Item·구간의 중복을 제거한다.
+- 설치 KR `2026.10.06`·글로벌 `2026.10.16`의 현재 카탈로그 대상에 납품원77종·단골거래12명/54개 고유 NPC-어종 연결, 총131개 구간이 일치했다. `.cache/detail-supplement-audit/KR.json`·`Global.json`과 조회 코드에 로컬 근거를 둔다. 조건/해금 단계·이번 주 요청을 읽은 것이 아니며 다른 특수 납품과 작살 전용 품목을 전수 지원한다고 표현하지 않는다. 수치/이름은 런타임 시트를 따르고 Draw에서는 시트를 다시 읽지 않는다. 실패는 확인 불가로, 소장품인데 연결이 없으면 미확인으로 표시한다.
+- [hook-yields.v1.json](../../data/hook-yields.v1.json)은 기존 일반21종/이중21·삼중10에 먼바다259종의 이중/삼중을 추가해 총280종이다. 원저자 Tyo'to Tayuun의 Indigo/Ruby CSV `DH`/`TH`에 명시된 단일 수량과 `3 - 4`/`5 - 7` 범위만 가져왔다. 고정 CSV260행은 설치 양쪽 클라이언트의259종에 연결되고 겹치는 어종의 수량 충돌0건이다. 원본의 범위와 미확인을 보존하고 기술 간 환산·입질 초·점수·전략은 도입하지 않는다. 각 CSV URL/SHA256/확인일을 수량 파일에도 기록했으며 해시는 아래 Beta의 원본과 같다. 원저작권/가공 범위는 THIRD-PARTY-NOTICES에 추가했다. DistantSeas의 AGPL 자료/코드를 도입하지 않았다.
+- 일반 수량은 종합 가이드 스냅샷의 Double/Triple Hook 관련60개 단락을 다시 확인했다. 직접 숫자를 말하는 일반 어종은 기존21종과 겹쳤으며, 준비 순서/필요 마릿수에서 새 수량을 역산하지 않았다. 일반 전수·획득력별 보장 수량·소장품 실제 수령량은 확인되지 않은 범위다. 2026-11-06 TODO 정리에서 전수 완성/보장 수량은 현재 목표에서 제외했으며 필요한 어종의 근거 있는 보완만 남긴다. 개발 전용 재생성 명령은 [data/README](../../data/README.md#최소-획득력납품수량-보강-2026-11-06)를 따른다.
 
 ## 먼바다 Beta 기본 안내와 일정 (2026-11-06)
 

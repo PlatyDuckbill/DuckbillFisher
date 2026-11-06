@@ -12,12 +12,12 @@ internal static class UiScale
 
     public static int Normalize(int percent) => UiScaleSettings.Normalize(percent);
 
-    public static void Draw(WindowSystem windows, int percent)
+    public static void Draw(WindowSystem windows, int percent, UiTheme theme)
     {
         var scale = Normalize(percent) / 100f;
         if (scale == 1)
         {
-            windows.Draw();
+            DrawThemed(windows, theme);
             return;
         }
 
@@ -46,13 +46,32 @@ internal static class UiScale
         ImGui.PushFont(ImGui.GetFont());
         try
         {
-            windows.Draw();
+            DrawThemed(windows, theme);
         }
         finally
         {
             io.FontGlobalScale = originalScale;
             ImGui.PopFont();
             ImGui.PopStyleVar(16);
+        }
+    }
+
+    private static void DrawThemed(WindowSystem windows, UiTheme theme)
+    {
+        using var style = new UiThemeScope(theme);
+        // Match the information surfaces across main/detail/timer without changing stored window settings.
+        var backgrounds = UiThemes.Find(theme) is not null
+            ? windows.Windows.Select(window => (Window: window, Alpha: window.BgAlpha)).ToArray() : null;
+        try
+        {
+            if (backgrounds is not null)
+                foreach (var entry in backgrounds) entry.Window.BgAlpha = 1f;
+            windows.Draw();
+        }
+        finally
+        {
+            if (backgrounds is not null)
+                foreach (var entry in backgrounds) entry.Window.BgAlpha = entry.Alpha;
         }
     }
 }

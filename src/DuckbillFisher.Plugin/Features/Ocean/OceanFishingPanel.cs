@@ -37,7 +37,7 @@ internal sealed class OceanFishingPanel(OceanFishing ocean, FishPreferences pref
             var route = view.Routes[view.Sample.RouteId];
             DrawVoyage(view, route);
             ImGui.Spacing();
-            if (ImGui.CollapsingHeader(UiText.Label(T.OceanSchedulePreview, "OceanSchedulePreview"))) DrawSchedule(view);
+            if (UiWidgets.Disclosure(UiText.Label(T.OceanSchedulePreview, "OceanSchedulePreview"))) DrawSchedule(view);
         }
         else
         {
@@ -59,7 +59,7 @@ internal sealed class OceanFishingPanel(OceanFishing ocean, FishPreferences pref
 
     private void DrawDiagnostics(bool developerMode)
     {
-        if (developerMode && ImGui.CollapsingHeader(UiText.Label(T.OceanDiagnostics, "OceanDiagnostics")))
+        if (developerMode && UiWidgets.Disclosure(UiText.Label(T.OceanDiagnostics, "OceanDiagnostics")))
         {
             var report = ocean.CreateReport();
             if (ImGui.SmallButton(UiText.Label(T.OceanCopyDiagnostics, "CopyOceanDiagnostics"))) ImGui.SetClipboardText(report);
@@ -202,7 +202,10 @@ internal sealed class OceanFishingPanel(OceanFishing ocean, FishPreferences pref
         }
         ImGui.Spacing(); ImGui.Separator(); ImGui.Spacing();
         ImGui.TextDisabled(UiText.Get(T.OceanPreview));
+        var themed = UiThemeScope.Current is not null;
+        if (themed) ImGui.PushStyleColor(ImGuiCol.Text, UiThemeScope.Current!.Accent);
         ImGui.TextWrapped(RouteName(selected));
+        if (themed) ImGui.PopStyleColor();
         DrawRoute(selected.Route);
         ImGui.Spacing();
         ImGui.TextUnformatted(UiText.Get(T.OceanPreparationBaits));
@@ -222,6 +225,13 @@ internal sealed class OceanFishingPanel(OceanFishing ocean, FishPreferences pref
         var height = Math.Max(ImGui.GetTextLineHeightWithSpacing() + ImGui.GetTextLineHeight(),
             ImGui.CalcTextSize(label, false, width).Y);
         var clicked = ImGui.Selectable("###Departure", selected, ImGuiSelectableFlags.None, new Vector2(0, height));
+        if (selected && UiThemeScope.Current is { } theme && ImGui.IsItemVisible())
+        {
+            var min = ImGui.GetItemRectMin();
+            var max = ImGui.GetItemRectMax();
+            ImGui.GetWindowDrawList().AddLine(new(min.X + 2, max.Y - 1), new(max.X - 2, max.Y - 1),
+                ImGui.GetColorU32(theme.Accent), 2);
+        }
         var next = ImGui.GetCursorPos();
         // Keep the native selectable hit area/keyboard behavior while wrapping long client names.
         ImGui.SetCursorPos(origin);

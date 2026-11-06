@@ -15,6 +15,16 @@ internal sealed class ChangelogWindow : Window
     // Keep the confirmed candidate unchanged when it is published.
     private static readonly ReleaseNotes[] PublishedReleases =
     [
+        new(new(0, 9, 0, 0),
+        [
+            (FontAwesomeIcon.Ship, T.ChangelogOceanBeta),
+            (FontAwesomeIcon.Filter, T.ChangelogOceanCandidates),
+            (FontAwesomeIcon.Fish, T.ChangelogMinimumGathering),
+            (FontAwesomeIcon.List, T.ChangelogDeliveryTiers),
+            (FontAwesomeIcon.Fish, T.ChangelogExpandedHookYield),
+            (FontAwesomeIcon.Cog, T.ChangelogThemes),
+            (FontAwesomeIcon.BookOpen, T.ChangelogFishingLogOrder),
+        ], new DateTimeOffset(2026, 11, 6, 12, 28, 36, TimeSpan.Zero)),
         new(new(0, 8, 0, 0),
         [
             (FontAwesomeIcon.Fish, T.ChangelogIntuitionProgress),
@@ -92,14 +102,6 @@ internal sealed class ChangelogWindow : Window
             (FontAwesomeIcon.MapMarkerAlt, T.ChangelogScheduleDetails),
         ], new DateTimeOffset(2026, 10, 20, 19, 1, 36, TimeSpan.Zero),
             T.ChangelogScheduleFeatureTitle, T.ChangelogScheduleFeatureSummary, FeatureIcon: FontAwesomeIcon.CalendarAlt),
-        new(new(0, 4, 1, 0),
-        [
-            (FontAwesomeIcon.MapMarkerAlt, T.ChangelogHistoryLocation),
-            (FontAwesomeIcon.History, T.ChangelogHistoryPresentation),
-            (FontAwesomeIcon.Link, T.ChangelogMoochLink),
-            (FontAwesomeIcon.Clock, T.ChangelogTimerRetention),
-        ], new DateTimeOffset(2026, 10, 20, 11, 50, 52, TimeSpan.Zero),
-            OtherEntries: [(FontAwesomeIcon.ChartBar, T.ChangelogProgressPalette)]),
     ];
     private readonly ReleaseNotes[] releases = PublishedReleases.Where(release => release.Version <= CurrentVersion).Take(10).ToArray();
     private readonly FishPreferences preferences;
@@ -149,7 +151,7 @@ internal sealed class ChangelogWindow : Window
         if (ImGui.BeginChild("ChangelogContent", new Vector2(0, -ImGui.GetFrameHeightWithSpacing())))
         {
             contentShown = true;
-            ImGui.TextColored(new Vector4(1, 0.8f, 0.32f, 1), UiText.Get(T.ChangelogVersion, CurrentVersion));
+            UiWidgets.TextColored(UiThemeScope.Current?.Text ?? new Vector4(1, 0.8f, 0.32f, 1), UiText.Get(T.ChangelogVersion, CurrentVersion));
             ImGui.Separator();
             ImGui.TextWrapped(UiText.Get(T.ChangelogPublishedHint, releases.Length));
             ImGui.Spacing();
@@ -157,7 +159,7 @@ internal sealed class ChangelogWindow : Window
             {
                 var release = releases[i];
                 var label = $"{UiText.Get(T.ChangelogRelease, release.Version)}###ReleaseNotes.{release.Version}";
-                if (!ImGui.CollapsingHeader(label, i == 0 ? ImGuiTreeNodeFlags.DefaultOpen : ImGuiTreeNodeFlags.None)) continue;
+                if (!UiWidgets.Disclosure(label, i == 0 ? ImGuiTreeNodeFlags.DefaultOpen : ImGuiTreeNodeFlags.None)) continue;
                 if (release.PublishedAtUtc is { } publishedAt)
                     ImGui.TextDisabled(UiText.Get(T.ChangelogPublishedAt, publishedAt.ToLocalTime()));
                 ImGui.Spacing();
@@ -165,7 +167,7 @@ internal sealed class ChangelogWindow : Window
                 {
                     UiWidgets.Icon(release.FeatureIcon);
                     ImGui.SameLine();
-                    ImGui.TextColored(new Vector4(0.45f, 0.82f, 1, 1), UiText.Get(title));
+                    UiWidgets.TextColored(UiThemeScope.Current is not null ? UiThemeColors.Information : new Vector4(0.45f, 0.82f, 1, 1), UiText.Get(title));
                     if (release.FeatureSummary is { } summary) ImGui.TextWrapped(UiText.Get(summary));
                     ImGui.Separator();
                     ImGui.Spacing();

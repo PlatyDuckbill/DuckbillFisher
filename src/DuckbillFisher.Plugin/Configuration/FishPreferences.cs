@@ -30,6 +30,7 @@ internal sealed record FishPreferencesView(int Revision, int Session, bool HasCh
     public UiMessage? CatalogPresetError { get; init; }
     public UiLanguage Language { get; init; } = UiLanguage.Korean;
     public int UiScalePercent { get; init; } = UiScale.DefaultPercent;
+    public UiTheme Theme { get; init; }
     public bool DeveloperMode { get; init; }
     public string LastSeenChangelogVersion { get; init; } = "";
     public CompactViewSettings Compact { get; init; } = new();
@@ -76,6 +77,7 @@ internal sealed class FishPreferences : IDisposable
     private PresetEdit? pendingPreset;
     private (UiLanguage Language, bool DeveloperMode)? pendingInterface;
     private int? pendingUiScale;
+    private UiTheme? pendingTheme;
     private CompactViewSettings? pendingCompact;
     private SpawnScheduleSettings? pendingSchedule;
     private TimerEdit? pendingTimer;
@@ -225,6 +227,12 @@ internal sealed class FishPreferences : IDisposable
         lock (gate)
             if (!disposed && writable && UiScale.Choices.Contains(percent))
                 pendingUiScale = percent;
+    }
+
+    public void SetTheme(UiTheme theme)
+    {
+        lock (gate)
+            if (!disposed && writable && Enum.IsDefined(theme)) pendingTheme = theme;
     }
 
     public void SetCompact(CompactViewSettings settings)
@@ -492,6 +500,7 @@ internal sealed class FishPreferences : IDisposable
                     pendingPreset = null;
                     pendingInterface = null;
                     pendingUiScale = null;
+                    pendingTheme = null;
                     pendingCompact = null;
                     pendingSchedule = null;
                     pendingTimer = null;
@@ -503,7 +512,7 @@ internal sealed class FishPreferences : IDisposable
                     foreach (var edit in manualEdits) pending.Enqueue(edit);
                 }
             }
-            if (pending.Count == 0 && pendingPersonal.Count == 0 && pendingAlerts is null && pendingFishAlerts.Count == 0 && pendingCatalog is null && pendingPreset is null && pendingInterface is null && pendingUiScale is null && pendingCompact is null && pendingSchedule is null && pendingTimer is null && pendingSpotFishHideCaught is null && pendingCustomSoundPath is null && pendingChangelogVersion is null)
+            if (pending.Count == 0 && pendingPersonal.Count == 0 && pendingAlerts is null && pendingFishAlerts.Count == 0 && pendingCatalog is null && pendingPreset is null && pendingInterface is null && pendingUiScale is null && pendingTheme is null && pendingCompact is null && pendingSchedule is null && pendingTimer is null && pendingSpotFishHideCaught is null && pendingCustomSoundPath is null && pendingChangelogVersion is null)
                 return;
             var candidate = CopyConfiguration();
             var changed = false;
@@ -541,6 +550,12 @@ internal sealed class FishPreferences : IDisposable
                     changed = true;
                 }
                 pendingChangelogVersion = null;
+            }
+            if (pendingTheme is { } theme)
+            {
+                changed |= candidate.Theme != theme;
+                candidate.Theme = theme;
+                pendingTheme = null;
             }
             if (pendingCustomSoundPath is { } customSoundPath)
             {
@@ -727,6 +742,7 @@ internal sealed class FishPreferences : IDisposable
             CatalogPresetError = view.CatalogPresetError,
             Language = configuration.Language, DeveloperMode = configuration.DeveloperMode,
             UiScalePercent = configuration.UiScalePercent,
+            Theme = configuration.Theme,
             LastSeenChangelogVersion = configuration.LastSeenChangelogVersion,
             Compact = configuration.Compact,
             Schedule = configuration.Schedule,
@@ -755,6 +771,7 @@ internal sealed class FishPreferences : IDisposable
         CatalogPresets = configuration.CatalogPresets.Select(value => value.Copy()).ToList(),
         Language = configuration.Language, DeveloperMode = configuration.DeveloperMode,
         UiScalePercent = configuration.UiScalePercent,
+        Theme = configuration.Theme,
         LastSeenChangelogVersion = configuration.LastSeenChangelogVersion,
         Compact = configuration.Compact,
         Schedule = configuration.Schedule,
@@ -797,6 +814,7 @@ internal sealed class FishPreferences : IDisposable
             pendingPreset = null;
             pendingInterface = null;
             pendingUiScale = null;
+            pendingTheme = null;
             pendingCompact = null;
             pendingSchedule = null;
             pendingTimer = null;

@@ -4,9 +4,17 @@
 
 ## 코드 탐색
 
+최소 획득력은 `MinimumGatheringData`의 별도 내장350종과 실제 Item/FishParameter 짝을 확인해 표시한다. 기존 일반 상세가 없는29종도 `FishingConditionPanel.DrawMinimumGathering`을 사용한다. 납품은 `FishDeliveryData`가 카탈로그 Framework 로드에서 공개 시트를 읽어 `FishDeliveryCatalog`의 준비/확인 불가와 대상/구간 배열을 관리 값으로 복사한다. `FishGuideRow.IsNormalItem`으로 EventItem의 숫자 ID와 일반 Item을 구분한다. Draw에서는 Item 색인만 조회하고 주간 요청/캐릭터 해금·보상을 판정하지 않는다. `HookYieldData`는 일반26종+먼바다259종을 읽고 일반은 기존 조건 짝, 먼바다 표시는 현재 상세의 FishParameter ID로 교차 확인한다. `UiWidgets.BeginTabItem`은 내부 탭의 활성 면/밑줄만 추가하며 기존 ID·조작/선택 상태는 ImGui가 유지한다.
+
+그라파이트/페이퍼는 기존 좌우 분할 ID/폭과 공통 상세의 읽는 순서를 유지한다. 큰 상단 요약 표·조건 네 구획은 후속 피드백으로 제거했다. UiThemeDecorations.ListItemSurface는 실제 행 원점/높이로 선택/호버 면과 일반 행의 아래 선을 그리며 즐겨찾기 입력의 클릭 범위는 별도다. FishingWindowPanel은 전폭 상태·실측 남은 시간·구간을 그린다. FishingConditionPanel은 라벨 실측 너비+값8글자보다 좁으면 라벨/값을 한 열로 쌓으며 기존 조건/미확인 판정을 공유한다. UiWidgets.SectionLabel은 구역 제목 옆에 얇은 선을 그린다. CatalogPresetsPanel의 두 테마 적용 행은 프레임/화살표 버튼이고 사용자 이름은 리터럴 텍스트로 그린다. HookYieldText는 알려진 수량에만 단위를 적용하고 양쪽 미확인은 한 번만 표시하며 숫자와 Unknown의 의미를 보존한다.
+
+상세의 메모·관리 영역은 공통 `FishDetailPanel`의 낚시 정보 뒤에 두고 기존 초안/저장과 ImGui ID를 유지한다. `SpawnAlertsPanel`은 선택 ID가 없을 때만 캐시된 현재 검색 결과의 첫 상세 가능 어종을 선택하고 기존 선택을 보존한다. 세션 전환은 선택/캐시를 초기화하며 개별 알림 입력은 기존 행에 둔다. `UiWidgets.Disclosure`는 접힘 제목만 중성 면으로 그려 행 선택/활성 메뉴와 구분한다. `CollectionProgressPanel`은 표시 범위별 펼침 상태와 집계 그룹으로 표 높이를 추정하고 기존 스크롤을 유지한다. 파일/전체 어종 검색이나 게임 동작을 추가하지 않는다.
+
+디자인 테마는 `UI/Themes/UiThemes`가 그라파이트/페이퍼의 색/모서리를 소유하고 `UiThemeScope`가 `UiScale`의 배율 적용 뒤부터 WindowSystem 종료까지 적용·복원한다. 전역 테마 스타일은 기존 Dalamud의 크기/간격과 공통 UI 배율을 따른다. 두 테마는 클릭 가능 요소 구분을 위해 FrameBorderSize만 최소1px·글자 크기에 비례해 범위 적용하고 복원한다. 기존 제목과 상태/경과 한 줄 타이머를 그대로 사용하며 확대 카드·제목/타이머 크기 계층은 제거했다. 기존 Window/ID/기능 패널은 재사용하고 행 장식은 `UiThemeDecorations`, 정보/성공/주의/실패/즐겨찾기 색은 `UiThemeColors`, 수집 막대/일정 구간의 도형은 `UiThemeCharts`에 둔다. 차트는 기존 비율/UTC 좌표와 항목 경계만 받아 그리며 클릭/툴팁/판정은 기존 패널이 유지한다. 제목줄/보조 화면/팝업도 같은 테마이며 게임 overlay는 범위 밖이다. Original은 기존 스타일을 유지한다. Theme는 schema26의 공통 설정 큐/스냅샷/사본/백업에 포함하고 누락/알 수 없는 값은 Original로 정규화한다. 새 관찰/구독이나 별도 Window의 수명은 추가하지 않는다.
+
 먼바다 Beta는 Core `OceanSchedule`이 UTC 접수 구간/순환 인덱스를 계산하고, Plugin `OceanFishing`이 Framework에서 클라이언트 IKD 시트·내장 기본 미끼 자료를 한 번 읽고 관리 snapshot을 발행한다. `NativeOceanFishingReader`만 실제 승선 정보를 읽는다. `OceanFishingPanel`은 수동 일정 선택을 관찰 상태와 분리하며 Draw에서는 시트/파일/포인터를 읽지 않는다. 미끼 찾기는 기존 `BaitFinder`를 재사용한다. [실행 계약·실기 대기](../verification/native/GLOBAL-COMPAT.md#먼바다-beta-개발본-구현-2026-11-06).
 
-먼바다 어종 목록은 카탈로그의 `OceanFishingSpotId`를 Framework에서 낚시터별로 색인해 현재 IKDSpot 일반/환해류 ID와 연결한다. 메인·캐스팅·공유 `SpotFishWindow`의 관찰 사용 비트는 각각 열림/닫힘에 따라 해제하며 한 화면이 닫혀도 다른 화면의 관찰을 중단하지 않는다. 목록 snapshot은 Ready/Loading/이동/대기/종료/OffVoyage/Unavailable을 구분하고, 세션 불일치나3초 표본 만료에는 행을 비운다. 기존 일반 낚시 Tracker의 먼바다 미지원 경계는 유지한다.
+먼바다 어종 목록은 Framework에서 실행 클라이언트의 낚시수첩 Item 슬롯으로26개 낚시터를 색인해 IKDSpot 일반/환해류 ID와 연결한다. 한 어종의 두 해역 소속을 주 낚시터 하나로 잃지 않는다. Core `OceanFishCondition`은 내장260행의 명시 시간/날씨·직감 부재만 비교하며 미확인을 보존한다. `OceanFishing`은 공개 StatusList/네이티브 날씨를 같은 세션의 관리 snapshot으로 복사하고 전체/후보/미확인 배열을 준비한다. 메인·캐스팅·공유 `SpotFishWindow`의 관찰 사용 비트는 각각 열림/닫힘에 따라 해제하며 한 화면이 닫혀도 다른 화면의 관찰을 중단하지 않는다. 목록 snapshot은 Ready/Loading/이동/대기/종료/OffVoyage/Unavailable을 구분하고, 세션 불일치나3초 표본 만료에는 행을 비운다. 기존 일반 낚시 Tracker의 먼바다 미지원 경계는 유지한다.
 
 | 책임 | 주요 구현 | 경계 |
 |---|---|---|
@@ -98,7 +106,7 @@
 
 ## 저장·수집·알림
 
-- FishPreferences schema24: 공통 즐겨찾기/필터/언어/UI 배율/간이 목록 전용 즐겨찾기 필터/알림 설정·현재 낚시터 알림 켜기(CurrentSpotAlertsEnabled)·커스텀 WAV 원본 경로·일정표/업데이트 내역 확인 버전(LastSeenChangelogVersion)·시전 알림/이름 있는 프리셋·입질/터주/터주왕 효과음·낚시터 목록 수집 필터, 캐릭터별 수동 수집/자동 관찰 백업(UTC·상태)/알림 중복 방지 기록/출현 시작 알림 회차(OpeningAlertWindows). schema1~23 변환과 손상/미지원 원본 보존을 유지한다. 이전 설정은 새 효과음 없음·최초 습득만 켜짐·낚시터 수집 숨김을 기본 적용하고 기존 알림/프리셋을 보존한다. 이전 설정은 간이 목록의 즐겨찾기 선택을 당시 메인 필터에서 한 번 이어받는다. 선택적인 확인 버전만 잘못되면 확인 전으로, 배율이 누락/선택 범위 밖이면100%로 정규화하며 다른 설정을 버리지 않는다.
+- FishPreferences schema26: 공통 즐겨찾기/필터/언어/UI 배율/간이 목록 전용 즐겨찾기 필터/알림 설정·현재 낚시터 알림 켜기(CurrentSpotAlertsEnabled)·커스텀 WAV 원본 경로·일정표/업데이트 내역 확인 버전(LastSeenChangelogVersion)·시전 알림/이름 있는 프리셋·입질/터주/터주왕 효과음·낚시터 목록 수집 필터, 캐릭터별 수동 수집/자동 관찰 백업(UTC·상태)/알림 중복 방지 기록/출현 시작 알림 회차(OpeningAlertWindows). schema1~25 변환과 손상/미지원 원본 보존을 유지한다. 이전 설정은 새 효과음 없음·최초 습득만 켜짐·낚시터 수집 숨김을 기본 적용하고 기존 알림/프리셋을 보존한다. 이전 설정은 간이 목록의 즐겨찾기 선택을 당시 메인 필터에서 한 번 이어받는다. 선택적인 확인 버전만 잘못되면 확인 전으로, 배율이 누락/선택 범위 밖이면100%로 정규화하며 다른 설정을 버리지 않는다.
 - PersonalRecords는 최대4,096종의 불변 값이며 필드별 요청을 Framework에서 현재 저장본에 적용한다. 메모/횟수 편집만으로 CatalogRevision을 올리지 않고 같은 snapshot 맵을 재사용한다. 타이머 프리셋 삭제는 연결만 정리하고 명시적 적용은 기존 알림ID/채널/효과음 보존 계약을 따른다. CommonSettingsBackup의 선택 필드로 JSON/ZIP에 포함하며 미저장 초안은 제외한다.
 - 캐스팅 알림의 로컬 채팅 채널은 Timer.AlertChannelId로 출현 알림 채널과 분리한다.21 이하 로딩/백업은 종전 채널을 한 번 이어받고 이후 독립 저장한다. 즐겨찾기 관리의 가운데 출현 알림 설정 탭이 기존 메인 설정의 옵션을 담당한다.
 - 업데이트 내역을 표시한 뒤 사용자가 닫으면 확인 버전을 저장한다. 저장 실패 시 이전 상태를 유지하고 재로드 때 다시 표시할 수 있다. 캐릭터/언어 전환은 확인 버전을 초기화하지 않고, 더 최신 확인값을 이전 DLL로 낮추지 않는다. 내역 저장만으로 CatalogRevision을 올리지 않는다.

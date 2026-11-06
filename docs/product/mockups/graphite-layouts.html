@@ -1,0 +1,205 @@
+<div id="db-layout-preview" class="viz-carousel" aria-label="그라파이트 공간 배치 비교" data-previous-label="이전 배치" data-next-label="다음 배치">
+  <section data-variant="좌우 분리" aria-label="목록과 상세를 좌우로 나눈 배치">
+    <div class="db-app db-split" data-design="split" aria-label="DuckbillFisher 즐겨찾기 배치 시안">
+      <header class="db-title"><span>DuckbillFisher</span><span class="db-quiet">즐겨찾기</span><div class="db-tools"><button type="button" data-local-tool="compact"><i data-lucide="list" aria-hidden="true"></i> 간이 목록</button><button type="button" data-local-tool="timer"><i data-lucide="timer" aria-hidden="true"></i> 캐스팅 타이머</button></div></header>
+      <nav class="db-navigation" aria-label="주 메뉴"><span>어종 목록</span><span class="db-current">즐겨찾기 관리</span><span>추천</span><span>출현 일정표</span><span>먼바다 · Beta</span><span>수집 현황</span><span>낚시 기록</span><span>설정</span></nav>
+      <div class="db-local"><div class="db-local-tabs"><span class="db-current">즐겨찾기</span><span>출현 알림 설정</span><span>발송 기록</span></div><span class="db-quiet">2종 · 대기 2 · 발송 0</span></div>
+      <div class="db-workspace">
+        <aside class="db-browser" aria-label="즐겨찾기 어종">
+          <label class="db-search"><i data-lucide="search" aria-hidden="true"></i><input type="search" aria-label="즐겨찾기 검색" placeholder="어종 · 낚시터 · ID 검색" data-search></label>
+          <div class="db-cards">
+            <article class="db-fish-card db-selected" data-fish-card="purse">
+              <button class="db-fish-main" type="button" data-select-fish="purse" aria-pressed="true"><span class="db-portrait"><i data-lucide="fish" aria-hidden="true"></i></span><span class="db-identity"><span class="db-fish-name">두둑지갑</span><span class="db-quiet">터주 · 만조 현관</span><span class="db-quiet">ET 16:00–18:00 · !!!</span></span><span class="db-row-clock"><span class="db-quiet">출현 예정</span><span class="db-numeric">16:02:59</span></span></button>
+              <div class="db-row-editor"><label><input type="checkbox" data-custom="purse"> 개별 알림</label><label class="db-minutes"><input type="number" value="5" aria-label="두둑지갑 알림 시간" data-lead="purse" disabled> 분 전</label><button class="db-star" type="button" aria-label="두둑지갑 즐겨찾기" aria-pressed="true" data-star="purse">★</button></div>
+            </article>
+            <article class="db-fish-card" data-fish-card="dragon">
+              <button class="db-fish-main" type="button" data-select-fish="dragon" aria-pressed="false"><span class="db-portrait db-portrait-alt"><i data-lucide="fish" aria-hidden="true"></i></span><span class="db-identity"><span class="db-fish-name">홍룡</span><span class="db-quiet">터주왕 · 홍옥 포대 근해</span><span class="db-quiet">ET 04:00–08:00 · !!!</span></span><span class="db-row-clock"><span class="db-quiet">출현 예정</span><span class="db-numeric">03:16:54</span></span></button>
+              <div class="db-row-editor"><label><input type="checkbox" data-custom="dragon"> 개별 알림</label><label class="db-minutes"><input type="number" value="5" aria-label="홍룡 알림 시간" data-lead="dragon" disabled> 분 전</label><button class="db-star" type="button" aria-label="홍룡 즐겨찾기" aria-pressed="true" data-star="dragon">★</button></div>
+            </article>
+          </div>
+        </aside>
+        <main class="db-detail" aria-label="선택한 어종 상세" aria-live="polite">
+          <div class="db-detail-heading"><span class="db-detail-portrait"><i data-lucide="fish" aria-hidden="true"></i></span><div class="db-detail-identity"><span class="db-eyebrow" data-detail-grade>터주 · 미수집</span><h2 data-detail-name>두둑지갑</h2><span class="db-quiet" data-detail-patch>Patch 7.4</span></div><div class="db-opportunity"><span class="db-quiet">출현 예정</span><span class="db-numeric" data-detail-clock>16:02:59</span><span class="db-quiet" data-detail-period>11.22 10:06–10:12</span></div></div>
+          <div class="db-detail-actions"><button type="button" data-local-tool="map"><i data-lucide="map-pin" aria-hidden="true"></i><span data-detail-location>울라이트 · 만조 현관</span></button><button type="button" data-local-tool="separate"><i data-lucide="square-arrow-out-up-right" aria-hidden="true"></i> 별도 보기</button></div>
+          <section class="db-condition-section"><h3>낚시 조건</h3><div class="db-condition-grid"><div class="db-bait"><span class="db-field-label">미끼</span><span class="db-field-value" data-detail-bait>유령 새우</span><span class="db-stock" data-detail-stock>소지 0개</span><button type="button" data-local-tool="bait">미끼 찾기</button></div><div><span class="db-field-label">낚아채기</span><span class="db-field-value db-hook"><i data-lucide="fish" aria-hidden="true"></i><span data-detail-hook>낚아채기 정보</span></span></div><div><span class="db-field-label">입질</span><span class="db-field-value">!!!</span></div><div><span class="db-field-label">이중 · 삼중</span><span class="db-field-value db-quiet">미확인 · 미확인</span></div></div></section>
+          <section class="db-facts"><div><span class="db-field-label">에오르제아 시간</span><span class="db-field-value db-numeric" data-detail-et>16:00–18:00</span></div><div><span class="db-field-label">날씨</span><span class="db-weather" aria-label="날씨 조건 아이콘"><i data-lucide="cloud" aria-hidden="true"></i><span>→</span><i data-lucide="cloud-rain" aria-hidden="true"></i></span></div></section>
+          <details class="db-disclosure"><summary>전승록</summary><p>어종에 연결된 기존 전승록 정보</p></details>
+          <details class="db-disclosure"><summary>메모 · 캐스팅 타이머 관리</summary><label>메모<textarea aria-label="두둑지갑 메모" rows="2"></textarea></label></details>
+        </main>
+      </div>
+
+    </div>
+  </section>
+  <section data-variant="위아래 구성" aria-label="목록 위에 상세 아래에 둔 배치" hidden>
+    <div class="db-app db-stacked" data-design="stacked" aria-label="DuckbillFisher 즐겨찾기 배치 시안">
+      <header class="db-title"><span>DuckbillFisher</span><span class="db-quiet">즐겨찾기</span><div class="db-tools"><button type="button" data-local-tool="compact"><i data-lucide="list" aria-hidden="true"></i> 간이 목록</button><button type="button" data-local-tool="timer"><i data-lucide="timer" aria-hidden="true"></i> 캐스팅 타이머</button></div></header>
+      <nav class="db-navigation" aria-label="주 메뉴"><span>어종 목록</span><span class="db-current">즐겨찾기 관리</span><span>추천</span><span>출현 일정표</span><span>먼바다 · Beta</span><span>수집 현황</span><span>낚시 기록</span><span>설정</span></nav>
+      <div class="db-local"><div class="db-local-tabs"><span class="db-current">즐겨찾기</span><span>출현 알림 설정</span><span>발송 기록</span></div><span class="db-quiet">2종 · 대기 2 · 발송 0</span></div>
+      <div class="db-workspace">
+        <aside class="db-browser" aria-label="즐겨찾기 어종">
+          <label class="db-search"><i data-lucide="search" aria-hidden="true"></i><input type="search" aria-label="즐겨찾기 검색" placeholder="어종 · 낚시터 · ID 검색" data-search></label>
+          <div class="db-ledger">
+            <article class="db-fish-card db-selected" data-fish-card="purse"><button class="db-fish-main" type="button" data-select-fish="purse" aria-pressed="true"><span class="db-portrait"><i data-lucide="fish" aria-hidden="true"></i></span><span class="db-identity"><span class="db-fish-name">두둑지갑</span><span class="db-quiet">터주 · 만조 현관</span></span><span class="db-row-clock"><span class="db-quiet">시작까지</span><span class="db-numeric">16:02:59</span></span></button><div class="db-row-editor"><label><input type="checkbox" data-custom="purse"> 개별 알림</label><label class="db-minutes"><input type="number" value="5" aria-label="두둑지갑 알림 시간" data-lead="purse" disabled> 분 전</label><button class="db-star" type="button" aria-label="두둑지갑 즐겨찾기" aria-pressed="true" data-star="purse">★</button></div></article>
+            <article class="db-fish-card" data-fish-card="dragon"><button class="db-fish-main" type="button" data-select-fish="dragon" aria-pressed="false"><span class="db-portrait db-portrait-alt"><i data-lucide="fish" aria-hidden="true"></i></span><span class="db-identity"><span class="db-fish-name">홍룡</span><span class="db-quiet">터주왕 · 홍옥 포대 근해</span></span><span class="db-row-clock"><span class="db-quiet">시작까지</span><span class="db-numeric">03:16:54</span></span></button><div class="db-row-editor"><label><input type="checkbox" data-custom="dragon"> 개별 알림</label><label class="db-minutes"><input type="number" value="5" aria-label="홍룡 알림 시간" data-lead="dragon" disabled> 분 전</label><button class="db-star" type="button" aria-label="홍룡 즐겨찾기" aria-pressed="true" data-star="dragon">★</button></div></article>
+          </div>
+        </aside>
+        <main class="db-detail" aria-label="선택한 어종 상세" aria-live="polite">
+          <div class="db-detail-heading"><span class="db-detail-portrait"><i data-lucide="fish" aria-hidden="true"></i></span><div class="db-detail-identity"><span class="db-eyebrow" data-detail-grade>터주 · 미수집</span><h2 data-detail-name>두둑지갑</h2><span class="db-quiet" data-detail-patch>Patch 7.4</span></div><div class="db-opportunity"><span class="db-quiet">출현 예정</span><span class="db-numeric" data-detail-clock>16:02:59</span><span class="db-quiet" data-detail-period>11.22 10:06–10:12</span></div></div>
+          <div class="db-detail-actions"><button type="button" data-local-tool="map"><i data-lucide="map-pin" aria-hidden="true"></i><span data-detail-location>울라이트 · 만조 현관</span></button><button type="button" data-local-tool="separate"><i data-lucide="square-arrow-out-up-right" aria-hidden="true"></i> 별도 보기</button></div>
+          <section class="db-condition-section"><h3>낚시 조건</h3><div class="db-condition-grid"><div class="db-bait"><span class="db-field-label">미끼</span><span class="db-field-value" data-detail-bait>유령 새우</span><span class="db-stock" data-detail-stock>소지 0개</span><button type="button" data-local-tool="bait">미끼 찾기</button></div><div><span class="db-field-label">낚아채기</span><span class="db-field-value db-hook"><i data-lucide="fish" aria-hidden="true"></i><span data-detail-hook>낚아채기 정보</span></span></div><div><span class="db-field-label">입질</span><span class="db-field-value">!!!</span></div><div><span class="db-field-label">이중 · 삼중</span><span class="db-field-value db-quiet">미확인 · 미확인</span></div></div></section>
+          <section class="db-facts"><div><span class="db-field-label">에오르제아 시간</span><span class="db-field-value db-numeric" data-detail-et>16:00–18:00</span></div><div><span class="db-field-label">날씨</span><span class="db-weather" aria-label="날씨 조건 아이콘"><i data-lucide="cloud" aria-hidden="true"></i><span>→</span><i data-lucide="cloud-rain" aria-hidden="true"></i></span></div></section>
+          <details class="db-disclosure"><summary>전승록</summary><p>어종에 연결된 기존 전승록 정보</p></details><details class="db-disclosure"><summary>메모 · 캐스팅 타이머 관리</summary><label>메모<textarea aria-label="두둑지갑 메모" rows="2"></textarea></label></details>
+        </main>
+      </div>
+
+    </div>
+  </section>
+</div>
+<style>
+  #db-layout-preview { --db-bg:#11161d; --db-chrome:#19212b; --db-panel:#1d2733; --db-raised:#283544; --db-field:#131c26; --db-text:#edf2f8; --db-muted:#acbacb; --db-line:#3a495b; --db-focus:#8cbcff; --db-selected:#24384c; --db-star:#e9ca81; --db-error:#f0a49e; }
+  #db-layout-preview [data-variant] { min-height:650px; }
+  #db-layout-preview .db-app { color-scheme:dark; box-sizing:border-box; color:var(--db-text); background:var(--db-bg); border:1px solid var(--db-line); font:400 13px/1.45 "Malgun Gothic",system-ui,sans-serif; min-height:590px; }
+  #db-layout-preview .db-app * { box-sizing:border-box; }
+  #db-layout-preview .db-app [hidden] { display:none !important; }
+  #db-layout-preview .db-app button, #db-layout-preview .db-app input, #db-layout-preview .db-app textarea { font:inherit; color:inherit; }
+  #db-layout-preview .db-title { display:flex; flex-wrap:wrap; align-items:center; gap:10px; padding:6px 10px; background:var(--db-chrome); font-weight:500; }
+  #db-layout-preview .db-quiet, #db-layout-preview .db-field-label, #db-layout-preview .db-eyebrow { color:var(--db-muted); font-weight:400; }
+  #db-layout-preview .db-tools { margin-left:auto; display:flex; flex-wrap:wrap; gap:8px; }
+  #db-layout-preview .db-app button { display:inline-flex; align-items:center; justify-content:center; gap:5px; background:var(--db-raised); border:0; border-radius:3px; padding:4px 7px; }
+  #db-layout-preview .db-app button:hover { background:var(--db-selected); }
+  #db-layout-preview .db-tools button { background:transparent; color:var(--db-muted); padding:0; }
+  #db-layout-preview .db-app svg { flex-shrink:0; width:16px; height:16px; }
+  #db-layout-preview .db-navigation { display:flex; flex-wrap:wrap; gap:0 15px; align-items:center; padding:0 10px; background:var(--db-chrome); border-bottom:1px solid var(--db-line); }
+  #db-layout-preview .db-navigation span { color:var(--db-muted); padding:7px 0 6px; white-space:nowrap; }
+  #db-layout-preview .db-navigation .db-current { color:var(--db-text); box-shadow:inset 0 -2px var(--db-focus); }
+  #db-layout-preview .db-local { display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:5px 12px; padding:8px 12px; }
+  #db-layout-preview .db-local-tabs { display:flex; flex-wrap:wrap; gap:16px; color:var(--db-muted); }
+  #db-layout-preview .db-local-tabs .db-current { color:var(--db-text); font-weight:500; }
+  #db-layout-preview .db-workspace { display:grid; grid-template-columns:minmax(260px,var(--db-list-share,40%)) minmax(0,1fr); gap:12px; padding:0 10px 10px; }
+  #db-layout-preview .db-browser { min-width:0; }
+  #db-layout-preview .db-search { display:flex; align-items:center; gap:6px; background:var(--db-field); border:1px solid var(--db-line); border-radius:3px; padding:4px 7px; margin-bottom:8px; color:var(--db-muted); }
+  #db-layout-preview .db-search input { padding:0; border:0; background:transparent; min-width:0; width:100%; }
+  #db-layout-preview .db-app input::placeholder { color:var(--db-muted); }
+  #db-layout-preview .db-cards { display:grid; gap:var(--db-row-gap,7px); }
+  #db-layout-preview .db-fish-card { background:var(--db-panel); border-radius:4px; position:relative; }
+  #db-layout-preview .db-fish-card.db-selected { background:var(--db-selected); }
+  #db-layout-preview .db-fish-card.db-selected::before { content:""; position:absolute; top:7px; bottom:7px; left:0; width:3px; border-radius:2px; background:var(--db-focus); pointer-events:none; }
+  #db-layout-preview .db-app .db-fish-main { display:grid; grid-template-columns:40px minmax(0,1fr) auto; width:100%; gap:8px; padding:9px 8px; text-align:left; justify-content:stretch; background:transparent; }
+  #db-layout-preview .db-portrait, #db-layout-preview .db-detail-portrait { display:flex; align-items:center; justify-content:center; background:var(--db-raised); color:var(--db-focus); border-radius:4px; height:40px; width:40px; }
+  #db-layout-preview .db-portrait svg { width:26px; height:26px; }
+  #db-layout-preview .db-portrait-alt { color:var(--db-star); }
+  #db-layout-preview .db-identity { display:grid; gap:3px; min-width:0; }
+  #db-layout-preview .db-fish-name { font-weight:500; }
+  #db-layout-preview .db-row-clock { display:grid; gap:4px; text-align:right; align-content:start; }
+  #db-layout-preview .db-row-clock .db-quiet { font-size:11px; }
+  #db-layout-preview .db-numeric { font-variant-numeric:tabular-nums; white-space:nowrap; }
+  #db-layout-preview .db-row-editor { display:flex; flex-wrap:wrap; align-items:center; gap:6px; padding:4px 8px 6px; border-top:1px solid var(--db-line); }
+  #db-layout-preview .db-row-editor label { display:inline-flex; gap:4px; align-items:center; color:var(--db-muted); }
+  #db-layout-preview .db-row-editor input[type="checkbox"] { margin:0; accent-color:var(--db-focus); }
+  #db-layout-preview .db-row-editor input[type="number"] { width:45px; min-width:0; background:var(--db-field); border:0; padding:2px 4px; font-variant-numeric:tabular-nums; }
+  #db-layout-preview .db-row-editor input:disabled { color:var(--db-muted); }
+  #db-layout-preview .db-app .db-star { background:transparent; color:var(--db-star); margin-left:auto; padding:0 3px; }
+  #db-layout-preview .db-star[aria-pressed="false"] { color:var(--db-muted); }
+  #db-layout-preview .db-detail { min-width:0; background:var(--db-panel); padding:10px 12px; border-radius:4px; }
+  #db-layout-preview .db-detail-heading { display:grid; grid-template-columns:48px minmax(0,1fr) auto; align-items:center; gap:10px; padding-bottom:10px; }
+  #db-layout-preview .db-detail-portrait { height:48px; width:48px; }
+  #db-layout-preview .db-detail-portrait svg { width:32px; height:32px; }
+  #db-layout-preview .db-detail-identity { min-width:0; }
+  #db-layout-preview h2 { font-size:17px; font-weight:500; margin:1px 0 2px; }
+  #db-layout-preview .db-eyebrow, #db-layout-preview .db-detail-identity>.db-quiet { font-size:11px; }
+  #db-layout-preview .db-opportunity { display:grid; gap:3px; text-align:right; }
+  #db-layout-preview .db-opportunity>.db-numeric { font-size:17px; font-weight:500; }
+  #db-layout-preview .db-opportunity>.db-quiet { font-size:11px; }
+  #db-layout-preview .db-detail-actions { display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:7px; padding:7px 0; border-top:1px solid var(--db-line); border-bottom:1px solid var(--db-line); }
+  #db-layout-preview .db-detail-actions button { background:transparent; color:var(--db-muted); padding:0; text-align:left; }
+  #db-layout-preview .db-condition-section { margin-top:12px; }
+  #db-layout-preview h3 { font-size:13px; font-weight:500; margin:0 0 9px; }
+  #db-layout-preview .db-condition-grid { display:grid; grid-template-columns:minmax(0,1.3fr) minmax(0,1fr); gap:12px 18px; }
+  #db-layout-preview .db-condition-grid>div, #db-layout-preview .db-facts>div { display:grid; align-content:start; gap:4px; }
+  #db-layout-preview .db-field-label { font-size:11px; }
+  #db-layout-preview .db-field-value { font-weight:500; overflow-wrap:anywhere; }
+  #db-layout-preview .db-stock { color:var(--db-error); font-size:11px; }
+  #db-layout-preview .db-stock.db-stock-unknown { color:var(--db-muted); }
+  #db-layout-preview .db-bait button { justify-self:start; }
+  #db-layout-preview .db-hook { display:flex; align-items:center; gap:6px; }
+  #db-layout-preview .db-facts { display:grid; grid-template-columns:1.3fr 1fr; gap:18px; border-top:1px solid var(--db-line); padding-top:10px; margin:12px 0 10px; }
+  #db-layout-preview .db-weather { display:flex; align-items:center; gap:7px; color:var(--db-muted); }
+  #db-layout-preview .db-disclosure { border-top:1px solid var(--db-line); padding:7px 0; color:var(--db-muted); }
+  #db-layout-preview .db-disclosure summary { font-size:12px; }
+  #db-layout-preview .db-disclosure p { margin:7px 0; }
+  #db-layout-preview .db-disclosure label { display:grid; gap:5px; margin-top:7px; }
+  #db-layout-preview .db-app textarea { width:100%; resize:vertical; background:var(--db-field); border:1px solid var(--db-line); }
+  #db-layout-preview .db-tool-result { min-height:20px; margin:0 10px 7px; color:var(--db-muted); font-size:11px; }
+  #db-layout-preview .db-stacked .db-workspace { display:flex; flex-direction:column; }
+  #db-layout-preview .db-stacked .db-ledger { display:grid; gap:2px; }
+  #db-layout-preview .db-stacked .db-fish-card { display:grid; grid-template-columns:minmax(0,1fr) auto; border-radius:0; }
+  #db-layout-preview .db-stacked .db-fish-main { padding:6px 9px; grid-template-columns:32px minmax(0,1fr) auto; }
+  #db-layout-preview .db-stacked .db-portrait { width:32px; height:32px; }
+  #db-layout-preview .db-stacked .db-row-editor { border-top:0; border-left:1px solid var(--db-line); padding:6px 10px; }
+  #db-layout-preview .db-stacked .db-condition-grid { grid-template-columns:1.5fr 1fr .7fr 1fr; }
+  #db-layout-preview .db-stacked .db-facts { grid-template-columns:1fr 1fr; }
+  @media(max-width:720px) { #db-layout-preview .db-workspace { grid-template-columns:1fr; } #db-layout-preview .db-title { gap:5px 10px; } #db-layout-preview .db-tools { width:100%; margin:0; } #db-layout-preview .db-navigation { gap:0 11px; } #db-layout-preview .db-stacked .db-condition-grid { grid-template-columns:1fr 1fr; } #db-layout-preview [data-variant] { min-height:1050px; } }
+  @media(max-width:440px) { #db-layout-preview .db-fish-main { grid-template-columns:32px minmax(0,1fr); } #db-layout-preview .db-portrait { height:32px; width:32px; } #db-layout-preview .db-row-clock { grid-column:2; display:flex; text-align:left; gap:7px; } #db-layout-preview .db-detail-heading { grid-template-columns:40px minmax(0,1fr); } #db-layout-preview .db-detail-portrait { height:40px; width:40px; } #db-layout-preview .db-opportunity { grid-column:2; display:flex; flex-wrap:wrap; gap:5px 8px; text-align:left; } #db-layout-preview .db-stacked .db-fish-card { grid-template-columns:1fr; } #db-layout-preview .db-stacked .db-row-editor { border-left:0; border-top:1px solid var(--db-line); } #db-layout-preview .db-stacked .db-fish-main { grid-template-columns:32px minmax(0,1fr); } }
+</style>
+<script>
+(() => {
+  const root = document.getElementById('db-layout-preview');
+  const fish = {
+    purse: { name:'두둑지갑', grade:'터주 · 미수집', patch:'Patch 7.4', location:'울라이트 · 만조 현관', clock:'16:02:59', period:'11.22 10:06–10:12', et:'16:00–18:00', bait:'유령 새우', stock:'소지 0개', hook:'낚아채기 정보' },
+    dragon: { name:'홍룡', grade:'터주왕 · 미수집', patch:'', location:'홍옥 포대 근해', clock:'03:16:54', period:'', et:'04:00–08:00', bait:'미확인', stock:'소지 수량 미확인', hook:'미확인' }
+  };
+  const state = { split:'purse', stacked:'purse', listShare:40, rowGap:7 };
+  const notes = {split:{purse:'',dragon:''},stacked:{purse:'',dragon:''}};
+  const widget = window.openai && window.openai.widgetState;
+  const saved = widget && (widget.privateContent || widget);
+  if (saved && typeof saved === 'object') {
+    for (const design of ['split','stacked']) if (Object.hasOwn(fish,saved[design])) state[design] = saved[design];
+  }
+  function paint(app) {
+    const data = fish[state[app.dataset.design]];
+    for (const field of ['name','grade','patch','location','clock','period','et','bait','stock','hook']) app.querySelector('[data-detail-' + field + ']').textContent = data[field];
+    for (const item of app.querySelectorAll('[data-fish-card]')) {
+      const selected = item.dataset.fishCard === state[app.dataset.design];
+      item.classList.toggle('db-selected', selected);
+      item.querySelector('[data-select-fish]').setAttribute('aria-pressed', String(selected));
+    }
+    app.querySelector('textarea').setAttribute('aria-label', data.name + ' 메모');
+    app.querySelector('textarea').value = notes[app.dataset.design][state[app.dataset.design]];
+    app.querySelector('[data-detail-stock]').classList.toggle('db-stock-unknown',state[app.dataset.design] === 'dragon');
+  }
+  function persist(design) {
+    if (window.openai && window.openai.setWidgetState) window.openai.setWidgetState({ modelContent:{layout:design,selectedFish:fish[state[design]].name},privateContent:{split:state.split,stacked:state.stacked} }).catch(() => {});
+  }
+  for (const app of root.querySelectorAll('[data-design]')) {
+    paint(app);
+    app.addEventListener('click', event => {
+      const select = event.target.closest('[data-select-fish]');
+      if (select) { state[app.dataset.design] = select.dataset.selectFish; paint(app); persist(app.dataset.design); }
+      const star = event.target.closest('[data-star]');
+      if (star) { const active = star.getAttribute('aria-pressed') === 'true'; star.setAttribute('aria-pressed',String(!active)); star.textContent = active ? '☆' : '★'; }
+    });
+    app.addEventListener('change', event => {
+      if (event.target.matches('[data-custom]')) app.querySelector('[data-lead="' + event.target.dataset.custom + '"]').disabled = !event.target.checked;
+    });
+    app.querySelector('[data-search]').addEventListener('input', event => {
+      const term = event.target.value.trim();
+      for (const item of app.querySelectorAll('[data-fish-card]')) item.hidden = !!term && !item.querySelector('.db-identity').textContent.includes(term);
+    });
+    app.querySelector('textarea').addEventListener('input',event => { notes[app.dataset.design][state[app.dataset.design]] = event.target.value; });
+  }
+  window.addEventListener('openai:set_globals',event => {
+    const widgetState = event.detail && event.detail.globals && event.detail.globals.widgetState;
+    const restored = widgetState && (widgetState.privateContent || widgetState);
+    if (!restored || typeof restored !== 'object') return;
+    for (const design of ['split','stacked']) if (Object.hasOwn(fish,restored[design])) state[design] = restored[design];
+    for (const app of root.querySelectorAll('[data-design]')) paint(app);
+  });
+  function applySpacing() { root.querySelector('.db-split').style.setProperty('--db-list-share', state.listShare + '%'); root.style.setProperty('--db-row-gap', state.rowGap + 'px'); }
+  applySpacing();
+  if (globalThis.Tweak) {
+    const tweak = new Tweak({container:root.querySelector('.db-split'),onChange:applySpacing});
+    tweak.addSlider(state,'listShare',{label:'목록 폭',min:34,max:48,step:2,unit:'%',reference:'db.list-share'});
+    tweak.addSlider(state,'rowGap',{label:'행 사이',min:3,max:9,step:1,unit:'px',reference:'db.row-gap'});
+  }
+})();
+</script>

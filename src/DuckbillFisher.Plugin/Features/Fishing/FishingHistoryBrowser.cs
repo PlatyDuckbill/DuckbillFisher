@@ -25,7 +25,7 @@ internal sealed class FishingHistoryBrowser(FishingTracker tracker, FishCatalog 
             UiWidgets.Tooltip(UiText.Get(T.TripActiveProtected));
             Diagnostics(developerMode);
             ImGui.TextWrapped(Location(view, selected));
-            ImGui.TextColored(new Vector4(.58f, .82f, .92f, 1), UiText.Get(T.TripTotalDuration,
+            UiWidgets.TextColored(UiThemeScope.Current is not null ? UiThemeColors.Information : new Vector4(.58f, .82f, .92f, 1), UiText.Get(T.TripTotalDuration,
                 FishingTimeText.TripDuration(selected, view, tracker.Now)));
             UiWidgets.Tooltip(UiText.Get(T.TripDurationHint));
             ImGui.TextWrapped(Summary(selected));
@@ -101,8 +101,10 @@ internal sealed class FishingHistoryBrowser(FishingTracker tracker, FishCatalog 
             ImGui.TableNextColumn(); ImGui.TextUnformatted(FishingTimeText.TripDuration(trip, view, tracker.Now));
             UiWidgets.Tooltip(UiText.Get(T.TripDurationHint));
             ImGui.TableNextColumn(); ImGui.TextUnformatted(trip.Casts.ToString(UiText.Culture));
-            ImGui.TableNextColumn(); ImGui.TextColored(new Vector4(.55f, .84f, .66f, 1), trip.Caught.ToString(UiText.Culture));
-            ImGui.TableNextColumn(); ImGui.TextColored(trip.IsActive ? new Vector4(.58f, .78f, .94f, 1) : new Vector4(.7f, .72f, .76f, 1),
+            ImGui.TableNextColumn(); UiWidgets.TextColored(UiThemeScope.Current is not null ? UiThemeColors.Positive : new Vector4(.55f, .84f, .66f, 1), trip.Caught.ToString(UiText.Culture));
+            ImGui.TableNextColumn(); UiWidgets.TextColored(UiThemeScope.Current is not null
+                    ? trip.IsActive ? UiThemeColors.Information : UiThemeColors.Secondary
+                    : trip.IsActive ? new Vector4(.58f, .78f, .94f, 1) : new Vector4(.7f, .72f, .76f, 1),
                 UiText.Get(trip.IsActive ? T.TripInProgress : T.TripEnded));
             ImGui.PopID();
         }
