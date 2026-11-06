@@ -13,10 +13,14 @@
 
 - ZIP `artifacts/share/0.9.0.0-rc2/DuckbillFisher-0.9.0.0.zip`:711,608바이트, SHA256 `536DB092BE1F8B5DEE6C6D651DE502DE838A946F31C22CAD1EF8AEBE6418C84B`.
 - 추출 DLL `DUCKBILL_ROOT/.cache/release-validation/0.9.0.0-rc2/DuckbillFisher.dll`: SHA256 `722EE5DF3BC4AEA0AA5D9B4521BC923DE4195F169C28C6C5E3F74D1157636D87`.
-- 후보를 다시 빌드하거나 덮어쓰지 않는다. 소스 커밋·Plogon·태그/Release·익명 자산·설치 JSON/공용 raw는 진행 결과를 아래에 기록한다. Release 공개 후 설치 목록을 갱신하는 단계다.
+- 후보를 다시 빌드하거나 덮어쓰지 않는다. 소스 커밋·Plogon·태그/Release·익명 자산·설치 JSON/공용 raw 확인 결과는 아래와 같다.
 
 - 사용자 요청으로 업데이트 내역을 사용자 동선 순서로 다시 다듬어 최종 후보를 rc2 경로에 별도로 준비했다. 앞선 후보는 게시하지 않았으며 원본을 덮어쓰지 않았다. 영어7문장의 내장 리소스/manifest/릴리스 요약 완전 일치와 대응 한국어를 확인했다.
 
 - 소스 커밋55a88255a85a761999220b3c8e292cacbcc5f9f6을 push하고 Plogon run42219256709의 성공을 확인한 뒤 같은 SHA에 v0.9.0.0 태그를 게시했다.
 - [Release](https://github.com/PlatyDuckbill/DuckbillFisher/releases/tag/v0.9.0.0) ID436487263을2026-11-06T12:40:54Z에 공개했다. 초안에 올린 ZIP/체크섬의 서버 digest·크기를 대조한 뒤 공개했다.
-- 익명 ZIP·체크섬·태그 아이콘은 모두HTTP200/원본 SHA256 일치다. 설치 목록 갱신 전 공용 raw의 DuckbillTweak0.2.0.4 항목을 별도 보관했다. 확인 후에만 후보release.json을 원본repo/release.json에 반영한다.
+- 익명 ZIP·체크섬·태그 아이콘은 모두HTTP200/원본 SHA256 일치다. 설치 목록 갱신 전 공용 raw의 DuckbillTweak0.2.0.4 항목을 별도 보관했다. 익명 확인 후 후보release.json을 원본repo/release.json에 반영했다.
+
+- 설치 목록 커밋1744e388ead2a5a97d6a9cc156a87d65dc5694ad을 push한 뒤 Plogon run42219793413도 성공했다. DuckbillRepo sync.yml run42219794690 수동 동기화 성공, 공용 저장소 커밋74ad49f380a2da1af65e27ec664d329f55f51439이다.
+- **2026-11-06T12:47:07Z**, 실제 공유 URL https://raw.githubusercontent.com/PlatyDuckbill/DuckbillRepo/main/pluginmaster.json 의 일반 GET에서HTTP200/0.9.0.0을 확인했다. 후보 설치 JSON의 모든 필드(API·주소·아이콘·7개 안내 포함)가 같고 DuckbillTweak0.2.0.4 전체 필드는 동기화 전과 같다. 동기화 직후0.8.0.0 캐시를 관찰했고 재검증 후 같은 URL의 일반 응답까지 확인했다. 쿼리 우회 URL만으로 완료하지 않았다.
+- 실제 Dalamud 설치 업데이트와 이 고정 산출물의 인게임 기능 확인은 사용자 지시대로 배포 후 확인 대기다.
