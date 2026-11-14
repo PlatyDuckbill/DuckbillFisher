@@ -10,6 +10,8 @@ namespace DuckbillFisher.Plugin;
 internal sealed class MainWindow : Window
 {
     private static readonly T[] Markers = [T.MarkCast, T.MarkWait, T.MarkBite, T.MarkHook, T.MarkRetrieve, T.MarkEnd, T.MarkMooch, T.MarkMove, T.MarkLogout];
+    private static readonly T[] NavigationLabels = [T.TabCatalog, T.TabAlerts, T.RecommendationTitle, T.ScheduleTitle,
+        T.OceanBetaTitle, T.TabCollectionProgress, T.TabHistory, T.TabSettings, T.TabGuide, T.TabFishing];
     private static readonly string[] LanguageNames = [UiText.Get(T.Korean), UiText.Get(T.English)];
     private readonly FishingActivityProbe observer;
     private readonly FishGuideDiagnostics fishGuide;
@@ -133,6 +135,14 @@ internal sealed class MainWindow : Window
         var timerWidth = iconWidth + ImGui.CalcTextSize(timer).X + padding.X * 2;
         var spacing = ImGui.GetStyle().ItemSpacing.X;
         var available = ImGui.GetContentRegionAvail().X;
+        var tabPadding = NavigationTabPadding();
+        var labelsWidth = 0f;
+        var labelCount = developerMode ? NavigationLabels.Length : NavigationLabels.Length - 2;
+        for (var i = 0; i < labelCount; i++)
+            labelsWidth += ImGui.CalcTextSize(tabPadding + UiText.Get(NavigationLabels[i])).X + padding.X * 2;
+        labelsWidth += ImGui.GetStyle().ItemInnerSpacing.X * (labelCount - 1);
+        var showShortcutLabels = labelsWidth + compactWidth + timerWidth + spacing * 2 <= available;
+        if (!showShortcutLabels) compactWidth = timerWidth = iconWidth;
         var themed = UiThemeScope.Current is { };
         if (themed)
         {
@@ -150,34 +160,45 @@ internal sealed class MainWindow : Window
         if (ImGui.BeginChild("MainNavigationTabs", new Vector2(tabWidth, ImGui.GetFrameHeightWithSpacing()), false,
             ImGuiWindowFlags.NoScrollbar | ImGuiWindowFlags.NoScrollWithMouse))
         {
-            // A live ImGui context can retain the previous tab order across plugin reloads.
-            // Use a stable ID for this menu order instead of reusing the old tab-bar state.
-            if (ImGui.BeginTabBar("MainNavigation.OceanBeta", ImGuiTabBarFlags.FittingPolicyScroll))
+            var io = ImGui.GetIO();
+            var horizontalWheel = io.MouseWheelH;
+            // The tab bar already handles horizontal wheel input, arrows and selection visibility.
+            // Forward vertical wheel only while this header child is hovered, and restore shared IO
+            // before drawing shortcuts/body content. No tab selection or global input mapping changes.
+            if (ImGui.IsWindowHovered() && horizontalWheel == 0)
+                io.MouseWheelH = io.MouseWheel;
+            try
             {
-                NavigationTab(MainPage.Catalog, T.TabCatalog, "CatalogTab", FontAwesomeIcon.Fish);
-                NavigationTab(MainPage.Alerts, T.TabAlerts, "SpawnAlertsTab", FontAwesomeIcon.Star);
-                NavigationTab(MainPage.Recommendations, T.RecommendationTitle, "RecommendationsTab", FontAwesomeIcon.Compass);
-                NavigationTab(MainPage.Schedule, T.ScheduleTitle, "SpawnScheduleTab", FontAwesomeIcon.CalendarAlt);
-                NavigationTab(MainPage.Ocean, T.OceanBetaTitle, "OceanBetaTab", FontAwesomeIcon.Ship);
-                NavigationTab(MainPage.Collection, T.TabCollectionProgress, "CollectionProgressTab", FontAwesomeIcon.ChartBar);
-                NavigationTab(MainPage.History, T.TabHistory, "FishingHistoryTab", FontAwesomeIcon.History);
-                NavigationTab(MainPage.Settings, T.TabSettings, "SettingsTab", FontAwesomeIcon.Cog, selectSettings);
-                if (developerMode)
+                // A live ImGui context can retain the previous tab order across plugin reloads.
+                // Use a stable ID for this menu order instead of reusing the old tab-bar state.
+                if (ImGui.BeginTabBar("MainNavigation.OceanBeta", ImGuiTabBarFlags.FittingPolicyScroll))
                 {
-                    NavigationTab(MainPage.Guide, T.TabGuide, "GuideTab", FontAwesomeIcon.BookOpen);
-                    NavigationTab(MainPage.Fishing, T.TabFishing, "FishingTab", FontAwesomeIcon.Search);
+                    NavigationTab(MainPage.Catalog, T.TabCatalog, "CatalogTab", FontAwesomeIcon.Fish);
+                    NavigationTab(MainPage.Alerts, T.TabAlerts, "SpawnAlertsTab", FontAwesomeIcon.Star);
+                    NavigationTab(MainPage.Recommendations, T.RecommendationTitle, "RecommendationsTab", FontAwesomeIcon.Compass);
+                    NavigationTab(MainPage.Schedule, T.ScheduleTitle, "SpawnScheduleTab", FontAwesomeIcon.CalendarAlt);
+                    NavigationTab(MainPage.Ocean, T.OceanBetaTitle, "OceanBetaTab", FontAwesomeIcon.Ship);
+                    NavigationTab(MainPage.Collection, T.TabCollectionProgress, "CollectionProgressTab", FontAwesomeIcon.ChartBar);
+                    NavigationTab(MainPage.History, T.TabHistory, "FishingHistoryTab", FontAwesomeIcon.History);
+                    NavigationTab(MainPage.Settings, T.TabSettings, "SettingsTab", FontAwesomeIcon.Cog, selectSettings);
+                    if (developerMode)
+                    {
+                        NavigationTab(MainPage.Guide, T.TabGuide, "GuideTab", FontAwesomeIcon.BookOpen);
+                        NavigationTab(MainPage.Fishing, T.TabFishing, "FishingTab", FontAwesomeIcon.Search);
+                    }
+                    ImGui.EndTabBar();
+                    selectSettings = false;
                 }
-                ImGui.EndTabBar();
-                selectSettings = false;
             }
+            finally { io.MouseWheelH = horizontalWheel; }
         }
         ImGui.EndChild();
         if (themed) ImGui.PopStyleColor(6);
         ImGui.SameLine(0, spacing);
-        if (Shortcut(FontAwesomeIcon.List, compact, "OpenCompactWindow", compactWidth)) ShowCompact?.Invoke();
+        if (Shortcut(FontAwesomeIcon.List, showShortcutLabels ? compact : "", "OpenCompactWindow", compactWidth)) ShowCompact?.Invoke();
         UiWidgets.Tooltip(UiText.Get(T.OpenCompactWindow));
         ImGui.SameLine();
-        if (Shortcut(FontAwesomeIcon.Stopwatch, timer, "OpenTimer", timerWidth)) ShowTimer?.Invoke();
+        if (Shortcut(FontAwesomeIcon.Stopwatch, showShortcutLabels ? timer : "", "OpenTimer", timerWidth)) ShowTimer?.Invoke();
         UiWidgets.Tooltip(timer);
     }
 
@@ -186,8 +207,7 @@ internal sealed class MainWindow : Window
         // Reserve icon space using the text font, then draw the glyph with the existing icon font.
         // The translated label, fixed tab ID, tab selection and native overflow scrolling remain intact.
         var fontSize = ImGui.GetFontSize();
-        var gap = fontSize + ImGui.GetStyle().ItemInnerSpacing.X;
-        var padding = new string(' ', Math.Max(1, (int)MathF.Ceiling(gap / Math.Max(1, ImGui.CalcTextSize(" ").X))));
+        var padding = NavigationTabPadding();
         var theme = UiThemeScope.Current;
         var accent = theme is not null ? UiThemeDecorations.NavigationAccent : Vector4.Zero;
         if (theme is not null) ImGui.PushStyleColor(ImGuiCol.Text, selectedPage == page || select ? theme.Text : theme.Muted);
@@ -221,6 +241,12 @@ internal sealed class MainWindow : Window
         }
     }
 
+    private static string NavigationTabPadding()
+    {
+        var gap = ImGui.GetFontSize() + ImGui.GetStyle().ItemInnerSpacing.X;
+        return new string(' ', Math.Max(1, (int)MathF.Ceiling(gap / Math.Max(1, ImGui.CalcTextSize(" ").X))));
+    }
+
     private static Vector4 NavigationIconColor(MainPage page)
     {
         var role = page switch
@@ -246,12 +272,14 @@ internal sealed class MainWindow : Window
         bool clicked;
         try { clicked = ImGui.Button($"###{id}", new Vector2(width, ImGui.GetFrameHeight())); }
         finally { if (theme is not null) ImGui.PopStyleColor(3); }
-        var origin = ImGui.GetItemRectMin() + ImGui.GetStyle().FramePadding;
+        var origin = ImGui.GetItemRectMin() + (label.Length == 0
+            ? (ImGui.GetItemRectSize() - new Vector2(ImGui.GetFontSize())) / 2
+            : ImGui.GetStyle().FramePadding);
         var draw = ImGui.GetWindowDrawList();
         var color = theme is not null ? ImGui.GetColorU32(ImGui.IsItemHovered() ? theme.Text : theme.Muted)
             : ImGui.GetColorU32(ImGuiCol.Text);
         draw.AddText(UiBuilder.IconFont, ImGui.GetFontSize(), origin, color, icon.ToIconString());
-        draw.AddText(origin + new Vector2(ImGui.GetFrameHeight(), 0), color, label);
+        if (label.Length > 0) draw.AddText(origin + new Vector2(ImGui.GetFrameHeight(), 0), color, label);
         return clicked;
     }
 
