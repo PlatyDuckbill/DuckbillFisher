@@ -872,12 +872,6 @@ Click to show a map pin.</value></data>
   <data name="ScheduleCalendarDateHint" xml:space="preserve"><value>{0:yyyy-MM-dd} · {1} fish
 Click for the full list of intervals below.</value></data>
   <data name="ScheduleCalendarTime" xml:space="preserve"><value>Time</value></data>
-  <data name="ChangelogScheduleFeatureTitle" xml:space="preserve"><value>New feature · Spawn schedule</value></data>
-  <data name="ChangelogScheduleFeatureSummary" xml:space="preserve"><value>Plan your next fishing target by time. Open Spawn schedule from the main view and switch between a compact timeline and a monthly calendar.</value></data>
-  <data name="ChangelogScheduleTargets" xml:space="preserve"><value>Switch between Timeline and Monthly calendar. Search favorites or filtered fish, hide caught fish, and toggle Fish Eyes with its toolbar icon. Hover over an interval to automatically highlight shared time on other fish.</value></data>
-  <data name="ChangelogScheduleTimeline" xml:space="preserve"><value>The timeline starts at 3 hours, with 1, 3, 6, 12 and 24-hour views. Compact rows show fish icons and locations; hover over an interval for exact times or click to open fish details.</value></data>
-  <data name="ChangelogScheduleCalendar" xml:space="preserve"><value>The month view previews spawn time and fish name on each date. Click a day for all its intervals, drag the divider to resize the list, or hide it for a larger calendar.</value></data>
-  <data name="ChangelogScheduleDetails" xml:space="preserve"><value>Use map pins and fish-details buttons directly from schedule entries. Baits, weather and other conditions stay in fish details.</value></data>
   <data name="ScheduleTimelineHint" xml:space="preserve"><value>Spawns along a time axis</value></data>
   <data name="ScheduleMonthHint" xml:space="preserve"><value>Spawns by date</value></data>
   <data name="ScheduleTrackTooltip" xml:space="preserve"><value>{0}
@@ -1190,4 +1184,7 @@ Shares duplicate prevention with zero-minute favorite alerts and uses the channe
   <data name="ChangelogOceanBeta" xml:space="preserve"><value>Use the new Ocean Fishing Beta tab to check departures, your current route, area time remaining and basic baits.</value></data>
   <data name="ChangelogOceanCandidates" xml:space="preserve"><value>Narrow Ocean Fishing lists by time, weather and Intuition conditions while keeping unconfirmed fish visible.</value></data>
   <data name="ChangelogFishingLogOrder" xml:space="preserve"><value>Browse fish at each fishing hole in the in-game Fishing Log order.</value></data>
+  <data name="ChangelogUndiscoveredMap" xml:space="preserve"><value>Click an undiscovered fishing hole in the Fishing Log to see its location on the map.</value></data>
+  <data name="ChangelogMenuWheel" xml:space="preserve"><value>Scroll the top menu horizontally with the mouse wheel.</value></data>
+  <data name="ChangelogCompactShortcuts" xml:space="preserve"><value>See more menu tabs in narrow layouts with compact icons for the quick list and casting timer shortcuts.</value></data>
 </root>

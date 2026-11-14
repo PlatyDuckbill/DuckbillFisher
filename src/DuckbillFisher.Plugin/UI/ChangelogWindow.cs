@@ -15,6 +15,12 @@ internal sealed class ChangelogWindow : Window
     // Keep the confirmed candidate unchanged when it is published.
     private static readonly ReleaseNotes[] PublishedReleases =
     [
+        new(new(0, 10, 0, 0),
+        [
+            (FontAwesomeIcon.MapMarkerAlt, T.ChangelogUndiscoveredMap),
+            (FontAwesomeIcon.ArrowsAltH, T.ChangelogMenuWheel),
+            (FontAwesomeIcon.CompressArrowsAlt, T.ChangelogCompactShortcuts),
+        ], new DateTimeOffset(2026, 11, 14, 23, 35, 8, TimeSpan.Zero)),
         new(new(0, 9, 0, 0),
         [
             (FontAwesomeIcon.Ship, T.ChangelogOceanBeta),
@@ -94,14 +100,6 @@ internal sealed class ChangelogWindow : Window
             (FontAwesomeIcon.Filter, T.ChangelogUpcomingTimeRange),
             (FontAwesomeIcon.Eraser, T.ChangelogEmptyTimeFilters),
         ], new DateTimeOffset(2026, 10, 21, 16, 22, 12, TimeSpan.Zero)),
-        new(new(0, 5, 0, 0),
-        [
-            (FontAwesomeIcon.Filter, T.ChangelogScheduleTargets),
-            (FontAwesomeIcon.Clock, T.ChangelogScheduleTimeline),
-            (FontAwesomeIcon.CalendarAlt, T.ChangelogScheduleCalendar),
-            (FontAwesomeIcon.MapMarkerAlt, T.ChangelogScheduleDetails),
-        ], new DateTimeOffset(2026, 10, 20, 19, 1, 36, TimeSpan.Zero),
-            T.ChangelogScheduleFeatureTitle, T.ChangelogScheduleFeatureSummary, FeatureIcon: FontAwesomeIcon.CalendarAlt),
     ];
     private readonly ReleaseNotes[] releases = PublishedReleases.Where(release => release.Version <= CurrentVersion).Take(10).ToArray();
     private readonly FishPreferences preferences;
