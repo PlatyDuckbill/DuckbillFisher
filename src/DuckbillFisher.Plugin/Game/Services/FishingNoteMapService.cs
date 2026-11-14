@@ -99,7 +99,7 @@ internal sealed class FishingNoteMapService : IDisposable
     {
         var sample = last;
         return string.Create(CultureInfo.InvariantCulture,
-            $"FishingNoteMap/v1: LastState={sample.State}; Check={sample.Check}; Clicks={clicks}; IndexLoaded={indexLoaded}; Areas={areas.Count}; SpotId={sample.SpotId}; AreaId={sample.AreaId}; Ordinal={sample.Ordinal}; Flags={sample.Flags}; ItemCount={sample.ItemCount}");
+            $"FishingNoteMap/v2: LastState={sample.State}; Check={sample.Check}; Clicks={clicks}; IndexLoaded={indexLoaded}; Areas={areas.Count}; SpotId={sample.SpotId}; AreaId={sample.AreaId}; Ordinal={sample.Ordinal}; Flags={sample.Flags}; ItemCount={sample.ItemCount}; ComponentNodes={sample.ComponentNodes}; ComponentCapacity={sample.ComponentCapacity}; ComponentKind={sample.ComponentKind}");
     }
 
     public void Dispose()

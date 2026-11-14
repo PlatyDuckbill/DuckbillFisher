@@ -14,7 +14,8 @@ internal enum FishingNoteMapState
 }
 
 internal sealed record FishingNoteMapReading(FishingNoteMapState State, uint SpotId = 0,
-    uint AreaId = 0, int Ordinal = -1, uint Flags = 0, int ItemCount = 0, string Check = "");
+    uint AreaId = 0, int Ordinal = -1, uint Flags = 0, int ItemCount = 0, string Check = "",
+    int ComponentNodes = 0, int ComponentCapacity = 0, int ComponentKind = -1);
 
 /// <summary>Reads only within the borrowed FishingNote receive-event lifetime. Never writes UI or invokes callbacks.</summary>
 internal sealed class NativeFishingNoteReader(IGameGui gui, IFramework framework)
@@ -34,16 +35,33 @@ internal sealed class NativeFishingNoteReader(IGameGui gui, IFramework framework
         // FishingNoteBook.uld: node 13 is the fishing-hole tree list (node 10 is the region list).
         // Find it in the current owner's node list, without calling a native node getter.
         AtkComponentTreeList* tree = null;
+        var componentNodes = 0;
+        var componentCapacity = 0;
+        var componentKind = -1;
         for (var i = 0; i < addon->UldManager.NodeListCount; i++)
         {
             var node = addon->UldManager.NodeList[i];
             if (node == null || node->NodeId != 13) continue;
             if ((uint)node->Type != 1025) return new(FishingNoteMapState.UnsupportedShape, Check: "TreeNodeType");
             var component = ((AtkComponentNode*)node)->Component;
-            if (component == null || component->UldManager.NodeList == null ||
-                component->UldManager.NodeListCount is < 7 or > 16 || component->UldManager.Objects == null ||
-                ((AtkUldComponentInfo*)component->UldManager.Objects)->ComponentType != ComponentType.TreeList)
-                return new(FishingNoteMapState.UnsupportedShape, Check: "TreeComponent");
+            if (component == null) return new(FishingNoteMapState.UnsupportedShape, Check: "TreeComponentMissing");
+            var manager = component->UldManager;
+            componentNodes = manager.NodeListCount;
+            componentCapacity = manager.NodeListSize;
+            if (manager.BaseType == AtkUldManagerBaseType.Component && manager.Objects != null)
+                componentKind = (int)((AtkUldComponentInfo*)manager.Objects)->ComponentType;
+            FishingNoteMapReading ShapeFailure(string check) => new(FishingNoteMapState.UnsupportedShape,
+                Check: check, ComponentNodes: componentNodes, ComponentCapacity: componentCapacity, ComponentKind: componentKind);
+            // A live list duplicates renderers; its node count is not the seven-node ULD template count.
+            // Check the running allocation and owner/type instead of imposing a template-derived ceiling.
+            if (manager.NodeList == null || componentNodes == 0 || componentNodes > componentCapacity)
+                return ShapeFailure("TreeNodeCapacity");
+            if (manager.BaseType != AtkUldManagerBaseType.Component || manager.Objects == null)
+                return ShapeFailure("TreeComponentInfo");
+            if (componentKind != (int)ComponentType.TreeList)
+                return ShapeFailure("TreeComponentKind");
+            if (component->OwnerNode != (AtkComponentNode*)node)
+                return ShapeFailure("TreeComponentOwner");
             tree = (AtkComponentTreeList*)component;
             break;
         }
@@ -67,7 +85,8 @@ internal sealed class NativeFishingNoteReader(IGameGui gui, IFramework framework
         var areaId = binding >> 16;
         var ordinal = (int)(binding & 0xFFFF);
         var flags = item->UIntValues[2];
-        FishingNoteMapReading Result(FishingNoteMapState state, uint id = 0, string check = "") => new(state, id, areaId, ordinal, flags, count, check);
+        FishingNoteMapReading Result(FishingNoteMapState state, uint id = 0, string check = "") =>
+            new(state, id, areaId, ordinal, flags, count, check, componentNodes, componentCapacity, componentKind);
         var agentHandle = gui.GetAgentById((int)AgentId.FishingNote);
         if (agentHandle.IsNull) return Result(FishingNoteMapState.NotOpen);
         var agent = (AgentFishingNote*)agentHandle.Address;

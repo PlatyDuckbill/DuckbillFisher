@@ -228,6 +228,7 @@ $groups = [ordered]@{
         'FFXIVClientStructs.FFXIV.Component.GUI.AtkUIColorHolder',
         'FFXIVClientStructs.FFXIV.Component.GUI.AtkUnitBase',
         'FFXIVClientStructs.FFXIV.Component.GUI.AtkUldManager',
+        'FFXIVClientStructs.FFXIV.Component.GUI.AtkUldManagerBaseType',
         'FFXIVClientStructs.FFXIV.Component.GUI.AtkUldObjectInfo',
         'FFXIVClientStructs.FFXIV.Component.GUI.AtkUldComponentInfo',
         'FFXIVClientStructs.FFXIV.Component.GUI.ComponentType',

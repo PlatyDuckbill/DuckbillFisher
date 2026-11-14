@@ -244,7 +244,7 @@ internal sealed class FishGuideDiagnostics : IDisposable
         {
             var report = new StringBuilder();
             void AppendInvariant(FormattableString line) => report.AppendLine(FormattableString.Invariant(line));
-            report.AppendLine("DuckbillFisher ENV-03/fish-guide-native/v5");
+            report.AppendLine("DuckbillFisher ENV-03/fish-guide-native/v6");
             AppendInvariant($"Plugin: {typeof(Plugin).Assembly.GetName().Version}; Dalamud: {typeof(IPlayerState).Assembly.GetName().Version}");
             AppendInvariant($"Session: {view.Session}; sampled: {view.HasSample}; IsLoggedIn={view.IsLoggedIn}; IsLoaded={view.IsLoaded?.ToString() ?? "not sampled"}");
             AppendInvariant($"FishGuide2={view.FishGuideVisible}; FishingNote={view.FishingNoteVisible}; loginFallback={view.LoginFallback}");
