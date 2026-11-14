@@ -1,6 +1,6 @@
 # 세션 인수인계
 
-갱신: 2026-11-06. 현재 사실/확인 대기는 [STATUS](STATUS.md), 버전별 근거는 [검증 색인](verification/README.md)에 둔다.
+갱신: 2026-11-15. 현재 사실/확인 대기는 [STATUS](STATUS.md), 버전별 근거는 [검증 색인](verification/README.md)에 둔다.
 
 ## 재개 순서
 
@@ -20,15 +20,15 @@
 |---|---|
 | 작업 폴더 | DUCKBILL_ROOT |
 | 게임 | FFXIV_GAME_PATH · 이 PC 기본 C:/Program Files (x86)/FINAL FANTASY XIV - KOREA/game |
-| KR 게임 빌드 | 2026.10.06.0000.0000 |
+| KR 게임 빌드 | 2026.11.03.0000.0000 |
 | 현재 KR 참조 | DALAMUD_HOME · 이 PC APPDATA/XIVLauncherKR/addon/Hooks/dev · wasdcxz15.0.3.9 |
-| 글로벌 게임·참조 | 이 PC C:/Program Files (x86)/SquareEnix/FINAL FANTASY XIV - A Realm Reborn/game (2026.10.16) · APPDATA/XIVLauncher/addon/Hooks/dev (goatcorp 15.0.3.9). 빌드 검사에는 `-p:DalamudLibPath`로 지정 |
+| 글로벌 게임·참조 | 이 PC C:/Program Files (x86)/SquareEnix/FINAL FANTASY XIV - A Realm Reborn/game (2026.11.03) · APPDATA/XIVLauncher/addon/Hooks/dev (goatcorp 15.0.4.0). 빌드 검사에는 `-p:DalamudLibPath`로 지정 |
 | 최소 지원 참조 | .cache/compat-15.0.3.6/full/ |
 | 친구 배포판 참조 | .cache/friend-runtime/provider-refs/ |
 | upstream 컴파일 참조 | .cache/upstream-15.0.3.6/refs/ · build/dalamud-reference.json 고정 해시 |
 | SDK/대상 | global.json 최소 10.0.101(latestFeature, 이 PC 10.0.402) · Dalamud SDK15.0.0 · x64/net10.0-windows |
 | 정규 개발 DLL | DUCKBILL_ROOT/src/DuckbillFisher.Plugin/bin/Debug/DuckbillFisher.dll |
-| 최근 별도 Debug | .cache/feature-review-build/DuckbillFisher.dll |
+| 최근 별도 Debug | .cache/undiscovered-spot-build/DuckbillFisher.dll (글로벌 별도는 .cache/undiscovered-spot-global-build/) |
 | 0.9.0.0 고정 Release 추출본 | .cache/release-validation/0.9.0.0-rc2/DuckbillFisher.dll · Release436487263 |
 | 0.9.0.0 고정 ZIP | artifacts/share/0.9.0.0-rc2/DuckbillFisher-0.9.0.0.zip · SHA256 536DB092BE1F8B5DEE6C6D651DE502DE838A946F31C22CAD1EF8AEBE6418C84B |
 | 이전0.8.0.0 고정 Release 추출본 | .cache/release-validation/0.8.0.0/DuckbillFisher.dll · Release435190222 게시 |

@@ -50,6 +50,7 @@ internal sealed class FishGuideDiagnostics : IDisposable
     }
 
     public FishGuideDiagnosticView View { get { lock (gate) return view; } }
+    public Func<string>? FishingNoteMapReport { private get; set; }
 
     // UI actions only enqueue work. Sheet/game APIs run on Framework.Update.
     public void RequestRefresh() { lock (gate) { if (!disposed) manualRefresh = true; } }
@@ -243,7 +244,7 @@ internal sealed class FishGuideDiagnostics : IDisposable
         {
             var report = new StringBuilder();
             void AppendInvariant(FormattableString line) => report.AppendLine(FormattableString.Invariant(line));
-            report.AppendLine("DuckbillFisher ENV-03/fish-guide-native/v4");
+            report.AppendLine("DuckbillFisher ENV-03/fish-guide-native/v5");
             AppendInvariant($"Plugin: {typeof(Plugin).Assembly.GetName().Version}; Dalamud: {typeof(IPlayerState).Assembly.GetName().Version}");
             AppendInvariant($"Session: {view.Session}; sampled: {view.HasSample}; IsLoggedIn={view.IsLoggedIn}; IsLoaded={view.IsLoaded?.ToString() ?? "not sampled"}");
             AppendInvariant($"FishGuide2={view.FishGuideVisible}; FishingNote={view.FishingNoteVisible}; loginFallback={view.LoginFallback}");
@@ -252,6 +253,7 @@ internal sealed class FishGuideDiagnostics : IDisposable
             report.AppendLine(view.Status.Diagnostic);
             AppendInvariant($"Game build: {collectionReader.RuntimeEnvironment.GameVersion}; collection address: {collectionReader.Availability.Diagnostic}");
             report.AppendLine(collectionReader.EnvironmentDiagnostic);
+            if (FishingNoteMapReport is { } noteReport) report.AppendLine(noteReport());
             // Only include a selection that belongs to the currently published snapshot.
             if (selected is not null && view.Rows.Contains(selected))
             {

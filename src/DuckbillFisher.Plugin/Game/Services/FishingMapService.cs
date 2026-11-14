@@ -10,27 +10,33 @@ internal sealed class FishingMapService : IDisposable
 {
     private readonly IGameGui gameGui;
     private readonly IClientState clientState;
+    private readonly IPlayerState playerState;
     private readonly IFramework framework;
     private readonly object gate = new();
     private FishingSpotView? pending;
+    private ulong? pendingCharacter;
     private UiMessage? result;
     private bool disposed;
 
-    public FishingMapService(IGameGui gameGui, IClientState clientState, IFramework framework)
+    public FishingMapService(IGameGui gameGui, IClientState clientState, IPlayerState playerState, IFramework framework)
     {
         this.gameGui = gameGui;
         this.clientState = clientState;
+        this.playerState = playerState;
         this.framework = framework;
         framework.Update += OnUpdate;
     }
 
     public UiMessage? Result { get { lock (gate) return result; } }
 
-    public void Request(FishingSpotView spot)
+    public void Request(FishingSpotView spot, ulong? expectedCharacter = null)
     {
         lock (gate)
             if (!disposed)
+            {
                 pending = spot;
+                pendingCharacter = expectedCharacter;
+            }
     }
 
     private void OnUpdate(IFramework _)
@@ -40,7 +46,10 @@ internal sealed class FishingMapService : IDisposable
             if (disposed || pending is not { } spot)
                 return;
             pending = null;
-            if (!clientState.IsLoggedIn)
+            var character = pendingCharacter;
+            pendingCharacter = null;
+            if (!clientState.IsLoggedIn || (character is { } expected &&
+                (!playerState.IsLoaded || playerState.ContentId != expected)))
             {
                 result = new(T.MapPlayerRequired);
                 return;
@@ -68,6 +77,7 @@ internal sealed class FishingMapService : IDisposable
                 return;
             disposed = true;
             pending = null;
+            pendingCharacter = null;
             framework.Update -= OnUpdate;
         }
     }

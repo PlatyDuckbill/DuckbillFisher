@@ -309,7 +309,7 @@ Review의 크기 차이가 난 세 타입은 Fisher 소스가 직접 쓰지 않�
 - 낚시 단계에서만 Duration420·유한한 전체 시간0~3600초·`ContentTimeLeft-TimeOffset`0~420초를 검사해 해역 시간을 제공한다. 시간만 무효이면 항로/기항지는 유지하고 시간만 미확인이다. 낚시 이외에는 지난 해역 시간을 표시하지 않는다. 이동/도착의 zone값을 다음 기항지로 해석하지 않는다. 현재 환해류 표시는 낚시 단계에서만 사용한다. 수치 범위 검사는 포인터 유효성을 대신하지 않으며 기존 접근자의 현재 객체 수명에 의존한다.
 - Framework200ms 표본을 관리 레코드로 복사하고 화면에서는 단조 시계로 경과를 차감한다.3초 이상 된 표본·캐릭터 세션 불일치·지역 이동에는 Unknown을 표시한다. 닫힌 탭은 관찰을 멈추며 재접속/캐릭터 전환으로 과거 표본이 현재 값이 되지 않는다. 일정 미리보기 선택은 관찰 결과와 별개다. Dispose에서 Framework 구독을 해제한다. 원시 포인터·이름으로 상태 판정·try/catch에 의존한 접근은 없다.
 - 추가 확인: KR/글로벌 설치 시트21항로/13해역/144쌍 편성표가 같은 ID/순서를 가리킨다.52행의 대상/미끼와 일반·환해류 FishingSpot 연결을 양쪽 시트에서 대조했다. 두 원저자144회 편성표를 게임 표에 대응해 UTC 위상40을 확인했다. 자료 조회/대조는 제품 테스트가 아니다. 클라이언트의 최신 날짜/모듈 revision은 위 정적 조사의 환경을 그대로 사용했다.
-- KR 별도→글로벌 별도→KR 정규 Debug 빌드 모두 경고0/오류0, 한영 리소스1,077키 일치. 사용 멤버 대조는279개, Breaking0/Uncovered0, 기존 UI 계층 크기 Review3·미사용 멤버 Warnings82다. 새 Ocean/Instance/Content 타입과 실제 사용 멤버에서 차이는 없었다. 이후 자료 상태/미끼 분류 검사를 보완해 재빌드했으며 새 네이티브 멤버 참조는 추가하지 않았다. 로컬 보고서는 `.cache/ocean-beta-research/native-comparison.json`이다. 테스트·게임 실기·패키징·원격 게시를 하지 않았다.
+- KR 별도·글로벌 별도·KR 정규·최소 지원15.0.3.6 별도 Debug 빌드 모두 경고0/오류0, 한영 리소스1,077키 일치. 사용 멤버 대조는279개, Breaking0/Uncovered0, 기존 UI 계층 크기 Review3·미사용 멤버 Warnings82다. 새 Ocean/Instance/Content 타입과 실제 사용 멤버에서 차이는 없었다. 이후 자료 상태/미끼 분류 검사를 보완해 재빌드했으며 새 네이티브 멤버 참조는 추가하지 않았다. 로컬 보고서는 `.cache/ocean-beta-research/native-comparison.json`이다. 테스트·게임 실기·패키징·원격 게시를 하지 않았다.
 
 ### 대표 실기 순서와 기대 결과
 
@@ -335,3 +335,17 @@ Review의 크기 차이가 난 세 타입은 Fisher 소스가 직접 쓰지 않�
 - 최신 공식 CI(Plogon)의 빌드 결과.
 - API 전환 시 KR 설치본의 실제 화면 표시.
 - 결합 없는 13개 ID의 지역 간 의미 동일성은 문장으로 확인할 수 없다.
+
+## 미발견 낚시터 클릭→지도 개발본 (2026-11-15)
+
+- 사용자 요청: 게임 낚시 수첩의 미발견 일반 낚시터를 왼쪽 클릭하면 해당 지도에 핀을 요청한다. 발견한 낚시터에는 추가 동작을 하지 않는다. `FishingNoteMapService`/`NativeFishingNoteReader`를 추가하고 기존 공개 `IGameGui.OpenMapWithMapLink`를 재사용했다. 수첩 내용·해금 비트·선택을 쓰거나 게임 콜백/입력을 발생시키지 않는다. 작살·단순 열기/선택 이동·우클릭은 지원 동작에서 제외한다. 공개0.9.0.0 게시본과 구분한다.
+- 이번 설치 파일 재확인: 양쪽 게임2026.11.03.0000.0000, KR Dalamud15.0.3.9/ClientStructs7.57.0.9831(revision `7b9966e7b400998a7ef03ac67cc0e3771a9be8e1`), 글로벌15.0.4.0/7.57.0.9480(`80cb4a7b7e11a6702e2eb8839afd301a918c638e`). SDK·lock·제품 버전은 바꾸지 않았다. 조사 식별자를 실행 가드로 사용하지 않는다.
+- 공개 AddonLifecycle의 `PreReceiveEvent`/`ListItemClick`/EventParam1을 관찰한다. 설치된 양쪽 FishingNoteBook.uld는40노드이며 낚시터 트리는 노드13/리소스1025/TreeList다. 게임 실행 파일을 오프라인으로 읽어 이 트리의 이벤트35/매개변수1 등록과 원래 수첩 처리 분기를 확인했다. 클릭 payload의 트리 항목/렌더러가 현재 소유 트리의 항목과 같을 때만 읽는다. 포인터는 해당 Framework 스레드/콜백 밖으로 보관하지 않는다.
+- 양쪽 실행 파일의 수첩 행 생성·클릭 처리·캐시 행 구성은 주소를 제외한 명령 비교에서 같았다. 행의 UIntValues3개는 `(전체 행 순번<<8)|행 종류`, `(지역 내 PlaceName<<16)|지역 내 순번`, 상태 비트다. 지역 제목의 두 번째 값 하위16비트는 지도 ID다. 캐시는 FishingSpot의 명시 PlaceNameMain/Sub 또는 TerritoryType.PlaceNameRegion/PlaceName으로 묶고 **FishingSpot.Order 오름차순**으로 정렬한다. 해금은 **FishingSpot RowId**의 비트이며 Order를 비트 인덱스로 쓰지 않는다. 상태 마스크0x04가 발견 표시와 연결됨을 정적 처리 경로에서 확인했다. 실제 사람 클릭의 관찰 결과로 확대하지 않는다.
+- 실행 계약: addon 주소/가시성/준비·노드 형태/컴포넌트 종류 → 유효 벡터 범위/클릭 항목·렌더러 결합 → Agent.Mode0/AddonId/지역 → 제목 지도·전체 행 순번·해당 지역의 연속 순번/행 수 → 시트 Order → 현재 캐릭터의 로드/ContentId/PlayerState 해금 비트와 수첩 상태 일치. 모두 통과한 미발견만 기존 카탈로그의 좌표로 요청한다. 발견은 `Discovered`, 범위 밖 해금/읽기 실패는 `DiscoveryUnknown`, 교차 불일치는 `DiscoveryMismatch`로 남긴다. try/catch로 네이티브 접근 실패를 복구한다고 가정하지 않는다.
+- 시트 검사는 양쪽333행/77그룹·화면 구조/행 식별/Order/좌표 지문 일치를 확인했다. 중복 Order가 있는 특수 그룹1개(해역 ID10026~10030)는 매핑 불가로 남긴다. **ClientStructs의 선언된 해금 BitCount329 또는 버퍼 상한 밖인 ID330~337 등에는 지도를 요청하지 않는다.** 내장 일반 낚시터 좌표가 없는 해역도 제외한다. 이는 발견한 항목으로 바꾸는 판정이 아니다.
+- 캐릭터 ID는 클릭 시점에 관리 값으로 복사하고 지도 요청 실행 직전에 다시 대조한다. 로그아웃/다른 캐릭터에는 오래된 요청을 실행하지 않는다. 이벤트/Framework 구독은 Dispose에서 제거하고 지도 큐도 플러그인 종료 때 비운다. UI 언어를 상태나 식별에 쓰지 않는다.
+- 진단 `fish-guide-native/v5`에 `FishingNoteMap/v1` 한 줄을 추가했다. `LastState/Check/Clicks/IndexLoaded/Areas/SpotId/AreaId/Ordinal/Flags/ItemCount`는 마지막 클릭의 관리 값이며 현재 캐릭터의 실시간 표본을 뜻하지 않는다. 주소/캐릭터 식별자는 출력하지 않는다. `Requested`는 지도 큐 접수이며 실제 핀 표시 성공을 뜻하지 않는다.
+- 검사: KR 별도·글로벌 별도·KR 정규·최소 지원15.0.3.6 별도 Debug 빌드 모두 경고0/오류0, 한영1,115키와 형식 인자 일치. KR/글로벌 사용 멤버 메타데이터/IL 대조 Breaking0/Uncovered0이며 기존 UI 루트 크기 차이3건은 Review다. 패치 후 로그 계약 점검은5언어 각각29/29, 기준선145행 변경0이다. 테스트는 추가/실행하지 않았다. 근거는 로컬 `.cache/undiscovered-spot-review/`의 시트/메타데이터/정적 판독이며 원시 실행 파일·어셈블리·역어셈블은 Git에 넣지 않는다.
+- 기존 ClientStructs 의존성의 고정 소스를 확인했으며 외부 코드 복제나 새 자료/라이선스 도입은 없다. [KR AgentFishingNote](https://github.com/aers/FFXIVClientStructs/blob/7b9966e7b400998a7ef03ac67cc0e3771a9be8e1/FFXIVClientStructs/FFXIV/Client/UI/Agent/AgentFishingNote.cs)·[글로벌 AgentFishingNote](https://github.com/aers/FFXIVClientStructs/blob/80cb4a7b7e11a6702e2eb8839afd301a918c638e/FFXIVClientStructs/FFXIV/Client/UI/Agent/AgentFishingNote.cs), [KR TreeList/행](https://github.com/aers/FFXIVClientStructs/blob/7b9966e7b400998a7ef03ac67cc0e3771a9be8e1/FFXIVClientStructs/FFXIV/Component/GUI/AtkComponentTreeList.cs)·[글로벌 TreeList/행](https://github.com/aers/FFXIVClientStructs/blob/80cb4a7b7e11a6702e2eb8839afd301a918c638e/FFXIVClientStructs/FFXIV/Component/GUI/AtkComponentTreeList.cs). 사용하는 컴포넌트/이벤트/벡터 멤버도 설치 DLL 양쪽으로 대조했다.
+- **실기 대기:** 정규 Debug DLL을 로드하고 게임 낚시 수첩에서 미발견 일반 낚시터2개를 각각 왼쪽 클릭한다. 기대: 각 지역 지도와 해당 낚시터 핀, 다른 미발견 항목을 누르면 그 위치로 교체. 발견한 항목·지역 제목·우클릭·단순 선택 이동/수첩 다시 열기에는 플러그인의 추가 지도 요청이 없어야 한다. 목록 스크롤/지역 변경 뒤에도 클릭한 행과 핀을 대조하고 재로드·재로그인 때 과거 요청이 재생되지 않는지 확인한다. 무반응이면 수첩 진단 보고서의 `FishingNoteMap/v1` 한 줄부터 요청한다. KR·글로벌 모두 실제 클릭/좌표 대조는 아직 하지 않았다. 빌드 성공을 실기 완료로 보지 않으며 원격 게시도 하지 않았다.

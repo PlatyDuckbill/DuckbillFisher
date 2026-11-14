@@ -20,6 +20,7 @@ public sealed class Plugin : IDalamudPlugin
     private readonly FishGuideDiagnostics fishGuide;
     private readonly FishCatalog fishCatalog;
     private readonly FishingMapService fishingMap;
+    private readonly FishingNoteMapService fishingNoteMap;
     private readonly FishPreferences fishPreferences;
     private readonly ManagedSoundLibrary soundLibrary;
     private readonly SettingsBackup settingsBackup;
@@ -73,7 +74,9 @@ public sealed class Plugin : IDalamudPlugin
         fishCatalog = new FishCatalog(dataManager, framework);
         var collectionReader = new NativeFishCollectionReader(framework, dataManager.Language);
         fishGuide = new FishGuideDiagnostics(clientState, playerState, fishCatalog, gameGui, framework, collectionReader);
-        fishingMap = new FishingMapService(gameGui, clientState, framework);
+        fishingMap = new FishingMapService(gameGui, clientState, playerState, framework);
+        fishingNoteMap = new(addonLifecycle, framework, clientState, playerState, dataManager, gameGui, fishCatalog, fishingMap, log);
+        fishGuide.FishingNoteMapReport = fishingNoteMap.CreateReport;
         fishPreferences = new FishPreferences(pluginInterface, clientState, playerState, framework, log, defaultLanguage);
         var managedSounds = new ManagedSoundFiles(pluginInterface.GetPluginConfigDirectory());
         soundLibrary = new ManagedSoundLibrary(fishPreferences, managedSounds, framework);
@@ -247,6 +250,7 @@ public sealed class Plugin : IDalamudPlugin
         fishingTracker.Dispose();
         fishingBuffs.Dispose();
         fishGuide.Dispose();
+        fishingNoteMap.Dispose();
         guideOpener.Dispose();
         fishCatalog.Dispose();
         fishingMap.Dispose();

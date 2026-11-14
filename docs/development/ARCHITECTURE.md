@@ -81,6 +81,8 @@
 
 ## 호환성과 실패
 
+`FishingNoteMapService`는 공개 AddonLifecycle의 FishingNote/PreReceiveEvent에서 명시적 왼쪽 ListItemClick만 받는다. `NativeFishingNoteReader`는 그 콜백의 유효 수명 안에서 소유 addon·트리 행·시트의 지역/지도/Order 순번과 PlayerState 해금 비트를 대조하고 관리 ID/상태만 반환한다. 미발견으로 일치한 ID만 기존 `FishingMapService`에 캐릭터 ID와 함께 큐잉하며 다음 Framework 표본의 캐릭터 불일치에는 폐기한다. 문자열·네이티브 포인터는 요청에 보관하지 않고 Dispose에서 구독/요청을 해제한다. 계약 실패는 이 지도 동작만 중단하며 수첩의 원래 처리는 그대로 흐른다.
+
 - 사용자 합의(2026-11-04): KR과 글로벌을 같은 빌드로 지원한다. 공개 API를 우선하고 네이티브 접근은 필요한 범위로 줄인다. [재설계안](RUNTIME-CONTRACT-REDESIGN.md)과 [근거](../verification/native/GLOBAL-COMPAT.md)를 따른다. 이 합의는 2026-10-23의 정확한 KR DLL 조합 검사 방침을 대체한다.
 - **전역 가드를 두지 않는다.** 로드 가능 여부는 Dalamud의 API 레벨 판정이, 게임과 배포판의 정합성은 런처·Dalamud가 담당한다. DLL 해시나 게임 빌드 일치로 기능을 막지 않으며, 배포판이 제공한 ClientStructs를 신뢰한다(사용자 수용 위험).
 - NativeEnvironment는 게임 빌드, 클라이언트 언어, Dalamud·ClientStructs·Interop의 버전과 MVID를 **진단 보고에만** 기록한다. 판정에 쓰지 않으므로 DLL 해시를 계산하지 않는다.
