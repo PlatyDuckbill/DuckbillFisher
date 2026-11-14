@@ -160,37 +160,27 @@ internal sealed class MainWindow : Window
         if (ImGui.BeginChild("MainNavigationTabs", new Vector2(tabWidth, ImGui.GetFrameHeightWithSpacing()), false,
             ImGuiWindowFlags.NoScrollbar | ImGuiWindowFlags.NoScrollWithMouse))
         {
-            var io = ImGui.GetIO();
-            var horizontalWheel = io.MouseWheelH;
-            // The tab bar already handles horizontal wheel input, arrows and selection visibility.
-            // Forward vertical wheel only while this header child is hovered, and restore shared IO
-            // before drawing shortcuts/body content. No tab selection or global input mapping changes.
-            if (ImGui.IsWindowHovered() && horizontalWheel == 0)
-                io.MouseWheelH = io.MouseWheel;
-            try
+            // A live ImGui context can retain the previous tab order across plugin reloads.
+            // Use a stable ID for this menu order instead of reusing the old tab-bar state.
+            if (ImGui.BeginTabBar("MainNavigation.OceanBeta", ImGuiTabBarFlags.FittingPolicyScroll))
             {
-                // A live ImGui context can retain the previous tab order across plugin reloads.
-                // Use a stable ID for this menu order instead of reusing the old tab-bar state.
-                if (ImGui.BeginTabBar("MainNavigation.OceanBeta", ImGuiTabBarFlags.FittingPolicyScroll))
+                NavigationTab(MainPage.Catalog, T.TabCatalog, "CatalogTab", FontAwesomeIcon.Fish);
+                NavigationTab(MainPage.Alerts, T.TabAlerts, "SpawnAlertsTab", FontAwesomeIcon.Star);
+                NavigationTab(MainPage.Recommendations, T.RecommendationTitle, "RecommendationsTab", FontAwesomeIcon.Compass);
+                NavigationTab(MainPage.Schedule, T.ScheduleTitle, "SpawnScheduleTab", FontAwesomeIcon.CalendarAlt);
+                NavigationTab(MainPage.Ocean, T.OceanBetaTitle, "OceanBetaTab", FontAwesomeIcon.Ship);
+                NavigationTab(MainPage.Collection, T.TabCollectionProgress, "CollectionProgressTab", FontAwesomeIcon.ChartBar);
+                NavigationTab(MainPage.History, T.TabHistory, "FishingHistoryTab", FontAwesomeIcon.History);
+                NavigationTab(MainPage.Settings, T.TabSettings, "SettingsTab", FontAwesomeIcon.Cog, selectSettings);
+                if (developerMode)
                 {
-                    NavigationTab(MainPage.Catalog, T.TabCatalog, "CatalogTab", FontAwesomeIcon.Fish);
-                    NavigationTab(MainPage.Alerts, T.TabAlerts, "SpawnAlertsTab", FontAwesomeIcon.Star);
-                    NavigationTab(MainPage.Recommendations, T.RecommendationTitle, "RecommendationsTab", FontAwesomeIcon.Compass);
-                    NavigationTab(MainPage.Schedule, T.ScheduleTitle, "SpawnScheduleTab", FontAwesomeIcon.CalendarAlt);
-                    NavigationTab(MainPage.Ocean, T.OceanBetaTitle, "OceanBetaTab", FontAwesomeIcon.Ship);
-                    NavigationTab(MainPage.Collection, T.TabCollectionProgress, "CollectionProgressTab", FontAwesomeIcon.ChartBar);
-                    NavigationTab(MainPage.History, T.TabHistory, "FishingHistoryTab", FontAwesomeIcon.History);
-                    NavigationTab(MainPage.Settings, T.TabSettings, "SettingsTab", FontAwesomeIcon.Cog, selectSettings);
-                    if (developerMode)
-                    {
-                        NavigationTab(MainPage.Guide, T.TabGuide, "GuideTab", FontAwesomeIcon.BookOpen);
-                        NavigationTab(MainPage.Fishing, T.TabFishing, "FishingTab", FontAwesomeIcon.Search);
-                    }
-                    ImGui.EndTabBar();
-                    selectSettings = false;
+                    NavigationTab(MainPage.Guide, T.TabGuide, "GuideTab", FontAwesomeIcon.BookOpen);
+                    NavigationTab(MainPage.Fishing, T.TabFishing, "FishingTab", FontAwesomeIcon.Search);
                 }
+                ScrollNavigationTabs();
+                ImGui.EndTabBar();
+                selectSettings = false;
             }
-            finally { io.MouseWheelH = horizontalWheel; }
         }
         ImGui.EndChild();
         if (themed) ImGui.PopStyleColor(6);
@@ -200,6 +190,26 @@ internal sealed class MainWindow : Window
         ImGui.SameLine();
         if (Shortcut(FontAwesomeIcon.Stopwatch, showShortcutLabels ? timer : "", "OpenTimer", timerWidth)) ShowTimer?.Invoke();
         UiWidgets.Tooltip(timer);
+    }
+
+    private static void ScrollNavigationTabs()
+    {
+        var io = ImGui.GetIO();
+        var wheel = io.MouseWheelH != 0 ? io.MouseWheelH : io.MouseWheel;
+        if (wheel == 0 || !float.IsFinite(wheel) || !ImGui.IsWindowHovered()) return;
+
+        // Dalamud's ImGui 1.88 tab layout does not consume wheel input. Use the current
+        // binding's tab-bar state only during this BeginTabBar/EndTabBar scope, after layout.
+        var tabs = ImGui.GetCurrentContext().CurrentTabBar;
+        if (tabs.IsNull || tabs.WantLayout || !ImGui.IsMouseHoveringRect(tabs.BarRect.Min, tabs.BarRect.Max)) return;
+        var visibleWidth = tabs.ScrollingRectMaxX - tabs.ScrollingRectMinX;
+        var totalWidth = tabs.WidthAllTabs;
+        if (!float.IsFinite(visibleWidth) || !float.IsFinite(totalWidth) || visibleWidth <= 0 || totalWidth <= visibleWidth ||
+            !float.IsFinite(tabs.ScrollingTarget)) return;
+        var step = Math.Max(ImGui.GetFontSize() * 4, visibleWidth / 3);
+        tabs.ScrollingTarget = Math.Clamp(tabs.ScrollingTarget - wheel * step, 0, totalWidth - visibleWidth);
+        tabs.ScrollingTargetDistToVisibility = 0;
+        // Native layout animates/clamps this target next frame. Selection IDs and shared IO stay intact.
     }
 
     private void NavigationTab(MainPage page, T label, string id, FontAwesomeIcon icon, bool select = false)
