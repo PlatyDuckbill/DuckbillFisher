@@ -1,6 +1,6 @@
 # 0.10.0.0 배포 기록
 
-2026-11-15(KST). 사용자가 이번 지도·상단 메뉴 개선의 배포와 간결한 업데이트 노트를 요청했다. 현재는 고정 Release 후보 준비 단계다. [영어 안내](../../releases/0.10.0.0.md).
+2026-11-15(KST). 사용자가 이번 지도·상단 메뉴 개선의 배포와 간결한 업데이트 노트를 요청했다. 고정 패키지 실기 질문에는 **“이번 패키지는 배포 후 확인”**으로 답해 이번 ZIP의 게임 확인을 게시 후로 미뤘다. [영어 안내](../../releases/0.10.0.0.md).
 
 ## 변경과 검사
 
@@ -9,9 +9,11 @@
 - 최근10개 내장 릴리스만 유지하며0.5.0.0 항목과 전용6키를 제거하고 새3키를 추가했다. PublishedAtUtc는 요청 무렵2026-11-14T23:35:08Z이며 실제 GitHub 공개 시각이 아니다. SDK/lock/저장 형식·기존 자료는 바꾸지 않았다.
 - 개발본의 미발견 지도 핀과 상단 메뉴 휠은 사용자 KR 대표 정상 보고를 받았다. 근거는 [지도](../native/GLOBAL-COMPAT.md#첫-kr-클릭-차단과-컴포넌트-검사-보완-2026-11-15)·[메뉴](../catalog/UI.md#최초-휠-무반응과-imgui188-호환-수정-2026-11-15)다. 이 고정 Release ZIP의 실제 로드/두 기능/내장 한영 안내와 발견한 항목·본문 스크롤·바로가기·재로드 경계는 확인 대기다. 이전 버전의 기능별 미확인을 이번 작업으로 완료 처리하지 않는다.
 
-## 고정 후보와 게시 단계
+## 고정 패키지와 게시 단계
 
 - ZIP `artifacts/share/0.10.0.0/DuckbillFisher-0.10.0.0.zip`:719,424바이트, SHA256 `5803A4249B877FFFE4776C4E11298A8BDDAEEE8FB4C766B96F77CA4994663C58`.
 - 추출 DLL `DUCKBILL_ROOT/.cache/release-validation/0.10.0.0/DuckbillFisher.dll`: SHA256 `600496F95454D66F8A7FE6810755D25245BEF4E9C66DBE09FA7F55B705080E37`.
 - 로컬 검사 보고서는 `.cache/release-build/0.10.0.0-validation.json`이다. 고정 ZIP/DLL을 다시 빌드하거나 덮어쓰지 않는다.
-- 배포 소스 커밋·Plogon·고정 ZIP 실기 확인·태그/Release·익명 자산·설치 JSON/공용 raw 확인은 이후 결과를 기록한다. 기존0.9.0.0 Release/설치 JSON은 아직 유지한다.
+- 배포 소스 `539a26dcfe011c626cf6985474a9ce028d1d5594`의 [Plogon run43654399965](https://github.com/PlatyDuckbill/DuckbillFisher/actions/runs/43654399965) 성공 후 같은 소스에 태그 `v0.10.0.0`을 만들었다.
+- [Release445678721](https://github.com/PlatyDuckbill/DuckbillFisher/releases/tag/v0.10.0.0)을2026-11-14T23:43:26Z에 공개했다. 업로드 크기/서버 SHA256과 익명 ZIP·체크섬·태그 아이콘 HTTP200/로컬 해시 일치를 확인했다. 기존 태그/ZIP은 덮어쓰지 않았다.
+- 익명 자산 확인 뒤 설치 JSON을0.10.0.0 후보와 동일하게 반영했다. 공용 목록 동기화와 실제 공유 raw URL 확인은 진행 중이다. 실제 Dalamud 설치/업데이트·고정 ZIP 게임 확인은 사용자 지시대로 배포 후 확인 대기다.

@@ -4,7 +4,7 @@
 
 ## 배포와 호환성
 
-- [0.10.0.0 미발견 낚시터 지도·상단 메뉴 개선](releases/RELEASE-0.10.0.0.md) · 고정 Release 후보 검사 완료·게시 준비
+- [0.10.0.0 미발견 낚시터 지도·상단 메뉴 개선](releases/RELEASE-0.10.0.0.md) · Release 공개·익명 자산 일치·설치 목록 동기화 중·패키지 실기는 배포 후 확인
 - [0.9.0.0 테마·어종 상세·먼바다 Beta](releases/RELEASE-0.9.0.0.md) · Plogon/Release·익명 자산/설치 JSON·공용 raw 확인 완료·사용자 지시로 실기는 배포 후 확인
 - [0.8.0.0 직감 준비·어종 상세 배포](releases/RELEASE-0.8.0.0.md) · Plogon/Release/익명 자산/설치 JSON·공용 raw 확인 완료·인게임 확인 대기
 - [0.7.0.0 글로벌 클라이언트 지원 배포](releases/RELEASE-0.7.0.0.md) · Plogon 점검·Release/설치 JSON·익명 자산·공용 저장소 동기화 확인 완료
