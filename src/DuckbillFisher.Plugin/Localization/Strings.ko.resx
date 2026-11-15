@@ -56,7 +56,7 @@
   <data name="OceanRecommendationScore" xml:space="preserve"><value>점수 목표 {0} · {1} · 기본 {2}점</value></data>
   <data name="OceanRecommendationIntuition" xml:space="preserve"><value>직감 후보 {0} · {1}</value></data>
   <data name="OceanRecommendationUnconfirmed" xml:space="preserve"><value>{0} (조건 미확인)</value></data>
-  <data name="OceanRecommendationHint" xml:space="preserve"><value>해역·시간대·환해류·확인된 날씨를 반영합니다.&#xA;점수 목표는 기본 점수×삼중 수량 하한 기준이며 실제 점수는 다를 수 있습니다.</value></data>
+  <data name="OceanRecommendationHint" xml:space="preserve"><value>해역·시간대·환해류·확인된 날씨·남은 시간을 반영합니다.&#xA;점수 목표는 기본 점수×삼중 수량 하한 기준이며 실제 점수는 다를 수 있습니다.</value></data>
   <data name="OceanIntuitionBait" xml:space="preserve"><value>직감 미끼</value></data>
   <data name="OceanIntuitionBaitHint" xml:space="preserve"><value>현재 해역의 직감 대상 후보입니다. 버프의 실제 대상은 미확인입니다.</value></data>
   <data name="OceanMoochPath" xml:space="preserve"><value>준비 경로 {0}</value></data>

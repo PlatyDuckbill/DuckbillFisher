@@ -148,6 +148,9 @@ for 260 pool memberships. Two blank preferred baits remain unknown. No bite
 times, catch probabilities, source strategies, prose or website code are copied.
 The plugin's own recommendation compares these facts with local time/weather
 observations and published yield minima; it is not an optimal-score guarantee.
+The numeric 90-second spectral-trigger cutoff was checked against the author's
+FAQ on 2026-11-15. URL and content SHA256 are pinned as policySource in the same
+JSON file. No FAQ prose, code or catch probabilities are redistributed.
 Only individual bait, tug, catch-quantity and time-of-day facts are recorded,
 linked to IDs verified against the installed KR and global client sheets.
 Basic targets were selected for direct bait without Intuition preparation;

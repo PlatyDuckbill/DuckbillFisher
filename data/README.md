@@ -52,7 +52,7 @@ dotnet run --project tools/FishingDataImport -- --ocean-hook-yields .cache/ocean
 dotnet run --no-restore --project tools/FishingDataImport "-p:DalamudLibPath=$env:APPDATA/XIVLauncher/addon/Hooks/dev" -- --ocean-baits .cache/ocean-bait-research/indigo-EN.csv .cache/ocean-bait-research/ruby-EN.csv data/ocean-guidance.v1.json data/ocean-conditions.v1.json 'C:/Program Files (x86)/FINAL FANTASY XIV - KOREA/game' 'C:/Program Files (x86)/SquareEnix/FINAL FANTASY XIV - A Realm Reborn/game' .cache/ocean-guidance.generated.json
 ```
 
-다른 PC에서는 설치/참조 경로를 바꾼다. 원본 다운로드는 개발 중에만 하며 플러그인은 내장 자료만 읽는다. 생성물을 검토한 뒤 반영하고 고정 공개 패키지는 덮어쓰지 않는다.
+다른 PC에서는 설치/참조 경로를 바꾼다. 원본 다운로드는 개발 중에만 하며 플러그인은 내장 자료만 읽는다. `policySource`는 환해류 유발90초 제한을 확인한 FAQ의 URL/해시/날짜다. 생성물을 검토한 뒤 반영하고 고정 공개 패키지는 덮어쓰지 않는다.
 
 ## 출처와 경계
 

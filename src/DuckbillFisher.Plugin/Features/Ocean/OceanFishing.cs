@@ -288,10 +288,23 @@ internal sealed class OceanFishing : IDisposable
             if (!targets.Where(t => t.SpectralTrigger).Select(t => t.FishItemId).ToHashSet()
                 .SetEquals(guidance.Values.Where(g => g.Time == 0).Select(g => g.Fish.Id))) throw new InvalidDataException("OceanBaitTriggerIdentity");
             foreach (var group in targets.GroupBy(t => t.FishingSpotId)) baitTargetsBySpot.Add(group.Key, group.ToArray());
+            foreach (var target in targets.Where(t => t.BaitKind == OceanBaitKind.Mooch))
+            {
+                var source = target;
+                var seen = new HashSet<uint> { source.FishItemId };
+                var depth = 0;
+                while (source.BaitKind == OceanBaitKind.Mooch)
+                {
+                    if (++depth > 3 || !seen.Add(source.BaitItemId)) throw new InvalidDataException("OceanBaitMoochCycle");
+                    source = baitTargetsBySpot[source.FishingSpotId].SingleOrDefault(t => t.FishItemId == source.BaitItemId)
+                        ?? throw new InvalidDataException("OceanBaitMoochPool");
+                }
+                if (source.BaitKind != OceanBaitKind.Direct) throw new InvalidDataException("OceanBaitMoochUnresolved");
+            }
             if (HookYieldData.Invalid) throw new InvalidDataException("OceanBaitYieldsUnavailable");
             foreach (var target in targets.Where(t => t.BaitKind != OceanBaitKind.Unknown))
                 if (!HookYieldData.ByItem.TryGetValue(target.FishItemId, out var yield) || !yield.Ocean ||
-                    yield.FishParameterId != target.FishParameterId || yield.TripleHook is null)
+                    yield.FishParameterId != target.FishParameterId || yield.TripleHook is not { Minimum: >= 1 and <= 7, Maximum: >= 1 and <= 7 })
                     throw new InvalidDataException("OceanBaitYieldIdentity");
             foreach (var entry in HookYieldData.ByItem.Values.Where(e => e.Ocean && e.TripleHook is not null))
                 minimumTripleYields.Add(entry.ItemId, entry.TripleHook!.Minimum);
@@ -315,8 +328,8 @@ internal sealed class OceanFishing : IDisposable
         }
     }
 
-    private OceanBaitRecommendation SelectBait(uint spot, byte time, uint? weather, bool? intuition, bool spectral, bool preview = false)
-        => OceanBaitRecommendations.Select(baitTargetsBySpot.GetValueOrDefault(spot) ?? [], fishConditions, minimumTripleYields, spot, time, weather, intuition, spectral, preview);
+    private OceanBaitRecommendation SelectBait(uint spot, byte time, uint? weather, bool? intuition, bool spectral, bool preview = false, double? remainingSeconds = null)
+        => OceanBaitRecommendations.Select(baitTargetsBySpot.GetValueOrDefault(spot) ?? [], fishConditions, minimumTripleYields, spot, time, weather, intuition, spectral, preview, remainingSeconds);
 
     private FishingItemView[] BaitPath(OceanBaitTarget target)
     {
@@ -341,7 +354,7 @@ internal sealed class OceanFishing : IDisposable
             return new(baitTargetsReady, null, [], intuition);
         var stop = route.Stops[sample.Zone];
         var weather = sample.WeatherState == OceanWeatherReadState.Ready && sample.WeatherId is { } id && weatherNames.ContainsKey(id) ? (uint?)id : null;
-        var selected = SelectBait(sample.Spectral ? stop.SpectralSpotId : stop.FishingSpotId, stop.Time, weather, intuition, sample.Spectral);
+        var selected = SelectBait(sample.Spectral ? stop.SpectralSpotId : stop.FishingSpotId, stop.Time, weather, intuition, sample.Spectral, remainingSeconds: sample.RemainingSeconds);
         return new(true, selected.Primary is { } primary ? ChoiceView(primary) : null, selected.IntuitionCandidates.Select(ChoiceView).ToArray(), intuition)
             { Weather = weather is { } known ? weatherNames[known] : "" };
     }

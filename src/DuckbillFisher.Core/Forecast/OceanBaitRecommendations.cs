@@ -11,12 +11,17 @@ public sealed record OceanBaitRecommendation(OceanBaitChoice? Primary, OceanBait
 
 public static class OceanBaitRecommendations
 {
+    // Source: Tyo'to Tayuun's FAQ, pinned in ocean-guidance.v1.json policySource.
+    public const int SpectralTriggerCutoffSeconds = 90;
+
     public static OceanBaitRecommendation Select(IReadOnlyList<OceanBaitTarget> targets,
         IReadOnlyDictionary<(uint Spot, uint Item), OceanFishCondition> conditions,
         IReadOnlyDictionary<uint, int> minimumTripleYields, uint fishingSpot, byte time, uint? weather,
-        bool? intuition, bool spectral, bool preview = false)
+        bool? intuition, bool spectral, bool preview = false, double? remainingSeconds = null)
     {
         if (fishingSpot == 0 || time is < 1 or > 3) return new(null, []);
+        bool? triggerAvailable = preview ? true : remainingSeconds is { } seconds && double.IsFinite(seconds) && seconds is >= 0 and <= 420
+            ? seconds > SpectralTriggerCutoffSeconds : null;
         var ordinary = new List<OceanBaitChoice>();
         var special = new List<OceanBaitChoice>();
         foreach (var target in targets)
@@ -35,7 +40,8 @@ public static class OceanBaitRecommendations
             if (target.BaitKind != OceanBaitKind.Direct) continue;
             var state = rule.Evaluate(time, weather, null);
             if (state == OceanCandidateState.Excluded) continue;
-            var reason = !spectral && target.SpectralTrigger ? OceanBaitReason.SpectralTrigger : OceanBaitReason.Score;
+            var reason = !spectral && target.SpectralTrigger && triggerAvailable != false ? OceanBaitReason.SpectralTrigger : OceanBaitReason.Score;
+            if (reason == OceanBaitReason.SpectralTrigger && triggerAvailable is null) state = OceanCandidateState.Unconfirmed;
             if (reason == OceanBaitReason.Score && (!minimumTripleYields.TryGetValue(target.FishItemId, out var minimum) || minimum is < 1 or > 7)) continue;
             ordinary.Add(new(target, reason, state));
         }

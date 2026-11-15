@@ -2,6 +2,12 @@
   "schemaVersion": 1,
   "dataVersion": "ocean-guidance-2026-11-15",
   "author": "Tyo\u0027to Tayuun",
+  "policySource": {
+    "url": "https://ffxiv.oceanfishing.boats/FAQ/",
+    "sha256": "ebea7bc5841474493cb89c029fae54bb6783c9425e8fa83fa56404d52c46d619",
+    "checkedUtc": "2026-11-15",
+    "processing": "Only the numeric 90-second spectral-trigger cutoff fact is used. No prose, code or catch probabilities copied. No public reuse license identified."
+  },
   "sources": [
     {
       "url": "https://ffxiv.oceanfishing.boats/fishdata/indigo-EN.csv",

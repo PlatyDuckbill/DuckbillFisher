@@ -56,7 +56,7 @@
   <data name="OceanRecommendationScore" xml:space="preserve"><value>Score target: {0} · {1} · {2} base points</value></data>
   <data name="OceanRecommendationIntuition" xml:space="preserve"><value>Intuition candidate: {0} · {1}</value></data>
   <data name="OceanRecommendationUnconfirmed" xml:space="preserve"><value>{0} (conditions unconfirmed)</value></data>
-  <data name="OceanRecommendationHint" xml:space="preserve"><value>Uses the area, time frame, current and known weather.&#xA;Score targets compare base points × minimum Triple Hook yield; actual scores may differ.</value></data>
+  <data name="OceanRecommendationHint" xml:space="preserve"><value>Uses the area, time frame, current, known weather and remaining time.&#xA;Score targets compare base points × minimum Triple Hook yield; actual scores may differ.</value></data>
   <data name="OceanIntuitionBait" xml:space="preserve"><value>Intuition bait</value></data>
   <data name="OceanIntuitionBaitHint" xml:space="preserve"><value>A candidate for this area; the active buff's actual target is unconfirmed.</value></data>
   <data name="OceanMoochPath" xml:space="preserve"><value>Preparation: {0}</value></data>
