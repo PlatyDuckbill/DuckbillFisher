@@ -1143,4 +1143,5 @@ internal enum TextKey
     ChangelogMenuWheel,
     ChangelogCompactShortcuts,
     ChangelogTitleButtonBounds,
+    ChangelogSuiteIcon,
 }

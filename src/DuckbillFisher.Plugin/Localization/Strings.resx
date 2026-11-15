@@ -1215,4 +1215,5 @@ Shares duplicate prevention with zero-minute favorite alerts and uses the channe
   <data name="AppearanceDetails" xml:space="preserve"><value>Fine adjustments</value></data>
   <data name="AppearanceTransparency" xml:space="preserve"><value>Background transparency</value></data>
   <data name="ChangelogTitleButtonBounds" xml:space="preserve"><value>Collapse and close buttons no longer overlap when you click them.</value></data>
+  <data name="ChangelogSuiteIcon" xml:space="preserve"><value>Recognize the fishing plugin by its new fishing-focused icon.</value></data>
 </root>

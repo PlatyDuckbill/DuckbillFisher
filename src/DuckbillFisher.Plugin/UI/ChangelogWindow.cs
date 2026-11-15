@@ -20,9 +20,10 @@ internal sealed class ChangelogWindow : Window
             (FontAwesomeIcon.Palette, T.ChangelogSuiteControls),
             (FontAwesomeIcon.List, T.ChangelogSuiteDensity),
             (FontAwesomeIcon.History, T.ChangelogSuiteHistory),
-        ], FeatureTitle: T.ChangelogSuiteTitle, FeatureSummary: T.ChangelogSuiteSummary, FeatureIcon: FontAwesomeIcon.Palette, OtherEntries:
+        ], new DateTimeOffset(2026, 11, 15, 10, 32, 30, TimeSpan.Zero), FeatureTitle: T.ChangelogSuiteTitle, FeatureSummary: T.ChangelogSuiteSummary, FeatureIcon: FontAwesomeIcon.Palette, OtherEntries:
         [
             (FontAwesomeIcon.MousePointer, T.ChangelogTitleButtonBounds),
+            (FontAwesomeIcon.Fish, T.ChangelogSuiteIcon),
         ]),
         // User-facing numbering: the already-published 0.10.0.0 feature release is presented as 0.9.1.0.
         // Its original tag/ZIP and actual published identity remain unchanged.
