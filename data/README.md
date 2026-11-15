@@ -2,9 +2,18 @@
 
 ## 일반 낚시 이중·삼중 수량 안내 (개발본 2026-11-05)
 
-`hook-yields.v1.json`은 조건/등급과 별도로 내장하는 형식1 자료다. 일반26종(이중26·삼중11)과 먼바다259종(양쪽 기술259)을 안내하며, 직감 선행43종 중20종(이중20·삼중8)을 포함한다. 한 기술이 null이면 미확인, maximum=null이면 원본이 하한만 설명한 경우다. 이중에서 삼중을 환산하거나 획득력 임계값을 추정하지 않는다. 일반 어종의 전수 자료는 아니다.
+`hook-yields.v1.json`은 조건/등급과 별도로 내장하는 형식1 자료다. 일반42종(이중39·삼중20)과 먼바다259종(양쪽 기술259)을 안내하며, 직감 선행43종 중26종(이중25·삼중10)을 포함한다. 한 기술이 null이면 미확인, maximum=null이면 원본이 하한만 설명한 경우다. 이중에서 삼중을 환산하거나 획득력 임계값을 추정하지 않는다. 일반 어종의 전수 자료는 아니다.
 
-일반 수량의 원본은 Fruity Snacks의10개 영상 설명과 종합 가이드와 Dawntrail 가이드다. 고정 영상ID·URL·확인일·UTF-8 SHA256·가공/권리 범위를 파일에 기록했다. 영상은descriptionSha256, 문서 내보내기 스냅샷은contentSha256으로 검증하며 문서 URL 자체를 고정 revision으로 간주하지 않는다. 이름/ID는 기존 조건 자료와 대조하고 게임 표시 이름은 클라이언트를 따른다. 원문·영상·이미지·외부 코드는 배포하지 않는다. 자세한 판정은 [DATA-SOURCES](../docs/development/DATA-SOURCES.md#일반-낚시-이중삼중-수량-안내-2026-11-05)를 따른다. 런타임 HTTP는 없다.
+일반 수량의 원본은 Fruity Snacks의10개 영상 설명·종합/Dawntrail 가이드와 Lodestone의 개별 어획 기록이다. 고정 영상ID·URL·확인일·SHA256·가공/권리 범위를 파일에 기록했다. 영상은descriptionSha256, 문서 내보내기/HTML 원본 응답은contentSha256으로 식별하며 URL 자체를 고정 revision으로 간주하지 않는다. 이름/ID는 기존 조건 자료와 양쪽 클라이언트에 대조하고 게임 표시 이름은 클라이언트를 따른다. 원문·영상·이미지·외부 코드는 배포하지 않는다. [수량 전수 점검과 보완](../docs/development/DATA-SOURCES.md#수량-빈칸-전수-점검과-보완-2026-11-15)을 따른다. 런타임 HTTP는 없다.
+
+빈칸 재집계(로컬 시트/JSON 검사이며 테스트·게임 프로세스·네트워크 접근 없음):
+
+```powershell
+. ./scripts/enter-dev.ps1
+dotnet run --no-restore --project tools/FishingDataImport "-p:DalamudLibPath=$env:APPDATA/XIVLauncher/addon/Hooks/dev" -- --hook-yield-audit data/fishing.kr.v2.json data/hook-yields.v1.json 'C:/Program Files (x86)/FINAL FANTASY XIV - KOREA/game' 'C:/Program Files (x86)/SquareEnix/FINAL FANTASY XIV - A Realm Reborn/game' .cache/hook-yields-audit.csv
+```
+
+이 PC의 글로벌 Lumina 참조로 양쪽 클라이언트 시트를 읽는다. 다른 PC에서는 설치/참조 경로를 바꾼다. 전체 FishParameter 행의 한영 이름·ID·기술별 Exact/Range/AtLeast/Unknown·누락 사유를 CSV로, 분류별 집계와 LF 정규화 UTF-8 입력/출력 SHA256을 같은 이름의 `.summary.json`으로 출력한다. 수량JSON에 없는 항목까지 포함하며, 미확인·특수 항목을 기본2/3마리로 채우지 않는다. [고정 점검 CSV](../docs/verification/data/reports/hook-yields-2026-11-15.csv)·[집계](../docs/verification/data/reports/hook-yields-2026-11-15.summary.json).
 
 현재 제품은 **`fishing.kr.v2.json` / `kr-regular-2026-11-06`**를 내장한다. 일반 도감1,258종 모두 상세에 연결했고 시간·날씨는1,257종 확인/부분1종이다. 핵심 잔여는 성 파스릭의 직감 시간·이크에바지의 낚아채기/시간·날씨 완전성2종이다. 최신 수치·출처/충돌·양쪽 시트 근거는 [이번 보완](../docs/development/DATA-SOURCES.md#필요한-어종-보완과-먼바다-조건-2026-11-06), 이전11종 목록은 [당시 보고서](../docs/verification/data/reports/fishing-data-2026-10-17/remaining.md)에 보존한다. 작살203건/미확인115건은 유지한다. 입질 통계는 포함하지 않는다.
 
@@ -16,7 +25,7 @@
 최신 조건 보완은 JSON의 `reviewedDetailObservations`에 원문 스냅샷 해시·출처별 수치·범위를 기록했다. 초기 재생성 출력으로 이 관측 보완을 덮어쓰지 않는다. 새 수치 적용 뒤 조건 자료의 LF 정규화 해시와 등급 자료의 버전/연결 해시를 함께 갱신해 `--validate`로 검사한다. 기존 소스 revision·과거 미확인 보고서는 초기 기반의 이력으로 보존한다.
 
 - `minimum-gathering.v1.json`: 고정 Teamcraft MIT 원본의 양수 최소 획득력350종이다. source URL/revision/SHA256/가공 내역과 Item/FishParameter를 기록한다. 0/누락과 복수 수량의 보장 임계값을 추정하지 않는다. 상세 조건 없는29종도 최소 획득력을 표시하며 유효하지 않은 자료는 해당 정보만 확인 불가로 처리한다.
-- `hook-yields.v1.json`: 일반26종/이중26·삼중11에 먼바다259종/이중259·삼중259를 더했다. `ocean`은 생략/false면 기존 일반 조건 자료와 ID를 검증하고 true면 개발 중 양쪽 클라이언트 대조와 실제 표시 어종 ID로 확인한다. 범위·하한·미확인 의미는 유지한다. 원저자 CSV 두 파일의 숫자 사실만 사용하고 URL/고정 해시/확인일과 권리 범위를 기록한다.
+- `hook-yields.v1.json`: 현재 일반42종/이중39·삼중20과 먼바다259종/이중259·삼중259다. `ocean`은 생략/false면 기존 일반 조건 자료와 ID를 검증하고 true면 개발 중 양쪽 클라이언트 대조와 실제 표시 어종 ID로 확인한다. 범위·하한·미확인 의미는 유지한다. 먼바다는 원저자 CSV 두 파일의 숫자 사실만 사용하고 URL/고정 해시/확인일과 권리 범위를 기록한다.
 - 납품원77종·단골거래12명/54개 NPC-어종 구간은 별도 정적 파일을 만들지 않고 클라이언트 시트를 카탈로그 로드 시 관리 값으로 복사한다. 런타임 HTTP는 없다. 범위/대조 근거는 [DATA-SOURCES](../docs/development/DATA-SOURCES.md#최소-획득력납품-구간수량-확장-2026-11-06)를 따른다.
 
 개발 전용 재생성(테스트/게임 프로세스 접근 없음):

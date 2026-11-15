@@ -8,6 +8,11 @@ using Lumina.Data;
 using Lumina.Excel.Sheets;
 
 // Development-only, local files and client sheets. Never evaluates JavaScript or reads a game process.
+if (args.Length > 0 && args[0] == "--hook-yield-audit")
+{
+    HookYieldAudit.Run(args.Skip(1).ToArray());
+    return;
+}
 if (args.Length > 0 && args[0] == "--ocean-conditions")
 {
     OceanConditionImport.Run(args.Skip(1).ToArray());

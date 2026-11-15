@@ -86,7 +86,7 @@ or third-party implementation is copied. These observations do not establish
 complete time/weather conditions or a hookset. They are not represented as
 MIT-licensed Teamcraft records.
 
-Regular-fishing multi-hook numeric observations (21 fish)
+Regular-fishing multi-hook numeric observations (42 fish)
 Observer: Fruity Snacks, checked 2026-11-05
 Sources, fixed video IDs and description/content SHA256: data/hook-yields.v1.json
 https://www.youtube.com/watch?v=_tSbRKjum54
@@ -114,6 +114,21 @@ are recorded. No cross-action yield conversion or Gathering breakpoints inferred
 No guide prose, code, images or video is redistributed. No public reuse license
 was identified; rights to the guides remain with their authors. These observations
 are not represented as MIT-licensed or Apache-licensed upstream data.
+
+Additional direct public catch observations, checked 2026-11-15:
+Tai Ki, Phrodiate Acuvens, Seori Mimeguri, Touya Glycine, Kinakko Kck,
+Himenyan Biwaco, Pepega Pepe, Dead Stock, Xeonidas Aspida, Light Umbra,
+Steinkel Solmund, Chibi Tora, Lu Snowynight, Mirfa Seiten and Rewachi Ultra.
+The original Lodestone article/comment URLs, original HTML response SHA256,
+observer credits and relevant observation context are recorded in
+data/hook-yields.v1.json sources with IDs starting with lodestone-.
+Sixteen fish were added and Fossiltongue's Double Hook range was supplemented.
+Only individual numeric observations are retained. Named Gathering ratings are
+observation context, not inferred breakpoints. Explicit preparation totals are
+used only as lower bounds when they establish a single-action minimum.
+No contributor prose, macros, images or code is redistributed. No public reuse
+license was identified; rights to the posts remain with their contributors.
+These observations are not represented as MIT-licensed or Apache-licensed data.
 
 Ocean Fishing basic-bait observations (13 stops, 52 guidance rows) and multi-hook quantities (259 fish)
 Observer: Tyo'to Tayuun, checked 2026-11-06

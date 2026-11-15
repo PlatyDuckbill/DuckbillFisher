@@ -1,0 +1,54 @@
+{
+  "format": "hook-yield-audit/v1",
+  "dataVersion": "regular-and-ocean-hook-yields-2026-11-15",
+  "conditionsSha256": "EDAC64F98C0DE23E9E01EBF43B9BBC41C152B0C3137CEC8ACDAD495E841D0901",
+  "hookYieldsSha256": "205D3CF55A546E589DA25B36D4A338EF204771A9580AB05E0F6F219E5833E656",
+  "csvSha256": "81543B020B35CAAB51155EE997424DB22E383445E720B4E3A40AECFEBDB008BD",
+  "clientRows": 2512,
+  "identityMismatches": 0,
+  "entries": 301,
+  "counts": {
+    "Unresolved": {
+      "rows": 47,
+      "doubleKnown": 0,
+      "tripleKnown": 0,
+      "bothUnknown": 47,
+      "oneUnknown": 0
+    },
+    "RegularConditions": {
+      "rows": 1258,
+      "doubleKnown": 39,
+      "tripleKnown": 20,
+      "bothUnknown": 1216,
+      "oneUnknown": 25
+    },
+    "IntuitionPrerequisites": {
+      "rows": 43,
+      "doubleKnown": 25,
+      "tripleKnown": 10,
+      "bothUnknown": 17,
+      "oneUnknown": 17
+    },
+    "Ocean": {
+      "rows": 259,
+      "doubleKnown": 259,
+      "tripleKnown": 259,
+      "bothUnknown": 0,
+      "oneUnknown": 0
+    },
+    "OtherItem": {
+      "rows": 944,
+      "doubleKnown": 0,
+      "tripleKnown": 0,
+      "bothUnknown": 944,
+      "oneUnknown": 0
+    },
+    "EventItem": {
+      "rows": 4,
+      "doubleKnown": 0,
+      "tripleKnown": 0,
+      "bothUnknown": 4,
+      "oneUnknown": 0
+    }
+  }
+}

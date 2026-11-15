@@ -43,6 +43,7 @@
 - [미끼 준비 · 0.3.0.0 개발 확인](bait/BAIT-PREPARATION.md)
 - [전체 원본 도입과 일부 조건 표시](data/ALL-SOURCE-DATA.md)
 - [일반 낚시 미확인 자료 보완 · 0.2.9.0](data/DATA-COMPLETION-2026-10-18.md)
+- [이중·삼중 수량2,512행 전수 집계·일반16종 보완](../development/DATA-SOURCES.md#수량-빈칸-전수-점검과-보완-2026-11-15) · [전체 CSV](data/reports/hook-yields-2026-11-15.csv)
 - [전체 데이터 확대 전 누락 점검](data/DATA-COVERAGE-REVIEW.md)
 - [신생 에오르제아 상세 조건 확대](data/DATA-EXPANSION.md)
 - [MVP-01 상세 정보와 지도 핀 / 초기 출현 예측](data/DETAILS.md)

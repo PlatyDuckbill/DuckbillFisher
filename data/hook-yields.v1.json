@@ -1,8 +1,8 @@
 {
   "schemaVersion": 1,
-  "dataVersion": "regular-and-ocean-hook-yields-2026-11-06",
-  "checkedUtc": "2026-11-06",
-  "rights": "Fruity Snacks and Tyo\u0027to Tayuun gameplay observations. No public reuse license identified. Individual numeric facts only; no prose, code, images, bite times or strategies redistributed.",
+  "dataVersion": "regular-and-ocean-hook-yields-2026-11-15",
+  "checkedUtc": "2026-11-15",
+  "rights": "Published catch observations by Fruity Snacks, Tyo'to Tayuun and credited Lodestone contributors. No public reuse license identified. Individual numeric facts only; no prose, code, images, bite times or strategies redistributed.",
   "processing": "Linked to existing FishParameter/Item identities. Explicit single-action quantities only. Null means unconfirmed. Null maximum means the guide establishes only a lower bound, including the count reached by its stated preparation sequence; no upper bound, cross-action conversion or Gathering breakpoint inferred.",
   "sources": [
     {
@@ -78,9 +78,147 @@
       "id": "fruity-dawntrail-2026-11-06",
       "url": "https://docs.google.com/document/d/1HB2R8e2ZS6kW3v-7xSYuBbTEA3AZSLj4j2jrA2YcPFs/edit",
       "contentSha256": "F71A2C1920C919374C8F94CE523E631A2E5067F67B532D5D5465A91839C583B6"
+    },
+    {
+      "id": "lodestone-hook-study-3619884",
+      "url": "https://jp.finalfantasyxiv.com/lodestone/character/5725416/blog/3619884/",
+      "contentSha256": "D8EEF79E91D5937AF4C7641BB13B72057FCFA38C3486C8637362FF9A1AF44B4E",
+      "snapshotFormat": "Original HTTPS HTML response bytes",
+      "checkedUtc": "2026-11-15",
+      "observer": "Tai Ki",
+      "observationContext": "Japanese Mega Octopus matched to English Octomammoth by the same Item 7707 / FishParameter 216 on both clients. No rule generalized to other big fish."
+    },
+    {
+      "id": "lodestone-blacklip-5598164",
+      "url": "https://na.finalfantasyxiv.com/lodestone/character/45179290/blog/5598164/",
+      "contentSha256": "0BB7009411201FBEA9466C18BBAF3C557987795A8DE780D92352FB88E0966F75",
+      "snapshotFormat": "Original HTTPS HTML response bytes",
+      "checkedUtc": "2026-11-15",
+      "observer": "Phrodiate Acuvens",
+      "observationContext": "Observed at level 100, Gathering 2944. Not a Gathering breakpoint or current-character guarantee."
+    },
+    {
+      "id": "lodestone-lamp-1795925",
+      "url": "https://jp.finalfantasyxiv.com/lodestone/character/365561/blog/1795925/",
+      "contentSha256": "207393CB91F6CE07B8FFFAF3AF5D0FF63E9C962B5DBD42D85B7B05A1BAC8AE41",
+      "snapshotFormat": "Original HTTPS HTML response bytes",
+      "checkedUtc": "2026-11-15",
+      "observer": "Seori Mimeguri",
+      "observationContext": "Author comment explicitly reports four Lamp Marimo on Double Hook."
+    },
+    {
+      "id": "lodestone-boxing-4782008",
+      "url": "https://jp.finalfantasyxiv.com/lodestone/character/10977364/blog/4782008/",
+      "contentSha256": "3881DCCC34E666F22FEC31F0F5F8701A32A8E87973D9316B630D0D45F65DFCBC",
+      "snapshotFormat": "Original HTTPS HTML response bytes",
+      "checkedUtc": "2026-11-15",
+      "observer": "Touya Glycine"
+    },
+    {
+      "id": "lodestone-sky-scorpion-5741062",
+      "url": "https://jp.finalfantasyxiv.com/lodestone/character/42964320/blog/5741062/",
+      "contentSha256": "5B3BD267F938686E5024AE81E46C0A9EB6C9F692164F20D526807FB513A2C0B8",
+      "snapshotFormat": "Original HTTPS HTML response bytes",
+      "checkedUtc": "2026-11-15",
+      "observer": "Kinakko Kck",
+      "observationContext": "Explicit three-to-four range for both Metal Spinner targets. No Triple Hook quantity stated."
+    },
+    {
+      "id": "lodestone-cricket-5252362",
+      "url": "https://jp.finalfantasyxiv.com/lodestone/character/34801907/blog/5252362/",
+      "contentSha256": "7E043E040AEC6C3368FE518F14C955D93ABE3D123DC06800490B9087C01C6E79",
+      "snapshotFormat": "Original HTTPS HTML response bytes",
+      "checkedUtc": "2026-11-15",
+      "observer": "Himenyan Biwaco",
+      "observationContext": "Observed Triple Hook yields five or six; not a theoretical maximum across all Gathering ratings."
+    },
+    {
+      "id": "lodestone-blue-crab-2ecaaedca71",
+      "url": "https://na.finalfantasyxiv.com/lodestone/playguide/db/item/2ecaaedca71/",
+      "contentSha256": "7252F323006CA7141A31BDCACBAA01B7F35982BB9694F4128E04527C9904E3C2",
+      "snapshotFormat": "Original HTTPS HTML response bytes",
+      "checkedUtc": "2026-11-15",
+      "observer": "Pepega Pepe"
+    },
+    {
+      "id": "lodestone-petal-d61268b56a6",
+      "url": "https://na.finalfantasyxiv.com/lodestone/playguide/db/item/d61268b56a6/",
+      "contentSha256": "371CDB07B216400AE61D3FD6E979E88A5944D24E65D2EF9D91A0C1B1C6084659",
+      "snapshotFormat": "Original HTTPS HTML response bytes",
+      "checkedUtc": "2026-11-15",
+      "observer": "Dead Stock; Xeonidas Aspida; Light Umbra"
+    },
+    {
+      "id": "lodestone-thinker-77c295edae2",
+      "url": "https://na.finalfantasyxiv.com/lodestone/playguide/db/item/77c295edae2/",
+      "contentSha256": "18C0F5C20D334C78018C3993F64D4DDD34D3498091356439715372F6906ACC7D",
+      "snapshotFormat": "Original HTTPS HTML response bytes",
+      "checkedUtc": "2026-11-15",
+      "observer": "Steinkel Solmund"
+    },
+    {
+      "id": "lodestone-shrieker-77e10fd9ba2",
+      "url": "https://eu.finalfantasyxiv.com/lodestone/playguide/db/item/77e10fd9ba2/",
+      "contentSha256": "A043E8EB1F3A7D184420B22E4D776EED58EC5C647A2D081B46BFB9515BA7EE86",
+      "snapshotFormat": "Original HTTPS HTML response bytes",
+      "checkedUtc": "2026-11-15",
+      "observer": "Chibi Tora"
+    },
+    {
+      "id": "lodestone-flowerhorn-b0045a57010",
+      "url": "https://na.finalfantasyxiv.com/lodestone/playguide/db/item/b0045a57010/",
+      "contentSha256": "64929589E094E90FB4946AF69839B9B42561CD2B5BF9F458C461E71464531EA0",
+      "snapshotFormat": "Original HTTPS HTML response bytes",
+      "checkedUtc": "2026-11-15",
+      "observer": "Lu Snowynight"
+    },
+    {
+      "id": "lodestone-lover-0d16d7792ba",
+      "url": "https://na.finalfantasyxiv.com/lodestone/playguide/db/item/0d16d7792ba/",
+      "contentSha256": "9C557A141EDF25C9FD202FA018444EC5EF042B873605F179DCC50A7979095F83",
+      "snapshotFormat": "Original HTTPS HTML response bytes",
+      "checkedUtc": "2026-11-15",
+      "observer": "Lu Snowynight",
+      "observationContext": "Only lower bound from explicitly described first catch plus Double Hook reaching three total. Speculative, untested Triple Hook excluded."
+    },
+    {
+      "id": "lodestone-usuginu-abbbd6b9593",
+      "url": "https://na.finalfantasyxiv.com/lodestone/playguide/db/item/abbbd6b9593/",
+      "contentSha256": "0929C3AD06F722D072C7F584092313FF8A6C797BDE5F3BF98003510B660D06FF",
+      "snapshotFormat": "Original HTTPS HTML response bytes",
+      "checkedUtc": "2026-11-15",
+      "observer": "Lu Snowynight",
+      "observationContext": "Only lower bounds from explicitly described first catch plus Double/Triple Hook reaching three/four total. No upper bound inferred."
+    },
+    {
+      "id": "lodestone-bounty-5304002",
+      "url": "https://jp.finalfantasyxiv.com/lodestone/character/25311264/blog/5304002/",
+      "contentSha256": "823C5BBD6D9B3539174A5837DD5D79249B2E4B131D3B17F9F0AB5E43730CFFCF",
+      "snapshotFormat": "Original HTTPS HTML response bytes",
+      "checkedUtc": "2026-11-15",
+      "observer": "Mirfa Seiten",
+      "observationContext": "Explicit inventory quantities in Intuition carryover experiments; collectable acceptance cases excluded."
+    },
+    {
+      "id": "lodestone-fossil-5316286",
+      "url": "https://jp.finalfantasyxiv.com/lodestone/character/39846081/blog/5316286/",
+      "contentSha256": "241049F4D5554AD0345D92E18C4277B4A9CB01000AC46BB7E6552DF5362E8DAE",
+      "snapshotFormat": "Original HTTPS HTML response bytes",
+      "checkedUtc": "2026-11-15",
+      "observer": "Rewachi Ultra"
     }
   ],
   "entries": [
+    {
+      "itemId": 4869,
+      "fishParameterId": 4,
+      "source": "lodestone-hook-study-3619884",
+      "doubleHook": {
+        "minimum": 4,
+        "maximum": 4
+      },
+      "tripleHook": null
+    },
     {
       "itemId": 4913,
       "fishParameterId": 155,
@@ -105,6 +243,59 @@
       }
     },
     {
+      "itemId": 5008,
+      "fishParameterId": 141,
+      "source": "lodestone-boxing-4782008",
+      "doubleHook": {
+        "minimum": 4,
+        "maximum": 4
+      },
+      "tripleHook": null
+    },
+    {
+      "itemId": 5466,
+      "fishParameterId": 120,
+      "source": "lodestone-blacklip-5598164",
+      "doubleHook": {
+        "minimum": 4,
+        "maximum": 4
+      },
+      "tripleHook": {
+        "minimum": 7,
+        "maximum": 7
+      }
+    },
+    {
+      "itemId": 5544,
+      "fishParameterId": 74,
+      "source": "lodestone-lamp-1795925",
+      "doubleHook": {
+        "minimum": 4,
+        "maximum": 4
+      },
+      "tripleHook": null
+    },
+    {
+      "itemId": 7707,
+      "fishParameterId": 216,
+      "source": "lodestone-hook-study-3619884",
+      "doubleHook": {
+        "minimum": 1,
+        "maximum": 1
+      },
+      "tripleHook": null
+    },
+    {
+      "itemId": 12753,
+      "fishParameterId": 339,
+      "source": "lodestone-sky-scorpion-5741062",
+      "doubleHook": {
+        "minimum": 3,
+        "maximum": 4
+      },
+      "tripleHook": null
+    },
+    {
       "itemId": 12754,
       "fishParameterId": 340,
       "source": "fruity-guide-2026-11-05",
@@ -115,12 +306,22 @@
       "tripleHook": null
     },
     {
+      "itemId": 12757,
+      "fishParameterId": 343,
+      "source": "lodestone-cricket-5252362",
+      "doubleHook": null,
+      "tripleHook": {
+        "minimum": 5,
+        "maximum": 6
+      }
+    },
+    {
       "itemId": 12800,
       "fishParameterId": 386,
-      "source": "pWQbh47dThg",
+      "source": "lodestone-fossil-5316286",
       "doubleHook": {
         "minimum": 3,
-        "maximum": null
+        "maximum": 4
       },
       "tripleHook": null
     },
@@ -128,6 +329,16 @@
       "itemId": 12805,
       "fishParameterId": 391,
       "source": "N9CAsGXVBvU",
+      "doubleHook": {
+        "minimum": 3,
+        "maximum": 4
+      },
+      "tripleHook": null
+    },
+    {
+      "itemId": 12810,
+      "fishParameterId": 396,
+      "source": "lodestone-sky-scorpion-5741062",
       "doubleHook": {
         "minimum": 3,
         "maximum": 4
@@ -153,6 +364,29 @@
         "maximum": 2
       },
       "tripleHook": null
+    },
+    {
+      "itemId": 22393,
+      "fishParameterId": 633,
+      "source": "lodestone-usuginu-abbbd6b9593",
+      "doubleHook": {
+        "minimum": 2,
+        "maximum": null
+      },
+      "tripleHook": {
+        "minimum": 3,
+        "maximum": null
+      }
+    },
+    {
+      "itemId": 23054,
+      "fishParameterId": 636,
+      "source": "lodestone-shrieker-77e10fd9ba2",
+      "doubleHook": null,
+      "tripleHook": {
+        "minimum": 3,
+        "maximum": 3
+      }
     },
     {
       "itemId": 23056,
@@ -211,9 +445,55 @@
       "tripleHook": null
     },
     {
+      "itemId": 27414,
+      "fishParameterId": 719,
+      "source": "lodestone-lover-0d16d7792ba",
+      "doubleHook": {
+        "minimum": 2,
+        "maximum": null
+      },
+      "tripleHook": null
+    },
+    {
       "itemId": 27462,
       "fishParameterId": 718,
       "source": "fruity-guide-2026-11-05",
+      "doubleHook": {
+        "minimum": 2,
+        "maximum": 2
+      },
+      "tripleHook": {
+        "minimum": 3,
+        "maximum": 3
+      }
+    },
+    {
+      "itemId": 29673,
+      "fishParameterId": 908,
+      "source": "lodestone-thinker-77c295edae2",
+      "doubleHook": null,
+      "tripleHook": {
+        "minimum": 3,
+        "maximum": 3
+      }
+    },
+    {
+      "itemId": 30487,
+      "fishParameterId": 910,
+      "source": "lodestone-blue-crab-2ecaaedca71",
+      "doubleHook": {
+        "minimum": 2,
+        "maximum": 2
+      },
+      "tripleHook": {
+        "minimum": 3,
+        "maximum": 3
+      }
+    },
+    {
+      "itemId": 31129,
+      "fishParameterId": 925,
+      "source": "lodestone-petal-d61268b56a6",
       "doubleHook": {
         "minimum": 2,
         "maximum": 2
@@ -240,6 +520,19 @@
       "doubleHook": {
         "minimum": 2,
         "maximum": null
+      },
+      "tripleHook": {
+        "minimum": 3,
+        "maximum": 3
+      }
+    },
+    {
+      "itemId": 36448,
+      "fishParameterId": 1071,
+      "source": "lodestone-flowerhorn-b0045a57010",
+      "doubleHook": {
+        "minimum": 2,
+        "maximum": 2
       },
       "tripleHook": {
         "minimum": 3,
@@ -320,6 +613,72 @@
         "minimum": 3,
         "maximum": 3
       }
+    },
+    {
+      "itemId": 41300,
+      "fishParameterId": 1275,
+      "source": "lodestone-bounty-5304002",
+      "doubleHook": {
+        "minimum": 2,
+        "maximum": 2
+      },
+      "tripleHook": {
+        "minimum": 3,
+        "maximum": 3
+      }
+    },
+    {
+      "itemId": 43735,
+      "fishParameterId": 1357,
+      "source": "fruity-dawntrail-2026-11-06",
+      "doubleHook": {
+        "minimum": 2,
+        "maximum": 2
+      },
+      "tripleHook": null
+    },
+    {
+      "itemId": 43781,
+      "fishParameterId": 1404,
+      "source": "fruity-dawntrail-2026-11-06",
+      "doubleHook": {
+        "minimum": 2,
+        "maximum": 2
+      },
+      "tripleHook": null
+    },
+    {
+      "itemId": 43795,
+      "fishParameterId": 1418,
+      "source": "fruity-dawntrail-2026-11-06",
+      "doubleHook": {
+        "minimum": 2,
+        "maximum": null
+      },
+      "tripleHook": null
+    },
+    {
+      "itemId": 43796,
+      "fishParameterId": 1419,
+      "source": "fruity-dawntrail-2026-11-06",
+      "doubleHook": {
+        "minimum": 2,
+        "maximum": null
+      },
+      "tripleHook": {
+        "minimum": 3,
+        "maximum": null
+      }
+    },
+    {
+      "itemId": 43798,
+      "fishParameterId": 1421,
+      "source": "fruity-dawntrail-2026-11-06",
+      "doubleHook": {
+        "minimum": 2,
+        "maximum": null
+      },
+      "tripleHook": null
     },
     {
       "itemId": 28937,
@@ -3946,59 +4305,6 @@
         "maximum": 1
       },
       "ocean": true
-    },
-    {
-      "itemId": 43781,
-      "fishParameterId": 1404,
-      "source": "fruity-dawntrail-2026-11-06",
-      "doubleHook": {
-        "minimum": 2,
-        "maximum": 2
-      },
-      "tripleHook": null
-    },
-    {
-      "itemId": 43735,
-      "fishParameterId": 1357,
-      "source": "fruity-dawntrail-2026-11-06",
-      "doubleHook": {
-        "minimum": 2,
-        "maximum": 2
-      },
-      "tripleHook": null
-    },
-    {
-      "itemId": 43796,
-      "fishParameterId": 1419,
-      "source": "fruity-dawntrail-2026-11-06",
-      "doubleHook": {
-        "minimum": 2,
-        "maximum": null
-      },
-      "tripleHook": {
-        "minimum": 3,
-        "maximum": null
-      }
-    },
-    {
-      "itemId": 43798,
-      "fishParameterId": 1421,
-      "source": "fruity-dawntrail-2026-11-06",
-      "doubleHook": {
-        "minimum": 2,
-        "maximum": null
-      },
-      "tripleHook": null
-    },
-    {
-      "itemId": 43795,
-      "fishParameterId": 1418,
-      "source": "fruity-dawntrail-2026-11-06",
-      "doubleHook": {
-        "minimum": 2,
-        "maximum": null
-      },
-      "tripleHook": null
     }
   ]
 }

@@ -1,20 +1,51 @@
 # 낚시 상세 데이터의 출처와 조회 계획
 
-갱신: 2026-11-06. 일반 도감1,258종 모두 상세에 연결했다. 최신 개발 자료는 시간·날씨1,257종 확인/부분1종, 핵심 미확인2종(성 파스릭의 석두 직감 시간·이크에바지 가위 낚아채기·시간/날씨)이다. 작살203건/미확인115건은 보존했다. 빌드·자료 대조와 인게임 확인 대기를 구분한다. [재현](../../data/README.md), [초기 보완 근거](../verification/data/DATA-COMPLETION-2026-10-18.md), [당시 잔여 목록](../verification/data/reports/fishing-data-2026-10-17/remaining.md). 입질 통계 API와 런타임 HTTP는 도입하지 않는다.
+갱신: 2026-11-15. 일반 도감1,258종 모두 상세에 연결했다. 최신 개발 자료는 시간·날씨1,257종 확인/부분1종, 핵심 미확인2종(성 파스릭의 석두 직감 시간·이크에바지 가위 낚아채기·시간/날씨)이다. 작살203건/미확인115건은 보존했다. 빌드·자료 대조와 인게임 확인 대기를 구분한다. [재현](../../data/README.md), [초기 보완 근거](../verification/data/DATA-COMPLETION-2026-10-18.md), [당시 잔여 목록](../verification/data/reports/fishing-data-2026-10-17/remaining.md). 입질 통계 API와 런타임 HTTP는 도입하지 않는다.
+
+## 수량 빈칸 전수 점검과 보완 (2026-11-15)
+
+- 사용자 요청으로 기존26행의 null만이 아니라 설치 KR·글로벌 FishParameter **2,512행 전체**와 수량 JSON을 대조했다. 양쪽 Item/EventItem 종류·Item/FishParameter 짝·도감/먼바다 구분 불일치0건이다. [전수 CSV](../verification/data/reports/hook-yields-2026-11-15.csv)에는 이름·ID·기술별 수량/미확인·원인 코드를, [집계 JSON](../verification/data/reports/hook-yields-2026-11-15.summary.json)에는 입력/CSV 해시를 남겼다. 재실행은 [data/README](../../data/README.md#일반-낚시-이중삼중-수량-안내-개발본-2026-11-05)의 `--hook-yield-audit`를 따른다.
+- 일반 조건1,258종 중 **이중39·삼중20·양쪽 모두17종**, 양쪽 미확인1,216종·한쪽 미확인25종이다. 기술별 빈칸은 이중1,219·삼중1,238종이다. 직감 선행43종은 이중25·삼중10·한쪽 이상26종, 양쪽 미확인17종이다. 먼바다259종은 양쪽 모두 알려져 있다. 조건 자료 밖 일반 Item944행·EventItem4행·KR 이름/참조 해석 불가47행은 별도 분류했다. 작살의 별도 시트는 이중/삼중 대상이 아니므로 이 수량 집계에 섞지 않는다.
+- 원저자 종합/Dawntrail 가이드와 Indigo/Ruby CSV를 다시 내려받아 기존 고정 SHA256 네 개와 일치함을 확인했다. 가이드의 Double/Triple Hook 단락과 기존285행을 재검토하고 Lodestone의 개별 어획 기록15개를 추가 조사했다. **빈칸 전수 집계는 모든 미확인 어종의 웹 기록을 개별 전수 조사했다는 뜻이 아니다.** 일반 전수 수량표는 확보하지 못했으며, 숫자가 없는 기술 권장·필요 총수량·다른 어종/기술의 값에서 새 값을 추정하지 않았다.
+- 일반16종의 기술별22값을 새로 넣고 Fossiltongue의 이중3이상을 명시적3~4로 보완해 일반42종/전체301종이 됐다. 새 관찰은 `sources`의 URL·HTML 원본 응답 SHA256·확인일·관찰자/맥락으로 고정한다. 원문·코드·이미지는 배포하지 않는다. 공개 재사용 라이선스는 확인되지 않았으며 THIRD-PARTY-NOTICES에 원저작권과 가공 범위를 기록했다.
+
+| 어종(KR / 영문) | Item / FishParameter | 이중 / 삼중 | 원본 기록 |
+|---|---|---|---|
+| 멜토르 망둥이 / Merlthor Goby | 4869 / 4 | 4 / 미확인 | [Tai Ki](https://jp.finalfantasyxiv.com/lodestone/character/5725416/blog/3619884/) |
+| 대왕문어 / Octomammoth | 7707 / 216 | 1 / 미확인 | 위 Tai Ki의 직접 시험. JP 메가옥토퍼스는 같은 ID로 대응하며 다른 터주로 일반화하지 않음 |
+| 검은나비조개 / Blacklip Oyster | 5466 / 120 | 4 / 7 | [Phrodiate Acuvens](https://na.finalfantasyxiv.com/lodestone/character/45179290/blog/5598164/), Lv100/획득력2944의 관찰이며 임계값 아님 |
+| 등불해조구 / Lamp Marimo | 5544 / 74 | 4 / 미확인 | [Seori Mimeguri의 댓글](https://jp.finalfantasyxiv.com/lodestone/character/365561/blog/1795925/) |
+| 권투비파 / Boxing Pleco | 5008 / 141 | 4 / 미확인 | [Touya Glycine](https://jp.finalfantasyxiv.com/lodestone/character/10977364/blog/4782008/) |
+| 하늘요정 셀레네 / Sky Faerie | 12753 / 339 | 3~4 / 미확인 | [Kinakko Kck](https://jp.finalfantasyxiv.com/lodestone/character/42964320/blog/5741062/) |
+| 비행전갈 / Scorpionfly | 12810 / 396 | 3~4 / 미확인 | 위 Kinakko Kck, 메탈 스피너의 두 대상에 대한 명시 범위 |
+| 두더지귀뚜라미 / Hedgemole Cricket | 12757 / 343 | 미확인 / 5~6 | [Himenyan Biwaco](https://jp.finalfantasyxiv.com/lodestone/character/34801907/blog/5252362/), 관찰 범위이며 모든 획득력의 상한 아님 |
+| 청게 / Blue Crab | 30487 / 910 | 2 / 3 | [Pepega Pepe](https://na.finalfantasyxiv.com/lodestone/playguide/db/item/2ecaaedca71/) |
+| 매화조개 / Petal Shell | 31129 / 925 | 2 / 3 | [Dead Stock·Xeonidas Aspida·Light Umbra](https://na.finalfantasyxiv.com/lodestone/playguide/db/item/d61268b56a6/) |
+| 지혜산호 / Thinker's Coral | 29673 / 908 | 미확인 / 3 | [원본 댓글](https://na.finalfantasyxiv.com/lodestone/playguide/db/item/77c295edae2/) |
+| 슈리커 / Shrieker | 23054 / 636 | 미확인 / 3 | [Chibi Tora](https://eu.finalfantasyxiv.com/lodestone/playguide/db/item/77e10fd9ba2/), 생미끼/생미끼II 각각 직접3 관찰 |
+| 꽃뿔 / Flowerhorn | 36448 / 1071 | 2 / 3 | [Lu Snowynight](https://na.finalfantasyxiv.com/lodestone/playguide/db/item/b0045a57010/) |
+| 연인화 / Lover's Flower | 27414 / 719 | 2이상 / 미확인 | [Lu Snowynight](https://na.finalfantasyxiv.com/lodestone/playguide/db/item/0d16d7792ba/), 원문에 적힌 1+이중=총3의 하한만 사용. 삼중은 원저자도 미시험이라 제외 |
+| 얇은보자기문어 / Usuginu Octopus | 22393 / 633 | 2이상 / 3이상 | [Lu Snowynight](https://na.finalfantasyxiv.com/lodestone/playguide/db/item/abbbd6b9593/), 명시된 1+기술=총3/4의 하한만 사용 |
+| 풍요해 구피 / Little Bounty | 41300 / 1275 | 2 / 3 | [Mirfa Seiten](https://jp.finalfantasyxiv.com/lodestone/character/25311264/blog/5304002/), 일반 수령량만 사용 |
+| 화석아로와나 / Fossiltongue | 12800 / 386 | 3~4 / 미확인 | [Rewachi Ultra](https://jp.finalfantasyxiv.com/lodestone/character/39846081/blog/5316286/), 기존 이중3이상의 범위 보완 |
+
+- CSV의 `Exact`는 원본이 제시한 단일 관찰 수량, `Range`는 명시 관찰 범위, `AtLeast`는 하한이다. 현재 캐릭터 획득력에서 보장된다는 의미가 아니다. 획득력별 전체 임계값·소장품으로 받은1마리와 일반 수령량의 구분은 기존 계약을 유지한다.
+- 검증: KR·글로벌 시트 ID/구분2,512행, 내장301행의 출처/범위/짝 검사 완료. 기존285행 중 변경은 Fossiltongue1행뿐이며 먼바다259행은 값/출처 변경0이다. KR 별도→정규 Debug 빌드 경고0/오류0, DLL 내장 수량 자료 SHA256 `205D3CF55A546E589DA25B36D4A338EF204771A9580AB05E0F6F219E5833E656`은 JSON과 일치한다. 한영1,141키·형식 인자 일치, 문서/로컬 링크 검사와 `git diff --check` 완료. STATUS76줄의 기존 길이 경고는 남는다. 테스트는 실행하지 않았다. 실제 어획 수량과 게임 표시 실기는 대기이며 공개0.10.0.1 패키지를 변경하지 않았다.
+- 게임 확인: 정규 개발 DLL `$env:DUCKBILL_ROOT/src/DuckbillFisher.Plugin/bin/Debug/DuckbillFisher.dll`을 로드한 뒤 어종 검색→상세에서 검은나비조개4/7·두더지귀뚜라미 미확인/5~6·대왕문어1/미확인·풍요해 구피2/3을 확인한다. 한쪽 미확인과 범위 표시, 미보완 어종의 미확인 유지가 기대 결과다. 실제 이중/삼중 어획량은 별도 확인 대기다.
 
 ## 필요한 어종 보완과 먼바다 조건 (2026-11-06)
 
 - 조건 자료는 `kr-regular-2026-11-06`으로 갱신하고 등급 자료의 조건 해시를 함께 갱신했다. `reviewedDetailObservations`에 URL·확인일·스냅샷 SHA256·수치·가공 범위를 기록했다. 기존 Tracker/Teamcraft revision은 원래 기반으로 보존한다. 새 자료가 전체 기반을 대체했다고 표현하지 않는다.
 - [Fruity Snacks Dawntrail 가이드](https://docs.google.com/document/d/1HB2R8e2ZS6kW3v-7xSYuBbTEA3AZSLj4j2jrA2YcPFs/edit)의 명시적 직감 시간으로 대왕큰뱀머리고기350초·제파 보폴360초·채광 하트가오리900초·세 날 범고래600초를 채웠다. [Uzel Qestir의 기록](https://jp.finalfantasyxiv.com/lodestone/character/29265719/blog/5636744)으로 정강이 메기/희망잉어 각300초, Razor Edge의 [심혈 망령](https://jp.finalfantasyxiv.com/lodestone/character/22067410/blog/5681892)300초·[번개구체](https://na.finalfantasyxiv.com/lodestone/character/22067410/blog/5723521/)90초를 보완했다. 출현 시간 길이를 직감 시간으로 사용하지 않았다.
 - 양쪽 시트의 이크에바지/요에콰 `FishingNoteInfo` 제한 플래그는0이지만,0만으로 제한 없음을 확정할 수 없다는 기존 계약을 유지한다. 요에콰만 [실측 기록 운영자의 명시적 무제한/Powerful 안내](https://eorzea-weather.com/en/fish/yowekwa-inkhead)를 채택했다. 이크에바지는 낚아채기와 시간/날씨 완전성 미확인을 유지한다. 성 파스릭은 실제 어획자의 공개 기록끼리120초/180초가 충돌해 null을 유지한다([180초](https://jp.finalfantasyxiv.com/lodestone/character/1632871/blog/5329881)·[120초](https://jp.finalfantasyxiv.com/lodestone/character/18733847/blog/5308295)).
-- 같은 Dawntrail 가이드로 기사 망둥이/발목 메기의 이중2를 추가했다. Golden Day 이중2이상·삼중3이상, Scarlet Queen/Copper Shark 이중2이상은 해당 기술로 준비 수량에 도달하는 원문의 절차가 입증하는 하한만 기록한다. 최대값·다른 기술·획득력 컷은 환산하지 않는다. 현재 일반26종/이중26·삼중11, 직감 선행43종 중20종/이중20·삼중8이다. 먼바다259종/양쪽259는 유지한다.
+- 같은 Dawntrail 가이드로 기사 망둥이/발목 메기의 이중2를 추가했다. Golden Day 이중2이상·삼중3이상, Scarlet Queen/Copper Shark 이중2이상은 해당 기술로 준비 수량에 도달하는 원문의 절차가 입증하는 하한만 기록한다. 최대값·다른 기술·획득력 컷은 환산하지 않는다. 당시 일반26종/이중26·삼중11, 직감 선행43종 중20종/이중20·삼중8이다. 먼바다259종/양쪽259는 유지한다.
 - 현재 Teamcraft 경로 최신 고정 revision `ca634a20561a1178fea3eb948be82e8fcccb8e2e`도 기존 최소 획득력350종과 값 충돌0, 우선 대상에 새 양수 값0이었다. 더 보완할 근거가 없는 최소 획득력은 미확인으로 유지한다. 일반 전수 완성·획득력별 보장 수량은 범위 밖이다.
 - [ocean-conditions.v1.json](../../data/ocean-conditions.v1.json)은 같은 원저자 Indigo/Ruby CSV의 시간 Yes/No·날씨 Yes/No/???·직감 필요 여부만 추린260행이다. URL·날짜·SHA256·권리 범위를 파일에 기록했다. 표/본문/이미지/코드는 배포하지 않는다. `???` 두 행은 미확인으로 남긴다. 빈 시간 열=일반, 빈 날씨 열=환해류 구분은 원저자 `displayStops.js`의 분류와 두 클라이언트 낚시터 슬롯으로 대조했다. Junior Jinbei는 양쪽 해역에 속하므로 Item 단독 키로 합치지 않는다.
 - 후보 판정은 Core의 순수 조건 비교다. 방문 시간대는 항로 시트, 현재 날씨는 검증된 ClientStructs 접근자, 직감 부재는 공개 StatusList 관찰이다. 관찰/자료 미확인 및 원본에 없는 날씨는 제외 근거가 아니다. 직감 활성은 대상까지 식별하지 못하므로 직감 필요 어종을 ‘조건 미확인’으로 남긴다. 장착 미끼/장비·특수 어획표·업적·점수 최적화는 판정하지 않는다. [실행 계약·실기 경계](../verification/native/GLOBAL-COMPAT.md#먼바다-조건-후보-개발본-2026-11-06).
 
 ## 일반 낚시 이중·삼중 수량 안내 (2026-11-05)
 
-- 별도 자료 [hook-yields.v1.json](../../data/hook-yields.v1.json)는 현재 일반26종/이중26·삼중11종이다. 최초12종의 영상 조사와 통합 가이드 추가9종에 위 Dawntrail5종을 보완한 결과다. 일반 직감 선행43종 중20종의 이중,8종의 삼중만 포함하므로 나머지는 여전히 미확인이다.
+- 별도 자료 [hook-yields.v1.json](../../data/hook-yields.v1.json)는 현재 일반42종/이중39·삼중20종이다. 최초12종의 영상 조사·통합 가이드9종·Dawntrail5종 이후 위 Lodestone16종을 보완했다. 일반 직감 선행43종 중26종에 한쪽 이상 수량이 있으며 나머지17종은 양쪽 모두 미확인이다.
 - 영상ID와 설명 SHA256, 문서의2026-11-05 UTF-8 텍스트 내보내기 스냅샷 SHA256(4CD82A004E2B11BAD2442FD07FCFD066EE9DC13FE38701DF26CBC2A9751486A0)을 기록한다. 문서 URL은 내용이 바뀔 수 있어 고정 revision으로 취급하지 않는다. 형식1의 source는 기존descriptionSha256과 추가contentSha256 중 유효한 해시를 요구한다. 기존 FishParameter↔Item 짝과 연결하며 원본에 없는 이름/ID/수량은 채우지 않는다.
 - 보강한 수량(이중/삼중, 빈 기술은 미확인): Titanic Sawfish4/7, Granite Crab3~4/미확인, Sculptor2/미확인, Eighteyes Eel1/미확인, Amber Monkfish1/미확인, Ponderer2/미확인, Thavnairian Caiman2/3, Thavnairian Calamari2/3, Jhinga2/3. 기존 Sand Egg의 삼중3, Astacus Aetherius의 이중2이상도 보완했다. 가이드의 해당 어종·직감 준비/재준비 절을 읽어 개별 기술의 숫자만 옮겼다. Green Prismfish의 복합 준비 순서 등 모호한 설명은 수량으로 환산하지 않았다.
 - 출처의 수량은 캐릭터 현재 획득력에서의 보장 수량이 아니다. ‘단일 어획+이중으로 직감 조건 충족’처럼 최소량만 확인되는 설명은 하한으로만 기록하고 상한은 null이다. 3~4처럼 명시한 범위와 구분한다. 삼중 설명이 없으면 null이며 이중 수량으로 변환하지 않는다. 일반 어종 전수·획득력별 임계값·소장품 실제 수령 계약은 미확인이다.
