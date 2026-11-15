@@ -47,7 +47,7 @@ internal static class HookYieldAudit
                 State(entry, "doubleHook") == "Unknown" && State(entry, "tripleHook") == "Unknown")
                 throw new InvalidDataException($"HookYieldEntryIdentity:{id}:{item}");
         }
-        var csv = new StringBuilder("fishParameterId,itemId,itemKind,category,nameKr,nameEn,inLog,intuitionPrerequisite,doubleState,doubleMinimum,doubleMaximum,tripleState,tripleMinimum,tripleMaximum,source,reason\n");
+        var csv = new StringBuilder("fishParameterId,itemId,itemKind,category,nameKr,nameEn,inLog,intuitionPrerequisite,doubleState,doubleMinimum,doubleMaximum,doubleEvidence,tripleState,tripleMinimum,tripleMaximum,tripleEvidence,source,reason\n");
         var totals = new Dictionary<string, int[]>();
         foreach (var row in kr.OrderBy(f => f.Id))
         {
@@ -64,8 +64,8 @@ internal static class HookYieldAudit
                 : category is "EventItem" or "OtherItem" ? "OutsideRegularConditionDataset_NoNumericEvidence"
                 : hasEntry ? "ActionQuantityUnconfirmed" : "NoYieldEntry";
             var fields = new[] { row.Id.ToString(), row.Item.ToString(), row.Kind, category, row.Name, globalById[row.Id].Name,
-                row.InLog ? "true" : "false", prerequisite ? "true" : "false", dh, Number("doubleHook", "minimum"), Number("doubleHook", "maximum"),
-                th, Number("tripleHook", "minimum"), Number("tripleHook", "maximum"), hasEntry ? entry.GetProperty("source").GetString()! : "", reason };
+                row.InLog ? "true" : "false", prerequisite ? "true" : "false", dh, Number("doubleHook", "minimum"), Number("doubleHook", "maximum"), hasEntry ? Evidence(entry, "doubleHook") : "Unknown",
+                th, Number("tripleHook", "minimum"), Number("tripleHook", "maximum"), hasEntry ? Evidence(entry, "tripleHook") : "Unknown", hasEntry ? entry.GetProperty("source").GetString()! : "", reason };
             csv.AppendLine(string.Join(',', fields.Select(s => '"' + s.Replace("\"", "\"\"") + '"')));
 
             string Number(string action, string bound) => hasEntry && entry.GetProperty(action).ValueKind != JsonValueKind.Null &&
@@ -83,7 +83,7 @@ internal static class HookYieldAudit
         File.WriteAllText(output, csv.ToString().Replace("\r\n", "\n"), new UTF8Encoding(false));
         var summary = new
         {
-            format = "hook-yield-audit/v1", dataVersion = root.GetProperty("dataVersion").GetString(),
+            format = "hook-yield-audit/v2", dataVersion = root.GetProperty("dataVersion").GetString(),
             conditionsSha256 = Hash(args[0]), hookYieldsSha256 = Hash(args[1]), csvSha256 = Hash(output),
             clientRows = kr.Length, identityMismatches = 0, entries = entries.Count,
             counts = totals.ToDictionary(p => p.Key, p => new { rows = p.Value[0], doubleKnown = p.Value[1], tripleKnown = p.Value[2], bothUnknown = p.Value[3], oneUnknown = p.Value[4] })
@@ -97,10 +97,18 @@ internal static class HookYieldAudit
     {
         var range = entry.GetProperty(key);
         if (range.ValueKind == JsonValueKind.Null) return "Unknown";
+        _ = Evidence(entry, key);
         var min = range.GetProperty("minimum").GetInt32();
         int? max = range.GetProperty("maximum").ValueKind == JsonValueKind.Null ? null : range.GetProperty("maximum").GetInt32();
         if (min is < 1 or > 999 || max is not null && (max < min || max > 999)) throw new InvalidDataException("HookYieldRange");
         return max is null ? "AtLeast" : max == min ? "Exact" : "Range";
+    }
+    private static string Evidence(JsonElement entry, string key)
+    {
+        var range = entry.GetProperty(key);
+        if (range.ValueKind == JsonValueKind.Null) return "Unknown";
+        var evidence = range.TryGetProperty("evidence", out var value) ? value.GetString() : "Observed";
+        return evidence is "Observed" or "Inferred" ? evidence : throw new InvalidDataException("HookYieldEvidence");
     }
     private sealed record Row(uint Id, uint Item, string Kind, string Name, bool InLog, bool Ocean);
     private static Row[] Read(string path, Language language)

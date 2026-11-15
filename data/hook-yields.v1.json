@@ -1,9 +1,9 @@
 {
   "schemaVersion": 1,
-  "dataVersion": "regular-and-ocean-hook-yields-2026-11-15",
+  "dataVersion": "regular-and-ocean-hook-yields-2026-11-15-evidence",
   "checkedUtc": "2026-11-15",
   "rights": "Published catch observations by Fruity Snacks, Tyo'to Tayuun and credited Lodestone contributors. No public reuse license identified. Individual numeric facts only; no prose, code, images, bite times or strategies redistributed.",
-  "processing": "Linked to existing FishParameter/Item identities. Explicit single-action quantities only. Null means unconfirmed. Null maximum means the guide establishes only a lower bound, including the count reached by its stated preparation sequence; no upper bound, cross-action conversion or Gathering breakpoint inferred.",
+  "processing": "Linked to existing FishParameter/Item identities. Explicit single-action quantities only. Null means unconfirmed. Null maximum means the guide establishes only a lower bound, including the count reached by its stated preparation sequence; no upper bound, cross-action conversion or Gathering breakpoint inferred. Optional per-action evidence=Inferred marks reviewed preparation-sequence lower bounds; omitted evidence means the source explicitly reports the quantity (Observed), not independent verification or a current-character guarantee.",
   "sources": [
     {
       "id": "_tSbRKjum54",
@@ -225,7 +225,8 @@
       "source": "AGL8XN87a5U",
       "doubleHook": {
         "minimum": 2,
-        "maximum": null
+        "maximum": null,
+        "evidence": "Inferred"
       },
       "tripleHook": null
     },
@@ -371,11 +372,13 @@
       "source": "lodestone-usuginu-abbbd6b9593",
       "doubleHook": {
         "minimum": 2,
-        "maximum": null
+        "maximum": null,
+        "evidence": "Inferred"
       },
       "tripleHook": {
         "minimum": 3,
-        "maximum": null
+        "maximum": null,
+        "evidence": "Inferred"
       }
     },
     {
@@ -394,7 +397,8 @@
       "source": "_tSbRKjum54",
       "doubleHook": {
         "minimum": 2,
-        "maximum": null
+        "maximum": null,
+        "evidence": "Inferred"
       },
       "tripleHook": {
         "minimum": 3,
@@ -407,7 +411,8 @@
       "source": "_tSbRKjum54",
       "doubleHook": {
         "minimum": 2,
-        "maximum": null
+        "maximum": null,
+        "evidence": "Inferred"
       },
       "tripleHook": {
         "minimum": 3,
@@ -450,7 +455,8 @@
       "source": "lodestone-lover-0d16d7792ba",
       "doubleHook": {
         "minimum": 2,
-        "maximum": null
+        "maximum": null,
+        "evidence": "Inferred"
       },
       "tripleHook": null
     },
@@ -519,7 +525,8 @@
       "source": "fruity-guide-2026-11-05",
       "doubleHook": {
         "minimum": 2,
-        "maximum": null
+        "maximum": null,
+        "evidence": "Inferred"
       },
       "tripleHook": {
         "minimum": 3,
@@ -571,11 +578,13 @@
       "source": "EyneCL9gcvM",
       "doubleHook": {
         "minimum": 2,
-        "maximum": null
+        "maximum": null,
+        "evidence": "Inferred"
       },
       "tripleHook": {
         "minimum": 3,
-        "maximum": null
+        "maximum": null,
+        "evidence": "Inferred"
       }
     },
     {
@@ -584,7 +593,8 @@
       "source": "X5DJDS5Iy1g",
       "doubleHook": {
         "minimum": 2,
-        "maximum": null
+        "maximum": null,
+        "evidence": "Inferred"
       },
       "tripleHook": null
     },
@@ -653,7 +663,8 @@
       "source": "fruity-dawntrail-2026-11-06",
       "doubleHook": {
         "minimum": 2,
-        "maximum": null
+        "maximum": null,
+        "evidence": "Inferred"
       },
       "tripleHook": null
     },
@@ -663,11 +674,13 @@
       "source": "fruity-dawntrail-2026-11-06",
       "doubleHook": {
         "minimum": 2,
-        "maximum": null
+        "maximum": null,
+        "evidence": "Inferred"
       },
       "tripleHook": {
         "minimum": 3,
-        "maximum": null
+        "maximum": null,
+        "evidence": "Inferred"
       }
     },
     {
@@ -676,7 +689,8 @@
       "source": "fruity-dawntrail-2026-11-06",
       "doubleHook": {
         "minimum": 2,
-        "maximum": null
+        "maximum": null,
+        "evidence": "Inferred"
       },
       "tripleHook": null
     },

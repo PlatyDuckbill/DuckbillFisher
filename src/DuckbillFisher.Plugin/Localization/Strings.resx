@@ -1155,8 +1155,10 @@ Shares duplicate prevention with zero-minute favorite alerts and uses the channe
     <value>{0}–{1}</value>
   </data>
   <data name="HookYieldHint" xml:space="preserve">
-    <value>Published yield guidance, not a guarantee at your current Gathering. Unknown values are not inferred from the other action. Collectables may behave differently.</value>
+    <value>Observed: quantities stated in published catch records. Inferred: a lower bound established by a documented preparation sequence. Neither is a guarantee at your current Gathering. Unknown values are not inferred from the other action. Collectables may behave differently.</value>
   </data>
+  <data name="HookYieldObservedValue" xml:space="preserve"><value>{0} (observed)</value></data>
+  <data name="HookYieldInferredValue" xml:space="preserve"><value>{0} (inferred)</value></data>
   <data name="HookYieldAtLeast" xml:space="preserve"><value>{0}+</value></data>
   <data name="HookYieldCount" xml:space="preserve"><value>{0} fish</value></data>
   <data name="HookYieldCountAtLeast" xml:space="preserve"><value>{0}+ fish</value></data>

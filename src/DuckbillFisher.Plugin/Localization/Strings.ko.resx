@@ -1155,8 +1155,10 @@
     <value>{0}~{1}</value>
   </data>
   <data name="HookYieldHint" xml:space="preserve">
-    <value>공개 자료의 수량 안내이며 현재 획득력에서의 보장 수량은 아닙니다. 한 기술의 수량으로 다른 기술을 추정하지 않습니다. 소장품은 적용이 다를 수 있습니다.</value>
+    <value>관찰: 공개 어획 기록에 명시된 수량입니다. 추정: 기록된 준비 절차에서 확인한 하한 수량입니다. 둘 다 현재 획득력에서의 보장 수량은 아닙니다. 한 기술의 수량으로 다른 기술을 추정하지 않습니다. 소장품은 적용이 다를 수 있습니다.</value>
   </data>
+  <data name="HookYieldObservedValue" xml:space="preserve"><value>{0} (관찰)</value></data>
+  <data name="HookYieldInferredValue" xml:space="preserve"><value>{0} (추정)</value></data>
   <data name="HookYieldAtLeast" xml:space="preserve"><value>{0} 이상</value></data>
   <data name="HookYieldCount" xml:space="preserve"><value>{0}마리</value></data>
   <data name="HookYieldCountAtLeast" xml:space="preserve"><value>{0}마리 이상</value></data>

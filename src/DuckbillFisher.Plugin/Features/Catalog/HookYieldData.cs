@@ -1,14 +1,18 @@
 using System.Collections.Frozen;
 using System.Text.Json;
+using System.Text.Json.Serialization;
 using Dalamud.Bindings.ImGui;
 using DuckbillFisher.Plugin.Localization;
 using T = DuckbillFisher.Plugin.Localization.TextKey;
 
 namespace DuckbillFisher.Plugin;
 
-internal sealed record HookYieldRange(int Minimum, int? Maximum)
+[JsonConverter(typeof(JsonStringEnumConverter<HookYieldEvidence>))]
+internal enum HookYieldEvidence { Observed, Inferred }
+
+internal sealed record HookYieldRange(int Minimum, int? Maximum, HookYieldEvidence Evidence = HookYieldEvidence.Observed)
 {
-    public bool Valid => Minimum is >= 1 and <= 999 && (Maximum is null || Maximum >= Minimum && Maximum <= 999);
+    public bool Valid => Enum.IsDefined(Evidence) && Minimum is >= 1 and <= 999 && (Maximum is null || Maximum >= Minimum && Maximum <= 999);
     public string Display => Maximum is null ? UiText.Get(T.HookYieldAtLeast, Minimum) : Maximum == Minimum
         ? Minimum.ToString(UiText.Culture) : UiText.Get(T.HookYieldRange, Minimum, Maximum);
 }
@@ -72,8 +76,12 @@ internal static class HookYieldText
         ImGui.PopTextWrapPos();
         UiWidgets.Tooltip(hint);
 
-        static string Count(HookYieldRange? range) => range is null ? UiText.Get(T.ConditionUnknown)
-            : range.Maximum is null ? UiText.Get(T.HookYieldCountAtLeast, range.Minimum)
-            : UiText.Get(T.HookYieldCount, range.Display);
+        static string Count(HookYieldRange? range)
+        {
+            if (range is null) return UiText.Get(T.ConditionUnknown);
+            var count = range.Maximum is null ? UiText.Get(T.HookYieldCountAtLeast, range.Minimum)
+                : UiText.Get(T.HookYieldCount, range.Display);
+            return UiText.Get(range.Evidence == HookYieldEvidence.Inferred ? T.HookYieldInferredValue : T.HookYieldObservedValue, count);
+        }
     }
 }
