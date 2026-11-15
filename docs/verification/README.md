@@ -4,6 +4,7 @@
 
 ## 배포와 호환성
 
+- [0.10.0.2 수량 보강·추정 표식](releases/RELEASE-0.10.0.2.md) · KR/글로벌/최소 지원 빌드·Plogon·익명 자산 해시 확인·공용 실제 raw22필드 일치·실기 대기
 - [0.10.0.1 공통 디자인·새 대표 아이콘](releases/RELEASE-0.10.0.1.md) · Plogon/Release·익명 ZIP/아이콘 해시·공용 실제 raw22필드 확인 완료·게임 설치/로드는 대기
 - [0.10.0.0 미발견 낚시터 지도·상단 메뉴 개선](releases/RELEASE-0.10.0.0.md) · Release 공개·익명 자산 일치·공용 실제 raw 확인 완료·패키지 실기는 배포 후 확인
 - [0.9.0.0 테마·어종 상세·먼바다 Beta](releases/RELEASE-0.9.0.0.md) · Plogon/Release·익명 자산/설치 JSON·공용 raw 확인 완료·사용자 지시로 실기는 배포 후 확인
