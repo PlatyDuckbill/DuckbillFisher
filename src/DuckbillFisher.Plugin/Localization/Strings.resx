@@ -1259,4 +1259,9 @@ Shares duplicate prevention with zero-minute favorite alerts and uses the channe
   <data name="OceanNoRecommendation" xml:space="preserve"><value>No basic target matches the current conditions.</value></data>
   <data name="OceanGoalPreview" xml:space="preserve"><value>{0} · {1}: {2} · {3}</value></data>
   <data name="OceanGoalPreviewEmpty" xml:space="preserve"><value>No basic target for this group and time frame on this route.</value></data>
+  <data name="ChangelogOceanGoalsTitle" xml:space="preserve"><value>Ocean Fishing goals and preparation</value></data>
+  <data name="ChangelogOceanGoals" xml:space="preserve"><value>Choose an Ocean Fishing fish group and preview its targets and baits.</value></data>
+  <data name="ChangelogOceanPreparationSplit" xml:space="preserve"><value>Prepare basic baits separately from optional Intuition baits.</value></data>
+  <data name="ChangelogOceanStockStates" xml:space="preserve"><value>Distinguish missing bait from unknown stock.</value></data>
+  <data name="ChangelogOceanNarrow" xml:space="preserve"><value>Read bait guidance more easily in narrow views.</value></data>
 </root>

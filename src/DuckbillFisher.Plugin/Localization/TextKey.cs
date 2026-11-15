@@ -1187,4 +1187,9 @@ internal enum TextKey
     OceanNoRecommendation,
     OceanGoalPreview,
     OceanGoalPreviewEmpty,
+    ChangelogOceanGoalsTitle,
+    ChangelogOceanGoals,
+    ChangelogOceanPreparationSplit,
+    ChangelogOceanStockStates,
+    ChangelogOceanNarrow,
 }
