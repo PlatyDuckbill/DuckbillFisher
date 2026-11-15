@@ -113,7 +113,7 @@
   <data name="FishPresetMissing" xml:space="preserve"><value>연결한 프리셋이 없습니다. 다른 프리셋을 선택하세요.</value></data>
   <data name="FishPresetApplied" xml:space="preserve"><value>‘{0}’ 프리셋을 타이머에 적용했습니다.</value></data>
   <data name="BackupPersonalRecordsMissing" xml:space="preserve"><value>이전 백업에는 개인 기록이 없습니다. 복원하면 현재 메모·도전 횟수·프리셋 연결도 비워집니다.</value></data>
-  <data name="SettingsViewUpdates" xml:space="preserve"><value>내역 보기</value></data>
+  <data name="SettingsViewUpdates" xml:space="preserve"><value>업데이트 내역 보기</value></data>
   <data name="BackupHelp" xml:space="preserve"><value>백업 범위·주의사항</value></data>
   <data name="BackupZipSummary" xml:space="preserve"><value>설정과 커스텀 WAV를 ZIP 하나로 저장합니다.</value></data>
   <data name="BackupJsonSummary" xml:space="preserve"><value>설정과 WAV 경로를 JSON 하나로 저장합니다.</value></data>
