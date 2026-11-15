@@ -15,9 +15,9 @@ internal static class UiThemeDecorations
         if (UiThemeScope.Current is not { } theme || width <= 1 || height <= 1) return;
         var draw = ImGui.GetWindowDrawList();
         var end = start + new Vector2(width, height);
-        GameThemeChrome.ControlSurface(start, end, false, false, true);
+        draw.AddRectFilled(start, end, ImGui.GetColorU32(Vector4.Lerp(theme.Surface, theme.Background, .25f)), 2);
         draw.AddLine(new(start.X, end.Y - 1), end - new Vector2(0, 1),
-            ImGui.GetColorU32(Vector4.Lerp(theme.Surface, theme.Border, .45f)));
+            ImGui.GetColorU32(theme.Border with { W = .22f }));
     }
 
     public static void ListItemSurface(Vector2 start, float width, float height, bool selected, bool hovered)

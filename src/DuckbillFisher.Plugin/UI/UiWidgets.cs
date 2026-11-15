@@ -93,17 +93,28 @@ internal static class UiWidgets
         try { return ImGui.CalcTextSize(glyph) * (size / Math.Max(1, ImGui.GetFontSize())); }
         finally { ImGui.PopFont(); }
     }
+    private static (Vector2 Size, float FontSize) FitButtonIcon(ImFontPtr font, string glyph, Vector2 available)
+    {
+        var measured = MeasureIcon(font, glyph);
+        var scale = Math.Min(1, Math.Min(Math.Max(1, available.X) / Math.Max(1, measured.X),
+            Math.Max(1, available.Y) / Math.Max(1, measured.Y)));
+        return (measured * scale, ImGui.GetFontSize() * scale);
+    }
     public static bool IconButton(FontAwesomeIcon icon, string id, string tooltip, bool active = false, float size = 0)
     {
         var side = size > 0 ? size : ImGui.GetFrameHeight();
         var clicked = Button($"###{id}", new(side));
         var min = ImGui.GetItemRectMin(); var max = ImGui.GetItemRectMax();
         var font = UiBuilder.IconFont;
-        var measured = MeasureIcon(font, icon.ToIconString());
-        var origin = Vector2.Round(min + (max - min - measured) / 2);
+        var glyph = icon.ToIconString();
+        var fitted = FitButtonIcon(font, glyph, max - min - new Vector2(4));
+        var origin = Vector2.Round(min + (max - min - fitted.Size) / 2);
         var color = active ? ImGui.GetColorU32(UiThemeColors.Favorite) : ImGui.GetColorU32(ImGuiCol.Text);
-        ImGui.GetWindowDrawList().AddText(font, ImGui.GetFontSize(), origin, color, icon.ToIconString());
-        Tooltip(tooltip);
+        var draw = ImGui.GetWindowDrawList();
+        draw.PushClipRect(min, max, true);
+        draw.AddText(font, fitted.FontSize, origin, color, glyph);
+        draw.PopClipRect();
+        if (tooltip.Length > 0) Tooltip(tooltip);
         return clicked;
     }
     public static bool ActionButton(FontAwesomeIcon icon, T key, string id, float width = 0) => ActionButton(icon, UiText.Get(key), id, width);
@@ -117,13 +128,20 @@ internal static class UiWidgets
         if (width <= 0) width = content + ImGui.GetStyle().FramePadding.X * 2;
         var clicked = Button($"###{id}", new(width, ImGui.GetFrameHeight()));
         var min = ImGui.GetItemRectMin(); var max = ImGui.GetItemRectMax();
-        var x = min.X + Math.Max(ImGui.GetStyle().FramePadding.X, (width - content) / 2);
+        var fontSize = ImGui.GetFontSize();
+        if (text.Length == 0)
+        {
+            var fitted = FitButtonIcon(font, icon.ToIconString(), max - min - new Vector2(4));
+            glyph = fitted.Size; fontSize = fitted.FontSize; content = glyph.X;
+        }
+        var x = min.X + (text.Length == 0 ? (max.X - min.X - content) / 2
+            : Math.Max(ImGui.GetStyle().FramePadding.X, (max.X - min.X - content) / 2));
         var draw = ImGui.GetWindowDrawList(); var color = ImGui.GetColorU32(ImGuiCol.Text);
         draw.PushClipRect(min, max, true);
-        draw.AddText(font, ImGui.GetFontSize(), Vector2.Round(new(x, min.Y + (max.Y - min.Y - glyph.Y) / 2)), color, icon.ToIconString());
+        draw.AddText(font, fontSize, Vector2.Round(new(x, min.Y + (max.Y - min.Y - glyph.Y) / 2)), color, icon.ToIconString());
         draw.AddText(Vector2.Round(new(x + glyph.X + gap, min.Y + (max.Y - min.Y - textSize.Y) / 2)), color, text);
         draw.PopClipRect();
-        if (content + ImGui.GetStyle().FramePadding.X * 2 > width) Tooltip(text);
+        if (text.Length > 0 && content + ImGui.GetStyle().FramePadding.X * 2 > width) Tooltip(text);
         return clicked;
     }
 
