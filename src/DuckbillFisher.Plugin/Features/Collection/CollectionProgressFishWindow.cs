@@ -57,6 +57,7 @@ internal sealed class CollectionProgressFishWindow : Window
 
     public override void Draw()
     {
+        using var contentStyle = GameThemeChrome.Content();
         GameThemeChrome.WindowSurface();
         var personal = preferences.View;
         var view = progress.FishView;

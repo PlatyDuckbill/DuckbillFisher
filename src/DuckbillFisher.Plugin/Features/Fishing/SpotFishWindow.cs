@@ -46,6 +46,7 @@ internal sealed class SpotFishWindow : Window
 
     public override void Draw()
     {
+        using var contentStyle = GameThemeChrome.Content();
         GameThemeChrome.WindowSurface();
         var view = tracker.View;
         var personal = preferences.View;

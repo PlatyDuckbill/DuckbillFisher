@@ -1214,4 +1214,5 @@ Shares duplicate prevention with zero-minute favorite alerts and uses the channe
   <data name="AppearanceReset" xml:space="preserve"><value>Reset brightness, depth and transparency</value></data>
   <data name="AppearanceDetails" xml:space="preserve"><value>Fine adjustments</value></data>
   <data name="AppearanceTransparency" xml:space="preserve"><value>Background transparency</value></data>
+  <data name="ChangelogTitleButtonBounds" xml:space="preserve"><value>Collapse and close buttons no longer overlap when you click them.</value></data>
 </root>

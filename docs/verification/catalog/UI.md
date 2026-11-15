@@ -523,3 +523,10 @@
 - ThemeAdjustmentEditor.Resolve는 직전 렌더에서 활성 상태인 초안만 실제 Draw의 UiThemeScope/ThemeScope에 전달한다. 세 Plugin의 Draw 진입부가 저장 값과 UI 초안을 분리해서 선택하므로 드래그 중 실제 배경/글자/조작부에 반영되며 파일 쓰기는 추가하지 않는다. 저장은 완료 시 기존 Framework 경로에 한 번 요청한다. 이탈/프레임 단절·외부 복원/저장 값 변경 시 초안을 버리며 저장 실패 뒤 반복 요청하지 않는다. 기존 저장 값/백업 형식·테마 색조·기본100/50/5는 유지한다.
 - 직접 별도→정규 Debug 세 프로젝트 빌드 경고0/오류0, Fisher1139/Calendar244/Tweak86 리소스·형식/실제 ko 위성과 Tweak 내장 자료/원본 일치를 확인했다. 오프라인으로 Calendar설정/Tweak전체설정/Fisher공통필드의 기본 접힘, 펄의 좁은 영어 큰 글꼴과 Fisher공통부의 좁은 큰 글꼴 펼침을 렌더했다. Fisher는 생산 공통 위젯을 호출한 가상 배치이며 전체 MainWindow/실제 아이콘을 대체하지 않는다. 정적 렌더는 실제 드래그/저장 성공을 검증하지 않는다. 테스트 추가/실행·푸시/배포는 하지 않았다.
 - 게임 확인 대기: 재로드→같은 제목/필드/기본 접힘과 견본 제거 확인→세부 조정을 펼쳐 누른 채 드래그할 때 실제 배경/밝기/입체감이 변하는지→놓은 뒤 재로드 값 보존→기본값 복원/백업 복원과 테마/언어·다른 기능 유지 확인. Calendar 날짜 한 번 클릭·기존 읽음/저장 확인 대기는 유지하며 Tweak의 네이티브 게임 UI는 변경하지 않았다.
+
+## 제목줄 접기·닫기 클릭 영역 겹침 수정 (2026-11-15)
+
+- 사용자가 X 중심 근처에서 접기가 반응한다고 제보했다. 설치된 KR cimgui의 ImGui1.88에서 접기/닫기 간격은 FontSize인데 실제 영역은 FontSize + FramePadding×2다. 공통 테마가 FramePadding.X를 round(font×.55)로 늘려 두 영역이 겹치며 먼저 제출되는 접기가 닫기 중심까지 차지했다. [배치 원본 v1.88](https://github.com/ocornut/imgui/blob/v1.88/imgui.cpp)·[영역 원본 v1.88](https://github.com/ocornut/imgui/blob/v1.88/imgui_widgets.cpp)과 설치 Dalamud.WindowHost.DrawTitleBarButtons의 IL을 대조했다. 외부 코드를 제품에 복사하지 않았다.
+- GameThemeScope의 제목줄 FramePadding.X와 ItemInnerSpacing.X는0으로 두어 기본 접기/닫기와 Dalamud 메뉴가 같은 폭으로 이어진다. GameThemeContentScope는 각 Draw 본문에서만 기존 round(font×.55)/round(font×.35)를 적용하고 종료 시 복원한다. Fisher 모든 보조 화면, Calendar 메인/내역/개인 일정·알림·삭제, Tweak 설정/내역에 적용했다. 색조·본문 배치/여백·기능/저장 형식·버전은 유지한다.
+- 별도 오프라인 ImGui 컨텍스트의 실제 CloseButton/CollapseButton 제출 영역을 마우스 입력 없이 계측했다. 폰트 배율80/100/125/150%에서 겹침12/14/18/22px→모두0px, 닫기 중심의 접기 영역 포함 true→false이고 본문 여백6/7/9/11px는 유지했다. 이것은 게임 클릭 재현이나 제품 테스트 실행이 아니다.
+- 세 프로젝트 별도→정규 Debug 경고0/오류0·Fisher1140/Calendar244/Tweak86 리소스/형식·Tweak 내장 자료/원본·ko 위성을 확인했다. 스모크 Calendar/Tweak 설정과 큰 글꼴 펄 내역의 실제 Draw를 정적 렌더했다. 실기 대기: 재로드→메뉴/삼각형/X 중심과 경계에 마우스 이동해 해당 버튼만 강조되는지→X는 닫기, 삼각형은 접기/펼치기, 제목줄 끌기는 이동하는지→작은/큰 UI 배율·보조 화면 반복 확인. 기존 날짜/설정 저장 확인 대기는 유지하며 테스트 추가/실행·푸시/배포는 하지 않았다.

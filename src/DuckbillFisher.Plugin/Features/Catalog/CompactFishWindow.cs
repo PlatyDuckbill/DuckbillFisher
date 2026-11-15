@@ -40,6 +40,7 @@ internal sealed class CompactFishWindow : Window
 
     public override void Draw()
     {
+        using var contentStyle = GameThemeChrome.Content();
         GameThemeChrome.WindowSurface();
         var personal = preferences.View;
         var view = observer.View;

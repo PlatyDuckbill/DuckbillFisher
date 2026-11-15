@@ -81,6 +81,7 @@ internal sealed class FishDetailWindow : Window
 
     public override void Draw()
     {
+        using var contentStyle = GameThemeChrome.Content();
         GameThemeChrome.WindowSurface();
         var personal = preferences.View;
         var view = catalog.View;

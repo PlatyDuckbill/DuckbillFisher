@@ -85,6 +85,7 @@ internal sealed class MainWindow : Window
 
     public override void Draw()
     {
+        using var contentStyle = GameThemeChrome.Content();
         GameThemeChrome.WindowSurface();
         var settings = preferences.View;
         if (UiText.Language != settings.Language)

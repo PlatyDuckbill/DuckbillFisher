@@ -49,6 +49,7 @@ internal sealed class CastingTimerSettingsWindow(FishPreferences preferences, Sp
 
     public override void Draw()
     {
+        using var contentStyle = GameThemeChrome.Content();
         GameThemeChrome.WindowSurface();
         var personal = preferences.View;
         var contextChanged = draftSession != personal.Session || draftRestoreRevision != personal.SettingsRestoreRevision;

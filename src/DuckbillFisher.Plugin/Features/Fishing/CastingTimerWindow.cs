@@ -41,6 +41,7 @@ internal sealed class CastingTimerWindow : Window
     public override void OnClose() { buffs.SetActive(false); ocean.SetActive(OceanConsumer.Timer, false); }
     public override void Draw()
     {
+        using var contentStyle = GameThemeChrome.Content();
         GameThemeChrome.WindowSurface();
         var view = tracker.View;
         var retained = !view.HasSession && view.CurrentTrip is not null && view.TimerRetainedUntil is not null;

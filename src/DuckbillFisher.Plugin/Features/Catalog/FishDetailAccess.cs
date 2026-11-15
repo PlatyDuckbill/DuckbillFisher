@@ -133,6 +133,7 @@ internal sealed class FishDetailAccess : Window, IDisposable
     }
     public override void Draw()
     {
+        using var contentStyle = GameThemeChrome.Content();
         GameThemeChrome.WindowSurface();
         if (searchStatus is { } status) { ImGui.TextWrapped(status.Display); return; }
         ImGui.TextWrapped(UiText.Get(T.FishSearchResults, search, candidates.Length));
