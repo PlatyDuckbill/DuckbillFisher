@@ -1158,6 +1158,9 @@ Shares duplicate prevention with zero-minute favorite alerts and uses the channe
     <value>Observed: quantities stated in published catch records. Inferred: a lower bound established by a documented preparation sequence. Neither is a guarantee at your current Gathering. Unknown values are not inferred from the other action. Collectables may behave differently.</value>
   </data>
   <data name="HookYieldObservedValue" xml:space="preserve"><value>{0} (observed)</value></data>
+  <data name="ChangelogHookYieldTitle" xml:space="preserve"><value>Multi-hook yield guidance</value></data>
+  <data name="ChangelogHookYieldExpansion" xml:space="preserve"><value>View Double Hook and Triple Hook yields for more regular fish.</value></data>
+  <data name="ChangelogHookYieldEvidence" xml:space="preserve"><value>See whether each yield comes from a published observation or a preparation-based estimate.</value></data>
   <data name="HookYieldInferredValue" xml:space="preserve"><value>{0} (inferred)</value></data>
   <data name="HookYieldAtLeast" xml:space="preserve"><value>{0}+</value></data>
   <data name="HookYieldCount" xml:space="preserve"><value>{0} fish</value></data>

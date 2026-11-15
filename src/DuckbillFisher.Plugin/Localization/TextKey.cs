@@ -1146,4 +1146,7 @@ internal enum TextKey
     ChangelogCompactShortcuts,
     ChangelogTitleButtonBounds,
     ChangelogSuiteIcon,
+    ChangelogHookYieldTitle,
+    ChangelogHookYieldExpansion,
+    ChangelogHookYieldEvidence,
 }
