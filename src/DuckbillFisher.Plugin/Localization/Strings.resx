@@ -1231,4 +1231,8 @@ Shares duplicate prevention with zero-minute favorite alerts and uses the channe
   <data name="AppearanceTransparency" xml:space="preserve"><value>Background transparency</value></data>
   <data name="ChangelogTitleButtonBounds" xml:space="preserve"><value>Collapse and close buttons no longer overlap when you click them.</value></data>
   <data name="ChangelogSuiteIcon" xml:space="preserve"><value>Recognize the fishing plugin by its new fishing-focused icon.</value></data>
+  <data name="ChangelogOceanBaitTitle" xml:space="preserve"><value>Ocean Fishing bait guidance</value></data>
+  <data name="ChangelogOceanBaitConditions" xml:space="preserve"><value>Get Ocean Fishing bait recommendations for your area, time frame, current and weather.</value></data>
+  <data name="ChangelogOceanBaitIntuition" xml:space="preserve"><value>See Intuition bait candidates and mooch preparation paths.</value></data>
+  <data name="ChangelogOceanBaitPreparation" xml:space="preserve"><value>Check recommended and special baits before departure.</value></data>
 </root>

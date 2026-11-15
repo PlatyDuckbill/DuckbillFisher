@@ -15,6 +15,12 @@ internal sealed class ChangelogWindow : Window
     // Keep the confirmed candidate unchanged when it is published.
     private static readonly ReleaseNotes[] PublishedReleases =
     [
+        new(new(0, 10, 1, 0),
+        [
+            (FontAwesomeIcon.Ship, T.ChangelogOceanBaitConditions),
+            (FontAwesomeIcon.Fish, T.ChangelogOceanBaitIntuition),
+            (FontAwesomeIcon.List, T.ChangelogOceanBaitPreparation),
+        ], new DateTimeOffset(2026, 11, 15, 14, 4, 13, TimeSpan.Zero), FeatureTitle: T.ChangelogOceanBaitTitle, FeatureIcon: FontAwesomeIcon.Ship),
         new(new(0, 10, 0, 2),
         [
             (FontAwesomeIcon.Fish, T.ChangelogHookYieldExpansion),

@@ -1159,4 +1159,8 @@ internal enum TextKey
     OceanIntuitionBaitHint,
     OceanMoochPath,
     OceanMoochBait,
+    ChangelogOceanBaitTitle,
+    ChangelogOceanBaitConditions,
+    ChangelogOceanBaitIntuition,
+    ChangelogOceanBaitPreparation,
 }
