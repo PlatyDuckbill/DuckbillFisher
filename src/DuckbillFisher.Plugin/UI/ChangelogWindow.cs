@@ -15,31 +15,45 @@ internal sealed class ChangelogWindow : Window
     // Keep the confirmed candidate unchanged when it is published.
     private static readonly ReleaseNotes[] PublishedReleases =
     [
-        new(new(0, 10, 0, 0),
+        new(new(0, 10, 0, 1),
+        [
+            (FontAwesomeIcon.Palette, T.ChangelogSuiteControls),
+            (FontAwesomeIcon.List, T.ChangelogSuiteDensity),
+            (FontAwesomeIcon.History, T.ChangelogSuiteHistory),
+        ], FeatureTitle: T.ChangelogSuiteTitle, FeatureSummary: T.ChangelogSuiteSummary, FeatureIcon: FontAwesomeIcon.Palette),
+        // User-facing numbering: the already-published 0.10.0.0 feature release is presented as 0.9.1.0.
+        // Its original tag/ZIP and actual published identity remain unchanged.
+        new(new(0, 9, 1, 0),
         [
             (FontAwesomeIcon.MapMarkerAlt, T.ChangelogUndiscoveredMap),
             (FontAwesomeIcon.ArrowsAltH, T.ChangelogMenuWheel),
             (FontAwesomeIcon.CompressArrowsAlt, T.ChangelogCompactShortcuts),
-        ], new DateTimeOffset(2026, 11, 14, 23, 35, 8, TimeSpan.Zero)),
+        ], new DateTimeOffset(2026, 11, 14, 23, 35, 8, TimeSpan.Zero), FeatureTitle: T.ChangelogMapFeatureTitle, FeatureSummary: T.ChangelogMapFeatureSummary, FeatureIcon: FontAwesomeIcon.MapMarkerAlt),
         new(new(0, 9, 0, 0),
         [
             (FontAwesomeIcon.Ship, T.ChangelogOceanBeta),
             (FontAwesomeIcon.Filter, T.ChangelogOceanCandidates),
+        ], new DateTimeOffset(2026, 11, 6, 12, 28, 36, TimeSpan.Zero),
+            FeatureTitle: T.ChangelogOceanFeatureTitle, FeatureSummary: T.ChangelogOceanFeatureSummary, OtherEntries:
+        [
             (FontAwesomeIcon.Fish, T.ChangelogMinimumGathering),
             (FontAwesomeIcon.List, T.ChangelogDeliveryTiers),
             (FontAwesomeIcon.Fish, T.ChangelogExpandedHookYield),
             (FontAwesomeIcon.Cog, T.ChangelogThemes),
             (FontAwesomeIcon.BookOpen, T.ChangelogFishingLogOrder),
-        ], new DateTimeOffset(2026, 11, 6, 12, 28, 36, TimeSpan.Zero)),
+        ], FeatureIcon: FontAwesomeIcon.Ship),
         new(new(0, 8, 0, 0),
         [
             (FontAwesomeIcon.Fish, T.ChangelogIntuitionProgress),
             (FontAwesomeIcon.PlusCircle, T.ChangelogSpawnAttemptsAuto),
+        ], new DateTimeOffset(2026, 11, 5, 12, 37, 34, TimeSpan.Zero),
+            FeatureTitle: T.ChangelogIntuitionFeatureTitle, FeatureSummary: T.ChangelogIntuitionFeatureSummary, OtherEntries:
+        [
             (FontAwesomeIcon.Filter, T.ChangelogUnusedBaits),
             (FontAwesomeIcon.BookOpen, T.ChangelogFishLookup),
             (FontAwesomeIcon.List, T.ChangelogHookYieldGuide),
             (FontAwesomeIcon.History, T.ChangelogMultipleCatchQuantity),
-        ], new DateTimeOffset(2026, 11, 5, 12, 37, 34, TimeSpan.Zero)),
+        ], FeatureIcon: FontAwesomeIcon.Fish),
         new(new(0, 7, 0, 0),
         [
             (FontAwesomeIcon.SyncAlt, T.ChangelogDalamudUpdates),
@@ -47,7 +61,7 @@ internal sealed class ChangelogWindow : Window
             (FontAwesomeIcon.Clock, T.ChangelogLocalReleaseTime),
         ], new DateTimeOffset(2026, 11, 4, 14, 45, 0, TimeSpan.Zero),
             T.ChangelogGlobalFeatureTitle, T.ChangelogGlobalFeatureSummary, FeatureIcon: FontAwesomeIcon.Globe),
-        new(new(0, 6, 0, 1), [(FontAwesomeIcon.Wrench, T.ChangelogDal4kr15039)], new DateTimeOffset(2026, 10, 31, 13, 40, 0, TimeSpan.Zero)),
+        new(new(0, 6, 0, 1), [(FontAwesomeIcon.Wrench, T.ChangelogDal4kr15039)], new DateTimeOffset(2026, 10, 31, 13, 40, 0, TimeSpan.Zero), FeatureTitle: T.ChangelogCompatibilityTitle, FeatureIcon: FontAwesomeIcon.Wrench),
         new(new(0, 6, 0, 0),
         [
             (FontAwesomeIcon.Compass, T.ChangelogRecommendationNow),
@@ -81,36 +95,44 @@ internal sealed class ChangelogWindow : Window
         [
             (FontAwesomeIcon.VolumeUp, T.ChangelogFishingSounds),
             (FontAwesomeIcon.Trophy, T.ChangelogFirstCatchSounds),
+        ], new DateTimeOffset(2026, 10, 23, 9, 41, 18, TimeSpan.Zero),
+            FeatureTitle: T.ChangelogSoundFeatureTitle, FeatureSummary: T.ChangelogSoundFeatureSummary, OtherEntries:
+        [
             (FontAwesomeIcon.Filter, T.ChangelogSpotFilterRetention),
             (FontAwesomeIcon.Cog, T.ChangelogTimerSettingsTabs),
-        ], new DateTimeOffset(2026, 10, 23, 9, 41, 18, TimeSpan.Zero)),
+        ], FeatureIcon: FontAwesomeIcon.VolumeUp),
         new(new(0, 5, 2, 0),
         [
             (FontAwesomeIcon.Bell, T.ChangelogCastAlerts),
             (FontAwesomeIcon.List, T.ChangelogTimerPresets),
             (FontAwesomeIcon.Stopwatch, T.ChangelogLureElapsed),
+        ], new DateTimeOffset(2026, 10, 23, 9, 0, 25, TimeSpan.Zero),
+            FeatureTitle: T.ChangelogCastFeatureTitle, FeatureSummary: T.ChangelogCastFeatureSummary, OtherEntries:
+        [
             (FontAwesomeIcon.Save, T.ChangelogCollectionBackup),
             (FontAwesomeIcon.Fish, T.ChangelogTimerShortcuts),
             (FontAwesomeIcon.Wrench, T.ChangelogKr15039),
-        ], new DateTimeOffset(2026, 10, 23, 9, 0, 25, TimeSpan.Zero)),
+        ], FeatureIcon: FontAwesomeIcon.Bell),
         new(new(0, 5, 1, 0),
         [
             (FontAwesomeIcon.Clock, T.ChangelogFishingBuffTimers),
             (FontAwesomeIcon.Filter, T.ChangelogRemainingTimeFilter),
             (FontAwesomeIcon.Filter, T.ChangelogUpcomingTimeRange),
             (FontAwesomeIcon.Eraser, T.ChangelogEmptyTimeFilters),
-        ], new DateTimeOffset(2026, 10, 21, 16, 22, 12, TimeSpan.Zero)),
+        ], new DateTimeOffset(2026, 10, 21, 16, 22, 12, TimeSpan.Zero), FeatureTitle: T.ChangelogTimerFeatureTitle, FeatureSummary: T.ChangelogTimerFeatureSummary, FeatureIcon: FontAwesomeIcon.Clock),
     ];
-    private readonly ReleaseNotes[] releases = PublishedReleases.Where(release => release.Version <= CurrentVersion).Take(10).ToArray();
+    private readonly ReleaseNotes[] releases = PublishedReleases.Where(release => release.Version <= CurrentVersion).ToArray();
     private readonly FishPreferences preferences;
     private bool contentShown;
     private bool acknowledged;
+    private bool resetScroll;
+    public bool IsUnread => !acknowledged && (!Version.TryParse(preferences.View.LastSeenChangelogVersion, out var seen) || seen < CurrentVersion);
 
     public ChangelogWindow(FishPreferences preferences) : base("DuckbillFisher###DuckbillFisher.Changelog")
     {
         this.preferences = preferences;
         IsOpen = false;
-        Size = new Vector2(560, 540);
+        Size = new Vector2(640, 580);
         SizeCondition = ImGuiCond.FirstUseEver;
         SizeConstraints = new WindowSizeConstraints
         {
@@ -122,8 +144,7 @@ internal sealed class ChangelogWindow : Window
 
     public void ShowIfUnread()
     {
-        var seen = preferences.View.LastSeenChangelogVersion;
-        if (!acknowledged && (!Version.TryParse(seen, out var version) || version < CurrentVersion)) IsOpen = true;
+        if (IsUnread) IsOpen = true;
     }
 
     public override void PreDraw()
@@ -132,7 +153,7 @@ internal sealed class ChangelogWindow : Window
         WindowName = $"{UiText.Get(T.ChangelogTitle)}###DuckbillFisher.Changelog";
     }
 
-    public override void OnOpen() => contentShown = false;
+    public override void OnOpen() { contentShown = false; resetScroll = true; }
 
     public override void OnClose()
     {
@@ -148,7 +169,7 @@ internal sealed class ChangelogWindow : Window
     {
         if (ImGui.BeginChild("ChangelogContent", new Vector2(0, -ImGui.GetFrameHeightWithSpacing())))
         {
-            contentShown = true;
+            if (resetScroll) { ImGui.SetScrollY(0); resetScroll = false; }
             UiWidgets.TextColored(UiThemeScope.Current?.Text ?? new Vector4(1, 0.8f, 0.32f, 1), UiText.Get(T.ChangelogVersion, CurrentVersion));
             ImGui.Separator();
             ImGui.TextWrapped(UiText.Get(T.ChangelogPublishedHint, releases.Length));
@@ -160,6 +181,7 @@ internal sealed class ChangelogWindow : Window
                 if (!UiWidgets.Disclosure(label, i == 0 ? ImGuiTreeNodeFlags.DefaultOpen : ImGuiTreeNodeFlags.None)) continue;
                 if (release.PublishedAtUtc is { } publishedAt)
                     ImGui.TextDisabled(UiText.Get(T.ChangelogPublishedAt, publishedAt.ToLocalTime()));
+                else ImGui.TextDisabled(UiText.Get(T.ChangelogInDevelopment));
                 ImGui.Spacing();
                 if (release.FeatureTitle is { } title)
                 {
@@ -171,6 +193,7 @@ internal sealed class ChangelogWindow : Window
                     ImGui.Spacing();
                 }
                 foreach (var (icon, text) in release.Entries) Entry(icon, text);
+                if (i == 0) contentShown = true;
                 if (release.OtherEntries is { Length: > 0 } other)
                 {
                     UiWidgets.Heading(T.ChangelogOtherImprovements);

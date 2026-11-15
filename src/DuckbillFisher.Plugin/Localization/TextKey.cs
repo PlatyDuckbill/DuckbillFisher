@@ -2,6 +2,27 @@ namespace DuckbillFisher.Plugin.Localization;
 
 internal enum TextKey
 {
+    ChangelogInDevelopment,
+    SettingsViewNewUpdates,
+    ChangelogSuiteTitle,
+    ChangelogSuiteSummary,
+    ChangelogSuiteControls,
+    ChangelogSuiteDensity,
+    ChangelogSuiteHistory,
+    ChangelogMapFeatureTitle,
+    ChangelogMapFeatureSummary,
+    ChangelogOceanFeatureTitle,
+    ChangelogOceanFeatureSummary,
+    ChangelogIntuitionFeatureTitle,
+    ChangelogIntuitionFeatureSummary,
+    ChangelogCompatibilityTitle,
+    ChangelogSoundFeatureTitle,
+    ChangelogSoundFeatureSummary,
+    ChangelogCastFeatureTitle,
+    ChangelogCastFeatureSummary,
+    ChangelogTimerFeatureTitle,
+    ChangelogTimerFeatureSummary,
+
     ThemeSetting,
     ThemeSettingHint,
     ThemeOriginal,

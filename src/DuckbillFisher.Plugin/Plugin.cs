@@ -173,6 +173,7 @@ public sealed class Plugin : IDalamudPlugin
         mainWindow.ShowTimer = timerWindow.Toggle;
         var changelogWindow = new ChangelogWindow(fishPreferences);
         mainWindow.ShowChangelog = () => changelogWindow.IsOpen = true;
+        mainWindow.HasUnreadChangelog = () => changelogWindow.IsUnread;
         mainWindow.ShowUnreadChangelog = changelogWindow.ShowIfUnread;
         compactWindow.ShowMain = mainWindow.Toggle;
         windows.AddWindow(mainWindow);

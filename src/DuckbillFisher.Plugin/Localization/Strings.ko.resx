@@ -767,7 +767,7 @@
   <data name="CustomSoundLoginRequired" xml:space="preserve"><value>캐릭터 접속 후 WAV를 불러오고 미리 들을 수 있습니다.</value></data>
   <data name="ChangelogTitle" xml:space="preserve"><value>업데이트 내역</value></data>
   <data name="ChangelogVersion" xml:space="preserve"><value>설치된 버전 · {0}</value></data>
-  <data name="ChangelogPublishedHint" xml:space="preserve"><value>최근 업데이트 {0}개를 확인할 수 있습니다.</value></data>
+  <data name="ChangelogPublishedHint" xml:space="preserve"><value>포함된 {0}개 버전의 업데이트 내역입니다.</value></data>
   <data name="ChangelogRelease" xml:space="preserve"><value>버전 {0}</value></data>
   <data name="ChangelogReopenHint" xml:space="preserve"><value>설정 → 업데이트 내역에서 다시 볼 수 있습니다.</value></data>
   <data name="ChangelogUnsaved" xml:space="preserve"><value>확인 여부를 저장할 수 없어 재로드하면 다시 표시될 수 있습니다.</value></data>
@@ -1187,4 +1187,24 @@
   <data name="ChangelogUndiscoveredMap" xml:space="preserve"><value>낚시 수첩의 미발견 일반 낚시터를 눌러 지도에서 위치를 확인할 수 있습니다.</value></data>
   <data name="ChangelogMenuWheel" xml:space="preserve"><value>상단 메뉴 위에서 마우스 휠로 메뉴를 좌우로 이동할 수 있습니다.</value></data>
   <data name="ChangelogCompactShortcuts" xml:space="preserve"><value>좁은 화면에서는 간이 목록·타이머 바로가기가 아이콘으로 줄어들어 메뉴 공간을 넓게 쓸 수 있습니다.</value></data>
+  <data name="SettingsViewNewUpdates" xml:space="preserve"><value>새 업데이트 보기</value></data>
+  <data name="ChangelogSuiteTitle" xml:space="preserve"><value>새 디자인 · 낚시 정보를 더 또렷하게</value></data>
+  <data name="ChangelogSuiteSummary" xml:space="preserve"><value>익숙한 어종 목록과 상세 구성에서 더 정돈된 조작부와 선택 표시를 사용할 수 있습니다.</value></data>
+  <data name="ChangelogSuiteControls" xml:space="preserve"><value>그라파이트·페이퍼에서 메뉴·필터·설정을 일관된 모양으로 사용할 수 있습니다.</value></data>
+  <data name="ChangelogSuiteDensity" xml:space="preserve"><value>촘촘한 어종 목록과 조절 가능한 좌우 분할, 익숙한 상세 순서를 유지합니다.</value></data>
+  <data name="ChangelogSuiteHistory" xml:space="preserve"><value>대표 기능과 기타 개선으로 정리한 업데이트 내역을 읽고 설정에서 새 업데이트를 확인할 수 있습니다.</value></data>
+  <data name="ChangelogMapFeatureTitle" xml:space="preserve"><value>낚시수첩 · 미발견 낚시터 위치</value></data>
+  <data name="ChangelogMapFeatureSummary" xml:space="preserve"><value>낚시수첩에서 아직 발견하지 못한 낚시터의 위치를 바로 확인할 수 있습니다.</value></data>
+  <data name="ChangelogOceanFeatureTitle" xml:space="preserve"><value>새 기능 · 먼바다 Beta</value></data>
+  <data name="ChangelogOceanFeatureSummary" xml:space="preserve"><value>출항 일정을 확인하고 현재 항로와 기본 미끼 안내를 함께 볼 수 있습니다.</value></data>
+  <data name="ChangelogIntuitionFeatureTitle" xml:space="preserve"><value>직감 준비 · 터주 회차 기록</value></data>
+  <data name="ChangelogIntuitionFeatureSummary" xml:space="preserve"><value>직감 준비 상황을 살펴보고 터주 도전 회차를 기록할 수 있습니다.</value></data>
+  <data name="ChangelogCompatibilityTitle" xml:space="preserve"><value>한국 Dalamud 호환성 수정</value></data>
+  <data name="ChangelogSoundFeatureTitle" xml:space="preserve"><value>낚시 알림 · 입질과 첫 어획 소리</value></data>
+  <data name="ChangelogSoundFeatureSummary" xml:space="preserve"><value>입질과 터주·터주왕의 첫 어획을 소리로 구분할 수 있습니다.</value></data>
+  <data name="ChangelogCastFeatureTitle" xml:space="preserve"><value>캐스팅 알림 · 프리셋</value></data>
+  <data name="ChangelogCastFeatureSummary" xml:space="preserve"><value>시전 시간 알림을 설정하고 이름 있는 타이머 프리셋을 사용할 수 있습니다.</value></data>
+  <data name="ChangelogTimerFeatureTitle" xml:space="preserve"><value>낚시 타이머 · 시간 필터</value></data>
+  <data name="ChangelogTimerFeatureSummary" xml:space="preserve"><value>낚시 버프의 시간을 확인하고 남은 시간으로 어종 목록을 좁힐 수 있습니다.</value></data>
+  <data name="ChangelogInDevelopment" xml:space="preserve"><value>개발 중</value></data>
 </root>

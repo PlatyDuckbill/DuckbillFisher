@@ -30,6 +30,7 @@ internal sealed class MainWindow : Window
     public Action? ShowCompact { get; set; }
     public Action? ShowTimer { get; set; }
     public Action? ShowChangelog { get; set; }
+    public Func<bool>? HasUnreadChangelog { get; set; }
     public Action? ShowUnreadChangelog { get; set; }
     private string[] markerLabels = Markers.Select(key => UiText.Get(key)).ToArray();
     private IReadOnlyList<FishGuideRow>? lastRows;
@@ -237,8 +238,6 @@ internal sealed class MainWindow : Window
                     : ImGui.GetColorU32(active ? ImGuiCol.Text : ImGuiCol.TextDisabled), icon.ToIconString());
             if (active && theme is not null)
             {
-                draw.AddLine(new(min.X + 3, min.Y + 1), new(max.X - 3, min.Y + 1),
-                    ImGui.GetColorU32(Vector4.Lerp(UiThemeDecorations.NavigationSelection, theme.Text, .2f)));
                 draw.AddLine(new(min.X + ImGui.GetStyle().FramePadding.X, max.Y - 1),
                     new(max.X - ImGui.GetStyle().FramePadding.X, max.Y - 1), ImGui.GetColorU32(accent), 2);
             }
@@ -360,7 +359,7 @@ internal sealed class MainWindow : Window
             ImGui.TextUnformatted(UiText.Get(T.ChangelogTitle));
             ImGui.TableNextColumn();
             var updatesWidth = Math.Max(1, Math.Min(ImGui.GetContentRegionAvail().X, ImGui.GetFontSize() * 14));
-            if (UiWidgets.ActionButton(FontAwesomeIcon.History, T.SettingsViewUpdates, "ShowChangelog", updatesWidth)) ShowChangelog?.Invoke();
+            if (UiWidgets.ActionButton(FontAwesomeIcon.History, HasUnreadChangelog?.Invoke() == true ? T.SettingsViewNewUpdates : T.SettingsViewUpdates, "ShowChangelog", updatesWidth)) ShowChangelog?.Invoke();
             ImGui.EndTable();
         }
         if (changed) preferences.SetInterface((UiLanguage)language, developer);

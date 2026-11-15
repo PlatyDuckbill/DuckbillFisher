@@ -3,7 +3,7 @@ using Dalamud.Bindings.ImGui;
 
 namespace DuckbillFisher.Plugin;
 
-/// <summary>Scoped colors, rounding and control edges. Host layout spacing stays unchanged.</summary>
+/// <summary>Scoped suite palette and compact controls. Existing text/row heights are retained.</summary>
 internal sealed class UiThemeScope : IDisposable
 {
     [ThreadStatic] private static UiThemeProfile? current;
@@ -74,8 +74,16 @@ internal sealed class UiThemeScope : IDisposable
             Variable(ImGuiStyleVar.GrabRounding, unit * p.Radius);
             Variable(ImGuiStyleVar.TabRounding, unit * p.Radius * .7f);
             Variable(ImGuiStyleVar.ScrollbarRounding, unit * p.Radius);
-            // Controls need a persistent edge, including icon-only buttons and input fields.
-            Variable(ImGuiStyleVar.FrameBorderSize, Math.Max(1, unit / 16));
+            // Quiet edges keep unchecked boxes and light input fields visible.
+            Variable(ImGuiStyleVar.FrameBorderSize, 1);
+            Variable(ImGuiStyleVar.WindowBorderSize, 1);
+            Variable(ImGuiStyleVar.ChildBorderSize, 0);
+            // Horizontal breathing room without growing fish rows or timer lines.
+            var padding = ImGui.GetStyle().FramePadding;
+            ImGui.PushStyleVar(ImGuiStyleVar.FramePadding, new Vector2(unit * .45f, padding.Y));
+            variables++;
+            ImGui.PushStyleVar(ImGuiStyleVar.ItemInnerSpacing, new Vector2(unit * .35f, ImGui.GetStyle().ItemInnerSpacing.Y));
+            variables++;
         }
         catch { Dispose(); throw; }
     }

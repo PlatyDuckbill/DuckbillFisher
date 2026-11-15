@@ -767,7 +767,7 @@ Main inventory only. An unknown quantity is not zero.</value></data>
   <data name="CustomSoundLoginRequired" xml:space="preserve"><value>Log in to load and preview the WAV.</value></data>
   <data name="ChangelogTitle" xml:space="preserve"><value>What's new</value></data>
   <data name="ChangelogVersion" xml:space="preserve"><value>Installed version · {0}</value></data>
-  <data name="ChangelogPublishedHint" xml:space="preserve"><value>Browse the {0} most recent updates.</value></data>
+  <data name="ChangelogPublishedHint" xml:space="preserve"><value>Bundled update history for {0} versions.</value></data>
   <data name="ChangelogRelease" xml:space="preserve"><value>Version {0}</value></data>
   <data name="ChangelogReopenHint" xml:space="preserve"><value>You can read these notes again in Settings → What's new.</value></data>
   <data name="ChangelogUnsaved" xml:space="preserve"><value>Read status cannot be saved. These notes may appear again after reloading.</value></data>
@@ -1187,4 +1187,24 @@ Shares duplicate prevention with zero-minute favorite alerts and uses the channe
   <data name="ChangelogUndiscoveredMap" xml:space="preserve"><value>Click an undiscovered fishing hole in the Fishing Log to see its location on the map.</value></data>
   <data name="ChangelogMenuWheel" xml:space="preserve"><value>Scroll the top menu horizontally with the mouse wheel.</value></data>
   <data name="ChangelogCompactShortcuts" xml:space="preserve"><value>See more menu tabs in narrow layouts with compact icons for the quick list and casting timer shortcuts.</value></data>
+  <data name="SettingsViewNewUpdates" xml:space="preserve"><value>View updates · New</value></data>
+  <data name="ChangelogSuiteTitle" xml:space="preserve"><value>A refined fishing companion</value></data>
+  <data name="ChangelogSuiteSummary" xml:space="preserve"><value>Browse the familiar fish list and details with calmer controls and clearer selection.</value></data>
+  <data name="ChangelogSuiteControls" xml:space="preserve"><value>Use coordinated menus, filters and settings in Graphite and Paper.</value></data>
+  <data name="ChangelogSuiteDensity" xml:space="preserve"><value>Keep the compact fish rows, adjustable split and familiar detail order.</value></data>
+  <data name="ChangelogSuiteHistory" xml:space="preserve"><value>Read each update by its main feature and other improvements, and spot unread updates in settings.</value></data>
+  <data name="ChangelogMapFeatureTitle" xml:space="preserve"><value>Fishing Log map shortcuts</value></data>
+  <data name="ChangelogMapFeatureSummary" xml:space="preserve"><value>Find an undiscovered fishing hole directly from the Fishing Log.</value></data>
+  <data name="ChangelogOceanFeatureTitle" xml:space="preserve"><value>Ocean Fishing Beta</value></data>
+  <data name="ChangelogOceanFeatureSummary" xml:space="preserve"><value>Check departures and follow your current route with basic bait guidance.</value></data>
+  <data name="ChangelogIntuitionFeatureTitle" xml:space="preserve"><value>Intuition preparation and attempts</value></data>
+  <data name="ChangelogIntuitionFeatureSummary" xml:space="preserve"><value>Track Intuition preparation and keep a record of your big-fish attempts.</value></data>
+  <data name="ChangelogCompatibilityTitle" xml:space="preserve"><value>Korean Dalamud compatibility</value></data>
+  <data name="ChangelogSoundFeatureTitle" xml:space="preserve"><value>Fishing sound alerts</value></data>
+  <data name="ChangelogSoundFeatureSummary" xml:space="preserve"><value>Choose sounds for bites and first big or legendary catches.</value></data>
+  <data name="ChangelogCastFeatureTitle" xml:space="preserve"><value>Cast alerts and presets</value></data>
+  <data name="ChangelogCastFeatureSummary" xml:space="preserve"><value>Set cast-time reminders and reuse named timer presets.</value></data>
+  <data name="ChangelogTimerFeatureTitle" xml:space="preserve"><value>Fishing timers and time filters</value></data>
+  <data name="ChangelogTimerFeatureSummary" xml:space="preserve"><value>Follow fishing buff timers and narrow fish lists by remaining time.</value></data>
+  <data name="ChangelogInDevelopment" xml:space="preserve"><value>In development</value></data>
 </root>

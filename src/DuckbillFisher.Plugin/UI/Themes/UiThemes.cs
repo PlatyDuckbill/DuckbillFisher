@@ -7,10 +7,10 @@ namespace DuckbillFisher.Plugin;
 internal sealed record UiThemeProfile(UiTheme Id, Vector4 Background, Vector4 Surface, Vector4 Field,
     Vector4 Text, Vector4 Muted, Vector4 Border, Vector4 Accent, float Radius, bool IsLight = false)
 {
-    public Vector4 Hover => UiThemes.Hex(IsLight ? 0xe6eee9U : 0x303536U);
-    public Vector4 Selection => UiThemes.Hex(IsLight ? 0xdbe8e1U : 0x3b3f40U);
-    public Vector4 Pressed => UiThemes.Hex(IsLight ? 0xc4d8cfU : 0x4a5051U);
-    public Vector4 Input => UiThemes.Hex(IsLight ? 0xffffffU : 0x171a1eU);
+    public Vector4 Hover => UiThemes.Hex(IsLight ? 0xe6eee9U : 0x2d3537U);
+    public Vector4 Selection => UiThemes.Hex(IsLight ? 0xdbe8e1U : 0x344541U);
+    public Vector4 Pressed => UiThemes.Hex(IsLight ? 0xc4d8cfU : 0x40564fU);
+    public Vector4 Input => UiThemes.Hex(IsLight ? 0xffffffU : 0x1c2022U);
 }
 
 internal static class UiThemes
@@ -19,8 +19,8 @@ internal static class UiThemes
     // Original designs inspired by the references documented in UI-UX-REDESIGN; no imported styles or assets.
     private static readonly UiThemeProfile[] Profiles =
     [
-        new(UiTheme.Graphite, Hex(0x161819), Hex(0x242627), Hex(0x343738), Hex(0xf0efe9),
-            Hex(0xaab0b3), Hex(0x626769), Hex(0xa3c6e2), .16f),
+        new(UiTheme.Graphite, Hex(0x191c1e), Hex(0x24282a), Hex(0x303639), Hex(0xeef0ec),
+            Hex(0xa8b1b2), Hex(0x454e51), Hex(0x8acdbd), .28f),
         new(UiTheme.Paper, Hex(0xeeece5), Hex(0xfaf9f4), Hex(0xe0e4dc), Hex(0x2a342f),
             Hex(0x59665f), Hex(0x87958d), Hex(0x356c64), .12f, IsLight: true),
     ];
