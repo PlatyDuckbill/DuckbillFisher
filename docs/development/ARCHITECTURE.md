@@ -14,6 +14,8 @@
 
 먼바다 Beta는 Core `OceanSchedule`이 UTC 접수 구간/순환 인덱스를 계산하고, Plugin `OceanFishing`이 Framework에서 클라이언트 IKD 시트·내장 기본 미끼 자료를 한 번 읽고 관리 snapshot을 발행한다. `NativeOceanFishingReader`만 실제 승선 정보를 읽는다. `OceanFishingPanel`은 수동 일정 선택을 관찰 상태와 분리하며 Draw에서는 시트/파일/포인터를 읽지 않는다. 미끼 찾기는 기존 `BaitFinder`를 재사용한다. [실행 계약·실기 대기](../verification/native/GLOBAL-COMPAT.md#먼바다-beta-개발본-구현-2026-11-06).
 
+조건별 미끼 추천은 Core `OceanBaitRecommendations`가 현재 해역의 명시 조건·기본 점수·삼중 수량 하한으로 기본 목표를 고르고 직감 활성 시 희귀어 후보를 따로 반환한다. Plugin은 목표260행/조건/수량을 ID로 연결하고 미끼·생미끼 경로와 준비 목록39조합을 로드 시 관리 값으로 만든다. 실제 직감 대상/생미끼 준비 완료를 추론하지 않는다. 같은 Framework 표본의 날씨·기존 공개 직감 관찰만 사용하고 실패/이동/세션 전환/만료에는 추천을 비운다. 목표 자료 실패는 기존 기본 안내만 유지한다. 진단 `ocean-beta/v3`는 추천 자료 준비 상태·목표/미끼 ID·이유/조건 확인 코드·직감 후보 수를 추가하며 표시 문자열/언어를 판정에 쓰지 않는다.
+
 먼바다 어종 목록은 Framework에서 실행 클라이언트의 낚시수첩 Item 슬롯으로26개 낚시터를 색인해 IKDSpot 일반/환해류 ID와 연결한다. 한 어종의 두 해역 소속을 주 낚시터 하나로 잃지 않는다. Core `OceanFishCondition`은 내장260행의 명시 시간/날씨·직감 부재만 비교하며 미확인을 보존한다. `OceanFishing`은 공개 StatusList/네이티브 날씨를 같은 세션의 관리 snapshot으로 복사하고 전체/후보/미확인 배열을 준비한다. 메인·캐스팅·공유 `SpotFishWindow`의 관찰 사용 비트는 각각 열림/닫힘에 따라 해제하며 한 화면이 닫혀도 다른 화면의 관찰을 중단하지 않는다. 목록 snapshot은 Ready/Loading/이동/대기/종료/OffVoyage/Unavailable을 구분하고, 세션 불일치나3초 표본 만료에는 행을 비운다. 기존 일반 낚시 Tracker의 먼바다 미지원 경계는 유지한다.
 
 | 책임 | 주요 구현 | 경계 |

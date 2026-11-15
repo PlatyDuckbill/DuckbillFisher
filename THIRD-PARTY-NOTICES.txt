@@ -142,6 +142,12 @@ Only individual numerical observations are retained; no bite times or strategies
 https://ffxiv.oceanfishing.boats/indigo/
 https://ffxiv.oceanfishing.boats/ruby/
 Source URLs and fixed SHA256 snapshots: data/ocean-guidance.v1.json
+Rechecked 2026-11-15 against identical original CSV hashes. The optional targets
+section retains preferred bait, mooch-source identity, tug and base-point facts
+for 260 pool memberships. Two blank preferred baits remain unknown. No bite
+times, catch probabilities, source strategies, prose or website code are copied.
+The plugin's own recommendation compares these facts with local time/weather
+observations and published yield minima; it is not an optimal-score guarantee.
 Only individual bait, tug, catch-quantity and time-of-day facts are recorded,
 linked to IDs verified against the installed KR and global client sheets.
 Basic targets were selected for direct bait without Intuition preparation;

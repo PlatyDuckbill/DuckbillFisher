@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
-  "dataVersion": "ocean-beta-2026-11-06",
-  "author": "Tyo'to Tayuun",
+  "dataVersion": "ocean-guidance-2026-11-15",
+  "author": "Tyo\u0027to Tayuun",
   "sources": [
     {
       "url": "https://ffxiv.oceanfishing.boats/fishdata/indigo-EN.csv",
@@ -503,5 +503,2609 @@
       "double": 4,
       "triple": 7
     }
-  ]
+  ],
+  "targets": [
+    {
+      "fishItemId": 28937,
+      "fishParameterId": 828,
+      "fishingSpotId": 237,
+      "baitItemId": 29714,
+      "baitKind": "Direct",
+      "points": 10,
+      "spectralTrigger": false,
+      "tug": "!"
+    },
+    {
+      "fishItemId": 28938,
+      "fishParameterId": 829,
+      "fishingSpotId": 237,
+      "baitItemId": 29715,
+      "baitKind": "Direct",
+      "points": 11,
+      "spectralTrigger": false,
+      "tug": "!"
+    },
+    {
+      "fishItemId": 28939,
+      "fishParameterId": 842,
+      "fishingSpotId": 237,
+      "baitItemId": 29715,
+      "baitKind": "Direct",
+      "points": 34,
+      "spectralTrigger": false,
+      "tug": "!"
+    },
+    {
+      "fishItemId": 28942,
+      "fishParameterId": 841,
+      "fishingSpotId": 237,
+      "baitItemId": 29716,
+      "baitKind": "Direct",
+      "points": 34,
+      "spectralTrigger": false,
+      "tug": "!!!"
+    },
+    {
+      "fishItemId": 29719,
+      "fishParameterId": 840,
+      "fishingSpotId": 237,
+      "baitItemId": 29715,
+      "baitKind": "Direct",
+      "points": 40,
+      "spectralTrigger": false,
+      "tug": "!!"
+    },
+    {
+      "fishItemId": 29721,
+      "fishParameterId": 853,
+      "fishingSpotId": 237,
+      "baitItemId": 29714,
+      "baitKind": "Direct",
+      "points": 50,
+      "spectralTrigger": false,
+      "tug": "!"
+    },
+    {
+      "fishItemId": 29723,
+      "fishParameterId": 832,
+      "fishingSpotId": 237,
+      "baitItemId": 29716,
+      "baitKind": "Direct",
+      "points": 14,
+      "spectralTrigger": false,
+      "tug": "!!"
+    },
+    {
+      "fishItemId": 29734,
+      "fishParameterId": 852,
+      "fishingSpotId": 237,
+      "baitItemId": 29715,
+      "baitKind": "Direct",
+      "points": 59,
+      "spectralTrigger": false,
+      "tug": "!!"
+    },
+    {
+      "fishItemId": 29744,
+      "fishParameterId": 860,
+      "fishingSpotId": 237,
+      "baitItemId": 29715,
+      "baitKind": "Direct",
+      "points": 253,
+      "spectralTrigger": false,
+      "tug": "!!!"
+    },
+    {
+      "fishItemId": 29784,
+      "fishParameterId": 900,
+      "fishingSpotId": 237,
+      "baitItemId": 29715,
+      "baitKind": "Direct",
+      "points": 100,
+      "spectralTrigger": true,
+      "tug": "!!!"
+    },
+    {
+      "fishItemId": 29749,
+      "fishParameterId": 865,
+      "fishingSpotId": 238,
+      "baitItemId": 29714,
+      "baitKind": "Direct",
+      "points": 67,
+      "spectralTrigger": false,
+      "tug": "!"
+    },
+    {
+      "fishItemId": 29750,
+      "fishParameterId": 866,
+      "fishingSpotId": 238,
+      "baitItemId": 29716,
+      "baitKind": "Direct",
+      "points": 78,
+      "spectralTrigger": false,
+      "tug": "!!"
+    },
+    {
+      "fishItemId": 29751,
+      "fishParameterId": 867,
+      "fishingSpotId": 238,
+      "baitItemId": 29716,
+      "baitKind": "Direct",
+      "points": 213,
+      "spectralTrigger": false,
+      "tug": "!!"
+    },
+    {
+      "fishItemId": 29752,
+      "fishParameterId": 868,
+      "fishingSpotId": 238,
+      "baitItemId": 29715,
+      "baitKind": "Direct",
+      "points": 71,
+      "spectralTrigger": false,
+      "tug": "!"
+    },
+    {
+      "fishItemId": 29753,
+      "fishParameterId": 869,
+      "fishingSpotId": 238,
+      "baitItemId": 29714,
+      "baitKind": "Direct",
+      "points": 222,
+      "spectralTrigger": false,
+      "tug": "!"
+    },
+    {
+      "fishItemId": 29754,
+      "fishParameterId": 870,
+      "fishingSpotId": 238,
+      "baitItemId": 29716,
+      "baitKind": "Direct",
+      "points": 78,
+      "spectralTrigger": false,
+      "tug": "!!"
+    },
+    {
+      "fishItemId": 29756,
+      "fishParameterId": 872,
+      "fishingSpotId": 238,
+      "baitItemId": 29714,
+      "baitKind": "Direct",
+      "points": 444,
+      "spectralTrigger": false,
+      "tug": "!"
+    },
+    {
+      "fishItemId": 29766,
+      "fishParameterId": 864,
+      "fishingSpotId": 238,
+      "baitItemId": 29715,
+      "baitKind": "Direct",
+      "points": 94,
+      "spectralTrigger": false,
+      "tug": "!!"
+    },
+    {
+      "fishItemId": 29782,
+      "fishParameterId": 898,
+      "fishingSpotId": 238,
+      "baitItemId": 29716,
+      "baitKind": "Direct",
+      "points": 213,
+      "spectralTrigger": false,
+      "tug": "!!!"
+    },
+    {
+      "fishItemId": 29788,
+      "fishParameterId": 904,
+      "fishingSpotId": 238,
+      "baitItemId": 2603,
+      "baitKind": "Direct",
+      "points": 500,
+      "spectralTrigger": false,
+      "tug": "!!!"
+    },
+    {
+      "fishItemId": 28941,
+      "fishParameterId": 833,
+      "fishingSpotId": 239,
+      "baitItemId": 29714,
+      "baitKind": "Direct",
+      "points": 10,
+      "spectralTrigger": false,
+      "tug": "!"
+    },
+    {
+      "fishItemId": 29722,
+      "fishParameterId": 831,
+      "fishingSpotId": 239,
+      "baitItemId": 29715,
+      "baitKind": "Direct",
+      "points": 10,
+      "spectralTrigger": false,
+      "tug": "!!"
+    },
+    {
+      "fishItemId": 29724,
+      "fishParameterId": 843,
+      "fishingSpotId": 239,
+      "baitItemId": 29715,
+      "baitKind": "Direct",
+      "points": 27,
+      "spectralTrigger": false,
+      "tug": "!"
+    },
+    {
+      "fishItemId": 29725,
+      "fishParameterId": 845,
+      "fishingSpotId": 239,
+      "baitItemId": 29716,
+      "baitKind": "Direct",
+      "points": 22,
+      "spectralTrigger": false,
+      "tug": "!!!"
+    },
+    {
+      "fishItemId": 29726,
+      "fishParameterId": 854,
+      "fishingSpotId": 239,
+      "baitItemId": 29714,
+      "baitKind": "Direct",
+      "points": 51,
+      "spectralTrigger": false,
+      "tug": "!"
+    },
+    {
+      "fishItemId": 29727,
+      "fishParameterId": 855,
+      "fishingSpotId": 239,
+      "baitItemId": 29722,
+      "baitKind": "Mooch",
+      "points": 49,
+      "spectralTrigger": false,
+      "tug": "!!"
+    },
+    {
+      "fishItemId": 29739,
+      "fishParameterId": 830,
+      "fishingSpotId": 239,
+      "baitItemId": 29714,
+      "baitKind": "Direct",
+      "points": 10,
+      "spectralTrigger": false,
+      "tug": "!"
+    },
+    {
+      "fishItemId": 29740,
+      "fishParameterId": 850,
+      "fishingSpotId": 239,
+      "baitItemId": 29714,
+      "baitKind": "Direct",
+      "points": 35,
+      "spectralTrigger": false,
+      "tug": "!"
+    },
+    {
+      "fishItemId": 29745,
+      "fishParameterId": 861,
+      "fishingSpotId": 239,
+      "baitItemId": 29716,
+      "baitKind": "Direct",
+      "points": 204,
+      "spectralTrigger": false,
+      "tug": "!!!"
+    },
+    {
+      "fishItemId": 29785,
+      "fishParameterId": 901,
+      "fishingSpotId": 239,
+      "baitItemId": 29715,
+      "baitKind": "Direct",
+      "points": 100,
+      "spectralTrigger": true,
+      "tug": "!!!"
+    },
+    {
+      "fishItemId": 29755,
+      "fishParameterId": 871,
+      "fishingSpotId": 240,
+      "baitItemId": 29715,
+      "baitKind": "Direct",
+      "points": 196,
+      "spectralTrigger": false,
+      "tug": "!!"
+    },
+    {
+      "fishItemId": 29757,
+      "fishParameterId": 873,
+      "fishingSpotId": 240,
+      "baitItemId": 29714,
+      "baitKind": "Direct",
+      "points": 156,
+      "spectralTrigger": false,
+      "tug": "!"
+    },
+    {
+      "fishItemId": 29758,
+      "fishParameterId": 874,
+      "fishingSpotId": 240,
+      "baitItemId": 29761,
+      "baitKind": "Mooch",
+      "points": 127,
+      "spectralTrigger": false,
+      "tug": "!!"
+    },
+    {
+      "fishItemId": 29759,
+      "fishParameterId": 875,
+      "fishingSpotId": 240,
+      "baitItemId": 29716,
+      "baitKind": "Direct",
+      "points": 59,
+      "spectralTrigger": false,
+      "tug": "!!"
+    },
+    {
+      "fishItemId": 29760,
+      "fishParameterId": 878,
+      "fishingSpotId": 240,
+      "baitItemId": 29715,
+      "baitKind": "Direct",
+      "points": 69,
+      "spectralTrigger": false,
+      "tug": "!"
+    },
+    {
+      "fishItemId": 29761,
+      "fishParameterId": 877,
+      "fishingSpotId": 240,
+      "baitItemId": 29714,
+      "baitKind": "Direct",
+      "points": 65,
+      "spectralTrigger": false,
+      "tug": "!"
+    },
+    {
+      "fishItemId": 29763,
+      "fishParameterId": 879,
+      "fishingSpotId": 240,
+      "baitItemId": 29761,
+      "baitKind": "Mooch",
+      "points": 245,
+      "spectralTrigger": false,
+      "tug": "!!"
+    },
+    {
+      "fishItemId": 29765,
+      "fishParameterId": 881,
+      "fishingSpotId": 240,
+      "baitItemId": 29761,
+      "baitKind": "Mooch",
+      "points": 345,
+      "spectralTrigger": false,
+      "tug": "!!!"
+    },
+    {
+      "fishItemId": 29779,
+      "fishParameterId": 876,
+      "fishingSpotId": 240,
+      "baitItemId": 29715,
+      "baitKind": "Direct",
+      "points": 69,
+      "spectralTrigger": false,
+      "tug": "!"
+    },
+    {
+      "fishItemId": 29789,
+      "fishParameterId": 905,
+      "fishingSpotId": 240,
+      "baitItemId": 2613,
+      "baitKind": "Direct",
+      "points": 500,
+      "spectralTrigger": false,
+      "tug": "!!!"
+    },
+    {
+      "fishItemId": 29728,
+      "fishParameterId": 834,
+      "fishingSpotId": 241,
+      "baitItemId": 29715,
+      "baitKind": "Direct",
+      "points": 13,
+      "spectralTrigger": false,
+      "tug": "!!"
+    },
+    {
+      "fishItemId": 29729,
+      "fishParameterId": 835,
+      "fishingSpotId": 241,
+      "baitItemId": 29714,
+      "baitKind": "Direct",
+      "points": 10,
+      "spectralTrigger": false,
+      "tug": "!"
+    },
+    {
+      "fishItemId": 29730,
+      "fishParameterId": 836,
+      "fishingSpotId": 241,
+      "baitItemId": 29715,
+      "baitKind": "Direct",
+      "points": 15,
+      "spectralTrigger": false,
+      "tug": "!!"
+    },
+    {
+      "fishItemId": 29731,
+      "fishParameterId": 846,
+      "fishingSpotId": 241,
+      "baitItemId": 29716,
+      "baitKind": "Direct",
+      "points": 32,
+      "spectralTrigger": false,
+      "tug": "!!"
+    },
+    {
+      "fishItemId": 29732,
+      "fishParameterId": 857,
+      "fishingSpotId": 241,
+      "baitItemId": 29714,
+      "baitKind": "Direct",
+      "points": 47,
+      "spectralTrigger": false,
+      "tug": "!"
+    },
+    {
+      "fishItemId": 29733,
+      "fishParameterId": 848,
+      "fishingSpotId": 241,
+      "baitItemId": 29716,
+      "baitKind": "Direct",
+      "points": 38,
+      "spectralTrigger": false,
+      "tug": "!!"
+    },
+    {
+      "fishItemId": 29735,
+      "fishParameterId": 847,
+      "fishingSpotId": 241,
+      "baitItemId": 29716,
+      "baitKind": "Direct",
+      "points": 32,
+      "spectralTrigger": false,
+      "tug": "!!!"
+    },
+    {
+      "fishItemId": 29742,
+      "fishParameterId": 856,
+      "fishingSpotId": 241,
+      "baitItemId": 29715,
+      "baitKind": "Direct",
+      "points": 46,
+      "spectralTrigger": false,
+      "tug": "!"
+    },
+    {
+      "fishItemId": 29746,
+      "fishParameterId": 862,
+      "fishingSpotId": 241,
+      "baitItemId": 29715,
+      "baitKind": "Direct",
+      "points": 204,
+      "spectralTrigger": false,
+      "tug": "!!!"
+    },
+    {
+      "fishItemId": 29787,
+      "fishParameterId": 903,
+      "fishingSpotId": 241,
+      "baitItemId": 29716,
+      "baitKind": "Direct",
+      "points": 100,
+      "spectralTrigger": true,
+      "tug": "!!!"
+    },
+    {
+      "fishItemId": 29762,
+      "fishParameterId": 896,
+      "fishingSpotId": 242,
+      "baitItemId": 29715,
+      "baitKind": "Direct",
+      "points": 222,
+      "spectralTrigger": false,
+      "tug": "!"
+    },
+    {
+      "fishItemId": 29767,
+      "fishParameterId": 883,
+      "fishingSpotId": 242,
+      "baitItemId": 29716,
+      "baitKind": "Direct",
+      "points": 216,
+      "spectralTrigger": false,
+      "tug": "!!"
+    },
+    {
+      "fishItemId": 29768,
+      "fishParameterId": 884,
+      "fishingSpotId": 242,
+      "baitItemId": 29714,
+      "baitKind": "Direct",
+      "points": 89,
+      "spectralTrigger": false,
+      "tug": "!"
+    },
+    {
+      "fishItemId": 29769,
+      "fishParameterId": 885,
+      "fishingSpotId": 242,
+      "baitItemId": 29716,
+      "baitKind": "Direct",
+      "points": 81,
+      "spectralTrigger": false,
+      "tug": "!!"
+    },
+    {
+      "fishItemId": 29770,
+      "fishParameterId": 886,
+      "fishingSpotId": 242,
+      "baitItemId": 29716,
+      "baitKind": "Direct",
+      "points": 216,
+      "spectralTrigger": false,
+      "tug": "!!!"
+    },
+    {
+      "fishItemId": 29772,
+      "fishParameterId": 888,
+      "fishingSpotId": 242,
+      "baitItemId": 29715,
+      "baitKind": "Direct",
+      "points": 95,
+      "spectralTrigger": false,
+      "tug": "!!"
+    },
+    {
+      "fishItemId": 29774,
+      "fishParameterId": 890,
+      "fishingSpotId": 242,
+      "baitItemId": 29714,
+      "baitKind": "Direct",
+      "points": 246,
+      "spectralTrigger": false,
+      "tug": "!"
+    },
+    {
+      "fishItemId": 29775,
+      "fishParameterId": 882,
+      "fishingSpotId": 242,
+      "baitItemId": 29715,
+      "baitKind": "Direct",
+      "points": 95,
+      "spectralTrigger": false,
+      "tug": "!"
+    },
+    {
+      "fishItemId": 29780,
+      "fishParameterId": 889,
+      "fishingSpotId": 242,
+      "baitItemId": 29715,
+      "baitKind": "Direct",
+      "points": 95,
+      "spectralTrigger": false,
+      "tug": "!!"
+    },
+    {
+      "fishItemId": 29790,
+      "fishParameterId": 906,
+      "fishingSpotId": 242,
+      "baitItemId": 2591,
+      "baitKind": "Direct",
+      "points": 500,
+      "spectralTrigger": false,
+      "tug": "!!!"
+    },
+    {
+      "fishItemId": 28940,
+      "fishParameterId": 844,
+      "fishingSpotId": 243,
+      "baitItemId": 29715,
+      "baitKind": "Direct",
+      "points": 43,
+      "spectralTrigger": false,
+      "tug": "!"
+    },
+    {
+      "fishItemId": 29718,
+      "fishParameterId": 849,
+      "fishingSpotId": 243,
+      "baitItemId": 29714,
+      "baitKind": "Direct",
+      "points": 27,
+      "spectralTrigger": false,
+      "tug": "!"
+    },
+    {
+      "fishItemId": 29720,
+      "fishParameterId": 858,
+      "fishingSpotId": 243,
+      "baitItemId": 29715,
+      "baitKind": "Direct",
+      "points": 45,
+      "spectralTrigger": false,
+      "tug": "!"
+    },
+    {
+      "fishItemId": 29736,
+      "fishParameterId": 837,
+      "fishingSpotId": 243,
+      "baitItemId": 29714,
+      "baitKind": "Direct",
+      "points": 13,
+      "spectralTrigger": false,
+      "tug": "!"
+    },
+    {
+      "fishItemId": 29737,
+      "fishParameterId": 838,
+      "fishingSpotId": 243,
+      "baitItemId": 29716,
+      "baitKind": "Direct",
+      "points": 11,
+      "spectralTrigger": false,
+      "tug": "!!"
+    },
+    {
+      "fishItemId": 29738,
+      "fishParameterId": 839,
+      "fishingSpotId": 243,
+      "baitItemId": 29716,
+      "baitKind": "Direct",
+      "points": 11,
+      "spectralTrigger": false,
+      "tug": "!!"
+    },
+    {
+      "fishItemId": 29741,
+      "fishParameterId": 851,
+      "fishingSpotId": 243,
+      "baitItemId": 29715,
+      "baitKind": "Direct",
+      "points": 36,
+      "spectralTrigger": false,
+      "tug": "!!"
+    },
+    {
+      "fishItemId": 29743,
+      "fishParameterId": 859,
+      "fishingSpotId": 243,
+      "baitItemId": 29718,
+      "baitKind": "Mooch",
+      "points": 52,
+      "spectralTrigger": false,
+      "tug": "!!"
+    },
+    {
+      "fishItemId": 29747,
+      "fishParameterId": 863,
+      "fishingSpotId": 243,
+      "baitItemId": 29714,
+      "baitKind": "Direct",
+      "points": 226,
+      "spectralTrigger": false,
+      "tug": "!!!"
+    },
+    {
+      "fishItemId": 29786,
+      "fishParameterId": 902,
+      "fishingSpotId": 243,
+      "baitItemId": 29714,
+      "baitKind": "Direct",
+      "points": 100,
+      "spectralTrigger": true,
+      "tug": "!!!"
+    },
+    {
+      "fishItemId": 29748,
+      "fishParameterId": 891,
+      "fishingSpotId": 244,
+      "baitItemId": 29715,
+      "baitKind": "Direct",
+      "points": 69,
+      "spectralTrigger": false,
+      "tug": "!"
+    },
+    {
+      "fishItemId": 29764,
+      "fishParameterId": 880,
+      "fishingSpotId": 244,
+      "baitItemId": 29714,
+      "baitKind": "Direct",
+      "points": 189,
+      "spectralTrigger": false,
+      "tug": "!"
+    },
+    {
+      "fishItemId": 29771,
+      "fishParameterId": 887,
+      "fishingSpotId": 244,
+      "baitItemId": 29714,
+      "baitKind": "Direct",
+      "points": 79,
+      "spectralTrigger": false,
+      "tug": "!"
+    },
+    {
+      "fishItemId": 29773,
+      "fishParameterId": 895,
+      "fishingSpotId": 244,
+      "baitItemId": 29715,
+      "baitKind": "Direct",
+      "points": 198,
+      "spectralTrigger": false,
+      "tug": "!!"
+    },
+    {
+      "fishItemId": 29776,
+      "fishParameterId": 892,
+      "fishingSpotId": 244,
+      "baitItemId": 29716,
+      "baitKind": "Direct",
+      "points": 79,
+      "spectralTrigger": false,
+      "tug": "!!"
+    },
+    {
+      "fishItemId": 29777,
+      "fishParameterId": 893,
+      "fishingSpotId": 244,
+      "baitItemId": 29714,
+      "baitKind": "Direct",
+      "points": 221,
+      "spectralTrigger": false,
+      "tug": "!"
+    },
+    {
+      "fishItemId": 29778,
+      "fishParameterId": 894,
+      "fishingSpotId": 244,
+      "baitItemId": 29714,
+      "baitKind": "Direct",
+      "points": 79,
+      "spectralTrigger": false,
+      "tug": "!"
+    },
+    {
+      "fishItemId": 29781,
+      "fishParameterId": 897,
+      "fishingSpotId": 244,
+      "baitItemId": 29716,
+      "baitKind": "Direct",
+      "points": 79,
+      "spectralTrigger": false,
+      "tug": "!!!"
+    },
+    {
+      "fishItemId": 29783,
+      "fishParameterId": 899,
+      "fishingSpotId": 244,
+      "baitItemId": 29715,
+      "baitKind": "Direct",
+      "points": 374,
+      "spectralTrigger": false,
+      "tug": "!!"
+    },
+    {
+      "fishItemId": 29791,
+      "fishParameterId": 907,
+      "fishingSpotId": 244,
+      "baitItemId": 2619,
+      "baitKind": "Direct",
+      "points": 500,
+      "spectralTrigger": false,
+      "tug": "!!!"
+    },
+    {
+      "fishItemId": 32055,
+      "fishParameterId": 933,
+      "fishingSpotId": 246,
+      "baitItemId": 29715,
+      "baitKind": "Direct",
+      "points": 10,
+      "spectralTrigger": false,
+      "tug": "!!"
+    },
+    {
+      "fishItemId": 32056,
+      "fishParameterId": 934,
+      "fishingSpotId": 246,
+      "baitItemId": 29714,
+      "baitKind": "Direct",
+      "points": 15,
+      "spectralTrigger": false,
+      "tug": "!"
+    },
+    {
+      "fishItemId": 32057,
+      "fishParameterId": 935,
+      "fishingSpotId": 246,
+      "baitItemId": 29714,
+      "baitKind": "Direct",
+      "points": 9,
+      "spectralTrigger": false,
+      "tug": "!"
+    },
+    {
+      "fishItemId": 32058,
+      "fishParameterId": 942,
+      "fishingSpotId": 246,
+      "baitItemId": 29716,
+      "baitKind": "Direct",
+      "points": 33,
+      "spectralTrigger": false,
+      "tug": "!!"
+    },
+    {
+      "fishItemId": 32059,
+      "fishParameterId": 943,
+      "fishingSpotId": 246,
+      "baitItemId": 29715,
+      "baitKind": "Direct",
+      "points": 41,
+      "spectralTrigger": false,
+      "tug": "!"
+    },
+    {
+      "fishItemId": 32060,
+      "fishParameterId": 944,
+      "fishingSpotId": 246,
+      "baitItemId": 29716,
+      "baitKind": "Direct",
+      "points": 39,
+      "spectralTrigger": false,
+      "tug": "!!!"
+    },
+    {
+      "fishItemId": 32061,
+      "fishParameterId": 951,
+      "fishingSpotId": 246,
+      "baitItemId": 29716,
+      "baitKind": "Direct",
+      "points": 58,
+      "spectralTrigger": false,
+      "tug": "!!!"
+    },
+    {
+      "fishItemId": 32062,
+      "fishParameterId": 952,
+      "fishingSpotId": 246,
+      "baitItemId": 29715,
+      "baitKind": "Direct",
+      "points": 52,
+      "spectralTrigger": false,
+      "tug": "!"
+    },
+    {
+      "fishItemId": 32063,
+      "fishParameterId": 987,
+      "fishingSpotId": 246,
+      "baitItemId": 29714,
+      "baitKind": "Direct",
+      "points": 100,
+      "spectralTrigger": true,
+      "tug": "!!!"
+    },
+    {
+      "fishItemId": 32064,
+      "fishParameterId": 957,
+      "fishingSpotId": 246,
+      "baitItemId": 29715,
+      "baitKind": "Direct",
+      "points": 246,
+      "spectralTrigger": false,
+      "tug": "!!!"
+    },
+    {
+      "fishItemId": 32065,
+      "fishParameterId": 960,
+      "fishingSpotId": 247,
+      "baitItemId": 29715,
+      "baitKind": "Direct",
+      "points": 84,
+      "spectralTrigger": false,
+      "tug": "!!"
+    },
+    {
+      "fishItemId": 32066,
+      "fishParameterId": 961,
+      "fishingSpotId": 247,
+      "baitItemId": 29714,
+      "baitKind": "Direct",
+      "points": 64,
+      "spectralTrigger": false,
+      "tug": "!"
+    },
+    {
+      "fishItemId": 32067,
+      "fishParameterId": 962,
+      "fishingSpotId": 247,
+      "baitItemId": 27590,
+      "baitKind": "Direct",
+      "points": 84,
+      "spectralTrigger": false,
+      "tug": "!!"
+    },
+    {
+      "fishItemId": 32068,
+      "fishParameterId": 963,
+      "fishingSpotId": 247,
+      "baitItemId": 27590,
+      "baitKind": "Direct",
+      "points": 84,
+      "spectralTrigger": false,
+      "tug": "!"
+    },
+    {
+      "fishItemId": 32069,
+      "fishParameterId": 964,
+      "fishingSpotId": 247,
+      "baitItemId": 29715,
+      "baitKind": "Direct",
+      "points": 198,
+      "spectralTrigger": false,
+      "tug": "!!"
+    },
+    {
+      "fishItemId": 32070,
+      "fishParameterId": 965,
+      "fishingSpotId": 247,
+      "baitItemId": 29716,
+      "baitKind": "Direct",
+      "points": 75,
+      "spectralTrigger": false,
+      "tug": "!!!"
+    },
+    {
+      "fishItemId": 32071,
+      "fishParameterId": 966,
+      "fishingSpotId": 247,
+      "baitItemId": 29715,
+      "baitKind": "Direct",
+      "points": 201,
+      "spectralTrigger": false,
+      "tug": "!!"
+    },
+    {
+      "fishItemId": 32072,
+      "fishParameterId": 967,
+      "fishingSpotId": 247,
+      "baitItemId": 29716,
+      "baitKind": "Direct",
+      "points": 178,
+      "spectralTrigger": false,
+      "tug": "!!!"
+    },
+    {
+      "fishItemId": 32073,
+      "fishParameterId": 968,
+      "fishingSpotId": 247,
+      "baitItemId": 29716,
+      "baitKind": "Direct",
+      "points": 283,
+      "spectralTrigger": false,
+      "tug": "!!"
+    },
+    {
+      "fishItemId": 32074,
+      "fishParameterId": 990,
+      "fishingSpotId": 247,
+      "baitItemId": 27590,
+      "baitKind": "Direct",
+      "points": 500,
+      "spectralTrigger": false,
+      "tug": "!!!"
+    },
+    {
+      "fishItemId": 32075,
+      "fishParameterId": 936,
+      "fishingSpotId": 248,
+      "baitItemId": 29714,
+      "baitKind": "Direct",
+      "points": 9,
+      "spectralTrigger": false,
+      "tug": "!"
+    },
+    {
+      "fishItemId": 32076,
+      "fishParameterId": 937,
+      "fishingSpotId": 248,
+      "baitItemId": 29714,
+      "baitKind": "Direct",
+      "points": 14,
+      "spectralTrigger": false,
+      "tug": "!"
+    },
+    {
+      "fishItemId": 32077,
+      "fishParameterId": 938,
+      "fishingSpotId": 248,
+      "baitItemId": 29715,
+      "baitKind": "Direct",
+      "points": 8,
+      "spectralTrigger": false,
+      "tug": "!!"
+    },
+    {
+      "fishItemId": 32078,
+      "fishParameterId": 945,
+      "fishingSpotId": 248,
+      "baitItemId": 29716,
+      "baitKind": "Direct",
+      "points": 35,
+      "spectralTrigger": false,
+      "tug": "!!"
+    },
+    {
+      "fishItemId": 32079,
+      "fishParameterId": 946,
+      "fishingSpotId": 248,
+      "baitItemId": 29714,
+      "baitKind": "Direct",
+      "points": 28,
+      "spectralTrigger": false,
+      "tug": "!"
+    },
+    {
+      "fishItemId": 32080,
+      "fishParameterId": 947,
+      "fishingSpotId": 248,
+      "baitItemId": 29715,
+      "baitKind": "Direct",
+      "points": 30,
+      "spectralTrigger": false,
+      "tug": "!"
+    },
+    {
+      "fishItemId": 32081,
+      "fishParameterId": 953,
+      "fishingSpotId": 248,
+      "baitItemId": 29716,
+      "baitKind": "Direct",
+      "points": 43,
+      "spectralTrigger": false,
+      "tug": "!!"
+    },
+    {
+      "fishItemId": 32082,
+      "fishParameterId": 954,
+      "fishingSpotId": 248,
+      "baitItemId": 29714,
+      "baitKind": "Direct",
+      "points": 49,
+      "spectralTrigger": false,
+      "tug": "!!!"
+    },
+    {
+      "fishItemId": 32083,
+      "fishParameterId": 988,
+      "fishingSpotId": 248,
+      "baitItemId": 29715,
+      "baitKind": "Direct",
+      "points": 100,
+      "spectralTrigger": true,
+      "tug": "!!!"
+    },
+    {
+      "fishItemId": 32084,
+      "fishParameterId": 958,
+      "fishingSpotId": 248,
+      "baitItemId": 29715,
+      "baitKind": "Direct",
+      "points": 326,
+      "spectralTrigger": false,
+      "tug": "!!!"
+    },
+    {
+      "fishItemId": 32085,
+      "fishParameterId": 969,
+      "fishingSpotId": 249,
+      "baitItemId": 29714,
+      "baitKind": "Direct",
+      "points": 102,
+      "spectralTrigger": false,
+      "tug": "!"
+    },
+    {
+      "fishItemId": 32086,
+      "fishParameterId": 970,
+      "fishingSpotId": 249,
+      "baitItemId": 29715,
+      "baitKind": "Direct",
+      "points": 77,
+      "spectralTrigger": false,
+      "tug": "!"
+    },
+    {
+      "fishItemId": 32087,
+      "fishParameterId": 971,
+      "fishingSpotId": 249,
+      "baitItemId": 29715,
+      "baitKind": "Direct",
+      "points": 102,
+      "spectralTrigger": false,
+      "tug": "!!"
+    },
+    {
+      "fishItemId": 32088,
+      "fishParameterId": 972,
+      "fishingSpotId": 249,
+      "baitItemId": 29714,
+      "baitKind": "Direct",
+      "points": 74,
+      "spectralTrigger": false,
+      "tug": "!"
+    },
+    {
+      "fishItemId": 32089,
+      "fishParameterId": 973,
+      "fishingSpotId": 249,
+      "baitItemId": 2587,
+      "baitKind": "Direct",
+      "points": 77,
+      "spectralTrigger": false,
+      "tug": "!!"
+    },
+    {
+      "fishItemId": 32090,
+      "fishParameterId": 974,
+      "fishingSpotId": 249,
+      "baitItemId": 29714,
+      "baitKind": "Direct",
+      "points": 255,
+      "spectralTrigger": false,
+      "tug": "!"
+    },
+    {
+      "fishItemId": 32091,
+      "fishParameterId": 975,
+      "fishingSpotId": 249,
+      "baitItemId": 29716,
+      "baitKind": "Direct",
+      "points": 92,
+      "spectralTrigger": false,
+      "tug": "!!"
+    },
+    {
+      "fishItemId": 32092,
+      "fishParameterId": 976,
+      "fishingSpotId": 249,
+      "baitItemId": 29716,
+      "baitKind": "Direct",
+      "points": 92,
+      "spectralTrigger": false,
+      "tug": "!!!"
+    },
+    {
+      "fishItemId": 32093,
+      "fishParameterId": 977,
+      "fishingSpotId": 249,
+      "baitItemId": 29716,
+      "baitKind": "Direct",
+      "points": 460,
+      "spectralTrigger": false,
+      "tug": "!!!"
+    },
+    {
+      "fishItemId": 32094,
+      "fishParameterId": 991,
+      "fishingSpotId": 249,
+      "baitItemId": 2587,
+      "baitKind": "Direct",
+      "points": 500,
+      "spectralTrigger": false,
+      "tug": "!!!"
+    },
+    {
+      "fishItemId": 32095,
+      "fishParameterId": 939,
+      "fishingSpotId": 250,
+      "baitItemId": 29714,
+      "baitKind": "Direct",
+      "points": 10,
+      "spectralTrigger": false,
+      "tug": "!"
+    },
+    {
+      "fishItemId": 32096,
+      "fishParameterId": 940,
+      "fishingSpotId": 250,
+      "baitItemId": 29714,
+      "baitKind": "Direct",
+      "points": 10,
+      "spectralTrigger": false,
+      "tug": "!"
+    },
+    {
+      "fishItemId": 32097,
+      "fishParameterId": 941,
+      "fishingSpotId": 250,
+      "baitItemId": 29715,
+      "baitKind": "Direct",
+      "points": 13,
+      "spectralTrigger": false,
+      "tug": "!!"
+    },
+    {
+      "fishItemId": 32098,
+      "fishParameterId": 948,
+      "fishingSpotId": 250,
+      "baitItemId": 29714,
+      "baitKind": "Direct",
+      "points": 29,
+      "spectralTrigger": false,
+      "tug": "!"
+    },
+    {
+      "fishItemId": 32099,
+      "fishParameterId": 949,
+      "fishingSpotId": 250,
+      "baitItemId": 29716,
+      "baitKind": "Direct",
+      "points": 29,
+      "spectralTrigger": false,
+      "tug": "!!"
+    },
+    {
+      "fishItemId": 32100,
+      "fishParameterId": 950,
+      "fishingSpotId": 250,
+      "baitItemId": 29716,
+      "baitKind": "Direct",
+      "points": 36,
+      "spectralTrigger": false,
+      "tug": "!!"
+    },
+    {
+      "fishItemId": 32101,
+      "fishParameterId": 955,
+      "fishingSpotId": 250,
+      "baitItemId": 29715,
+      "baitKind": "Direct",
+      "points": 44,
+      "spectralTrigger": false,
+      "tug": "!!!"
+    },
+    {
+      "fishItemId": 32102,
+      "fishParameterId": 956,
+      "fishingSpotId": 250,
+      "baitItemId": 29715,
+      "baitKind": "Direct",
+      "points": 44,
+      "spectralTrigger": false,
+      "tug": "!!"
+    },
+    {
+      "fishItemId": 32103,
+      "fishParameterId": 989,
+      "fishingSpotId": 250,
+      "baitItemId": 29716,
+      "baitKind": "Direct",
+      "points": 100,
+      "spectralTrigger": true,
+      "tug": "!!!"
+    },
+    {
+      "fishItemId": 32104,
+      "fishParameterId": 959,
+      "fishingSpotId": 250,
+      "baitItemId": 29714,
+      "baitKind": "Direct",
+      "points": 238,
+      "spectralTrigger": false,
+      "tug": "!!!"
+    },
+    {
+      "fishItemId": 32105,
+      "fishParameterId": 978,
+      "fishingSpotId": 251,
+      "baitItemId": 29714,
+      "baitKind": "Direct",
+      "points": 107,
+      "spectralTrigger": false,
+      "tug": "!"
+    },
+    {
+      "fishItemId": 32106,
+      "fishParameterId": 979,
+      "fishingSpotId": 251,
+      "baitItemId": 29716,
+      "baitKind": "Direct",
+      "points": 70,
+      "spectralTrigger": false,
+      "tug": "!!"
+    },
+    {
+      "fishItemId": 32107,
+      "fishParameterId": 980,
+      "fishingSpotId": 251,
+      "baitItemId": 29714,
+      "baitKind": "Direct",
+      "points": 72,
+      "spectralTrigger": false,
+      "tug": "!"
+    },
+    {
+      "fishItemId": 32108,
+      "fishParameterId": 981,
+      "fishingSpotId": 251,
+      "baitItemId": 29715,
+      "baitKind": "Direct",
+      "points": 75,
+      "spectralTrigger": false,
+      "tug": "!!"
+    },
+    {
+      "fishItemId": 32109,
+      "fishParameterId": 982,
+      "fishingSpotId": 251,
+      "baitItemId": 29715,
+      "baitKind": "Direct",
+      "points": 237,
+      "spectralTrigger": false,
+      "tug": "!!"
+    },
+    {
+      "fishItemId": 32110,
+      "fishParameterId": 983,
+      "fishingSpotId": 251,
+      "baitItemId": 32107,
+      "baitKind": "Mooch",
+      "points": 202,
+      "spectralTrigger": false,
+      "tug": "!"
+    },
+    {
+      "fishItemId": 32111,
+      "fishParameterId": 984,
+      "fishingSpotId": 251,
+      "baitItemId": 29716,
+      "baitKind": "Direct",
+      "points": 125,
+      "spectralTrigger": false,
+      "tug": "!!"
+    },
+    {
+      "fishItemId": 32112,
+      "fishParameterId": 985,
+      "fishingSpotId": 251,
+      "baitItemId": 29714,
+      "baitKind": "Direct",
+      "points": 72,
+      "spectralTrigger": false,
+      "tug": "!"
+    },
+    {
+      "fishItemId": 32113,
+      "fishParameterId": 986,
+      "fishingSpotId": 251,
+      "baitItemId": 29715,
+      "baitKind": "Direct",
+      "points": 465,
+      "spectralTrigger": false,
+      "tug": "!!"
+    },
+    {
+      "fishItemId": 32114,
+      "fishParameterId": 992,
+      "fishingSpotId": 251,
+      "baitItemId": 32107,
+      "baitKind": "Mooch",
+      "points": 500,
+      "spectralTrigger": false,
+      "tug": "!!!"
+    },
+    {
+      "fishItemId": 40521,
+      "fishParameterId": 1189,
+      "fishingSpotId": 286,
+      "baitItemId": 29715,
+      "baitKind": "Direct",
+      "points": 31,
+      "spectralTrigger": false,
+      "tug": "!"
+    },
+    {
+      "fishItemId": 40522,
+      "fishParameterId": 1178,
+      "fishingSpotId": 286,
+      "baitItemId": 29714,
+      "baitKind": "Direct",
+      "points": 11,
+      "spectralTrigger": false,
+      "tug": "!"
+    },
+    {
+      "fishItemId": 40523,
+      "fishParameterId": 1179,
+      "fishingSpotId": 286,
+      "baitItemId": 29715,
+      "baitKind": "Direct",
+      "points": 10,
+      "spectralTrigger": false,
+      "tug": "!!"
+    },
+    {
+      "fishItemId": 40524,
+      "fishParameterId": 1177,
+      "fishingSpotId": 286,
+      "baitItemId": 29716,
+      "baitKind": "Direct",
+      "points": 15,
+      "spectralTrigger": false,
+      "tug": "!!"
+    },
+    {
+      "fishItemId": 40525,
+      "fishParameterId": 1190,
+      "fishingSpotId": 286,
+      "baitItemId": 29715,
+      "baitKind": "Direct",
+      "points": 42,
+      "spectralTrigger": false,
+      "tug": "!!"
+    },
+    {
+      "fishItemId": 40526,
+      "fishParameterId": 1191,
+      "fishingSpotId": 286,
+      "baitItemId": 29714,
+      "baitKind": "Direct",
+      "points": 38,
+      "spectralTrigger": false,
+      "tug": "!"
+    },
+    {
+      "fishItemId": 40527,
+      "fishParameterId": 1201,
+      "fishingSpotId": 286,
+      "baitItemId": 29714,
+      "baitKind": "Direct",
+      "points": 56,
+      "spectralTrigger": false,
+      "tug": "!"
+    },
+    {
+      "fishItemId": 40528,
+      "fishParameterId": 1202,
+      "fishingSpotId": 286,
+      "baitItemId": 29716,
+      "baitKind": "Direct",
+      "points": 47,
+      "spectralTrigger": false,
+      "tug": "!!!"
+    },
+    {
+      "fishItemId": 40529,
+      "fishParameterId": 1249,
+      "fishingSpotId": 286,
+      "baitItemId": 29716,
+      "baitKind": "Direct",
+      "points": 100,
+      "spectralTrigger": true,
+      "tug": "!!!"
+    },
+    {
+      "fishItemId": 40530,
+      "fishParameterId": 1209,
+      "fishingSpotId": 286,
+      "baitItemId": 29716,
+      "baitKind": "Direct",
+      "points": 263,
+      "spectralTrigger": false,
+      "tug": "!!!"
+    },
+    {
+      "fishItemId": 40531,
+      "fishParameterId": 1213,
+      "fishingSpotId": 287,
+      "baitItemId": 29714,
+      "baitKind": "Direct",
+      "points": 51,
+      "spectralTrigger": false,
+      "tug": "!"
+    },
+    {
+      "fishItemId": 40532,
+      "fishParameterId": 1214,
+      "fishingSpotId": 287,
+      "baitItemId": 29716,
+      "baitKind": "Direct",
+      "points": 68,
+      "spectralTrigger": false,
+      "tug": "!!"
+    },
+    {
+      "fishItemId": 40533,
+      "fishParameterId": 1215,
+      "fishingSpotId": 287,
+      "baitItemId": 29715,
+      "baitKind": "Direct",
+      "points": 144,
+      "spectralTrigger": false,
+      "tug": "!"
+    },
+    {
+      "fishItemId": 40534,
+      "fishParameterId": 1216,
+      "fishingSpotId": 287,
+      "baitItemId": 29716,
+      "baitKind": "Direct",
+      "points": 51,
+      "spectralTrigger": false,
+      "tug": "!!!"
+    },
+    {
+      "fishItemId": 40535,
+      "fishParameterId": 1217,
+      "fishingSpotId": 287,
+      "baitItemId": 29714,
+      "baitKind": "Direct",
+      "points": 101,
+      "spectralTrigger": false,
+      "tug": "!"
+    },
+    {
+      "fishItemId": 40536,
+      "fishParameterId": 1218,
+      "fishingSpotId": 287,
+      "baitItemId": 29716,
+      "baitKind": "Direct",
+      "points": 102,
+      "spectralTrigger": false,
+      "tug": "!!!"
+    },
+    {
+      "fishItemId": 40537,
+      "fishParameterId": 1219,
+      "fishingSpotId": 287,
+      "baitItemId": 29715,
+      "baitKind": "Direct",
+      "points": 144,
+      "spectralTrigger": false,
+      "tug": "!"
+    },
+    {
+      "fishItemId": 40538,
+      "fishParameterId": 1220,
+      "fishingSpotId": 287,
+      "baitItemId": 29715,
+      "baitKind": "Direct",
+      "points": 72,
+      "spectralTrigger": false,
+      "tug": "!"
+    },
+    {
+      "fishItemId": 40539,
+      "fishParameterId": 1221,
+      "fishingSpotId": 287,
+      "baitItemId": 29715,
+      "baitKind": "Direct",
+      "points": 289,
+      "spectralTrigger": false,
+      "tug": "!!"
+    },
+    {
+      "fishItemId": 40540,
+      "fishParameterId": 1253,
+      "fishingSpotId": 287,
+      "baitItemId": 36593,
+      "baitKind": "Direct",
+      "points": 500,
+      "spectralTrigger": false,
+      "tug": "!!!"
+    },
+    {
+      "fishItemId": 40541,
+      "fishParameterId": 1180,
+      "fishingSpotId": 288,
+      "baitItemId": 29715,
+      "baitKind": "Direct",
+      "points": 14,
+      "spectralTrigger": false,
+      "tug": "!!"
+    },
+    {
+      "fishItemId": 40542,
+      "fishParameterId": 1181,
+      "fishingSpotId": 288,
+      "baitItemId": 29714,
+      "baitKind": "Direct",
+      "points": 10,
+      "spectralTrigger": false,
+      "tug": "!"
+    },
+    {
+      "fishItemId": 40543,
+      "fishParameterId": 1182,
+      "fishingSpotId": 288,
+      "baitItemId": 29714,
+      "baitKind": "Direct",
+      "points": 10,
+      "spectralTrigger": false,
+      "tug": "!"
+    },
+    {
+      "fishItemId": 40544,
+      "fishParameterId": 1192,
+      "fishingSpotId": 288,
+      "baitItemId": 29716,
+      "baitKind": "Direct",
+      "points": 26,
+      "spectralTrigger": false,
+      "tug": "!!"
+    },
+    {
+      "fishItemId": 40545,
+      "fishParameterId": 1193,
+      "fishingSpotId": 288,
+      "baitItemId": 29716,
+      "baitKind": "Direct",
+      "points": 37,
+      "spectralTrigger": false,
+      "tug": "!!"
+    },
+    {
+      "fishItemId": 40546,
+      "fishParameterId": 1194,
+      "fishingSpotId": 288,
+      "baitItemId": 29715,
+      "baitKind": "Direct",
+      "points": 33,
+      "spectralTrigger": false,
+      "tug": "!"
+    },
+    {
+      "fishItemId": 40547,
+      "fishParameterId": 1203,
+      "fishingSpotId": 288,
+      "baitItemId": 29714,
+      "baitKind": "Direct",
+      "points": 53,
+      "spectralTrigger": false,
+      "tug": "!"
+    },
+    {
+      "fishItemId": 40548,
+      "fishParameterId": 1204,
+      "fishingSpotId": 288,
+      "baitItemId": 40543,
+      "baitKind": "Mooch",
+      "points": 35,
+      "spectralTrigger": false,
+      "tug": "!!!"
+    },
+    {
+      "fishItemId": 40549,
+      "fishParameterId": 1250,
+      "fishingSpotId": 288,
+      "baitItemId": 29715,
+      "baitKind": "Direct",
+      "points": 100,
+      "spectralTrigger": true,
+      "tug": "!!!"
+    },
+    {
+      "fishItemId": 40550,
+      "fishParameterId": 1210,
+      "fishingSpotId": 288,
+      "baitItemId": 29714,
+      "baitKind": "Direct",
+      "points": 263,
+      "spectralTrigger": false,
+      "tug": "!!!"
+    },
+    {
+      "fishItemId": 40551,
+      "fishParameterId": 1222,
+      "fishingSpotId": 289,
+      "baitItemId": 29715,
+      "baitKind": "Direct",
+      "points": 62,
+      "spectralTrigger": false,
+      "tug": "!!"
+    },
+    {
+      "fishItemId": 40552,
+      "fishParameterId": 1223,
+      "fishingSpotId": 289,
+      "baitItemId": 29714,
+      "baitKind": "Direct",
+      "points": 58,
+      "spectralTrigger": false,
+      "tug": "!"
+    },
+    {
+      "fishItemId": 40553,
+      "fishParameterId": 1224,
+      "fishingSpotId": 289,
+      "baitItemId": 29715,
+      "baitKind": "Direct",
+      "points": 191,
+      "spectralTrigger": false,
+      "tug": "!!"
+    },
+    {
+      "fishItemId": 40554,
+      "fishParameterId": 1225,
+      "fishingSpotId": 289,
+      "baitItemId": 29716,
+      "baitKind": "Direct",
+      "points": 115,
+      "spectralTrigger": false,
+      "tug": "!!"
+    },
+    {
+      "fishItemId": 40555,
+      "fishParameterId": 1226,
+      "fishingSpotId": 289,
+      "baitItemId": 29714,
+      "baitKind": "Direct",
+      "points": 198,
+      "spectralTrigger": false,
+      "tug": "!"
+    },
+    {
+      "fishItemId": 40556,
+      "fishParameterId": 1227,
+      "fishingSpotId": 289,
+      "baitItemId": 29715,
+      "baitKind": "Direct",
+      "points": 62,
+      "spectralTrigger": false,
+      "tug": "!"
+    },
+    {
+      "fishItemId": 40557,
+      "fishParameterId": 1228,
+      "fishingSpotId": 289,
+      "baitItemId": 29714,
+      "baitKind": "Direct",
+      "points": 83,
+      "spectralTrigger": false,
+      "tug": "!"
+    },
+    {
+      "fishItemId": 40558,
+      "fishParameterId": 1229,
+      "fishingSpotId": 289,
+      "baitItemId": 29716,
+      "baitKind": "Direct",
+      "points": 92,
+      "spectralTrigger": false,
+      "tug": "!!!"
+    },
+    {
+      "fishItemId": 40559,
+      "fishParameterId": 1230,
+      "fishingSpotId": 289,
+      "baitItemId": 29715,
+      "baitKind": "Direct",
+      "points": 191,
+      "spectralTrigger": false,
+      "tug": "!!"
+    },
+    {
+      "fishItemId": 40560,
+      "fishParameterId": 1254,
+      "fishingSpotId": 289,
+      "baitItemId": 40551,
+      "baitKind": "Mooch",
+      "points": 500,
+      "spectralTrigger": false,
+      "tug": "!!!"
+    },
+    {
+      "fishItemId": 40561,
+      "fishParameterId": 1183,
+      "fishingSpotId": 290,
+      "baitItemId": 29714,
+      "baitKind": "Direct",
+      "points": 11,
+      "spectralTrigger": false,
+      "tug": "!"
+    },
+    {
+      "fishItemId": 40562,
+      "fishParameterId": 1184,
+      "fishingSpotId": 290,
+      "baitItemId": 29715,
+      "baitKind": "Direct",
+      "points": 10,
+      "spectralTrigger": false,
+      "tug": "!!"
+    },
+    {
+      "fishItemId": 40563,
+      "fishParameterId": 1185,
+      "fishingSpotId": 290,
+      "baitItemId": 29714,
+      "baitKind": "Direct",
+      "points": 15,
+      "spectralTrigger": false,
+      "tug": "!"
+    },
+    {
+      "fishItemId": 40564,
+      "fishParameterId": 1195,
+      "fishingSpotId": 290,
+      "baitItemId": 29715,
+      "baitKind": "Direct",
+      "points": 41,
+      "spectralTrigger": false,
+      "tug": "!!"
+    },
+    {
+      "fishItemId": 40565,
+      "fishParameterId": 1205,
+      "fishingSpotId": 290,
+      "baitItemId": 29714,
+      "baitKind": "Direct",
+      "points": 57,
+      "spectralTrigger": false,
+      "tug": "!"
+    },
+    {
+      "fishItemId": 40566,
+      "fishParameterId": 1197,
+      "fishingSpotId": 290,
+      "baitItemId": 29716,
+      "baitKind": "Direct",
+      "points": 38,
+      "spectralTrigger": false,
+      "tug": "!!"
+    },
+    {
+      "fishItemId": 40567,
+      "fishParameterId": 1196,
+      "fishingSpotId": 290,
+      "baitItemId": 29714,
+      "baitKind": "Direct",
+      "points": 33,
+      "spectralTrigger": false,
+      "tug": "!"
+    },
+    {
+      "fishItemId": 40568,
+      "fishParameterId": 1206,
+      "fishingSpotId": 290,
+      "baitItemId": 29716,
+      "baitKind": "Direct",
+      "points": 55,
+      "spectralTrigger": false,
+      "tug": "!!!"
+    },
+    {
+      "fishItemId": 40569,
+      "fishParameterId": 1251,
+      "fishingSpotId": 290,
+      "baitItemId": 29715,
+      "baitKind": "Direct",
+      "points": 100,
+      "spectralTrigger": true,
+      "tug": "!!!"
+    },
+    {
+      "fishItemId": 40570,
+      "fishParameterId": 1211,
+      "fishingSpotId": 290,
+      "baitItemId": 29715,
+      "baitKind": "Direct",
+      "points": 227,
+      "spectralTrigger": false,
+      "tug": "!!!"
+    },
+    {
+      "fishItemId": 40571,
+      "fishParameterId": 1231,
+      "fishingSpotId": 291,
+      "baitItemId": 29715,
+      "baitKind": "Direct",
+      "points": 81,
+      "spectralTrigger": false,
+      "tug": "!!"
+    },
+    {
+      "fishItemId": 40572,
+      "fishParameterId": 1232,
+      "fishingSpotId": 291,
+      "baitItemId": 29714,
+      "baitKind": "Direct",
+      "points": 83,
+      "spectralTrigger": false,
+      "tug": "!"
+    },
+    {
+      "fishItemId": 40573,
+      "fishParameterId": 1233,
+      "fishingSpotId": 291,
+      "baitItemId": 29714,
+      "baitKind": "Direct",
+      "points": 218,
+      "spectralTrigger": false,
+      "tug": "!"
+    },
+    {
+      "fishItemId": 40574,
+      "fishParameterId": 1234,
+      "fishingSpotId": 291,
+      "baitItemId": 29714,
+      "baitKind": "Direct",
+      "points": 83,
+      "spectralTrigger": false,
+      "tug": "!"
+    },
+    {
+      "fishItemId": 40575,
+      "fishParameterId": 1235,
+      "fishingSpotId": 291,
+      "baitItemId": 29716,
+      "baitKind": "Direct",
+      "points": 76,
+      "spectralTrigger": false,
+      "tug": "!!"
+    },
+    {
+      "fishItemId": 40576,
+      "fishParameterId": 1236,
+      "fishingSpotId": 291,
+      "baitItemId": 29715,
+      "baitKind": "Direct",
+      "points": 187,
+      "spectralTrigger": false,
+      "tug": "!!"
+    },
+    {
+      "fishItemId": 40577,
+      "fishParameterId": 1237,
+      "fishingSpotId": 291,
+      "baitItemId": 29714,
+      "baitKind": "Direct",
+      "points": 218,
+      "spectralTrigger": false,
+      "tug": "!"
+    },
+    {
+      "fishItemId": 40578,
+      "fishParameterId": 1238,
+      "fishingSpotId": 291,
+      "baitItemId": 29716,
+      "baitKind": "Direct",
+      "points": 178,
+      "spectralTrigger": false,
+      "tug": "!!!"
+    },
+    {
+      "fishItemId": 40579,
+      "fishParameterId": 1239,
+      "fishingSpotId": 291,
+      "baitItemId": 29716,
+      "baitKind": "Direct",
+      "points": 126,
+      "spectralTrigger": false,
+      "tug": "!!"
+    },
+    {
+      "fishItemId": 40580,
+      "fishParameterId": 1255,
+      "fishingSpotId": 291,
+      "baitItemId": 27590,
+      "baitKind": "Direct",
+      "points": 500,
+      "spectralTrigger": false,
+      "tug": "!!!"
+    },
+    {
+      "fishItemId": 40581,
+      "fishParameterId": 1186,
+      "fishingSpotId": 292,
+      "baitItemId": 29714,
+      "baitKind": "Direct",
+      "points": 10,
+      "spectralTrigger": false,
+      "tug": "!"
+    },
+    {
+      "fishItemId": 40582,
+      "fishParameterId": 1187,
+      "fishingSpotId": 292,
+      "baitItemId": 29715,
+      "baitKind": "Direct",
+      "points": 14,
+      "spectralTrigger": false,
+      "tug": "!"
+    },
+    {
+      "fishItemId": 40583,
+      "fishParameterId": 1188,
+      "fishingSpotId": 292,
+      "baitItemId": 29715,
+      "baitKind": "Direct",
+      "points": 10,
+      "spectralTrigger": false,
+      "tug": "!!"
+    },
+    {
+      "fishItemId": 40584,
+      "fishParameterId": 1198,
+      "fishingSpotId": 292,
+      "baitItemId": 29714,
+      "baitKind": "Direct",
+      "points": 37,
+      "spectralTrigger": false,
+      "tug": "!"
+    },
+    {
+      "fishItemId": 40585,
+      "fishParameterId": 1199,
+      "fishingSpotId": 292,
+      "baitItemId": 29716,
+      "baitKind": "Direct",
+      "points": 40,
+      "spectralTrigger": false,
+      "tug": "!!"
+    },
+    {
+      "fishItemId": 40586,
+      "fishParameterId": 1200,
+      "fishingSpotId": 292,
+      "baitItemId": 29714,
+      "baitKind": "Direct",
+      "points": 31,
+      "spectralTrigger": false,
+      "tug": "!"
+    },
+    {
+      "fishItemId": 40587,
+      "fishParameterId": 1207,
+      "fishingSpotId": 292,
+      "baitItemId": 29715,
+      "baitKind": "Direct",
+      "points": 52,
+      "spectralTrigger": false,
+      "tug": "!!"
+    },
+    {
+      "fishItemId": 40588,
+      "fishParameterId": 1208,
+      "fishingSpotId": 292,
+      "baitItemId": 29716,
+      "baitKind": "Direct",
+      "points": 49,
+      "spectralTrigger": false,
+      "tug": "!!!"
+    },
+    {
+      "fishItemId": 40589,
+      "fishParameterId": 1252,
+      "fishingSpotId": 292,
+      "baitItemId": 29715,
+      "baitKind": "Direct",
+      "points": 100,
+      "spectralTrigger": true,
+      "tug": "!!!"
+    },
+    {
+      "fishItemId": 40590,
+      "fishParameterId": 1212,
+      "fishingSpotId": 292,
+      "baitItemId": 29716,
+      "baitKind": "Direct",
+      "points": 223,
+      "spectralTrigger": false,
+      "tug": "!!!"
+    },
+    {
+      "fishItemId": 40591,
+      "fishParameterId": 1240,
+      "fishingSpotId": 293,
+      "baitItemId": 29714,
+      "baitKind": "Direct",
+      "points": 85,
+      "spectralTrigger": false,
+      "tug": "!"
+    },
+    {
+      "fishItemId": 40592,
+      "fishParameterId": 1241,
+      "fishingSpotId": 293,
+      "baitItemId": 29716,
+      "baitKind": "Direct",
+      "points": 79,
+      "spectralTrigger": false,
+      "tug": "!!"
+    },
+    {
+      "fishItemId": 40593,
+      "fishParameterId": 1242,
+      "fishingSpotId": 293,
+      "baitItemId": 29716,
+      "baitKind": "Direct",
+      "points": 79,
+      "spectralTrigger": false,
+      "tug": "!!"
+    },
+    {
+      "fishItemId": 40594,
+      "fishParameterId": 1243,
+      "fishingSpotId": 293,
+      "baitItemId": 29714,
+      "baitKind": "Direct",
+      "points": 85,
+      "spectralTrigger": false,
+      "tug": "!"
+    },
+    {
+      "fishItemId": 40595,
+      "fishParameterId": 1244,
+      "fishingSpotId": 293,
+      "baitItemId": 29714,
+      "baitKind": "Direct",
+      "points": 85,
+      "spectralTrigger": false,
+      "tug": "!"
+    },
+    {
+      "fishItemId": 40596,
+      "fishParameterId": 1245,
+      "fishingSpotId": 293,
+      "baitItemId": 29715,
+      "baitKind": "Direct",
+      "points": 184,
+      "spectralTrigger": false,
+      "tug": "!"
+    },
+    {
+      "fishItemId": 40597,
+      "fishParameterId": 1246,
+      "fishingSpotId": 293,
+      "baitItemId": 29715,
+      "baitKind": "Direct",
+      "points": 209,
+      "spectralTrigger": false,
+      "tug": "!!"
+    },
+    {
+      "fishItemId": 40598,
+      "fishParameterId": 1247,
+      "fishingSpotId": 293,
+      "baitItemId": 29716,
+      "baitKind": "Direct",
+      "points": 185,
+      "spectralTrigger": false,
+      "tug": "!!!"
+    },
+    {
+      "fishItemId": 40599,
+      "fishParameterId": 1248,
+      "fishingSpotId": 293,
+      "baitItemId": 29715,
+      "baitKind": "Direct",
+      "points": 209,
+      "spectralTrigger": false,
+      "tug": "!!"
+    },
+    {
+      "fishItemId": 40600,
+      "fishParameterId": 1256,
+      "fishingSpotId": 293,
+      "baitItemId": 12704,
+      "baitKind": "Direct",
+      "points": 500,
+      "spectralTrigger": false,
+      "tug": "!!!"
+    },
+    {
+      "fishItemId": 51209,
+      "fishParameterId": 1472,
+      "fishingSpotId": 334,
+      "baitItemId": 29714,
+      "baitKind": "Direct",
+      "points": 10,
+      "spectralTrigger": false,
+      "tug": "!"
+    },
+    {
+      "fishItemId": 51210,
+      "fishParameterId": 1473,
+      "fishingSpotId": 334,
+      "baitItemId": 29715,
+      "baitKind": "Direct",
+      "points": 15,
+      "spectralTrigger": false,
+      "tug": "!!"
+    },
+    {
+      "fishItemId": 51211,
+      "fishParameterId": 1474,
+      "fishingSpotId": 334,
+      "baitItemId": 29716,
+      "baitKind": "Direct",
+      "points": 11,
+      "spectralTrigger": false,
+      "tug": "!!"
+    },
+    {
+      "fishItemId": 51212,
+      "fishParameterId": 1475,
+      "fishingSpotId": 334,
+      "baitItemId": 29715,
+      "baitKind": "Direct",
+      "points": 35,
+      "spectralTrigger": false,
+      "tug": "!"
+    },
+    {
+      "fishItemId": 51213,
+      "fishParameterId": 1476,
+      "fishingSpotId": 334,
+      "baitItemId": 29715,
+      "baitKind": "Direct",
+      "points": 35,
+      "spectralTrigger": false,
+      "tug": "!!"
+    },
+    {
+      "fishItemId": 51214,
+      "fishParameterId": 1477,
+      "fishingSpotId": 334,
+      "baitItemId": 29716,
+      "baitKind": "Direct",
+      "points": 40,
+      "spectralTrigger": false,
+      "tug": "!!"
+    },
+    {
+      "fishItemId": 51215,
+      "fishParameterId": 1478,
+      "fishingSpotId": 334,
+      "baitItemId": 29716,
+      "baitKind": "Direct",
+      "points": 59,
+      "spectralTrigger": false,
+      "tug": "!!!"
+    },
+    {
+      "fishItemId": 51216,
+      "fishParameterId": 1479,
+      "fishingSpotId": 334,
+      "baitItemId": 29714,
+      "baitKind": "Direct",
+      "points": 52,
+      "spectralTrigger": false,
+      "tug": "!"
+    },
+    {
+      "fishItemId": 51217,
+      "fishParameterId": 1480,
+      "fishingSpotId": 334,
+      "baitItemId": 29714,
+      "baitKind": "Direct",
+      "points": 100,
+      "spectralTrigger": true,
+      "tug": "!!!"
+    },
+    {
+      "fishItemId": 51218,
+      "fishParameterId": 1481,
+      "fishingSpotId": 334,
+      "baitItemId": 29714,
+      "baitKind": "Direct",
+      "points": 236,
+      "spectralTrigger": false,
+      "tug": "!!!"
+    },
+    {
+      "fishItemId": 51219,
+      "fishParameterId": 1482,
+      "fishingSpotId": 335,
+      "baitItemId": 29714,
+      "baitKind": "Direct",
+      "points": 86,
+      "spectralTrigger": false,
+      "tug": "!"
+    },
+    {
+      "fishItemId": 51220,
+      "fishParameterId": 1483,
+      "fishingSpotId": 335,
+      "baitItemId": 29715,
+      "baitKind": "Direct",
+      "points": 84,
+      "spectralTrigger": false,
+      "tug": "!"
+    },
+    {
+      "fishItemId": 51221,
+      "fishParameterId": 1484,
+      "fishingSpotId": 335,
+      "baitItemId": 29714,
+      "baitKind": "Direct",
+      "points": 69,
+      "spectralTrigger": false,
+      "tug": "!"
+    },
+    {
+      "fishItemId": 51222,
+      "fishParameterId": 1485,
+      "fishingSpotId": 335,
+      "baitItemId": 29714,
+      "baitKind": "Direct",
+      "points": 199,
+      "spectralTrigger": false,
+      "tug": "!"
+    },
+    {
+      "fishItemId": 51223,
+      "fishParameterId": 1486,
+      "fishingSpotId": 335,
+      "baitItemId": 29715,
+      "baitKind": "Direct",
+      "points": 58,
+      "spectralTrigger": false,
+      "tug": "!!"
+    },
+    {
+      "fishItemId": 51224,
+      "fishParameterId": 1487,
+      "fishingSpotId": 335,
+      "baitItemId": 29716,
+      "baitKind": "Direct",
+      "points": 68,
+      "spectralTrigger": false,
+      "tug": "!!!"
+    },
+    {
+      "fishItemId": 51225,
+      "fishParameterId": 1488,
+      "fishingSpotId": 335,
+      "baitItemId": 51223,
+      "baitKind": "Mooch",
+      "points": 100,
+      "spectralTrigger": false,
+      "tug": "!!"
+    },
+    {
+      "fishItemId": 51226,
+      "fishParameterId": 1489,
+      "fishingSpotId": 335,
+      "baitItemId": 29716,
+      "baitKind": "Direct",
+      "points": 160,
+      "spectralTrigger": false,
+      "tug": "!!!"
+    },
+    {
+      "fishItemId": 51227,
+      "fishParameterId": 1490,
+      "fishingSpotId": 335,
+      "baitItemId": 29715,
+      "baitKind": "Direct",
+      "points": 200,
+      "spectralTrigger": false,
+      "tug": "!!"
+    },
+    {
+      "fishItemId": 51228,
+      "fishParameterId": 1491,
+      "fishingSpotId": 335,
+      "baitItemId": 51225,
+      "baitKind": "Mooch",
+      "points": 500,
+      "spectralTrigger": false,
+      "tug": "!!!"
+    },
+    {
+      "fishItemId": 51229,
+      "fishParameterId": 1492,
+      "fishingSpotId": 336,
+      "baitItemId": 29714,
+      "baitKind": "Direct",
+      "points": 8,
+      "spectralTrigger": false,
+      "tug": "!"
+    },
+    {
+      "fishItemId": 51230,
+      "fishParameterId": 1493,
+      "fishingSpotId": 336,
+      "baitItemId": 29715,
+      "baitKind": "Direct",
+      "points": 9,
+      "spectralTrigger": false,
+      "tug": "!!"
+    },
+    {
+      "fishItemId": 51231,
+      "fishParameterId": 1494,
+      "fishingSpotId": 336,
+      "baitItemId": 29714,
+      "baitKind": "Direct",
+      "points": 13,
+      "spectralTrigger": false,
+      "tug": "!"
+    },
+    {
+      "fishItemId": 51232,
+      "fishParameterId": 1495,
+      "fishingSpotId": 336,
+      "baitItemId": 29714,
+      "baitKind": "Direct",
+      "points": 36,
+      "spectralTrigger": false,
+      "tug": "!"
+    },
+    {
+      "fishItemId": 51233,
+      "fishParameterId": 1496,
+      "fishingSpotId": 336,
+      "baitItemId": 29715,
+      "baitKind": "Direct",
+      "points": 31,
+      "spectralTrigger": false,
+      "tug": "!!"
+    },
+    {
+      "fishItemId": 51234,
+      "fishParameterId": 1497,
+      "fishingSpotId": 336,
+      "baitItemId": 29716,
+      "baitKind": "Direct",
+      "points": 27,
+      "spectralTrigger": false,
+      "tug": "!!"
+    },
+    {
+      "fishItemId": 51235,
+      "fishParameterId": 1498,
+      "fishingSpotId": 336,
+      "baitItemId": 29716,
+      "baitKind": "Direct",
+      "points": 48,
+      "spectralTrigger": false,
+      "tug": "!!!"
+    },
+    {
+      "fishItemId": 51237,
+      "fishParameterId": 1500,
+      "fishingSpotId": 336,
+      "baitItemId": 29715,
+      "baitKind": "Direct",
+      "points": 100,
+      "spectralTrigger": true,
+      "tug": "!!!"
+    },
+    {
+      "fishItemId": 51238,
+      "fishParameterId": 1501,
+      "fishingSpotId": 336,
+      "baitItemId": 29715,
+      "baitKind": "Direct",
+      "points": 210,
+      "spectralTrigger": false,
+      "tug": "!!!"
+    },
+    {
+      "fishItemId": 51687,
+      "fishParameterId": 1509,
+      "fishingSpotId": 336,
+      "baitItemId": 0,
+      "baitKind": "Unknown",
+      "points": 300,
+      "spectralTrigger": false,
+      "tug": "!"
+    },
+    {
+      "fishItemId": 51239,
+      "fishParameterId": 1502,
+      "fishingSpotId": 337,
+      "baitItemId": 29714,
+      "baitKind": "Direct",
+      "points": 75,
+      "spectralTrigger": false,
+      "tug": "!"
+    },
+    {
+      "fishItemId": 51240,
+      "fishParameterId": 1503,
+      "fishingSpotId": 337,
+      "baitItemId": 29715,
+      "baitKind": "Direct",
+      "points": 70,
+      "spectralTrigger": false,
+      "tug": "!!"
+    },
+    {
+      "fishItemId": 51241,
+      "fishParameterId": 1504,
+      "fishingSpotId": 337,
+      "baitItemId": 29715,
+      "baitKind": "Direct",
+      "points": 92,
+      "spectralTrigger": false,
+      "tug": "!"
+    },
+    {
+      "fishItemId": 51242,
+      "fishParameterId": 1505,
+      "fishingSpotId": 337,
+      "baitItemId": 29715,
+      "baitKind": "Direct",
+      "points": 164,
+      "spectralTrigger": false,
+      "tug": "!!"
+    },
+    {
+      "fishItemId": 51243,
+      "fishParameterId": 1506,
+      "fishingSpotId": 337,
+      "baitItemId": 29716,
+      "baitKind": "Direct",
+      "points": 70,
+      "spectralTrigger": false,
+      "tug": "!!!"
+    },
+    {
+      "fishItemId": 51244,
+      "fishParameterId": 1507,
+      "fishingSpotId": 337,
+      "baitItemId": 29714,
+      "baitKind": "Direct",
+      "points": 150,
+      "spectralTrigger": false,
+      "tug": "!"
+    },
+    {
+      "fishItemId": 51245,
+      "fishParameterId": 1508,
+      "fishingSpotId": 337,
+      "baitItemId": 29716,
+      "baitKind": "Direct",
+      "points": 70,
+      "spectralTrigger": false,
+      "tug": "!!!"
+    },
+    {
+      "fishItemId": 51246,
+      "fishParameterId": 1510,
+      "fishingSpotId": 337,
+      "baitItemId": 29716,
+      "baitKind": "Direct",
+      "points": 204,
+      "spectralTrigger": false,
+      "tug": "!!!"
+    },
+    {
+      "fishItemId": 51247,
+      "fishParameterId": 1511,
+      "fishingSpotId": 337,
+      "baitItemId": 2591,
+      "baitKind": "Direct",
+      "points": 500,
+      "spectralTrigger": false,
+      "tug": "!!!"
+    },
+    {
+      "fishItemId": 51687,
+      "fishParameterId": 1509,
+      "fishingSpotId": 337,
+      "baitItemId": 0,
+      "baitKind": "Unknown",
+      "points": 300,
+      "spectralTrigger": false,
+      "tug": "!"
+    }
+  ],
+  "checkedUtc": "2026-11-15",
+  "targetProcessing": "Preferred bait, single-fish points, tug and explicit spectral-trigger identities only from pinned CSV snapshots, checked 2026-11-15. Item/FishParameter/pool/bait-kind matched against both clients. A preferred fish is a mooch source, not inventory bait. Blank preferred bait remains Unknown. No bite times, catch rates, prose or source code redistributed. Existing 52 basic rows are preserved."
 }

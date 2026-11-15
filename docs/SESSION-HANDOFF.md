@@ -28,7 +28,7 @@
 | upstream 컴파일 참조 | .cache/upstream-15.0.3.6/refs/ · build/dalamud-reference.json 고정 해시 |
 | SDK/대상 | global.json 최소 10.0.101(latestFeature, 이 PC 10.0.402) · Dalamud SDK15.0.0 · x64/net10.0-windows |
 | 정규 개발 DLL | DUCKBILL_ROOT/src/DuckbillFisher.Plugin/bin/Debug/DuckbillFisher.dll |
-| 최근 별도 Debug | .cache/ui-unification-build/DuckbillFisher.dll (0.10.0.1 공통 디자인 개발본) |
+| 최근 별도 Debug | .cache/ocean-bait-build/DuckbillFisher.dll (조건별 먼바다 미끼 추천 개발본) · 글로벌 .cache/ocean-bait-global-build/DuckbillFisher.dll |
 | 0.10.0.2 고정 Release | .cache/release-validation/0.10.0.2/DuckbillFisher.dll · artifacts/share/0.10.0.2/DuckbillFisher-0.10.0.2.zip · Release446066338 공개 |
 | 0.10.0.1 고정 Release | .cache/release-validation/0.10.0.1-final/DuckbillFisher.dll · artifacts/share/0.10.0.1-final/DuckbillFisher-0.10.0.1.zip · Release445981172 공개 |
 | 0.10.0.0 고정 Release | .cache/release-validation/0.10.0.0/DuckbillFisher.dll · artifacts/share/0.10.0.0/DuckbillFisher-0.10.0.0.zip · Release445678721 공개 |
@@ -53,5 +53,6 @@
 - 일반 자료의 남은 이름/ID/이유는 [잔여 보고서](verification/data/reports/fishing-data-2026-10-17/remaining.md), 재생성은 [data/README](../data/README.md)를 따른다. 완성 자료를 보완 단계 baseline으로 다시 넣지 않는다.
 - 초기 예측 고정 기대값은10종이며 보존 v1 입력은140종이다. [fixture 설명](../tests/DuckbillFisher.Core.Tests/Fixtures/README.md)을 확인하고 자동 덮어쓰지 않는다. 제품은 v2 조건/v1 등급을 내장한다.
 - 진단은 필요한 짧은 구역부터 요청한다. 자료는 catalog/v10의 DataValidation/IntuitionForecast, 예측은 summary/v11의 SelectedForecast/ForecastComparison/SelectedConditions/SelectedIntuition, 음원은 alerts/v8의 CustomSoundState/Code, 미끼는 bait-ui/v7의 Pages를 사용한다.
+- 개발본 먼바다 진단은 ocean-beta/v3의 BaitTargetsReady/RecommendedFish/RecommendedBait/Reason/Availability/IntuitionBaitCandidates를 사용한다. 공개0.10.0.2의 v2와 구분한다.
 - 타이머 상태 API의 정적 근거는 .cache/timer-status-api.json, 시트 도우미는 .cache/timer-status-audit/다. 기존 공개판 근거는 [타이머 기록](verification/fishing/TIMER-HISTORY.md)에 있다.
 - 예측 정적 자료 도우미/UTC·CSV와 비교 한계는 [FORECAST](verification/forecast/FORECAST.md)에, 과거 소스/문서 경로는 Git 이력에 보존된다. 문서 전체 사본이나 새로운 재개 상태 사본을 반복 생성하지 않는다.

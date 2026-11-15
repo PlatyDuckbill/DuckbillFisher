@@ -41,6 +41,19 @@ dotnet run --project tools/FishingDataImport -- --ocean-hook-yields .cache/ocean
 
 두 번째 명령은 기존 수량 파일의 복사본을 출력 경로로 사용한다. 입력의 고정 해시와 출력 차이를 검토한 뒤 제품 자료에 반영한다.
 
+## 먼바다 조건별 미끼 추천 (개발본 2026-11-15)
+
+`ocean-guidance.v1.json`은 기존 기본 안내52행과 선택 `targets`260행을 함께 내장한다. targets의 `fishItemId`/`fishParameterId`/`fishingSpotId`는 조건 자료와 연결하며 `baitKind`는 Direct/Mooch/Unknown이다. `baitItemId=0`은 미확인이다. `points`는 원본의 한 마리 기본 점수이며 예상 점수/어획률이 아니다. 생미끼 아이템을 장착 가능한 미끼로 표시하지 않는다. [자료·추천 범위](../docs/development/DATA-SOURCES.md#먼바다-조건별-미끼-추천-개발본-2026-11-15).
+
+고정 CSV를 로컬로 준비한 뒤 별도 후보를 생성한다. 기존52행 보존·CSV 해시·양쪽 클라이언트 미끼 종류/ID/해역 소속·260행 완전성을 검사하며 게임 프로세스나 테스트를 실행하지 않는다.
+
+```powershell
+. ./scripts/enter-dev.ps1
+dotnet run --no-restore --project tools/FishingDataImport "-p:DalamudLibPath=$env:APPDATA/XIVLauncher/addon/Hooks/dev" -- --ocean-baits .cache/ocean-bait-research/indigo-EN.csv .cache/ocean-bait-research/ruby-EN.csv data/ocean-guidance.v1.json data/ocean-conditions.v1.json 'C:/Program Files (x86)/FINAL FANTASY XIV - KOREA/game' 'C:/Program Files (x86)/SquareEnix/FINAL FANTASY XIV - A Realm Reborn/game' .cache/ocean-guidance.generated.json
+```
+
+다른 PC에서는 설치/참조 경로를 바꾼다. 원본 다운로드는 개발 중에만 하며 플러그인은 내장 자료만 읽는다. 생성물을 검토한 뒤 반영하고 고정 공개 패키지는 덮어쓰지 않는다.
+
 ## 출처와 경계
 
 - 기본 원본: [Fish Tracker](https://github.com/icykoneko/ff14-fish-tracker-app/tree/d0e1ab5bba62c2b57356e690a73676cd4751b64d), revision `d0e1ab5bba62c2b57356e690a73676cd4751b64d`. JS 숫자 조건과 YAML 미확인 표시를 함께 읽는다. 입력 해시는 `fishing-source.json`에 고정한다.

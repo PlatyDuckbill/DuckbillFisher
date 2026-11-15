@@ -11,6 +11,17 @@ internal sealed record OceanStop(uint Id, string Name, uint FishingSpotId, uint 
 internal sealed record OceanRoute(uint Id, string Name, uint TerritoryId, uint ContentId, OceanStop[] Stops);
 internal sealed record OceanDeparture(DateTimeOffset Starts, bool Ruby, OceanRoute Route);
 internal sealed record OceanGuidance(uint SpotId, byte Time, FishingItemView Bait, FishingItemView Fish, string Tug, int Double, int Triple);
+internal sealed record OceanBaitChoiceView(FishingItemView Bait, FishingItemView Fish, OceanBaitKind Kind,
+    OceanBaitReason Reason, OceanCandidateState Availability, string Tug, int Points)
+{
+    public FishingItemView[] BaitPath { get; init; } = [];
+}
+internal sealed record OceanRecommendationView(bool DataReady, OceanBaitChoiceView? Primary,
+    OceanBaitChoiceView[] IntuitionCandidates, bool? Intuition)
+{
+    public string Weather { get; init; } = "";
+}
+internal sealed record OceanBaitPlan(OceanBaitChoiceView? Normal, OceanBaitChoiceView? Spectral, FishingItemView[] Baits);
 internal enum OceanDataState { Loading, Ready, Unavailable }
 [Flags]
 internal enum OceanConsumer { Main = 1, Timer = 2, FishList = 4 }
@@ -33,6 +44,10 @@ internal sealed record OceanVoyageView(int Session, OceanDataState DataState, Oc
     public bool DataReady => DataState == OceanDataState.Ready;
     public bool IsOceanTerritory { get; init; }
     public OceanFishListView FishList { get; init; } = new(OceanFishListState.Loading);
+    public OceanRecommendationView Recommendation { get; init; } = new(false, null, [], null);
+    public IReadOnlyDictionary<(uint Stop, byte Time), OceanBaitPlan> Plans { get; init; }
+        = new Dictionary<(uint, byte), OceanBaitPlan>();
+    public int BaitTargetRows { get; init; }
 }
 
 /// <summary>Loads local sheets/resources once, then copies live state on Framework. No HTTP and no Draw-time data reads.</summary>
@@ -53,6 +68,12 @@ internal sealed class OceanFishing : IDisposable
     private readonly Dictionary<(uint, byte), OceanGuidance> guidance = [];
     private readonly Dictionary<(uint Spot, uint Item), OceanFishCondition> fishConditions = [];
     private readonly Dictionary<uint, string> weatherNames = [];
+    private readonly Dictionary<uint, OceanBaitTarget[]> baitTargetsBySpot = [];
+    private readonly Dictionary<uint, FishingItemView> baitItems = [];
+    private readonly Dictionary<uint, FishingItemView> targetItems = [];
+    private readonly Dictionary<uint, int> minimumTripleYields = [];
+    private readonly Dictionary<(uint Stop, byte Time), OceanBaitPlan> plans = [];
+    private bool baitTargetsReady;
     private bool conditionsReady;
     private (uint Indigo, uint Ruby)[] table = [];
     private OceanVoyageView view = new(-1, OceanDataState.Loading, new(OceanReadState.PlayerUnavailable), 0,
@@ -87,7 +108,8 @@ internal sealed class OceanFishing : IDisposable
             var current = Volatile.Read(ref view);
             return current.Session != preferences.View.Session || current.SampledAt == 0 ||
                 Stopwatch.GetElapsedTime(current.SampledAt).TotalSeconds > 3
-                ? current with { Sample = new(OceanReadState.Stale), FishList = new(OceanFishListState.Unavailable) } : current;
+                ? current with { Sample = new(OceanReadState.Stale), FishList = new(OceanFishListState.Unavailable),
+                    Recommendation = new(current.Recommendation.DataReady, null, [], null) } : current;
         }
     }
 
@@ -97,7 +119,7 @@ internal sealed class OceanFishing : IDisposable
         else Interlocked.And(ref consumers, ~(int)consumer);
     }
 
-    private OceanFishListView FishList(OceanNativeSample sample)
+    private OceanFishListView FishList(OceanNativeSample sample, bool? intuition)
     {
         if (sample.State == OceanReadState.OffVoyage) return new(OceanFishListState.OffVoyage);
         if (sample.State != OceanReadState.Ready) return new(OceanFishListState.Unavailable);
@@ -114,7 +136,6 @@ internal sealed class OceanFishing : IDisposable
         if (indexedRows is not { Count: > 0 }) return new(catalog.View.Status.Key == Localization.TextKey.RowsReadError
             ? OceanFishListState.Unavailable : OceanFishListState.Loading);
         if (!fishBySpot.TryGetValue(id, out var rows)) return new(OceanFishListState.Unavailable);
-        var intuition = ReadIntuition();
         var candidates = new List<FishGuideRow>();
         var uncertain = new HashSet<uint>();
         // A positive generic Intuition status does not identify its target after a pool transition.
@@ -149,7 +170,9 @@ internal sealed class OceanFishing : IDisposable
         var current = View;
         var s = current.Sample;
         var route = current.Routes.GetValueOrDefault(s.RouteId);
-        return FormattableString.Invariant($"Format=ocean-beta/v2\nDataState={current.DataState}; GuidanceRows={current.Guidance.Count}\nState={s.State}; Phase={s.Phase}; Route={s.RouteId}; Zone={s.Zone}; Spectral={s.Spectral}\nContent={s.ContentId}; ExpectedContent={route?.ContentId}; Territory={route?.TerritoryId}\nDuration={s.Duration}; ContentSeconds={s.ContentSeconds}; TimeOffset={s.TimeOffset}; ZoneSeconds={s.RemainingSeconds}\nConditionsReady={conditionsReady}; ConditionRows={fishConditions.Count}; WeatherState={s.WeatherState}; Weather={s.WeatherId}; Time={current.FishList.Time}; Intuition={current.FishList.Intuition}\nFishRows={current.FishList.Rows.Length}; Candidates={current.FishList.Candidates.Length}; Unconfirmed={current.FishList.Unconfirmed.Count}\nSampleAgeMs={(current.SampledAt == 0 ? -1 : Stopwatch.GetElapsedTime(current.SampledAt).TotalMilliseconds):F0}\nNextRegistrationUtc={current.Departures.FirstOrDefault()?.Starts:O}");
+        var time = s.State == OceanReadState.Ready && s.Phase == OceanPhase.Fishing && route is not null && s.Zone >= 0 && s.Zone < route.Stops.Length
+            ? route.Stops[s.Zone].Time : (byte)0;
+        return FormattableString.Invariant($"Format=ocean-beta/v3\nDataState={current.DataState}; GuidanceRows={current.Guidance.Count}\nState={s.State}; Phase={s.Phase}; Route={s.RouteId}; Zone={s.Zone}; Spectral={s.Spectral}\nContent={s.ContentId}; ExpectedContent={route?.ContentId}; Territory={route?.TerritoryId}\nDuration={s.Duration}; ContentSeconds={s.ContentSeconds}; TimeOffset={s.TimeOffset}; ZoneSeconds={s.RemainingSeconds}\nConditionsReady={conditionsReady}; ConditionRows={fishConditions.Count}; WeatherState={s.WeatherState}; Weather={s.WeatherId}; Time={time}; Intuition={current.Recommendation.Intuition}\nFishRows={current.FishList.Rows.Length}; Candidates={current.FishList.Candidates.Length}; Unconfirmed={current.FishList.Unconfirmed.Count}\nBaitTargetsReady={current.Recommendation.DataReady}; BaitTargetRows={current.BaitTargetRows}; RecommendedFish={current.Recommendation.Primary?.Fish.Id}; RecommendedBait={current.Recommendation.Primary?.Bait.Id}; Reason={current.Recommendation.Primary?.Reason}; Availability={current.Recommendation.Primary?.Availability}; IntuitionBaitCandidates={current.Recommendation.IntuitionCandidates.Length}\nSampleAgeMs={(current.SampledAt == 0 ? -1 : Stopwatch.GetElapsedTime(current.SampledAt).TotalMilliseconds):F0}\nNextRegistrationUtc={current.Departures.FirstOrDefault()?.Starts:O}");
     }
 
     private void Load()
@@ -217,7 +240,114 @@ internal sealed class OceanFishing : IDisposable
             }
         }
         catch (Exception e) { guidance.Clear(); log.Warning("OceanGuidanceUnavailable: {Code}", e.GetType().Name); }
+        LoadBaitTargets();
     }
+
+    private void LoadBaitTargets()
+    {
+        if (!conditionsReady) return;
+        try
+        {
+            using var stream = typeof(OceanFishing).Assembly.GetManifestResourceStream("DuckbillFisher.OceanGuidance")!;
+            using var document = JsonDocument.Parse(stream);
+            if (document.RootElement.GetProperty("schemaVersion").GetInt32() != 1) throw new InvalidDataException("OceanBaitSchema");
+            var items = data.GetExcelSheet<Item>()!;
+            var fish = data.GetExcelSheet<FishParameter>()!;
+            var targets = new List<OceanBaitTarget>();
+            var identities = new HashSet<(uint, uint)>();
+            foreach (var entry in document.RootElement.GetProperty("targets").EnumerateArray())
+            {
+                var kind = entry.GetProperty("baitKind").GetString();
+                if (kind is not ("Unknown" or "Direct" or "Mooch")) throw new InvalidDataException("OceanBaitKind");
+                var target = new OceanBaitTarget(entry.GetProperty("fishItemId").GetUInt32(), entry.GetProperty("fishParameterId").GetUInt32(),
+                    entry.GetProperty("fishingSpotId").GetUInt32(), entry.GetProperty("baitItemId").GetUInt32(), Enum.Parse<OceanBaitKind>(kind),
+                    entry.GetProperty("points").GetInt32(), entry.GetProperty("spectralTrigger").GetBoolean(), entry.GetProperty("tug").GetString()!);
+                if (!fishConditions.TryGetValue((target.FishingSpotId, target.FishItemId), out var condition) || condition.FishParameterId != target.FishParameterId ||
+                    target.Points is < 1 or > 1000 || target.Tug is not ("!" or "!!" or "!!!") || !identities.Add((target.FishingSpotId, target.FishItemId)) ||
+                    target.SpectralTrigger && (condition.RequiresIntuition || !guidance.Values.Any(g => g.Time == 0 && g.Fish.Id == target.FishItemId)))
+                    throw new InvalidDataException("OceanBaitIdentity");
+                var item = items.GetRow(target.FishItemId);
+                if (item.Name.ExtractText().Length == 0) throw new InvalidDataException("OceanBaitFishName");
+                targetItems.TryAdd(item.RowId, new(item.RowId, item.Name.ExtractText(), item.Icon));
+                if (target.BaitKind == OceanBaitKind.Unknown)
+                {
+                    if (target.BaitItemId != 0) throw new InvalidDataException("OceanBaitUnknown");
+                }
+                else
+                {
+                    var bait = items.GetRow(target.BaitItemId);
+                    var isBait = bait.ItemUICategory.RowId == FishingGameIds.BaitCategory;
+                    if (bait.Name.ExtractText().Length == 0 || (target.BaitKind == OceanBaitKind.Direct) != isBait ||
+                        target.BaitKind == OceanBaitKind.Mooch && !fish.Any(f => f.OceanStars > 0 && f.Item.Is<Item>() && f.Item.RowId == bait.RowId))
+                        throw new InvalidDataException("OceanBaitReference");
+                    baitItems.TryAdd(bait.RowId, new(bait.RowId, bait.Name.ExtractText(), bait.Icon));
+                }
+                targets.Add(target);
+            }
+            if (targets.Count != fishConditions.Count) throw new InvalidDataException("OceanBaitCoverage");
+            if (!targets.Where(t => t.SpectralTrigger).Select(t => t.FishItemId).ToHashSet()
+                .SetEquals(guidance.Values.Where(g => g.Time == 0).Select(g => g.Fish.Id))) throw new InvalidDataException("OceanBaitTriggerIdentity");
+            foreach (var group in targets.GroupBy(t => t.FishingSpotId)) baitTargetsBySpot.Add(group.Key, group.ToArray());
+            if (HookYieldData.Invalid) throw new InvalidDataException("OceanBaitYieldsUnavailable");
+            foreach (var target in targets.Where(t => t.BaitKind != OceanBaitKind.Unknown))
+                if (!HookYieldData.ByItem.TryGetValue(target.FishItemId, out var yield) || !yield.Ocean ||
+                    yield.FishParameterId != target.FishParameterId || yield.TripleHook is null)
+                    throw new InvalidDataException("OceanBaitYieldIdentity");
+            foreach (var entry in HookYieldData.ByItem.Values.Where(e => e.Ocean && e.TripleHook is not null))
+                minimumTripleYields.Add(entry.ItemId, entry.TripleHook!.Minimum);
+            foreach (var stop in routes.Values.SelectMany(r => r.Stops).DistinctBy(s => s.Id))
+                foreach (var time in new byte[] { 1, 2, 3 })
+                {
+                    var normal = SelectBait(stop.FishingSpotId, time, null, null, false, true);
+                    var spectral = SelectBait(stop.SpectralSpotId, time, null, null, true, true);
+                    var choices = new[] { normal.Primary, spectral.Primary }.Where(c => c is not null).Cast<OceanBaitChoice>()
+                        .Concat(normal.IntuitionCandidates).Concat(spectral.IntuitionCandidates);
+                    plans.Add((stop.Id, time), new(normal.Primary is { } n ? ChoiceView(n) : null, spectral.Primary is { } s ? ChoiceView(s) : null,
+                        choices.Select(c => BaitPath(c.Target).FirstOrDefault())
+                        .Where(b => b is not null && !targetItems.ContainsKey(b.Id)).Cast<FishingItemView>().DistinctBy(b => b.Id).ToArray()));
+                }
+            baitTargetsReady = true;
+        }
+        catch (Exception e)
+        {
+            baitTargetsReady = false; baitTargetsBySpot.Clear(); baitItems.Clear(); targetItems.Clear(); minimumTripleYields.Clear(); plans.Clear();
+            log.Warning("OceanBaitTargetsUnavailable: {Code}", e is InvalidDataException ? e.Message : e.GetType().Name);
+        }
+    }
+
+    private OceanBaitRecommendation SelectBait(uint spot, byte time, uint? weather, bool? intuition, bool spectral, bool preview = false)
+        => OceanBaitRecommendations.Select(baitTargetsBySpot.GetValueOrDefault(spot) ?? [], fishConditions, minimumTripleYields, spot, time, weather, intuition, spectral, preview);
+
+    private FishingItemView[] BaitPath(OceanBaitTarget target)
+    {
+        var path = new List<FishingItemView>();
+        var seen = new HashSet<uint> { target.FishItemId };
+        for (var step = 0; step < 4; step++)
+        {
+            if (target.BaitItemId == 0 || !seen.Add(target.BaitItemId) || !baitItems.TryGetValue(target.BaitItemId, out var bait)) break;
+            path.Insert(0, bait);
+            if (target.BaitKind == OceanBaitKind.Direct) break;
+            var source = baitTargetsBySpot.GetValueOrDefault(target.FishingSpotId)?.FirstOrDefault(t => t.FishItemId == target.BaitItemId);
+            if (source is null) break;
+            target = source;
+        }
+        return path.ToArray();
+    }
+
+    private OceanRecommendationView Recommendation(OceanNativeSample sample, bool? intuition)
+    {
+        if (!baitTargetsReady || sample.State != OceanReadState.Ready || sample.Phase != OceanPhase.Fishing ||
+            !routes.TryGetValue(sample.RouteId, out var route) || sample.Zone < 0 || sample.Zone >= route.Stops.Length)
+            return new(baitTargetsReady, null, [], intuition);
+        var stop = route.Stops[sample.Zone];
+        var weather = sample.WeatherState == OceanWeatherReadState.Ready && sample.WeatherId is { } id && weatherNames.ContainsKey(id) ? (uint?)id : null;
+        var selected = SelectBait(sample.Spectral ? stop.SpectralSpotId : stop.FishingSpotId, stop.Time, weather, intuition, sample.Spectral);
+        return new(true, selected.Primary is { } primary ? ChoiceView(primary) : null, selected.IntuitionCandidates.Select(ChoiceView).ToArray(), intuition)
+            { Weather = weather is { } known ? weatherNames[known] : "" };
+    }
+
+    private OceanBaitChoiceView ChoiceView(OceanBaitChoice choice) => new(baitItems[choice.Target.BaitItemId], targetItems[choice.Target.FishItemId],
+        choice.Target.BaitKind, choice.Reason, choice.Availability, choice.Target.Tug, choice.Target.Points) { BaitPath = BaitPath(choice.Target) };
 
     private void LoadConditions()
     {
@@ -267,7 +397,7 @@ internal sealed class OceanFishing : IDisposable
         {
             if (view.Session != personal.Session) Volatile.Write(ref view, view with { Session = personal.Session,
                 Sample = new(OceanReadState.PlayerUnavailable), SampledAt = 0,
-                IsOceanTerritory = false, FishList = new(OceanFishListState.Unavailable) });
+                IsOceanTerritory = false, FishList = new(OceanFishListState.Unavailable), Recommendation = new(baitTargetsReady, null, [], null) });
             return;
         }
         if (sampledAt != 0 && Stopwatch.GetElapsedTime(sampledAt).TotalMilliseconds < 200 && view.Session == personal.Session) return;
@@ -304,11 +434,15 @@ internal sealed class OceanFishing : IDisposable
             sample = sample with { WeatherState = OceanWeatherReadState.InvalidValue };
         // A Framework callback cannot publish a departed character's state to a new session.
         if (preferences.View.Session != personal.Session) return;
+        var intuition = sample.State == OceanReadState.Ready && sample.Phase == OceanPhase.Fishing ? ReadIntuition() : null;
+        var fishList = FishList(sample, intuition);
+        var recommendation = Recommendation(sample, intuition);
+        if (preferences.View.Session != personal.Session) return;
         Volatile.Write(ref view, new(personal.Session, dataReady ? OceanDataState.Ready : OceanDataState.Unavailable,
             sample, sampledAt, routes, departures, guidance)
         {
             IsOceanTerritory = personal.HasCharacter && client.IsLoggedIn && routes.Values.Any(r => r.TerritoryId == client.TerritoryType),
-            FishList = FishList(sample),
+            FishList = fishList, Recommendation = recommendation, Plans = plans, BaitTargetRows = baitTargetsBySpot.Values.Sum(rows => rows.Length),
         });
     }
 
@@ -317,6 +451,6 @@ internal sealed class OceanFishing : IDisposable
         disposed = true; Interlocked.Exchange(ref consumers, 0);
         framework.Update -= Update;
         Volatile.Write(ref view, view with { Sample = new(OceanReadState.PlayerUnavailable), SampledAt = 0,
-            IsOceanTerritory = false, FishList = new(OceanFishListState.Unavailable) });
+            IsOceanTerritory = false, FishList = new(OceanFishListState.Unavailable), Recommendation = new(baitTargetsReady, null, [], null) });
     }
 }

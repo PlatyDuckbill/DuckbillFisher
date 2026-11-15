@@ -138,10 +138,16 @@ internal sealed class OceanFishingPanel(OceanFishing ocean, FishPreferences pref
         ImGui.Spacing();
         ImGui.TextUnformatted(UiText.Get(T.OceanBasicGuide));
         var stop = route.Stops[sample.Zone];
+        if (view.Recommendation.DataReady)
+        {
+            DrawRecommendation(view, stop);
+            return;
+        }
+        ImGui.TextDisabled(UiText.Get(T.OceanRecommendationFallback));
         view.Guidance.TryGetValue((stop.Id, 0), out var normal);
         view.Guidance.TryGetValue((stop.Id, stop.Time), out var spectral);
-        DrawBait(normal?.Bait, sample.Spectral ? T.OceanNormal : T.OceanRecommended, !sample.Spectral, "NormalBait");
-        DrawBait(spectral?.Bait, sample.Spectral ? T.OceanRecommended : T.OceanSpectralBait, sample.Spectral, "SpectralBait");
+        DrawBait(normal?.Bait, T.OceanNormal, false, "NormalBait");
+        DrawBait(spectral?.Bait, T.OceanSpectralBait, false, "SpectralBait");
         var target = sample.Spectral ? spectral : normal;
         if (target is not null)
         {
@@ -150,6 +156,46 @@ internal sealed class OceanFishingPanel(OceanFishing ocean, FishPreferences pref
                 target.Fish.Name, target.Tug, target.Double, target.Triple));
             UiWidgets.Tooltip(UiText.Get(T.OceanTargetHint));
         }
+    }
+
+    private void DrawRecommendation(OceanVoyageView view, OceanStop stop)
+    {
+        var recommendation = view.Recommendation;
+        ImGui.TextDisabled(UiText.Get(T.OceanRecommendationWeather,
+            recommendation.Weather.Length > 0 ? recommendation.Weather : UiText.Get(T.ConditionUnknown)));
+        DrawBait(recommendation.Primary?.Bait, T.OceanRecommended, true, "RecommendedBait");
+        if (recommendation.Primary is { } primary) DrawTarget(primary);
+        if (view.Plans.TryGetValue((stop.Id, stop.Time), out var plan))
+        {
+            var other = view.Sample.Spectral ? plan.Normal : plan.Spectral;
+            if (other is not null && other.Bait.Id != recommendation.Primary?.Bait.Id)
+                DrawBait(other.Bait, view.Sample.Spectral ? T.OceanNormal : T.OceanSpectralBait, false, "OtherPoolBait");
+        }
+        foreach (var candidate in recommendation.IntuitionCandidates)
+        {
+            ImGui.PushID((int)candidate.Fish.Id);
+            DrawBait(candidate.Bait, T.OceanIntuitionBait, false, "IntuitionBait", candidate.Kind != OceanBaitKind.Mooch);
+            DrawTarget(candidate);
+            if (candidate.Kind == OceanBaitKind.Mooch && candidate.BaitPath.Length > 1)
+                ImGui.TextWrapped(UiText.Get(T.OceanMoochPath, string.Join(" → ", candidate.BaitPath.Select(b => b.Name))));
+            ImGui.PopID();
+        }
+        if (recommendation.Intuition is null) ImGui.TextDisabled(UiText.Get(T.OceanIntuitionUnknown));
+    }
+
+    private static void DrawTarget(OceanBaitChoiceView target)
+    {
+        var text = target.Reason switch
+        {
+            OceanBaitReason.SpectralTrigger => UiText.Get(T.OceanRecommendationTrigger, target.Fish.Name, target.Tug),
+            OceanBaitReason.IntuitionCandidate => UiText.Get(T.OceanRecommendationIntuition, target.Fish.Name, target.Tug),
+            _ => UiText.Get(T.OceanRecommendationScore, target.Fish.Name, target.Tug, target.Points),
+        };
+        if (target.Reason != OceanBaitReason.IntuitionCandidate && target.Availability == OceanCandidateState.Unconfirmed)
+            text = UiText.Get(T.OceanRecommendationUnconfirmed, text);
+        ImGui.TextWrapped(text);
+        UiWidgets.Tooltip(UiText.Get(target.Reason == OceanBaitReason.IntuitionCandidate ? T.OceanIntuitionBaitHint : T.OceanRecommendationHint));
+        if (target.Reason != OceanBaitReason.IntuitionCandidate) HookYieldText.Draw(target.Fish.Id, standalone: false);
     }
 
     private static void DrawRegistration(OceanVoyageView view)
@@ -209,11 +255,11 @@ internal sealed class OceanFishingPanel(OceanFishing ocean, FishPreferences pref
         DrawRoute(selected.Route);
         ImGui.Spacing();
         ImGui.TextUnformatted(UiText.Get(T.OceanPreparationBaits));
-        var baits = selected.Route.Stops.SelectMany(s => new[]
-        {
-            view.Guidance.GetValueOrDefault((s.Id, (byte)0))?.Bait,
-            view.Guidance.GetValueOrDefault((s.Id, s.Time))?.Bait,
-        }).Where(b => b is not null).Cast<FishingItemView>().DistinctBy(b => b.Id).ToArray();
+        var baits = selected.Route.Stops.SelectMany(s => view.Plans.TryGetValue((s.Id, s.Time), out var plan) ? plan.Baits : new[]
+            {
+                view.Guidance.GetValueOrDefault((s.Id, (byte)0))?.Bait,
+                view.Guidance.GetValueOrDefault((s.Id, s.Time))?.Bait,
+            }.Where(b => b is not null).Cast<FishingItemView>()).DistinctBy(b => b.Id).ToArray();
         foreach (var bait in baits) DrawBait(bait, T.OceanBasicBait, false, $"Prep{bait.Id}");
         if (baits.Length == 0) ImGui.TextWrapped(UiText.Get(T.OceanGuidanceMissing));
     }
@@ -240,7 +286,7 @@ internal sealed class OceanFishingPanel(OceanFishing ocean, FishPreferences pref
         return clicked;
     }
 
-    private void DrawBait(FishingItemView? bait, T label, bool active, string id)
+    private void DrawBait(FishingItemView? bait, T label, bool active, string id, bool inventoryBait = true)
     {
         ImGui.PushID(id);
         if (ImGui.BeginTable("OceanBaitRow", 4, ImGuiTableFlags.SizingFixedFit))
@@ -257,14 +303,15 @@ internal sealed class OceanFishingPanel(OceanFishing ocean, FishPreferences pref
             if (bait is null) ImGui.TextWrapped(UiText.Get(T.OceanGuidanceMissing));
             else
             {
-                visibleBaits.Add(bait);
+                if (inventoryBait) visibleBaits.Add(bait);
                 UiWidgets.GameIcon(textures, bait.IconId, ImGui.GetTextLineHeight(), bait.Name);
                 ImGui.SameLine(); ImGui.TextWrapped(bait.Name);
                 ImGui.TableNextColumn();
                 var inventory = stock.View;
-                var quantity = inventory.Session == preferences.View.Session ? inventory.Quantity(bait.Id) : null;
-                ImGui.TextWrapped(quantity.HasValue ? UiText.Get(T.OceanBaitStock, quantity.Value) : UiText.Get(T.ConditionUnknown));
-                ImGui.TableNextColumn(); finder.DrawButton(bait, preferences.View.Session);
+                var quantity = inventoryBait && inventory.Session == preferences.View.Session ? inventory.Quantity(bait.Id) : null;
+                ImGui.TextWrapped(!inventoryBait ? UiText.Get(T.OceanMoochBait) : quantity.HasValue ? UiText.Get(T.OceanBaitStock, quantity.Value) : UiText.Get(T.ConditionUnknown));
+                ImGui.TableNextColumn();
+                if (inventoryBait) finder.DrawButton(bait, preferences.View.Session);
             }
             ImGui.EndTable();
         }
