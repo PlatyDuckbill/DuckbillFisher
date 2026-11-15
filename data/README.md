@@ -47,6 +47,8 @@ dotnet run --project tools/FishingDataImport -- --ocean-hook-yields .cache/ocean
 
 고정 CSV를 로컬로 준비한 뒤 별도 후보를 생성한다. 기존52행 보존·CSV 해시·양쪽 클라이언트 미끼 종류/ID/해역 소속·260행 완전성을 검사하며 게임 프로세스나 테스트를 실행하지 않는다.
 
+2026-11-16 개발본은 `group`에 원본 Species12군의78행을 추가한다. 빈182행은 Default(미분류)이며 업적 ID/필요 수량/달성 상태를 뜻하지 않는다. [분류·정책 경계](../docs/development/DATA-SOURCES.md#먼바다-어종군과-준비-미끼-개발본-2026-11-16).
+
 ```powershell
 . ./scripts/enter-dev.ps1
 dotnet run --no-restore --project tools/FishingDataImport "-p:DalamudLibPath=$env:APPDATA/XIVLauncher/addon/Hooks/dev" -- --ocean-baits .cache/ocean-bait-research/indigo-EN.csv .cache/ocean-bait-research/ruby-EN.csv data/ocean-guidance.v1.json data/ocean-conditions.v1.json 'C:/Program Files (x86)/FINAL FANTASY XIV - KOREA/game' 'C:/Program Files (x86)/SquareEnix/FINAL FANTASY XIV - A Realm Reborn/game' .cache/ocean-guidance.generated.json

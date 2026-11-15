@@ -1235,4 +1235,28 @@
   <data name="ChangelogOceanBaitConditions" xml:space="preserve"><value>해역·시간대·환해류·날씨에 맞는 먼바다 미끼를 추천받을 수 있습니다.</value></data>
   <data name="ChangelogOceanBaitIntuition" xml:space="preserve"><value>직감 미끼 후보와 생미끼 준비 경로를 확인할 수 있습니다.</value></data>
   <data name="ChangelogOceanBaitPreparation" xml:space="preserve"><value>출항 전에 추천 미끼와 특수 미끼를 함께 준비할 수 있습니다.</value></data>
+  <data name="OceanOptionalBaits" xml:space="preserve"><value>직감용 미끼 (선택)</value></data>
+  <data name="OceanOptionalBaitsHint" xml:space="preserve"><value>이 항로의 직감 후보용 추가 미끼입니다. 기본 낚시에는 필수가 아닙니다.</value></data>
+  <data name="OceanBaitMissing" xml:space="preserve"><value>미소지</value></data>
+  <data name="OceanBaitStockUnknown" xml:space="preserve"><value>소지 미확인</value></data>
+  <data name="OceanBaitBuyHint" xml:space="preserve"><value>기본 먼바다 미끼는 출항 접수처 근처나 배 안 상점에서 살 수 있습니다.</value></data>
+  <data name="OceanGoal" xml:space="preserve"><value>낚시 목표</value></data>
+  <data name="OceanGoalDefault" xml:space="preserve"><value>기본 추천</value></data>
+  <data name="OceanGoalShark" xml:space="preserve"><value>상어</value></data>
+  <data name="OceanGoalJellyfish" xml:space="preserve"><value>해파리</value></data>
+  <data name="OceanGoalFugu" xml:space="preserve"><value>복어</value></data>
+  <data name="OceanGoalCrab" xml:space="preserve"><value>게</value></data>
+  <data name="OceanGoalShrimp" xml:space="preserve"><value>새우</value></data>
+  <data name="OceanGoalShellfish" xml:space="preserve"><value>조개</value></data>
+  <data name="OceanGoalSquid" xml:space="preserve"><value>오징어</value></data>
+  <data name="OceanGoalManta" xml:space="preserve"><value>가오리</value></data>
+  <data name="OceanGoalOctopus" xml:space="preserve"><value>문어</value></data>
+  <data name="OceanGoalSeadragon" xml:space="preserve"><value>해룡</value></data>
+  <data name="OceanGoalMantis" xml:space="preserve"><value>갯가재</value></data>
+  <data name="OceanGoalPrehistoric" xml:space="preserve"><value>고대어</value></data>
+  <data name="OceanGoalHint" xml:space="preserve"><value>어종군 목표는 삼중 수량 하한을 우선합니다. 업적 달성 여부와 파티 진행도는 판정하지 않습니다.</value></data>
+  <data name="OceanRecommendationGoal" xml:space="preserve"><value>어종군 목표 {0} · {1}</value></data>
+  <data name="OceanNoRecommendation" xml:space="preserve"><value>현재 조건에 맞는 기본 목표가 없습니다.</value></data>
+  <data name="OceanGoalPreview" xml:space="preserve"><value>{0} · {1}: {2} · {3}</value></data>
+  <data name="OceanGoalPreviewEmpty" xml:space="preserve"><value>이 출항편의 시간대에 맞는 어종군 기본 목표가 없습니다.</value></data>
 </root>

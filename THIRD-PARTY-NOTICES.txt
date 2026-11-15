@@ -151,6 +151,10 @@ observations and published yield minima; it is not an optimal-score guarantee.
 The numeric 90-second spectral-trigger cutoff was checked against the author's
 FAQ on 2026-11-15. URL and content SHA256 are pinned as policySource in the same
 JSON file. No FAQ prose, code or catch probabilities are redistributed.
+Rechecked 2026-11-16 against identical CSV hashes. Explicit Species values add
+78 group classifications across 12 groups; blanks stay unclassified. No
+achievement IDs, thresholds, completion or party-progress facts are inferred.
+The pinned FAQ also supports the three basic baits and their shop availability.
 Only individual bait, tug, catch-quantity and time-of-day facts are recorded,
 linked to IDs verified against the installed KR and global client sheets.
 Basic targets were selected for direct bait without Intuition preparation;

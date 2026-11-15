@@ -71,15 +71,19 @@ internal static class OceanBaitImport
                 var trigger = !spectral && (name.StartsWith("Spectral ", StringComparison.Ordinal) || name == "Spectresaur");
                 var tug = Field(row, "Bite");
                 if (tug is not ("!" or "!!" or "!!!") || rule.RequiresIntuition != (Field(row, "Intuition").Length > 0)) throw new InvalidDataException("OceanBaitCondition");
+                var species = Field(row, "Species");
+                var group = OceanFishingGoal.Default;
+                if (species.Length > 0 && (!Enum.TryParse(species, out group) || group == OceanFishingGoal.Default || !Enum.IsDefined(group)))
+                    throw new InvalidDataException($"OceanBaitGroup:{species}");
                 if (!targets.TryAdd((spotId, rule.ItemId), new { fishItemId = rule.ItemId, fishParameterId = rule.FishParameterId,
-                    fishingSpotId = spotId, baitItemId = baitId, baitKind = kind, points, spectralTrigger = trigger, tug })) throw new InvalidDataException("OceanBaitDuplicate");
+                    fishingSpotId = spotId, baitItemId = baitId, baitKind = kind, points, spectralTrigger = trigger, tug, group = group.ToString() })) throw new InvalidDataException("OceanBaitDuplicate");
             }
         }
         if (targets.Count != rules.Length) throw new InvalidDataException("OceanBaitCoverage");
         root["targets"] = JsonSerializer.SerializeToNode(targets.OrderBy(p => p.Key.Spot).ThenBy(p => p.Key.Item).Select(p => p.Value));
-        root["dataVersion"] = "ocean-guidance-2026-11-15";
-        root["checkedUtc"] = "2026-11-15";
-        root["targetProcessing"] = "Preferred bait, single-fish points, tug and explicit spectral-trigger identities only from pinned CSV snapshots, checked 2026-11-15. Item/FishParameter/pool/bait-kind matched against both clients. A preferred fish is a mooch source, not inventory bait. Blank preferred bait remains Unknown. No bite times, catch rates, prose or source code redistributed. Existing 52 basic rows are preserved.";
+        root["dataVersion"] = "ocean-guidance-2026-11-16";
+        root["checkedUtc"] = "2026-11-16";
+        root["targetProcessing"] = "Preferred bait, single-fish points, tug, explicit spectral-trigger identities and Species group facts only from pinned CSV snapshots, checked 2026-11-16. Item/FishParameter/pool/bait-kind matched against both clients. A preferred fish is a mooch source, not inventory bait. Blank preferred bait remains Unknown; blank Species remains Default (unclassified). Groups do not establish achievement IDs, thresholds or player/party progress. No bite times, catch rates, prose or source code redistributed. Existing 52 basic rows are preserved.";
         File.WriteAllText(args[6], root.ToJsonString(new JsonSerializerOptions { WriteIndented = true }).Replace("\r\n", "\n") + "\n");
         Console.WriteLine($"OceanBaits: targets={targets.Count}; missingBait={missing}; mooch={mooch}; originalBasicRows={root["entries"]!.AsArray().Count}");
     }

@@ -1235,4 +1235,28 @@ Shares duplicate prevention with zero-minute favorite alerts and uses the channe
   <data name="ChangelogOceanBaitConditions" xml:space="preserve"><value>Get Ocean Fishing bait recommendations for your area, time frame, current and weather.</value></data>
   <data name="ChangelogOceanBaitIntuition" xml:space="preserve"><value>See Intuition bait candidates and mooch preparation paths.</value></data>
   <data name="ChangelogOceanBaitPreparation" xml:space="preserve"><value>Check recommended and special baits before departure.</value></data>
+  <data name="OceanOptionalBaits" xml:space="preserve"><value>Intuition baits (optional)</value></data>
+  <data name="OceanOptionalBaitsHint" xml:space="preserve"><value>Extra baits for Intuition candidates on this route; optional for basic fishing.</value></data>
+  <data name="OceanBaitMissing" xml:space="preserve"><value>Not owned</value></data>
+  <data name="OceanBaitStockUnknown" xml:space="preserve"><value>Stock unknown</value></data>
+  <data name="OceanBaitBuyHint" xml:space="preserve"><value>Basic Ocean Fishing baits are sold near the boarding dock and aboard the ship.</value></data>
+  <data name="OceanGoal" xml:space="preserve"><value>Fishing goal</value></data>
+  <data name="OceanGoalDefault" xml:space="preserve"><value>Default</value></data>
+  <data name="OceanGoalShark" xml:space="preserve"><value>Sharks</value></data>
+  <data name="OceanGoalJellyfish" xml:space="preserve"><value>Jellyfish</value></data>
+  <data name="OceanGoalFugu" xml:space="preserve"><value>Fugu</value></data>
+  <data name="OceanGoalCrab" xml:space="preserve"><value>Crabs</value></data>
+  <data name="OceanGoalShrimp" xml:space="preserve"><value>Shrimp</value></data>
+  <data name="OceanGoalShellfish" xml:space="preserve"><value>Shellfish</value></data>
+  <data name="OceanGoalSquid" xml:space="preserve"><value>Squid</value></data>
+  <data name="OceanGoalManta" xml:space="preserve"><value>Mantas</value></data>
+  <data name="OceanGoalOctopus" xml:space="preserve"><value>Octopuses</value></data>
+  <data name="OceanGoalSeadragon" xml:space="preserve"><value>Seadragons</value></data>
+  <data name="OceanGoalMantis" xml:space="preserve"><value>Mantis shrimp</value></data>
+  <data name="OceanGoalPrehistoric" xml:space="preserve"><value>Prehistoric fish</value></data>
+  <data name="OceanGoalHint" xml:space="preserve"><value>Group goals prefer the minimum Triple Hook yield. Achievement completion and party progress are not tracked.</value></data>
+  <data name="OceanRecommendationGoal" xml:space="preserve"><value>Group target: {0} · {1}</value></data>
+  <data name="OceanNoRecommendation" xml:space="preserve"><value>No basic target matches the current conditions.</value></data>
+  <data name="OceanGoalPreview" xml:space="preserve"><value>{0} · {1}: {2} · {3}</value></data>
+  <data name="OceanGoalPreviewEmpty" xml:space="preserve"><value>No basic target for this group and time frame on this route.</value></data>
 </root>

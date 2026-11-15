@@ -1,12 +1,12 @@
 {
   "schemaVersion": 1,
-  "dataVersion": "ocean-guidance-2026-11-15",
+  "dataVersion": "ocean-guidance-2026-11-16",
   "author": "Tyo\u0027to Tayuun",
   "policySource": {
     "url": "https://ffxiv.oceanfishing.boats/FAQ/",
     "sha256": "ebea7bc5841474493cb89c029fae54bb6783c9425e8fa83fa56404d52c46d619",
     "checkedUtc": "2026-11-15",
-    "processing": "Only the numeric 90-second spectral-trigger cutoff fact is used. No prose, code or catch probabilities copied. No public reuse license identified."
+    "processing": "Only the numeric 90-second spectral-trigger cutoff and basic-bait preparation/shop facts are used. No prose, code or catch probabilities copied. No public reuse license identified."
   },
   "sources": [
     {
@@ -519,7 +519,8 @@
       "baitKind": "Direct",
       "points": 10,
       "spectralTrigger": false,
-      "tug": "!"
+      "tug": "!",
+      "group": "Default"
     },
     {
       "fishItemId": 28938,
@@ -529,7 +530,8 @@
       "baitKind": "Direct",
       "points": 11,
       "spectralTrigger": false,
-      "tug": "!"
+      "tug": "!",
+      "group": "Default"
     },
     {
       "fishItemId": 28939,
@@ -539,7 +541,8 @@
       "baitKind": "Direct",
       "points": 34,
       "spectralTrigger": false,
-      "tug": "!"
+      "tug": "!",
+      "group": "Default"
     },
     {
       "fishItemId": 28942,
@@ -549,7 +552,8 @@
       "baitKind": "Direct",
       "points": 34,
       "spectralTrigger": false,
-      "tug": "!!!"
+      "tug": "!!!",
+      "group": "Shark"
     },
     {
       "fishItemId": 29719,
@@ -559,7 +563,8 @@
       "baitKind": "Direct",
       "points": 40,
       "spectralTrigger": false,
-      "tug": "!!"
+      "tug": "!!",
+      "group": "Default"
     },
     {
       "fishItemId": 29721,
@@ -569,7 +574,8 @@
       "baitKind": "Direct",
       "points": 50,
       "spectralTrigger": false,
-      "tug": "!"
+      "tug": "!",
+      "group": "Default"
     },
     {
       "fishItemId": 29723,
@@ -579,7 +585,8 @@
       "baitKind": "Direct",
       "points": 14,
       "spectralTrigger": false,
-      "tug": "!!"
+      "tug": "!!",
+      "group": "Default"
     },
     {
       "fishItemId": 29734,
@@ -589,7 +596,8 @@
       "baitKind": "Direct",
       "points": 59,
       "spectralTrigger": false,
-      "tug": "!!"
+      "tug": "!!",
+      "group": "Octopus"
     },
     {
       "fishItemId": 29744,
@@ -599,7 +607,8 @@
       "baitKind": "Direct",
       "points": 253,
       "spectralTrigger": false,
-      "tug": "!!!"
+      "tug": "!!!",
+      "group": "Default"
     },
     {
       "fishItemId": 29784,
@@ -609,7 +618,8 @@
       "baitKind": "Direct",
       "points": 100,
       "spectralTrigger": true,
-      "tug": "!!!"
+      "tug": "!!!",
+      "group": "Default"
     },
     {
       "fishItemId": 29749,
@@ -619,7 +629,8 @@
       "baitKind": "Direct",
       "points": 67,
       "spectralTrigger": false,
-      "tug": "!"
+      "tug": "!",
+      "group": "Default"
     },
     {
       "fishItemId": 29750,
@@ -629,7 +640,8 @@
       "baitKind": "Direct",
       "points": 78,
       "spectralTrigger": false,
-      "tug": "!!"
+      "tug": "!!",
+      "group": "Shark"
     },
     {
       "fishItemId": 29751,
@@ -639,7 +651,8 @@
       "baitKind": "Direct",
       "points": 213,
       "spectralTrigger": false,
-      "tug": "!!"
+      "tug": "!!",
+      "group": "Shark"
     },
     {
       "fishItemId": 29752,
@@ -649,7 +662,8 @@
       "baitKind": "Direct",
       "points": 71,
       "spectralTrigger": false,
-      "tug": "!"
+      "tug": "!",
+      "group": "Default"
     },
     {
       "fishItemId": 29753,
@@ -659,7 +673,8 @@
       "baitKind": "Direct",
       "points": 222,
       "spectralTrigger": false,
-      "tug": "!"
+      "tug": "!",
+      "group": "Default"
     },
     {
       "fishItemId": 29754,
@@ -669,7 +684,8 @@
       "baitKind": "Direct",
       "points": 78,
       "spectralTrigger": false,
-      "tug": "!!"
+      "tug": "!!",
+      "group": "Default"
     },
     {
       "fishItemId": 29756,
@@ -679,7 +695,8 @@
       "baitKind": "Direct",
       "points": 444,
       "spectralTrigger": false,
-      "tug": "!"
+      "tug": "!",
+      "group": "Default"
     },
     {
       "fishItemId": 29766,
@@ -689,7 +706,8 @@
       "baitKind": "Direct",
       "points": 94,
       "spectralTrigger": false,
-      "tug": "!!"
+      "tug": "!!",
+      "group": "Octopus"
     },
     {
       "fishItemId": 29782,
@@ -699,7 +717,8 @@
       "baitKind": "Direct",
       "points": 213,
       "spectralTrigger": false,
-      "tug": "!!!"
+      "tug": "!!!",
+      "group": "Shark"
     },
     {
       "fishItemId": 29788,
@@ -709,7 +728,8 @@
       "baitKind": "Direct",
       "points": 500,
       "spectralTrigger": false,
-      "tug": "!!!"
+      "tug": "!!!",
+      "group": "Default"
     },
     {
       "fishItemId": 28941,
@@ -719,7 +739,8 @@
       "baitKind": "Direct",
       "points": 10,
       "spectralTrigger": false,
-      "tug": "!"
+      "tug": "!",
+      "group": "Default"
     },
     {
       "fishItemId": 29722,
@@ -729,7 +750,8 @@
       "baitKind": "Direct",
       "points": 10,
       "spectralTrigger": false,
-      "tug": "!!"
+      "tug": "!!",
+      "group": "Default"
     },
     {
       "fishItemId": 29724,
@@ -739,7 +761,8 @@
       "baitKind": "Direct",
       "points": 27,
       "spectralTrigger": false,
-      "tug": "!"
+      "tug": "!",
+      "group": "Fugu"
     },
     {
       "fishItemId": 29725,
@@ -749,7 +772,8 @@
       "baitKind": "Direct",
       "points": 22,
       "spectralTrigger": false,
-      "tug": "!!!"
+      "tug": "!!!",
+      "group": "Default"
     },
     {
       "fishItemId": 29726,
@@ -759,7 +783,8 @@
       "baitKind": "Direct",
       "points": 51,
       "spectralTrigger": false,
-      "tug": "!"
+      "tug": "!",
+      "group": "Default"
     },
     {
       "fishItemId": 29727,
@@ -769,7 +794,8 @@
       "baitKind": "Mooch",
       "points": 49,
       "spectralTrigger": false,
-      "tug": "!!"
+      "tug": "!!",
+      "group": "Default"
     },
     {
       "fishItemId": 29739,
@@ -779,7 +805,8 @@
       "baitKind": "Direct",
       "points": 10,
       "spectralTrigger": false,
-      "tug": "!"
+      "tug": "!",
+      "group": "Jellyfish"
     },
     {
       "fishItemId": 29740,
@@ -789,7 +816,8 @@
       "baitKind": "Direct",
       "points": 35,
       "spectralTrigger": false,
-      "tug": "!"
+      "tug": "!",
+      "group": "Seadragon"
     },
     {
       "fishItemId": 29745,
@@ -799,7 +827,8 @@
       "baitKind": "Direct",
       "points": 204,
       "spectralTrigger": false,
-      "tug": "!!!"
+      "tug": "!!!",
+      "group": "Default"
     },
     {
       "fishItemId": 29785,
@@ -809,7 +838,8 @@
       "baitKind": "Direct",
       "points": 100,
       "spectralTrigger": true,
-      "tug": "!!!"
+      "tug": "!!!",
+      "group": "Default"
     },
     {
       "fishItemId": 29755,
@@ -819,7 +849,8 @@
       "baitKind": "Direct",
       "points": 196,
       "spectralTrigger": false,
-      "tug": "!!"
+      "tug": "!!",
+      "group": "Default"
     },
     {
       "fishItemId": 29757,
@@ -829,7 +860,8 @@
       "baitKind": "Direct",
       "points": 156,
       "spectralTrigger": false,
-      "tug": "!"
+      "tug": "!",
+      "group": "Jellyfish"
     },
     {
       "fishItemId": 29758,
@@ -839,7 +871,8 @@
       "baitKind": "Mooch",
       "points": 127,
       "spectralTrigger": false,
-      "tug": "!!"
+      "tug": "!!",
+      "group": "Default"
     },
     {
       "fishItemId": 29759,
@@ -849,7 +882,8 @@
       "baitKind": "Direct",
       "points": 59,
       "spectralTrigger": false,
-      "tug": "!!"
+      "tug": "!!",
+      "group": "Default"
     },
     {
       "fishItemId": 29760,
@@ -859,7 +893,8 @@
       "baitKind": "Direct",
       "points": 69,
       "spectralTrigger": false,
-      "tug": "!"
+      "tug": "!",
+      "group": "Default"
     },
     {
       "fishItemId": 29761,
@@ -869,7 +904,8 @@
       "baitKind": "Direct",
       "points": 65,
       "spectralTrigger": false,
-      "tug": "!"
+      "tug": "!",
+      "group": "Default"
     },
     {
       "fishItemId": 29763,
@@ -879,7 +915,8 @@
       "baitKind": "Mooch",
       "points": 245,
       "spectralTrigger": false,
-      "tug": "!!"
+      "tug": "!!",
+      "group": "Seadragon"
     },
     {
       "fishItemId": 29765,
@@ -889,7 +926,8 @@
       "baitKind": "Mooch",
       "points": 345,
       "spectralTrigger": false,
-      "tug": "!!!"
+      "tug": "!!!",
+      "group": "Default"
     },
     {
       "fishItemId": 29779,
@@ -899,7 +937,8 @@
       "baitKind": "Direct",
       "points": 69,
       "spectralTrigger": false,
-      "tug": "!"
+      "tug": "!",
+      "group": "Default"
     },
     {
       "fishItemId": 29789,
@@ -909,7 +948,8 @@
       "baitKind": "Direct",
       "points": 500,
       "spectralTrigger": false,
-      "tug": "!!!"
+      "tug": "!!!",
+      "group": "Default"
     },
     {
       "fishItemId": 29728,
@@ -919,7 +959,8 @@
       "baitKind": "Direct",
       "points": 13,
       "spectralTrigger": false,
-      "tug": "!!"
+      "tug": "!!",
+      "group": "Default"
     },
     {
       "fishItemId": 29729,
@@ -929,7 +970,8 @@
       "baitKind": "Direct",
       "points": 10,
       "spectralTrigger": false,
-      "tug": "!"
+      "tug": "!",
+      "group": "Default"
     },
     {
       "fishItemId": 29730,
@@ -939,7 +981,8 @@
       "baitKind": "Direct",
       "points": 15,
       "spectralTrigger": false,
-      "tug": "!!"
+      "tug": "!!",
+      "group": "Default"
     },
     {
       "fishItemId": 29731,
@@ -949,7 +992,8 @@
       "baitKind": "Direct",
       "points": 32,
       "spectralTrigger": false,
-      "tug": "!!"
+      "tug": "!!",
+      "group": "Default"
     },
     {
       "fishItemId": 29732,
@@ -959,7 +1003,8 @@
       "baitKind": "Direct",
       "points": 47,
       "spectralTrigger": false,
-      "tug": "!"
+      "tug": "!",
+      "group": "Fugu"
     },
     {
       "fishItemId": 29733,
@@ -969,7 +1014,8 @@
       "baitKind": "Direct",
       "points": 38,
       "spectralTrigger": false,
-      "tug": "!!"
+      "tug": "!!",
+      "group": "Default"
     },
     {
       "fishItemId": 29735,
@@ -979,7 +1025,8 @@
       "baitKind": "Direct",
       "points": 32,
       "spectralTrigger": false,
-      "tug": "!!!"
+      "tug": "!!!",
+      "group": "Shark"
     },
     {
       "fishItemId": 29742,
@@ -989,7 +1036,8 @@
       "baitKind": "Direct",
       "points": 46,
       "spectralTrigger": false,
-      "tug": "!"
+      "tug": "!",
+      "group": "Default"
     },
     {
       "fishItemId": 29746,
@@ -999,7 +1047,8 @@
       "baitKind": "Direct",
       "points": 204,
       "spectralTrigger": false,
-      "tug": "!!!"
+      "tug": "!!!",
+      "group": "Default"
     },
     {
       "fishItemId": 29787,
@@ -1009,7 +1058,8 @@
       "baitKind": "Direct",
       "points": 100,
       "spectralTrigger": true,
-      "tug": "!!!"
+      "tug": "!!!",
+      "group": "Default"
     },
     {
       "fishItemId": 29762,
@@ -1019,7 +1069,8 @@
       "baitKind": "Direct",
       "points": 222,
       "spectralTrigger": false,
-      "tug": "!"
+      "tug": "!",
+      "group": "Jellyfish"
     },
     {
       "fishItemId": 29767,
@@ -1029,7 +1080,8 @@
       "baitKind": "Direct",
       "points": 216,
       "spectralTrigger": false,
-      "tug": "!!"
+      "tug": "!!",
+      "group": "Shark"
     },
     {
       "fishItemId": 29768,
@@ -1039,7 +1091,8 @@
       "baitKind": "Direct",
       "points": 89,
       "spectralTrigger": false,
-      "tug": "!"
+      "tug": "!",
+      "group": "Fugu"
     },
     {
       "fishItemId": 29769,
@@ -1049,7 +1102,8 @@
       "baitKind": "Direct",
       "points": 81,
       "spectralTrigger": false,
-      "tug": "!!"
+      "tug": "!!",
+      "group": "Default"
     },
     {
       "fishItemId": 29770,
@@ -1059,7 +1113,8 @@
       "baitKind": "Direct",
       "points": 216,
       "spectralTrigger": false,
-      "tug": "!!!"
+      "tug": "!!!",
+      "group": "Shark"
     },
     {
       "fishItemId": 29772,
@@ -1069,7 +1124,8 @@
       "baitKind": "Direct",
       "points": 95,
       "spectralTrigger": false,
-      "tug": "!!"
+      "tug": "!!",
+      "group": "Default"
     },
     {
       "fishItemId": 29774,
@@ -1079,7 +1135,8 @@
       "baitKind": "Direct",
       "points": 246,
       "spectralTrigger": false,
-      "tug": "!"
+      "tug": "!",
+      "group": "Default"
     },
     {
       "fishItemId": 29775,
@@ -1089,7 +1146,8 @@
       "baitKind": "Direct",
       "points": 95,
       "spectralTrigger": false,
-      "tug": "!"
+      "tug": "!",
+      "group": "Default"
     },
     {
       "fishItemId": 29780,
@@ -1099,7 +1157,8 @@
       "baitKind": "Direct",
       "points": 95,
       "spectralTrigger": false,
-      "tug": "!!"
+      "tug": "!!",
+      "group": "Default"
     },
     {
       "fishItemId": 29790,
@@ -1109,7 +1168,8 @@
       "baitKind": "Direct",
       "points": 500,
       "spectralTrigger": false,
-      "tug": "!!!"
+      "tug": "!!!",
+      "group": "Default"
     },
     {
       "fishItemId": 28940,
@@ -1119,7 +1179,8 @@
       "baitKind": "Direct",
       "points": 43,
       "spectralTrigger": false,
-      "tug": "!"
+      "tug": "!",
+      "group": "Fugu"
     },
     {
       "fishItemId": 29718,
@@ -1129,7 +1190,8 @@
       "baitKind": "Direct",
       "points": 27,
       "spectralTrigger": false,
-      "tug": "!"
+      "tug": "!",
+      "group": "Default"
     },
     {
       "fishItemId": 29720,
@@ -1139,7 +1201,8 @@
       "baitKind": "Direct",
       "points": 45,
       "spectralTrigger": false,
-      "tug": "!"
+      "tug": "!",
+      "group": "Default"
     },
     {
       "fishItemId": 29736,
@@ -1149,7 +1212,8 @@
       "baitKind": "Direct",
       "points": 13,
       "spectralTrigger": false,
-      "tug": "!"
+      "tug": "!",
+      "group": "Default"
     },
     {
       "fishItemId": 29737,
@@ -1159,7 +1223,8 @@
       "baitKind": "Direct",
       "points": 11,
       "spectralTrigger": false,
-      "tug": "!!"
+      "tug": "!!",
+      "group": "Default"
     },
     {
       "fishItemId": 29738,
@@ -1169,7 +1234,8 @@
       "baitKind": "Direct",
       "points": 11,
       "spectralTrigger": false,
-      "tug": "!!"
+      "tug": "!!",
+      "group": "Default"
     },
     {
       "fishItemId": 29741,
@@ -1179,7 +1245,8 @@
       "baitKind": "Direct",
       "points": 36,
       "spectralTrigger": false,
-      "tug": "!!"
+      "tug": "!!",
+      "group": "Crab"
     },
     {
       "fishItemId": 29743,
@@ -1189,7 +1256,8 @@
       "baitKind": "Mooch",
       "points": 52,
       "spectralTrigger": false,
-      "tug": "!!"
+      "tug": "!!",
+      "group": "Default"
     },
     {
       "fishItemId": 29747,
@@ -1199,7 +1267,8 @@
       "baitKind": "Direct",
       "points": 226,
       "spectralTrigger": false,
-      "tug": "!!!"
+      "tug": "!!!",
+      "group": "Default"
     },
     {
       "fishItemId": 29786,
@@ -1209,7 +1278,8 @@
       "baitKind": "Direct",
       "points": 100,
       "spectralTrigger": true,
-      "tug": "!!!"
+      "tug": "!!!",
+      "group": "Default"
     },
     {
       "fishItemId": 29748,
@@ -1219,7 +1289,8 @@
       "baitKind": "Direct",
       "points": 69,
       "spectralTrigger": false,
-      "tug": "!"
+      "tug": "!",
+      "group": "Default"
     },
     {
       "fishItemId": 29764,
@@ -1229,7 +1300,8 @@
       "baitKind": "Direct",
       "points": 189,
       "spectralTrigger": false,
-      "tug": "!"
+      "tug": "!",
+      "group": "Seadragon"
     },
     {
       "fishItemId": 29771,
@@ -1239,7 +1311,8 @@
       "baitKind": "Direct",
       "points": 79,
       "spectralTrigger": false,
-      "tug": "!"
+      "tug": "!",
+      "group": "Default"
     },
     {
       "fishItemId": 29773,
@@ -1249,7 +1322,8 @@
       "baitKind": "Direct",
       "points": 198,
       "spectralTrigger": false,
-      "tug": "!!"
+      "tug": "!!",
+      "group": "Octopus"
     },
     {
       "fishItemId": 29776,
@@ -1259,7 +1333,8 @@
       "baitKind": "Direct",
       "points": 79,
       "spectralTrigger": false,
-      "tug": "!!"
+      "tug": "!!",
+      "group": "Default"
     },
     {
       "fishItemId": 29777,
@@ -1269,7 +1344,8 @@
       "baitKind": "Direct",
       "points": 221,
       "spectralTrigger": false,
-      "tug": "!"
+      "tug": "!",
+      "group": "Crab"
     },
     {
       "fishItemId": 29778,
@@ -1279,7 +1355,8 @@
       "baitKind": "Direct",
       "points": 79,
       "spectralTrigger": false,
-      "tug": "!"
+      "tug": "!",
+      "group": "Default"
     },
     {
       "fishItemId": 29781,
@@ -1289,7 +1366,8 @@
       "baitKind": "Direct",
       "points": 79,
       "spectralTrigger": false,
-      "tug": "!!!"
+      "tug": "!!!",
+      "group": "Default"
     },
     {
       "fishItemId": 29783,
@@ -1299,7 +1377,8 @@
       "baitKind": "Direct",
       "points": 374,
       "spectralTrigger": false,
-      "tug": "!!"
+      "tug": "!!",
+      "group": "Default"
     },
     {
       "fishItemId": 29791,
@@ -1309,7 +1388,8 @@
       "baitKind": "Direct",
       "points": 500,
       "spectralTrigger": false,
-      "tug": "!!!"
+      "tug": "!!!",
+      "group": "Default"
     },
     {
       "fishItemId": 32055,
@@ -1319,7 +1399,8 @@
       "baitKind": "Direct",
       "points": 10,
       "spectralTrigger": false,
-      "tug": "!!"
+      "tug": "!!",
+      "group": "Crab"
     },
     {
       "fishItemId": 32056,
@@ -1329,7 +1410,8 @@
       "baitKind": "Direct",
       "points": 15,
       "spectralTrigger": false,
-      "tug": "!"
+      "tug": "!",
+      "group": "Default"
     },
     {
       "fishItemId": 32057,
@@ -1339,7 +1421,8 @@
       "baitKind": "Direct",
       "points": 9,
       "spectralTrigger": false,
-      "tug": "!"
+      "tug": "!",
+      "group": "Fugu"
     },
     {
       "fishItemId": 32058,
@@ -1349,7 +1432,8 @@
       "baitKind": "Direct",
       "points": 33,
       "spectralTrigger": false,
-      "tug": "!!"
+      "tug": "!!",
+      "group": "Manta"
     },
     {
       "fishItemId": 32059,
@@ -1359,7 +1443,8 @@
       "baitKind": "Direct",
       "points": 41,
       "spectralTrigger": false,
-      "tug": "!"
+      "tug": "!",
+      "group": "Default"
     },
     {
       "fishItemId": 32060,
@@ -1369,7 +1454,8 @@
       "baitKind": "Direct",
       "points": 39,
       "spectralTrigger": false,
-      "tug": "!!!"
+      "tug": "!!!",
+      "group": "Default"
     },
     {
       "fishItemId": 32061,
@@ -1379,7 +1465,8 @@
       "baitKind": "Direct",
       "points": 58,
       "spectralTrigger": false,
-      "tug": "!!!"
+      "tug": "!!!",
+      "group": "Default"
     },
     {
       "fishItemId": 32062,
@@ -1389,7 +1476,8 @@
       "baitKind": "Direct",
       "points": 52,
       "spectralTrigger": false,
-      "tug": "!"
+      "tug": "!",
+      "group": "Default"
     },
     {
       "fishItemId": 32063,
@@ -1399,7 +1487,8 @@
       "baitKind": "Direct",
       "points": 100,
       "spectralTrigger": true,
-      "tug": "!!!"
+      "tug": "!!!",
+      "group": "Default"
     },
     {
       "fishItemId": 32064,
@@ -1409,7 +1498,8 @@
       "baitKind": "Direct",
       "points": 246,
       "spectralTrigger": false,
-      "tug": "!!!"
+      "tug": "!!!",
+      "group": "Default"
     },
     {
       "fishItemId": 32065,
@@ -1419,7 +1509,8 @@
       "baitKind": "Direct",
       "points": 84,
       "spectralTrigger": false,
-      "tug": "!!"
+      "tug": "!!",
+      "group": "Crab"
     },
     {
       "fishItemId": 32066,
@@ -1429,7 +1520,8 @@
       "baitKind": "Direct",
       "points": 64,
       "spectralTrigger": false,
-      "tug": "!"
+      "tug": "!",
+      "group": "Fugu"
     },
     {
       "fishItemId": 32067,
@@ -1439,7 +1531,8 @@
       "baitKind": "Direct",
       "points": 84,
       "spectralTrigger": false,
-      "tug": "!!"
+      "tug": "!!",
+      "group": "Default"
     },
     {
       "fishItemId": 32068,
@@ -1449,7 +1542,8 @@
       "baitKind": "Direct",
       "points": 84,
       "spectralTrigger": false,
-      "tug": "!"
+      "tug": "!",
+      "group": "Default"
     },
     {
       "fishItemId": 32069,
@@ -1459,7 +1553,8 @@
       "baitKind": "Direct",
       "points": 198,
       "spectralTrigger": false,
-      "tug": "!!"
+      "tug": "!!",
+      "group": "Default"
     },
     {
       "fishItemId": 32070,
@@ -1469,7 +1564,8 @@
       "baitKind": "Direct",
       "points": 75,
       "spectralTrigger": false,
-      "tug": "!!!"
+      "tug": "!!!",
+      "group": "Manta"
     },
     {
       "fishItemId": 32071,
@@ -1479,7 +1575,8 @@
       "baitKind": "Direct",
       "points": 201,
       "spectralTrigger": false,
-      "tug": "!!"
+      "tug": "!!",
+      "group": "Default"
     },
     {
       "fishItemId": 32072,
@@ -1489,7 +1586,8 @@
       "baitKind": "Direct",
       "points": 178,
       "spectralTrigger": false,
-      "tug": "!!!"
+      "tug": "!!!",
+      "group": "Default"
     },
     {
       "fishItemId": 32073,
@@ -1499,7 +1597,8 @@
       "baitKind": "Direct",
       "points": 283,
       "spectralTrigger": false,
-      "tug": "!!"
+      "tug": "!!",
+      "group": "Default"
     },
     {
       "fishItemId": 32074,
@@ -1509,7 +1608,8 @@
       "baitKind": "Direct",
       "points": 500,
       "spectralTrigger": false,
-      "tug": "!!!"
+      "tug": "!!!",
+      "group": "Default"
     },
     {
       "fishItemId": 32075,
@@ -1519,7 +1619,8 @@
       "baitKind": "Direct",
       "points": 9,
       "spectralTrigger": false,
-      "tug": "!"
+      "tug": "!",
+      "group": "Crab"
     },
     {
       "fishItemId": 32076,
@@ -1529,7 +1630,8 @@
       "baitKind": "Direct",
       "points": 14,
       "spectralTrigger": false,
-      "tug": "!"
+      "tug": "!",
+      "group": "Default"
     },
     {
       "fishItemId": 32077,
@@ -1539,7 +1641,8 @@
       "baitKind": "Direct",
       "points": 8,
       "spectralTrigger": false,
-      "tug": "!!"
+      "tug": "!!",
+      "group": "Default"
     },
     {
       "fishItemId": 32078,
@@ -1549,7 +1652,8 @@
       "baitKind": "Direct",
       "points": 35,
       "spectralTrigger": false,
-      "tug": "!!"
+      "tug": "!!",
+      "group": "Default"
     },
     {
       "fishItemId": 32079,
@@ -1559,7 +1663,8 @@
       "baitKind": "Direct",
       "points": 28,
       "spectralTrigger": false,
-      "tug": "!"
+      "tug": "!",
+      "group": "Crab"
     },
     {
       "fishItemId": 32080,
@@ -1569,7 +1674,8 @@
       "baitKind": "Direct",
       "points": 30,
       "spectralTrigger": false,
-      "tug": "!"
+      "tug": "!",
+      "group": "Default"
     },
     {
       "fishItemId": 32081,
@@ -1579,7 +1685,8 @@
       "baitKind": "Direct",
       "points": 43,
       "spectralTrigger": false,
-      "tug": "!!"
+      "tug": "!!",
+      "group": "Default"
     },
     {
       "fishItemId": 32082,
@@ -1589,7 +1696,8 @@
       "baitKind": "Direct",
       "points": 49,
       "spectralTrigger": false,
-      "tug": "!!!"
+      "tug": "!!!",
+      "group": "Default"
     },
     {
       "fishItemId": 32083,
@@ -1599,7 +1707,8 @@
       "baitKind": "Direct",
       "points": 100,
       "spectralTrigger": true,
-      "tug": "!!!"
+      "tug": "!!!",
+      "group": "Default"
     },
     {
       "fishItemId": 32084,
@@ -1609,7 +1718,8 @@
       "baitKind": "Direct",
       "points": 326,
       "spectralTrigger": false,
-      "tug": "!!!"
+      "tug": "!!!",
+      "group": "Default"
     },
     {
       "fishItemId": 32085,
@@ -1619,7 +1729,8 @@
       "baitKind": "Direct",
       "points": 102,
       "spectralTrigger": false,
-      "tug": "!"
+      "tug": "!",
+      "group": "Crab"
     },
     {
       "fishItemId": 32086,
@@ -1629,7 +1740,8 @@
       "baitKind": "Direct",
       "points": 77,
       "spectralTrigger": false,
-      "tug": "!"
+      "tug": "!",
+      "group": "Default"
     },
     {
       "fishItemId": 32087,
@@ -1639,7 +1751,8 @@
       "baitKind": "Direct",
       "points": 102,
       "spectralTrigger": false,
-      "tug": "!!"
+      "tug": "!!",
+      "group": "Manta"
     },
     {
       "fishItemId": 32088,
@@ -1649,7 +1762,8 @@
       "baitKind": "Direct",
       "points": 74,
       "spectralTrigger": false,
-      "tug": "!"
+      "tug": "!",
+      "group": "Default"
     },
     {
       "fishItemId": 32089,
@@ -1659,7 +1773,8 @@
       "baitKind": "Direct",
       "points": 77,
       "spectralTrigger": false,
-      "tug": "!!"
+      "tug": "!!",
+      "group": "Default"
     },
     {
       "fishItemId": 32090,
@@ -1669,7 +1784,8 @@
       "baitKind": "Direct",
       "points": 255,
       "spectralTrigger": false,
-      "tug": "!"
+      "tug": "!",
+      "group": "Crab"
     },
     {
       "fishItemId": 32091,
@@ -1679,7 +1795,8 @@
       "baitKind": "Direct",
       "points": 92,
       "spectralTrigger": false,
-      "tug": "!!"
+      "tug": "!!",
+      "group": "Default"
     },
     {
       "fishItemId": 32092,
@@ -1689,7 +1806,8 @@
       "baitKind": "Direct",
       "points": 92,
       "spectralTrigger": false,
-      "tug": "!!!"
+      "tug": "!!!",
+      "group": "Default"
     },
     {
       "fishItemId": 32093,
@@ -1699,7 +1817,8 @@
       "baitKind": "Direct",
       "points": 460,
       "spectralTrigger": false,
-      "tug": "!!!"
+      "tug": "!!!",
+      "group": "Shark"
     },
     {
       "fishItemId": 32094,
@@ -1709,7 +1828,8 @@
       "baitKind": "Direct",
       "points": 500,
       "spectralTrigger": false,
-      "tug": "!!!"
+      "tug": "!!!",
+      "group": "Default"
     },
     {
       "fishItemId": 32095,
@@ -1719,7 +1839,8 @@
       "baitKind": "Direct",
       "points": 10,
       "spectralTrigger": false,
-      "tug": "!"
+      "tug": "!",
+      "group": "Fugu"
     },
     {
       "fishItemId": 32096,
@@ -1729,7 +1850,8 @@
       "baitKind": "Direct",
       "points": 10,
       "spectralTrigger": false,
-      "tug": "!"
+      "tug": "!",
+      "group": "Default"
     },
     {
       "fishItemId": 32097,
@@ -1739,7 +1861,8 @@
       "baitKind": "Direct",
       "points": 13,
       "spectralTrigger": false,
-      "tug": "!!"
+      "tug": "!!",
+      "group": "Jellyfish"
     },
     {
       "fishItemId": 32098,
@@ -1749,7 +1872,8 @@
       "baitKind": "Direct",
       "points": 29,
       "spectralTrigger": false,
-      "tug": "!"
+      "tug": "!",
+      "group": "Fugu"
     },
     {
       "fishItemId": 32099,
@@ -1759,7 +1883,8 @@
       "baitKind": "Direct",
       "points": 29,
       "spectralTrigger": false,
-      "tug": "!!"
+      "tug": "!!",
+      "group": "Default"
     },
     {
       "fishItemId": 32100,
@@ -1769,7 +1894,8 @@
       "baitKind": "Direct",
       "points": 36,
       "spectralTrigger": false,
-      "tug": "!!"
+      "tug": "!!",
+      "group": "Default"
     },
     {
       "fishItemId": 32101,
@@ -1779,7 +1905,8 @@
       "baitKind": "Direct",
       "points": 44,
       "spectralTrigger": false,
-      "tug": "!!!"
+      "tug": "!!!",
+      "group": "Shark"
     },
     {
       "fishItemId": 32102,
@@ -1789,7 +1916,8 @@
       "baitKind": "Direct",
       "points": 44,
       "spectralTrigger": false,
-      "tug": "!!"
+      "tug": "!!",
+      "group": "Default"
     },
     {
       "fishItemId": 32103,
@@ -1799,7 +1927,8 @@
       "baitKind": "Direct",
       "points": 100,
       "spectralTrigger": true,
-      "tug": "!!!"
+      "tug": "!!!",
+      "group": "Default"
     },
     {
       "fishItemId": 32104,
@@ -1809,7 +1938,8 @@
       "baitKind": "Direct",
       "points": 238,
       "spectralTrigger": false,
-      "tug": "!!!"
+      "tug": "!!!",
+      "group": "Default"
     },
     {
       "fishItemId": 32105,
@@ -1819,7 +1949,8 @@
       "baitKind": "Direct",
       "points": 107,
       "spectralTrigger": false,
-      "tug": "!"
+      "tug": "!",
+      "group": "Fugu"
     },
     {
       "fishItemId": 32106,
@@ -1829,7 +1960,8 @@
       "baitKind": "Direct",
       "points": 70,
       "spectralTrigger": false,
-      "tug": "!!"
+      "tug": "!!",
+      "group": "Default"
     },
     {
       "fishItemId": 32107,
@@ -1839,7 +1971,8 @@
       "baitKind": "Direct",
       "points": 72,
       "spectralTrigger": false,
-      "tug": "!"
+      "tug": "!",
+      "group": "Default"
     },
     {
       "fishItemId": 32108,
@@ -1849,7 +1982,8 @@
       "baitKind": "Direct",
       "points": 75,
       "spectralTrigger": false,
-      "tug": "!!"
+      "tug": "!!",
+      "group": "Default"
     },
     {
       "fishItemId": 32109,
@@ -1859,7 +1993,8 @@
       "baitKind": "Direct",
       "points": 237,
       "spectralTrigger": false,
-      "tug": "!!"
+      "tug": "!!",
+      "group": "Fugu"
     },
     {
       "fishItemId": 32110,
@@ -1869,7 +2004,8 @@
       "baitKind": "Mooch",
       "points": 202,
       "spectralTrigger": false,
-      "tug": "!"
+      "tug": "!",
+      "group": "Default"
     },
     {
       "fishItemId": 32111,
@@ -1879,7 +2015,8 @@
       "baitKind": "Direct",
       "points": 125,
       "spectralTrigger": false,
-      "tug": "!!"
+      "tug": "!!",
+      "group": "Manta"
     },
     {
       "fishItemId": 32112,
@@ -1889,7 +2026,8 @@
       "baitKind": "Direct",
       "points": 72,
       "spectralTrigger": false,
-      "tug": "!"
+      "tug": "!",
+      "group": "Default"
     },
     {
       "fishItemId": 32113,
@@ -1899,7 +2037,8 @@
       "baitKind": "Direct",
       "points": 465,
       "spectralTrigger": false,
-      "tug": "!!"
+      "tug": "!!",
+      "group": "Default"
     },
     {
       "fishItemId": 32114,
@@ -1909,7 +2048,8 @@
       "baitKind": "Mooch",
       "points": 500,
       "spectralTrigger": false,
-      "tug": "!!!"
+      "tug": "!!!",
+      "group": "Default"
     },
     {
       "fishItemId": 40521,
@@ -1919,7 +2059,8 @@
       "baitKind": "Direct",
       "points": 31,
       "spectralTrigger": false,
-      "tug": "!"
+      "tug": "!",
+      "group": "Shrimp"
     },
     {
       "fishItemId": 40522,
@@ -1929,7 +2070,8 @@
       "baitKind": "Direct",
       "points": 11,
       "spectralTrigger": false,
-      "tug": "!"
+      "tug": "!",
+      "group": "Shellfish"
     },
     {
       "fishItemId": 40523,
@@ -1939,7 +2081,8 @@
       "baitKind": "Direct",
       "points": 10,
       "spectralTrigger": false,
-      "tug": "!!"
+      "tug": "!!",
+      "group": "Squid"
     },
     {
       "fishItemId": 40524,
@@ -1949,7 +2092,8 @@
       "baitKind": "Direct",
       "points": 15,
       "spectralTrigger": false,
-      "tug": "!!"
+      "tug": "!!",
+      "group": "Default"
     },
     {
       "fishItemId": 40525,
@@ -1959,7 +2103,8 @@
       "baitKind": "Direct",
       "points": 42,
       "spectralTrigger": false,
-      "tug": "!!"
+      "tug": "!!",
+      "group": "Default"
     },
     {
       "fishItemId": 40526,
@@ -1969,7 +2114,8 @@
       "baitKind": "Direct",
       "points": 38,
       "spectralTrigger": false,
-      "tug": "!"
+      "tug": "!",
+      "group": "Default"
     },
     {
       "fishItemId": 40527,
@@ -1979,7 +2125,8 @@
       "baitKind": "Direct",
       "points": 56,
       "spectralTrigger": false,
-      "tug": "!"
+      "tug": "!",
+      "group": "Default"
     },
     {
       "fishItemId": 40528,
@@ -1989,7 +2136,8 @@
       "baitKind": "Direct",
       "points": 47,
       "spectralTrigger": false,
-      "tug": "!!!"
+      "tug": "!!!",
+      "group": "Default"
     },
     {
       "fishItemId": 40529,
@@ -1999,7 +2147,8 @@
       "baitKind": "Direct",
       "points": 100,
       "spectralTrigger": true,
-      "tug": "!!!"
+      "tug": "!!!",
+      "group": "Default"
     },
     {
       "fishItemId": 40530,
@@ -2009,7 +2158,8 @@
       "baitKind": "Direct",
       "points": 263,
       "spectralTrigger": false,
-      "tug": "!!!"
+      "tug": "!!!",
+      "group": "Default"
     },
     {
       "fishItemId": 40531,
@@ -2019,7 +2169,8 @@
       "baitKind": "Direct",
       "points": 51,
       "spectralTrigger": false,
-      "tug": "!"
+      "tug": "!",
+      "group": "Shellfish"
     },
     {
       "fishItemId": 40532,
@@ -2029,7 +2180,8 @@
       "baitKind": "Direct",
       "points": 68,
       "spectralTrigger": false,
-      "tug": "!!"
+      "tug": "!!",
+      "group": "Squid"
     },
     {
       "fishItemId": 40533,
@@ -2039,7 +2191,8 @@
       "baitKind": "Direct",
       "points": 144,
       "spectralTrigger": false,
-      "tug": "!"
+      "tug": "!",
+      "group": "Shrimp"
     },
     {
       "fishItemId": 40534,
@@ -2049,7 +2202,8 @@
       "baitKind": "Direct",
       "points": 51,
       "spectralTrigger": false,
-      "tug": "!!!"
+      "tug": "!!!",
+      "group": "Default"
     },
     {
       "fishItemId": 40535,
@@ -2059,7 +2213,8 @@
       "baitKind": "Direct",
       "points": 101,
       "spectralTrigger": false,
-      "tug": "!"
+      "tug": "!",
+      "group": "Default"
     },
     {
       "fishItemId": 40536,
@@ -2069,7 +2224,8 @@
       "baitKind": "Direct",
       "points": 102,
       "spectralTrigger": false,
-      "tug": "!!!"
+      "tug": "!!!",
+      "group": "Prehistoric"
     },
     {
       "fishItemId": 40537,
@@ -2079,7 +2235,8 @@
       "baitKind": "Direct",
       "points": 144,
       "spectralTrigger": false,
-      "tug": "!"
+      "tug": "!",
+      "group": "Default"
     },
     {
       "fishItemId": 40538,
@@ -2089,7 +2246,8 @@
       "baitKind": "Direct",
       "points": 72,
       "spectralTrigger": false,
-      "tug": "!"
+      "tug": "!",
+      "group": "Mantis"
     },
     {
       "fishItemId": 40539,
@@ -2099,7 +2257,8 @@
       "baitKind": "Direct",
       "points": 289,
       "spectralTrigger": false,
-      "tug": "!!"
+      "tug": "!!",
+      "group": "Prehistoric"
     },
     {
       "fishItemId": 40540,
@@ -2109,7 +2268,8 @@
       "baitKind": "Direct",
       "points": 500,
       "spectralTrigger": false,
-      "tug": "!!!"
+      "tug": "!!!",
+      "group": "Prehistoric"
     },
     {
       "fishItemId": 40541,
@@ -2119,7 +2279,8 @@
       "baitKind": "Direct",
       "points": 14,
       "spectralTrigger": false,
-      "tug": "!!"
+      "tug": "!!",
+      "group": "Default"
     },
     {
       "fishItemId": 40542,
@@ -2129,7 +2290,8 @@
       "baitKind": "Direct",
       "points": 10,
       "spectralTrigger": false,
-      "tug": "!"
+      "tug": "!",
+      "group": "Shellfish"
     },
     {
       "fishItemId": 40543,
@@ -2139,7 +2301,8 @@
       "baitKind": "Direct",
       "points": 10,
       "spectralTrigger": false,
-      "tug": "!"
+      "tug": "!",
+      "group": "Shrimp"
     },
     {
       "fishItemId": 40544,
@@ -2149,7 +2312,8 @@
       "baitKind": "Direct",
       "points": 26,
       "spectralTrigger": false,
-      "tug": "!!"
+      "tug": "!!",
+      "group": "Squid"
     },
     {
       "fishItemId": 40545,
@@ -2159,7 +2323,8 @@
       "baitKind": "Direct",
       "points": 37,
       "spectralTrigger": false,
-      "tug": "!!"
+      "tug": "!!",
+      "group": "Default"
     },
     {
       "fishItemId": 40546,
@@ -2169,7 +2334,8 @@
       "baitKind": "Direct",
       "points": 33,
       "spectralTrigger": false,
-      "tug": "!"
+      "tug": "!",
+      "group": "Default"
     },
     {
       "fishItemId": 40547,
@@ -2179,7 +2345,8 @@
       "baitKind": "Direct",
       "points": 53,
       "spectralTrigger": false,
-      "tug": "!"
+      "tug": "!",
+      "group": "Default"
     },
     {
       "fishItemId": 40548,
@@ -2189,7 +2356,8 @@
       "baitKind": "Mooch",
       "points": 35,
       "spectralTrigger": false,
-      "tug": "!!!"
+      "tug": "!!!",
+      "group": "Default"
     },
     {
       "fishItemId": 40549,
@@ -2199,7 +2367,8 @@
       "baitKind": "Direct",
       "points": 100,
       "spectralTrigger": true,
-      "tug": "!!!"
+      "tug": "!!!",
+      "group": "Default"
     },
     {
       "fishItemId": 40550,
@@ -2209,7 +2378,8 @@
       "baitKind": "Direct",
       "points": 263,
       "spectralTrigger": false,
-      "tug": "!!!"
+      "tug": "!!!",
+      "group": "Default"
     },
     {
       "fishItemId": 40551,
@@ -2219,7 +2389,8 @@
       "baitKind": "Direct",
       "points": 62,
       "spectralTrigger": false,
-      "tug": "!!"
+      "tug": "!!",
+      "group": "Default"
     },
     {
       "fishItemId": 40552,
@@ -2229,7 +2400,8 @@
       "baitKind": "Direct",
       "points": 58,
       "spectralTrigger": false,
-      "tug": "!"
+      "tug": "!",
+      "group": "Shrimp"
     },
     {
       "fishItemId": 40553,
@@ -2239,7 +2411,8 @@
       "baitKind": "Direct",
       "points": 191,
       "spectralTrigger": false,
-      "tug": "!!"
+      "tug": "!!",
+      "group": "Default"
     },
     {
       "fishItemId": 40554,
@@ -2249,7 +2422,8 @@
       "baitKind": "Direct",
       "points": 115,
       "spectralTrigger": false,
-      "tug": "!!"
+      "tug": "!!",
+      "group": "Squid"
     },
     {
       "fishItemId": 40555,
@@ -2259,7 +2433,8 @@
       "baitKind": "Direct",
       "points": 198,
       "spectralTrigger": false,
-      "tug": "!"
+      "tug": "!",
+      "group": "Default"
     },
     {
       "fishItemId": 40556,
@@ -2269,7 +2444,8 @@
       "baitKind": "Direct",
       "points": 62,
       "spectralTrigger": false,
-      "tug": "!"
+      "tug": "!",
+      "group": "Default"
     },
     {
       "fishItemId": 40557,
@@ -2279,7 +2455,8 @@
       "baitKind": "Direct",
       "points": 83,
       "spectralTrigger": false,
-      "tug": "!"
+      "tug": "!",
+      "group": "Shellfish"
     },
     {
       "fishItemId": 40558,
@@ -2289,7 +2466,8 @@
       "baitKind": "Direct",
       "points": 92,
       "spectralTrigger": false,
-      "tug": "!!!"
+      "tug": "!!!",
+      "group": "Default"
     },
     {
       "fishItemId": 40559,
@@ -2299,7 +2477,8 @@
       "baitKind": "Direct",
       "points": 191,
       "spectralTrigger": false,
-      "tug": "!!"
+      "tug": "!!",
+      "group": "Default"
     },
     {
       "fishItemId": 40560,
@@ -2309,7 +2488,8 @@
       "baitKind": "Mooch",
       "points": 500,
       "spectralTrigger": false,
-      "tug": "!!!"
+      "tug": "!!!",
+      "group": "Default"
     },
     {
       "fishItemId": 40561,
@@ -2319,7 +2499,8 @@
       "baitKind": "Direct",
       "points": 11,
       "spectralTrigger": false,
-      "tug": "!"
+      "tug": "!",
+      "group": "Default"
     },
     {
       "fishItemId": 40562,
@@ -2329,7 +2510,8 @@
       "baitKind": "Direct",
       "points": 10,
       "spectralTrigger": false,
-      "tug": "!!"
+      "tug": "!!",
+      "group": "Squid"
     },
     {
       "fishItemId": 40563,
@@ -2339,7 +2521,8 @@
       "baitKind": "Direct",
       "points": 15,
       "spectralTrigger": false,
-      "tug": "!"
+      "tug": "!",
+      "group": "Default"
     },
     {
       "fishItemId": 40564,
@@ -2349,7 +2532,8 @@
       "baitKind": "Direct",
       "points": 41,
       "spectralTrigger": false,
-      "tug": "!!"
+      "tug": "!!",
+      "group": "Default"
     },
     {
       "fishItemId": 40565,
@@ -2359,7 +2543,8 @@
       "baitKind": "Direct",
       "points": 57,
       "spectralTrigger": false,
-      "tug": "!"
+      "tug": "!",
+      "group": "Default"
     },
     {
       "fishItemId": 40566,
@@ -2369,7 +2554,8 @@
       "baitKind": "Direct",
       "points": 38,
       "spectralTrigger": false,
-      "tug": "!!"
+      "tug": "!!",
+      "group": "Default"
     },
     {
       "fishItemId": 40567,
@@ -2379,7 +2565,8 @@
       "baitKind": "Direct",
       "points": 33,
       "spectralTrigger": false,
-      "tug": "!"
+      "tug": "!",
+      "group": "Shrimp"
     },
     {
       "fishItemId": 40568,
@@ -2389,7 +2576,8 @@
       "baitKind": "Direct",
       "points": 55,
       "spectralTrigger": false,
-      "tug": "!!!"
+      "tug": "!!!",
+      "group": "Default"
     },
     {
       "fishItemId": 40569,
@@ -2399,7 +2587,8 @@
       "baitKind": "Direct",
       "points": 100,
       "spectralTrigger": true,
-      "tug": "!!!"
+      "tug": "!!!",
+      "group": "Default"
     },
     {
       "fishItemId": 40570,
@@ -2409,7 +2598,8 @@
       "baitKind": "Direct",
       "points": 227,
       "spectralTrigger": false,
-      "tug": "!!!"
+      "tug": "!!!",
+      "group": "Default"
     },
     {
       "fishItemId": 40571,
@@ -2419,7 +2609,8 @@
       "baitKind": "Direct",
       "points": 81,
       "spectralTrigger": false,
-      "tug": "!!"
+      "tug": "!!",
+      "group": "Squid"
     },
     {
       "fishItemId": 40572,
@@ -2429,7 +2620,8 @@
       "baitKind": "Direct",
       "points": 83,
       "spectralTrigger": false,
-      "tug": "!"
+      "tug": "!",
+      "group": "Shrimp"
     },
     {
       "fishItemId": 40573,
@@ -2439,7 +2631,8 @@
       "baitKind": "Direct",
       "points": 218,
       "spectralTrigger": false,
-      "tug": "!"
+      "tug": "!",
+      "group": "Default"
     },
     {
       "fishItemId": 40574,
@@ -2449,7 +2642,8 @@
       "baitKind": "Direct",
       "points": 83,
       "spectralTrigger": false,
-      "tug": "!"
+      "tug": "!",
+      "group": "Default"
     },
     {
       "fishItemId": 40575,
@@ -2459,7 +2653,8 @@
       "baitKind": "Direct",
       "points": 76,
       "spectralTrigger": false,
-      "tug": "!!"
+      "tug": "!!",
+      "group": "Default"
     },
     {
       "fishItemId": 40576,
@@ -2469,7 +2664,8 @@
       "baitKind": "Direct",
       "points": 187,
       "spectralTrigger": false,
-      "tug": "!!"
+      "tug": "!!",
+      "group": "Default"
     },
     {
       "fishItemId": 40577,
@@ -2479,7 +2675,8 @@
       "baitKind": "Direct",
       "points": 218,
       "spectralTrigger": false,
-      "tug": "!"
+      "tug": "!",
+      "group": "Default"
     },
     {
       "fishItemId": 40578,
@@ -2489,7 +2686,8 @@
       "baitKind": "Direct",
       "points": 178,
       "spectralTrigger": false,
-      "tug": "!!!"
+      "tug": "!!!",
+      "group": "Default"
     },
     {
       "fishItemId": 40579,
@@ -2499,7 +2697,8 @@
       "baitKind": "Direct",
       "points": 126,
       "spectralTrigger": false,
-      "tug": "!!"
+      "tug": "!!",
+      "group": "Squid"
     },
     {
       "fishItemId": 40580,
@@ -2509,7 +2708,8 @@
       "baitKind": "Direct",
       "points": 500,
       "spectralTrigger": false,
-      "tug": "!!!"
+      "tug": "!!!",
+      "group": "Default"
     },
     {
       "fishItemId": 40581,
@@ -2519,7 +2719,8 @@
       "baitKind": "Direct",
       "points": 10,
       "spectralTrigger": false,
-      "tug": "!"
+      "tug": "!",
+      "group": "Default"
     },
     {
       "fishItemId": 40582,
@@ -2529,7 +2730,8 @@
       "baitKind": "Direct",
       "points": 14,
       "spectralTrigger": false,
-      "tug": "!"
+      "tug": "!",
+      "group": "Default"
     },
     {
       "fishItemId": 40583,
@@ -2539,7 +2741,8 @@
       "baitKind": "Direct",
       "points": 10,
       "spectralTrigger": false,
-      "tug": "!!"
+      "tug": "!!",
+      "group": "Default"
     },
     {
       "fishItemId": 40584,
@@ -2549,7 +2752,8 @@
       "baitKind": "Direct",
       "points": 37,
       "spectralTrigger": false,
-      "tug": "!"
+      "tug": "!",
+      "group": "Default"
     },
     {
       "fishItemId": 40585,
@@ -2559,7 +2763,8 @@
       "baitKind": "Direct",
       "points": 40,
       "spectralTrigger": false,
-      "tug": "!!"
+      "tug": "!!",
+      "group": "Default"
     },
     {
       "fishItemId": 40586,
@@ -2569,7 +2774,8 @@
       "baitKind": "Direct",
       "points": 31,
       "spectralTrigger": false,
-      "tug": "!"
+      "tug": "!",
+      "group": "Shrimp"
     },
     {
       "fishItemId": 40587,
@@ -2579,7 +2785,8 @@
       "baitKind": "Direct",
       "points": 52,
       "spectralTrigger": false,
-      "tug": "!!"
+      "tug": "!!",
+      "group": "Default"
     },
     {
       "fishItemId": 40588,
@@ -2589,7 +2796,8 @@
       "baitKind": "Direct",
       "points": 49,
       "spectralTrigger": false,
-      "tug": "!!!"
+      "tug": "!!!",
+      "group": "Default"
     },
     {
       "fishItemId": 40589,
@@ -2599,7 +2807,8 @@
       "baitKind": "Direct",
       "points": 100,
       "spectralTrigger": true,
-      "tug": "!!!"
+      "tug": "!!!",
+      "group": "Default"
     },
     {
       "fishItemId": 40590,
@@ -2609,7 +2818,8 @@
       "baitKind": "Direct",
       "points": 223,
       "spectralTrigger": false,
-      "tug": "!!!"
+      "tug": "!!!",
+      "group": "Default"
     },
     {
       "fishItemId": 40591,
@@ -2619,7 +2829,8 @@
       "baitKind": "Direct",
       "points": 85,
       "spectralTrigger": false,
-      "tug": "!"
+      "tug": "!",
+      "group": "Shrimp"
     },
     {
       "fishItemId": 40592,
@@ -2629,7 +2840,8 @@
       "baitKind": "Direct",
       "points": 79,
       "spectralTrigger": false,
-      "tug": "!!"
+      "tug": "!!",
+      "group": "Default"
     },
     {
       "fishItemId": 40593,
@@ -2639,7 +2851,8 @@
       "baitKind": "Direct",
       "points": 79,
       "spectralTrigger": false,
-      "tug": "!!"
+      "tug": "!!",
+      "group": "Default"
     },
     {
       "fishItemId": 40594,
@@ -2649,7 +2862,8 @@
       "baitKind": "Direct",
       "points": 85,
       "spectralTrigger": false,
-      "tug": "!"
+      "tug": "!",
+      "group": "Shellfish"
     },
     {
       "fishItemId": 40595,
@@ -2659,7 +2873,8 @@
       "baitKind": "Direct",
       "points": 85,
       "spectralTrigger": false,
-      "tug": "!"
+      "tug": "!",
+      "group": "Default"
     },
     {
       "fishItemId": 40596,
@@ -2669,7 +2884,8 @@
       "baitKind": "Direct",
       "points": 184,
       "spectralTrigger": false,
-      "tug": "!"
+      "tug": "!",
+      "group": "Default"
     },
     {
       "fishItemId": 40597,
@@ -2679,7 +2895,8 @@
       "baitKind": "Direct",
       "points": 209,
       "spectralTrigger": false,
-      "tug": "!!"
+      "tug": "!!",
+      "group": "Default"
     },
     {
       "fishItemId": 40598,
@@ -2689,7 +2906,8 @@
       "baitKind": "Direct",
       "points": 185,
       "spectralTrigger": false,
-      "tug": "!!!"
+      "tug": "!!!",
+      "group": "Default"
     },
     {
       "fishItemId": 40599,
@@ -2699,7 +2917,8 @@
       "baitKind": "Direct",
       "points": 209,
       "spectralTrigger": false,
-      "tug": "!!"
+      "tug": "!!",
+      "group": "Default"
     },
     {
       "fishItemId": 40600,
@@ -2709,7 +2928,8 @@
       "baitKind": "Direct",
       "points": 500,
       "spectralTrigger": false,
-      "tug": "!!!"
+      "tug": "!!!",
+      "group": "Default"
     },
     {
       "fishItemId": 51209,
@@ -2719,7 +2939,8 @@
       "baitKind": "Direct",
       "points": 10,
       "spectralTrigger": false,
-      "tug": "!"
+      "tug": "!",
+      "group": "Mantis"
     },
     {
       "fishItemId": 51210,
@@ -2729,7 +2950,8 @@
       "baitKind": "Direct",
       "points": 15,
       "spectralTrigger": false,
-      "tug": "!!"
+      "tug": "!!",
+      "group": "Default"
     },
     {
       "fishItemId": 51211,
@@ -2739,7 +2961,8 @@
       "baitKind": "Direct",
       "points": 11,
       "spectralTrigger": false,
-      "tug": "!!"
+      "tug": "!!",
+      "group": "Default"
     },
     {
       "fishItemId": 51212,
@@ -2749,7 +2972,8 @@
       "baitKind": "Direct",
       "points": 35,
       "spectralTrigger": false,
-      "tug": "!"
+      "tug": "!",
+      "group": "Default"
     },
     {
       "fishItemId": 51213,
@@ -2759,7 +2983,8 @@
       "baitKind": "Direct",
       "points": 35,
       "spectralTrigger": false,
-      "tug": "!!"
+      "tug": "!!",
+      "group": "Default"
     },
     {
       "fishItemId": 51214,
@@ -2769,7 +2994,8 @@
       "baitKind": "Direct",
       "points": 40,
       "spectralTrigger": false,
-      "tug": "!!"
+      "tug": "!!",
+      "group": "Default"
     },
     {
       "fishItemId": 51215,
@@ -2779,7 +3005,8 @@
       "baitKind": "Direct",
       "points": 59,
       "spectralTrigger": false,
-      "tug": "!!!"
+      "tug": "!!!",
+      "group": "Prehistoric"
     },
     {
       "fishItemId": 51216,
@@ -2789,7 +3016,8 @@
       "baitKind": "Direct",
       "points": 52,
       "spectralTrigger": false,
-      "tug": "!"
+      "tug": "!",
+      "group": "Default"
     },
     {
       "fishItemId": 51217,
@@ -2799,7 +3027,8 @@
       "baitKind": "Direct",
       "points": 100,
       "spectralTrigger": true,
-      "tug": "!!!"
+      "tug": "!!!",
+      "group": "Default"
     },
     {
       "fishItemId": 51218,
@@ -2809,7 +3038,8 @@
       "baitKind": "Direct",
       "points": 236,
       "spectralTrigger": false,
-      "tug": "!!!"
+      "tug": "!!!",
+      "group": "Default"
     },
     {
       "fishItemId": 51219,
@@ -2819,7 +3049,8 @@
       "baitKind": "Direct",
       "points": 86,
       "spectralTrigger": false,
-      "tug": "!"
+      "tug": "!",
+      "group": "Mantis"
     },
     {
       "fishItemId": 51220,
@@ -2829,7 +3060,8 @@
       "baitKind": "Direct",
       "points": 84,
       "spectralTrigger": false,
-      "tug": "!"
+      "tug": "!",
+      "group": "Default"
     },
     {
       "fishItemId": 51221,
@@ -2839,7 +3071,8 @@
       "baitKind": "Direct",
       "points": 69,
       "spectralTrigger": false,
-      "tug": "!"
+      "tug": "!",
+      "group": "Default"
     },
     {
       "fishItemId": 51222,
@@ -2849,7 +3082,8 @@
       "baitKind": "Direct",
       "points": 199,
       "spectralTrigger": false,
-      "tug": "!"
+      "tug": "!",
+      "group": "Default"
     },
     {
       "fishItemId": 51223,
@@ -2859,7 +3093,8 @@
       "baitKind": "Direct",
       "points": 58,
       "spectralTrigger": false,
-      "tug": "!!"
+      "tug": "!!",
+      "group": "Default"
     },
     {
       "fishItemId": 51224,
@@ -2869,7 +3104,8 @@
       "baitKind": "Direct",
       "points": 68,
       "spectralTrigger": false,
-      "tug": "!!!"
+      "tug": "!!!",
+      "group": "Prehistoric"
     },
     {
       "fishItemId": 51225,
@@ -2879,7 +3115,8 @@
       "baitKind": "Mooch",
       "points": 100,
       "spectralTrigger": false,
-      "tug": "!!"
+      "tug": "!!",
+      "group": "Default"
     },
     {
       "fishItemId": 51226,
@@ -2889,7 +3126,8 @@
       "baitKind": "Direct",
       "points": 160,
       "spectralTrigger": false,
-      "tug": "!!!"
+      "tug": "!!!",
+      "group": "Prehistoric"
     },
     {
       "fishItemId": 51227,
@@ -2899,7 +3137,8 @@
       "baitKind": "Direct",
       "points": 200,
       "spectralTrigger": false,
-      "tug": "!!"
+      "tug": "!!",
+      "group": "Default"
     },
     {
       "fishItemId": 51228,
@@ -2909,7 +3148,8 @@
       "baitKind": "Mooch",
       "points": 500,
       "spectralTrigger": false,
-      "tug": "!!!"
+      "tug": "!!!",
+      "group": "Prehistoric"
     },
     {
       "fishItemId": 51229,
@@ -2919,7 +3159,8 @@
       "baitKind": "Direct",
       "points": 8,
       "spectralTrigger": false,
-      "tug": "!"
+      "tug": "!",
+      "group": "Mantis"
     },
     {
       "fishItemId": 51230,
@@ -2929,7 +3170,8 @@
       "baitKind": "Direct",
       "points": 9,
       "spectralTrigger": false,
-      "tug": "!!"
+      "tug": "!!",
+      "group": "Default"
     },
     {
       "fishItemId": 51231,
@@ -2939,7 +3181,8 @@
       "baitKind": "Direct",
       "points": 13,
       "spectralTrigger": false,
-      "tug": "!"
+      "tug": "!",
+      "group": "Default"
     },
     {
       "fishItemId": 51232,
@@ -2949,7 +3192,8 @@
       "baitKind": "Direct",
       "points": 36,
       "spectralTrigger": false,
-      "tug": "!"
+      "tug": "!",
+      "group": "Default"
     },
     {
       "fishItemId": 51233,
@@ -2959,7 +3203,8 @@
       "baitKind": "Direct",
       "points": 31,
       "spectralTrigger": false,
-      "tug": "!!"
+      "tug": "!!",
+      "group": "Default"
     },
     {
       "fishItemId": 51234,
@@ -2969,7 +3214,8 @@
       "baitKind": "Direct",
       "points": 27,
       "spectralTrigger": false,
-      "tug": "!!"
+      "tug": "!!",
+      "group": "Prehistoric"
     },
     {
       "fishItemId": 51235,
@@ -2979,7 +3225,8 @@
       "baitKind": "Direct",
       "points": 48,
       "spectralTrigger": false,
-      "tug": "!!!"
+      "tug": "!!!",
+      "group": "Prehistoric"
     },
     {
       "fishItemId": 51237,
@@ -2989,7 +3236,8 @@
       "baitKind": "Direct",
       "points": 100,
       "spectralTrigger": true,
-      "tug": "!!!"
+      "tug": "!!!",
+      "group": "Default"
     },
     {
       "fishItemId": 51238,
@@ -2999,7 +3247,8 @@
       "baitKind": "Direct",
       "points": 210,
       "spectralTrigger": false,
-      "tug": "!!!"
+      "tug": "!!!",
+      "group": "Default"
     },
     {
       "fishItemId": 51687,
@@ -3009,7 +3258,8 @@
       "baitKind": "Unknown",
       "points": 300,
       "spectralTrigger": false,
-      "tug": "!"
+      "tug": "!",
+      "group": "Default"
     },
     {
       "fishItemId": 51239,
@@ -3019,7 +3269,8 @@
       "baitKind": "Direct",
       "points": 75,
       "spectralTrigger": false,
-      "tug": "!"
+      "tug": "!",
+      "group": "Mantis"
     },
     {
       "fishItemId": 51240,
@@ -3029,7 +3280,8 @@
       "baitKind": "Direct",
       "points": 70,
       "spectralTrigger": false,
-      "tug": "!!"
+      "tug": "!!",
+      "group": "Default"
     },
     {
       "fishItemId": 51241,
@@ -3039,7 +3291,8 @@
       "baitKind": "Direct",
       "points": 92,
       "spectralTrigger": false,
-      "tug": "!"
+      "tug": "!",
+      "group": "Default"
     },
     {
       "fishItemId": 51242,
@@ -3049,7 +3302,8 @@
       "baitKind": "Direct",
       "points": 164,
       "spectralTrigger": false,
-      "tug": "!!"
+      "tug": "!!",
+      "group": "Default"
     },
     {
       "fishItemId": 51243,
@@ -3059,7 +3313,8 @@
       "baitKind": "Direct",
       "points": 70,
       "spectralTrigger": false,
-      "tug": "!!!"
+      "tug": "!!!",
+      "group": "Prehistoric"
     },
     {
       "fishItemId": 51244,
@@ -3069,7 +3324,8 @@
       "baitKind": "Direct",
       "points": 150,
       "spectralTrigger": false,
-      "tug": "!"
+      "tug": "!",
+      "group": "Mantis"
     },
     {
       "fishItemId": 51245,
@@ -3079,7 +3335,8 @@
       "baitKind": "Direct",
       "points": 70,
       "spectralTrigger": false,
-      "tug": "!!!"
+      "tug": "!!!",
+      "group": "Default"
     },
     {
       "fishItemId": 51246,
@@ -3089,7 +3346,8 @@
       "baitKind": "Direct",
       "points": 204,
       "spectralTrigger": false,
-      "tug": "!!!"
+      "tug": "!!!",
+      "group": "Prehistoric"
     },
     {
       "fishItemId": 51247,
@@ -3099,7 +3357,8 @@
       "baitKind": "Direct",
       "points": 500,
       "spectralTrigger": false,
-      "tug": "!!!"
+      "tug": "!!!",
+      "group": "Default"
     },
     {
       "fishItemId": 51687,
@@ -3109,9 +3368,10 @@
       "baitKind": "Unknown",
       "points": 300,
       "spectralTrigger": false,
-      "tug": "!"
+      "tug": "!",
+      "group": "Default"
     }
   ],
-  "checkedUtc": "2026-11-15",
-  "targetProcessing": "Preferred bait, single-fish points, tug and explicit spectral-trigger identities only from pinned CSV snapshots, checked 2026-11-15. Item/FishParameter/pool/bait-kind matched against both clients. A preferred fish is a mooch source, not inventory bait. Blank preferred bait remains Unknown. No bite times, catch rates, prose or source code redistributed. Existing 52 basic rows are preserved."
+  "checkedUtc": "2026-11-16",
+  "targetProcessing": "Preferred bait, single-fish points, tug, explicit spectral-trigger identities and Species group facts only from pinned CSV snapshots, checked 2026-11-16. Item/FishParameter/pool/bait-kind matched against both clients. A preferred fish is a mooch source, not inventory bait. Blank preferred bait remains Unknown; blank Species remains Default (unclassified). Groups do not establish achievement IDs, thresholds or player/party progress. No bite times, catch rates, prose or source code redistributed. Existing 52 basic rows are preserved."
 }
