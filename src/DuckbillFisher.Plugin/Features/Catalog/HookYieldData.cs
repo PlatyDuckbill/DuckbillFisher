@@ -81,7 +81,7 @@ internal static class HookYieldText
             if (range is null) return UiText.Get(T.ConditionUnknown);
             var count = range.Maximum is null ? UiText.Get(T.HookYieldCountAtLeast, range.Minimum)
                 : UiText.Get(T.HookYieldCount, range.Display);
-            return UiText.Get(range.Evidence == HookYieldEvidence.Inferred ? T.HookYieldInferredValue : T.HookYieldObservedValue, count);
+            return range.Evidence == HookYieldEvidence.Inferred ? UiText.Get(T.HookYieldInferredValue, count) : count;
         }
     }
 }

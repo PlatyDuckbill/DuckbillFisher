@@ -1139,7 +1139,6 @@ internal enum TextKey
     DeliveryHint,
     HookYieldDoubleValue,
     HookYieldTripleValue,
-    HookYieldObservedValue,
     HookYieldInferredValue,
     ChangelogUndiscoveredMap,
     ChangelogMenuWheel,
