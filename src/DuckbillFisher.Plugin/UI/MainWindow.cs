@@ -274,88 +274,60 @@ internal sealed class MainWindow : Window
 
     private static bool Shortcut(FontAwesomeIcon icon, string label, string id, float width) => UiWidgets.ActionButton(icon, label, id, width);
 
+    public (int Brightness, int Depth, int Transparency) ResolveAppearance(FishPreferencesView settings) =>
+        appearance.Resolve(settings.ThemeBrightness, settings.ThemeDepth, settings.ThemeTransparency, IsOpen && selectedPage == MainPage.Settings);
+
     private void DrawSettings(FishPreferencesView settings)
     {
-        UiWidgets.Heading(T.InterfaceSettings);
+        if (GameThemeChrome.SettingsHeader(UiText.Get(T.TabSettings),
+            UiText.Get(HasUnreadChangelog?.Invoke() == true ? T.SettingsViewNewUpdates : T.SettingsViewUpdates))) ShowChangelog?.Invoke();
         var language = (int)settings.Language;
         var developer = settings.DeveloperMode;
         var changed = false;
-        if (ImGui.BeginTable("InterfaceSettingsFields", 2, ImGuiTableFlags.SizingFixedFit))
+        ImGui.BeginDisabled(!settings.CanEdit);
+        GameThemeChrome.SectionLabel(UiText.Get(T.AppearanceStyle));
+        if (GameThemeChrome.BeginSettingsFields(3))
         {
-            var labelWidth = new[] { T.Language, T.UiScale, T.DeveloperMode, T.ChangelogTitle }
-                .Max(key => ImGui.CalcTextSize(UiText.Get(key)).X);
-            ImGui.TableSetupColumn("Setting", ImGuiTableColumnFlags.WidthFixed, labelWidth);
-            ImGui.TableSetupColumn("Value", ImGuiTableColumnFlags.WidthStretch);
-            ImGui.BeginDisabled(!settings.CanEdit);
-            ImGui.TableNextRow();
-            ImGui.TableNextColumn();
-            ImGui.AlignTextToFramePadding();
-            ImGui.TextUnformatted(UiText.Get(T.Language));
-            ImGui.TableNextColumn();
-            ImGui.SetNextItemWidth(Math.Max(1, Math.Min(ImGui.GetContentRegionAvail().X, ImGui.GetFontSize() * 14)));
+            GameThemeChrome.SettingsField(UiText.Get(T.ThemeSetting));
+            if (GameThemeChrome.BeginCombo("###InterfaceTheme", UiText.Get(UiThemes.Name(settings.Theme))))
+            {
+                foreach (var theme in UiThemes.Choices)
+                {
+                    var selected = theme == UiThemeSettings.Normalize(settings.Theme);
+                    if (ImGui.Selectable(UiText.Label(UiThemes.Name(theme), $"Theme.{theme}"), selected)) preferences.SetTheme(theme);
+                    if (selected) ImGui.SetItemDefaultFocus();
+                    UiWidgets.Tooltip(UiText.Get(UiThemes.Description(theme)));
+                }
+                ImGui.EndCombo();
+            }
+            UiWidgets.Tooltip(UiText.Get(T.ThemeSettingHint));
+            GameThemeChrome.SettingsField(UiText.Get(T.Language));
             changed = GameThemeChrome.Combo("###Language", ref language, LanguageNames, LanguageNames.Length);
-            ImGui.TableNextRow();
-            ImGui.TableNextColumn();
-            ImGui.AlignTextToFramePadding();
-            ImGui.TextUnformatted(UiText.Get(T.UiScale));
-            ImGui.TableNextColumn();
+            GameThemeChrome.SettingsField(UiText.Get(T.UiScale));
             var scaleIndex = Array.IndexOf(UiScale.Choices, settings.UiScalePercent);
-            var scaleWidth = Math.Min(ImGui.GetContentRegionAvail().X, ImGui.GetFontSize() * 14);
+            var scaleWidth = Math.Min(ImGui.GetContentRegionAvail().X, ImGui.GetFontSize() * 20);
             ImGui.SetNextItemWidth(Math.Max(1, scaleWidth - ImGui.GetFrameHeight() - ImGui.GetStyle().ItemSpacing.X));
             if (GameThemeChrome.Combo("###UiScale", ref scaleIndex, UiScale.Labels, UiScale.Labels.Length))
                 preferences.SetUiScale(UiScale.Choices[scaleIndex]);
             UiWidgets.Tooltip(UiText.Get(T.UiScaleHint));
             ImGui.SameLine();
-            if (UiWidgets.IconButton(FontAwesomeIcon.Undo, "ResetUiScale", UiText.Get(T.UiScaleReset)))
-                preferences.SetUiScale(UiScale.DefaultPercent);
-            ImGui.TableNextRow();
-            ImGui.TableNextColumn();
-            ImGui.AlignTextToFramePadding();
-            ImGui.TextUnformatted(UiText.Get(T.DeveloperMode));
-            ImGui.TableNextColumn();
-            changed |= ImGui.Checkbox("###DeveloperMode", ref developer);
-            UiWidgets.Tooltip(UiText.Get(T.DeveloperModeHint));
-            ImGui.EndDisabled();
-            ImGui.TableNextRow();
-            ImGui.TableNextColumn();
-            ImGui.AlignTextToFramePadding();
-            ImGui.TextUnformatted(UiText.Get(T.ChangelogTitle));
-            ImGui.TableNextColumn();
-            var updatesWidth = Math.Max(1, Math.Min(ImGui.GetContentRegionAvail().X, ImGui.GetFontSize() * 14));
-            if (UiWidgets.ActionButton(FontAwesomeIcon.History, HasUnreadChangelog?.Invoke() == true ? T.SettingsViewNewUpdates : T.SettingsViewUpdates, "ShowChangelog", updatesWidth)) ShowChangelog?.Invoke();
+            if (UiWidgets.IconButton(FontAwesomeIcon.Undo, "ResetUiScale", UiText.Get(T.UiScaleReset))) preferences.SetUiScale(UiScale.DefaultPercent);
             ImGui.EndTable();
         }
-        if (changed) preferences.SetInterface((UiLanguage)language, developer);
-        if (settings.Error is { } error) ImGui.TextWrapped(error.Display);
-        ImGui.BeginDisabled(!settings.CanEdit);
-        GameThemeChrome.SectionLabel(UiText.Get(T.AppearanceStyle));
-        ImGui.AlignTextToFramePadding();
-        ImGui.TextUnformatted(UiText.Get(T.ThemeSetting));
-        ImGui.SameLine();
-        ImGui.SetNextItemWidth(Math.Max(1, Math.Min(ImGui.GetContentRegionAvail().X, ImGui.GetFontSize() * 20)));
-        if (GameThemeChrome.BeginCombo("###InterfaceTheme", UiText.Get(UiThemes.Name(settings.Theme))))
-        {
-            foreach (var theme in UiThemes.Choices)
-            {
-                var selected = theme == UiThemeSettings.Normalize(settings.Theme);
-                if (ImGui.Selectable(UiText.Label(UiThemes.Name(theme), $"Theme.{theme}"), selected)) preferences.SetTheme(theme);
-                if (selected) ImGui.SetItemDefaultFocus();
-                UiWidgets.Tooltip(UiText.Get(UiThemes.Description(theme)));
-            }
-            ImGui.EndCombo();
-        }
-        UiWidgets.Tooltip(UiText.Get(T.ThemeSettingHint));
         if (appearance.Draw(UiThemeSettings.Normalize(settings.Theme) == UiTheme.Pearl, settings.ThemeBrightness, settings.ThemeDepth, settings.ThemeTransparency,
             UiText.Get(T.AppearanceBrightness), UiText.Get(T.AppearanceDepth), UiText.Get(T.AppearanceTransparency), UiText.Get(T.AppearanceHint),
-            UiText.Get(T.AppearanceReset), UiText.Get(T.AppearancePreview)) is { } adjustment)
+            UiText.Get(T.AppearanceReset), UiText.Get(T.AppearanceDetails)) is { } adjustment)
             preferences.SetAppearance(adjustment.Brightness, adjustment.Depth, adjustment.Transparency);
+        ImGui.Spacing();
+        changed |= ImGui.Checkbox(UiText.Label(T.DeveloperMode, "DeveloperMode"), ref developer);
+        UiWidgets.Tooltip(UiText.Get(T.DeveloperModeHint));
         ImGui.EndDisabled();
+        if (changed) preferences.SetInterface((UiLanguage)language, developer);
+        if (settings.Error is { } error) ImGui.TextWrapped(error.Display);
         ImGui.Spacing();
         backup.Draw(settings);
-        ImGui.Spacing();
-        ImGui.Separator();
-        if (FishingData.Failure is not null || UiWidgets.Disclosure(UiText.Label(T.DataSourceLabel, "SettingsSources")))
-            FishDetailPanel.DrawSources();
+        ImGui.Spacing(); ImGui.Separator();
+        if (FishingData.Failure is not null || UiWidgets.Disclosure(UiText.Label(T.DataSourceLabel, "SettingsSources"))) FishDetailPanel.DrawSources();
     }
 
     private void DrawFishGuide()

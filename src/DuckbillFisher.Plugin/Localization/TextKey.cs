@@ -29,7 +29,7 @@ internal enum TextKey
     AppearanceTransparency,
     AppearanceHint,
     AppearanceReset,
-    AppearancePreview,
+    AppearanceDetails,
     ThemeSetting,
     ThemeSettingHint,
     ThemeOriginal,
