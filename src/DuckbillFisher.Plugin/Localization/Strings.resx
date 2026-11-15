@@ -1190,7 +1190,7 @@ Shares duplicate prevention with zero-minute favorite alerts and uses the channe
   <data name="SettingsViewNewUpdates" xml:space="preserve"><value>View updates · New</value></data>
   <data name="ChangelogSuiteTitle" xml:space="preserve"><value>A refined fishing companion</value></data>
   <data name="ChangelogSuiteSummary" xml:space="preserve"><value>Browse the familiar fish list and details with calmer controls and clearer selection.</value></data>
-  <data name="ChangelogSuiteControls" xml:space="preserve"><value>Adjust screen brightness and surface depth in Smoke and Pearl.</value></data>
+  <data name="ChangelogSuiteControls" xml:space="preserve"><value>Adjust screen brightness, surface depth and background transparency in Smoke and Pearl.</value></data>
   <data name="ChangelogSuiteDensity" xml:space="preserve"><value>Keep the compact fish rows, adjustable split and familiar detail order.</value></data>
   <data name="ChangelogSuiteHistory" xml:space="preserve"><value>Read each update by its main feature and other improvements, and spot unread updates in settings.</value></data>
   <data name="ChangelogMapFeatureTitle" xml:space="preserve"><value>Fishing Log map shortcuts</value></data>
@@ -1210,7 +1210,8 @@ Shares duplicate prevention with zero-minute favorite alerts and uses the channe
   <data name="AppearanceStyle" xml:space="preserve"><value>Screen style</value></data>
   <data name="AppearanceBrightness" xml:space="preserve"><value>Screen brightness</value></data>
   <data name="AppearanceDepth" xml:space="preserve"><value>Surface depth</value></data>
-  <data name="AppearanceHint" xml:space="preserve"><value>Preview below while dragging; release to apply. Brightness does not change transparency. Depth at 0% gives a flat surface.</value></data>
-  <data name="AppearanceReset" xml:space="preserve"><value>Reset brightness and depth</value></data>
+  <data name="AppearanceHint" xml:space="preserve"><value>Preview below while dragging; release to apply. Higher transparency reveals more of the game background. Depth at 0% gives a flat surface.</value></data>
+  <data name="AppearanceReset" xml:space="preserve"><value>Reset brightness, depth and transparency</value></data>
   <data name="AppearancePreview" xml:space="preserve"><value>Surface preview</value></data>
+  <data name="AppearanceTransparency" xml:space="preserve"><value>Background transparency</value></data>
 </root>

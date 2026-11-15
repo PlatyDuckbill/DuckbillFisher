@@ -12,12 +12,12 @@ internal static class UiScale
 
     public static int Normalize(int percent) => UiScaleSettings.Normalize(percent);
 
-    public static void Draw(WindowSystem windows, int percent, UiTheme theme, int brightness = GameThemePalette.DefaultBrightness, int depth = GameThemePalette.DefaultDepth)
+    public static void Draw(WindowSystem windows, int percent, UiTheme theme, int brightness = GameThemePalette.DefaultBrightness, int depth = GameThemePalette.DefaultDepth, int transparency = GameThemePalette.DefaultTransparency)
     {
         var scale = Normalize(percent) / 100f;
         if (scale == 1)
         {
-            DrawThemed(windows, theme, brightness, depth);
+            DrawThemed(windows, theme, brightness, depth, transparency);
             return;
         }
 
@@ -46,7 +46,7 @@ internal static class UiScale
         ImGui.PushFont(ImGui.GetFont());
         try
         {
-            DrawThemed(windows, theme, brightness, depth);
+            DrawThemed(windows, theme, brightness, depth, transparency);
         }
         finally
         {
@@ -56,11 +56,11 @@ internal static class UiScale
         }
     }
 
-    private static void DrawThemed(WindowSystem windows, UiTheme theme, int brightness, int depth)
+    private static void DrawThemed(WindowSystem windows, UiTheme theme, int brightness, int depth, int transparency)
     {
-        using var style = new UiThemeScope(theme, brightness, depth);
+        using var style = new UiThemeScope(theme, brightness, depth, transparency);
         // Match the information surfaces across main/detail/timer without changing stored window settings.
-        var backgrounds = UiThemes.Find(theme, brightness, depth) is not null
+        var backgrounds = UiThemes.Find(theme, brightness, depth, transparency) is not null
             ? windows.Windows.Select(window => (Window: window, Alpha: window.BgAlpha)).ToArray() : null;
         try
         {

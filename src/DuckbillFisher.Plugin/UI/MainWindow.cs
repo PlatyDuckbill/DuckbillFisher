@@ -345,10 +345,10 @@ internal sealed class MainWindow : Window
             ImGui.EndCombo();
         }
         UiWidgets.Tooltip(UiText.Get(T.ThemeSettingHint));
-        if (appearance.Draw(UiThemeSettings.Normalize(settings.Theme) == UiTheme.Pearl, settings.ThemeBrightness, settings.ThemeDepth,
-            UiText.Get(T.AppearanceBrightness), UiText.Get(T.AppearanceDepth), UiText.Get(T.AppearanceHint),
+        if (appearance.Draw(UiThemeSettings.Normalize(settings.Theme) == UiTheme.Pearl, settings.ThemeBrightness, settings.ThemeDepth, settings.ThemeTransparency,
+            UiText.Get(T.AppearanceBrightness), UiText.Get(T.AppearanceDepth), UiText.Get(T.AppearanceTransparency), UiText.Get(T.AppearanceHint),
             UiText.Get(T.AppearanceReset), UiText.Get(T.AppearancePreview)) is { } adjustment)
-            preferences.SetAppearance(adjustment.Brightness, adjustment.Depth);
+            preferences.SetAppearance(adjustment.Brightness, adjustment.Depth, adjustment.Transparency);
         ImGui.EndDisabled();
         ImGui.Spacing();
         backup.Draw(settings);

@@ -25,6 +25,7 @@ internal sealed class CommonSettingsBackup
     public UiTheme Theme { get; set; }
     public int ThemeBrightness { get; set; } = GameThemePalette.DefaultBrightness;
     public int ThemeDepth { get; set; } = GameThemePalette.DefaultDepth;
+    public int ThemeTransparency { get; set; } = GameThemePalette.DefaultTransparency;
     public required bool DeveloperMode { get; set; }
     public required CompactViewSettings Compact { get; set; } = new();
     public required SpawnScheduleSettings Schedule { get; set; } = new();
@@ -43,7 +44,7 @@ internal sealed class CommonSettingsBackup
         SpawnAlertAudience = value.SpawnAlertAudience, RemoveFavoriteOnRegistration = value.RemoveFavoriteOnRegistration,
         Catalog = value.Catalog.Copy(), CatalogPresets = value.CatalogPresets.Select(preset => preset.Copy()).ToList(),
         Language = value.Language, UiScalePercent = value.UiScalePercent, DeveloperMode = value.DeveloperMode,
-        Theme = value.Theme, ThemeBrightness = value.ThemeBrightness, ThemeDepth = value.ThemeDepth,
+        Theme = value.Theme, ThemeBrightness = value.ThemeBrightness, ThemeDepth = value.ThemeDepth, ThemeTransparency = value.ThemeTransparency,
         Compact = value.Compact, Schedule = value.Schedule, Timer = value.Timer.Copy(),
         SpotFishHideCaught = value.SpotFishHideCaught, FishAlertLeadMinutes = new(value.FishAlertLeadMinutes),
         PersonalRecords = new(value.PersonalRecords),
@@ -67,6 +68,7 @@ internal sealed class CommonSettingsBackup
         target.Theme = UiThemeSettings.Normalize(Theme);
         target.ThemeBrightness = GameThemePalette.NormalizeBrightness(ThemeBrightness);
         target.ThemeDepth = GameThemePalette.NormalizeDepth(ThemeDepth);
+        target.ThemeTransparency = GameThemePalette.NormalizeTransparency(ThemeTransparency);
         target.DeveloperMode = DeveloperMode;
         target.Compact = Compact;
         target.Schedule = Schedule;

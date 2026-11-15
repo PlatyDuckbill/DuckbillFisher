@@ -32,6 +32,7 @@ public sealed class FishPreferencesConfiguration : IPluginConfiguration
     public UiTheme Theme { get; set; }
     public int ThemeBrightness { get; set; } = GameThemePalette.DefaultBrightness;
     public int ThemeDepth { get; set; } = GameThemePalette.DefaultDepth;
+    public int ThemeTransparency { get; set; } = GameThemePalette.DefaultTransparency;
     public bool DeveloperMode { get; set; }
     public string LastSeenChangelogVersion { get; set; } = "";
     public CompactViewSettings Compact { get; set; } = new();
