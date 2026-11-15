@@ -31,6 +31,8 @@ internal sealed record FishPreferencesView(int Revision, int Session, bool HasCh
     public UiLanguage Language { get; init; } = UiLanguage.Korean;
     public int UiScalePercent { get; init; } = UiScale.DefaultPercent;
     public UiTheme Theme { get; init; }
+    public int ThemeBrightness { get; init; } = GameThemePalette.DefaultBrightness;
+    public int ThemeDepth { get; init; } = GameThemePalette.DefaultDepth;
     public bool DeveloperMode { get; init; }
     public string LastSeenChangelogVersion { get; init; } = "";
     public CompactViewSettings Compact { get; init; } = new();
@@ -78,6 +80,7 @@ internal sealed class FishPreferences : IDisposable
     private (UiLanguage Language, bool DeveloperMode)? pendingInterface;
     private int? pendingUiScale;
     private UiTheme? pendingTheme;
+    private (int Brightness, int Depth)? pendingAppearance;
     private CompactViewSettings? pendingCompact;
     private SpawnScheduleSettings? pendingSchedule;
     private TimerEdit? pendingTimer;
@@ -227,6 +230,12 @@ internal sealed class FishPreferences : IDisposable
         lock (gate)
             if (!disposed && writable && UiScale.Choices.Contains(percent))
                 pendingUiScale = percent;
+    }
+
+    public void SetAppearance(int brightness, int depth)
+    {
+        lock (gate)
+            if (!disposed && writable) pendingAppearance = (GameThemePalette.NormalizeBrightness(brightness), GameThemePalette.NormalizeDepth(depth));
     }
 
     public void SetTheme(UiTheme theme)
@@ -501,6 +510,7 @@ internal sealed class FishPreferences : IDisposable
                     pendingInterface = null;
                     pendingUiScale = null;
                     pendingTheme = null;
+                    pendingAppearance = null;
                     pendingCompact = null;
                     pendingSchedule = null;
                     pendingTimer = null;
@@ -512,7 +522,7 @@ internal sealed class FishPreferences : IDisposable
                     foreach (var edit in manualEdits) pending.Enqueue(edit);
                 }
             }
-            if (pending.Count == 0 && pendingPersonal.Count == 0 && pendingAlerts is null && pendingFishAlerts.Count == 0 && pendingCatalog is null && pendingPreset is null && pendingInterface is null && pendingUiScale is null && pendingTheme is null && pendingCompact is null && pendingSchedule is null && pendingTimer is null && pendingSpotFishHideCaught is null && pendingCustomSoundPath is null && pendingChangelogVersion is null)
+            if (pending.Count == 0 && pendingPersonal.Count == 0 && pendingAlerts is null && pendingFishAlerts.Count == 0 && pendingCatalog is null && pendingPreset is null && pendingInterface is null && pendingUiScale is null && pendingTheme is null && pendingAppearance is null && pendingCompact is null && pendingSchedule is null && pendingTimer is null && pendingSpotFishHideCaught is null && pendingCustomSoundPath is null && pendingChangelogVersion is null)
                 return;
             var candidate = CopyConfiguration();
             var changed = false;
@@ -550,6 +560,13 @@ internal sealed class FishPreferences : IDisposable
                     changed = true;
                 }
                 pendingChangelogVersion = null;
+            }
+            if (pendingAppearance is { } appearance)
+            {
+                changed |= candidate.ThemeBrightness != appearance.Brightness || candidate.ThemeDepth != appearance.Depth;
+                candidate.ThemeBrightness = appearance.Brightness;
+                candidate.ThemeDepth = appearance.Depth;
+                pendingAppearance = null;
             }
             if (pendingTheme is { } theme)
             {
@@ -742,7 +759,7 @@ internal sealed class FishPreferences : IDisposable
             CatalogPresetError = view.CatalogPresetError,
             Language = configuration.Language, DeveloperMode = configuration.DeveloperMode,
             UiScalePercent = configuration.UiScalePercent,
-            Theme = configuration.Theme,
+            Theme = configuration.Theme, ThemeBrightness = configuration.ThemeBrightness, ThemeDepth = configuration.ThemeDepth,
             LastSeenChangelogVersion = configuration.LastSeenChangelogVersion,
             Compact = configuration.Compact,
             Schedule = configuration.Schedule,
@@ -771,7 +788,7 @@ internal sealed class FishPreferences : IDisposable
         CatalogPresets = configuration.CatalogPresets.Select(value => value.Copy()).ToList(),
         Language = configuration.Language, DeveloperMode = configuration.DeveloperMode,
         UiScalePercent = configuration.UiScalePercent,
-        Theme = configuration.Theme,
+        Theme = configuration.Theme, ThemeBrightness = configuration.ThemeBrightness, ThemeDepth = configuration.ThemeDepth,
         LastSeenChangelogVersion = configuration.LastSeenChangelogVersion,
         Compact = configuration.Compact,
         Schedule = configuration.Schedule,
@@ -815,6 +832,7 @@ internal sealed class FishPreferences : IDisposable
             pendingInterface = null;
             pendingUiScale = null;
             pendingTheme = null;
+            pendingAppearance = null;
             pendingCompact = null;
             pendingSchedule = null;
             pendingTimer = null;

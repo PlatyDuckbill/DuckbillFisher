@@ -23,6 +23,12 @@ internal enum TextKey
     ChangelogTimerFeatureTitle,
     ChangelogTimerFeatureSummary,
 
+    AppearanceStyle,
+    AppearanceBrightness,
+    AppearanceDepth,
+    AppearanceHint,
+    AppearanceReset,
+    AppearancePreview,
     ThemeSetting,
     ThemeSettingHint,
     ThemeOriginal,

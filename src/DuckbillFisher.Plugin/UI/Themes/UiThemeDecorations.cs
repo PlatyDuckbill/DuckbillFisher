@@ -6,16 +6,16 @@ namespace DuckbillFisher.Plugin;
 internal static class UiThemeDecorations
 {
     // Shared selection and accent, with a quiet navigation surface.
-    public static Vector4 NavigationSelection => GameThemePalette.For(UiThemeScope.Current?.IsLight == true).Selection;
-    public static Vector4 NavigationHover => GameThemePalette.For(UiThemeScope.Current?.IsLight == true).Hover;
-    public static Vector4 NavigationAccent => GameThemePalette.For(UiThemeScope.Current?.IsLight == true).Accent;
+    public static Vector4 NavigationSelection => (GameThemeScope.Current ?? GameThemePalette.For(UiThemeScope.Current?.IsLight == true)).Selection;
+    public static Vector4 NavigationHover => (GameThemeScope.Current ?? GameThemePalette.For(UiThemeScope.Current?.IsLight == true)).Hover;
+    public static Vector4 NavigationAccent => (GameThemeScope.Current ?? GameThemePalette.For(UiThemeScope.Current?.IsLight == true)).Accent;
 
     public static void NavigationBand(Vector2 start, float width, float height)
     {
         if (UiThemeScope.Current is not { } theme || width <= 1 || height <= 1) return;
         var draw = ImGui.GetWindowDrawList();
         var end = start + new Vector2(width, height);
-        draw.AddRectFilled(start, end, ImGui.GetColorU32(Vector4.Lerp(theme.Surface, theme.Background, .25f)), 2);
+        GameThemeChrome.ControlSurface(start, end, false, false, true);
         draw.AddLine(new(start.X, end.Y - 1), end - new Vector2(0, 1),
             ImGui.GetColorU32(theme.Border with { W = .22f }));
     }

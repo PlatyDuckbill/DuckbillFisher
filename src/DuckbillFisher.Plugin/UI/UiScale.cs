@@ -12,12 +12,12 @@ internal static class UiScale
 
     public static int Normalize(int percent) => UiScaleSettings.Normalize(percent);
 
-    public static void Draw(WindowSystem windows, int percent, UiTheme theme)
+    public static void Draw(WindowSystem windows, int percent, UiTheme theme, int brightness = GameThemePalette.DefaultBrightness, int depth = GameThemePalette.DefaultDepth)
     {
         var scale = Normalize(percent) / 100f;
         if (scale == 1)
         {
-            DrawThemed(windows, theme);
+            DrawThemed(windows, theme, brightness, depth);
             return;
         }
 
@@ -46,7 +46,7 @@ internal static class UiScale
         ImGui.PushFont(ImGui.GetFont());
         try
         {
-            DrawThemed(windows, theme);
+            DrawThemed(windows, theme, brightness, depth);
         }
         finally
         {
@@ -56,17 +56,17 @@ internal static class UiScale
         }
     }
 
-    private static void DrawThemed(WindowSystem windows, UiTheme theme)
+    private static void DrawThemed(WindowSystem windows, UiTheme theme, int brightness, int depth)
     {
-        using var style = new UiThemeScope(theme);
+        using var style = new UiThemeScope(theme, brightness, depth);
         // Match the information surfaces across main/detail/timer without changing stored window settings.
-        var backgrounds = UiThemes.Find(theme) is not null
+        var backgrounds = UiThemes.Find(theme, brightness, depth) is not null
             ? windows.Windows.Select(window => (Window: window, Alpha: window.BgAlpha)).ToArray() : null;
         try
         {
             if (backgrounds is not null)
                 foreach (var entry in backgrounds) entry.Window.BgAlpha = entry.Window is ChangelogWindow
-                    ? GameThemePalette.OverlayOpacity : GameThemePalette.For(UiThemes.Find(theme).IsLight).Surface.W;
+                    ? GameThemePalette.OverlayOpacity : GameThemeScope.Current!.Surface.W;
             windows.Draw();
         }
         finally

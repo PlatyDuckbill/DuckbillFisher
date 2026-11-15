@@ -1190,7 +1190,7 @@
   <data name="SettingsViewNewUpdates" xml:space="preserve"><value>새 업데이트 보기</value></data>
   <data name="ChangelogSuiteTitle" xml:space="preserve"><value>새 디자인 · 낚시 정보를 더 또렷하게</value></data>
   <data name="ChangelogSuiteSummary" xml:space="preserve"><value>익숙한 어종 목록과 상세 구성에서 더 정돈된 조작부와 선택 표시를 사용할 수 있습니다.</value></data>
-  <data name="ChangelogSuiteControls" xml:space="preserve"><value>스모크·펄 테마에서 메뉴·필터·설정을 일관된 모양으로 사용할 수 있습니다.</value></data>
+  <data name="ChangelogSuiteControls" xml:space="preserve"><value>스모크·펄 테마에서 화면 밝기와 표면 입체감을 조절할 수 있습니다.</value></data>
   <data name="ChangelogSuiteDensity" xml:space="preserve"><value>촘촘한 어종 목록과 조절 가능한 좌우 분할, 익숙한 상세 순서를 유지합니다.</value></data>
   <data name="ChangelogSuiteHistory" xml:space="preserve"><value>대표 기능과 기타 개선으로 정리한 업데이트 내역을 읽고 설정에서 새 업데이트를 확인할 수 있습니다.</value></data>
   <data name="ChangelogMapFeatureTitle" xml:space="preserve"><value>낚시수첩 · 미발견 낚시터 위치</value></data>
@@ -1207,4 +1207,10 @@
   <data name="ChangelogTimerFeatureTitle" xml:space="preserve"><value>낚시 타이머 · 시간 필터</value></data>
   <data name="ChangelogTimerFeatureSummary" xml:space="preserve"><value>낚시 버프의 시간을 확인하고 남은 시간으로 어종 목록을 좁힐 수 있습니다.</value></data>
   <data name="ChangelogInDevelopment" xml:space="preserve"><value>개발 중</value></data>
+  <data name="AppearanceStyle" xml:space="preserve"><value>화면 스타일</value></data>
+  <data name="AppearanceBrightness" xml:space="preserve"><value>화면 밝기</value></data>
+  <data name="AppearanceDepth" xml:space="preserve"><value>표면 입체감</value></data>
+  <data name="AppearanceHint" xml:space="preserve"><value>드래그하는 동안 아래에서 미리 보고, 놓으면 적용합니다. 밝기는 투명도를 바꾸지 않으며, 입체감 0%는 평평하게 표시합니다.</value></data>
+  <data name="AppearanceReset" xml:space="preserve"><value>밝기·입체감 기본값</value></data>
+  <data name="AppearancePreview" xml:space="preserve"><value>표면 미리보기</value></data>
 </root>

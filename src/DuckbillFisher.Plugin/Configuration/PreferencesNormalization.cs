@@ -22,6 +22,8 @@ internal static class PreferencesNormalization
         loaded.CustomAlertSoundPath ??= "";
         loaded.UiScalePercent = UiScale.Normalize(loaded.UiScalePercent);
         loaded.Theme = UiThemeSettings.Normalize(loaded.Theme);
+        loaded.ThemeBrightness = GameThemePalette.NormalizeBrightness(loaded.ThemeBrightness);
+        loaded.ThemeDepth = GameThemePalette.NormalizeDepth(loaded.ThemeDepth);
         loaded.Schedule = PreferencesMigration.Schedule(loaded.Schedule, version);
         loaded.LastSeenChangelogVersion = PreferencesMigration.SeenVersion(loaded.LastSeenChangelogVersion);
         loaded.Timer = loaded.Timer is not null && loaded.Timer.IsValid() ? loaded.Timer.Copy() : new();

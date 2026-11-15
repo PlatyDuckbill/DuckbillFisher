@@ -210,7 +210,7 @@ public sealed class Plugin : IDalamudPlugin
     private void DrawWindows()
     {
         var settings = fishPreferences.View;
-        UiScale.Draw(windows, settings.UiScalePercent, settings.Theme);
+        UiScale.Draw(windows, settings.UiScalePercent, settings.Theme, settings.ThemeBrightness, settings.ThemeDepth);
     }
 
     public void Dispose()

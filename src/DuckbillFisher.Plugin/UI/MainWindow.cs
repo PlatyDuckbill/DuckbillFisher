@@ -9,6 +9,7 @@ namespace DuckbillFisher.Plugin;
 
 internal sealed class MainWindow : Window
 {
+    private readonly ThemeAdjustmentEditor appearance = new();
     private static readonly T[] Markers = [T.MarkCast, T.MarkWait, T.MarkBite, T.MarkHook, T.MarkRetrieve, T.MarkEnd, T.MarkMooch, T.MarkMove, T.MarkLogout];
     private static readonly T[] NavigationLabels = [T.TabCatalog, T.TabAlerts, T.RecommendationTitle, T.ScheduleTitle,
         T.OceanBetaTitle, T.TabCollectionProgress, T.TabHistory, T.TabSettings, T.TabGuide, T.TabFishing];
@@ -239,8 +240,7 @@ internal sealed class MainWindow : Window
                     : ImGui.GetColorU32(active ? ImGuiCol.Text : ImGuiCol.TextDisabled), icon.ToIconString());
             if (active && theme is not null)
             {
-                var middle = MathF.Round((min.Y + max.Y) / 2);
-                draw.AddTriangleFilled(new(min.X + 1, middle), new(min.X + 4, middle - 3), new(min.X + 4, middle + 3), ImGui.GetColorU32(accent));
+
                 draw.AddLine(new(min.X + ImGui.GetStyle().FramePadding.X, max.Y - 1),
                     new(max.X - ImGui.GetStyle().FramePadding.X, max.Y - 1), ImGui.GetColorU32(accent), 2);
             }
@@ -282,7 +282,7 @@ internal sealed class MainWindow : Window
         var changed = false;
         if (ImGui.BeginTable("InterfaceSettingsFields", 2, ImGuiTableFlags.SizingFixedFit))
         {
-            var labelWidth = new[] { T.Language, T.UiScale, T.ThemeSetting, T.DeveloperMode, T.ChangelogTitle }
+            var labelWidth = new[] { T.Language, T.UiScale, T.DeveloperMode, T.ChangelogTitle }
                 .Max(key => ImGui.CalcTextSize(UiText.Get(key)).X);
             ImGui.TableSetupColumn("Setting", ImGuiTableColumnFlags.WidthFixed, labelWidth);
             ImGui.TableSetupColumn("Value", ImGuiTableColumnFlags.WidthStretch);
@@ -311,25 +311,6 @@ internal sealed class MainWindow : Window
             ImGui.TableNextRow();
             ImGui.TableNextColumn();
             ImGui.AlignTextToFramePadding();
-            ImGui.TextUnformatted(UiText.Get(T.ThemeSetting));
-            ImGui.TableNextColumn();
-            ImGui.SetNextItemWidth(Math.Max(1, Math.Min(ImGui.GetContentRegionAvail().X, ImGui.GetFontSize() * 20)));
-            if (GameThemeChrome.BeginCombo("###InterfaceTheme", UiText.Get(UiThemes.Name(settings.Theme))))
-            {
-                foreach (var theme in UiThemes.Choices)
-                {
-                    var selected = theme == settings.Theme;
-                    if (ImGui.Selectable(UiText.Label(UiThemes.Name(theme), $"Theme.{theme}"), selected))
-                        preferences.SetTheme(theme);
-                    if (selected) ImGui.SetItemDefaultFocus();
-                    UiWidgets.Tooltip(UiText.Get(UiThemes.Description(theme)));
-                }
-                ImGui.EndCombo();
-            }
-            UiWidgets.Tooltip(UiText.Get(T.ThemeSettingHint));
-            ImGui.TableNextRow();
-            ImGui.TableNextColumn();
-            ImGui.AlignTextToFramePadding();
             ImGui.TextUnformatted(UiText.Get(T.DeveloperMode));
             ImGui.TableNextColumn();
             changed |= ImGui.Checkbox("###DeveloperMode", ref developer);
@@ -346,6 +327,30 @@ internal sealed class MainWindow : Window
         }
         if (changed) preferences.SetInterface((UiLanguage)language, developer);
         if (settings.Error is { } error) ImGui.TextWrapped(error.Display);
+        ImGui.BeginDisabled(!settings.CanEdit);
+        GameThemeChrome.SectionLabel(UiText.Get(T.AppearanceStyle));
+        ImGui.AlignTextToFramePadding();
+        ImGui.TextUnformatted(UiText.Get(T.ThemeSetting));
+        ImGui.SameLine();
+        ImGui.SetNextItemWidth(Math.Max(1, Math.Min(ImGui.GetContentRegionAvail().X, ImGui.GetFontSize() * 20)));
+        if (GameThemeChrome.BeginCombo("###InterfaceTheme", UiText.Get(UiThemes.Name(settings.Theme))))
+        {
+            foreach (var theme in UiThemes.Choices)
+            {
+                var selected = theme == UiThemeSettings.Normalize(settings.Theme);
+                if (ImGui.Selectable(UiText.Label(UiThemes.Name(theme), $"Theme.{theme}"), selected)) preferences.SetTheme(theme);
+                if (selected) ImGui.SetItemDefaultFocus();
+                UiWidgets.Tooltip(UiText.Get(UiThemes.Description(theme)));
+            }
+            ImGui.EndCombo();
+        }
+        UiWidgets.Tooltip(UiText.Get(T.ThemeSettingHint));
+        if (appearance.Draw(UiThemeSettings.Normalize(settings.Theme) == UiTheme.Pearl, settings.ThemeBrightness, settings.ThemeDepth,
+            UiText.Get(T.AppearanceBrightness), UiText.Get(T.AppearanceDepth), UiText.Get(T.AppearanceHint),
+            UiText.Get(T.AppearanceReset), UiText.Get(T.AppearancePreview)) is { } adjustment)
+            preferences.SetAppearance(adjustment.Brightness, adjustment.Depth);
+        ImGui.EndDisabled();
+        ImGui.Spacing();
         backup.Draw(settings);
         ImGui.Spacing();
         ImGui.Separator();
