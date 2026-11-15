@@ -141,7 +141,7 @@ internal sealed class BaitFinder : IDisposable
     public void DrawButton(FishingItemView item, int session)
     {
         ImGui.BeginDisabled(!CanRequest(item.Id, session));
-        if (ImGui.SmallButton(UiText.Label(T.BaitFind, "FindBait"))) Request(item, session);
+        if (UiWidgets.SmallButton(UiText.Label(T.BaitFind, "FindBait"))) Request(item, session);
         ImGui.EndDisabled();
         UiWidgets.Tooltip(UiText.Get(T.BaitFindHint));
     }
@@ -168,7 +168,7 @@ internal sealed class BaitFinder : IDisposable
         ImGui.TableNextColumn();
         ImGui.TextWrapped(message);
         ImGui.TableNextColumn();
-        if (ImGui.SmallButton(UiText.Label(T.BaitFindCancel, "CancelFindBait"))) Cancel();
+        if (UiWidgets.SmallButton(UiText.Label(T.BaitFindCancel, "CancelFindBait"))) Cancel();
         ImGui.EndTable();
     }
 

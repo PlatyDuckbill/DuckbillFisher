@@ -167,6 +167,7 @@ internal sealed class ChangelogWindow : Window
 
     public override void Draw()
     {
+        GameThemeChrome.WindowSurface();
         if (ImGui.BeginChild("ChangelogContent", new Vector2(0, -ImGui.GetFrameHeightWithSpacing())))
         {
             if (resetScroll) { ImGui.SetScrollY(0); resetScroll = false; }
@@ -185,9 +186,7 @@ internal sealed class ChangelogWindow : Window
                 ImGui.Spacing();
                 if (release.FeatureTitle is { } title)
                 {
-                    UiWidgets.Icon(release.FeatureIcon);
-                    ImGui.SameLine();
-                    UiWidgets.TextColored(UiThemeScope.Current is not null ? UiThemeColors.Information : new Vector4(0.45f, 0.82f, 1, 1), UiText.Get(title));
+                    GameThemeChrome.FeatureTitle(UiText.Get(title));
                     if (release.FeatureSummary is { } summary) ImGui.TextWrapped(UiText.Get(summary));
                     ImGui.Separator();
                     ImGui.Spacing();
@@ -196,7 +195,7 @@ internal sealed class ChangelogWindow : Window
                 if (i == 0) contentShown = true;
                 if (release.OtherEntries is { Length: > 0 } other)
                 {
-                    UiWidgets.Heading(T.ChangelogOtherImprovements);
+                    GameThemeChrome.SectionLabel(UiText.Get(T.ChangelogOtherImprovements));
                     foreach (var (icon, text) in other) Entry(icon, text);
                 }
             }
@@ -206,20 +205,10 @@ internal sealed class ChangelogWindow : Window
                 ImGui.TextWrapped(UiText.Get(T.ChangelogUnsaved));
         }
         ImGui.EndChild();
-        if (ImGui.Button(UiText.Label(T.ChangelogDismiss, "DismissChangelog"))) IsOpen = false;
+        if (UiWidgets.Button(UiText.Label(T.ChangelogDismiss, "DismissChangelog"))) IsOpen = false;
     }
 
-    private static void Entry(FontAwesomeIcon icon, T key)
-    {
-        UiWidgets.Icon(icon);
-        ImGui.SameLine();
-        ImGui.BeginGroup();
-        ImGui.PushTextWrapPos(ImGui.GetContentRegionAvail().X + ImGui.GetCursorPosX());
-        ImGui.TextUnformatted(UiText.Get(key));
-        ImGui.PopTextWrapPos();
-        ImGui.EndGroup();
-        ImGui.Spacing();
-    }
+    private static void Entry(FontAwesomeIcon icon, T key) => GameThemeChrome.Note(UiText.Get(key));
 
     private sealed record ReleaseNotes(Version Version, (FontAwesomeIcon Icon, T Text)[] Entries, DateTimeOffset? PublishedAtUtc = null,
         T? FeatureTitle = null, T? FeatureSummary = null, (FontAwesomeIcon Icon, T Text)[]? OtherEntries = null,

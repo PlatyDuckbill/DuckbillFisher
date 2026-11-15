@@ -106,13 +106,13 @@ internal sealed class FishListPanel(FishCatalog catalog, ITextureProvider textur
         var comboWidth = ImGui.GetFontSize() * 12;
         string[] sortNames = [UiText.Get(T.CatalogSortName), UiText.Get(T.CatalogSortId), UiText.Get(T.CatalogSortWindow), UiText.Get(T.CatalogSortFavorite)];
         ImGui.SetNextItemWidth(comboWidth);
-        var filtersChanged = ImGui.Combo("###CatalogSort", ref sort, sortNames, sortNames.Length);
+        var filtersChanged = GameThemeChrome.Combo("###CatalogSort", ref sort, sortNames, sortNames.Length);
         UiWidgets.Tooltip(UiText.Get(sort == 2 ? T.CatalogSortWindowHint : T.CatalogSort));
         UiWidgets.FlowNext(comboWidth, toolbarRight);
         string[] collectionNames = [UiText.Get(T.CollectionAll), UiText.Get(T.CollectionHideCaught),
             UiText.Get(T.CollectionCaughtOnly), UiText.Get(T.CollectionUnknownOnly)];
         ImGui.SetNextItemWidth(comboWidth);
-        filtersChanged |= ImGui.Combo("###CatalogCollectionVisibility", ref collectionVisibility, collectionNames, collectionNames.Length);
+        filtersChanged |= GameThemeChrome.Combo("###CatalogCollectionVisibility", ref collectionVisibility, collectionNames, collectionNames.Length);
         UiWidgets.Tooltip(UiText.Get(T.CollectionVisibility));
         UiWidgets.FlowNext(ImGui.GetFontSize() * 7, toolbarRight);
         filtersChanged |= DrawFilters(view.Geography);
@@ -126,7 +126,7 @@ internal sealed class FishListPanel(FishCatalog catalog, ITextureProvider textur
             filtersChanged = true;
         }
         UiWidgets.FlowNext(ImGui.GetFontSize() * 7, toolbarRight);
-        if (ImGui.Button(UiText.Label(T.BaitPreparation, "BaitPreparation"))) showBaitPreparation();
+        if (UiWidgets.Button(UiText.Label(T.BaitPreparation, "BaitPreparation"))) showBaitPreparation();
         UiWidgets.FlowNext(ImGui.GetFontSize() * 7, toolbarRight);
         if (presets.Draw(personal, CurrentCatalogSettings()) is { } preset)
         {
@@ -159,7 +159,7 @@ internal sealed class FishListPanel(FishCatalog catalog, ITextureProvider textur
         }
         if (DeveloperMode)
         {
-            if (ImGui.SmallButton(UiText.Label(T.CatalogDiagnostics, "CatalogDiagnostics"))) ImGui.OpenPopup("CatalogDiagnosticsPopup");
+            if (UiWidgets.SmallButton(UiText.Label(T.CatalogDiagnostics, "CatalogDiagnostics"))) ImGui.OpenPopup("CatalogDiagnosticsPopup");
             ImGui.SetNextWindowSizeConstraints(new Vector2(ImGui.GetFontSize() * 24, 0),
                 new Vector2(ImGui.GetFontSize() * 40, ImGui.GetMainViewport().WorkSize.Y * 0.8f));
             if (ImGui.BeginPopup("CatalogDiagnosticsPopup"))
@@ -167,9 +167,9 @@ internal sealed class FishListPanel(FishCatalog catalog, ITextureProvider textur
                 ImGui.TextWrapped(view.Status.Display);
                 changed |= ImGui.Checkbox(UiText.Label(T.CatalogShowUnresolved, "CatalogShowUnresolved"), ref showUnresolved);
                 changed |= ImGui.Checkbox(UiText.Label(T.CatalogDetailsOnly, "CatalogDetailsOnly"), ref detailsOnly);
-                if (ImGui.Button(UiText.Label(T.ReloadFish, "ReloadCatalog"))) catalog.RequestLoad(reload: true);
-                if (ImGui.Button(UiText.Label(T.CopyCatalogReport, "CopyCatalogReport"))) ImGui.SetClipboardText(CreateReport(personal, observed));
-                if (ImGui.Button(UiText.Label(T.CopyFullCatalogReport, "CopyFullCatalogReport"))) ImGui.SetClipboardText(CreateReport(personal, observed, full: true));
+                if (UiWidgets.Button(UiText.Label(T.ReloadFish, "ReloadCatalog"))) catalog.RequestLoad(reload: true);
+                if (UiWidgets.Button(UiText.Label(T.CopyCatalogReport, "CopyCatalogReport"))) ImGui.SetClipboardText(CreateReport(personal, observed));
+                if (UiWidgets.Button(UiText.Label(T.CopyFullCatalogReport, "CopyFullCatalogReport"))) ImGui.SetClipboardText(CreateReport(personal, observed, full: true));
                 if (UiWidgets.Disclosure(UiText.Label(T.CollectionHelp, "CollectionHelp")))
                 {
                     ImGui.TextWrapped(UiText.Get(T.CollectionObservedCount, observed.Caught.Count, observed.Uncaught.Count, observed.Status));
@@ -200,10 +200,10 @@ internal sealed class FishListPanel(FishCatalog catalog, ITextureProvider textur
         ImGui.TextDisabled(UiText.Get(T.ResultCount, matches.Length));
         ImGui.SameLine();
         ImGui.BeginDisabled(upcomingIndex < 0);
-        if (ImGui.SmallButton(UiText.Label(T.JumpUpcoming, "CatalogJumpUpcoming"))) jumpUpcoming = true;
+        if (UiWidgets.SmallButton(UiText.Label(T.JumpUpcoming, "CatalogJumpUpcoming"))) jumpUpcoming = true;
         ImGui.EndDisabled();
         ImGui.SameLine();
-        if (ImGui.SmallButton(UiText.Label(T.JumpTop, "CatalogJumpTop"))) resetScroll = true;
+        if (UiWidgets.SmallButton(UiText.Label(T.JumpTop, "CatalogJumpTop"))) resetScroll = true;
         if (DeveloperMode && unresolvedCount > 0)
             ImGui.TextWrapped(UiText.Get(T.CatalogUnresolvedCount, unresolvedCount));
         ImGui.Separator();
@@ -232,7 +232,7 @@ internal sealed class FishListPanel(FishCatalog catalog, ITextureProvider textur
             (geography.Regions.Count > 0 ? 1 : 0) + (geography.Expansions.Count > 0 ? 1 : 0) +
             (minimumRemainingMinutes > 0 ? 1 : 0) + (minimumUpcomingMinutes is not null ? 1 : 0) +
             (maximumUpcomingMinutes is not null ? 1 : 0);
-        if (ImGui.Button($"{UiText.Get(T.CatalogFiltersHeading, active)}###CatalogFilters")) ImGui.OpenPopup("CatalogFiltersPopup");
+        if (UiWidgets.Button($"{UiText.Get(T.CatalogFiltersHeading, active)}###CatalogFilters")) ImGui.OpenPopup("CatalogFiltersPopup");
         if (ImGui.IsItemHovered())
             ImGui.SetTooltip(UiText.Get(T.CatalogFiltersSummary,
                 new UiMessage(timeRestrictedOnly ? T.OptionOn : T.OptionOff), gradeNames[gradeVisibility],
@@ -243,7 +243,7 @@ internal sealed class FishListPanel(FishCatalog catalog, ITextureProvider textur
             new Vector2(popupWidth, ImGui.GetMainViewport().WorkSize.Y * 0.85f));
         if (!ImGui.BeginPopup("CatalogFiltersPopup")) return false;
         var changed = false;
-        if (ImGui.Button(UiText.Label(T.CatalogShowAll, "CatalogShowAll")))
+        if (UiWidgets.Button(UiText.Label(T.CatalogShowAll, "CatalogShowAll")))
         {
             ApplyCatalogSettings(CatalogSettings.AllFish(SortChoices[sort]));
             search = "";
@@ -265,7 +265,7 @@ internal sealed class FishListPanel(FishCatalog catalog, ITextureProvider textur
         var gradeStacked = ImGui.GetContentRegionAvail().X < ImGui.GetFontSize() * 12 + ImGui.CalcTextSize(UiText.Get(T.GradeFilter)).X;
         if (gradeStacked) ImGui.TextWrapped(UiText.Get(T.GradeFilter));
         ImGui.SetNextItemWidth(Math.Min(ImGui.GetContentRegionAvail().X, ImGui.GetFontSize() * 12));
-        changed |= ImGui.Combo(gradeStacked ? "###CatalogGradeFilter" : UiText.Label(T.GradeFilter, "CatalogGradeFilter"), ref gradeVisibility, gradeNames, gradeNames.Length);
+        changed |= GameThemeChrome.Combo(gradeStacked ? "###CatalogGradeFilter" : UiText.Label(T.GradeFilter, "CatalogGradeFilter"), ref gradeVisibility, gradeNames, gradeNames.Length);
         if (ImGui.IsItemHovered()) ImGui.SetTooltip(UiText.Get(T.GradeFilterHint));
         changed |= ImGui.Checkbox(UiText.Label(T.CatalogFavoritesOnly, "CatalogFavoritesOnly"), ref favoritesOnly);
         changed |= ImGui.Checkbox(UiText.Label(T.CurrentRegionOnly, "CatalogCurrentRegionOnly"), ref currentRegionOnly);
@@ -274,7 +274,7 @@ internal sealed class FishListPanel(FishCatalog catalog, ITextureProvider textur
         changed |= ImGui.Checkbox(UiText.Label(T.CatalogInLogOnly, "CatalogInLogOnly"), ref inLogOnly);
         ImGui.Separator();
         changed |= geography.Draw(options);
-        if (ImGui.Button(UiText.Label(T.Close, "CloseFilters"))) ImGui.CloseCurrentPopup();
+        if (UiWidgets.Button(UiText.Label(T.Close, "CloseFilters"))) ImGui.CloseCurrentPopup();
         ImGui.EndPopup();
         return changed;
     }

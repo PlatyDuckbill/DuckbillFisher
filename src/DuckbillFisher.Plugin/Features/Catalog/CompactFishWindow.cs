@@ -40,10 +40,11 @@ internal sealed class CompactFishWindow : Window
 
     public override void Draw()
     {
+        GameThemeChrome.WindowSurface();
         var personal = preferences.View;
         var view = observer.View;
         ImGui.BeginDisabled(view.Upcoming.Length == 0);
-        if (ImGui.Button(UiText.Label(T.JumpUpcoming, "CompactJumpUpcoming"))) jumpUpcoming = true;
+        if (UiWidgets.Button(UiText.Label(T.JumpUpcoming, "CompactJumpUpcoming"))) jumpUpcoming = true;
         ImGui.EndDisabled();
         ImGui.SameLine();
         if (UiWidgets.IconButton(FontAwesomeIcon.ArrowUp, "CompactJumpTop", UiText.Get(T.JumpTop))) jumpTop = true;

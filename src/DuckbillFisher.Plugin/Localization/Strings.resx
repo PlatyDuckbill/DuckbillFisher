@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <root>
   <data name="ThemeSetting" xml:space="preserve"><value>Theme</value></data>
-  <data name="ThemeSettingHint" xml:space="preserve"><value>Applies to the main screen, casting timer and auxiliary views. Spacing and timer layout follow the original Dalamud view. Your choice is saved.</value></data>
+  <data name="ThemeSettingHint" xml:space="preserve"><value>Choose the Smoke or Pearl theme.</value></data>
   <data name="ThemeOriginal" xml:space="preserve"><value>Original · Dalamud theme</value></data>
   <data name="ThemeOriginalHint" xml:space="preserve"><value>Uses the existing Dalamud appearance and compact timer.</value></data>
-  <data name="ThemeGraphite" xml:space="preserve"><value>Graphite</value></data>
-  <data name="ThemeGraphiteHint" xml:space="preserve"><value>Neutral graphite surfaces, outlined controls and aligned fishing details.</value></data>
+  <data name="ThemeGraphite" xml:space="preserve"><value>Smoke</value></data>
+  <data name="ThemeGraphiteHint" xml:space="preserve"><value>Translucent neutral grey with silver edges and warm gold selection.</value></data>
   <data name="PresetApplyHint" xml:space="preserve"><value>Apply the filters and sort order from “{0}”.</value></data>
   <data name="DetailMinimumGathering" xml:space="preserve"><value>Min. Gathering</value></data>
   <data name="MinimumGatheringUnavailable" xml:space="preserve"><value>Data unavailable</value></data>
@@ -17,8 +17,8 @@
   <data name="DeliveryHint" xml:space="preserve"><value>These are delivery targets and collectability tiers. Check the game for unlock requirements and currently requested items. Special exchanges outside appraisers and custom deliveries are not included.</value></data>
   <data name="HookYieldDoubleValue" xml:space="preserve"><value>Double {0}</value></data>
   <data name="HookYieldTripleValue" xml:space="preserve"><value>Triple {0}</value></data>
-  <data name="ThemePaper" xml:space="preserve"><value>Paper</value></data>
-  <data name="ThemePaperHint" xml:space="preserve"><value>Warm white surfaces and dark text, with teal, ochre and plum information accents.</value></data>
+  <data name="ThemePaper" xml:space="preserve"><value>Pearl</value></data>
+  <data name="ThemePaperHint" xml:space="preserve"><value>Translucent pearl white with soft grey controls and warm ink text.</value></data>
   <data name="ThemeScheduleMarksHint" xml:space="preserve"><value>Filled bars are open now; outlined bars are upcoming. A highlighted outline marks your selection, and amber hatching marks overlapping windows.</value></data>
   <data name="OceanFishTitle" xml:space="preserve"><value>Fish in this sea area</value></data>
   <data name="OceanFishAreaTitle" xml:space="preserve"><value>{0} · {1}</value></data>
@@ -766,7 +766,7 @@ Main inventory only. An unknown quantity is not zero.</value></data>
   <data name="CustomSoundSkipped" xml:space="preserve"><value>Custom WAV skipped</value></data>
   <data name="CustomSoundLoginRequired" xml:space="preserve"><value>Log in to load and preview the WAV.</value></data>
   <data name="ChangelogTitle" xml:space="preserve"><value>What's new</value></data>
-  <data name="ChangelogVersion" xml:space="preserve"><value>Installed version · {0}</value></data>
+  <data name="ChangelogVersion" xml:space="preserve"><value>Current version {0}</value></data>
   <data name="ChangelogPublishedHint" xml:space="preserve"><value>Bundled update history for {0} versions.</value></data>
   <data name="ChangelogRelease" xml:space="preserve"><value>Version {0}</value></data>
   <data name="ChangelogReopenHint" xml:space="preserve"><value>You can read these notes again in Settings → What's new.</value></data>
@@ -1190,7 +1190,7 @@ Shares duplicate prevention with zero-minute favorite alerts and uses the channe
   <data name="SettingsViewNewUpdates" xml:space="preserve"><value>View updates · New</value></data>
   <data name="ChangelogSuiteTitle" xml:space="preserve"><value>A refined fishing companion</value></data>
   <data name="ChangelogSuiteSummary" xml:space="preserve"><value>Browse the familiar fish list and details with calmer controls and clearer selection.</value></data>
-  <data name="ChangelogSuiteControls" xml:space="preserve"><value>Use coordinated menus, filters and settings in Graphite and Paper.</value></data>
+  <data name="ChangelogSuiteControls" xml:space="preserve"><value>Use coordinated Smoke and Pearl controls across menus, filters and settings.</value></data>
   <data name="ChangelogSuiteDensity" xml:space="preserve"><value>Keep the compact fish rows, adjustable split and familiar detail order.</value></data>
   <data name="ChangelogSuiteHistory" xml:space="preserve"><value>Read each update by its main feature and other improvements, and spot unread updates in settings.</value></data>
   <data name="ChangelogMapFeatureTitle" xml:space="preserve"><value>Fishing Log map shortcuts</value></data>

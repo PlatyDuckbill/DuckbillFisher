@@ -17,7 +17,7 @@ internal sealed class BaitPreparationPanel(BaitPreparation preparation, BaitStoc
         var source = (int)preparation.Source;
         string[] choices = [UiText.Get(T.BaitSourceFavorites), UiText.Get(T.BaitSourceCatalog), UiText.Get(T.BaitSourceUnused)];
         ImGui.SetNextItemWidth(ImGui.GetFontSize() * 19);
-        if (ImGui.Combo(UiText.Label(T.BaitSource, "BaitSource"), ref source, choices, choices.Length))
+        if (GameThemeChrome.Combo(UiText.Label(T.BaitSource, "BaitSource"), ref source, choices, choices.Length))
             preparation.SetSource((BaitPreparationSource)source);
         UiWidgets.Tooltip(UiText.Get(source == 0 ? T.BaitSourceFavoritesHint : source == 1 ? T.BaitSourceCatalogHint : T.BaitUnusedHint));
         var inventory = stock.View;
@@ -79,14 +79,14 @@ internal sealed class BaitPreparationPanel(BaitPreparation preparation, BaitStoc
         if (personal.DeveloperMode)
         {
             ImGui.BeginDisabled(probe.IsWaiting);
-            if (ImGui.SmallButton(UiText.Label(T.BaitProbeRequest, "BaitUiProbeRequest"))) probe.Request(personal.Session);
+            if (UiWidgets.SmallButton(UiText.Label(T.BaitProbeRequest, "BaitUiProbeRequest"))) probe.Request(personal.Session);
             ImGui.EndDisabled();
             ImGui.SameLine();
-            if (ImGui.SmallButton(UiText.Label(T.BaitProbeCopy, "BaitUiProbeCopy"))) ImGui.SetClipboardText(probe.Report);
+            if (UiWidgets.SmallButton(UiText.Label(T.BaitProbeCopy, "BaitUiProbeCopy"))) ImGui.SetClipboardText(probe.Report);
             if (probe.IsWaiting)
             {
                 ImGui.SameLine();
-                if (ImGui.SmallButton(UiText.Label(T.BaitProbeCancel, "BaitUiProbeCancel"))) probe.Cancel();
+                if (UiWidgets.SmallButton(UiText.Label(T.BaitProbeCancel, "BaitUiProbeCancel"))) probe.Cancel();
                 ImGui.TextWrapped(UiText.Get(T.BaitProbeWaiting, probe.SecondsRemaining));
             }
             else ImGui.TextWrapped(probe.StatusMessage.Display);
@@ -99,7 +99,7 @@ internal sealed class BaitPreparationPanel(BaitPreparation preparation, BaitStoc
         UiWidgets.GameIcon(textures, item.IconId, ImGui.GetFrameHeight(), item.Name);
         ImGui.SameLine();
         ImGui.BeginDisabled(!personal.HasCharacter);
-        if (ImGui.SmallButton($"{item.Name}###BaitItemLink")) links.Request(item, personal.Session);
+        if (UiWidgets.SmallButton($"{item.Name}###BaitItemLink")) links.Request(item, personal.Session);
         ImGui.EndDisabled();
         ImGui.SameLine();
         if (count == 0) UiWidgets.TextColored(UiThemeScope.Current is not null ? UiThemeColors.Negative : new Vector4(1, 0.55f, 0.45f, 1), UiText.Get(T.BaitQuantity, 0));

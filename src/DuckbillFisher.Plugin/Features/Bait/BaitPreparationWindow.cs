@@ -24,5 +24,5 @@ internal sealed class BaitPreparationWindow : Window
     }
 
     public override void PreDraw() => WindowName = $"{UiText.Get(T.BaitPreparation)}###DuckbillFisher.BaitPreparation";
-    public override void Draw() => panel.Draw();
+    public override void Draw() { GameThemeChrome.WindowSurface(); panel.Draw(); }
 }

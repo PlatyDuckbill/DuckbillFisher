@@ -193,7 +193,7 @@ internal sealed class FishDetailPanel(FishPreferences preferences, ITextureProvi
         var desiredWidth = ImGui.CalcTextSize(state).X + ImGui.GetFrameHeight() + ImGui.GetStyle().FramePadding.X * 2;
         ImGui.SetNextItemWidth(Math.Max(1, Math.Min(desiredWidth,
             ImGui.GetContentRegionAvail().X - (manual ? ImGui.GetFrameHeightWithSpacing() : 0))));
-        if (ImGui.BeginCombo("###CollectionState", state))
+        if (GameThemeChrome.BeginCombo("###CollectionState", state))
         {
             if (ImGui.Selectable(UiText.Label(T.MarkCaught, "Caught"))) preferences.SetManualCaught(fish.FishParameterId, true, personal.Session);
             if (ImGui.Selectable(UiText.Label(T.MarkUncaught, "Uncaught"))) preferences.SetManualCaught(fish.FishParameterId, false, personal.Session);
@@ -214,7 +214,7 @@ internal sealed class FishDetailPanel(FishPreferences preferences, ITextureProvi
             ImGui.TableNextColumn();
             var clicked = iconOnly
                 ? UiWidgets.IconButton(FontAwesomeIcon.ExternalLinkAlt, "OpenIndependentDetail", openLabel)
-                : ImGui.Button(UiText.Label(T.OpenIndependentDetail, "OpenIndependentDetail"));
+                : UiWidgets.Button(UiText.Label(T.OpenIndependentDetail, "OpenIndependentDetail"));
             if (clicked) showDetail(fish);
         }
         ImGui.EndTable();
@@ -253,6 +253,6 @@ internal sealed class FishDetailPanel(FishPreferences preferences, ITextureProvi
                 ImGui.TextWrapped(UiText.Get(T.DataSupplementSourceInfo, source.Name, source.Revision[..Math.Min(8, source.Revision.Length)]));
             ImGui.TextWrapped(UiText.Get(T.SourceCoverageInfo, FishingData.Dataset.Fish.Length, FishingData.Dataset.Spearfishing.Length, FishingData.SpearUnknown));
         }
-        if (ImGui.Button(UiText.Label(T.CopyDataLicense, "CopyDataLicense"))) ImGui.SetClipboardText(FishingData.Notices);
+        if (UiWidgets.Button(UiText.Label(T.CopyDataLicense, "CopyDataLicense"))) ImGui.SetClipboardText(FishingData.Notices);
     }
 }

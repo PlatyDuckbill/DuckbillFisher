@@ -29,7 +29,7 @@ internal sealed class CollectionProgressPanel(CollectionProgress progress, FishC
                 view.Overall.All.Unknown));
             string[] choices = [UiText.Get(T.CollectionProgressAll), UiText.Get(T.CollectionProgressBig), UiText.Get(T.CollectionProgressLegendary)];
             ImGui.SetNextItemWidth(ImGui.GetFontSize() * 16);
-            ImGui.Combo(UiText.Label(T.CollectionProgressScope, "CollectionProgressScope"), ref scope, choices, choices.Length);
+            GameThemeChrome.Combo(UiText.Label(T.CollectionProgressScope, "CollectionProgressScope"), ref scope, choices, choices.Length);
             Summary(view.Regular, choices);
             if (view.UnknownGrades > 0) ImGui.TextWrapped(UiText.Get(T.CollectionProgressUnknownGrade, view.UnknownGrades));
             var columns = scope == 0 ? 4 : 2;

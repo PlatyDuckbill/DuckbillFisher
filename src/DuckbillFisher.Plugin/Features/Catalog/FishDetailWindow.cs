@@ -81,6 +81,7 @@ internal sealed class FishDetailWindow : Window
 
     public override void Draw()
     {
+        GameThemeChrome.WindowSurface();
         var personal = preferences.View;
         var view = catalog.View;
         if (personal.Session != session)
@@ -98,7 +99,7 @@ internal sealed class FishDetailWindow : Window
         if (comparison)
         {
             ImGui.BeginDisabled(back.Count == 0);
-            if (ImGui.SmallButton(UiText.Label(T.RelatedDetailBack, "RelatedDetailBack")) && back.Count > 0)
+            if (UiWidgets.SmallButton(UiText.Label(T.RelatedDetailBack, "RelatedDetailBack")) && back.Count > 0)
             {
                 var previous = back[^1];
                 back.RemoveAt(back.Count - 1);

@@ -136,7 +136,7 @@ internal sealed class SpawnSchedulePanel(SpawnSchedule schedule, FishCatalog cat
             ImGui.SetCursorPos(new(x, y));
             var sourceKey = settings.Source == SpawnScheduleSource.Favorites ? T.ScheduleFavorites : T.ScheduleCatalog;
             ImGui.BeginDisabled(!personal.CanEdit);
-            if (ImGui.Button(UiText.Label(sourceKey, "ScheduleSource"), new Vector2(sourceWidth, ImGui.GetFrameHeight())))
+            if (UiWidgets.Button(UiText.Label(sourceKey, "ScheduleSource"), new Vector2(sourceWidth, ImGui.GetFrameHeight())))
                 settings = settings with { Source = settings.Source == SpawnScheduleSource.Favorites
                     ? SpawnScheduleSource.Catalog : SpawnScheduleSource.Favorites };
             ImGui.EndDisabled();
@@ -217,7 +217,7 @@ internal sealed class SpawnSchedulePanel(SpawnSchedule schedule, FishCatalog cat
             : theme?.Field ?? new Vector4(0.15f, 0.23f, 0.31f, 1));
         ImGui.PushStyleColor(ImGuiCol.ButtonHovered, theme?.Hover ?? new Vector4(0.23f, 0.34f, 0.45f, 1));
         ImGui.PushStyleColor(ImGuiCol.ButtonActive, theme?.Selection ?? new Vector4(0.20f, 0.40f, 0.56f, 1));
-        var clicked = ImGui.Button($"###{id}", new Vector2(width, height));
+        var clicked = UiWidgets.Button($"###{id}", new Vector2(width, height));
         ImGui.PopStyleColor(3);
         var draw = ImGui.GetWindowDrawList();
         var line = Math.Max(1, fontSize * 0.1f);
@@ -244,7 +244,7 @@ internal sealed class SpawnSchedulePanel(SpawnSchedule schedule, FishCatalog cat
     private static bool Toggle(string text, string id, bool active)
     {
         if (active) ImGui.PushStyleColor(ImGuiCol.Button, ImGui.GetStyle().Colors[(int)ImGuiCol.ButtonActive]);
-        var clicked = ImGui.Button($"{text}###{id}");
+        var clicked = UiWidgets.Button($"{text}###{id}");
         if (active) ImGui.PopStyleColor();
         return clicked;
     }
@@ -269,7 +269,7 @@ internal sealed class SpawnSchedulePanel(SpawnSchedule schedule, FishCatalog cat
             ImGui.TextWrapped(UiText.Get(view.TargetCount == 0 ? view.SourceCount == 0
                 ? settings.Source == SpawnScheduleSource.Favorites ? T.ScheduleNoFavorites : T.ScheduleNoCatalog
                 : T.ScheduleNoMatches : T.ScheduleNoTimed));
-            if (search.Length > 0 && ImGui.SmallButton(UiText.Label(T.ScheduleClearSearch, "ClearScheduleSearch")))
+            if (search.Length > 0 && UiWidgets.SmallButton(UiText.Label(T.ScheduleClearSearch, "ClearScheduleSearch")))
             { search = ""; schedule.SetSearch(""); }
         }
         if (hoveredWindow is { } hovered) schedule.Select(hovered.FishId, hovered.Start);
@@ -508,15 +508,15 @@ internal sealed class SpawnSchedulePanel(SpawnSchedule schedule, FishCatalog cat
         var right = ImGui.GetCursorPosX() + ImGui.GetContentRegionAvail().X;
         ImGui.BeginGroup();
         ImGui.BeginDisabled(month.Year <= 1);
-        if (ImGui.Button("<###CalendarPrevious")) ChangeMonth(month.AddMonths(-1));
+        if (UiWidgets.Button("<###CalendarPrevious")) ChangeMonth(month.AddMonths(-1));
         ImGui.EndDisabled(); ImGui.SameLine();
         ImGui.AlignTextToFramePadding();
         ImGui.TextUnformatted(month.ToDateTime(TimeOnly.MinValue).ToString("Y", UiText.Culture));
         UiWidgets.Tooltip(UiText.Get(T.ScheduleCalendarHint));
         ImGui.SameLine(); ImGui.BeginDisabled(month.Year >= 9998);
-        if (ImGui.Button(">###CalendarNext")) ChangeMonth(month.AddMonths(1));
+        if (UiWidgets.Button(">###CalendarNext")) ChangeMonth(month.AddMonths(1));
         ImGui.EndDisabled(); ImGui.SameLine();
-        if (ImGui.Button(UiText.Label(T.ScheduleToday, "CalendarToday")))
+        if (UiWidgets.Button(UiText.Label(T.ScheduleToday, "CalendarToday")))
         {
             selectedDate = DateOnly.FromDateTime(schedule.Now.LocalDateTime);
             month = new(selectedDate.Year, selectedDate.Month, 1); schedule.SelectDate(selectedDate);
@@ -524,7 +524,7 @@ internal sealed class SpawnSchedulePanel(SpawnSchedule schedule, FishCatalog cat
         ImGui.EndGroup();
         var toggleKey = showCalendarList ? T.ScheduleHideList : T.ScheduleShowList;
         UiWidgets.FlowNext(ImGui.CalcTextSize(UiText.Get(toggleKey)).X + ImGui.GetStyle().FramePadding.X * 2, right);
-        if (ImGui.Button(UiText.Label(toggleKey, "CalendarListVisible"))) showCalendarList = !showCalendarList;
+        if (UiWidgets.Button(UiText.Label(toggleKey, "CalendarListVisible"))) showCalendarList = !showCalendarList;
         UiWidgets.Tooltip(UiText.Get(T.ScheduleCalendarResizeHint));
     }
 
@@ -667,7 +667,7 @@ internal sealed class SpawnSchedulePanel(SpawnSchedule schedule, FishCatalog cat
                 ImGui.TableNextColumn(); ImGui.TextUnformatted(TimeRange(clipped)); UiWidgets.Tooltip(Range(window));
                 ImGui.TableNextColumn(); DrawFish(slot.Entry, rowHeight);
                 ImGui.TableNextColumn(); DrawPin(slot.Entry.Fish);
-                ImGui.TableNextColumn(); if (ImGui.SmallButton(UiText.Label(T.ScheduleDetail, "CalendarFishDetail"))) showDetail(slot.Entry.Fish);
+                ImGui.TableNextColumn(); if (UiWidgets.SmallButton(UiText.Label(T.ScheduleDetail, "CalendarFishDetail"))) showDetail(slot.Entry.Fish);
                 ImGui.PopID();
             }
         }

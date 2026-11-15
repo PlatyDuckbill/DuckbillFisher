@@ -41,6 +41,7 @@ internal sealed class CastingTimerWindow : Window
     public override void OnClose() { buffs.SetActive(false); ocean.SetActive(OceanConsumer.Timer, false); }
     public override void Draw()
     {
+        GameThemeChrome.WindowSurface();
         var view = tracker.View;
         var retained = !view.HasSession && view.CurrentTrip is not null && view.TimerRetainedUntil is not null;
         if (retained && view.TimerRetainedUntil is { } expires)
@@ -63,12 +64,7 @@ internal sealed class CastingTimerWindow : Window
         UiWidgets.Tooltip(spotLabel);
         if (!stackedHeader) ImGui.SameLine();
         ImGui.BeginDisabled(!canShowFish);
-        if (ImGui.Button("###TimerSpotFish", new Vector2(buttonSize, ImGui.GetFrameHeight()))) toggleSpotFish();
-        var buttonOrigin = ImGui.GetItemRectMin() + ImGui.GetStyle().FramePadding;
-        var draw = ImGui.GetWindowDrawList();
-        var color = ImGui.GetColorU32(ImGuiCol.Text);
-        draw.AddText(UiBuilder.IconFont, ImGui.GetFontSize(), buttonOrigin, color, FontAwesomeIcon.Fish.ToIconString());
-        draw.AddText(buttonOrigin + new Vector2(ImGui.GetFrameHeight(), 0), color, fishLabel);
+        if (UiWidgets.ActionButton(FontAwesomeIcon.Fish, T.TimerSpotFishButton, "TimerSpotFish", buttonSize)) toggleSpotFish();
         ImGui.EndDisabled();
         UiWidgets.Tooltip(canShowFish ? fishLabel : isOcean ? spotLabel : UiText.Get(T.TimerSpotUnavailableHint));
         ImGui.SameLine();

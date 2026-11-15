@@ -211,13 +211,13 @@ internal sealed class FishRowRenderer(ITextureProvider textures, FishingMapServi
             ImGui.SetCursorPos(start + new Vector2(Math.Max(comparisonX, textX + textWidth - actionWidth), 4));
             if (compactActions
                 ? UiWidgets.IconButton(FontAwesomeIcon.Fish, "RecommendationOpenDetail", UiText.Get(T.RecommendationDetailsButton), size: line)
-                : ImGui.SmallButton(UiText.Label(T.RecommendationDetailsButton, "RecommendationOpenDetail")))
+                : UiWidgets.SmallButton(UiText.Label(T.RecommendationDetailsButton, "RecommendationOpenDetail")))
             { actionClicked = true; recommendation.OpenDetail?.Invoke(); }
             actionHovered |= ImGui.IsItemHovered();
             ImGui.SameLine();
             if (compactActions
                 ? UiWidgets.IconButton(FontAwesomeIcon.InfoCircle, "RecommendationOpenEvidence", UiText.Get(T.RecommendationEvidenceButton), size: line)
-                : ImGui.SmallButton(UiText.Label(T.RecommendationEvidenceButton, "RecommendationOpenEvidence")))
+                : UiWidgets.SmallButton(UiText.Label(T.RecommendationEvidenceButton, "RecommendationOpenEvidence")))
             { actionClicked = true; recommendation.OpenEvidence?.Invoke(); }
             actionHovered |= ImGui.IsItemHovered();
             ImGui.SetCursorPos(start + new Vector2(scheduleX, 4 + line * 2));

@@ -17,10 +17,10 @@ internal sealed class FishingHistoryBrowser(FishingTracker tracker, FishCatalog 
         var view = tracker.View;
         if (view.SelectedTrip is { } selected)
         {
-            if (ImGui.Button(UiText.Label(T.TripBack, "TripBack"))) tracker.SelectTrip(view.Session, null);
+            if (UiWidgets.Button(UiText.Label(T.TripBack, "TripBack"))) tracker.SelectTrip(view.Session, null);
             ImGui.SameLine();
             ImGui.BeginDisabled(selected.IsActive || !view.HistoryWritable);
-            if (ImGui.Button(UiText.Label(T.TripDelete, "DeleteSelectedTrip"))) Confirm(view.Session, [selected.Id]);
+            if (UiWidgets.Button(UiText.Label(T.TripDelete, "DeleteSelectedTrip"))) Confirm(view.Session, [selected.Id]);
             ImGui.EndDisabled();
             UiWidgets.Tooltip(UiText.Get(T.TripActiveProtected));
             Diagnostics(developerMode);
@@ -35,11 +35,11 @@ internal sealed class FishingHistoryBrowser(FishingTracker tracker, FishCatalog 
         }
         else
         {
-            if (ImGui.Button(UiText.Label(T.CastingTimerTitle, "OpenCastingTimer"))) showTimer?.Invoke();
+            if (UiWidgets.Button(UiText.Label(T.CastingTimerTitle, "OpenCastingTimer"))) showTimer?.Invoke();
             ImGui.SameLine();
             var closed = view.Trips.Where(t => !t.IsActive).Select(t => t.Id).ToArray();
             ImGui.BeginDisabled(closed.Length == 0 || !view.HistoryWritable);
-            if (ImGui.Button(UiText.Label(T.TripDeleteAll, "DeleteCompletedTrips"))) Confirm(view.Session, closed);
+            if (UiWidgets.Button(UiText.Label(T.TripDeleteAll, "DeleteCompletedTrips"))) Confirm(view.Session, closed);
             ImGui.EndDisabled();
             ImGui.SameLine();
             ImGui.TextDisabled(UiText.Get(T.TripCapacity, view.Trips.Count, FishingAttempts.TripCapacity));
@@ -60,7 +60,7 @@ internal sealed class FishingHistoryBrowser(FishingTracker tracker, FishCatalog 
     {
         if (!enabled) return;
         ImGui.SameLine();
-        if (ImGui.Button(UiText.Label(T.CopyTimerReport, "CopyTimerReport"))) ImGui.SetClipboardText(tracker.CreateReport());
+        if (UiWidgets.Button(UiText.Label(T.CopyTimerReport, "CopyTimerReport"))) ImGui.SetClipboardText(tracker.CreateReport());
     }
     private void DrawSummaries(FishingTrackerView view)
     {
@@ -134,10 +134,10 @@ internal sealed class FishingHistoryBrowser(FishingTracker tracker, FishCatalog 
         { deleteIds = []; ImGui.CloseCurrentPopup(); ImGui.EndPopup(); return; }
         ImGui.TextUnformatted(UiText.Get(T.TripDeleteQuestion, deleteIds.Length));
         ImGui.TextDisabled(UiText.Get(T.TripActiveProtected));
-        if (ImGui.Button(UiText.Label(T.Cancel, "CancelTripDelete")))
+        if (UiWidgets.Button(UiText.Label(T.Cancel, "CancelTripDelete")))
         { deleteIds = []; ImGui.CloseCurrentPopup(); }
         ImGui.SameLine();
-        if (ImGui.Button(UiText.Label(T.TripDelete, "ConfirmTripDelete")))
+        if (UiWidgets.Button(UiText.Label(T.TripDelete, "ConfirmTripDelete")))
         { tracker.DeleteTrips(deleteSession, deleteIds); deleteIds = []; ImGui.CloseCurrentPopup(); }
         ImGui.EndPopup();
     }

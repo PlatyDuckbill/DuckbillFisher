@@ -57,6 +57,7 @@ internal sealed class CollectionProgressFishWindow : Window
 
     public override void Draw()
     {
+        GameThemeChrome.WindowSurface();
         var personal = preferences.View;
         var view = progress.FishView;
         if (view.Session != personal.Session || view.Selection != requested || view.Name is null)
@@ -71,7 +72,7 @@ internal sealed class CollectionProgressFishWindow : Window
             _ => T.CollectionProgressAll,
         };
         ImGui.TextWrapped(UiText.Get(T.CollectionProgressListScope, view.Name, new UiMessage(gradeKey)));
-        if (ImGui.Button(UiText.Label(hideCaught ? T.TimerHideCaught : T.TimerAllFish, "CollectionProgressListFilter"))) hideCaught = !hideCaught;
+        if (UiWidgets.Button(UiText.Label(hideCaught ? T.TimerHideCaught : T.TimerAllFish, "CollectionProgressListFilter"))) hideCaught = !hideCaught;
         UiWidgets.Tooltip(UiText.Get(T.CollectionProgressListHint));
         var matches = hideCaught ? view.RemainingFish : view.AllFish;
         ImGui.SameLine();

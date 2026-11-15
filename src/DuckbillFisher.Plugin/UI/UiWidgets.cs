@@ -83,36 +83,47 @@ internal static class UiWidgets
         ImGui.PopFont();
     }
 
+    public static bool Button(string label, Vector2 size = default) => GameThemeChrome.Button(label, size);
+    public static bool SmallButton(string label) => GameThemeChrome.SmallButton(label);
+
+    private static Vector2 MeasureIcon(ImFontPtr font, string glyph)
+    {
+        var size = ImGui.GetFontSize();
+        ImGui.PushFont(font);
+        try { return ImGui.CalcTextSize(glyph) * (size / Math.Max(1, ImGui.GetFontSize())); }
+        finally { ImGui.PopFont(); }
+    }
     public static bool IconButton(FontAwesomeIcon icon, string id, string tooltip, bool active = false, float size = 0)
     {
-        if (active) ImGui.PushStyleColor(ImGuiCol.Text, UiThemeScope.Current is not null ? UiThemeColors.Favorite
-            : ReadableColor(new Vector4(1, 0.8f, 0.32f, 1)));
-        ImGui.PushFont(UiBuilder.IconFont);
-        if (size > 0) ImGui.PushStyleVar(ImGuiStyleVar.FramePadding, Vector2.Zero);
-        var clicked = ImGui.Button($"{icon.ToIconString()}###{id}", new Vector2(size > 0 ? size : ImGui.GetFrameHeight()));
-        if (size > 0) ImGui.PopStyleVar();
-        ImGui.PopFont();
-        if (active) ImGui.PopStyleColor();
+        var side = size > 0 ? size : ImGui.GetFrameHeight();
+        var clicked = Button($"###{id}", new(side));
+        var min = ImGui.GetItemRectMin(); var max = ImGui.GetItemRectMax();
+        var font = UiBuilder.IconFont;
+        var measured = MeasureIcon(font, icon.ToIconString());
+        var origin = Vector2.Round(min + (max - min - measured) / 2);
+        var color = active ? ImGui.GetColorU32(UiThemeColors.Favorite) : ImGui.GetColorU32(ImGuiCol.Text);
+        ImGui.GetWindowDrawList().AddText(font, ImGui.GetFontSize(), origin, color, icon.ToIconString());
         Tooltip(tooltip);
         return clicked;
     }
-
-    public static bool ActionButton(FontAwesomeIcon icon, T key, string id, float width = 0)
+    public static bool ActionButton(FontAwesomeIcon icon, T key, string id, float width = 0) => ActionButton(icon, UiText.Get(key), id, width);
+    public static bool ActionButton(FontAwesomeIcon icon, string text, string id, float width = 0)
     {
-        var label = UiText.Get(key);
-        if (width <= 0) width = ImGui.GetFrameHeight() + ImGui.CalcTextSize(label).X + ImGui.GetStyle().FramePadding.X * 2;
-        var clicked = ImGui.Button($"###{id}", new Vector2(width, ImGui.GetFrameHeight()));
-        var min = ImGui.GetItemRectMin();
-        var max = ImGui.GetItemRectMax();
-        var contentWidth = ImGui.GetFrameHeight() + ImGui.CalcTextSize(label).X;
-        var origin = min + new Vector2(Math.Max(ImGui.GetStyle().FramePadding.X, (width - contentWidth) / 2), ImGui.GetStyle().FramePadding.Y);
-        var draw = ImGui.GetWindowDrawList();
-        var color = ImGui.GetColorU32(ImGuiCol.Text);
+        var font = UiBuilder.IconFont;
+        var glyph = MeasureIcon(font, icon.ToIconString());
+        var gap = text.Length == 0 ? 0 : ImGui.GetStyle().ItemInnerSpacing.X;
+        var textSize = ImGui.CalcTextSize(text);
+        var content = glyph.X + gap + textSize.X;
+        if (width <= 0) width = content + ImGui.GetStyle().FramePadding.X * 2;
+        var clicked = Button($"###{id}", new(width, ImGui.GetFrameHeight()));
+        var min = ImGui.GetItemRectMin(); var max = ImGui.GetItemRectMax();
+        var x = min.X + Math.Max(ImGui.GetStyle().FramePadding.X, (width - content) / 2);
+        var draw = ImGui.GetWindowDrawList(); var color = ImGui.GetColorU32(ImGuiCol.Text);
         draw.PushClipRect(min, max, true);
-        draw.AddText(UiBuilder.IconFont, ImGui.GetFontSize(), origin, color, icon.ToIconString());
-        draw.AddText(origin + new Vector2(ImGui.GetFrameHeight(), 0), color, label);
+        draw.AddText(font, ImGui.GetFontSize(), Vector2.Round(new(x, min.Y + (max.Y - min.Y - glyph.Y) / 2)), color, icon.ToIconString());
+        draw.AddText(Vector2.Round(new(x + glyph.X + gap, min.Y + (max.Y - min.Y - textSize.Y) / 2)), color, text);
         draw.PopClipRect();
-        if (contentWidth + ImGui.GetStyle().FramePadding.X * 2 > width) Tooltip(label);
+        if (content + ImGui.GetStyle().FramePadding.X * 2 > width) Tooltip(text);
         return clicked;
     }
 
@@ -145,7 +156,7 @@ internal static class UiWidgets
     {
         if (active) ImGui.PushStyleColor(ImGuiCol.Button, UiThemeScope.Current is { } theme ? theme.Selection : new Vector4(0.18f, 0.48f, 0.62f, 1));
         var size = ImGui.GetFrameHeight();
-        var clicked = ImGui.Button($"###{id}", new Vector2(size));
+        var clicked = UiWidgets.Button($"###{id}", new Vector2(size));
         if (active) ImGui.PopStyleColor();
         var start = ImGui.GetItemRectMin() + new Vector2(2);
         if (iconId != 0 && textures.TryGetFromGameIcon(new GameIconLookup(iconId), out var texture) &&
@@ -166,7 +177,7 @@ internal static class UiWidgets
         ImGui.PushStyleColor(ImGuiCol.Button, Vector4.Zero);
         ImGui.PushStyleVar(ImGuiStyleVar.FramePadding, Vector2.Zero);
         ImGui.PushFont(UiBuilder.IconFont);
-        var clicked = ImGui.Button($"{FontAwesomeIcon.MapMarkedAlt.ToIconString()}###{id}", new Vector2(MapPinWidth(height), height));
+        var clicked = UiWidgets.Button($"{FontAwesomeIcon.MapMarkedAlt.ToIconString()}###{id}", new Vector2(MapPinWidth(height), height));
         ImGui.PopFont();
         ImGui.PopStyleVar();
         ImGui.PopStyleColor();
@@ -178,7 +189,7 @@ internal static class UiWidgets
     public static bool FavoriteButton(string id, bool favorite)
     {
         var size = ImGui.GetFrameHeight();
-        var clicked = ImGui.Button($"###{id}", new Vector2(size));
+        var clicked = UiWidgets.Button($"###{id}", new Vector2(size));
         var center = (ImGui.GetItemRectMin() + ImGui.GetItemRectMax()) / 2;
         var color = ImGui.GetColorU32(favorite ? UiThemeScope.Current is not null ? UiThemeColors.Favorite : new Vector4(1, 0.8f, 0.32f, 1)
             : ImGui.GetStyle().Colors[(int)ImGuiCol.Text]);
@@ -238,16 +249,7 @@ internal static class UiWidgets
         }
     }
 
-    public static bool Disclosure(string label, ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags.None)
-    {
-        if (UiThemeScope.Current is not { } theme) return ImGui.CollapsingHeader(label, flags);
-        // A disclosure is not a selected row. Keep the same hit area and ID, with a quiet surface.
-        ImGui.PushStyleColor(ImGuiCol.Header, Vector4.Lerp(theme.Background, theme.Surface, .35f));
-        ImGui.PushStyleColor(ImGuiCol.HeaderHovered, theme.Hover);
-        ImGui.PushStyleColor(ImGuiCol.HeaderActive, theme.Input);
-        try { return ImGui.CollapsingHeader(label, flags); }
-        finally { ImGui.PopStyleColor(3); }
-    }
+    public static bool Disclosure(string label, ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags.None) => GameThemeChrome.Disclosure(label, flags);
 
     public static bool BeginTabItem(string label, ImGuiTabItemFlags flags = ImGuiTabItemFlags.None)
     {
@@ -291,7 +293,7 @@ internal static class UiWidgets
             ImGui.PopTextWrapPos();
             Tooltip(opener.IsSupported ? prompt.Display : opener.UnavailableReason.Display);
             ImGui.BeginDisabled(!opener.IsSupported);
-            if (ImGui.Button(UiText.Label(T.OpenFishGuide, "OpenFishGuide"))) opener.Request(personal);
+            if (UiWidgets.Button(UiText.Label(T.OpenFishGuide, "OpenFishGuide"))) opener.Request(personal);
             ImGui.EndDisabled();
             if (!opener.IsSupported) Tooltip(opener.UnavailableReason.Display);
             if (failure is not null) ImGui.TextWrapped(failure.Display);
@@ -338,7 +340,7 @@ internal static class UiWidgets
             GuideWarningHint(hint);
             ImGui.SameLine();
             ImGui.BeginDisabled(!opener.IsSupported);
-            if (ImGui.Button(UiText.Label(T.OpenFishGuide, "OpenFishGuide"), new Vector2(buttonWidth, frame))) opener.Request(personal);
+            if (UiWidgets.Button(UiText.Label(T.OpenFishGuide, "OpenFishGuide"), new Vector2(buttonWidth, frame))) opener.Request(personal);
             ImGui.EndDisabled();
             GuideWarningHint(hint);
         }

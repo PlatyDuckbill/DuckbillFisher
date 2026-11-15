@@ -84,6 +84,7 @@ internal sealed class MainWindow : Window
 
     public override void Draw()
     {
+        GameThemeChrome.WindowSurface();
         var settings = preferences.View;
         if (UiText.Language != settings.Language)
         {
@@ -238,6 +239,8 @@ internal sealed class MainWindow : Window
                     : ImGui.GetColorU32(active ? ImGuiCol.Text : ImGuiCol.TextDisabled), icon.ToIconString());
             if (active && theme is not null)
             {
+                var middle = MathF.Round((min.Y + max.Y) / 2);
+                draw.AddTriangleFilled(new(min.X + 1, middle), new(min.X + 4, middle - 3), new(min.X + 4, middle + 3), ImGui.GetColorU32(accent));
                 draw.AddLine(new(min.X + ImGui.GetStyle().FramePadding.X, max.Y - 1),
                     new(max.X - ImGui.GetStyle().FramePadding.X, max.Y - 1), ImGui.GetColorU32(accent), 2);
             }
@@ -269,28 +272,7 @@ internal sealed class MainWindow : Window
         return Vector4.Lerp(role, UiThemeColors.Secondary, .25f);
     }
 
-    private static bool Shortcut(FontAwesomeIcon icon, string label, string id, float width)
-    {
-        var theme = UiThemeScope.Current;
-        if (theme is not null)
-        {
-            ImGui.PushStyleColor(ImGuiCol.Button, Vector4.Zero);
-            ImGui.PushStyleColor(ImGuiCol.ButtonHovered, theme.Hover);
-            ImGui.PushStyleColor(ImGuiCol.ButtonActive, theme.Pressed);
-        }
-        bool clicked;
-        try { clicked = ImGui.Button($"###{id}", new Vector2(width, ImGui.GetFrameHeight())); }
-        finally { if (theme is not null) ImGui.PopStyleColor(3); }
-        var origin = ImGui.GetItemRectMin() + (label.Length == 0
-            ? (ImGui.GetItemRectSize() - new Vector2(ImGui.GetFontSize())) / 2
-            : ImGui.GetStyle().FramePadding);
-        var draw = ImGui.GetWindowDrawList();
-        var color = theme is not null ? ImGui.GetColorU32(ImGui.IsItemHovered() ? theme.Text : theme.Muted)
-            : ImGui.GetColorU32(ImGuiCol.Text);
-        draw.AddText(UiBuilder.IconFont, ImGui.GetFontSize(), origin, color, icon.ToIconString());
-        if (label.Length > 0) draw.AddText(origin + new Vector2(ImGui.GetFrameHeight(), 0), color, label);
-        return clicked;
-    }
+    private static bool Shortcut(FontAwesomeIcon icon, string label, string id, float width) => UiWidgets.ActionButton(icon, label, id, width);
 
     private void DrawSettings(FishPreferencesView settings)
     {
@@ -311,7 +293,7 @@ internal sealed class MainWindow : Window
             ImGui.TextUnformatted(UiText.Get(T.Language));
             ImGui.TableNextColumn();
             ImGui.SetNextItemWidth(Math.Max(1, Math.Min(ImGui.GetContentRegionAvail().X, ImGui.GetFontSize() * 14)));
-            changed = ImGui.Combo("###Language", ref language, LanguageNames, LanguageNames.Length);
+            changed = GameThemeChrome.Combo("###Language", ref language, LanguageNames, LanguageNames.Length);
             ImGui.TableNextRow();
             ImGui.TableNextColumn();
             ImGui.AlignTextToFramePadding();
@@ -320,7 +302,7 @@ internal sealed class MainWindow : Window
             var scaleIndex = Array.IndexOf(UiScale.Choices, settings.UiScalePercent);
             var scaleWidth = Math.Min(ImGui.GetContentRegionAvail().X, ImGui.GetFontSize() * 14);
             ImGui.SetNextItemWidth(Math.Max(1, scaleWidth - ImGui.GetFrameHeight() - ImGui.GetStyle().ItemSpacing.X));
-            if (ImGui.Combo("###UiScale", ref scaleIndex, UiScale.Labels, UiScale.Labels.Length))
+            if (GameThemeChrome.Combo("###UiScale", ref scaleIndex, UiScale.Labels, UiScale.Labels.Length))
                 preferences.SetUiScale(UiScale.Choices[scaleIndex]);
             UiWidgets.Tooltip(UiText.Get(T.UiScaleHint));
             ImGui.SameLine();
@@ -332,7 +314,7 @@ internal sealed class MainWindow : Window
             ImGui.TextUnformatted(UiText.Get(T.ThemeSetting));
             ImGui.TableNextColumn();
             ImGui.SetNextItemWidth(Math.Max(1, Math.Min(ImGui.GetContentRegionAvail().X, ImGui.GetFontSize() * 20)));
-            if (ImGui.BeginCombo("###InterfaceTheme", UiText.Get(UiThemes.Name(settings.Theme))))
+            if (GameThemeChrome.BeginCombo("###InterfaceTheme", UiText.Get(UiThemes.Name(settings.Theme))))
             {
                 foreach (var theme in UiThemes.Choices)
                 {
@@ -393,10 +375,10 @@ internal sealed class MainWindow : Window
         var fallback = view.LoginFallback;
         if (ImGui.Checkbox(UiText.Label(T.LoginFallback, "LoginFallback"), ref fallback))
             fishGuide.SetLoginFallback(fallback);
-        if (ImGui.Button(UiText.Label(T.ReloadFish, "ReloadFish")))
+        if (UiWidgets.Button(UiText.Label(T.ReloadFish, "ReloadFish")))
             fishGuide.RequestRefresh();
         ImGui.SameLine();
-        if (ImGui.Button(UiText.Label(T.CopyGuide, "CopyGuide")))
+        if (UiWidgets.Button(UiText.Label(T.CopyGuide, "CopyGuide")))
             ImGui.SetClipboardText(fishGuide.CreateReport(selectedFish));
         ImGui.TextUnformatted(UiText.Get(T.GuideRows, view.Rows.Count, view.InLogCount, view.MaxInLogId));
 
@@ -424,7 +406,7 @@ internal sealed class MainWindow : Window
                 ImGui.TextWrapped(UiText.Get(T.BitValue, sample.Value?.ToString() ?? "Unknown", sample.Reason));
             else
                 ImGui.TextUnformatted(UiText.Get(T.BitPending));
-            if (ImGui.Button(UiText.Label(T.ReadBitAgain, "ReadBitAgain")))
+            if (UiWidgets.Button(UiText.Label(T.ReadBitAgain, "ReadBitAgain")))
                 fishGuide.RequestCollectionRead(selected.FishParameterId);
         }
         if (UiWidgets.Disclosure(UiText.Label(T.GuideHistory, "GuideHistory")))
@@ -455,16 +437,16 @@ internal sealed class MainWindow : Window
         var probe = observer.View;
         var view = probe.Observation;
         ImGui.BeginDisabled(view.IsRecording);
-        if (ImGui.Button(UiText.Label(T.StartObservation, "StartObservation")))
+        if (UiWidgets.Button(UiText.Label(T.StartObservation, "StartObservation")))
             observer.Start();
         ImGui.EndDisabled();
         ImGui.SameLine();
         ImGui.BeginDisabled(!view.IsRecording);
-        if (ImGui.Button(UiText.Label(T.StopObservation, "StopObservation")))
+        if (UiWidgets.Button(UiText.Label(T.StopObservation, "StopObservation")))
             observer.Stop();
         ImGui.EndDisabled();
         ImGui.SameLine();
-        if (ImGui.Button(UiText.Label(T.CopyObservation, "CopyObservation")))
+        if (UiWidgets.Button(UiText.Label(T.CopyObservation, "CopyObservation")))
             ImGui.SetClipboardText(observer.CreateReport());
 
         // Start/stop are Framework requests; manual markers can update the snapshot immediately.
@@ -476,9 +458,9 @@ internal sealed class MainWindow : Window
         ImGui.TextWrapped(UiText.Get(T.ObservationHint));
         ImGui.BeginDisabled(!view.IsRecording);
         ImGui.SetNextItemWidth(180);
-        ImGui.Combo(UiText.Label(T.ManualMarker, "ManualMarker"), ref selectedMarker, markerLabels, markerLabels.Length);
+        GameThemeChrome.Combo(UiText.Label(T.ManualMarker, "ManualMarker"), ref selectedMarker, markerLabels, markerLabels.Length);
         ImGui.SameLine();
-        if (ImGui.Button(UiText.Label(T.AddMarker, "AddMarker")))
+        if (UiWidgets.Button(UiText.Label(T.AddMarker, "AddMarker")))
             observer.Mark($"Marker={Markers[selectedMarker]}");
         ImGui.EndDisabled();
         ImGui.TextWrapped(UiText.Get(T.MarkerHint));
@@ -495,7 +477,7 @@ internal sealed class MainWindow : Window
         }
         ImGui.EndChild();
         ImGui.Spacing();
-        if (ImGui.Button(UiText.Label(T.Close, "Close")))
+        if (UiWidgets.Button(UiText.Label(T.Close, "Close")))
             IsOpen = false;
     }
 }

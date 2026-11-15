@@ -57,7 +57,7 @@ internal sealed class SpawnAlertsPanel(FishPreferences preferences, SpawnAlerts 
         if (DeveloperMode && UiWidgets.Disclosure(UiText.Label(T.AlertDiagnosticsHeading, "SpawnAlertDiagnostics")))
         {
             ImGui.TextWrapped(view.Status.Display);
-            if (ImGui.Button(UiText.Label(T.AlertsCopy, "CopySpawnAlerts")))
+            if (UiWidgets.Button(UiText.Label(T.AlertsCopy, "CopySpawnAlerts")))
                 ImGui.SetClipboardText(alerts.CreateReport());
         }
         ImGui.Separator();
@@ -140,7 +140,7 @@ internal sealed class SpawnAlertsPanel(FishPreferences preferences, SpawnAlerts 
             ImGui.TableNextColumn();
             ImGui.SetNextItemWidth(-1);
             var channelNames = ChatChannelChoices.Names;
-            changed |= ImGui.Combo("###SpawnAlertChannel", ref channel, channelNames, channelNames.Length);
+            changed |= GameThemeChrome.Combo("###SpawnAlertChannel", ref channel, channelNames, channelNames.Length);
             ImGui.TableNextRow();
             ImGui.TableNextColumn();
             ImGui.AlignTextToFramePadding();
@@ -150,10 +150,10 @@ internal sealed class SpawnAlertsPanel(FishPreferences preferences, SpawnAlerts 
             ImGui.SetNextItemWidth(Math.Max(1, ImGui.GetContentRegionAvail().X - previewWidth - ImGui.GetStyle().ItemSpacing.X));
             var sounds = Enumerable.Range(0, CustomAlertSound.Choice + 1).Select(value => value == 0 ? UiText.Get(T.AlertSoundNone)
                 : value == CustomAlertSound.Choice ? UiText.Get(T.CustomSound) : UiText.Get(T.AlertSoundNumber, value)).ToArray();
-            changed |= ImGui.Combo("###SpawnAlertSound", ref sound, sounds, sounds.Length);
+            changed |= GameThemeChrome.Combo("###SpawnAlertSound", ref sound, sounds, sounds.Length);
             ImGui.SameLine();
             ImGui.BeginDisabled(sound == 0 || !output.SoundAvailable || !settings.HasCharacter || soundLibrary.Busy(SoundSlot.SpawnAlert));
-            if (ImGui.Button(UiText.Label(T.AlertSoundPreview, "PreviewAlertSound"))) output.RequestPreview(sound, settings.Session);
+            if (UiWidgets.Button(UiText.Label(T.AlertSoundPreview, "PreviewAlertSound"))) output.RequestPreview(sound, settings.Session);
             ImGui.EndDisabled();
             ImGui.EndTable();
         }
@@ -161,7 +161,7 @@ internal sealed class SpawnAlertsPanel(FishPreferences preferences, SpawnAlerts 
         {
             if (settings.CustomAlertSoundPath.Length > 0) ImGui.TextWrapped(settings.CustomAlertSoundPath);
             ImGui.BeginDisabled(soundLibrary.Busy(SoundSlot.SpawnAlert));
-            if (ImGui.Button(UiText.Label(T.CustomSoundChoose, "CustomSoundChoose")))
+            if (UiWidgets.Button(UiText.Label(T.CustomSoundChoose, "CustomSoundChoose")))
             {
                 var expectedSession = settings.Session;
                 soundFiles.OpenFileDialog(UiText.Get(T.CustomSoundChoose), ".wav,.WAV", (bool ok, string path) =>
@@ -172,10 +172,10 @@ internal sealed class SpawnAlertsPanel(FishPreferences preferences, SpawnAlerts 
             ImGui.EndDisabled();
             ImGui.SameLine();
             ImGui.BeginDisabled(soundLibrary.Busy(SoundSlot.SpawnAlert));
-            if (ImGui.Button(UiText.Label(T.CustomSoundReload, "CustomSoundReload"))) output.ReloadCustomSound();
+            if (UiWidgets.Button(UiText.Label(T.CustomSoundReload, "CustomSoundReload"))) output.ReloadCustomSound();
             ImGui.EndDisabled();
             ImGui.SameLine();
-            if (ImGui.Button(UiText.Label(T.CustomSoundStop, "CustomSoundStop"))) output.StopCustomSound();
+            if (UiWidgets.Button(UiText.Label(T.CustomSoundStop, "CustomSoundStop"))) output.StopCustomSound();
             if (soundLibrary.Message(SoundSlot.SpawnAlert) is { } importMessage) ImGui.TextWrapped(importMessage.Display);
             ImGui.TextWrapped(UiText.Get(T.ManagedSoundHint));
             ImGui.PushStyleColor(ImGuiCol.Text, ImGui.GetStyle().Colors[(int)ImGuiCol.TextDisabled]);

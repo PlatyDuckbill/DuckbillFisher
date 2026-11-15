@@ -75,7 +75,7 @@ internal sealed class FishPersonalPanel(FishPreferences preferences)
             ImGui.TextUnformatted(UiText.Get(T.FishPreset));
             ImGui.TableNextColumn();
             ImGui.SetNextItemWidth(-1);
-            if (ImGui.BeginCombo("###FishTimerPreset", selected?.Name ?? UiText.Get(T.FishPresetNone)))
+            if (GameThemeChrome.BeginCombo("###FishTimerPreset", selected?.Name ?? UiText.Get(T.FishPresetNone)))
             {
                 if (ImGui.Selectable(UiText.Label(T.FishPresetNone, "NoFishPreset"), record.TimerPresetId is null))
                     preferences.SetFishTimerPreset(fishId, null, personal.Session, personal.SettingsRestoreRevision);
@@ -172,10 +172,10 @@ internal sealed class FishPersonalPanel(FishPreferences preferences)
         ImGui.PushTextWrapPos(ImGui.GetCursorPosX() + ImGui.GetFontSize() * 24);
         ImGui.TextUnformatted(UiText.Get(T.FishNoteClearQuestion));
         ImGui.PopTextWrapPos();
-        if (ImGui.Button(UiText.Label(T.Cancel, "CancelClearFishNote")))
+        if (UiWidgets.Button(UiText.Label(T.Cancel, "CancelClearFishNote")))
         { draft.Confirmation = null; ImGui.CloseCurrentPopup(); }
         ImGui.SameLine();
-        if (ImGui.Button(UiText.Label(T.FishNoteClear, "ConfirmClearFishNote")))
+        if (UiWidgets.Button(UiText.Label(T.FishNoteClear, "ConfirmClearFishNote")))
         {
             var completion = new TaskCompletionSource<bool>(TaskCreationOptions.RunContinuationsAsynchronously);
             if (preferences.ClearFishNote(fishId, confirm.ExpectedNote, confirm.Session, confirm.RestoreRevision,

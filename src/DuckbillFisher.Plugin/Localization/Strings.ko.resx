@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <root>
   <data name="ThemeSetting" xml:space="preserve"><value>테마</value></data>
-  <data name="ThemeSettingHint" xml:space="preserve"><value>메인·캐스팅 타이머·보조 화면에 함께 적용합니다. 간격과 타이머 배치는 기존 Dalamud 화면을 따르며 선택한 테마를 저장합니다.</value></data>
+  <data name="ThemeSettingHint" xml:space="preserve"><value>스모크 또는 펄 테마를 선택합니다.</value></data>
   <data name="ThemeOriginal" xml:space="preserve"><value>기존 · Dalamud 테마</value></data>
   <data name="ThemeOriginalHint" xml:space="preserve"><value>기존 Dalamud 디자인과 간결한 타이머 표시를 사용합니다.</value></data>
-  <data name="ThemeGraphite" xml:space="preserve"><value>그라파이트</value></data>
-  <data name="ThemeGraphiteHint" xml:space="preserve"><value>무채색 바탕에 조작부의 윤곽과 정렬된 낚시 정보를 표시합니다.</value></data>
+  <data name="ThemeGraphite" xml:space="preserve"><value>스모크</value></data>
+  <data name="ThemeGraphiteHint" xml:space="preserve"><value>반투명 중성 회색에 은빛 윤곽과 따뜻한 금빛 선택을 더한 테마입니다.</value></data>
   <data name="PresetApplyHint" xml:space="preserve"><value>‘{0}’의 필터·정렬을 적용합니다.</value></data>
   <data name="DetailMinimumGathering" xml:space="preserve"><value>최소 획득력</value></data>
   <data name="MinimumGatheringUnavailable" xml:space="preserve"><value>자료 확인 불가</value></data>
@@ -17,8 +17,8 @@
   <data name="DeliveryHint" xml:space="preserve"><value>납품 대상과 소장가치 구간입니다. 개방 단계와 현재 요청 품목은 게임에서 확인해 주세요. 납품원·단골거래 외의 특수 교환은 포함하지 않습니다.</value></data>
   <data name="HookYieldDoubleValue" xml:space="preserve"><value>이중 {0}</value></data>
   <data name="HookYieldTripleValue" xml:space="preserve"><value>삼중 {0}</value></data>
-  <data name="ThemePaper" xml:space="preserve"><value>페이퍼</value></data>
-  <data name="ThemePaperHint" xml:space="preserve"><value>따뜻한 흰 바탕과 짙은 글자에 청록·황토·자주색으로 정보를 구분합니다.</value></data>
+  <data name="ThemePaper" xml:space="preserve"><value>펄</value></data>
+  <data name="ThemePaperHint" xml:space="preserve"><value>반투명 진주색 바탕에 부드러운 회색 조작부와 따뜻한 잉크색 글자를 사용합니다.</value></data>
   <data name="ThemeScheduleMarksHint" xml:space="preserve"><value>채운 막대는 출현 중, 윤곽선 막대는 출현 예정입니다. 강조 테두리는 선택 항목, 주황색 빗금은 겹치는 출현 구간입니다.</value></data>
   <data name="OceanFishTitle" xml:space="preserve"><value>이 해역의 어종 보기</value></data>
   <data name="OceanFishAreaTitle" xml:space="preserve"><value>{0} · {1}</value></data>
@@ -766,7 +766,7 @@
   <data name="CustomSoundSkipped" xml:space="preserve"><value>커스텀 WAV 생략</value></data>
   <data name="CustomSoundLoginRequired" xml:space="preserve"><value>캐릭터 접속 후 WAV를 불러오고 미리 들을 수 있습니다.</value></data>
   <data name="ChangelogTitle" xml:space="preserve"><value>업데이트 내역</value></data>
-  <data name="ChangelogVersion" xml:space="preserve"><value>설치된 버전 · {0}</value></data>
+  <data name="ChangelogVersion" xml:space="preserve"><value>현재 버전 {0}</value></data>
   <data name="ChangelogPublishedHint" xml:space="preserve"><value>포함된 {0}개 버전의 업데이트 내역입니다.</value></data>
   <data name="ChangelogRelease" xml:space="preserve"><value>버전 {0}</value></data>
   <data name="ChangelogReopenHint" xml:space="preserve"><value>설정 → 업데이트 내역에서 다시 볼 수 있습니다.</value></data>
@@ -1190,7 +1190,7 @@
   <data name="SettingsViewNewUpdates" xml:space="preserve"><value>새 업데이트 보기</value></data>
   <data name="ChangelogSuiteTitle" xml:space="preserve"><value>새 디자인 · 낚시 정보를 더 또렷하게</value></data>
   <data name="ChangelogSuiteSummary" xml:space="preserve"><value>익숙한 어종 목록과 상세 구성에서 더 정돈된 조작부와 선택 표시를 사용할 수 있습니다.</value></data>
-  <data name="ChangelogSuiteControls" xml:space="preserve"><value>그라파이트·페이퍼에서 메뉴·필터·설정을 일관된 모양으로 사용할 수 있습니다.</value></data>
+  <data name="ChangelogSuiteControls" xml:space="preserve"><value>스모크·펄 테마에서 메뉴·필터·설정을 일관된 모양으로 사용할 수 있습니다.</value></data>
   <data name="ChangelogSuiteDensity" xml:space="preserve"><value>촘촘한 어종 목록과 조절 가능한 좌우 분할, 익숙한 상세 순서를 유지합니다.</value></data>
   <data name="ChangelogSuiteHistory" xml:space="preserve"><value>대표 기능과 기타 개선으로 정리한 업데이트 내역을 읽고 설정에서 새 업데이트를 확인할 수 있습니다.</value></data>
   <data name="ChangelogMapFeatureTitle" xml:space="preserve"><value>낚시수첩 · 미발견 낚시터 위치</value></data>

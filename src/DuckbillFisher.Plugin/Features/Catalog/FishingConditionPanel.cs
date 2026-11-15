@@ -36,7 +36,7 @@ internal sealed class FishingConditionPanel(ITextureProvider textures, FishingIt
             if (firstBaits.Length == 1) baitFinder.DrawButton(firstBaits[0], personal.Session);
             else
             {
-                if (ImGui.SmallButton(UiText.Label(T.BaitFind, "FindBaitChoice"))) ImGui.OpenPopup("FindBaitAlternatives");
+                if (UiWidgets.SmallButton(UiText.Label(T.BaitFind, "FindBaitChoice"))) ImGui.OpenPopup("FindBaitAlternatives");
                 UiWidgets.Tooltip(UiText.Get(T.BaitFindHint));
                 if (ImGui.BeginPopup("FindBaitAlternatives"))
                 {

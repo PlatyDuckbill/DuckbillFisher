@@ -15,7 +15,7 @@ internal sealed class IntuitionProgressPanel(IntuitionProgress progress, ITextur
         if (view.Targets.Length == 0) return;
         var themed = UiThemeScope.Current is not null;
         if (themed) ImGui.PushStyleColor(ImGuiCol.Text, UiThemeColors.Special);
-        if (ImGui.SmallButton(UiText.Label(T.IntuitionPreparation, "IntuitionProgressDetails"))) ImGui.OpenPopup("IntuitionProgress");
+        if (UiWidgets.SmallButton(UiText.Label(T.IntuitionPreparation, "IntuitionProgressDetails"))) ImGui.OpenPopup("IntuitionProgress");
         if (themed) ImGui.PopStyleColor();
         var target = view.Targets.FirstOrDefault(f => f.FishParameterId == view.Selected);
         UiWidgets.Tooltip(target?.DisplayName ?? "");
@@ -40,7 +40,7 @@ internal sealed class IntuitionProgressPanel(IntuitionProgress progress, ITextur
                     if (line == 1)
                     {
                         ImGui.SameLine();
-                        if (ImGui.SmallButton(UiText.Get(T.IntuitionMore, view.Prey.Length - i) + "###IntuitionMore")) ImGui.OpenPopup("IntuitionProgress");
+                        if (UiWidgets.SmallButton(UiText.Get(T.IntuitionMore, view.Prey.Length - i) + "###IntuitionMore")) ImGui.OpenPopup("IntuitionProgress");
                         break;
                     }
                     line++;
@@ -60,7 +60,7 @@ internal sealed class IntuitionProgressPanel(IntuitionProgress progress, ITextur
         if (ImGui.IsPopupOpen("IntuitionProgress"))
             ImGui.SetNextWindowSizeConstraints(new Vector2(ImGui.GetFontSize() * 20, 0), new Vector2(ImGui.GetFontSize() * 31, ImGui.GetFontSize() * 28));
         if (!ImGui.BeginPopup("IntuitionProgress")) return;
-        if (view.Targets.Length > 1 && ImGui.BeginCombo("###IntuitionTarget", target?.DisplayName ?? ""))
+        if (view.Targets.Length > 1 && GameThemeChrome.BeginCombo("###IntuitionTarget", target?.DisplayName ?? ""))
         {
             foreach (var fish in view.Targets)
                 if (ImGui.Selectable($"{fish.DisplayName}###IntuitionTarget{fish.FishParameterId}", fish.FishParameterId == view.Selected))
@@ -81,7 +81,7 @@ internal sealed class IntuitionProgressPanel(IntuitionProgress progress, ITextur
                 ImGui.PopID();
             }
         ImGui.EndChild();
-        if (target is not null && ImGui.SmallButton(UiText.Label(T.IntuitionOpenDetail, "IntuitionOpenDetail")))
+        if (target is not null && UiWidgets.SmallButton(UiText.Label(T.IntuitionOpenDetail, "IntuitionOpenDetail")))
         { showDetail(target); ImGui.CloseCurrentPopup(); }
         ImGui.EndPopup();
     }

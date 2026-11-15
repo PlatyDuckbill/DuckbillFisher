@@ -46,6 +46,7 @@ internal sealed class SpotFishWindow : Window
 
     public override void Draw()
     {
+        GameThemeChrome.WindowSurface();
         var view = tracker.View;
         var personal = preferences.View;
         var voyage = ocean.View;
@@ -69,7 +70,7 @@ internal sealed class SpotFishWindow : Window
             }
         }
         ImGui.BeginDisabled(!personal.CanEdit);
-        if (ImGui.Button(UiText.Label(hideCaught ? T.TimerHideCaught : T.TimerAllFish, "TimerCollectionFilter")))
+        if (UiWidgets.Button(UiText.Label(hideCaught ? T.TimerHideCaught : T.TimerAllFish, "TimerCollectionFilter")))
         {
             hideCaught = !hideCaught;
             preferences.SetSpotFishHideCaught(hideCaught);

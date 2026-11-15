@@ -62,7 +62,7 @@ internal sealed class OceanFishingPanel(OceanFishing ocean, FishPreferences pref
         if (developerMode && UiWidgets.Disclosure(UiText.Label(T.OceanDiagnostics, "OceanDiagnostics")))
         {
             var report = ocean.CreateReport();
-            if (ImGui.SmallButton(UiText.Label(T.OceanCopyDiagnostics, "CopyOceanDiagnostics"))) ImGui.SetClipboardText(report);
+            if (UiWidgets.SmallButton(UiText.Label(T.OceanCopyDiagnostics, "CopyOceanDiagnostics"))) ImGui.SetClipboardText(report);
             ImGui.TextUnformatted(report);
         }
     }
@@ -105,7 +105,7 @@ internal sealed class OceanFishingPanel(OceanFishing ocean, FishPreferences pref
             {
                 ImGui.SameLine();
                 ImGui.BeginDisabled(fishList.State != OceanFishListState.Ready);
-                if (ImGui.SmallButton(UiText.Label(T.TimerSpotFishButton, "OceanSpotFish"))) toggleSpotFish();
+                if (UiWidgets.SmallButton(UiText.Label(T.TimerSpotFishButton, "OceanSpotFish"))) toggleSpotFish();
                 ImGui.EndDisabled();
                 UiWidgets.Tooltip(fishList.State == OceanFishListState.Ready
                     ? UiText.Get(T.OceanFishConditionsHint) : UiWidgets.OceanSpotLabel(fishList));

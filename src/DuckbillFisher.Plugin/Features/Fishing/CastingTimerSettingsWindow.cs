@@ -49,6 +49,7 @@ internal sealed class CastingTimerSettingsWindow(FishPreferences preferences, Sp
 
     public override void Draw()
     {
+        GameThemeChrome.WindowSurface();
         var personal = preferences.View;
         var contextChanged = draftSession != personal.Session || draftRestoreRevision != personal.SettingsRestoreRevision;
         if (contextChanged) { overwrite = null; presetError = null; }
@@ -117,7 +118,7 @@ internal sealed class CastingTimerSettingsWindow(FishPreferences preferences, Sp
         var channel = Math.Max(0, Array.IndexOf(ChatChannelChoices.All, (Dalamud.Game.Text.XivChatType)draft.AlertChannelId));
         ImGui.SetNextItemWidth(ImGui.GetFontSize() * 14);
         var names = ChatChannelChoices.Names;
-        var changed = ImGui.Combo(UiText.Label(T.AlertChannel, "TimerChatChannel"), ref channel, names, names.Length);
+        var changed = GameThemeChrome.Combo(UiText.Label(T.AlertChannel, "TimerChatChannel"), ref channel, names, names.Length);
         UiWidgets.Tooltip(UiText.Get(T.TimerAlertDeliveryHint));
         if (changed) draft = draft with { AlertChannelId = (ushort)ChatChannelChoices.All[channel] };
         ImGui.TextWrapped(UiText.Get(T.TimerAlertHint));
@@ -156,7 +157,7 @@ internal sealed class CastingTimerSettingsWindow(FishPreferences preferences, Sp
             var soundNames = Enumerable.Range(0, 17).Select(value => value == 0
                 ? UiText.Get(T.AlertSoundNone) : UiText.Get(T.AlertSoundNumber, value)).ToArray();
             ImGui.SetNextItemWidth(ImGui.GetFontSize() * 12);
-            changed |= ImGui.Combo(UiText.Label(T.AlertSound, "Sound"), ref sound, soundNames, soundNames.Length);
+            changed |= GameThemeChrome.Combo(UiText.Label(T.AlertSound, "Sound"), ref sound, soundNames, soundNames.Length);
             ImGui.SameLine();
             ImGui.BeginDisabled(!personal.HasCharacter || sound == 0);
             if (UiWidgets.IconButton(FontAwesomeIcon.VolumeUp, "PreviewTimerSound", UiText.Get(T.AlertSoundPreview)))
@@ -211,7 +212,7 @@ internal sealed class CastingTimerSettingsWindow(FishPreferences preferences, Sp
                 ? UiText.Get(T.AlertSoundNone) : value == CustomAlertSound.Choice ? UiText.Get(T.CustomSound)
                 : UiText.Get(T.AlertSoundNumber, value)).ToArray();
             ImGui.SetNextItemWidth(ImGui.GetFontSize() * 12);
-            changed |= ImGui.Combo(UiText.Label(T.AlertSound, "FishingSoundChoice"), ref sound, names, names.Length);
+            changed |= GameThemeChrome.Combo(UiText.Label(T.AlertSound, "FishingSoundChoice"), ref sound, names, names.Length);
             ImGui.SameLine();
             ImGui.BeginDisabled(!personal.HasCharacter || sound == 0 || soundLibrary.Busy(slot));
             if (UiWidgets.IconButton(FontAwesomeIcon.VolumeUp, "PreviewFishingSound", UiText.Get(T.AlertSoundPreview)))
@@ -292,7 +293,7 @@ internal sealed class CastingTimerSettingsWindow(FishPreferences preferences, Sp
         var selected = draft.Presets.FirstOrDefault(preset => preset.Id == selectedPreset);
         ImGui.SetNextItemWidth(Math.Max(80, ImGui.GetContentRegionAvail().X - ActionWidth(T.TimerAlertLoadPreset) -
             ImGui.GetFrameHeight() - ImGui.GetStyle().ItemSpacing.X * 2));
-        if (ImGui.BeginCombo("###TimerPresets", selected?.Name ?? UiText.Get(T.TimerAlertSelectPreset)))
+        if (GameThemeChrome.BeginCombo("###TimerPresets", selected?.Name ?? UiText.Get(T.TimerAlertSelectPreset)))
         {
             foreach (var preset in draft.Presets)
             {
@@ -378,10 +379,10 @@ internal sealed class CastingTimerSettingsWindow(FishPreferences preferences, Sp
         ImGui.TextUnformatted(UiText.Get(T.TimerPresetOverwriteQuestion, request.Replacement.Name));
         ImGui.PopTextWrapPos();
         var changed = false;
-        if (ImGui.Button(UiText.Label(T.Cancel, "CancelTimerPresetOverwrite")))
+        if (UiWidgets.Button(UiText.Label(T.Cancel, "CancelTimerPresetOverwrite")))
         { overwrite = null; ImGui.CloseCurrentPopup(); }
         ImGui.SameLine();
-        if (ImGui.Button(UiText.Label(T.TimerPresetOverwrite, "ConfirmTimerPresetOverwrite")))
+        if (UiWidgets.Button(UiText.Label(T.TimerPresetOverwrite, "ConfirmTimerPresetOverwrite")))
         {
             var index = draft.Presets.FindIndex(preset => preset.Id == request.Source.Id);
             if (index < 0 || draft.Presets[index].Name != request.Source.Name ||

@@ -19,7 +19,7 @@ internal sealed class CatalogPresetsPanel(FishPreferences preferences)
             name = "";
             savingName = null;
         }
-        if (ImGui.Button(UiText.Label(T.PresetButton, "CatalogPresets"))) ImGui.OpenPopup("CatalogPresetsPopup");
+        if (UiWidgets.Button(UiText.Label(T.PresetButton, "CatalogPresets"))) ImGui.OpenPopup("CatalogPresetsPopup");
         UiWidgets.Tooltip(UiText.Get(T.PresetScope));
         var popupWidth = Math.Min(ImGui.GetFontSize() * 30, ImGui.GetMainViewport().WorkSize.X * .95f);
         ImGui.SetNextWindowSizeConstraints(new Vector2(Math.Min(ImGui.GetFontSize() * 22, popupWidth), 0),
@@ -33,7 +33,7 @@ internal sealed class CatalogPresetsPanel(FishPreferences preferences)
         var duplicate = view.CatalogPresets.Any(value => string.Equals(value.Name, trimmed, StringComparison.OrdinalIgnoreCase));
         var full = view.CatalogPresets.Count >= CatalogPreset.MaxCount;
         ImGui.BeginDisabled(!view.CanEdit || !CatalogPreset.ValidName(trimmed) || duplicate || full);
-        if (ImGui.Button(UiText.Label(T.PresetSaveCurrent, "SaveCatalogPreset")))
+        if (UiWidgets.Button(UiText.Label(T.PresetSaveCurrent, "SaveCatalogPreset")))
         {
             preferences.SaveCatalogPreset(trimmed, current);
             savingName = trimmed;
@@ -60,7 +60,7 @@ internal sealed class CatalogPresetsPanel(FishPreferences preferences)
                 var themed = UiThemeScope.Current is { };
                 var matches = current.Matches(preset.Settings);
                 if (themed && matches) ImGui.PushStyleColor(ImGuiCol.Button, UiThemeScope.Current!.Selection);
-                var load = themed ? ImGui.Button("###LoadPreset", new Vector2(Math.Max(1, ImGui.GetContentRegionAvail().X), ImGui.GetFrameHeight()))
+                var load = themed ? UiWidgets.Button("###LoadPreset", new Vector2(Math.Max(1, ImGui.GetContentRegionAvail().X), ImGui.GetFrameHeight()))
                     : ImGui.Selectable("###LoadPreset", matches, ImGuiSelectableFlags.None, new Vector2(0, ImGui.GetFrameHeight()));
                 if (themed && matches) ImGui.PopStyleColor();
                 if (load)
@@ -102,14 +102,14 @@ internal sealed class CatalogPresetsPanel(FishPreferences preferences)
             {
                 ImGui.TextWrapped(UiText.Get(T.PresetDeleteQuestion, preset.Name));
                 ImGui.BeginDisabled(!view.CanEdit);
-                if (ImGui.Button(UiText.Label(T.PresetDelete, "ConfirmDeletePreset")))
+                if (UiWidgets.Button(UiText.Label(T.PresetDelete, "ConfirmDeletePreset")))
                 {
                     preferences.DeleteCatalogPreset(preset.Id);
                     ImGui.CloseCurrentPopup();
                 }
                 ImGui.EndDisabled();
                 ImGui.SameLine();
-                if (ImGui.Button(UiText.Label(T.Cancel, "CancelDeletePreset"))) ImGui.CloseCurrentPopup();
+                if (UiWidgets.Button(UiText.Label(T.Cancel, "CancelDeletePreset"))) ImGui.CloseCurrentPopup();
             }
             ImGui.EndPopup();
         }

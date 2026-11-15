@@ -64,10 +64,10 @@ internal sealed class FishGeographyPanel
         changed |= DrawHiddenRegions(options);
         if (!open) return changed;
 
-        if (ImGui.Button($"{UiText.Get(T.GeographyChooseRegions, regionPreview)}###ChooseRegions"))
+        if (UiWidgets.Button($"{UiText.Get(T.GeographyChooseRegions, regionPreview)}###ChooseRegions"))
             ImGui.OpenPopup("GeographyRegionPicker");
         ImGui.SameLine();
-        if (ImGui.SmallButton(UiText.Label(T.GeographyClearRegions, "ClearRegionsOutside")))
+        if (UiWidgets.SmallButton(UiText.Label(T.GeographyClearRegions, "ClearRegionsOutside")))
         {
             changed |= ClearRegions();
             UpdateOptions(options);
@@ -92,7 +92,7 @@ internal sealed class FishGeographyPanel
         var changed = false;
         ImGui.TextUnformatted(UiText.Get(T.GeographyExpansion));
         ImGui.SameLine();
-        if (ImGui.SmallButton(UiText.Label(T.GeographyAll, "ClearExpansions")) && expansions.Count > 0)
+        if (UiWidgets.SmallButton(UiText.Label(T.GeographyAll, "ClearExpansions")) && expansions.Count > 0)
         {
             expansions.Clear();
             expansionRevision++;
@@ -124,10 +124,10 @@ internal sealed class FishGeographyPanel
         ImGui.TextUnformatted(UiText.Get(T.GeographyRegion));
         ImGui.SetNextItemWidth(ImGui.GetContentRegionAvail().X * 0.65f);
         ImGui.InputText(UiText.Label(T.GeographySearch, "RegionSearch"), ref regionSearch, 100);
-        if (ImGui.SmallButton(UiText.Label(T.GeographyClearRegions, "ClearRegions")))
+        if (UiWidgets.SmallButton(UiText.Label(T.GeographyClearRegions, "ClearRegions")))
             changed |= ClearRegions();
         ImGui.SameLine();
-        if (ImGui.SmallButton(UiText.Label(T.Close, "CloseRegionPicker"))) ImGui.CloseCurrentPopup();
+        if (UiWidgets.SmallButton(UiText.Label(T.Close, "CloseRegionPicker"))) ImGui.CloseCurrentPopup();
         UpdateOptions(options);
         changed |= DrawHiddenRegions(options);
         ImGui.TextDisabled(UiText.Get(T.GeographyScopeCount, scopedRegions.Length, visibleRegions.Length));
@@ -172,7 +172,7 @@ internal sealed class FishGeographyPanel
             ImGui.PopTextWrapPos();
             ImGui.EndTooltip();
         }
-        if (!ImGui.SmallButton(UiText.Label(T.GeographyClearHidden, "ClearHiddenRegions"))) return false;
+        if (!UiWidgets.SmallButton(UiText.Label(T.GeographyClearHidden, "ClearHiddenRegions"))) return false;
         foreach (var id in hiddenRegions) regions.Remove(id);
         regionRevision++;
         UpdateOptions(options);

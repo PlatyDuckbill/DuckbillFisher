@@ -65,7 +65,8 @@ internal static class UiScale
         try
         {
             if (backgrounds is not null)
-                foreach (var entry in backgrounds) entry.Window.BgAlpha = 1f;
+                foreach (var entry in backgrounds) entry.Window.BgAlpha = entry.Window is ChangelogWindow
+                    ? GameThemePalette.OverlayOpacity : GameThemePalette.For(UiThemes.Find(theme).IsLight).Surface.W;
             windows.Draw();
         }
         finally
