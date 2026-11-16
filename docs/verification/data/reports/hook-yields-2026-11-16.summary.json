@@ -1,12 +1,12 @@
 {
   "format": "hook-yield-audit/v2",
-  "dataVersion": "regular-and-ocean-hook-yields-2026-11-16",
+  "dataVersion": "regular-and-ocean-hook-yields-2026-11-16-intuition",
   "conditionsSha256": "EDAC64F98C0DE23E9E01EBF43B9BBC41C152B0C3137CEC8ACDAD495E841D0901",
-  "hookYieldsSha256": "9D5359E9DFEB793E7E04C06AE63929ED8E9357573EF778A6C70CE76DE0DB7E58",
-  "csvSha256": "111E408C4967A45ADBC3A9F82081B0AB4CF85446F1A691037F481137F7490BE2",
+  "hookYieldsSha256": "E2B543F0AE6FCE7E0FB3250149731D5D5B5EF550A59A07ED46726719805A0788",
+  "csvSha256": "BCB41802BE0E4B5B480880803EC1E59E111FC8013529B282A5055226AEFAC876",
   "clientRows": 2512,
   "identityMismatches": 0,
-  "entries": 306,
+  "entries": 308,
   "counts": {
     "Unresolved": {
       "rows": 47,
@@ -17,17 +17,17 @@
     },
     "RegularConditions": {
       "rows": 1258,
-      "doubleKnown": 45,
-      "tripleKnown": 20,
-      "bothUnknown": 1211,
-      "oneUnknown": 29
+      "doubleKnown": 47,
+      "tripleKnown": 21,
+      "bothUnknown": 1209,
+      "oneUnknown": 30
     },
     "IntuitionPrerequisites": {
       "rows": 43,
-      "doubleKnown": 29,
-      "tripleKnown": 10,
-      "bothUnknown": 14,
-      "oneUnknown": 19
+      "doubleKnown": 31,
+      "tripleKnown": 11,
+      "bothUnknown": 12,
+      "oneUnknown": 20
     },
     "Ocean": {
       "rows": 259,

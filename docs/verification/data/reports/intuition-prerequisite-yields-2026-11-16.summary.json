@@ -1,0 +1,73 @@
+{
+  "format": "intuition-prerequisite-yield-review/v1",
+  "checkedUtc": "2026-11-16",
+  "scope": "The 14 regular Intuition prerequisites with both actions unknown before this supplement",
+  "hookYieldsSha256": "E2B543F0AE6FCE7E0FB3250149731D5D5B5EF550A59A07ED46726719805A0788",
+  "csvSha256": "739C29B040B91AFB93E4028FEE2D4108AD59ABB19321874C3852178513B89947",
+  "reviewed": 14,
+  "fishSupplemented": 2,
+  "actionValuesAdded": 3,
+  "remainingBothUnknown": 12,
+  "reviewCodes": [
+    {
+      "code": "InferredLowerBoundAdded",
+      "count": 1
+    },
+    {
+      "code": "NoActionSpecificNumericEvidence",
+      "count": 10
+    },
+    {
+      "code": "ObservedCountsAdded",
+      "count": 1
+    },
+    {
+      "code": "SkillWorksWithoutQuantity",
+      "count": 2
+    }
+  ],
+  "sources": [
+    {
+      "id": "fruity-guide-2026-11-05",
+      "url": "https://docs.google.com/document/d/1B7wjAtw5uCiARS9tXsozYAX8l6JZOzl2YtJSjejqchk/edit",
+      "contentSha256": "4CD82A004E2B11BAD2442FD07FCFD066EE9DC13FE38701DF26CBC2A9751486A0",
+      "snapshotFormat": "Google Docs plain text export, UTF-8 without BOM",
+      "checkedUtc": "2026-11-05"
+    },
+    {
+      "id": "fruity-dawntrail-2026-11-06",
+      "url": "https://docs.google.com/document/d/1HB2R8e2ZS6kW3v-7xSYuBbTEA3AZSLj4j2jrA2YcPFs/edit",
+      "contentSha256": "F71A2C1920C919374C8F94CE523E631A2E5067F67B532D5D5465A91839C583B6"
+    },
+    {
+      "id": "forum-shapeshifter-6161994",
+      "url": "https://forum.square-enix.com/ffxiv/threads/476778-Fisher-s-Intuition-not-triggering-for-Aquamaton-after-6.3?mode=linear&p=6161994",
+      "contentSha256": "B3F6B0D957B9774D3276B7CFFD42787708DCB3781BE16A94578A4F62F75FE60F",
+      "snapshotFormat": "Original HTTPS HTML response bytes",
+      "checkedUtc": "2026-11-16"
+    },
+    {
+      "id": "lodestone-vagrant-5688798",
+      "url": "https://jp.finalfantasyxiv.com/lodestone/character/29948674/blog/5688798/",
+      "contentSha256": "2B097A732864FFE4A26F276BC9DEB32EC84A0417F2B37267C87079B63D637406",
+      "snapshotFormat": "Original HTTPS HTML response bytes",
+      "checkedUtc": "2026-11-16"
+    },
+    {
+      "id": "lodestone-driftwood-5729237",
+      "url": "https://jp.finalfantasyxiv.com/lodestone/character/29948674/blog/5729237/",
+      "contentSha256": "0DEA35625F902C1C2EDC015C128846938E4FB4B5B45E8E03C3E963D6A1E873CA",
+      "snapshotFormat": "Original HTTPS HTML response bytes",
+      "checkedUtc": "2026-11-16"
+    },
+    {
+      "id": "lodestone-ebe-db58336ff3f",
+      "url": "https://na.finalfantasyxiv.com/lodestone/playguide/db/item/db58336ff3f/",
+      "contentSha256": "8831216B19E9CE4490B3D93BCE0B09ACBDE8B12C5D9259AEB10CA2F9E8FC26BA",
+      "snapshotFormat": "Original HTTPS HTML response bytes",
+      "checkedUtc": "2026-11-16"
+    }
+  ],
+  "limits": "Individual published facts or explicitly marked preparation-sequence lower bounds only. No raw prose, code, media, Gathering thresholds, cross-action conversion or generic big-fish yields imported. No public reuse license identified. Development research only; not independent in-game verification.",
+  "hashNormalization": "UTF-8 without BOM, LF line endings"
+}

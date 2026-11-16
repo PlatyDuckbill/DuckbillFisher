@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "dataVersion": "regular-and-ocean-hook-yields-2026-11-16",
+  "dataVersion": "regular-and-ocean-hook-yields-2026-11-16-intuition",
   "checkedUtc": "2026-11-16",
   "rights": "Published catch observations by Fruity Snacks, Tyo'to Tayuun and credited Lodestone contributors. No public reuse license identified. Individual numeric facts only; no prose, code, images, bite times or strategies redistributed.",
   "processing": "Linked to existing FishParameter/Item identities. Explicit single-action quantities only. Null means unconfirmed. Null maximum means the guide establishes only a lower bound, including the count reached by its stated preparation sequence; no upper bound, cross-action conversion or Gathering breakpoint inferred. Optional per-action evidence=Inferred marks reviewed preparation-sequence lower bounds; omitted evidence means the source explicitly reports the quantity (Observed), not independent verification or a current-character guarantee.",
@@ -254,6 +254,24 @@
       "checkedUtc": "2026-11-16",
       "observer": "Stella Kanon",
       "observationContext": "Author explicitly describes repeated Double Hook Pearl-eye catches of 2 while targeting Sculptor. Not the similarly named restoration fish."
+    },
+    {
+      "id": "forum-shapeshifter-6161994",
+      "url": "https://forum.square-enix.com/ffxiv/threads/476778-Fisher-s-Intuition-not-triggering-for-Aquamaton-after-6.3?mode=linear&p=6161994",
+      "contentSha256": "B3F6B0D957B9774D3276B7CFFD42787708DCB3781BE16A94578A4F62F75FE60F",
+      "snapshotFormat": "Original HTTPS HTML response bytes",
+      "checkedUtc": "2026-11-16",
+      "observer": "Fruity Snacks",
+      "observationContext": "First-person Lv90 catch report explicitly states Double Hook 2 and Triple Hook 3 for Shapeshifter. The reported Intuition issue is not adopted as a runtime contract. No Gathering breakpoint stated."
+    },
+    {
+      "id": "lodestone-vagrant-5688798",
+      "url": "https://jp.finalfantasyxiv.com/lodestone/character/29948674/blog/5688798/",
+      "contentSha256": "2B097A732864FFE4A26F276BC9DEB32EC84A0417F2B37267C87079B63D637406",
+      "snapshotFormat": "Original HTTPS HTML response bytes",
+      "checkedUtc": "2026-11-16",
+      "observer": "Sik Falot",
+      "observationContext": "The main preparation sequence catches 1 Vagrant Cascade, then uses one Double Hook to trigger a 3-fish Intuition requirement. Records only a reviewed minimum of 2, not an explicit upper bound. The optional earlier extra catch is not used in this inference."
     }
   ],
   "entries": [
@@ -4418,6 +4436,30 @@
       "doubleHook": {
         "minimum": 2,
         "maximum": 2
+      },
+      "tripleHook": null
+    },
+    {
+      "itemId": 27452,
+      "fishParameterId": 733,
+      "source": "forum-shapeshifter-6161994",
+      "doubleHook": {
+        "minimum": 2,
+        "maximum": 2
+      },
+      "tripleHook": {
+        "minimum": 3,
+        "maximum": 3
+      }
+    },
+    {
+      "itemId": 43760,
+      "fishParameterId": 1382,
+      "source": "lodestone-vagrant-5688798",
+      "doubleHook": {
+        "minimum": 2,
+        "maximum": null,
+        "evidence": "Inferred"
       },
       "tripleHook": null
     }

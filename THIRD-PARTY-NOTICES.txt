@@ -144,6 +144,18 @@ no source prose, tables, images, code or macros are redistributed. No public
 reuse license was identified; rights remain with the respective contributors.
 These supplemental observations are not represented as MIT-licensed upstream data.
 
+Intuition-prerequisite yield review, checked 2026-11-16:
+Fruity Snacks' first-person Square Enix forum report explicitly supplies
+Shapeshifter Double Hook 2 and Triple Hook 3. Sik Falot's Lodestone preparation
+sequence establishes only Vagrant Cascade Double Hook minimum 2, marked Inferred.
+Original URLs, response SHA256, observer credits and scope are recorded in
+data/hook-yields.v1.json sources. The forum's Intuition bug report is not adopted
+as a runtime contract. Other contributors' statements that a skill works,
+generic big-fish restrictions and preparation totals without a single-action
+quantity are not converted to numeric yields. No source prose, images, macros
+or code is redistributed. No public reuse license was identified; rights remain
+with the respective contributors. These facts are not MIT-licensed upstream data.
+
 Ocean Fishing basic-bait observations (13 stops, 52 guidance rows) and multi-hook quantities (259 fish)
 Observer: Tyo'to Tayuun, checked 2026-11-06
 The DH/TH numeric values and explicit ranges are also included in data/hook-yields.v1.json.
