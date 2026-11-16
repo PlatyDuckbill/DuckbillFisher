@@ -1192,4 +1192,8 @@ internal enum TextKey
     ChangelogOceanPreparationSplit,
     ChangelogOceanStockStates,
     ChangelogOceanNarrow,
+    ChangelogDetailDataTitle,
+    ChangelogDetailResponsive,
+    ChangelogGatheringSupplement,
+    ChangelogDoubleHookSupplement,
 }

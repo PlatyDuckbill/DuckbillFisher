@@ -1264,4 +1264,8 @@ Shares duplicate prevention with zero-minute favorite alerts and uses the channe
   <data name="ChangelogOceanPreparationSplit" xml:space="preserve"><value>Prepare basic baits separately from optional Intuition baits.</value></data>
   <data name="ChangelogOceanStockStates" xml:space="preserve"><value>Distinguish missing bait from unknown stock.</value></data>
   <data name="ChangelogOceanNarrow" xml:space="preserve"><value>Read bait guidance more easily in narrow views.</value></data>
+  <data name="ChangelogDetailDataTitle" xml:space="preserve"><value>Fish details and data</value></data>
+  <data name="ChangelogDetailResponsive" xml:space="preserve"><value>Read fish details and personal controls more easily in narrow views.</value></data>
+  <data name="ChangelogGatheringSupplement" xml:space="preserve"><value>See minimum Gathering requirements for two more fish.</value></data>
+  <data name="ChangelogDoubleHookSupplement" xml:space="preserve"><value>See Double Hook quantities for six more fish.</value></data>
 </root>
