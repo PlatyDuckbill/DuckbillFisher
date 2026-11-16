@@ -1,6 +1,27 @@
 # 낚시 상세 데이터의 출처와 조회 계획
 
-갱신: 2026-11-15. 일반 도감1,258종 모두 상세에 연결했다. 최신 개발 자료는 시간·날씨1,257종 확인/부분1종, 핵심 미확인2종(성 파스릭의 석두 직감 시간·이크에바지 가위 낚아채기·시간/날씨)이다. 작살203건/미확인115건은 보존했다. 빌드·자료 대조와 인게임 확인 대기를 구분한다. [재현](../../data/README.md), [초기 보완 근거](../verification/data/DATA-COMPLETION-2026-10-18.md), [당시 잔여 목록](../verification/data/reports/fishing-data-2026-10-17/remaining.md). 입질 통계 API와 런타임 HTTP는 도입하지 않는다.
+갱신: 2026-11-16. 일반 도감1,258종 모두 상세에 연결했다. 최신 개발 자료는 시간·날씨1,257종 확인/부분1종, 핵심 미확인2종(성 파스릭의 석두 직감 시간·이크에바지 가위 낚아채기·시간/날씨)이다. 최소 획득력·복수 수량의 대량 미확인은 아래 집계로 별도 관리한다. 작살203건/미확인115건은 보존했다. 빌드·자료 대조와 인게임 확인 대기를 구분한다. [재현](../../data/README.md), [초기 보완 근거](../verification/data/DATA-COMPLETION-2026-10-18.md), [당시 잔여 목록](../verification/data/reports/fishing-data-2026-10-17/remaining.md). 입질 통계 API와 런타임 HTTP는 도입하지 않는다.
+
+## 최소 획득력·직감 선행 수량 누락 보완 (2026-11-16)
+
+- 일반1,258종의 최소 획득력은321→323종, 미확인은937→935종이다. 상세 조건 밖29종을 합친 내장 값은350→352종이다. [어종별 CSV](../verification/data/reports/minimum-gathering-2026-11-16.csv)·[집계/해시](../verification/data/reports/minimum-gathering-2026-11-16.summary.json)는 일반 조건 대상만 다룬다. 미확인935종 중 터주/터주왕16종·직감 선행36종이며 두 집합은 겹칠 수 있다. 나머지 미확인이 기본값0이나 제한 없음이라는 뜻은 아니다.
+- Teamcraft의 `fishing-sources.json` 최신 변경 revision `c42102575cfeaa2cb71e51c2aba13e2b27490872`를 내려받아 확인했다(SHA256 `FB68E3CF4997F89C3156DAE9D7CE705A6EC4862506DBE245482798B1D4A8E25A`). 양수350종 모두 기존 값과 일치하고 새 값/충돌0이다. 기반 고정 revision/SDK는 바꾸지 않았다.
+- [Fruity Snacks 종합 가이드](https://docs.google.com/document/d/1B7wjAtw5uCiARS9tXsozYAX8l6JZOzl2YtJSjejqchk/edit)의 개별 어종 구역에서 샤크네이도/The Second One `680`과 용암제왕/The Lord of Lords `730`을 보완했다. 같은 가이드와 Dawntrail 권의 새 다운로드는 종전 SHA256 두 개와 일치한다. 개별 수치만 채택하며 패치 표는 기존 Captain Nemo `750`·Paikiller `803`처럼 예외가 있어 일괄 적용하지 않았다. Floating Boulder는 가이드335/다른 공개 안내349의 차이가 해소되지 않아 미확인으로 유지한다.
+- 최소 획득력의 외부 관찰은 `fishing-supplement-source.json`의 선택 `reviewedMinimumGathering`에 URL·원본 응답 해시·확인일·개별 값/ID·권리/가공 범위를 고정했다. `--detail-supplement`가 두 설치본의 유일한 Item/FishParameter와 범위·중복/기존 값 충돌을 확인한 뒤 `minimum-gathering.v1.json`의 `reviewedObservations`로 복사한다. Teamcraft MIT 기반과 관찰의 미확인 재사용 라이선스는 구분하며 원문을 배포하지 않는다.
+
+| 어종 | Item / FishParameter | 새 이중 수량 | 근거 |
+|---|---|---|---|
+| 줄삼치 / Wahoo | 4904 / 116 | 4 | [Tetrapot Yama의 명시적 기술별 안내](https://jp.finalfantasyxiv.com/lodestone/character/18274711/blog/4095119/) |
+| 은빛상어 / Silver Shark | 4903 / 111 | 4 | 같은 글의 실제 이중 어획 기록 |
+| 큰숲메기 / Jungle Catfish | 5031 / 184 | 3 | [Pure White Memeu Meu](https://jp.finalfantasyxiv.com/lodestone/character/27908164/blog/4479691/) |
+| 요정조개 / Ice Faerie | 12715 / 302 | 4 | [Kingyo Neko](https://jp.finalfantasyxiv.com/lodestone/character/11572331/blog/3769356/) |
+| 두더지귀뚜라미 / Hedgemole Cricket | 12757 / 343 | 3~4 | [Razor Edge](https://jp.finalfantasyxiv.com/lodestone/character/22067410/blog/4102682/), 기존 삼중5~6의 별도 원본은 `relatedSources`에 유지 |
+| 진주목어 / Pearl-eye | 20041 / 604 | 2 | [Stella Kanon의 반복 이중 어획 기록](https://jp.finalfantasyxiv.com/lodestone/character/32253535/blog/5178756/), 부흥용 동명 어종에 적용하지 않음 |
+
+- 일반47종(이중45·삼중20), 먼바다259종이며 전체306행이다. 직감 선행43종은 한쪽 이상29종/이중29·삼중10, 양쪽 미확인14종이다. 일반의 기술별 빈칸은 이중1,213·삼중1,238종이다. [최신 수량 CSV](../verification/data/reports/hook-yields-2026-11-16.csv)·[집계/해시](../verification/data/reports/hook-yields-2026-11-16.summary.json)를 따르며 이전 날짜 보고서는 당시 근거로 보존한다.
+- 기존350개 최소 획득력과 알려진 모든 기술별 수량/범위·추정14개를 보존했다. 새6개 수량은 원문이 기술별 값을 명시하므로 추정 표식을 붙이지 않으며 현재 획득력의 보장값은 아니다. 기존 두더지귀뚜라미 삼중의 출처도 보존했다. 수량 없는 기술 권장·스킬 일반 설명·모호한 준비 총량·부흥용 어종 기록은 새 값으로 사용하지 않았다. 삼중 수량은 새 근거가 없어 변경하지 않았다.
+- 검사: KR/글로벌2,512행 ID/종류 불일치0, 최소 획득력 재생성352행/충돌0. 직접 별도 `.cache/data-gap-build/` → 정규 Debug 경고0/오류0·한영1,189키/형식 인자 일치. 실제 DLL의 두 로더는 `Invalid=false`, 획득력352/수량306행이며 내장 리소스/원본 해시가 일치한다. 획득력 JSON과 보고서 해시는 LF·BOM 없는 UTF-8로 정규화한다. 문서/공백 검사 완료, 테스트 추가/실행·푸시/배포는 하지 않았다. 실제 어획량·추가값 게임 표시는 확인 대기다.
+- 게임 대표 확인: 정규 DLL 재로드 → 샤크네이도 `680`·용암제왕 `730`, 줄삼치/요정조개 이중 `4`·큰숲메기 `3`, 두더지귀뚜라미 이중 `3~4`/기존 삼중 `5~6`, 진주목어 이중 `2`를 확인한다. 수량이 없는 나머지 기술은 계속 미확인이어야 한다. 필요한 범위만 확인하며 미확인 전체를 완료 처리하지 않는다.
 
 ## 수량 빈칸 전수 점검과 보완 (2026-11-15)
 

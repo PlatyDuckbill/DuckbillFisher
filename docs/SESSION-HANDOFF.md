@@ -28,7 +28,7 @@
 | upstream 컴파일 참조 | .cache/upstream-15.0.3.6/refs/ · build/dalamud-reference.json 고정 해시 |
 | SDK/대상 | global.json 최소 10.0.101(latestFeature, 이 PC 10.0.402) · Dalamud SDK15.0.0 · x64/net10.0-windows |
 | 정규 개발 DLL | DUCKBILL_ROOT/src/DuckbillFisher.Plugin/bin/Debug/DuckbillFisher.dll |
-| 최근 별도 Debug | .cache/detail-width-build/DuckbillFisher.dll (상세 좁은 폭/배율 대응 개발본, KR 참조) · 이전 먼바다 글로벌 .cache/ocean-ux-global-build/DuckbillFisher.dll |
+| 최근 별도 Debug | .cache/data-gap-build/DuckbillFisher.dll (최소 획득력/수량 누락 보완 개발본, KR 참조) · 이전 먼바다 글로벌 .cache/ocean-ux-global-build/DuckbillFisher.dll |
 | 0.10.2.0 고정 Release | .cache/release-validation/0.10.2.0/DuckbillFisher.dll · artifacts/share/0.10.2.0/DuckbillFisher-0.10.2.0.zip · Release446164726 공개 |
 | 0.10.1.0 고정 Release | .cache/release-validation/0.10.1.0/DuckbillFisher.dll · artifacts/share/0.10.1.0/DuckbillFisher-0.10.1.0.zip · Release446130476 공개 |
 | 0.10.0.2 고정 Release | .cache/release-validation/0.10.0.2/DuckbillFisher.dll · artifacts/share/0.10.0.2/DuckbillFisher-0.10.0.2.zip · Release446066338 공개 |

@@ -33,6 +33,27 @@ internal static class DetailSupplementImport
             entries.Add(new(id, fish, positive[0]));
         }
         if (entries.Count == 0) throw new InvalidDataException("DetailSupplementEmpty");
+        var observations = source.TryGetProperty("reviewedMinimumGathering", out var reviewed)
+            ? reviewed.EnumerateArray().Select(row => row.Clone()).ToArray() : [];
+        var reviewedIds = new HashSet<uint>();
+        foreach (var observation in observations)
+        {
+            var id = observation.GetProperty("itemId").GetUInt32();
+            var fish = observation.GetProperty("fishParameterId").GetUInt32();
+            var minimum = observation.GetProperty("minimumGathering").GetInt32();
+            var snapshot = observation.GetProperty("contentSha256").GetString();
+            if (id == 0 || fish == 0 || minimum is < 1 or > 100000 || !reviewedIds.Add(id) ||
+                !kr.TryGetValue(id, out var krFish) || krFish != fish || !global.TryGetValue(id, out var globalFish) || globalFish != fish ||
+                snapshot is not { Length: 64 } || !snapshot.All(Uri.IsHexDigit) ||
+                !Uri.TryCreate(observation.GetProperty("url").GetString(), UriKind.Absolute, out var url) || url.Scheme != "https" ||
+                string.IsNullOrWhiteSpace(observation.GetProperty("scope").GetString()) ||
+                string.IsNullOrWhiteSpace(observation.GetProperty("rights").GetString()))
+                throw new InvalidDataException($"DetailSupplementObservation:{id}");
+            var existing = entries.SingleOrDefault(entry => entry.ItemId == id);
+            if (existing is not null && existing.MinimumGathering != minimum)
+                throw new InvalidDataException($"DetailSupplementObservationConflict:{id}");
+            if (existing is null) entries.Add(new(id, fish, minimum));
+        }
         var result = new
         {
             schemaVersion = 1,
@@ -40,12 +61,14 @@ internal static class DetailSupplementImport
             {
                 url = source.GetProperty("repository").GetString() + "/blob/" + source.GetProperty("revision").GetString() + "/libs/data/src/lib/json/fishing-sources.json",
                 revision = source.GetProperty("revision").GetString(), sha256 = hash, license = "MIT",
-                processing = "Positive minGathering only. Zero/missing omitted as unknown. Unique Item/FishParameter identities matched on both installed clients. No multiple-hook guarantee thresholds inferred."
+                processing = "Base: positive Teamcraft minGathering only; zero/missing remains unknown. Separately credited reviewedObservations supply explicit per-fish minima, never patch/level/gear estimates. Unique Item/FishParameter identities matched on both installed clients. No multiple-hook guarantee thresholds inferred."
             },
+            reviewedObservations = observations,
             entries = entries.OrderBy(entry => entry.ItemId).ToArray()
         };
-        File.WriteAllText(args[4], JsonSerializer.Serialize(result, new JsonSerializerOptions { WriteIndented = true, PropertyNamingPolicy = JsonNamingPolicy.CamelCase }) + "\n");
-        Console.WriteLine($"DetailSupplement: confirmed={entries.Count}; conflicts=0; KR/global identities matched; source={hash}");
+        var json = JsonSerializer.Serialize(result, new JsonSerializerOptions { WriteIndented = true, PropertyNamingPolicy = JsonNamingPolicy.CamelCase });
+        File.WriteAllText(args[4], json.Replace("\r\n", "\n") + "\n");
+        Console.WriteLine($"DetailSupplement: confirmed={entries.Count}; reviewed={observations.Length}; conflicts=0; KR/global identities matched; source={hash}");
     }
 
     private static Dictionary<uint, uint> Identities(string gamePath, Language language)

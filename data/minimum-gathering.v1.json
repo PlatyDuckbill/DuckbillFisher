@@ -5,8 +5,34 @@
     "revision": "8925c7b73a99e8ba4fb2aa10719a3b3f48109ea7",
     "sha256": "701438120D5DB489985972A833777F7B31DCF7CA2E76A756136DD1677B957B74",
     "license": "MIT",
-    "processing": "Positive minGathering only. Zero/missing omitted as unknown. Unique Item/FishParameter identities matched on both installed clients. No multiple-hook guarantee thresholds inferred."
+    "processing": "Base: positive Teamcraft minGathering only; zero/missing remains unknown. Separately credited reviewedObservations supply explicit per-fish minima, never patch/level/gear estimates. Unique Item/FishParameter identities matched on both installed clients. No multiple-hook guarantee thresholds inferred."
   },
+  "reviewedObservations": [
+    {
+      "itemId": 15636,
+      "fishParameterId": 451,
+      "minimumGathering": 680,
+      "url": "https://docs.google.com/document/d/1B7wjAtw5uCiARS9tXsozYAX8l6JZOzl2YtJSjejqchk/edit",
+      "observer": "Fruity Snacks",
+      "checkedUtc": "2026-11-16",
+      "contentSha256": "4CD82A004E2B11BAD2442FD07FCFD066EE9DC13FE38701DF26CBC2A9751486A0",
+      "snapshotFormat": "Google Docs plain text export, original response bytes",
+      "scope": "The Second One individual fish section explicitly states Minimum Gathering 680. No patch-wide or gear-based estimate.",
+      "rights": "Individual numeric fact only. No public reuse license identified; rights remain with the author. Not part of the MIT-licensed Teamcraft base."
+    },
+    {
+      "itemId": 17584,
+      "fishParameterId": 475,
+      "minimumGathering": 730,
+      "url": "https://docs.google.com/document/d/1B7wjAtw5uCiARS9tXsozYAX8l6JZOzl2YtJSjejqchk/edit",
+      "observer": "Fruity Snacks",
+      "checkedUtc": "2026-11-16",
+      "contentSha256": "4CD82A004E2B11BAD2442FD07FCFD066EE9DC13FE38701DF26CBC2A9751486A0",
+      "snapshotFormat": "Google Docs plain text export, original response bytes",
+      "scope": "The Lord of Lords individual fish section explicitly states Minimum Gathering 730. No patch-wide or gear-based estimate.",
+      "rights": "Individual numeric fact only. No public reuse license identified; rights remain with the author. Not part of the MIT-licensed Teamcraft base."
+    }
+  ],
   "entries": [
     {
       "itemId": 7678,
@@ -589,6 +615,11 @@
       "minimumGathering": 720
     },
     {
+      "itemId": 15636,
+      "fishParameterId": 451,
+      "minimumGathering": 680
+    },
+    {
       "itemId": 15637,
       "fishParameterId": 452,
       "minimumGathering": 660
@@ -671,6 +702,11 @@
     {
       "itemId": 17582,
       "fishParameterId": 473,
+      "minimumGathering": 730
+    },
+    {
+      "itemId": 17584,
+      "fishParameterId": 475,
       "minimumGathering": 730
     },
     {

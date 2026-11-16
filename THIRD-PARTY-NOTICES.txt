@@ -130,6 +130,20 @@ No contributor prose, macros, images or code is redistributed. No public reuse
 license was identified; rights to the posts remain with their contributors.
 These observations are not represented as MIT-licensed or Apache-licensed data.
 
+Additional per-fish numeric facts, checked 2026-11-16:
+Fruity Snacks' individual The Second One and The Lord of Lords guide sections
+supply two minimum Gathering values. The fixed Teamcraft MIT base stays separate;
+URLs, original export SHA256, values, scope and rights are recorded in
+data/fishing-supplement-source.json reviewedMinimumGathering and copied to
+data/minimum-gathering.v1.json reviewedObservations during regeneration.
+Six Double Hook quantities are credited to Tetrapot Yama, Pure White Memeu Meu,
+Kingyo Neko, Razor Edge and Stella Kanon in data/hook-yields.v1.json sources.
+The existing Hedgemole Cricket Triple Hook observation remains separately
+credited through relatedSources. Only individual numeric facts are retained;
+no source prose, tables, images, code or macros are redistributed. No public
+reuse license was identified; rights remain with the respective contributors.
+These supplemental observations are not represented as MIT-licensed upstream data.
+
 Ocean Fishing basic-bait observations (13 stops, 52 guidance rows) and multi-hook quantities (259 fish)
 Observer: Tyo'to Tayuun, checked 2026-11-06
 The DH/TH numeric values and explicit ranges are also included in data/hook-yields.v1.json.

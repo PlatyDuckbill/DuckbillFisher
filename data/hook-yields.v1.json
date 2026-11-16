@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
-  "dataVersion": "regular-and-ocean-hook-yields-2026-11-15-evidence",
-  "checkedUtc": "2026-11-15",
+  "dataVersion": "regular-and-ocean-hook-yields-2026-11-16",
+  "checkedUtc": "2026-11-16",
   "rights": "Published catch observations by Fruity Snacks, Tyo'to Tayuun and credited Lodestone contributors. No public reuse license identified. Individual numeric facts only; no prose, code, images, bite times or strategies redistributed.",
   "processing": "Linked to existing FishParameter/Item identities. Explicit single-action quantities only. Null means unconfirmed. Null maximum means the guide establishes only a lower bound, including the count reached by its stated preparation sequence; no upper bound, cross-action conversion or Gathering breakpoint inferred. Optional per-action evidence=Inferred marks reviewed preparation-sequence lower bounds; omitted evidence means the source explicitly reports the quantity (Observed), not independent verification or a current-character guarantee.",
   "sources": [
@@ -206,6 +206,54 @@
       "snapshotFormat": "Original HTTPS HTML response bytes",
       "checkedUtc": "2026-11-15",
       "observer": "Rewachi Ultra"
+    },
+    {
+      "id": "lodestone-ice-faerie-3769356",
+      "url": "https://jp.finalfantasyxiv.com/lodestone/character/11572331/blog/3769356/",
+      "contentSha256": "0D1C570450524BDD3DD1D2A30AB15E2E997C76E1C4C21B21F5197C6818515E55",
+      "snapshotFormat": "Original HTTPS HTML response bytes",
+      "checkedUtc": "2026-11-16",
+      "observer": "Kingyo Neko",
+      "observationContext": "Author explicitly reports Double Hook Ice Faerie 4. One published observation, not a Gathering-independent guarantee."
+    },
+    {
+      "id": "lodestone-jungle-4479691",
+      "url": "https://jp.finalfantasyxiv.com/lodestone/character/27908164/blog/4479691/",
+      "contentSha256": "A013B7C25EE8CDFC90B162B5BD9A37F17B2B05D733FE11DE632E5D60EB7886A9",
+      "snapshotFormat": "Original HTTPS HTML response bytes",
+      "checkedUtc": "2026-11-16",
+      "observer": "Pure White Memeu Meu",
+      "observationContext": "Explicit single Double Hook Jungle Catfish quantity 3, not an inference from the total Intuition requirement."
+    },
+    {
+      "id": "lodestone-cricket-4102682",
+      "url": "https://jp.finalfantasyxiv.com/lodestone/character/22067410/blog/4102682/",
+      "contentSha256": "8070364EA46FC6140D70B84B37990A35E2465472F27C8BE743200817211791D6",
+      "snapshotFormat": "Original HTTPS HTML response bytes",
+      "checkedUtc": "2026-11-16",
+      "observer": "Razor Edge",
+      "observationContext": "Explicit Double Hook Hedgemole Cricket range 3-4. The existing Triple Hook range 5-6 remains sourced to lodestone-cricket-5252362.",
+      "relatedSources": [
+        "lodestone-cricket-5252362"
+      ]
+    },
+    {
+      "id": "lodestone-wahoo-4095119",
+      "url": "https://jp.finalfantasyxiv.com/lodestone/character/18274711/blog/4095119/",
+      "contentSha256": "FE4514C00F73E9ED3A4436CBF7FC7372FD75A9E25DAD91A6E9C37ED1B4BB95A3",
+      "snapshotFormat": "Original HTTPS HTML response bytes",
+      "checkedUtc": "2026-11-16",
+      "observer": "Tetrapot Yama",
+      "observationContext": "Explicit Double Hook Wahoo 4 guidance; the same author directly reports a Silver Shark 4 catch. Values retained only for those two identified fish."
+    },
+    {
+      "id": "lodestone-pearl-eye-5178756",
+      "url": "https://jp.finalfantasyxiv.com/lodestone/character/32253535/blog/5178756/",
+      "contentSha256": "EF0278E4674ECC18FDEE9DF3BC12E175F788C41D15FB0508DD6778CE8BFE803F",
+      "snapshotFormat": "Original HTTPS HTML response bytes",
+      "checkedUtc": "2026-11-16",
+      "observer": "Stella Kanon",
+      "observationContext": "Author explicitly describes repeated Double Hook Pearl-eye catches of 2 while targeting Sculptor. Not the similarly named restoration fish."
     }
   ],
   "entries": [
@@ -309,8 +357,11 @@
     {
       "itemId": 12757,
       "fishParameterId": 343,
-      "source": "lodestone-cricket-5252362",
-      "doubleHook": null,
+      "source": "lodestone-cricket-4102682",
+      "doubleHook": {
+        "minimum": 3,
+        "maximum": 4
+      },
       "tripleHook": {
         "minimum": 5,
         "maximum": 6
@@ -4319,6 +4370,56 @@
         "maximum": 1
       },
       "ocean": true
+    },
+    {
+      "itemId": 4903,
+      "fishParameterId": 111,
+      "source": "lodestone-wahoo-4095119",
+      "doubleHook": {
+        "minimum": 4,
+        "maximum": 4
+      },
+      "tripleHook": null
+    },
+    {
+      "itemId": 4904,
+      "fishParameterId": 116,
+      "source": "lodestone-wahoo-4095119",
+      "doubleHook": {
+        "minimum": 4,
+        "maximum": 4
+      },
+      "tripleHook": null
+    },
+    {
+      "itemId": 5031,
+      "fishParameterId": 184,
+      "source": "lodestone-jungle-4479691",
+      "doubleHook": {
+        "minimum": 3,
+        "maximum": 3
+      },
+      "tripleHook": null
+    },
+    {
+      "itemId": 12715,
+      "fishParameterId": 302,
+      "source": "lodestone-ice-faerie-3769356",
+      "doubleHook": {
+        "minimum": 4,
+        "maximum": 4
+      },
+      "tripleHook": null
+    },
+    {
+      "itemId": 20041,
+      "fishParameterId": 604,
+      "source": "lodestone-pearl-eye-5178756",
+      "doubleHook": {
+        "minimum": 2,
+        "maximum": 2
+      },
+      "tripleHook": null
     }
   ]
 }

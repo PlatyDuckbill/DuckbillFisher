@@ -1,0 +1,15 @@
+{
+  "format": "minimum-gathering-audit/v1",
+  "checkedUtc": "2026-11-16",
+  "scope": "Regular conditions only; other installed-client fish excluded",
+  "conditionsSha256": "EDAC64F98C0DE23E9E01EBF43B9BBC41C152B0C3137CEC8ACDAD495E841D0901",
+  "minimumGatheringSha256": "AEBBEDCC458A6A24F17239AA6433B17CAE5C10C737043EB3658D80D0799DE338",
+  "csvSha256": "5FD74607DE1F444B451F84EAC0E06931D61DF880ADE2DF9ECA6D4956773EAED2",
+  "total": 1258,
+  "known": 323,
+  "unknown": 935,
+  "bigOrLegendaryUnknown": 16,
+  "intuitionPrerequisitesUnknown": 36,
+  "nonRegularKnown": 29,
+  "hashNormalization": "UTF-8 without BOM, LF line endings"
+}

@@ -31,5 +31,31 @@
       "checkedOn": "2026-10-17",
       "scope": "Individual published catch observation: bait and tug only. No comment text or bite seconds copied. Time/weather completeness and hookset remain unknown."
     }
+  ],
+  "reviewedMinimumGathering": [
+    {
+      "itemId": 15636,
+      "fishParameterId": 451,
+      "minimumGathering": 680,
+      "url": "https://docs.google.com/document/d/1B7wjAtw5uCiARS9tXsozYAX8l6JZOzl2YtJSjejqchk/edit",
+      "observer": "Fruity Snacks",
+      "checkedUtc": "2026-11-16",
+      "contentSha256": "4CD82A004E2B11BAD2442FD07FCFD066EE9DC13FE38701DF26CBC2A9751486A0",
+      "snapshotFormat": "Google Docs plain text export, original response bytes",
+      "scope": "The Second One individual fish section explicitly states Minimum Gathering 680. No patch-wide or gear-based estimate.",
+      "rights": "Individual numeric fact only. No public reuse license identified; rights remain with the author. Not part of the MIT-licensed Teamcraft base."
+    },
+    {
+      "itemId": 17584,
+      "fishParameterId": 475,
+      "minimumGathering": 730,
+      "url": "https://docs.google.com/document/d/1B7wjAtw5uCiARS9tXsozYAX8l6JZOzl2YtJSjejqchk/edit",
+      "observer": "Fruity Snacks",
+      "checkedUtc": "2026-11-16",
+      "contentSha256": "4CD82A004E2B11BAD2442FD07FCFD066EE9DC13FE38701DF26CBC2A9751486A0",
+      "snapshotFormat": "Google Docs plain text export, original response bytes",
+      "scope": "The Lord of Lords individual fish section explicitly states Minimum Gathering 730. No patch-wide or gear-based estimate.",
+      "rights": "Individual numeric fact only. No public reuse license identified; rights remain with the author. Not part of the MIT-licensed Teamcraft base."
+    }
   ]
 }
