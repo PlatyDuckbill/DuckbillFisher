@@ -1200,4 +1200,6 @@ internal enum TextKey
     PreventMovementCancel,
     PreventMovementCancelHint,
     MovementGuardUnavailable,
+    ChangelogMovementGuardTitle,
+    ChangelogMovementGuard,
 }

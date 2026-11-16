@@ -29,6 +29,7 @@
 | SDK/대상 | global.json 최소 10.0.101(latestFeature, 이 PC 10.0.402) · Dalamud SDK15.0.0 · x64/net10.0-windows |
 | 정규 개발 DLL | DUCKBILL_ROOT/src/DuckbillFisher.Plugin/bin/Debug/DuckbillFisher.dll |
 | 최근 별도 Debug | .cache/movement-guard-build/DuckbillFisher.dll (이동 취소 방지 개발본, KR 참조) · 글로벌 .cache/movement-guard-global-build/DuckbillFisher.dll · 이전 자료 보완 .cache/intuition-prerequisite-build/DuckbillFisher.dll |
+| 0.10.5.0 고정 Release 후보 | .cache/release-validation/0.10.5.0/DuckbillFisher.dll · artifacts/share/0.10.5.0/DuckbillFisher-0.10.5.0.zip · 실기/원격 게시 대기 |
 | 0.10.4.0 고정 Release | .cache/release-validation/0.10.4.0/DuckbillFisher.dll · artifacts/share/0.10.4.0/DuckbillFisher-0.10.4.0.zip · Release447082107 공개 |
 | 0.10.3.0 고정 Release | .cache/release-validation/0.10.3.0/DuckbillFisher.dll · artifacts/share/0.10.3.0/DuckbillFisher-0.10.3.0.zip · Release447057672 공개 |
 | 0.10.2.0 고정 Release | .cache/release-validation/0.10.2.0/DuckbillFisher.dll · artifacts/share/0.10.2.0/DuckbillFisher-0.10.2.0.zip · Release446164726 공개 |

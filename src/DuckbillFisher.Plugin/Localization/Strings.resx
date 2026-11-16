@@ -1272,4 +1272,6 @@ Shares duplicate prevention with zero-minute favorite alerts and uses the channe
   <data name="PreventMovementCancel" xml:space="preserve"><value>Prevent fishing cancellation from movement</value></data>
   <data name="PreventMovementCancelHint" xml:space="preserve"><value>Prevents movement from reeling in your rod while fishing, including movement keys and holding both mouse buttons. Use Quit to stop fishing. Chat, camera controls and fishing actions remain available. Does not prevent forced interruptions by the game. Disabled by default.</value></data>
   <data name="MovementGuardUnavailable" xml:space="preserve"><value>Movement protection is unavailable; normal game behavior applies. Code: {0}</value></data>
+  <data name="ChangelogMovementGuardTitle" xml:space="preserve"><value>Fishing movement guard</value></data>
+  <data name="ChangelogMovementGuard" xml:space="preserve"><value>Prevent accidental movement from ending fishing with an optional movement guard.</value></data>
 </root>

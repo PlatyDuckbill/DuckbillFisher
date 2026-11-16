@@ -2,12 +2,12 @@
   <PropertyGroup>
     <AssemblyName>DuckbillFisher</AssemblyName>
     <RootNamespace>DuckbillFisher.Plugin</RootNamespace>
-    <Version>0.10.4.0</Version>
+    <Version>0.10.5.0</Version>
     <NeutralLanguage>en</NeutralLanguage>
     <Author>PlatyDuckbill</Author>
     <Name>DuckbillFisher</Name>
     <Punchline>Let Duckbill guide your next catch.</Punchline>
-    <Changelog>• Read fish details and personal controls more easily in narrow views.&#xA;• See minimum Gathering requirements for two more fish.&#xA;• See more Double Hook and Triple Hook quantities.</Changelog>
+    <Changelog>• Prevent accidental movement from ending fishing with an optional movement guard.</Changelog>
     <Description>Let Duckbill guide your next catch.&#xA;A big-fish hunting companion for FFXIV: choose your next target, prepare baits, and track your collection.&#xA;&#xA;• Choose your next big fish by availability, mooch chains and Intuition requirements.&#xA;• Plan spawns with a timeline and monthly calendar, including Fish Eyes and Intuition forecasts.&#xA;• Track collection progress by expansion and region, synced with the in-game Fish Guide.&#xA;• Prepare baits for favorites or filtered fish, with inventory counts and in-game bait highlights.&#xA;• Get local alerts for favorites and uncaught big fish at your current fishing hole, with optional sounds.&#xA;• Follow casts with a timer and personal fishing records.&#xA;• Browse fish with filters, baits, conditions and map links; see fish available now in the quick list.&#xA;&#xA;Open: /dbfs or /duckbillfisher. /dbfs cl: compact list; /dbfs ct: casting timer.&#xA;UI: English / Korean. Game names follow your client.&#xA;&#xA;Does not automate fishing or send anything to the server.&#xA;The plugin icon was created with AI assistance.</Description>
     <RepoUrl>https://github.com/PlatyDuckbill/DuckbillFisher</RepoUrl>
     <Tags>fishing;fish;big fish;collection;timer;alerts;한국어</Tags>
