@@ -1269,4 +1269,7 @@ Shares duplicate prevention with zero-minute favorite alerts and uses the channe
   <data name="ChangelogGatheringSupplement" xml:space="preserve"><value>See minimum Gathering requirements for two more fish.</value></data>
   <data name="ChangelogDoubleHookSupplement" xml:space="preserve"><value>See Double Hook quantities for six more fish.</value></data>
   <data name="ChangelogHookYieldSupplement" xml:space="preserve"><value>See more Double Hook and Triple Hook quantities.</value></data>
+  <data name="PreventMovementCancel" xml:space="preserve"><value>Prevent fishing cancellation from movement</value></data>
+  <data name="PreventMovementCancelHint" xml:space="preserve"><value>Prevents movement from reeling in your rod while fishing, including movement keys and holding both mouse buttons. Use Quit to stop fishing. Chat, camera controls and fishing actions remain available. Does not prevent forced interruptions by the game. Disabled by default.</value></data>
+  <data name="MovementGuardUnavailable" xml:space="preserve"><value>Movement protection is unavailable; normal game behavior applies. Code: {0}</value></data>
 </root>

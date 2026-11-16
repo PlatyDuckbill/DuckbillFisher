@@ -179,6 +179,7 @@ $groups = [ordered]@{
         'Dalamud.Plugin.Services.IPlayerState', 'Dalamud.Game.Player.PlayerState',
         'Dalamud.Plugin.Services.IGameGui', 'Dalamud.Game.Gui.GameGui',
         'Dalamud.Plugin.Services.IAddonLifecycle',
+        'Dalamud.Plugin.Services.IGameInteropProvider', 'Dalamud.Hooking.Hook`1',
         'Dalamud.Game.Addon.Lifecycle.AddonArgTypes.AddonArgs',
         'Dalamud.Game.Addon.Lifecycle.AddonArgTypes.AddonReceiveEventArgs',
         'Dalamud.Game.Addon.Lifecycle.AddonEvent', 'Dalamud.Game.Addon.Events.AddonEventType',

@@ -1197,4 +1197,7 @@ internal enum TextKey
     ChangelogGatheringSupplement,
     ChangelogDoubleHookSupplement,
     ChangelogHookYieldSupplement,
+    PreventMovementCancel,
+    PreventMovementCancelHint,
+    MovementGuardUnavailable,
 }

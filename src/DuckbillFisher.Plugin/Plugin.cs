@@ -38,6 +38,7 @@ public sealed class Plugin : IDalamudPlugin
     private readonly FishDetailWindow compareDetailWindow;
     private readonly FishGuideOpenService guideOpener;
     private readonly FishingTracker fishingTracker;
+    private readonly NativeFishingMovementGuard movementGuard;
     private readonly CastingTimerWindow timerWindow;
     private readonly FishingBuffObserver fishingBuffs;
     private readonly CastingTimerNotifications timerNotifications;
@@ -59,7 +60,7 @@ public sealed class Plugin : IDalamudPlugin
     public Plugin(IDalamudPluginInterface pluginInterface, ICommandManager commandManager, ICondition conditions,
         IClientState clientState, IPlayerState playerState, IDataManager dataManager, IGameGui gameGui, IFramework framework,
         ITextureProvider textureProvider, IPluginLog log, IChatGui chat, IGameInventory inventory, IAddonLifecycle addonLifecycle,
-        IObjectTable objectTable, IContextMenu contextMenu)
+        IObjectTable objectTable, IContextMenu contextMenu, IGameInteropProvider interop)
     {
         this.pluginInterface = pluginInterface;
         this.commandManager = commandManager;
@@ -83,6 +84,7 @@ public sealed class Plugin : IDalamudPlugin
         settingsBackup = new SettingsBackup(fishPreferences, managedSounds, soundLibrary, framework);
         backupPanel = new SettingsBackupPanel(settingsBackup, fishPreferences);
         var activityReader = new NativeFishingActivityReader(framework);
+        movementGuard = new(interop, framework, clientState, playerState, conditions, fishPreferences, activityReader, log);
         fishingObserver = new FishingActivityProbe(conditions, clientState, playerState, framework, chat,
             dataManager, fishPreferences, activityReader);
         guideOpener = new FishGuideOpenService(gameGui, clientState, playerState, framework, fishPreferences, fishCatalog, collectionReader);
@@ -142,7 +144,7 @@ public sealed class Plugin : IDalamudPlugin
             fishPreferences, fishingTracker);
         intuitionProgress = new(fishingTracker, fishCatalog, fishPreferences, objectTable, clientState, playerState, conditions, framework, inventory);
         timerWindow = new CastingTimerWindow(fishingTracker, fishingBuffs, intuitionProgress, textureProvider, detailWindow.Show, spotFishWindow.Toggle, ocean);
-        timerSettings = new CastingTimerSettingsWindow(fishPreferences, alertOutput, fishingSounds, soundLibrary);
+        timerSettings = new CastingTimerSettingsWindow(fishPreferences, alertOutput, fishingSounds, soundLibrary, movementGuard);
         detailPanel.ShowTimerPresets = timerSettings.OpenPresets;
         timerWindow.ShowSettings = () => timerSettings.IsOpen = true;
         compactObserver = new CompactFishObserver(fishCatalog, fishPreferences, framework, fishCollection, fishingRegion);
@@ -220,6 +222,7 @@ public sealed class Plugin : IDalamudPlugin
             return;
 
         disposed = true;
+        movementGuard.Dispose();
         pluginInterface.UiBuilder.Draw -= DrawWindows;
         pluginInterface.UiBuilder.Draw -= baitFinder.DrawOverlay;
         pluginInterface.UiBuilder.OpenMainUi -= OpenMainUi;

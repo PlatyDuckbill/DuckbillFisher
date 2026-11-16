@@ -33,6 +33,7 @@
 | 출현 일정표 | Core FishingForecast.Enumerate/EnumerateCalendar, Plugin SpawnSchedule, SpawnScheduleCalendar, SpawnSchedulePanel | 일반30일/달력32일 분리. Framework 대상 필터링·선택 날짜 회차 캐시, 관리 입력만 취소 가능한 작업에서 계산. 월 데이터는 압축 UTC 구간 배열, UI는 보이는 행/날짜 칸만 표시 |
 | 터주작 추천 | Core FishRecommendations/FishRecommendationSelection, Plugin FishRecommendationService/RecommendationText/FishRecommendationPanel | 일정·요구량/빈도 snapshot 수집과 탭별 선별·정렬 분리. 단일 취소 작업자·UTC 캐시·요청 세대. UI는 표시/명시 요청만 담당 |
 | 시전 관찰 | FishingTracker, NativeFishingActivityReader, FishingLogContracts | 본인 로그·시전 단계·시간 상관관계, 미검증 결과 Unknown |
+| 이동 취소 방지 | NativeFishingMovementGuard | 기본 꺼짐. 실행 ClientStructs의 낚시 이동 취소 함수만 후킹하고 매 호출의 스레드/캐릭터/직업·Fishing 플래그/현재 handler·vtable/단계 계약을 확인한다. 실패에는 원본 통과, 게임 입력·기술·명령 실행 없음. Framework에서 설정 적용·후크 생성/옵션 해제 정리, 언로드 시 후크·구독 해제 |
 | 시전 알림 | Core CastTimerAlerts, CastingTimerNotifications, CastingTimerSettingsWindow | 단조 시간 교차·시전별 알림ID 중복 방지. Framework에서 기존 추적기만 소비하고 선택SE/로컬 채팅 재사용, 화면 닫힘과 독립 |
 | 낚시 효과 | FishingBuffObserver | 타이머가 열렸을 때 Framework에서 공개 LocalPlayer.StatusList의850/568·루어3972/3973의Param을200ms 주기로 복사. 루어는 같은 시전의 새1~3중첩만 시작 시각을 알 수 있다. 공개 API만 쓰며 네이티브 판정과 묶지 않는다. 로그인/캐릭터·어부/이동 확인, 단조 만료·1초 신선도. Draw는 관리 값만 표시 |
 | 기록 저장 | FishingHistoryStore, FishingHistoryBrowser | 묶음 파일·원자 교체·요약/상세 지연 읽기·삭제/재시도. schema2 선택 필드로 단조 총 시간/검증된 생미끼 연결 ID 저장 |

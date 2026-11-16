@@ -358,3 +358,22 @@ Review의 크기 차이가 난 세 타입은 Fisher 소스가 직접 쓰지 않�
 - KR/글로벌 고정 revision의 [KR AtkUldManager](https://github.com/aers/FFXIVClientStructs/blob/7b9966e7b400998a7ef03ac67cc0e3771a9be8e1/FFXIVClientStructs/FFXIV/Component/GUI/AtkUldManager.cs)·[글로벌 AtkUldManager](https://github.com/aers/FFXIVClientStructs/blob/80cb4a7b7e11a6702e2eb8839afd301a918c638e/FFXIVClientStructs/FFXIV/Component/GUI/AtkUldManager.cs)에서 노드 수/할당 크기·BaseType과 Objects의 캐스팅 계약을 확인했다. 관련 설치 DLL 멤버도 양쪽으로 대조한다. 외부 소스 복제/도입은 없다.
 - KR 별도→글로벌 별도→KR 정규 Debug 빌드 경고0/오류0, 한영1,115키/인자 일치. 최종 사용 멤버329개 대조 Breaking0/Uncovered0, 기존 UI 루트 크기 Review3이며 근거는 `.cache/undiscovered-spot-review/native-fix-comparison.json`이다. 테스트는 추가/실행하지 않았다. **수정본 확인 절차:** 같은 정규 경로의 DLL을 다시 로드하고 미발견 항목을 왼쪽 클릭한다. 기대는 해당 지도와 핀이다. 계속 무반응이면 `FishingNoteMap/v2` 한 줄만 확인하며, 발견한 항목의 추가 동작 없음도 유지돼야 한다.
 - **KR 대표 정상 확인:** `2b7eade` 수정본 안내 뒤 사용자가 “잘 되는 중”이라고 보고했다(2026-11-15). 이번 대화의 미발견 항목 클릭→지도/핀 동작에 대한 대표 정상 보고로 기록한다. 지역/항목 ID·정확한 좌표 대조·발견한 항목의 무반응·스크롤/지역 변경·재접속/재로드·해금 상한 밖 항목·글로벌 실기는 개별 확인되지 않았다. 구형 `TreeComponent`의 정확한 하위 원인이나 모든 낚시터의 정상 동작까지 확정하지 않는다. 이번 기록 갱신에서는 DLL 재빌드·테스트·원격 게시를 하지 않았다.
+
+## 낚시 이동 취소 방지 개발본 (2026-11-17)
+
+- 사용자 요청: 실수로 이동 키 또는 마우스 양쪽 버튼을 눌러 낚싯대를 접는 일을 막고 ‘중단’ 기술로 종료하는 옵션이다. 타이머 설정→캐스팅 알림 상단에 기본 꺼짐으로 추가했다. `Timer.PreventMovementCancel` 선택 필드로 공통 저장/백업하며 기존 schema26/백업 형식1을 유지한다. 누락은 false이고 알림 프리셋 적용은 바꾸지 않는다. 공개0.10.4.0 산출물/설치 JSON에는 포함하지 않았다.
+- 공개 `IKeyState`는 키 상태를 변경할 수 있지만 채팅·재지정 키·마우스 전체를 건드릴 필요가 없어 사용하지 않았다. `NativeFishingMovementGuard`가 실행 중 ClientStructs의 `FishingEventHandler.StaticVirtualTablePointer->CancelByPlayerMovement` 주소를 얻고 정확한 생성 delegate로 `IGameInteropProvider.HookFromAddress`를 만든다. 임의 오프셋·자체 시그니처·게임 메모리 필드 쓰기·입력/기술/게임 명령 실행은 추가하지 않는다. 이 기능은 기존 읽기 전용 관찰과 별개로 사용자가 켠 이동 취소 처리 차단이다.
+- KR wasdcxz15.0.3.9 / 글로벌 goatcorp15.0.4.0의 설치 DLL에서 위 주소 접근자·delegate `(FishingEventHandler*, bool, bool) -> void`·생성된 가상 함수 호출 IL과 `FishingState`를 대조했다. 두 bool의 개별 의미를 추측해 분기하지 않고 원본 통과 시 그대로 전달한다. 차단의 의미는 해당 이동 취소 함수에 한정하며 모든 낚시 종료 원인 차단으로 확대하지 않는다.
+- 고정 소스: [KR EventHandler](https://github.com/aers/FFXIVClientStructs/blob/7b9966e7b400998a7ef03ac67cc0e3771a9be8e1/FFXIVClientStructs/FFXIV/Client/Game/Event/EventHandler.cs)·[KR FishingEventHandler](https://github.com/aers/FFXIVClientStructs/blob/7b9966e7b400998a7ef03ac67cc0e3771a9be8e1/FFXIVClientStructs/FFXIV/Client/Game/Event/FishingEventHandler.cs), [글로벌 EventHandler](https://github.com/aers/FFXIVClientStructs/blob/80cb4a7b7e11a6702e2eb8839afd301a918c638e/FFXIVClientStructs/FFXIV/Client/Game/Event/EventHandler.cs)·[글로벌 FishingEventHandler](https://github.com/aers/FFXIVClientStructs/blob/80cb4a7b7e11a6702e2eb8839afd301a918c638e/FFXIVClientStructs/FFXIV/Client/Game/Event/FishingEventHandler.cs). ClientStructs는 MIT이며 기존 참조의 공개 API만 사용하고 소스 파일을 복제/가공하지 않았다. 같은 목적의 [HaselTweaks 사례](https://github.com/Haselnussbomber/HaselTweaks/blob/7fe2a16e0efafda78cf7ca2294eacf945ca2866b/HaselTweaks/Tweaks/PreventMovementReelIn.cs)는 AGPL-3.0으로 조사 참고만 했으며 코드/파일 도입은 없다.
+- 실행 계약: 매 호출에서 Framework 스레드, 현재 로그인/로드/캐릭터·어부/지역 전환 없음, 공개 Fishing43, 현재 EventFramework handler와 콜백 self의 동일성, 정적/실제 vtable 동일성 및 후크 주소 일치, 기존 reader의 캐릭터·단계0~12/선택 생미끼 범위를 검사한다. 시전/입질/낚아채기/결과·소장품/루어/다음 시전 대기 PoleReady만 차단하고 None/Quitting/Unk11은 통과한다. 단계만으로 어종·성공을 추론하지 않는다. 객체 포인터를 보관하거나 Draw에서 읽지 않는다.
+- 실패·수명: 계약 실패는 원본 처리로 돌아가며 이 기능만 사용 불가 코드로 표시한다. 후크 생성 실패는 옵션을 껐다 켜기 전 반복 생성하지 않는다. 옵션 해제는 다음 Framework 갱신에 후크를 정리하며 저장 반영 이후 콜백도 원본 통과한다. 캐릭터/직업/지역이 바뀌면 현재 계약부터 다시 확인하고 이전 보호 상태로 차단하지 않는다. 언로드는 disposed를 먼저 설정하고 후크/Framework 구독을 정리한다. 타이머 열림과 독립이며 서버 강제 중단/게임 자체 종료 방지는 보장하지 않는다.
+- 검사: KR 별도→글로벌 별도→KR 정규 Debug 빌드 경고0/오류0. 한영1,197키/인자 일치. 사용 멤버345개 KR↔글로벌 메타데이터 비교 Breaking0/Uncovered0, 기존 UI 루트 크기 Review3이다. 근거는 `.cache/movement-guard-review/native-comparison.json`이며 `compare-native-runtime.ps1`에 새 Dalamud 후크 API 비교 범위를 추가했다. 테스트는 추가/실행하지 않았고 게임 실행/실기/원격 게시도 하지 않았다.
+- 정규 개발 DLL: `DUCKBILL_ROOT/src/DuckbillFisher.Plugin/bin/Debug/DuckbillFisher.dll`. 실제 루트와 별도 KR/글로벌 DLL은 HANDOFF를 따른다. 공개판 고정 DLL과 같은 후보로 취급하지 않는다.
+
+### 실기 확인 순서와 기대 결과
+
+1. 위 정규 DLL을 로드하고 `/dbfs ct`→타이머 설정→캐스팅 알림에서 옵션을 켠다. 기본 꺼짐도 확인한다.
+2. 직접 투척한 뒤 이동 키(사용자 지정 키 포함)와 마우스 양쪽 버튼을 각각 누른다. 기대는 낚싯대 유지이며 자동 이동/재투척은 없어야 한다. 입질 대기뿐 아니라 한 번 낚아챈 뒤 다음 투척 전에도 반복한다.
+3. 채팅에 w 등을 입력하고 카메라를 돌린 뒤 직접 낚아채기·루어·‘중단’ 기술을 사용한다. 기대는 각 입력 유지와 ‘중단’에 따른 정상 종료다. 중단 후에는 평상시 이동이 가능해야 한다.
+4. 옵션을 끄고 다시 직접 낚시한 뒤 이동한다. 기대는 종전처럼 이동으로 종료다. 옵션 켜짐/꺼짐 저장·재로드, 타이머 닫힘, 설정 백업 복원과 알림 프리셋 적용의 독립성도 확인한다.
+5. 지역/직업 전환·재접속과 먼바다·소장품 선택 중의 동작, KR·글로벌 각각은 별도 확인한다. 실패하면 타이머 설정의 코드와 해당 단계/입력 방식만 우선 확인한다. 현재 모든 실기는 대기다.
