@@ -1,18 +1,17 @@
 # 현재 상태
 
-갱신: 2026-11-17 · 공개0.10.4.0/API15·schema26 · 현재 설치 KR·글로벌 게임2026.11.03
+갱신: 2026-11-17 · 공개0.10.5.0/API15·schema26 · 현재 설치 KR·글로벌 게임2026.11.03
 
 ## 현재 배포
 
-- 배포 준비 **0.10.5.0**: 이동 취소 방지 옵션을 포함한 최소 지원 Release ZIP을 고정했다. KR/글로벌/최소 지원 빌드·한영1,199키·ZIP7파일/내장 자료7개 확인 완료, 고정 Release 실기/생략 지시와 Plogon·원격 게시는 대기다. [후보 기록](verification/releases/RELEASE-0.10.5.0.md).
-- 공개 **0.10.4.0**: 둔갑문어 이중2/삼중3·폭포 망령 이중2이상(추정)을 추가하고 앞선 상세 개선/자료 보완 노트를 통합했다. KR/글로벌/최소 지원 Release 빌드 경고0/오류0·한영1,194키·ZIP7파일/내장 자료7개·Plogon·익명 자산 해시·공용 실제 raw22필드 확인 완료. 사용자 지시로 추가 인게임 확인 없이 게시했으며 실제 설치/수량 표시/한영/재로드는 대기다. [배포 기록](verification/releases/RELEASE-0.10.4.0.md).
-- 이전 공개판의 게시·확인·미확인은 [0.10.3.0](verification/releases/RELEASE-0.10.3.0.md)·[0.10.2.0](verification/releases/RELEASE-0.10.2.0.md)·[0.10.1.0](verification/releases/RELEASE-0.10.1.0.md)·[0.10.0.2](verification/releases/RELEASE-0.10.0.2.md)·[0.10.0.1](verification/releases/RELEASE-0.10.0.1.md)·[0.10.0.0](verification/releases/RELEASE-0.10.0.0.md)·[0.9.0.0](verification/releases/RELEASE-0.9.0.0.md)·[이전 배포 색인](verification/README.md#배포와-호환성)에 보존한다. 새 버전으로 과거의 실기 대기를 완료 처리하지 않는다.
+- 공개 **0.10.5.0**: 낚시 중 이동으로 인한 취소 방지 옵션을 추가했다. KR/글로벌/최소 지원 Release 빌드 경고0/오류0·한영1,199키·ZIP7파일/내장 자료7개·Plogon·익명 자산 해시·공용 실제 raw22필드 확인 완료. 사용자 지시로 추가 Release 실기를 생략했으며 실제 설치/옵션·한영/재로드는 대기다. [배포 기록](verification/releases/RELEASE-0.10.5.0.md).
+- 이전 공개판의 게시·확인·미확인은 [0.10.4.0](verification/releases/RELEASE-0.10.4.0.md)·[0.10.3.0](verification/releases/RELEASE-0.10.3.0.md)·[0.10.2.0](verification/releases/RELEASE-0.10.2.0.md)·[0.10.1.0](verification/releases/RELEASE-0.10.1.0.md)·[0.10.0.2](verification/releases/RELEASE-0.10.0.2.md)·[0.10.0.1](verification/releases/RELEASE-0.10.0.1.md)·[0.10.0.0](verification/releases/RELEASE-0.10.0.0.md)·[0.9.0.0](verification/releases/RELEASE-0.9.0.0.md)·[이전 배포 색인](verification/README.md#배포와-호환성)에 보존한다. 새 버전으로 과거의 실기 대기를 완료 처리하지 않는다.
 - KR0.7.0.0 실제 저장소 업데이트/내역은 사용자 확인(2026-11-05), 글로벌은 대기다. 실제 저장소 업데이트 확인 완료인0.5.3.0·0.4.1.0과 다른 버전의 확인 범위는 각 기록을 따른다.
 - 설치 URL: https://raw.githubusercontent.com/PlatyDuckbill/DuckbillRepo/main/pluginmaster.json (Fisher·Calendar·Tweak 공용). 명령은 /dbfs·/duckbillfisher, cl/compact·ct/timer다.
 
 ## 현재 기능과 확인
 
-- 개발본: 타이머 설정→캐스팅 알림 상단의 ‘낚시 중 이동으로 인한 취소 방지’(기본 꺼짐)는 KR 사용자 대표 정상 확인(2026-11-17)이다. KR·글로벌 구조/빌드와 한영 리소스를 확인했으며, 입력/단계별 세부 조합·옵션 해제·저장/재로드·글로벌은 개별 대기다. [계약·확인 범위](verification/native/GLOBAL-COMPAT.md#낚시-이동-취소-방지-개발본-2026-11-17).
+- 0.10.5.0의 타이머 설정→캐스팅 알림 상단 ‘낚시 중 이동으로 인한 취소 방지’(기본 꺼짐)는 개발본 KR 사용자 대표 정상 확인(2026-11-17)이다. 고정 Release 실기와 입력/단계별 세부 조합·옵션 해제·저장/재로드·글로벌은 개별 대기다. [계약·확인 범위](verification/native/GLOBAL-COMPAT.md#낚시-이동-취소-방지-개발본-2026-11-17).
 - 메인 메뉴: 어종 목록/즐겨찾기 관리/추천/출현 일정표/먼바다 Beta/수집 현황/낚시 기록/설정. 모든 메인 탭에 도감 미대조 경고를 표시한다. 테마는 스모크·펄만 제공하며 옛 값은 밝기 계열에 맞춰 이행한다.
 - 목록·필터·수집·알림·미끼·타이머·기록·개인 기록/백업의 현재 계약은 [PRODUCT](product/PRODUCT.md), 대표 정상과 잔여는 [검증 색인](verification/README.md)을 따른다. 대표 확인을 전수 조합으로 확대하지 않는다.
 - 0.10.3.0에 포함한 상세의 좁은 폭/확대 대응은 KR 개발본 사용자 대표 정상(2026-11-16)이다. 세부 어종/배율·입력/저장 조합과 글로벌 전수 확인으로 확대하지 않는다. [검수](verification/catalog/UI.md#상세-좁은-폭배율-대응-개발본-2026-11-16).
@@ -36,7 +35,7 @@
 
 ## 다음 한 작업과 미확인
 
-다음 한 작업: **0.10.5.0 고정 후보의 실기 확인 또는 생략 지시와 Plogon 성공을 확인한 뒤 요청한 배포를 마친다.** [후보 기록](verification/releases/RELEASE-0.10.5.0.md)을 따른다. 0.10.4.0 실제 업데이트·추가값과 이전 버전/먼바다 확인 대기는 각 검증 기록에 유지한다.
+다음 한 작업: **0.10.5.0 실제 업데이트와 이동 취소 방지 옵션의 표시/정상 동작을 대표 확인한다.** [고정 DLL·확인 절차](verification/releases/RELEASE-0.10.5.0.md#게시와-확인-대기)를 따른다. 이전 버전 추가값/먼바다 확인 대기는 각 검증 기록에 유지한다.
 
 - KR 사용자 확인: 기사 망둥이·발목 메기 수량, 두둑지갑 획득력4,450, 얼음송곳빙어 납품원49/81/114+, 사베네어 낙엽고기 시로 알리아포138/212/325+, 일반 어획→타이머 기록→상세 연결. 실제 복수 어획량·직감/회차·나머지 UI/먼바다는 대기다. [기록](verification/catalog/UI.md#네-작업-마감과-kr-확인-후보-개발본-2026-11-06).
 - 최근 소장품 선택/수령 누락·일시적 낚시터 식별·무관한 수령 실패의 직감 초기화·회차 증가·목록 로드 전 검색을 보완했다. 자동 회차·직감/복수 어획·소장품 수령 시점의 [실기 대기](verification/fishing/TIMER-HISTORY.md#배포-전-기능로직-재점검-개발본-2026-11-05)는 유지한다.
