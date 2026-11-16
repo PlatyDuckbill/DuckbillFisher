@@ -1196,4 +1196,5 @@ internal enum TextKey
     ChangelogDetailResponsive,
     ChangelogGatheringSupplement,
     ChangelogDoubleHookSupplement,
+    ChangelogHookYieldSupplement,
 }
