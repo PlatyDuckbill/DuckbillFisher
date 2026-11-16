@@ -85,6 +85,7 @@ internal sealed class FishDetailPanel(FishPreferences preferences, ITextureProvi
     {
         var iconSize = ImGui.GetFontSize() * 3;
         var patch = fish.Details is { } patchDetails ? PatchText(patchDetails.Rule) : "";
+        var actionsBelow = false;
         if (ImGui.BeginTable("DetailTitle", 2, ImGuiTableFlags.SizingFixedFit))
         {
             ImGui.TableSetupColumn("Icon", ImGuiTableColumnFlags.WidthFixed, iconSize);
@@ -106,9 +107,11 @@ internal sealed class FishDetailPanel(FishPreferences preferences, ITextureProvi
                 }
                 ImGui.EndTable();
             }
-            DrawActions(fish, personal, observed, showDetail);
+            actionsBelow = ImGui.GetContentRegionAvail().X < ActionRowWidth(fish, personal, observed, showDetail, true);
+            if (!actionsBelow) DrawActions(fish, personal, observed, showDetail);
             ImGui.EndTable();
         }
+        if (actionsBelow) DrawActions(fish, personal, observed, showDetail);
     }
 
     private void DrawAvailability(FishGuideRow fish, FishCatalogView catalog, DateTimeOffset now)
@@ -163,61 +166,101 @@ internal sealed class FishDetailPanel(FishPreferences preferences, ITextureProvi
 
     private void DrawActions(FishGuideRow fish, FishPreferencesView personal, FishCollectionView observed, Action<FishGuideRow>? showDetail)
     {
-        var grade = fish.IsOceanFishing ? UiText.Get(T.OceanLabel)
-            : fish.Grade is FishGrade.Big or FishGrade.Legendary
-                ? UiText.Get(fish.Grade == FishGrade.Legendary ? T.GradeLegendaryLabel : T.GradeBigLabel) : "";
+        var grade = GradeText(fish);
         var openLabel = UiText.Get(T.OpenIndependentDetail);
         var openWidth = ImGui.CalcTextSize(openLabel).X + ImGui.GetStyle().FramePadding.X * 2;
         var state = UiText.Get(FishRowRenderer.CollectionKey(personal, observed, fish.FishParameterId));
-        var iconOnly = ImGui.GetContentRegionAvail().X < openWidth + ImGui.CalcTextSize(grade).X +
-            ImGui.CalcTextSize(state).X + ImGui.GetFrameHeight() * 3 + ImGui.GetStyle().ItemSpacing.X * 4;
-        if (!ImGui.BeginTable("DetailActions", (grade.Length > 0 ? 3 : 2) + (showDetail is null ? 0 : 1), ImGuiTableFlags.SizingFixedFit)) return;
-        if (grade.Length > 0) ImGui.TableSetupColumn("Grade", ImGuiTableColumnFlags.WidthFixed, ImGui.CalcTextSize(grade).X + 4);
-        ImGui.TableSetupColumn("Favorite", ImGuiTableColumnFlags.WidthFixed, ImGui.GetFrameHeight());
-        ImGui.TableSetupColumn("Collection", ImGuiTableColumnFlags.WidthStretch);
-        if (showDetail is not null) ImGui.TableSetupColumn("SeparateDetail", ImGuiTableColumnFlags.WidthFixed, iconOnly ? ImGui.GetFrameHeight() : openWidth);
-        if (grade.Length > 0)
+        var available = ImGui.GetContentRegionAvail().X;
+        var iconOnly = available < ActionRowWidth(fish, personal, observed, showDetail, false);
+        var stacked = available < ActionRowWidth(fish, personal, observed, showDetail, true);
+        if (!ImGui.BeginTable("DetailActions", stacked ? 1 : (grade.Length > 0 ? 3 : 2) + (showDetail is null ? 0 : 1), ImGuiTableFlags.SizingFixedFit)) return;
+        if (stacked)
         {
+            ImGui.TableSetupColumn("Actions", ImGuiTableColumnFlags.WidthStretch);
             ImGui.TableNextColumn();
+            if (grade.Length > 0) { DrawGrade(); ImGui.SameLine(); }
+            DrawFavorite();
+            if (showDetail is not null) { ImGui.SameLine(); DrawOpen(); }
+            ImGui.TableNextColumn();
+            DrawCollection();
+        }
+        else
+        {
+            if (grade.Length > 0) ImGui.TableSetupColumn("Grade", ImGuiTableColumnFlags.WidthFixed, ImGui.CalcTextSize(grade).X);
+            ImGui.TableSetupColumn("Favorite", ImGuiTableColumnFlags.WidthFixed, ImGui.GetFrameHeight());
+            ImGui.TableSetupColumn("Collection", ImGuiTableColumnFlags.WidthStretch);
+            if (showDetail is not null) ImGui.TableSetupColumn("SeparateDetail", ImGuiTableColumnFlags.WidthFixed, iconOnly ? ImGui.GetFrameHeight() : openWidth);
+            if (grade.Length > 0) { ImGui.TableNextColumn(); DrawGrade(); }
+            ImGui.TableNextColumn(); DrawFavorite();
+            ImGui.TableNextColumn(); DrawCollection();
+            if (showDetail is not null) { ImGui.TableNextColumn(); DrawOpen(); }
+        }
+        ImGui.EndTable();
+
+        void DrawGrade()
+        {
             ImGui.AlignTextToFramePadding();
             ImGui.TextDisabled(grade);
         }
-        ImGui.TableNextColumn();
-        ImGui.BeginDisabled(!personal.CanEdit || !fish.IsDisplayable);
-        var favorite = personal.Favorites.Contains(fish.FishParameterId);
-        if (UiWidgets.FavoriteButton("Favorite", favorite)) preferences.SetFavorite(fish.FishParameterId, !favorite);
-        ImGui.EndDisabled();
-        ImGui.TableNextColumn();
-        var manual = personal.ManualCaught.ContainsKey(fish.FishParameterId);
-        ImGui.BeginDisabled(!personal.CanEdit || !personal.HasCharacter || !fish.IsDisplayable);
-        var desiredWidth = ImGui.CalcTextSize(state).X + ImGui.GetFrameHeight() + ImGui.GetStyle().FramePadding.X * 2;
-        ImGui.SetNextItemWidth(Math.Max(1, Math.Min(desiredWidth,
-            ImGui.GetContentRegionAvail().X - (manual ? ImGui.GetFrameHeightWithSpacing() : 0))));
-        if (GameThemeChrome.BeginCombo("###CollectionState", state))
+
+        void DrawFavorite()
         {
-            if (ImGui.Selectable(UiText.Label(T.MarkCaught, "Caught"))) preferences.SetManualCaught(fish.FishParameterId, true, personal.Session);
-            if (ImGui.Selectable(UiText.Label(T.MarkUncaught, "Uncaught"))) preferences.SetManualCaught(fish.FishParameterId, false, personal.Session);
-            if (manual && ImGui.Selectable(UiText.Label(T.ClearManualCollection, "ClearManual")))
-                preferences.SetManualCaught(fish.FishParameterId, null, personal.Session);
-            ImGui.EndCombo();
+            ImGui.BeginDisabled(!personal.CanEdit || !fish.IsDisplayable);
+            var favorite = personal.Favorites.Contains(fish.FishParameterId);
+            if (UiWidgets.FavoriteButton("Favorite", favorite)) preferences.SetFavorite(fish.FishParameterId, !favorite);
+            ImGui.EndDisabled();
         }
-        UiWidgets.Tooltip(UiText.Get(T.CollectionControlHint));
-        if (manual)
+
+        void DrawCollection()
         {
-            ImGui.SameLine();
-            if (UiWidgets.IconButton(FontAwesomeIcon.Undo, "ClearManual", UiText.Get(T.ClearManualCollection)))
-                preferences.SetManualCaught(fish.FishParameterId, null, personal.Session);
+            var manual = personal.ManualCaught.ContainsKey(fish.FishParameterId);
+            ImGui.BeginDisabled(!personal.CanEdit || !personal.HasCharacter || !fish.IsDisplayable);
+            var desiredWidth = ImGui.CalcTextSize(state).X + ImGui.GetFrameHeight() + ImGui.GetStyle().FramePadding.X * 2;
+            ImGui.SetNextItemWidth(Math.Max(1, Math.Min(desiredWidth,
+                ImGui.GetContentRegionAvail().X - (manual ? ImGui.GetFrameHeight() + ImGui.GetStyle().ItemSpacing.X : 0))));
+            if (GameThemeChrome.BeginCombo("###CollectionState", state))
+            {
+                if (ImGui.Selectable(UiText.Label(T.MarkCaught, "Caught"))) preferences.SetManualCaught(fish.FishParameterId, true, personal.Session);
+                if (ImGui.Selectable(UiText.Label(T.MarkUncaught, "Uncaught"))) preferences.SetManualCaught(fish.FishParameterId, false, personal.Session);
+                if (manual && ImGui.Selectable(UiText.Label(T.ClearManualCollection, "ClearManual")))
+                    preferences.SetManualCaught(fish.FishParameterId, null, personal.Session);
+                ImGui.EndCombo();
+            }
+            UiWidgets.Tooltip(UiText.Get(T.CollectionControlHint));
+            if (manual)
+            {
+                ImGui.SameLine();
+                if (UiWidgets.IconButton(FontAwesomeIcon.Undo, "ClearManual", UiText.Get(T.ClearManualCollection)))
+                    preferences.SetManualCaught(fish.FishParameterId, null, personal.Session);
+            }
+            ImGui.EndDisabled();
         }
-        ImGui.EndDisabled();
-        if (showDetail is not null)
+
+        void DrawOpen()
         {
-            ImGui.TableNextColumn();
             var clicked = iconOnly
                 ? UiWidgets.IconButton(FontAwesomeIcon.ExternalLinkAlt, "OpenIndependentDetail", openLabel)
                 : UiWidgets.Button(UiText.Label(T.OpenIndependentDetail, "OpenIndependentDetail"));
-            if (clicked) showDetail(fish);
+            if (clicked) showDetail?.Invoke(fish);
         }
-        ImGui.EndTable();
+    }
+
+    private static string GradeText(FishGuideRow fish) => fish.IsOceanFishing ? UiText.Get(T.OceanLabel)
+        : fish.Grade is FishGrade.Big or FishGrade.Legendary
+            ? UiText.Get(fish.Grade == FishGrade.Legendary ? T.GradeLegendaryLabel : T.GradeBigLabel) : "";
+
+    private static float ActionRowWidth(FishGuideRow fish, FishPreferencesView personal, FishCollectionView observed,
+        Action<FishGuideRow>? showDetail, bool iconOnly)
+    {
+        var grade = GradeText(fish);
+        var state = UiText.Get(FishRowRenderer.CollectionKey(personal, observed, fish.FishParameterId));
+        var columns = (grade.Length > 0 ? 3 : 2) + (showDetail is null ? 0 : 1);
+        var width = ImGui.CalcTextSize(grade).X + ImGui.GetFrameHeight() + ImGui.CalcTextSize(state).X +
+            ImGui.GetFrameHeight() + ImGui.GetStyle().FramePadding.X * 2 + ImGui.GetStyle().CellPadding.X * 2 * columns;
+        if (personal.ManualCaught.ContainsKey(fish.FishParameterId)) width += ImGui.GetFrameHeight() + ImGui.GetStyle().ItemSpacing.X;
+        if (showDetail is not null) width += iconOnly ? ImGui.GetFrameHeight()
+            : ImGui.CalcTextSize(UiText.Get(T.OpenIndependentDetail)).X + ImGui.GetStyle().FramePadding.X * 2;
+        return width;
     }
     private static void DrawOcean(OceanFishingView? ocean)
     {

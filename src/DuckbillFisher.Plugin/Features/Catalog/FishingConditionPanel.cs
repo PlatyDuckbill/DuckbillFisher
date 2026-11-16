@@ -251,18 +251,22 @@ internal sealed class FishingConditionPanel(ITextureProvider textures, FishingIt
         var spacing = minimumConditions > 0 ? 14 : 8;
         var nameWidth = Math.Max(1, Math.Min(ImGui.CalcTextSize(name).X,
             Math.Min(ImGui.GetFontSize() * 12, width - IconSize - spacing - minimumConditions)));
+        var stacked = width < IconSize + spacing + minimumConditions + Math.Min(ImGui.CalcTextSize(name).X, ImGui.GetFontSize() * 12) ||
+            width < ImGui.GetFontSize() * 20 && nameWidth < ImGui.CalcTextSize(name).X;
         ImGui.PushID(id);
         ImGui.BeginGroup();
-        Item(item, name, "Item", personal, nameWidth, tooltip,
+        ImGui.PushTextWrapPos(ImGui.GetCursorPosX() + width);
+        Item(item, name, "Item", personal, stacked ? null : nameWidth, tooltip,
             detail is not null && openDetail is not null ? () => openDetail(item.Id) : null, preparation: true);
+        ImGui.PopTextWrapPos();
         if (detail is not null)
         {
-            ImGui.SameLine(0, 6);
-            StepConditions(detail, Math.Max(1, width - IconSize - nameWidth - 14));
+            if (!stacked) ImGui.SameLine(0, 6);
+            StepConditions(detail, stacked ? width : Math.Max(1, width - IconSize - nameWidth - 14));
         }
         else if (annotateMissing)
         {
-            ImGui.SameLine(0, 6);
+            if (!stacked) ImGui.SameLine(0, 6);
             UiWidgets.Icon(FontAwesomeIcon.InfoCircle);
             UiWidgets.Tooltip(UiText.Get(T.StepConditionsUnknown));
         }

@@ -44,16 +44,19 @@ internal sealed class FishPersonalPanel(FishPreferences preferences)
         ImGui.Spacing();
         var selected = personal.Timer.Presets.FirstOrDefault(preset => preset.Id == record.TimerPresetId);
         ImGui.BeginDisabled(!canEdit);
-        if (ImGui.BeginTable("FishPersonalFields", 2, ImGuiTableFlags.SizingFixedFit))
+        var labelWidth = Math.Max(ImGui.CalcTextSize(UiText.Get(T.FishAttempts)).X, ImGui.CalcTextSize(UiText.Get(T.FishPreset)).X);
+        var minimumInput = ImGui.CalcTextSize(FishPersonalRecord.MaxAttempts.ToString(UiText.Culture)).X + ImGui.GetStyle().FramePadding.X * 2;
+        var stackedFields = ImGui.GetContentRegionAvail().X < labelWidth + minimumInput + ImGui.GetFrameHeight() * 2 +
+            ImGui.GetStyle().ItemSpacing.X * 2 + ImGui.GetStyle().CellPadding.X * 4;
+        if (ImGui.BeginTable("FishPersonalFields", stackedFields ? 1 : 2, ImGuiTableFlags.SizingFixedFit))
         {
-            var labelWidth = Math.Max(ImGui.CalcTextSize(UiText.Get(T.FishAttempts)).X, ImGui.CalcTextSize(UiText.Get(T.FishPreset)).X);
-            ImGui.TableSetupColumn("Setting", ImGuiTableColumnFlags.WidthFixed, labelWidth);
+            if (!stackedFields) ImGui.TableSetupColumn("Setting", ImGuiTableColumnFlags.WidthFixed, labelWidth);
             ImGui.TableSetupColumn("Value", ImGuiTableColumnFlags.WidthStretch);
             ImGui.TableNextRow(); ImGui.TableNextColumn();
             ImGui.AlignTextToFramePadding();
             ImGui.TextUnformatted(UiText.Get(T.FishAttempts));
             UiWidgets.Tooltip(UiText.Get(T.FishAttemptsHint));
-            ImGui.TableNextColumn();
+            if (!stackedFields) ImGui.TableNextColumn();
             var valueWidth = Math.Max(1, ImGui.GetContentRegionAvail().X - ImGui.GetFrameHeight() * 2 - ImGui.GetStyle().ItemSpacing.X * 2);
             ImGui.BeginDisabled(record.Attempts == 0);
             if (UiWidgets.IconButton(FontAwesomeIcon.Minus, "DecreaseAttempts", UiText.Get(T.FishAttemptsDecrease)))
@@ -73,7 +76,7 @@ internal sealed class FishPersonalPanel(FishPreferences preferences)
             ImGui.TableNextRow(); ImGui.TableNextColumn();
             ImGui.AlignTextToFramePadding();
             ImGui.TextUnformatted(UiText.Get(T.FishPreset));
-            ImGui.TableNextColumn();
+            if (!stackedFields) ImGui.TableNextColumn();
             ImGui.SetNextItemWidth(-1);
             if (GameThemeChrome.BeginCombo("###FishTimerPreset", selected?.Name ?? UiText.Get(T.FishPresetNone)))
             {
@@ -97,13 +100,15 @@ internal sealed class FishPersonalPanel(FishPreferences preferences)
             ImGui.EndTable();
         }
         ImGui.EndDisabled();
-        var actionWidth = Math.Max(1, (ImGui.GetContentRegionAvail().X - ImGui.GetStyle().ItemSpacing.X) / 2);
+        var available = ImGui.GetContentRegionAvail().X;
+        var stackedActions = available < Math.Max(ActionWidth(T.FishPresetApply), ActionWidth(T.FishPresetManage)) * 2 + ImGui.GetStyle().ItemSpacing.X;
+        var actionWidth = Math.Max(1, stackedActions ? available : (available - ImGui.GetStyle().ItemSpacing.X) / 2);
         ImGui.BeginDisabled(!canEdit || selected is null);
         if (UiWidgets.ActionButton(FontAwesomeIcon.Play, T.FishPresetApply, "ApplyFishPreset", actionWidth))
             preferences.ApplyFishTimerPreset(fishId, personal.Session, personal.SettingsRestoreRevision);
         UiWidgets.Tooltip(UiText.Get(T.FishPresetApplyHint));
         ImGui.EndDisabled();
-        ImGui.SameLine();
+        if (!stackedActions) ImGui.SameLine();
         if (UiWidgets.ActionButton(FontAwesomeIcon.Cog, T.FishPresetManage, "ManageFishPreset", actionWidth)) ManagePresets?.Invoke();
         if (personal.Timer.Presets.Count == 0) ImGui.TextWrapped(UiText.Get(T.FishPresetEmpty));
         if (personal.PersonalResult is { } result && result.FishId == fishId &&
@@ -118,7 +123,11 @@ internal sealed class FishPersonalPanel(FishPreferences preferences)
         if (ImGui.InputTextMultiline("###FishNote", ref draft.Text, FishPersonalRecord.MaxNoteLength * 4 + 1,
             new Vector2(-1, ImGui.GetTextLineHeightWithSpacing() * 4), ImGuiInputTextFlags.AllowTabInput)) draft.Submitted = false;
         var valid = FishPersonalRecord.ValidNote(draft.Text);
-        var actionWidth = Math.Max(1, (ImGui.GetContentRegionAvail().X - ImGui.GetFrameHeight() - ImGui.GetStyle().ItemSpacing.X * 2) / 2);
+        var available = ImGui.GetContentRegionAvail().X;
+        var stackedActions = available < Math.Max(ActionWidth(T.FishNoteSave), ActionWidth(T.FishNoteClear)) * 2 +
+            ImGui.GetFrameHeight() + ImGui.GetStyle().ItemSpacing.X * 2;
+        var actionWidth = Math.Max(1, stackedActions ? available :
+            (available - ImGui.GetFrameHeight() - ImGui.GetStyle().ItemSpacing.X * 2) / 2);
         ImGui.BeginDisabled(!draft.Dirty || !valid);
         if (UiWidgets.ActionButton(FontAwesomeIcon.Save, T.FishNoteSave, "SaveFishNote", actionWidth))
         {
@@ -126,11 +135,12 @@ internal sealed class FishPersonalPanel(FishPreferences preferences)
             draft.Submitted = true;
         }
         ImGui.EndDisabled();
-        ImGui.SameLine();
+        if (!stackedActions) ImGui.SameLine();
         var clearLabel = UiText.Label(T.FishNoteClear, "ClearFishNoteConfirmation");
         var hostId = ImGui.GetID(clearLabel);
         ImGui.BeginDisabled(draft.Text.Length == 0 && record.Note.Length == 0);
-        if (UiWidgets.ActionButton(FontAwesomeIcon.TrashAlt, T.FishNoteClear, "ClearFishNote", actionWidth))
+        var clearWidth = stackedActions ? Math.Max(1, available - ImGui.GetFrameHeight() - ImGui.GetStyle().ItemSpacing.X) : actionWidth;
+        if (UiWidgets.ActionButton(FontAwesomeIcon.TrashAlt, T.FishNoteClear, "ClearFishNote", clearWidth))
         {
             draft.Confirmation = new(hostId, personal.Session, personal.SettingsRestoreRevision, record.Note);
             ImGui.OpenPopup(clearLabel);
@@ -151,8 +161,9 @@ internal sealed class FishPersonalPanel(FishPreferences preferences)
             ImGui.TextDisabled(UiText.Get(T.FishNoteLength, draft.Text.Length, FishPersonalRecord.MaxNoteLength));
             if (draft.Dirty || draft.Submitted)
             {
-                ImGui.SameLine();
-                ImGui.TextDisabled(UiText.Get(draft.Dirty ? T.FishNoteUnsaved : T.FishNoteSaved));
+                var status = UiText.Get(draft.Dirty ? T.FishNoteUnsaved : T.FishNoteSaved);
+                UiWidgets.FlowNext(ImGui.CalcTextSize(status).X, ImGui.GetCursorPosX() + ImGui.GetContentRegionAvail().X);
+                UiWidgets.TextWrappedSecondary(status);
             }
         }
         var conflictShown = personal.PersonalResult is { } result && result.FishId == fishId && result.Message.Key == T.FishNoteConflict;
@@ -160,6 +171,9 @@ internal sealed class FishPersonalPanel(FishPreferences preferences)
             ImGui.TextWrapped(UiText.Get(T.FishNoteConflict));
         DrawClearConfirmation(clearLabel, hostId, fishId, draft, personal, canEdit);
     }
+
+    private static float ActionWidth(T key) => ImGui.CalcTextSize(UiText.Get(key)).X + ImGui.GetFrameHeight() +
+        ImGui.GetStyle().ItemInnerSpacing.X + ImGui.GetStyle().FramePadding.X * 2;
 
     private void DrawClearConfirmation(string label, uint hostId, uint fishId, NoteDraft draft, FishPreferencesView personal, bool canEdit)
     {
