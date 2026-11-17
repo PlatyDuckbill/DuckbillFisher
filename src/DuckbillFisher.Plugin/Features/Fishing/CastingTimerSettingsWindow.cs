@@ -10,7 +10,7 @@ using T = DuckbillFisher.Plugin.Localization.TextKey;
 namespace DuckbillFisher.Plugin;
 
 internal sealed class CastingTimerSettingsWindow(FishPreferences preferences, SpawnAlertOutput output, FishingSoundNotifications fishingSounds,
-    ManagedSoundLibrary soundLibrary, NativeFishingMovementGuard movementGuard)
+    ManagedSoundLibrary soundLibrary)
     : Window("DuckbillFisher###DuckbillFisher.TimerSettings"), IDisposable
 {
     private readonly FileDialogManager soundFiles = new();
@@ -116,17 +116,10 @@ internal sealed class CastingTimerSettingsWindow(FishPreferences preferences, Sp
 
     private bool DrawCastAlerts(FishPreferencesView personal)
     {
-        var preventMovement = draft.PreventMovementCancel;
-        var movementChanged = ImGui.Checkbox(UiText.Label(T.PreventMovementCancel, "PreventMovementCancel"), ref preventMovement);
-        UiWidgets.Tooltip(UiText.Get(T.PreventMovementCancelHint));
-        if (movementChanged) draft = draft with { PreventMovementCancel = preventMovement };
-        if (preventMovement && movementGuard.State is not (FishingMovementGuardState.Disabled or FishingMovementGuardState.Waiting or FishingMovementGuardState.Ready))
-            ImGui.TextWrapped(UiText.Get(T.MovementGuardUnavailable, movementGuard.State));
-        ImGui.Separator();
         var channel = Math.Max(0, Array.IndexOf(ChatChannelChoices.All, (Dalamud.Game.Text.XivChatType)draft.AlertChannelId));
         ImGui.SetNextItemWidth(ImGui.GetFontSize() * 14);
         var names = ChatChannelChoices.Names;
-        var changed = GameThemeChrome.Combo(UiText.Label(T.AlertChannel, "TimerChatChannel"), ref channel, names, names.Length) | movementChanged;
+        var changed = GameThemeChrome.Combo(UiText.Label(T.AlertChannel, "TimerChatChannel"), ref channel, names, names.Length);
         UiWidgets.Tooltip(UiText.Get(T.TimerAlertDeliveryHint));
         if (changed) draft = draft with { AlertChannelId = (ushort)ChatChannelChoices.All[channel] };
         ImGui.TextWrapped(UiText.Get(T.TimerAlertHint));

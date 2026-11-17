@@ -1274,4 +1274,5 @@ Shares duplicate prevention with zero-minute favorite alerts and uses the channe
   <data name="MovementGuardUnavailable" xml:space="preserve"><value>Movement protection is unavailable; normal game behavior applies. Code: {0}</value></data>
   <data name="ChangelogMovementGuardTitle" xml:space="preserve"><value>Fishing movement guard</value></data>
   <data name="ChangelogMovementGuard" xml:space="preserve"><value>Prevent accidental movement from ending fishing with an optional movement guard.</value></data>
+  <data name="FishingConvenienceSettings" xml:space="preserve"><value>Fishing convenience</value></data>
 </root>

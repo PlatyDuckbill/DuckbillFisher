@@ -18,7 +18,7 @@ internal sealed class CastingTimerWindow : Window
     private readonly FishingBuffObserver buffs;
     private readonly IntuitionProgressPanel intuition;
     private readonly OceanFishing ocean;
-    public Action? ShowSettings { get; set; }
+    public Action? ToggleSettings { get; set; }
 
     public CastingTimerWindow(FishingTracker tracker, FishingBuffObserver buffs, IntuitionProgress progress, ITextureProvider textures, Action<FishGuideRow> showDetail, Action toggleSpotFish,
         OceanFishing ocean)
@@ -69,7 +69,7 @@ internal sealed class CastingTimerWindow : Window
         ImGui.EndDisabled();
         UiWidgets.Tooltip(canShowFish ? fishLabel : isOcean ? spotLabel : UiText.Get(T.TimerSpotUnavailableHint));
         ImGui.SameLine();
-        if (UiWidgets.IconButton(FontAwesomeIcon.Stopwatch, "OpenTimerSettings", UiText.Get(T.TimerAlertSettings))) ShowSettings?.Invoke();
+        if (UiWidgets.IconButton(FontAwesomeIcon.Stopwatch, "OpenTimerSettings", UiText.Get(T.TimerAlertSettings))) ToggleSettings?.Invoke();
 
         var timed = view.Active ?? view.CurrentRecords.FirstOrDefault();
         var usesFishBait = timed?.BaitKind is FishingBaitKind.Mooch or FishingBaitKind.Swimbait;

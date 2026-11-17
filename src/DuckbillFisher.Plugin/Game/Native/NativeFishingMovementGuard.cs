@@ -1,3 +1,4 @@
+using System.Diagnostics;
 using Dalamud.Game.ClientState.Conditions;
 using Dalamud.Hooking;
 using Dalamud.Plugin.Services;
@@ -21,6 +22,8 @@ internal sealed unsafe class NativeFishingMovementGuard : IDisposable
     private Hook<FishingEventHandler.Delegates.CancelByPlayerMovement>? hook;
     private volatile bool disposed;
     private bool hookFailed;
+    private long hookFailedAt;
+    private nint hookSourceAddress;
     private int state;
 
     public NativeFishingMovementGuard(IGameInteropProvider interop, IFramework framework, IClientState client,
@@ -47,12 +50,13 @@ internal sealed unsafe class NativeFishingMovementGuard : IDisposable
         if (disposed) return;
         if (!preferences.View.Timer.PreventMovementCancel)
         {
-            hook?.Dispose(); hook = null; hookFailed = false;
+            hook?.Dispose(); hook = null; hookSourceAddress = 0; hookFailed = false;
             SetState(FishingMovementGuardState.Disabled);
             return;
         }
-        if (hookFailed) return;
         if (!HasCurrentFisher()) { SetState(FishingMovementGuardState.Waiting); return; }
+        if (hookFailed && Stopwatch.GetElapsedTime(hookFailedAt).TotalSeconds < 5)
+        { SetState(FishingMovementGuardState.HookUnavailable); return; }
         // Resolved by the running ClientStructs, never a signature or vtable slot owned by this plugin.
         var table = FishingEventHandler.StaticVirtualTablePointer;
         if (table == null || table->CancelByPlayerMovement == null)
@@ -60,7 +64,7 @@ internal sealed unsafe class NativeFishingMovementGuard : IDisposable
         var address = (nint)table->CancelByPlayerMovement;
         if (hook is not null)
         {
-            if (hook.Address != address)
+            if (hookSourceAddress != address)
             { SetState(FishingMovementGuardState.ContractMismatch); return; }
             // Preserve a failed live contract until a later callback verifies it, or the option is switched off.
             return;
@@ -70,14 +74,19 @@ internal sealed unsafe class NativeFishingMovementGuard : IDisposable
         {
             hook = interop.HookFromAddress<FishingEventHandler.Delegates.CancelByPlayerMovement>(
                 address, OnMovementCancel);
+            // Dalamud follows existing jumps. Hook.Address may be the resolved backend target,
+            // while the ClientStructs vtable still contains the original function entry.
+            hookSourceAddress = address;
             hook.Enable();
+            hookFailed = false;
             SetState(FishingMovementGuardState.Ready);
         }
         catch (Exception ex)
         {
-            hook?.Dispose(); hook = null; hookFailed = true;
+            hook?.Dispose(); hook = null; hookSourceAddress = 0;
+            if (!hookFailed) log.Warning("FishingMovementGuard unavailable; retrying in 5 seconds: {Reason}", ex.GetType().Name);
+            hookFailed = true; hookFailedAt = Stopwatch.GetTimestamp();
             SetState(FishingMovementGuardState.HookUnavailable);
-            log.Warning("FishingMovementGuard unavailable: {Reason}", ex.GetType().Name);
         }
     }
 
@@ -101,7 +110,7 @@ internal sealed unsafe class NativeFishingMovementGuard : IDisposable
         { SetState(FishingMovementGuardState.AddressUnavailable); return false; }
         // Check identity against the current root before dereferencing the callback's borrowed handler.
         if (self == null || (*root)->EventHandlerModule.FishingEventHandler != self ||
-            self->VirtualTable != table || (nint)table->CancelByPlayerMovement != hook!.Address)
+            self->VirtualTable != table || (nint)table->CancelByPlayerMovement != hookSourceAddress)
         { SetState(FishingMovementGuardState.ContractMismatch); return false; }
         var sample = reader.Read(preferences.View.CharacterId, true);
         if (sample.Availability != FishingReadState.Ready)
@@ -118,6 +127,6 @@ internal sealed unsafe class NativeFishingMovementGuard : IDisposable
         if (disposed) return;
         disposed = true;
         framework.Update -= Update;
-        hook?.Dispose(); hook = null;
+        hook?.Dispose(); hook = null; hookSourceAddress = 0;
     }
 }

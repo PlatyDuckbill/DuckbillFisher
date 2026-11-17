@@ -28,6 +28,7 @@ internal sealed class MainWindow : Window
     private readonly SettingsBackupPanel backup;
     private readonly FishCollectionObserver collection;
     private readonly FishGuideOpenService guideOpener;
+    private readonly NativeFishingMovementGuard movementGuard;
     public Action? ShowCompact { get; set; }
     public Action? ShowTimer { get; set; }
     public Action? ShowChangelog { get; set; }
@@ -48,7 +49,7 @@ internal sealed class MainWindow : Window
         SpawnAlertsPanel spawnAlerts, FishPreferences preferences, Action languageChanged,
         FishingHistoryBrowser fishingHistory, CollectionProgressPanel collectionProgress, SpawnSchedulePanel schedule,
         SettingsBackupPanel backup, FishRecommendationPanel recommendations, FishCollectionObserver collection,
-        FishGuideOpenService guideOpener, OceanFishingPanel ocean) : base("DuckbillFisher###DuckbillFisher.Main")
+        FishGuideOpenService guideOpener, OceanFishingPanel ocean, NativeFishingMovementGuard movementGuard) : base("DuckbillFisher###DuckbillFisher.Main")
     {
         this.observer = observer;
         this.fishGuide = fishGuide;
@@ -64,6 +65,7 @@ internal sealed class MainWindow : Window
         this.collection = collection;
         this.guideOpener = guideOpener;
         this.ocean = ocean;
+        this.movementGuard = movementGuard;
         UiText.SetLanguage(preferences.View.Language);
         markerLabels = Markers.Select(key => UiText.Get(key)).ToArray();
         languageChanged();
@@ -322,6 +324,14 @@ internal sealed class MainWindow : Window
         ImGui.Spacing();
         changed |= ImGui.Checkbox(UiText.Label(T.DeveloperMode, "DeveloperMode"), ref developer);
         UiWidgets.Tooltip(UiText.Get(T.DeveloperModeHint));
+        ImGui.Spacing();
+        GameThemeChrome.SectionLabel(UiText.Get(T.FishingConvenienceSettings));
+        var preventMovement = settings.Timer.PreventMovementCancel;
+        if (ImGui.Checkbox(UiText.Label(T.PreventMovementCancel, "PreventMovementCancel"), ref preventMovement))
+            preferences.SetPreventMovementCancel(preventMovement, settings.Session, settings.SettingsRestoreRevision);
+        UiWidgets.Tooltip(UiText.Get(T.PreventMovementCancelHint));
+        if (preventMovement && movementGuard.State is not (FishingMovementGuardState.Disabled or FishingMovementGuardState.Waiting or FishingMovementGuardState.Ready))
+            ImGui.TextWrapped(UiText.Get(T.MovementGuardUnavailable, movementGuard.State));
         ImGui.EndDisabled();
         if (changed) preferences.SetInterface((UiLanguage)language, developer);
         if (settings.Error is { } error) ImGui.TextWrapped(error.Display);

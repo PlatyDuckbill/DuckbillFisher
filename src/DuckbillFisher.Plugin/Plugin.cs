@@ -144,9 +144,9 @@ public sealed class Plugin : IDalamudPlugin
             fishPreferences, fishingTracker);
         intuitionProgress = new(fishingTracker, fishCatalog, fishPreferences, objectTable, clientState, playerState, conditions, framework, inventory);
         timerWindow = new CastingTimerWindow(fishingTracker, fishingBuffs, intuitionProgress, textureProvider, detailWindow.Show, spotFishWindow.Toggle, ocean);
-        timerSettings = new CastingTimerSettingsWindow(fishPreferences, alertOutput, fishingSounds, soundLibrary, movementGuard);
+        timerSettings = new CastingTimerSettingsWindow(fishPreferences, alertOutput, fishingSounds, soundLibrary);
         detailPanel.ShowTimerPresets = timerSettings.OpenPresets;
-        timerWindow.ShowSettings = () => timerSettings.IsOpen = true;
+        timerWindow.ToggleSettings = timerSettings.Toggle;
         compactObserver = new CompactFishObserver(fishCatalog, fishPreferences, framework, fishCollection, fishingRegion);
         compactWindow = new CompactFishWindow(compactObserver, fishPreferences, fishCollection, textureProvider, detailWindow.Show, fishingMap);
         spawnAlertsPanel = new SpawnAlertsPanel(fishPreferences, spawnAlerts, alertOutput, fishCollection, textureProvider,
@@ -170,7 +170,7 @@ public sealed class Plugin : IDalamudPlugin
             new CollectionProgressPanel(collectionProgress, fishCatalog, fishPreferences, collectionFishWindow.Show),
             new SpawnSchedulePanel(schedule, fishCatalog, fishPreferences, textureProvider, detailWindow.Show, fishingMap), backupPanel,
             new FishRecommendationPanel(recommendations, fishCatalog, fishPreferences, fishCollection, detailWindow.Show, fishingMap, textureProvider),
-            fishCollection, guideOpener, new OceanFishingPanel(ocean, fishPreferences, baitStock, baitFinder, textureProvider, spotFishWindow.Toggle));
+            fishCollection, guideOpener, new OceanFishingPanel(ocean, fishPreferences, baitStock, baitFinder, textureProvider, spotFishWindow.Toggle), movementGuard);
         mainWindow.ShowCompact = compactWindow.Toggle;
         mainWindow.ShowTimer = timerWindow.Toggle;
         var changelogWindow = new ChangelogWindow(fishPreferences);

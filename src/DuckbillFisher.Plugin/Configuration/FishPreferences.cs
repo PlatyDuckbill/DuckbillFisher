@@ -261,7 +261,23 @@ internal sealed class FishPreferences : IDisposable
     {
         lock (gate)
             if (!disposed && writable && settings.IsValid() && expectedSession == view.Session && expectedRestoreRevision == view.SettingsRestoreRevision)
-                pendingTimer = new(settings.Copy(), expectedSession, expectedRestoreRevision);
+            {
+                // Timer alerts/sounds must not overwrite a movement option edited in the main settings.
+                var current = pendingTimer is { } queued && queued.Session == expectedSession && queued.RestoreRevision == expectedRestoreRevision
+                    ? queued.Settings : view.Timer;
+                pendingTimer = new(settings.Copy() with { PreventMovementCancel = current.PreventMovementCancel }, expectedSession, expectedRestoreRevision);
+            }
+    }
+
+    public void SetPreventMovementCancel(bool enabled, int expectedSession, int expectedRestoreRevision)
+    {
+        lock (gate)
+            if (!disposed && writable && expectedSession == view.Session && expectedRestoreRevision == view.SettingsRestoreRevision)
+            {
+                var current = pendingTimer is { } queued && queued.Session == expectedSession && queued.RestoreRevision == expectedRestoreRevision
+                    ? queued.Settings : view.Timer;
+                pendingTimer = new(current.Copy() with { PreventMovementCancel = enabled }, expectedSession, expectedRestoreRevision);
+            }
     }
 
     public void SetSpotFishHideCaught(bool hideCaught)

@@ -1198,6 +1198,7 @@ internal enum TextKey
     ChangelogDoubleHookSupplement,
     ChangelogHookYieldSupplement,
     PreventMovementCancel,
+    FishingConvenienceSettings,
     PreventMovementCancelHint,
     MovementGuardUnavailable,
     ChangelogMovementGuardTitle,
