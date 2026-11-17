@@ -1,11 +1,11 @@
 # 현재 상태
 
-갱신: 2026-11-17 · 공개0.10.5.0/API15·schema26 · 현재 설치 KR·글로벌 게임2026.11.03
+갱신: 2026-11-17 · 공개0.10.5.1/API15·schema26 · 현재 설치 KR·글로벌 게임2026.11.03
 
 ## 현재 배포
 
-- 공개 **0.10.5.0**: 낚시 중 이동으로 인한 취소 방지 옵션을 추가했다. KR/글로벌/최소 지원 Release 빌드 경고0/오류0·한영1,199키·ZIP7파일/내장 자료7개·Plogon·익명 자산 해시·공용 실제 raw22필드 확인 완료. 사용자 지시로 추가 Release 실기를 생략했으며 실제 설치/옵션·한영/재로드는 대기다. [배포 기록](verification/releases/RELEASE-0.10.5.0.md).
-- 이전 공개판의 게시·확인·미확인은 [0.10.4.0](verification/releases/RELEASE-0.10.4.0.md)·[0.10.3.0](verification/releases/RELEASE-0.10.3.0.md)·[0.10.2.0](verification/releases/RELEASE-0.10.2.0.md)·[0.10.1.0](verification/releases/RELEASE-0.10.1.0.md)·[0.10.0.2](verification/releases/RELEASE-0.10.0.2.md)·[0.10.0.1](verification/releases/RELEASE-0.10.0.1.md)·[0.10.0.0](verification/releases/RELEASE-0.10.0.0.md)·[0.9.0.0](verification/releases/RELEASE-0.9.0.0.md)·[이전 배포 색인](verification/README.md#배포와-호환성)에 보존한다. 새 버전으로 과거의 실기 대기를 완료 처리하지 않는다.
+- 공개 **0.10.5.1**: 이동 방지 복구·메인 설정 이동·시계 설정 토글을 포함한다. KR/글로벌/최소 지원 Release 빌드 경고0/오류0·한영1,204키·ZIP7파일/내장 자료7개·Plogon·익명 자산 해시·공용 실제 raw22필드 확인 완료. 사용자 지시로 추가 Release 실기를 생략했으며 실제 설치/옵션·한영/재로드는 대기다. [배포 기록](verification/releases/RELEASE-0.10.5.1.md).
+- 이전 공개판의 게시·확인·미확인은 [0.10.5.0](verification/releases/RELEASE-0.10.5.0.md)·[0.10.4.0](verification/releases/RELEASE-0.10.4.0.md)·[0.10.3.0](verification/releases/RELEASE-0.10.3.0.md)·[0.10.2.0](verification/releases/RELEASE-0.10.2.0.md)·[0.10.1.0](verification/releases/RELEASE-0.10.1.0.md)·[0.10.0.2](verification/releases/RELEASE-0.10.0.2.md)·[0.10.0.1](verification/releases/RELEASE-0.10.0.1.md)·[0.10.0.0](verification/releases/RELEASE-0.10.0.0.md)·[0.9.0.0](verification/releases/RELEASE-0.9.0.0.md)·[이전 배포 색인](verification/README.md#배포와-호환성)에 보존한다. 새 버전으로 과거의 실기 대기를 완료 처리하지 않는다.
 - KR0.7.0.0 실제 저장소 업데이트/내역은 사용자 확인(2026-11-05), 글로벌은 대기다. 실제 저장소 업데이트 확인 완료인0.5.3.0·0.4.1.0과 다른 버전의 확인 범위는 각 기록을 따른다.
 - 설치 URL: https://raw.githubusercontent.com/PlatyDuckbill/DuckbillRepo/main/pluginmaster.json (Fisher·Calendar·Tweak 공용). 명령은 /dbfs·/duckbillfisher, cl/compact·ct/timer다.
 
@@ -35,7 +35,7 @@
 
 ## 다음 한 작업과 미확인
 
-다음 한 작업: **이동 취소 방지의 저장·재로드 후 유지 여부를 확인한다.** 수정본 KR 대표 정상 보고와 개별 잔여는 [확인 기록](verification/native/GLOBAL-COMPAT.md#간헐적-무동작과-옵션-위치-보완-개발본-2026-11-17)을 따른다. 공개0.10.5.0 실제 설치/추가 Release 실기와 이전 자료/먼바다 대기는 각 배포·검증 기록에 유지한다.
+다음 한 작업: **0.10.5.1 실제 업데이트와 이동 취소 방지의 저장·재로드 후 유지를 확인한다.** [고정 DLL·개별 잔여](verification/releases/RELEASE-0.10.5.1.md#게시와-확인-대기)를 따른다. 개발본 대표 정상과 공개판 확인은 구분하며 이전 버전/자료/먼바다 대기는 각 배포·검증 기록에 유지한다.
 
 - KR 사용자 확인: 기사 망둥이·발목 메기 수량, 두둑지갑 획득력4,450, 얼음송곳빙어 납품원49/81/114+, 사베네어 낙엽고기 시로 알리아포138/212/325+, 일반 어획→타이머 기록→상세 연결. 실제 복수 어획량·직감/회차·나머지 UI/먼바다는 대기다. [기록](verification/catalog/UI.md#네-작업-마감과-kr-확인-후보-개발본-2026-11-06).
 - 최근 소장품 선택/수령 누락·일시적 낚시터 식별·무관한 수령 실패의 직감 초기화·회차 증가·목록 로드 전 검색을 보완했다. 자동 회차·직감/복수 어획·소장품 수령 시점의 [실기 대기](verification/fishing/TIMER-HISTORY.md#배포-전-기능로직-재점검-개발본-2026-11-05)는 유지한다.

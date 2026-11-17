@@ -29,6 +29,7 @@
 | SDK/대상 | global.json 최소 10.0.101(latestFeature, 이 PC 10.0.402) · Dalamud SDK15.0.0 · x64/net10.0-windows |
 | 정규 개발 DLL | DUCKBILL_ROOT/src/DuckbillFisher.Plugin/bin/Debug/DuckbillFisher.dll |
 | 최근 별도 Debug | .cache/movement-guard-fix-build/DuckbillFisher.dll (이동 방지 간헐적 무동작·설정 위치/시계 토글 보완, KR 참조) · 글로벌 .cache/movement-guard-fix-global-build/DuckbillFisher.dll |
+| 0.10.5.1 고정 Release | .cache/release-validation/0.10.5.1/DuckbillFisher.dll · artifacts/share/0.10.5.1/DuckbillFisher-0.10.5.1.zip · Release448610250 공개 |
 | 0.10.5.0 고정 Release | .cache/release-validation/0.10.5.0/DuckbillFisher.dll · artifacts/share/0.10.5.0/DuckbillFisher-0.10.5.0.zip · Release447316908 공개 |
 | 0.10.4.0 고정 Release | .cache/release-validation/0.10.4.0/DuckbillFisher.dll · artifacts/share/0.10.4.0/DuckbillFisher-0.10.4.0.zip · Release447082107 공개 |
 | 0.10.3.0 고정 Release | .cache/release-validation/0.10.3.0/DuckbillFisher.dll · artifacts/share/0.10.3.0/DuckbillFisher-0.10.3.0.zip · Release447057672 공개 |
@@ -47,7 +48,7 @@
 
 ## 개발본과 게시본 구분
 
-- 현재 공개판은0.10.5.0(태그 소스d4509b5)이며 고정 패키지/게시 근거는 [0.10.5.0 기록](verification/releases/RELEASE-0.10.5.0.md)을 따른다. 사용자 지시로 추가 Release 실기를 생략했으며 실제 설치/옵션·한영·재로드 확인은 대기다. 위 고정 추출본을 재빌드해 교체하지 않는다. 이전 버전의 상세 추가값·먼바다·추정 표식/어획량 확인 대기는 해당 기록에 보존한다.
+- 현재 공개판은0.10.5.1(태그 소스7db6a9e)이며 고정 패키지/게시 근거는 [0.10.5.1 기록](verification/releases/RELEASE-0.10.5.1.md)을 따른다. 사용자 지시로 추가 Release 실기를 생략했으며 실제 설치/옵션·한영·재로드 확인은 대기다. 위 고정 추출본을 재빌드해 교체하지 않는다. 이전 버전의 상세 추가값·먼바다·추정 표식/어획량 확인 대기는 해당 기록에 보존한다.
 - 정규/별도 Debug와 고정 Release 추출본은 구분한다. 정규/별도 Debug를 게시본 확인에 쓰지 않으며 확인 뒤 실행 파일을 다시 빌드하지 않는다. 새 후보에 과거 대표 확인을 자동 적용하지 않는다.
 - 이전 버전 확인에는 해당 Release 기록의 추출 DLL을 사용한다. 과거 테스트 허용(추천31개·추천22/알림20/설정32개 등)은 각각 당시 승인 범위였다.
 - 설치 목록의 공용 배포는 DuckbillRepo의 `pluginmaster.json`이며 이 저장소의 repo/release.json이 원본이다. 동기화 절차는 [DISTRIBUTION](development/DISTRIBUTION.md)을 따른다.
