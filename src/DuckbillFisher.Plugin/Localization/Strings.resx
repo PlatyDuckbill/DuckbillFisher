@@ -1279,4 +1279,5 @@ Shares duplicate prevention with zero-minute favorite alerts and uses the channe
   <data name="ChangelogMovementGuardReliability" xml:space="preserve"><value>Improved reliability of fishing movement protection.</value></data>
   <data name="ChangelogMovementGuardSettings" xml:space="preserve"><value>Find movement protection under Settings → Fishing convenience.</value></data>
   <data name="ChangelogTimerSettingsToggle" xml:space="preserve"><value>Open and close timer settings with the timer's clock button.</value></data>
+  <data name="ChangelogMovementGuardStartup" xml:space="preserve"><value>Fixed movement protection not working until it was turned off and on again.</value></data>
 </root>

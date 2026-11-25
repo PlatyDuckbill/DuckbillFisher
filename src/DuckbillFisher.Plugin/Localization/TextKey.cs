@@ -1203,6 +1203,7 @@ internal enum TextKey
     ChangelogMovementGuardReliability,
     ChangelogMovementGuardSettings,
     ChangelogTimerSettingsToggle,
+    ChangelogMovementGuardStartup,
     PreventMovementCancelHint,
     MovementGuardUnavailable,
     ChangelogMovementGuardTitle,

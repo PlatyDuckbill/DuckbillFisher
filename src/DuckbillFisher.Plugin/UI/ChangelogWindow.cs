@@ -15,6 +15,8 @@ internal sealed class ChangelogWindow : Window
     // Keep the confirmed candidate unchanged when it is published.
     private static readonly ReleaseNotes[] PublishedReleases =
     [
+        new(new(0, 10, 5, 2), [(FontAwesomeIcon.ShieldAlt, T.ChangelogMovementGuardStartup)],
+            new DateTimeOffset(2026, 11, 25, 12, 17, 18, TimeSpan.Zero)),
         new(new(0, 10, 5, 1),
         [
             (FontAwesomeIcon.ShieldAlt, T.ChangelogMovementGuardReliability),
