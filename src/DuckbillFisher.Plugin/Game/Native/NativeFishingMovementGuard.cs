@@ -69,6 +69,9 @@ internal sealed unsafe class NativeFishingMovementGuard : IDisposable
             // Preserve a failed live contract until a later callback verifies it, or the option is switched off.
             return;
         }
+        // A hook created at login/job change stayed inert until the option was toggled, while one created
+        // later worked. Create it when fishing actually starts, matching the timing of that manual recovery.
+        if (!conditions[ConditionFlag.Fishing]) { SetState(FishingMovementGuardState.Waiting); return; }
         // Only hook creation is caught. A catch cannot make an invalid game pointer safe.
         try
         {
@@ -80,6 +83,7 @@ internal sealed unsafe class NativeFishingMovementGuard : IDisposable
             hook.Enable();
             hookFailed = false;
             SetState(FishingMovementGuardState.Ready);
+            log.Information("FishingMovementGuard hook created at fishing start (entry==target: {SameAddress})", hook.Address == address);
         }
         catch (Exception ex)
         {
